@@ -267,7 +267,10 @@ void main() {
     final row = t.widget<Text>(find.text('Alpha one'));
     expect(heading.style!.fontFamily, NamoFonts.sinhala);
     expect(heading.style!.fontFamily, row.style!.fontFamily);
-    expect(heading.style!.fontFamilyFallback, contains(NamoFonts.sinhala));
+    // The family is itself the bundled Sinhala one; the fallback is the other
+    // bundled family, so no font is fetched.
+    expect(heading.style!.fontFamilyFallback, row.style!.fontFamilyFallback);
+    expect(heading.style!.fontFamilyFallback, [NamoFonts.serif]);
   });
 
   testWidgets('a single reading shows no reading heading', (t) async {

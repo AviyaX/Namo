@@ -111,7 +111,8 @@ void main() {
       expect(flags('Pali').isChecked, ui.CheckedState.isTrue);
       expect(flags('English').isChecked, ui.CheckedState.isFalse);
       expect(flags('Pali').isSelected, ui.Tristate.none);
-      expect(flags('Dark').isChecked, ui.CheckedState.isFalse);
+      expect(flags('Dark').isChecked, ui.CheckedState.isTrue);
+      expect(flags('Light').isChecked, ui.CheckedState.isFalse);
       expect(flags('Dark').isInMutuallyExclusiveGroup, isTrue);
       expect(flags('Verse by verse').isInMutuallyExclusiveGroup, isTrue);
       expect(flags('Pali').isInMutuallyExclusiveGroup, isFalse);

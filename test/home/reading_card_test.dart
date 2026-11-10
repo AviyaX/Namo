@@ -182,9 +182,9 @@ void main() {
         expect(gradient.begin, Alignment.topLeft);
         expect(gradient.end, Alignment.bottomRight);
       }
-      expect(NamoPalette.light.surface, const Color(0xFFE8E0D2));
-      expect(NamoPalette.light.background, const Color(0xFFF5F1E8));
-      expect(NamoPalette.light.accent, const Color(0xFFA88B5B));
+      expect(NamoPalette.light.surface, const Color(0xFFFDFBF6));
+      expect(NamoPalette.light.background, const Color(0xFFF7F4EC));
+      expect(NamoPalette.light.accent, const Color(0xFF7F6130));
     },
   );
 
@@ -223,7 +223,7 @@ void main() {
       ],
     );
     final card = find.byType(ReadingCard);
-    final p = NamoPalette.light;
+    final p = NamoPalette.dark; // the app opens dark
     // The InkWell paints on the clear Material laid over the card.
     final ink = find.descendant(of: card, matching: find.byType(Material)).last;
 

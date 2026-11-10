@@ -1,18 +1,48 @@
 import 'package:flutter/material.dart';
 
-/// The five brand colours.
-abstract final class NamoColors {
-  static const ivory = Color(0xFFF5F1E8);
-  static const sand = Color(0xFFE8E0D2);
-  static const gold = Color(0xFFA88B5B);
-  static const forest = Color(0xFF354638);
-  static const charcoal = Color(0xFF292A26);
-}
-
 abstract final class NamoSizes {
   static const readingColumn = 680.0;
   static const wideBreakpoint = 840.0;
   static const touchTarget = 48.0;
+  static const homeColumn = 1040.0;
+  static const iconSmall = 20.0;
+  static const icon = 24.0;
+  static const navBarHeight = 64.0;
+
+  /// The side margin of a page at [width].
+  static double pageMargin(double width) => width < 360
+      ? 16
+      : width < wideBreakpoint
+          ? 20
+          : 32;
+}
+
+abstract final class NamoSpace {
+  static const xs = 4.0;
+  static const sm = 8.0;
+  static const md = 12.0;
+  static const lg = 16.0;
+  static const xl = 24.0;
+  static const xxl = 32.0;
+  static const xxxl = 48.0;
+}
+
+abstract final class NamoRadius {
+  static const sm = 12.0;
+  static const md = 16.0;
+  static const lg = 24.0;
+}
+
+abstract final class NamoMotion {
+  static const press = Duration(milliseconds: 120);
+  static const quick = Duration(milliseconds: 200);
+  static const open = Duration(milliseconds: 300);
+  static const close = Duration(milliseconds: 200);
+  static const curve = Curves.easeOutCubic;
+
+  /// [d], or zero when the person has asked for no animation.
+  static Duration of(BuildContext context, Duration d) =>
+      MediaQuery.disableAnimationsOf(context) ? Duration.zero : d;
 }
 
 /// Semantic colour roles, one set per brightness.
@@ -20,44 +50,80 @@ abstract final class NamoSizes {
 class NamoPalette extends ThemeExtension<NamoPalette> {
   const NamoPalette({
     required this.background,
+    required this.backgroundAlt,
     required this.surface,
-    required this.divider,
+    required this.border,
     required this.text,
-    required this.textQuiet,
-    required this.heading,
-    required this.accent,
+    required this.textSecondary,
+    required this.textMuted,
+    required this.sage,
+    required this.gold,
+    required this.onSage,
+    required this.shadow,
   });
 
   final Color background;
+  final Color backgroundAlt;
   final Color surface;
-  final Color divider;
+  final Color border;
   final Color text;
-  final Color textQuiet;
-  final Color heading;
-  final Color accent;
-
-  static const light = NamoPalette(
-    background: NamoColors.ivory,
-    surface: NamoColors.sand,
-    divider: NamoColors.sand,
-    text: NamoColors.charcoal,
-    textQuiet: Color(0xFF5F5E57),
-    heading: NamoColors.forest,
-    accent: NamoColors.gold,
-  );
+  final Color textSecondary;
+  final Color textMuted;
+  final Color sage;
+  final Color gold;
+  final Color onSage;
+  final Color shadow;
 
   static const dark = NamoPalette(
-    background: Color(0xFF1E1F1C),
-    surface: NamoColors.charcoal,
-    divider: Color(0xFF3A3B36),
-    text: NamoColors.sand,
-    textQuiet: Color(0xFFB5AD9E),
-    heading: Color(0xFFA9BFA9),
-    accent: Color(0xFFC9AE7C),
+    background: Color(0xFF151714),
+    backgroundAlt: Color(0xFF1C1F1B),
+    surface: Color(0xFF232720),
+    border: Color(0xFF34382F),
+    text: Color(0xFFEAE6DC),
+    textSecondary: Color(0xFFA9A698),
+    textMuted: Color(0xFF77776D),
+    sage: Color(0xFFA8B99F),
+    gold: Color(0xFFC6A879),
+    onSage: Color(0xFF151714),
+    shadow: Color(0x4D000000),
   );
 
-  /// The tint a keyboard-focused row is drawn in: the heading colour, faint.
-  Color get focus => heading.withValues(alpha: 0.18);
+  static const light = NamoPalette(
+    background: Color(0xFFF7F4EC),
+    backgroundAlt: Color(0xFFEFEBE1),
+    surface: Color(0xFFFDFBF6),
+    border: Color(0xFFD5CFC0),
+    text: Color(0xFF22251F),
+    textSecondary: Color(0xFF4F5248),
+    textMuted: Color(0xFF72736A),
+    sage: Color(0xFF4F6447),
+    gold: Color(0xFF7F6130),
+    onSage: Color(0xFFFDFBF6),
+    shadow: Color(0x1F22251F),
+  );
+
+  /// Text drawn over a picture, and the scrim colour it sits on.
+  static const onPicture = Color(0xFFEAE6DC);
+  static const pictureScrim = Color(0xFF151714);
+
+  Color get pressed => text.withValues(alpha: 0.08);
+  Color get hovered => text.withValues(alpha: 0.04);
+  Color get sageTint => sage.withValues(alpha: 0.14);
+
+  /// The only shadow in the app.
+  List<BoxShadow> get floatShadow =>
+      [BoxShadow(color: shadow, blurRadius: 24, offset: const Offset(0, 8))];
+
+  // Old name, removed in Task 14
+  Color get divider => border;
+  // Old name, removed in Task 14
+  Color get textQuiet => textSecondary;
+  // Old name, removed in Task 14
+  Color get heading => text;
+  // Old name, removed in Task 14
+  Color get accent => gold;
+  // Old name, removed in Task 14
+  Color get focus => sageTint;
 
   static NamoPalette of(BuildContext context) =>
       Theme.of(context).extension<NamoPalette>()!;
@@ -65,34 +131,47 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   @override
   NamoPalette copyWith({
     Color? background,
+    Color? backgroundAlt,
     Color? surface,
-    Color? divider,
+    Color? border,
     Color? text,
-    Color? textQuiet,
-    Color? heading,
-    Color? accent,
+    Color? textSecondary,
+    Color? textMuted,
+    Color? sage,
+    Color? gold,
+    Color? onSage,
+    Color? shadow,
   }) =>
       NamoPalette(
         background: background ?? this.background,
+        backgroundAlt: backgroundAlt ?? this.backgroundAlt,
         surface: surface ?? this.surface,
-        divider: divider ?? this.divider,
+        border: border ?? this.border,
         text: text ?? this.text,
-        textQuiet: textQuiet ?? this.textQuiet,
-        heading: heading ?? this.heading,
-        accent: accent ?? this.accent,
+        textSecondary: textSecondary ?? this.textSecondary,
+        textMuted: textMuted ?? this.textMuted,
+        sage: sage ?? this.sage,
+        gold: gold ?? this.gold,
+        onSage: onSage ?? this.onSage,
+        shadow: shadow ?? this.shadow,
       );
 
   @override
   NamoPalette lerp(ThemeExtension<NamoPalette>? other, double t) {
     if (other is! NamoPalette) return this;
+    Color mix(Color a, Color b) => Color.lerp(a, b, t)!;
     return NamoPalette(
-      background: Color.lerp(background, other.background, t)!,
-      surface: Color.lerp(surface, other.surface, t)!,
-      divider: Color.lerp(divider, other.divider, t)!,
-      text: Color.lerp(text, other.text, t)!,
-      textQuiet: Color.lerp(textQuiet, other.textQuiet, t)!,
-      heading: Color.lerp(heading, other.heading, t)!,
-      accent: Color.lerp(accent, other.accent, t)!,
+      background: mix(background, other.background),
+      backgroundAlt: mix(backgroundAlt, other.backgroundAlt),
+      surface: mix(surface, other.surface),
+      border: mix(border, other.border),
+      text: mix(text, other.text),
+      textSecondary: mix(textSecondary, other.textSecondary),
+      textMuted: mix(textMuted, other.textMuted),
+      sage: mix(sage, other.sage),
+      gold: mix(gold, other.gold),
+      onSage: mix(onSage, other.onSage),
+      shadow: mix(shadow, other.shadow),
     );
   }
 }

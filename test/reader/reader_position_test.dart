@@ -222,7 +222,7 @@ void main() {
     'bookmark and favourite buttons toggle and announce their state',
     (t) async {
       final c = await openAt(t, Routes.reader('r1'), InMemoryKeyValueStore());
-      final palette = NamoPalette.light;
+      final palette = NamoPalette.dark; // the app opens dark
       expect(find.byTooltip('Bookmark this section'), findsNWidgets(3));
       expect(find.byTooltip('Remove bookmark'), findsNothing);
 

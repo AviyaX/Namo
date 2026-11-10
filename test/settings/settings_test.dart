@@ -24,7 +24,7 @@ void main() {
     expect(s.lineSpacing, 1.6);
     expect(s.scrollSpeed, 22.0);
     expect(s.autoScrollWithAudio, isFalse);
-    expect(s.themeMode, ThemeMode.system);
+    expect(s.themeMode, ThemeMode.dark);
   });
 
   test('settings survive a round trip through the store', () {
@@ -89,14 +89,29 @@ void main() {
   test('JSON that is not an object gives all defaults', () {
     final store = InMemoryKeyValueStore()..write('namo.settings.v1', '[1,2]');
     expect(
-        containerOn(store).read(settingsProvider).themeMode, ThemeMode.system);
+        containerOn(store).read(settingsProvider).themeMode, ThemeMode.dark);
   });
 
   test('an unknown layout or theme name falls back alone', () {
     final s = AppSettings.fromJson(
         {'layout': 'zigzag', 'themeMode': 'sepia', 'fontScale': 1.2});
     expect(s.layout, TwoLanguageLayout.verse);
-    expect(s.themeMode, ThemeMode.system);
+    expect(s.themeMode, ThemeMode.dark);
     expect(s.fontScale, 1.2);
+  });
+
+  test('every stored theme name reads back, and garbage gives dark', () {
+    ThemeMode read(Object? j) => AppSettings.fromJson(j).themeMode;
+    expect(const AppSettings().themeMode, ThemeMode.dark);
+    expect(read({'themeMode': 'system'}), ThemeMode.system);
+    expect(read({'themeMode': 'light'}), ThemeMode.light);
+    expect(read({'themeMode': 'dark'}), ThemeMode.dark);
+    expect(read({}), ThemeMode.dark);
+    expect(read({'themeMode': 7}), ThemeMode.dark);
+    expect(read({'themeMode': 'sepia'}), ThemeMode.dark);
+    expect(read('nonsense'), ThemeMode.dark);
+    final store = InMemoryKeyValueStore()
+      ..write('namo.settings.v1', '"nonsense"');
+    expect(containerOn(store).read(settingsProvider).themeMode, ThemeMode.dark);
   });
 }

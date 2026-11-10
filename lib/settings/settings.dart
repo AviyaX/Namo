@@ -16,7 +16,7 @@ class AppSettings {
     this.lineSpacing = 1.6,
     this.scrollSpeed = 22.0,
     this.autoScrollWithAudio = false,
-    this.themeMode = ThemeMode.system,
+    this.themeMode = ThemeMode.dark,
   });
 
   static const fontScaleRange = (min: 0.85, max: 1.6);

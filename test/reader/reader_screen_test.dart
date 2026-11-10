@@ -84,7 +84,7 @@ void main() {
       );
       expect(
         t.widget<Text>(find.text('category 1')).style!.color,
-        NamoPalette.light.textQuiet,
+        NamoPalette.dark.textQuiet, // the app opens dark
       );
       for (var i = 1; i <= 3; i++) {
         expect(find.byKey(ValueKey('heading-s0$i')), findsOneWidget);

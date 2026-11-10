@@ -4,46 +4,46 @@ import 'tokens.dart';
 import 'typography.dart';
 
 ThemeData namoTheme(Brightness brightness) {
-  final p = brightness == Brightness.light
-      ? NamoPalette.light
-      : NamoPalette.dark;
-  TextStyle style(double size, {int weight = 400, Color? color}) => namoText(
-      NamoFonts.english,
-      size: size,
-      color: color ?? p.text,
-      weight: weight);
-  final hairline = BorderSide(color: p.divider, width: 1);
-  const radius = BorderRadius.all(Radius.circular(8));
+  final p =
+      brightness == Brightness.light ? NamoPalette.light : NamoPalette.dark;
+  final hairline = BorderSide(color: p.border, width: 1);
+  const radius = BorderRadius.all(Radius.circular(NamoRadius.sm));
+  const minSize = Size(NamoSizes.touchTarget, NamoSizes.touchTarget);
 
   final textTheme = TextTheme(
-    displayLarge: style(22, weight: 600, color: p.heading),
-    displayMedium: style(22, weight: 600, color: p.heading),
-    displaySmall: style(22, weight: 600, color: p.heading),
-    headlineLarge: style(22, weight: 600, color: p.heading),
-    headlineMedium: style(22, weight: 600, color: p.heading),
-    headlineSmall: style(20, weight: 600, color: p.heading),
-    titleLarge: style(20, weight: 600, color: p.heading),
-    titleMedium: style(16, weight: 600),
-    titleSmall: style(14, weight: 600),
-    bodyLarge: style(16),
-    bodyMedium: style(16),
-    bodySmall: style(14, color: p.textQuiet),
-    labelLarge: style(16, weight: 500),
-    labelMedium: style(14, weight: 500),
-    labelSmall: style(12, weight: 500, color: p.textQuiet),
+    displayLarge: NamoType.screenTitle(p.text),
+    displayMedium: NamoType.screenTitle(p.text),
+    displaySmall: NamoType.screenTitle(p.text),
+    headlineLarge: NamoType.screenTitle(p.text),
+    headlineMedium: NamoType.sectionTitle(p.text),
+    headlineSmall: NamoType.sectionTitle(p.text),
+    titleLarge: NamoType.sectionTitle(p.text),
+    titleMedium: NamoType.cardTitle(p.text),
+    titleSmall: NamoType.label(p.text),
+    bodyLarge: NamoType.body(p.text),
+    bodyMedium: NamoType.body(p.text),
+    bodySmall: NamoType.caption(p.textSecondary),
+    labelLarge: NamoType.label(p.text),
+    labelMedium: NamoType.label(p.textSecondary),
+    labelSmall: NamoType.overline(p.textSecondary),
   );
 
-  final scheme = ColorScheme.fromSeed(
-    seedColor: NamoColors.forest,
+  final scheme = ColorScheme(
     brightness: brightness,
-  ).copyWith(
-    surface: p.background,
+    primary: p.sage,
+    onPrimary: p.onSage,
+    secondary: p.gold,
+    onSecondary: p.onSage,
+    error: brightness == Brightness.light
+        ? const Color(0xFF9B3B2F)
+        : const Color(0xFFE08A7C),
+    onError: brightness == Brightness.light
+        ? const Color(0xFFFDFBF6)
+        : const Color(0xFF151714),
+    surface: p.surface,
     onSurface: p.text,
-    primary: p.heading,
-    onPrimary: p.background,
-    secondary: p.accent,
-    outline: p.divider,
-    outlineVariant: p.divider,
+    outline: p.textMuted,
+    outlineVariant: p.border,
     surfaceTint: Colors.transparent,
   );
 
@@ -55,38 +55,43 @@ ThemeData namoTheme(Brightness brightness) {
     canvasColor: p.background,
     textTheme: textTheme,
     extensions: [p],
-    dividerTheme: DividerThemeData(color: p.divider, thickness: 1, space: 1),
+    splashFactory: NoSplash.splashFactory,
+    highlightColor: p.pressed,
+    hoverColor: p.hovered,
+    focusColor: p.sageTint,
+    iconTheme: IconThemeData(color: p.text, weight: 300),
+    dividerTheme: DividerThemeData(color: p.border, thickness: 1, space: 1),
     appBarTheme: AppBarTheme(
       elevation: 0,
       scrolledUnderElevation: 0,
       backgroundColor: p.background,
-      foregroundColor: p.heading,
+      foregroundColor: p.text,
       surfaceTintColor: Colors.transparent,
       titleTextStyle: textTheme.titleLarge,
     ),
     cardTheme: CardThemeData(
       elevation: 0,
-      color: p.background,
+      color: p.surface,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
+        minimumSize: minSize,
         shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
+        minimumSize: minSize,
         side: hairline,
         shape: const RoundedRectangleBorder(borderRadius: radius),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
+        minimumSize: minSize,
         shape: const RoundedRectangleBorder(borderRadius: radius),
       ),
     ),
@@ -98,74 +103,81 @@ ThemeData namoTheme(Brightness brightness) {
       indicatorColor: p.surface,
       iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
           color: states.contains(WidgetState.selected)
-              ? p.heading
-              : p.textQuiet)),
-      labelTextStyle: WidgetStateProperty.resolveWith((states) => style(12,
-          weight: 500,
-          color: states.contains(WidgetState.selected)
-              ? p.heading
-              : p.textQuiet)),
+              ? p.sage
+              : p.textSecondary)),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) =>
+          NamoType.overline(states.contains(WidgetState.selected)
+              ? p.sage
+              : p.textSecondary)),
     ),
     navigationRailTheme: NavigationRailThemeData(
       elevation: 0,
       backgroundColor: p.background,
       indicatorColor: p.surface,
       labelType: NavigationRailLabelType.all,
-      selectedIconTheme: IconThemeData(color: p.heading),
-      unselectedIconTheme: IconThemeData(color: p.textQuiet),
-      selectedLabelTextStyle: style(12, weight: 500, color: p.heading),
-      unselectedLabelTextStyle: style(12, weight: 500, color: p.textQuiet),
+      selectedIconTheme: IconThemeData(color: p.sage),
+      unselectedIconTheme: IconThemeData(color: p.textSecondary),
+      selectedLabelTextStyle: NamoType.overline(p.sage),
+      unselectedLabelTextStyle: NamoType.overline(p.textSecondary),
     ),
     snackBarTheme: SnackBarThemeData(
       elevation: 0,
       backgroundColor: p.surface,
-      contentTextStyle: style(16),
-      actionTextColor: p.heading,
+      contentTextStyle: NamoType.body(p.text),
+      actionTextColor: p.sage,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
     ),
+    tooltipTheme: TooltipThemeData(
+      decoration: BoxDecoration(
+        color: p.surface,
+        borderRadius: radius,
+        border: Border.fromBorderSide(hairline),
+      ),
+      textStyle: NamoType.caption(p.text),
+    ),
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(
-        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
-        foregroundColor: p.heading,
-        disabledForegroundColor: p.textQuiet.withValues(alpha: 0.5),
-        highlightColor: p.surface,
-        hoverColor: p.surface,
+        minimumSize: minSize,
+        foregroundColor: p.text,
+        disabledForegroundColor: p.textMuted,
+        highlightColor: p.pressed,
+        hoverColor: p.hovered,
       ),
     ),
-    // Off must show: an outline and thumb in the quiet text colour (the
-    // default is a pale grey on a pale track).
+    // Off must show: an outline and thumb in the muted text colour.
     switchTheme: SwitchThemeData(
       trackColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? p.heading : p.background),
+          states.contains(WidgetState.selected) ? p.sage : p.border),
       trackOutlineColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? p.heading : p.textQuiet),
+          states.contains(WidgetState.selected) ? p.sage : p.textMuted),
       thumbColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? p.background : p.textQuiet),
+          states.contains(WidgetState.selected) ? p.onSage : p.textSecondary),
     ),
     sliderTheme: SliderThemeData(
-      activeTrackColor: p.heading,
-      inactiveTrackColor: p.divider,
-      thumbColor: p.heading,
-      overlayColor: p.surface,
+      activeTrackColor: p.sage,
+      inactiveTrackColor: p.border,
+      thumbColor: p.sage,
+      overlayColor: p.sageTint,
       activeTickMarkColor: Colors.transparent,
       inactiveTickMarkColor: Colors.transparent,
     ),
     bottomSheetTheme: BottomSheetThemeData(
       elevation: 0,
       modalElevation: 0,
-      backgroundColor: p.background,
-      modalBackgroundColor: p.background,
+      backgroundColor: p.surface,
+      modalBackgroundColor: p.surface,
       surfaceTintColor: Colors.transparent,
       shadowColor: Colors.transparent,
-      dragHandleColor: p.divider,
+      dragHandleColor: p.border,
       shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+          borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(NamoRadius.lg)),
           side: hairline),
     ),
     dialogTheme: DialogThemeData(
       elevation: 0,
-      backgroundColor: p.background,
+      backgroundColor: p.surface,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
     ),

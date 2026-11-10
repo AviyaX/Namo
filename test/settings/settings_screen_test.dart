@@ -200,16 +200,21 @@ void main() {
     }
   });
 
-  testWidgets('choosing Dark changes the app theme at once', (t) async {
+  testWidgets('choosing a theme changes the app theme at once', (t) async {
     await openSettings(t, size: const Size(390, 2400));
-    expect(t.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
-        ThemeMode.system);
+    ThemeMode mode() =>
+        t.widget<MaterialApp>(find.byType(MaterialApp)).themeMode!;
+    Brightness shown() =>
+        Theme.of(t.element(find.byType(Scaffold).first)).brightness;
+    expect(mode(), ThemeMode.dark);
+    await t.tap(row('Light'));
+    await t.pumpAndSettle();
+    expect(mode(), ThemeMode.light);
+    expect(shown(), Brightness.light);
     await t.tap(row('Dark'));
     await t.pumpAndSettle();
-    expect(t.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
-        ThemeMode.dark);
-    expect(Theme.of(t.element(find.byType(Scaffold).first)).brightness,
-        Brightness.dark);
+    expect(mode(), ThemeMode.dark);
+    expect(shown(), Brightness.dark);
   });
 
   testWidgets('Sources opens from Settings', (t) async {

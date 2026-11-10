@@ -65,6 +65,13 @@ Future<ProviderContainer> open(
   return ProviderScope.containerOf(t.element(find.byType(MaterialApp)));
 }
 
+/// A stream event from the player reaches the controls one frame after the
+/// frame the tap or advance asked for.
+Future<void> pumpStream(WidgetTester t) async {
+  await t.pump();
+  await t.pump();
+}
+
 String audioLabel(WidgetTester t) => t.widget<IconButton>(_audioPlay).tooltip!;
 String scrollLabel(WidgetTester t) =>
     t.widget<IconButton>(_scrollPlay).tooltip!;
@@ -130,33 +137,33 @@ void main() {
     );
 
     await t.tap(_audioPlay);
-    await t.pump();
+    await pumpStream(t);
     expect(player.state.status, ChantStatus.playing);
     expect(audioLabel(t), 'Pause recording');
     player.advance(const Duration(seconds: 7));
-    await t.pump();
+    await pumpStream(t);
     expect(find.text('0:07 / 0:20'), findsOneWidget);
 
     await t.tap(_audioPlay);
-    await t.pump();
+    await pumpStream(t);
     expect(player.state.status, ChantStatus.paused);
     expect(audioLabel(t), 'Play recording');
     expect(find.text('0:07 / 0:20'), findsOneWidget);
 
     await t.tap(_audioPlay);
-    await t.pump();
+    await pumpStream(t);
     expect(player.state.status, ChantStatus.playing);
     expect(player.state.position, const Duration(seconds: 7));
     expect(audioLabel(t), 'Pause recording');
 
     await t.tap(_audioRestart);
-    await t.pump();
+    await pumpStream(t);
     expect(player.state.status, ChantStatus.playing);
     expect(player.state.position, Duration.zero);
     expect(find.text('0:00 / 0:20'), findsOneWidget);
 
     player.advance(const Duration(seconds: 30));
-    await t.pump();
+    await pumpStream(t);
     expect(player.state.status, ChantStatus.completed);
     expect(audioLabel(t), 'Play recording');
     expect(find.text('0:20 / 0:20'), findsOneWidget);
@@ -277,11 +284,16 @@ void main() {
     final player = FakeChantPlayer();
     await open(t, player: player);
     await t.tap(_audioPlay);
-    await t.pump();
+    await pumpStream(t);
     t.binding
       ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
       ..handleAppLifecycleStateChanged(AppLifecycleState.hidden);
-    await t.pump();
+    expect(player.state.status, ChantStatus.paused);
+    // Frames stop while the app is hidden; draw again to see the label.
+    t.binding
+      ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
+      ..handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await pumpStream(t);
     expect(player.state.status, ChantStatus.paused);
     expect(audioLabel(t), 'Play recording');
   });
