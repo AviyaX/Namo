@@ -13,7 +13,12 @@ class ReaderBottomBar extends StatelessWidget {
     this.onPlay,
     this.autoScroll = AutoScrollStatus.stopped,
     this.progress = 0,
+    this.audio,
   });
+
+  /// The recording's controls, in a row of their own above the buttons;
+  /// null when the reading has no recording.
+  final Widget? audio;
 
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
@@ -55,6 +60,7 @@ class ReaderBottomBar extends StatelessWidget {
                 ),
               ),
             ),
+            ?audio,
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(

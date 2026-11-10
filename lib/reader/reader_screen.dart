@@ -5,6 +5,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../audio/audio_catalogue.dart';
+import '../audio/audio_controls.dart';
+import '../audio/chant_player.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/not_found.dart';
@@ -51,6 +54,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   late final AutoScrollEngine _autoScroll;
   late final Ticker _ticker;
   Duration _lastTick = Duration.zero;
+
+  /// The recording's player, once bound; null for a reading without one.
+  ChantPlayer? _player;
+  String? _playerReading;
+  StreamSubscription<ChantState>? _audioSub;
+  ChantStatus _audioStatus = ChantStatus.idle;
 
   /// Whether the jump to the section or saved place has been scheduled.
   bool _opened = false;
@@ -105,8 +114,44 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _autoScroll.onFrame(since);
   }
 
+  /// Loads [recording] into [player] (both null for a reading without
+  /// one) and watches it. Called on every build; does nothing new unless
+  /// the reading or the player changed.
+  void _bindAudio(Recording? recording, ChantPlayer? player) {
+    final readingId = recording?.readingId;
+    if (identical(player, _player) && readingId == _playerReading) return;
+    final old = _player;
+    _audioSub?.cancel();
+    _audioSub = null;
+    _audioStatus = ChantStatus.idle;
+    _player = player;
+    _playerReading = readingId;
+    if (old != null) unawaited(old.pause());
+    if (recording == null || player == null) return;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !identical(_player, player)) return;
+      _audioSub = player.states.listen(_onAudio);
+      player.load(recording);
+    });
+  }
+
+  /// The one link between audio and auto-scroll: audio starting starts the
+  /// scroll, if the setting asks for it.
+  void _onAudio(ChantState state) {
+    final started = state.status == ChantStatus.playing &&
+        _audioStatus != ChantStatus.playing;
+    _audioStatus = state.status;
+    if (started &&
+        ref.read(settingsProvider).autoScrollWithAudio &&
+        _autoScroll.status != AutoScrollStatus.running) {
+      _autoScroll.play();
+    }
+  }
+
   void _toBackground() {
     _autoScroll.pause();
+    final player = _player;
+    if (player != null) unawaited(player.pause());
     _save();
   }
 
@@ -147,6 +192,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     // Providers cannot change while the tree is being torn down, so the last
     // place is noted now and handed over once this frame is done.
     _saveLater();
+    _audioSub?.cancel();
     _lifecycle.dispose();
     _ticker.dispose();
     _autoScroll.dispose();
@@ -355,6 +401,13 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             settings.layout,
           );
           final favourite = saved.isFavourite(reading.id);
+          final recording = ref
+              .watch(audioCatalogueProvider)
+              .recordingFor(reading.id);
+          _bindAudio(
+            recording,
+            recording == null ? null : ref.watch(chantPlayerProvider),
+          );
 
           if (!_opened) {
             _opened = true;
@@ -457,6 +510,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                     : () => _jumpTo(_nextTarget!),
                 onPlay: _playOrPause,
                 autoScroll: _autoScroll.status,
+                audio: recording == null
+                    ? null
+                    : AudioControls(recording: recording),
               ),
             ),
           );
