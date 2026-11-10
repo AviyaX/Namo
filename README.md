@@ -26,10 +26,22 @@ Namo is not made by, or connected with, namo.lk.
 The verse text reaches the app only through `tools/build_content.py`, which reads `content/extracted/*.json` and writes `assets/content/namaskaraya_to_pin_dima.json`.
 The English for sections 1–6 is prose from a narrow-column PDF, so the build re-sets it as sentences (line breaks and joining spaces only; it fails if any other character would change). English that is verse keeps the translator's line breaks.
 
+## Pirith content
+
+The Pirith topic (39 readings with recordings) reaches the app only through `tools/build_pirith.py`, which reads `content/extracted/pitaka_lk_pirith.json` and writes `assets/content/pirith.json` and `content/pirith_names.md`.
+
+- Rebuild: `python -I -X utf8 tools/build_pirith.py .`
+- Check it is up to date (also checks each bundled recording is the downloaded original): `python -I -X utf8 tools/build_pirith.py . --check`
+- Import the recordings: `python -I -X utf8 tools/build_pirith.py . --import-audio <audio_dir>`, where `<audio_dir>` is the folder of downloaded originals; it copies them into `assets/audio/pirith/`.
+- The downloaded originals are not in git. They live only in the main checkout's `source_material/pitaka_lk_pirith/audio`; the 39 recordings that ship are the ones in `assets/audio/pirith/`.
+- Tests: `python -I -X utf8 tools/test_build_pirith.py`. The glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`) also covers every pirith name.
+- Before publishing, read `docs/release-checklist.md`.
+
 ## Docs
 
 - `docs/superpowers/specs/`: the owner's spec and the design.
 - `docs/superpowers/plans/`: the plan for the first release.
+- `docs/release-checklist.md`: what must be true before the app is published.
 - `docs/pictures.md`: where each picture comes from and its licence.
 
 ## Commands

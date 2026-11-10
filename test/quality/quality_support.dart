@@ -4,6 +4,7 @@ import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -200,5 +201,53 @@ Future<void> scrollThrough(WidgetTester t) async {
     position.jumpTo(offset);
     await t.pump();
     expect(t.takeException(), isNull, reason: 'at offset $offset');
+  }
+}
+
+/// A pirith in the reader with the chanting playing (fake player, no sound)
+/// and a phrase highlighted. With [pausedFollowing] a hand has then moved the
+/// text, so the `Follow the chanting` pill shows.
+Future<void> openChanting(
+  WidgetTester t, {
+  Size size = const Size(390, 844),
+  double deviceTextScale = 1.0,
+  bool? dark,
+  bool pausedFollowing = false,
+  String id = mangalaReadingId,
+}) async {
+  final lib = await realLibrary(t);
+  final recording = ContentAudioCatalogue(lib).recordingFor(id)!;
+  final times = recording.blockTimes.whereType<BlockTime>().toList();
+  final player = FakeChantPlayer(
+    length: times.last.end + const Duration(seconds: 2),
+  );
+  await openReal(
+    t,
+    Routes.reader(id),
+    size: size,
+    deviceTextScale: deviceTextScale,
+    dark: dark,
+    player: player,
+  );
+  await t.tap(find.byKey(const ValueKey('chant-play')));
+  await t.pump();
+  final middle = times[3];
+  player.advance(
+    middle.start + (middle.end - middle.start) ~/ 2 - player.state.position,
+  );
+  for (var i = 0; i < 12; i++) {
+    await t.pump(const Duration(milliseconds: 100));
+  }
+  expect(find.byKey(const ValueKey('phrase-active')), findsOneWidget);
+  if (pausedFollowing) {
+    // Start near the top of the text: in a short window the floating bar
+    // covers the middle of it.
+    final text = t.getRect(find.byType(CustomScrollView));
+    await t.dragFrom(
+      Offset(text.center.dx, text.top + 40),
+      const Offset(0, 60),
+    );
+    await t.pump();
+    expect(find.byKey(const ValueKey('follow-chanting')), findsOneWidget);
   }
 }
