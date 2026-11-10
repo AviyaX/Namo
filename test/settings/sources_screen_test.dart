@@ -97,11 +97,30 @@ void main() {
       expect(name, greaterThan(y));
       expect(note.top, greaterThan(name));
       expect(note.bottom, lessThan(corrections));
-      // Nothing between the credit and the next heading but its padding.
-      expect(corrections - note.bottom, lessThan(40));
+      // Nothing between the picture credits and the next heading but their
+      // padding: the Home banner credit is the last one.
+      final last = t.getRect(
+        find.textContaining('the top of Home on wide screens', findRichText: true),
+      );
+      expect(last.top, greaterThan(note.bottom));
+      expect(corrections - last.bottom, lessThan(40));
       handle.dispose();
     },
   );
+
+  testWidgets('Sources credits the Home banner picture under Pictures', (t) async {
+    await openSources(t);
+    final name = text('Home banner picture');
+    expect(name, findsOneWidget);
+    expect(
+      find.textContaining('the top of Home on wide screens', findRichText: true),
+      findsOneWidget,
+    );
+    final y = t.getTopLeft(find.text('Pictures')).dy;
+    expect(t.getTopLeft(name).dy, greaterThan(t.getTopLeft(text('Home card picture')).dy));
+    expect(t.getTopLeft(name).dy, greaterThan(y));
+    expect(t.getTopLeft(name).dy, lessThan(t.getTopLeft(find.text('Corrections')).dy));
+  });
 
   testWidgets('Sources no longer mentions Wikimedia or Price Zero', (t) async {
     await openSources(t);

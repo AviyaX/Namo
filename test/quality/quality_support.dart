@@ -9,6 +9,7 @@ import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_chant_player.dart';
@@ -91,6 +92,7 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// theme. [withSaved] fills Saved with bookmarks and a favourite.
 /// [library] replaces the bundled content. [audio] puts the placeholder
 /// recording on every reading; [audioFails] makes the player fail to load it.
+/// [overrides] are added to the app's provider overrides (a fixed clock, say).
 Future<void> openReal(
   WidgetTester t,
   String location, {
@@ -102,6 +104,7 @@ Future<void> openReal(
   Library? library,
   bool audio = false,
   bool audioFails = false,
+  List<Override> overrides = const [],
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -133,6 +136,7 @@ Future<void> openReal(
   await pumpApp(
     t,
     overrides: [
+      ...overrides,
       contentRepositoryProvider.overrideWithValue(
         _FixedRepository(lib),
       ),

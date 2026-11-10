@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../content/content_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/namo_page.dart';
 import '../library/library_gate.dart';
 import '../reader/position_controller.dart';
 import '../router.dart';
-import 'reading_card.dart';
+import '../settings/settings.dart';
+import 'card_art.dart';
+import 'continue_card.dart';
+import 'featured_card.dart';
+import 'gatha_card.dart';
+import 'section_strip.dart';
+import 'today.dart';
 
-/// The width of the Home column on wide screens: room for a few cards a row.
-const _wideColumn = 1040.0;
-
-/// A wide card is between these widths.
-const _cardMin = 320.0, _cardMax = 360.0, _gap = 16.0;
+/// The size of a picture card under Collections (it grows taller when its
+/// words need more room).
+const _collectionWidth = 200.0, _collectionHeight = 148.0;
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key = const ValueKey('screen-home')});
@@ -23,176 +27,154 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = NamoPalette.of(context);
-    final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
-    return Scaffold(
-      // The foot of the list scrolls clear of the navigation bar, which
-      // floats over the page.
-      body: SafeArea(
-        bottom: false,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: wide ? _wideColumn : NamoSizes.readingColumn,
-            ),
-            child: ListView(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.paddingOf(context).bottom,
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
-                  child: Semantics(
-                    header: true,
-                    child: Text(
-                      'Namo',
-                      style: namoText(
-                        NamoFonts.english,
-                        size: 32,
-                        color: p.heading,
-                        weight: 600,
-                      ),
-                    ),
-                  ),
-                ),
-                LibraryGate(
-                  builder: (context, library) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const _ContinueReading(),
-                      _Cards(categories: library.categories, wide: wide),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+    final width = MediaQuery.sizeOf(context).width;
+    final wide = width >= NamoSizes.wideBreakpoint;
+    final now = ref.watch(clockProvider)();
+    return NamoPage(
+      columnKey: const ValueKey('home-column'),
+      maxWidth: wide ? NamoSizes.homeColumn : NamoSizes.readingColumn,
+      children: [
+        Semantics(
+          header: true,
+          child: Text('Namo', style: NamoType.wordmark(p.text)),
         ),
-      ),
+        const SizedBox(height: NamoSpace.xs),
+        Text(greetingFor(now), style: NamoType.body(p.textSecondary)),
+        LibraryGate(
+          builder: (context, library) =>
+              _Blocks(library: library, now: now, wide: wide),
+        ),
+      ],
     );
   }
 }
 
-/// The category cards: one a row, as wide as the column, on a phone; a
-/// wrapping grid of cards [_cardMin]-[_cardMax] wide, from the left edge, on
-/// a wide screen.
-class _Cards extends StatelessWidget {
-  const _Cards({required this.categories, required this.wide});
+/// Everything under the header, [_gap] apart.
+class _Blocks extends ConsumerWidget {
+  const _Blocks({required this.library, required this.now, required this.wide});
 
-  final List<Category> categories;
+  final Library library;
+  final DateTime now;
   final bool wide;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      child: LayoutBuilder(
-        builder: (context, box) {
-          final width = box.maxWidth;
-          final double cardWidth;
-          if (wide) {
-            final perRow = ((width + _gap) / (_cardMin + _gap)).floor().clamp(
-              1,
-              1000,
-            );
-            cardWidth = ((width - (perRow - 1) * _gap) / perRow).clamp(
-              _cardMin,
-              _cardMax,
-            );
-          } else {
-            cardWidth = width;
-          }
-          return Wrap(
-            spacing: _gap,
-            runSpacing: _gap,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gap = MediaQuery.sizeOf(context).width < 360
+        ? NamoSpace.xl
+        : NamoSpace.xxl;
+    final selection = ref.watch(settingsProvider.select((s) => s.languages));
+    final showContinue = ref.watch(
+      positionProvider.select((s) => hasContinue(s, library)),
+    );
+    final first = library.categories.firstOrNull;
+    final pick = gathaForDay(library, now);
+
+    final continueCard = showContinue ? ContinueCard(library: library) : null;
+    final gathaCard = pick == null
+        ? null
+        : GathaCard(pick: pick, selection: selection);
+    final featured = first == null ? null : FeaturedCard(category: first);
+
+    final blocks = <Widget>[
+      if (wide) ...[
+        ?featured,
+        if (continueCard != null && gathaCard != null)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (final c in categories)
-                SizedBox(
-                  width: cardWidth,
-                  child: ReadingCard(category: c),
-                ),
+              Expanded(child: continueCard),
+              const SizedBox(width: NamoSpace.xl),
+              Expanded(child: gathaCard),
             ],
-          );
-        },
-      ),
+          )
+        else
+          ?(continueCard ?? gathaCard),
+      ] else ...[
+        ?continueCard,
+        ?featured,
+        ?gathaCard,
+      ],
+      if (first != null &&
+          first.readings.isNotEmpty &&
+          first.readings.first.sections.isNotEmpty)
+        SectionStrip(category: first),
+      if (library.categories.length >= 2)
+        _Collections(categories: library.categories.skip(1).toList()),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final b in blocks) ...[SizedBox(height: gap), b],
+      ],
     );
   }
 }
 
-/// Where the reader left off: the reading, the section and how far through.
-/// Absent until something was read, or if that reading is no longer there.
-class _ContinueReading extends ConsumerWidget {
-  const _ContinueReading();
+/// Every topic after the first, as picture cards in a row that scrolls
+/// sideways; each opens the topic in the Library.
+class _Collections extends StatelessWidget {
+  const _Collections({required this.categories});
 
-  void _open(BuildContext context, String readingId) =>
-      context.go(Routes.reader(readingId, from: ReaderFrom.home));
+  final List<Category> categories;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final position = ref.watch(positionProvider);
-    final library = ref.watch(libraryProvider).value;
-    final id = position.lastReadingId;
-    final progress = id == null ? null : position.byReading[id];
-    final reading = id == null ? null : library?.reading(id);
-    if (progress == null || reading == null) return const SizedBox.shrink();
-    final heading = reading.sections
-        .where((s) => s.id == progress.position.sectionId)
-        .firstOrNull
-        ?.heading;
+  Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    return Semantics(
-      button: true,
-      container: true,
-      excludeSemantics: true,
-      label: [
-        'Continue reading',
-        reading.title,
-        ?heading,
-        '${(progress.progress * 100).round()} percent',
-      ].join(', '),
-      onTap: () => _open(context, reading.id),
-      child: InkWell(
-        onTap: () => _open(context, reading.id),
-        splashFactory: NoSplash.splashFactory,
-        highlightColor: p.surface,
-        hoverColor: p.surface,
-        focusColor: p.focus,
-        child: Container(
-          constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: p.divider, width: 1)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Semantics(
+          header: true,
+          child: Text('Collections', style: NamoType.sectionTitle(p.text)),
+        ),
+        const SizedBox(height: NamoSpace.md),
+        EqualHeightRow(
+          children: [
+            for (final c in categories)
+              _CollectionCard(key: ValueKey('collection-${c.id}'), category: c),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CollectionCard extends StatelessWidget {
+  const _CollectionCard({super.key, required this.category});
+
+  final Category category;
+
+  @override
+  Widget build(BuildContext context) {
+    final count = sectionCountLabel(sectionCount(category));
+    const onPicture = NamoPalette.onPicture;
+    return SizedBox(
+      width: _collectionWidth,
+      child: TappableCard(
+        radius: NamoRadius.md,
+        onTap: () => context.go(Routes.category(category.id)),
+        semanticLabel: '${category.title}, ${category.subtitle}, $count',
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(NamoRadius.md),
+          child: Stack(
+            fit: StackFit.passthrough,
             children: [
-              Text(
-                'Continue reading',
-                style: namoText(
-                  NamoFonts.english,
-                  size: 14,
-                  color: p.textQuiet,
-                  weight: 600,
-                ),
-              ),
-              Text(
-                reading.title,
-                style: namoText(NamoFonts.english, size: 18, color: p.text),
-              ),
-              if (heading != null)
-                Text(
-                  heading,
-                  style: namoText(
-                    NamoFonts.sinhala,
-                    size: 14,
-                    color: p.textQuiet,
+              Positioned.fill(child: TopicPicture(categoryId: category.id)),
+              PictureWords(
+                minHeight: _collectionHeight,
+                child: Padding(
+                  padding: const EdgeInsets.all(NamoSpace.lg),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(category.title, style: NamoType.cardTitle(onPicture)),
+                      const SizedBox(height: NamoSpace.xs),
+                      Text(count, style: NamoType.caption(onPicture)),
+                    ],
                   ),
                 ),
-              const SizedBox(height: 8),
-              LinearProgressIndicator(
-                value: progress.progress,
-                minHeight: 2,
-                color: p.accent,
-                backgroundColor: p.divider,
               ),
             ],
           ),

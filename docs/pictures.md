@@ -6,6 +6,8 @@ Pictures in the app must be free to reuse or made for the app; every picture get
 
 `assets/pictures/buddha_wandanawa.jpg` — supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded). JPEG, 1600 x 900, SHA-1 `57b612a216db6b3f97c9f9af38b41b46abdd51aa`. Used on the Buddha Wandanawa card (`cat-namaskaraya`).
 
+`assets/pictures/home_banner.jpg` — supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded). JPEG, 1280 x 427, 68,138 bytes, SHA-1 `c8f5705c0528d81867d9d4e7ab9e429d75e2d9b6`. Used for the Home banner on wide screens (840 wide and up), for the Buddha Wandanawa topic (`cat-namaskaraya`). A byte-for-byte copy of `design/card_images/home_banner.jpg`.
+
 ## Kept for later, not bundled
 
 In `design/card_images/` (not listed in `pubspec.yaml`). Same origin as above: supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded).
@@ -15,9 +17,8 @@ In `design/card_images/` (not listed in `pubspec.yaml`). Same origin as above: s
 | `pirith.jpg` | 1600 x 900 | `461ee9b62b683276482de9994c4c58d606cc7344` | the Pirith topic |
 | `bodhi_tree.jpg` | 1600 x 900 | `b66ad8f7214b7b71488d9b6330ae7f85953a84ee` | the Meditation topic |
 | `stupa_dusk.jpg` | 1280 x 720 | `bcc99eea8c0d821f3af832b4bdf540c42315a9ba` | spare |
-| `home_banner.jpg` | 1280 x 427 | `c8f5705c0528d81867d9d4e7ab9e429d75e2d9b6` | a wide banner for Home, not used yet |
 
-`design/card_images/buddha_wandanawa.jpg` is a copy of the bundled picture.
+`design/card_images/buddha_wandanawa.jpg` and `design/card_images/home_banner.jpg` are copies of the bundled pictures.
 
 ## No longer used
 

@@ -102,6 +102,7 @@ flutter:
     - assets/branding/
     - assets/content/
     - assets/pictures/buddha_wandanawa.jpg
+    - assets/pictures/home_banner.jpg
     - assets/audio_dev/placeholder_tone_not_a_chant.wav
 
   fonts:

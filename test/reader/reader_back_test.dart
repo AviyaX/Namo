@@ -1,5 +1,5 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
-import 'package:buddhist_gatha/home/reading_card.dart';
+import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -55,7 +55,7 @@ void main() {
       t,
     ) async {
       await openAt(t, Routes.home);
-      await t.tap(find.byType(ReadingCard));
+      await t.tap(find.byType(FeaturedCard));
       await t.pumpAndSettle();
       await goBack(t, way);
       expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);

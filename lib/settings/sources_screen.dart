@@ -42,6 +42,12 @@ const _pictureCredits = [
     'Made for this app by its owner with an AI image tool. It is a '
         'generated picture, not a photograph of a real statue or place.',
   ),
+  _Credit(
+    'Home banner picture',
+    'Shown across the top of Home on wide screens. Made for this app by its '
+        'owner with an AI image tool; a generated picture, not a photograph '
+        'of a real place.',
+  ),
 ];
 
 /// A correction as the content file records it, with every section it was

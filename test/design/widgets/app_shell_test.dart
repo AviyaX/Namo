@@ -23,6 +23,17 @@ Finder _scrollable(String label) => find
 
 /// The lowest bottom edge of anything laid out in the list of [scrollable].
 double _contentBottom(WidgetTester t, Finder scrollable) {
+  final lists = find.descendant(
+    of: scrollable,
+    matching: find.byWidgetPredicate((w) => w is SliverMultiBoxAdaptorWidget),
+  );
+  // A page built on NamoPage (Home) is one column in a scroll view, laid out
+  // whole: its bottom edge is the end of the page.
+  if (lists.evaluate().isEmpty) {
+    return t
+        .getRect(find.descendant(of: scrollable, matching: find.byType(Column)).first)
+        .bottom;
+  }
   final list = find
       .descendant(
         of: scrollable,

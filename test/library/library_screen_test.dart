@@ -4,7 +4,7 @@ import 'package:buddhist_gatha/app.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/typography.dart';
-import 'package:buddhist_gatha/home/reading_card.dart';
+import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/design/widgets/pressable.dart';
 import 'package:flutter/material.dart';
@@ -187,7 +187,7 @@ void main() {
         ),
       ],
     );
-    await t.tap(find.byType(ReadingCard));
+    await t.tap(find.byType(FeaturedCard));
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
     expect(find.text('Alpha one'), findsOneWidget);
@@ -382,7 +382,7 @@ void main() {
         ),
       ],
     );
-    await t.tap(find.byType(ReadingCard));
+    await t.tap(find.byType(FeaturedCard));
     await t.pumpAndSettle();
     expect(find.text('Alpha one'), findsOneWidget);
 
@@ -392,7 +392,7 @@ void main() {
 
     await t.tap(find.text('Home'));
     await t.pumpAndSettle();
-    await t.tap(find.byType(ReadingCard));
+    await t.tap(find.byType(FeaturedCard));
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
     expect(find.text('Alpha one'), findsOneWidget);
@@ -449,10 +449,18 @@ void main() {
         );
         await t.tap(find.text('Home'));
         await t.pumpAndSettle();
-        await t.tap(find.byType(ReadingCard));
+        await t.tap(find.byType(FeaturedCard));
         await t.pump();
         expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
-        expect(find.text('Alpha one'), findsOneWidget);
+        // In the Library (Home, fading out, shows the same heading on its
+        // section row).
+        expect(
+          find.descendant(
+            of: find.byKey(const ValueKey('screen-library')),
+            matching: find.text('Alpha one'),
+          ),
+          findsOneWidget,
+        );
         final height = t.getSize(find.byKey(const ValueKey('open-c1'))).height;
         await t.pumpAndSettle();
         expect(t.getSize(find.byKey(const ValueKey('open-c1'))).height, height);
