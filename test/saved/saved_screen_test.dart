@@ -1,6 +1,7 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
+import 'package:buddhist_gatha/design/widgets/pressable.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
@@ -86,6 +87,58 @@ void main() {
     expect(c.read(savedProvider).favourites, isEmpty);
     expect(find.text('No favourites yet.'), findsOneWidget);
     expect(find.text('No bookmarks yet.'), findsNothing);
+  });
+
+  testWidgets('remove buttons are labelled buttons for screen readers', (
+    t,
+  ) async {
+    final handle = t.ensureSemantics();
+    final c = await openSaved(t);
+    c.read(savedProvider.notifier)
+      ..toggleBookmark('r1', 's01')
+      ..toggleFavourite('r1');
+    await t.pumpAndSettle();
+    for (final tip in [
+      'Remove bookmark: heading 1',
+      'Remove favourite: reading 1',
+    ]) {
+      expect(
+        t.getSemantics(
+          find.descendant(
+            of: find.byTooltip(tip),
+            matching: find.byType(Pressable),
+          ),
+        ),
+        matchesSemantics(
+          isButton: true,
+          hasTapAction: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          tooltip: tip,
+        ),
+        reason: tip,
+      );
+    }
+    await t.tap(find.text('heading 1'));
+    await t.pumpAndSettle();
+    expect(find.byKey(const ValueKey('reader-settings')), findsOneWidget);
+    handle.dispose();
+  });
+
+  testWidgets('group labels are headings', (t) async {
+    final handle = t.ensureSemantics();
+    final c = await openSaved(t);
+    c.read(savedProvider.notifier)
+      ..toggleBookmark('r1', 's01')
+      ..toggleFavourite('r1');
+    await t.pumpAndSettle();
+    for (final label in ['Bookmarks · 1', 'Favourites · 1']) {
+      expect(
+        t.getSemantics(find.text(label)),
+        matchesSemantics(label: label, isHeader: true),
+      );
+    }
+    handle.dispose();
   });
 
   testWidgets('with nothing saved there is one calm empty state', (t) async {
