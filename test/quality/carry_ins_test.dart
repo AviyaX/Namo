@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/theme.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
+import 'package:buddhist_gatha/design/widgets/namo_switch.dart';
 import 'package:buddhist_gatha/reader/reader_bottom_bar.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
@@ -312,20 +313,27 @@ void main() {
 
   testWidgets('16. the auto-scroll switch is visible when off, in both themes', (t) async {
     for (final brightness in Brightness.values) {
-      final theme = namoTheme(brightness);
-      final p = theme.extension<NamoPalette>()!;
-      final off = <WidgetState>{};
-      final outline = theme.switchTheme.trackOutlineColor!.resolve(off)!;
-      final thumb = theme.switchTheme.thumbColor!.resolve(off)!;
-      final track = theme.switchTheme.trackColor!.resolve(off)!;
-      expect(contrast(outline, p.background), greaterThanOrEqualTo(3), reason: '$brightness outline');
-      expect(contrast(thumb, track), greaterThanOrEqualTo(3), reason: '$brightness thumb');
-      final on = {WidgetState.selected};
-      expect(
-        contrast(theme.switchTheme.trackColor!.resolve(on)!, p.background),
-        greaterThanOrEqualTo(3),
-        reason: '$brightness on track',
-      );
+      final p = brightness == Brightness.dark ? NamoPalette.dark : NamoPalette.light;
+      for (final value in [false, true]) {
+        await t.pumpWidget(
+          MaterialApp(
+            theme: namoTheme(brightness),
+            home: Scaffold(body: Center(child: NamoSwitch(value: value, onChanged: (_) {}))),
+          ),
+        );
+        await t.pumpAndSettle();
+        final sw = t.widget<Switch>(find.byType(Switch));
+        final state = <WidgetState>{};
+        final outline = sw.trackOutlineColor!.resolve(state)!;
+        final thumb = sw.thumbColor!.resolve(state)!;
+        final track = sw.trackColor!.resolve(state)!;
+        if (!value) {
+          expect(contrast(outline, p.background), greaterThanOrEqualTo(3), reason: '$brightness outline');
+          expect(contrast(thumb, track), greaterThanOrEqualTo(3), reason: '$brightness thumb');
+        } else {
+          expect(contrast(track, p.background), greaterThanOrEqualTo(3), reason: '$brightness on track');
+        }
+      }
     }
   });
 
