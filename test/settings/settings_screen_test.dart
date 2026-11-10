@@ -84,6 +84,18 @@ void main() {
     h.dispose();
   });
 
+  testWidgets('Settings: the reason for a disabled layout is visible text',
+      (t) async {
+    await openSettings(t);
+    expect(find.text('Needs two languages'), findsNothing);
+    await t.tap(row('Pali'));
+    await t.pump();
+    expect(find.text('Needs two languages'), findsOneWidget);
+    await t.tap(row('English'));
+    await t.pump();
+    expect(find.text('Needs two languages'), findsNothing);
+  });
+
   testWidgets('Settings: every chooser row is at least 48 tall', (t) async {
     await openSettings(t);
     for (final label in [

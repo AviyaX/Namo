@@ -141,8 +141,23 @@ class LayoutChooser extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final enabled = settings.languages.languages.length == 2;
+    final p = NamoPalette.of(context);
     return Column(
       children: [
+        if (!enabled)
+          // Rows already carry the hint for screen readers; this is the
+          // visible copy, so it is not announced a second time.
+          ExcludeSemantics(
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                child: Text('Needs two languages',
+                    style: namoText(NamoFonts.english,
+                        size: 14, color: p.textQuiet)),
+              ),
+            ),
+          ),
         for (final layout in TwoLanguageLayout.values)
           _ChoiceRow(
             label: layout.label,
