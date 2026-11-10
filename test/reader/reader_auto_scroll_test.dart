@@ -220,8 +220,9 @@ void main() {
         isSemantics(
           label: label,
           isButton: true,
-          isSelected: label == 'Normal',
-          hasSelectedState: true,
+          isInMutuallyExclusiveGroup: true,
+          hasCheckedState: true,
+          isChecked: label == 'Normal',
         ),
       );
       expect(

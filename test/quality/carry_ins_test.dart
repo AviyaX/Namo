@@ -135,12 +135,13 @@ void main() {
           reason: label,
         );
       }
-      for (final label in ['Slow']) {
-        final ink = t.widget<InkWell>(
-          find.ancestor(of: find.text(label), matching: find.byType(InkWell)).first,
+      // The speed choices are segments of the speed selector: Pressables.
+      for (final label in ['Slow', 'Normal', 'Fast']) {
+        expect(
+          find.ancestor(of: find.text(label), matching: find.byType(Pressable)),
+          findsOneWidget,
+          reason: label,
         );
-        expect(ink.focusColor, isNotNull, reason: label);
-        expect(ink.focusColor!.a, greaterThan(0), reason: label);
       }
     });
   });

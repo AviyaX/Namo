@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/segmented_selector.dart';
 import '../reader/auto_scroll.dart';
 import 'settings.dart';
 
@@ -30,6 +31,84 @@ class SettingsHeading extends StatelessWidget {
             weight: 600,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A row label, with an optional quiet hint under it.
+class SettingLabel extends StatelessWidget {
+  const SettingLabel(this.text, {super.key, this.hint});
+
+  final String text;
+  final String? hint;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        NamoSpace.lg,
+        0,
+        NamoSpace.lg,
+        NamoSpace.xs,
+      ),
+      child: Semantics(
+        header: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(text, softWrap: true, style: NamoType.label(p.text)),
+            if (hint != null)
+              Text(
+                hint!,
+                softWrap: true,
+                style: NamoType.caption(p.textSecondary),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A slider on the app's colours: sage track and thumb on a border track.
+class _NamoSlider extends StatelessWidget {
+  const _NamoSlider({
+    required this.sliderKey,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.divisions,
+    required this.semanticFormatterCallback,
+    required this.onChanged,
+  });
+
+  final Key sliderKey;
+  final double value;
+  final double min;
+  final double max;
+  final int divisions;
+  final String Function(double) semanticFormatterCallback;
+  final ValueChanged<double> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return SliderTheme(
+      data: SliderTheme.of(context).copyWith(
+        activeTrackColor: p.sage,
+        inactiveTrackColor: p.border,
+        thumbColor: p.sage,
+      ),
+      child: Slider(
+        key: sliderKey,
+        value: value.clamp(min, max),
+        min: min,
+        max: max,
+        divisions: divisions,
+        semanticFormatterCallback: semanticFormatterCallback,
+        onChanged: onChanged,
       ),
     );
   }
@@ -68,30 +147,32 @@ class ScrollSpeedControl extends StatelessWidget {
     final range = AppSettings.scrollSpeedRange;
     final custom = _presetName(value) == null;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      padding: const EdgeInsets.fromLTRB(
+        NamoSpace.lg,
+        NamoSpace.xs,
+        NamoSpace.lg,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              for (final (i, (name, speed)) in _presets.indexed) ...[
-                if (i > 0) const SizedBox(width: 8),
-                Expanded(
-                  child: _SpeedChoice(
-                    label: name,
-                    selected: value == speed,
-                    onTap: () => onChanged(speed),
-                  ),
-                ),
-              ],
+          SegmentedSelector<double>(
+            semanticLabel: 'Speed presets',
+            segments: [
+              for (final (name, speed) in _presets) Segment(speed, name),
             ],
+            selected: {
+              for (final (_, speed) in _presets)
+                if (value == speed) speed,
+            },
+            onPressed: onChanged,
           ),
           MergeSemantics(
             child: Semantics(
               label: 'Scroll speed',
-              child: Slider(
-                key: sliderKey,
-                value: value.clamp(range.min, range.max),
+              child: _NamoSlider(
+                sliderKey: sliderKey,
+                value: value,
                 min: range.min,
                 max: range.max,
                 divisions: (range.max - range.min).round(),
@@ -104,79 +185,16 @@ class ScrollSpeedControl extends StatelessWidget {
           // Under the slider, so the slider does not move when it appears.
           if (custom)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: NamoSpace.sm),
               child: ExcludeSemantics(
                 child: Text(
                   'Custom',
                   softWrap: true,
-                  style: namoText(
-                    NamoFonts.english,
-                    size: 14,
-                    color: p.textQuiet,
-                  ),
+                  style: NamoType.caption(p.textSecondary),
                 ),
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-/// One preset speed: a hairline-bordered button, outlined in the heading
-/// colour when it is on.
-class _SpeedChoice extends StatelessWidget {
-  const _SpeedChoice({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = NamoPalette.of(context);
-    final radius = BorderRadius.circular(8);
-    return Semantics(
-      container: true,
-      excludeSemantics: true,
-      button: true,
-      selected: selected,
-      label: label,
-      onTap: onTap,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: radius,
-        splashFactory: NoSplash.splashFactory,
-        highlightColor: p.surface,
-        hoverColor: p.surface,
-        focusColor: p.focus,
-        child: Container(
-          constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: radius,
-            border: Border.all(
-              color: selected ? p.heading : p.divider,
-              width: 1,
-            ),
-          ),
-          child: Text(
-            label,
-            softWrap: true,
-            textAlign: TextAlign.center,
-            style: namoText(
-              NamoFonts.english,
-              size: 16,
-              color: selected ? p.heading : p.text,
-              weight: selected ? 600 : 400,
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -233,7 +251,7 @@ class SliderSetting extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      padding: const EdgeInsets.fromLTRB(NamoSpace.lg, 0, NamoSpace.lg, 0),
       child: MergeSemantics(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -244,29 +262,20 @@ class SliderSetting extends StatelessWidget {
                   child: Text(
                     label,
                     softWrap: true,
-                    style: namoText(
-                      NamoFonts.english,
-                      size: 14,
-                      color: p.textQuiet,
-                      weight: 600,
-                    ),
+                    style: NamoType.label(p.text),
                   ),
                 ),
                 ExcludeSemantics(
                   child: Text(
                     describe(value),
-                    style: namoText(
-                      NamoFonts.english,
-                      size: 14,
-                      color: p.textQuiet,
-                    ),
+                    style: NamoType.caption(p.textSecondary),
                   ),
                 ),
               ],
             ),
-            Slider(
-              key: sliderKey,
-              value: value.clamp(range.min, range.max),
+            _NamoSlider(
+              sliderKey: sliderKey,
+              value: value,
               min: range.min,
               max: range.max,
               divisions: divisions,
