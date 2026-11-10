@@ -102,7 +102,8 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// left null, the theme is whatever [settings] holds (the app's default is
 /// Dark) and the device is light. [withSaved] fills Saved with bookmarks and
 /// a favourite.
-/// [library] replaces the bundled content. [audio] puts the placeholder
+/// [library] replaces the bundled content. [player] is the one the reader gets (a fake that fails to load when
+/// [audioFails]). [audio] puts the placeholder
 /// recording on every reading; [audioFails] makes the player fail to load it.
 /// [storeExtras] are extra saved values (a remembered reading place, say).
 /// [overrides] are added to the app's provider overrides (a fixed clock, say).
@@ -117,6 +118,7 @@ Future<void> openReal(
   Library? library,
   bool audio = false,
   bool audioFails = false,
+  ChantPlayer? player,
   List<Override> overrides = const [],
   Map<String, String> storeExtras = const {},
   bool settle = true,
@@ -156,7 +158,7 @@ Future<void> openReal(
       ),
     );
   }
-  final player = FakeChantPlayer(failOnLoad: audioFails);
+  final chantPlayer = player ?? FakeChantPlayer(failOnLoad: audioFails);
   await pumpApp(
     t,
     overrides: [
@@ -166,11 +168,11 @@ Future<void> openReal(
       ),
       keyValueStoreProvider.overrideWithValue(store),
       if (audio) audioCatalogueProvider.overrideWithValue(PlaceholderCatalogue()),
-      if (audio)
-        chantPlayerProvider.overrideWith((ref) {
-          ref.onDispose(player.dispose);
-          return player;
-        }),
+      // Never a real player: nothing makes a sound in a test.
+      chantPlayerProvider.overrideWith((ref) {
+        ref.onDispose(chantPlayer.dispose);
+        return chantPlayer;
+      }),
     ],
     location: location,
     size: size,

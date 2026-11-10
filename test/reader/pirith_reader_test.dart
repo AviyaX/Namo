@@ -32,7 +32,12 @@ ScrollController _scroll(WidgetTester t) =>
 
 final _prev = find.byKey(const ValueKey('reader-prev'));
 final _next = find.byKey(const ValueKey('reader-next'));
-final _play = find.byKey(const ValueKey('reader-play'));
+// A pirith's bar has the auto-scroll button (a Tooltip inside it) in place
+// of the round one.
+final _play = find.descendant(
+  of: find.byKey(const ValueKey('reader-autoscroll')),
+  matching: find.byType(Tooltip),
+);
 
 bool _enabled(WidgetTester t, Finder f) =>
     t.widget<NamoIconButton>(f).onPressed != null;

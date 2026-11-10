@@ -79,6 +79,15 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   StreamSubscription<ChantState>? _audioSub;
   ChantStatus _audioStatus = ChantStatus.idle;
 
+  /// The recording when it is a timed one (a chant), whose controls are
+  /// the chanting bar; null otherwise.
+  Recording? _timed;
+
+  /// Where the chanting is. Idle until the first play of this reader asks
+  /// for the recording; the player is not asked before that.
+  final _chant = ValueNotifier<ChantState>(const ChantState());
+  bool _chantLoaded = false;
+
   /// Keeps the screen on while the page scrolls or a recording plays.
   late final ScreenAwake _awake;
   bool _holdingAwake = false;
@@ -178,8 +187,19 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _updateAwake();
     _player = player;
     _playerReading = readingId;
+    _timed = recording != null && recording.timed ? recording : null;
+    _chantLoaded = false;
+    _chant.value = const ChantState();
     if (old != null) unawaited(old.pause());
     if (recording == null || player == null) return;
+    if (_timed != null) {
+      // Only listened to now; the recording is asked for at the first play.
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !identical(_player, player)) return;
+        _audioSub = player.states.listen(_onAudio);
+      });
+      return;
+    }
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !identical(_player, player)) return;
       _audioSub = player.states.listen(_onAudio);
@@ -190,6 +210,13 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// The one link between audio and auto-scroll: audio starting starts the
   /// scroll, if the setting asks for it.
   void _onAudio(ChantState state) {
+    if (_timed != null) {
+      _audioStatus = state.status;
+      // What a player left from another reading is not this one's chanting.
+      if (_chantLoaded) _chant.value = state;
+      _updateAwake();
+      return;
+    }
     final started =
         state.status == ChantStatus.playing &&
         _audioStatus != ChantStatus.playing;
@@ -215,8 +242,38 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (_autoScroll.status == AutoScrollStatus.running) {
       _autoScroll.pause();
     } else {
+      // Only one of the two at a time.
+      if (_chant.value.status == ChantStatus.playing) {
+        unawaited(_player?.pause());
+      }
       _autoScroll.play();
     }
+  }
+
+  /// Plays, pauses or resumes the chanting. The recording is asked for the
+  /// first time it is played (and again after a failure).
+  Future<void> _chantPlayOrPause() async {
+    final player = _player, recording = _timed;
+    if (player == null || recording == null) return;
+    final status = _chant.value.status;
+    if (status == ChantStatus.loading) return;
+    if (status == ChantStatus.playing) {
+      await player.pause();
+      return;
+    }
+    _autoScroll.pause();
+    if (!_chantLoaded || status == ChantStatus.failed) {
+      _chantLoaded = true;
+      _chant.value = const ChantState(status: ChantStatus.loading);
+      await player.load(recording);
+      if (!mounted || !identical(_player, player)) return;
+    }
+    await player.play();
+  }
+
+  void _chantRestart() {
+    _autoScroll.pause();
+    unawaited(_player?.restart());
   }
 
   @override
@@ -249,6 +306,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     // place is noted now and handed over once this frame is done.
     _saveLater();
     _audioSub?.cancel();
+    // Quiet before the player is let go.
+    final player = _player;
+    if (player != null) unawaited(player.pause());
+    _chant.dispose();
     _setAwake(false);
     _lifecycle.dispose();
     _ticker.dispose();
@@ -484,6 +545,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     final next = category.readings[to];
     return () {
       _autoScroll.pause();
+      final player = _player;
+      if (player != null) unawaited(player.pause());
       _save();
       // Always at the beginning, whatever place is remembered for it.
       context.pushReplacement(
@@ -613,7 +676,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                 ],
               ),
               bottomNavigationBar: ListenableBuilder(
-                listenable: _autoScroll,
+                listenable: Listenable.merge([_autoScroll, _chant]),
                 builder: (context, _) => ReaderBottomBar(
                   previousTooltip: reading.isPhrased
                       ? 'Previous pirith'
@@ -633,9 +696,15 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                       : () => _jumpTo(_nextTarget!),
                   onPlay: _playOrPause,
                   autoScroll: _autoScroll.status,
-                  audio: recording == null
+                  audio: recording == null || recording.timed
                       ? null
                       : AudioControls(recording: recording),
+                  chantState: recording != null && recording.timed
+                      ? _chant.value
+                      : null,
+                  onChantPlay: _chantPlayOrPause,
+                  onChantRestart: _chantRestart,
+                  onChantSeek: (to) => unawaited(_player?.seek(to)),
                 ),
               ),
             ),
