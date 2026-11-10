@@ -114,9 +114,7 @@ void main() {
     expect(c.offset, 400);
   });
 
-  testWidgets('a move made on purpose and synced does not pause it', (
-    t,
-  ) async {
+  testWidgets('a move made on purpose and synced does not pause it', (t) async {
     final (c, engine) = await pumpPage(t, speed: 22);
     engine.play();
     oneSecond(engine);
@@ -149,6 +147,26 @@ void main() {
     expect(c.offset, 0);
     oneSecond(engine);
     expect(c.offset, closeTo(60, 0.01));
+  });
+
+  testWidgets('play with the page already at the very end starts from the '
+      'top at once', (t) async {
+    for (final paused in [false, true]) {
+      final (c, engine) = await pumpPage(t, speed: 60);
+      final max = c.position.maxScrollExtent;
+      if (paused) {
+        c.jumpTo(max - 30);
+        engine.play();
+        frames(engine, 10);
+        engine.pause();
+      }
+      c.jumpTo(max);
+      engine.play();
+      expect(engine.status, AutoScrollStatus.running, reason: '$paused');
+      expect(c.offset, 0, reason: '$paused');
+      oneSecond(engine);
+      expect(c.offset, closeTo(60, 0.01), reason: '$paused');
+    }
   });
 
   testWidgets('reset returns to the top and stops', (t) async {

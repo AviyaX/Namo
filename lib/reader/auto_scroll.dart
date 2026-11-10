@@ -55,10 +55,13 @@ class AutoScrollEngine extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Starts from the page's current offset; after finishing, from the top.
+  /// Starts from the page's current offset; after finishing, or with the
+  /// page already at its very end, from the top.
   void play() {
     if (!_controller.hasClients) return;
-    if (_status == AutoScrollStatus.finished) _controller.jumpTo(0);
+    final end = _controller.position.maxScrollExtent;
+    final atEnd = end > 0 && _controller.offset >= end;
+    if (_status == AutoScrollStatus.finished || atEnd) _controller.jumpTo(0);
     _target = _controller.offset;
     _setStatus(AutoScrollStatus.running);
   }
