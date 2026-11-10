@@ -199,6 +199,153 @@ void main() {
       },
     );
 
+    test('captures which language is at the top', () {
+      final p = capturePosition(
+        readingId: 'r1',
+        items: items,
+        extents: [e(0, 40), e(40, 100), e(140, 60)],
+        scrollOffset: 170,
+      )!;
+      expect(p.verseId, 's01-v1');
+      expect(p.language, si);
+      expect(p.fraction, 0.5);
+      final heading = capturePosition(
+        readingId: 'r1',
+        items: items,
+        extents: [e(0, 40), e(40, 100), e(140, 60)],
+        scrollOffset: 10,
+      )!;
+      expect(heading.language, isNull);
+    });
+
+    test('a second-language item at the top restores to that language, '
+        'verse layout', () {
+      final verseLayout = [
+        h('s01'),
+        v('s01-v1', pi),
+        v('s01-v1', si),
+        v('s01-v2', pi),
+        v('s01-v2', si),
+      ];
+      final extents = [
+        e(0, 40),
+        e(40, 50),
+        e(90, 300),
+        e(390, 50),
+        e(440, 300),
+      ];
+      final p = capturePosition(
+        readingId: 'r1',
+        items: verseLayout,
+        extents: extents,
+        scrollOffset: 240,
+      )!;
+      expect(p.language, si);
+      // The Sinhala grows (larger text); the place stays in the Sinhala.
+      final grown = [e(0, 60), e(60, 80), e(140, 600), e(740, 80), e(820, 600)];
+      expect(
+        offsetForPosition(
+          position: p,
+          items: verseLayout,
+          extents: grown,
+          maxScrollExtent: 5000,
+        ),
+        440,
+      );
+    });
+
+    test('a second-language item at the top restores to that language, '
+        'section layout', () {
+      final sectionLayout = [
+        h('s01'),
+        v('s01-v1', pi),
+        v('s01-v2', pi),
+        v('s01-v1', si),
+        v('s01-v2', si),
+      ];
+      final extents = [
+        e(0, 40),
+        e(40, 50),
+        e(90, 50),
+        e(140, 300),
+        e(440, 300),
+      ];
+      final p = capturePosition(
+        readingId: 'r1',
+        items: sectionLayout,
+        extents: extents,
+        scrollOffset: 590,
+      )!;
+      expect(p.verseId, 's01-v2');
+      expect(p.language, si);
+      expect(
+        offsetForPosition(
+          position: p,
+          items: sectionLayout,
+          extents: extents,
+          maxScrollExtent: 5000,
+        ),
+        590,
+      );
+      // Switching to verse layout keeps the Sinhala of the same verse.
+      final verseLayout = [
+        h('s01'),
+        v('s01-v1', pi),
+        v('s01-v1', si),
+        v('s01-v2', pi),
+        v('s01-v2', si),
+      ];
+      expect(
+        offsetForPosition(
+          position: p,
+          items: verseLayout,
+          extents: [e(0, 40), e(40, 50), e(90, 300), e(390, 50), e(440, 300)],
+          maxScrollExtent: 5000,
+        ),
+        590,
+      );
+    });
+
+    test('a language no longer chosen falls back to the first item of the '
+        'verse', () {
+      const p = ReadingPosition(
+        readingId: 'r1',
+        sectionId: 's01',
+        verseId: 's01-v1',
+        language: ReadingLanguage.english,
+        fraction: 0.5,
+      );
+      expect(
+        offsetForPosition(
+          position: p,
+          items: items,
+          extents: [e(0, 40), e(40, 100), e(140, 60)],
+          maxScrollExtent: 1000,
+        ),
+        90,
+      );
+    });
+
+    test('a heading at the top keeps its fraction', () {
+      final p = capturePosition(
+        readingId: 'r1',
+        items: items,
+        extents: [e(0, 40), e(40, 100), e(140, 60)],
+        scrollOffset: 30,
+      )!;
+      expect(p.verseId, isNull);
+      expect(p.fraction, 0.75);
+      expect(
+        offsetForPosition(
+          position: p,
+          items: items,
+          extents: [e(0, 80), e(80, 100), e(180, 60)],
+          maxScrollExtent: 1000,
+        ),
+        60,
+      );
+    });
+
     test('progress is 0 on a page that does not scroll', () {
       expect(progressOf(0, 0), 0);
       expect(progressOf(40, -1), 0);
@@ -224,6 +371,42 @@ void main() {
         fraction: 0,
       );
       expect(ReadingPosition.fromJson(heading.toJson())!.verseId, isNull);
+
+      const sinhala = ReadingPosition(
+        readingId: 'r1',
+        sectionId: 's02',
+        verseId: 's02-v1',
+        language: ReadingLanguage.sinhala,
+        fraction: 0.25,
+      );
+      final json = jsonDecode(jsonEncode(sinhala.toJson())) as Map;
+      expect(json['language'], 'si');
+      expect(ReadingPosition.fromJson(json)!.language, ReadingLanguage.sinhala);
+      expect(_position.toJson().containsKey('language'), isFalse);
+    });
+
+    test('data saved before the language was stored still loads', () {
+      final p = ReadingPosition.fromJson({
+        'readingId': 'r1',
+        'sectionId': 's02',
+        'verseId': 's02-v1',
+        'fraction': 0.25,
+      })!;
+      expect(p.verseId, 's02-v1');
+      expect(p.language, isNull);
+      expect(p.fraction, 0.25);
+      for (final bad in [7, 'xx', null]) {
+        expect(
+          ReadingPosition.fromJson({
+            'readingId': 'r1',
+            'sectionId': 's02',
+            'verseId': 's02-v1',
+            'language': bad,
+            'fraction': 0.25,
+          })!.language,
+          isNull,
+        );
+      }
     });
 
     test('damaged values give null or fall back', () {

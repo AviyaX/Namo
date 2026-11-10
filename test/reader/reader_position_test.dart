@@ -98,6 +98,25 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('the second language at the top stays at the top through text '
+      'size and layout changes', (t) async {
+    final c = await openAt(t, Routes.reader('r1'), InMemoryKeyValueStore());
+    await scrollToTop(t, 'verse-s02-v1-si');
+
+    c.read(settingsProvider.notifier).setFontScale(1.6);
+    await t.pumpAndSettle();
+    expectAtTop(t, 'verse-s02-v1-si');
+
+    c.read(settingsProvider.notifier).setLayout(TwoLanguageLayout.section);
+    await t.pumpAndSettle();
+    expectAtTop(t, 'verse-s02-v1-si');
+
+    c.read(settingsProvider.notifier).setLineSpacing(2.2);
+    await t.pumpAndSettle();
+    expectAtTop(t, 'verse-s02-v1-si');
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('a narrower window keeps the same verse at the top', (t) async {
     await openAt(t, Routes.reader('r1'), InMemoryKeyValueStore());
     await scrollToTop(t, 'verse-s02-v1-pi');
@@ -165,8 +184,9 @@ void main() {
     expect(saved.byReading['r1']!.position.verseId, 's01-v2');
 
     // The place is kept in the store: a new start of the app finds it.
+    // It comes back to the same language's text of the verse.
     c = await openAt(t, Routes.reader('r1'), store);
-    expectAtTop(t, 'verse-s01-v2-pi');
+    expectAtTop(t, 'verse-s01-v2-si');
 
     // Going to the background saves without waiting.
     await scrollToTop(t, 'heading-s03');
