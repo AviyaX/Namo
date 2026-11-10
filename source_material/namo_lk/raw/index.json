@@ -1,0 +1,617 @@
+{
+ "source": "https://namo.lk",
+ "fetched_utc": "2026-11-09T14:24:15+00:00",
+ "method": "WordPress REST API (wp-json/wp/v2), unmodified records",
+ "reuse_terms_on_site": "none stated (no copyright, licence or terms page found on 2026-11-09)",
+ "items": [
+  {
+   "kind": "posts",
+   "id": 105,
+   "slug": "saranagamanaya",
+   "title": "සරණාගමනය (තිසරණයට පැමිණීම) &#8211; Saranagamanaya",
+   "link": "https://namo.lk/saranagamanaya/",
+   "date": "2019-04-14T07:44:17",
+   "modified": "2023-08-08T07:29:58",
+   "categories": [
+    2
+   ],
+   "content_chars": 7305,
+   "file": "posts/saranagamanaya.json"
+  },
+  {
+   "kind": "posts",
+   "id": 119,
+   "slug": "theruwan-namadima",
+   "title": "තෙරුවන් නැමදීම &#8211; Theruwan Namadeema",
+   "link": "https://namo.lk/theruwan-namadima/",
+   "date": "2019-04-14T08:47:53",
+   "modified": "2023-08-08T07:29:17",
+   "categories": [
+    2
+   ],
+   "content_chars": 10742,
+   "file": "posts/theruwan-namadima.json"
+  },
+  {
+   "kind": "posts",
+   "id": 142,
+   "slug": "buddha-meditation",
+   "title": "බුද්ධානුස්සති භාවනාව පාලි හා සිංහලෙන් &#8211; Buddha Meditation in Pali and Sinhala",
+   "link": "https://namo.lk/buddha-meditation/",
+   "date": "2019-04-14T09:54:48",
+   "modified": "2023-08-08T07:28:39",
+   "categories": [
+    2
+   ],
+   "content_chars": 9672,
+   "file": "posts/buddha-meditation.json"
+  },
+  {
+   "kind": "posts",
+   "id": 154,
+   "slug": "dhamma-guna",
+   "title": "ධර්ම රත්නයේ ගුණ &#8211; Dhamma Guna in Sinhala",
+   "link": "https://namo.lk/dhamma-guna/",
+   "date": "2019-04-14T12:52:32",
+   "modified": "2023-08-08T07:44:21",
+   "categories": [
+    14,
+    2
+   ],
+   "content_chars": 4837,
+   "file": "posts/dhamma-guna.json"
+  },
+  {
+   "kind": "posts",
+   "id": 161,
+   "slug": "sanga-guna",
+   "title": "සංඝ රත්නයේ ගුණ &#8211; Sanga Guna &#8211; Supreme Qualities of Sangha",
+   "link": "https://namo.lk/sanga-guna/",
+   "date": "2019-04-15T02:17:02",
+   "modified": "2023-08-08T07:27:20",
+   "categories": [
+    14,
+    2
+   ],
+   "content_chars": 8230,
+   "file": "posts/sanga-guna.json"
+  },
+  {
+   "kind": "posts",
+   "id": 172,
+   "slug": "maha-mangala-sutta",
+   "title": "මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන්  Maha Mangala Sutta in Pali and Sinhala Translation",
+   "link": "https://namo.lk/maha-mangala-sutta/",
+   "date": "2019-04-15T03:34:45",
+   "modified": "2023-08-08T22:16:12",
+   "categories": [
+    18,
+    66,
+    23,
+    6,
+    24
+   ],
+   "content_chars": 22420,
+   "file": "posts/maha-mangala-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 209,
+   "slug": "rathana-sutta",
+   "title": "රතන සුත්තං (රතන සූත්‍රය) පාලි සිංහල පරිවර්ථනය &#8211; Rathana Suthraya (Sutta) in Pali with Sinhala Translation",
+   "link": "https://namo.lk/rathana-sutta/",
+   "date": "2019-04-15T07:08:24",
+   "modified": "2023-08-08T22:15:32",
+   "categories": [
+    18,
+    66,
+    23,
+    6,
+    24
+   ],
+   "content_chars": 36132,
+   "file": "posts/rathana-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 251,
+   "slug": "karaneeyametta-sutta",
+   "title": "කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation",
+   "link": "https://namo.lk/karaneeyametta-sutta/",
+   "date": "2019-04-15T17:39:41",
+   "modified": "2023-08-09T22:03:24",
+   "categories": [
+    18,
+    23,
+    6,
+    24,
+    25
+   ],
+   "content_chars": 42648,
+   "file": "posts/karaneeyametta-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 343,
+   "slug": "dhammachakkappavattana-sutta",
+   "title": "ධම්මචක්කප්පවත්තන සුත්තං (දම්සක් පැවතුම් සූත්‍රය) පාලි හා සිංහලෙන් Dhammacakkappavattana Sutta Pali Sinhala Translation",
+   "link": "https://namo.lk/dhammachakkappavattana-sutta/",
+   "date": "2019-04-18T17:14:33",
+   "modified": "2023-08-08T07:21:32",
+   "categories": [
+    18,
+    47,
+    21,
+    6
+   ],
+   "content_chars": 86870,
+   "file": "posts/dhammachakkappavattana-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 425,
+   "slug": "budhu-guna-piritha",
+   "title": "බුදු ගුණ පිරිත &#8211; Budhu Guna Piritha",
+   "link": "https://namo.lk/budhu-guna-piritha/",
+   "date": "2019-04-20T02:14:08",
+   "modified": "2023-08-08T07:20:26",
+   "categories": [
+    8,
+    14,
+    2
+   ],
+   "content_chars": 31499,
+   "file": "posts/budhu-guna-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 465,
+   "slug": "ten-precepts",
+   "title": "දස සිල් &#8211; පාලි, සිංහල, හා ඉංග්‍රීසියෙන්  The Ten Precepts in Pali, Sinhala and English",
+   "link": "https://namo.lk/ten-precepts/",
+   "date": "2019-04-28T12:32:58",
+   "modified": "2023-08-08T07:19:46",
+   "categories": [
+    2
+   ],
+   "content_chars": 26178,
+   "file": "posts/ten-precepts.json"
+  },
+  {
+   "kind": "posts",
+   "id": 488,
+   "slug": "dasa-dhamma-sutta",
+   "title": "දසධම්ම සුත්තං (දසධම්ම සූත්‍රය) පාලි හා සිංහලෙන් Dasa Dhamma Sutta In Pali with Translation",
+   "link": "https://namo.lk/dasa-dhamma-sutta/",
+   "date": "2019-04-28T15:51:51",
+   "modified": "2023-08-08T07:19:06",
+   "categories": [
+    22,
+    18,
+    41,
+    6
+   ],
+   "content_chars": 26744,
+   "file": "posts/dasa-dhamma-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 568,
+   "slug": "kanda-piritha",
+   "title": "ඛන්ධපරිත්තං (කඳ පිරිත) පාළි හා සිංහලෙන් &#8211; Kanda Piritha in Pali and Sinhala",
+   "link": "https://namo.lk/kanda-piritha/",
+   "date": "2019-05-01T03:20:16",
+   "modified": "2024-01-09T22:35:55",
+   "categories": [
+    8
+   ],
+   "content_chars": 27930,
+   "file": "posts/kanda-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 596,
+   "slug": "mettanisansa-sutta",
+   "title": "මෙත්තානිසංස සුත්තං (මෙත්තානිසංස සූත්‍රය) පාලි, සිංහල, හා ඉංග්‍රිසියෙන්  Mettanisansa Sutta in Pali with Sinhala and English Translation",
+   "link": "https://namo.lk/mettanisansa-sutta/",
+   "date": "2019-05-02T02:39:13",
+   "modified": "2023-08-08T07:17:30",
+   "categories": [
+    22,
+    18,
+    42,
+    6
+   ],
+   "content_chars": 25430,
+   "file": "posts/mettanisansa-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 629,
+   "slug": "miththanisansa-sutta",
+   "title": "මිත්තානිසංස සුත්තං (මිත්තානිසංස සූත්‍රය) පාලි හා සිංහලෙන් &#8211; Miththanisansa Sutta in Pali and Sinhala Translation",
+   "link": "https://namo.lk/miththanisansa-sutta/",
+   "date": "2019-05-02T14:20:34",
+   "modified": "2023-08-08T07:16:38",
+   "categories": [
+    6
+   ],
+   "content_chars": 24747,
+   "file": "posts/miththanisansa-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 644,
+   "slug": "mora-piritha",
+   "title": "මෝර පරිත්තං (මෝර පිරිත) හා අර්ථය සිංහලෙන් Mora Piritha in Pali with Sinhala Translation",
+   "link": "https://namo.lk/mora-piritha/",
+   "date": "2019-05-02T16:21:25",
+   "modified": "2023-08-08T07:15:54",
+   "categories": [
+    8
+   ],
+   "content_chars": 21754,
+   "file": "posts/mora-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 653,
+   "slug": "chanda-piritha",
+   "title": "චන්ද පරිත්තං (චන්ද පිරිත) පාලි සිංහල පරිවර්ථනය Chanda Piritha in Pali and Sinhala Translation",
+   "link": "https://namo.lk/chanda-piritha/",
+   "date": "2019-05-18T06:32:27",
+   "modified": "2023-08-08T07:15:17",
+   "categories": [
+    8
+   ],
+   "content_chars": 23391,
+   "file": "posts/chanda-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 671,
+   "slug": "suriya-piritha",
+   "title": "සූරිය පරිත්තං (සූරිය පිරිත) පාලි සිංහල පරිවර්ථනය Suriya Piritha Sinhala Translation",
+   "link": "https://namo.lk/suriya-piritha/",
+   "date": "2019-05-18T15:26:11",
+   "modified": "2023-08-08T07:14:35",
+   "categories": [
+    8
+   ],
+   "content_chars": 23976,
+   "file": "posts/suriya-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 688,
+   "slug": "dajagga-piritha",
+   "title": "ධජග්ග පරිත්තං (ධජග්ග පිරිත) පාලි හා සිංහලෙන් Dajagga (Dhajagga) Piritha with Sinhala Translation",
+   "link": "https://namo.lk/dajagga-piritha/",
+   "date": "2019-07-16T06:34:28",
+   "modified": "2023-08-08T07:13:56",
+   "categories": [
+    8
+   ],
+   "content_chars": 33171,
+   "file": "posts/dajagga-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 864,
+   "slug": "buddha-puja",
+   "title": "බුද්ධ පූජාව හා බෝධි පූජාව පාලි හා සිංහලෙන් &#8211; Buddha Puja and Bodhi Puja In Pali With Sinhala Meaning",
+   "link": "https://namo.lk/buddha-puja/",
+   "date": "2020-01-28T09:05:39",
+   "modified": "2024-06-27T09:32:15",
+   "categories": [
+    14
+   ],
+   "content_chars": 38934,
+   "file": "posts/buddha-puja.json"
+  },
+  {
+   "kind": "posts",
+   "id": 913,
+   "slug": "rathnamali-yantra",
+   "title": "රත්නමාලී යන්ත්‍රය පාලි හා සිංහලෙන් Rathnamali Yanthraya In Pali with Sinhala Translation",
+   "link": "https://namo.lk/rathnamali-yantra/",
+   "date": "2020-01-28T09:41:19",
+   "modified": "2024-07-02T10:49:34",
+   "categories": [
+    14,
+    6
+   ],
+   "content_chars": 20605,
+   "file": "posts/rathnamali-yantra.json"
+  },
+  {
+   "kind": "posts",
+   "id": 935,
+   "slug": "jaya-piritha",
+   "title": "ජය පිරිත පාලි හා සිංහලෙන් Jaya Piritha with Sinhala Translation",
+   "link": "https://namo.lk/jaya-piritha/",
+   "date": "2020-02-05T19:47:40",
+   "modified": "2024-09-26T21:23:45",
+   "categories": [
+    8
+   ],
+   "content_chars": 23886,
+   "file": "posts/jaya-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 1355,
+   "slug": "bojjanga-piritha",
+   "title": "මහාකස්සපත්ථේර බොජ්ඣංග පරිත්තං (මහා කස්සප තෙර බොජ්ඣංග පිරිත) සිංහල හා ඉංග්‍රීසි පරිවර්ථන   Maha Kassapa Thero Bojjanga Piritha Sinhala English Translation",
+   "link": "https://namo.lk/bojjanga-piritha/",
+   "date": "2020-04-11T08:11:13",
+   "modified": "2023-08-08T22:11:54",
+   "categories": [
+    18,
+    47,
+    8,
+    21,
+    6
+   ],
+   "content_chars": 35078,
+   "file": "posts/bojjanga-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 1564,
+   "slug": "alavaka-sutta",
+   "title": "ආලවක සුත්තං (ආලවක සුත්‍රය) සහ සිංහල ඉංග්‍රිසි පරිවරිථන Alavaka Sutta with English Sinhala Translation",
+   "link": "https://namo.lk/alavaka-sutta/",
+   "date": "2020-04-12T09:50:27",
+   "modified": "2023-08-08T07:10:41",
+   "categories": [
+    18,
+    43,
+    21,
+    6
+   ],
+   "content_chars": 42287,
+   "file": "posts/alavaka-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 1676,
+   "slug": "parabhava-sutta",
+   "title": "පරාභව සුත්තං (පරාභව සූත්‍රය) සිංහල හා ඉංග්‍රීසි පරිවර්ථන Parabhava Sutta Sinhala English Translation",
+   "link": "https://namo.lk/parabhava-sutta/",
+   "date": "2020-04-13T09:23:33",
+   "modified": "2023-08-08T07:09:51",
+   "categories": [
+    18,
+    23,
+    6,
+    24,
+    25
+   ],
+   "content_chars": 46008,
+   "file": "posts/parabhava-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 1793,
+   "slug": "girimananda-sutta",
+   "title": "ගිරිමානන්ද සුත්තං (ගිරිමානන්ද සූත්‍රය) පාළි හා සිංහලෙන් &#8211; Girimananda Sutta in Pali and Sinhala",
+   "link": "https://namo.lk/girimananda-sutta/",
+   "date": "2020-05-12T13:27:39",
+   "modified": "2026-10-22T22:44:09",
+   "categories": [
+    22,
+    18,
+    41,
+    6
+   ],
+   "content_chars": 23317,
+   "file": "posts/girimananda-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 1889,
+   "slug": "isigili-sutta",
+   "title": "ඉසිගි​ලි සුත්තං (ඉසිගි​ලි සූත්‍රය) සිංහල අර්ථය සමග. Isigili Sutta in Pali with Sinhala Translation",
+   "link": "https://namo.lk/isigili-sutta/",
+   "date": "2021-05-08T22:49:51",
+   "modified": "2023-08-08T07:08:24",
+   "categories": [
+    18,
+    20,
+    6,
+    31
+   ],
+   "content_chars": 32764,
+   "file": "posts/isigili-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 1970,
+   "slug": "chakkavatti-seehanada-sutra",
+   "title": "චක්කවත්ති සීහනාද සුත්තං(සූත්‍රය) සිංහල අර්ථය සම​ග &#8211; Chakkavatti Seehanada Sutra with Sinhala Translation",
+   "link": "https://namo.lk/chakkavatti-seehanada-sutra/",
+   "date": "2021-05-22T05:58:02",
+   "modified": "2023-08-08T06:59:39",
+   "categories": [
+    18,
+    19,
+    28,
+    6
+   ],
+   "content_chars": 116517,
+   "file": "posts/chakkavatti-seehanada-sutra.json"
+  },
+  {
+   "kind": "posts",
+   "id": 2194,
+   "slug": "vasala-sutta",
+   "title": "වසල සුත්තං(වසල සූත්‍ර​ය) සිංහල හා ඉංග්‍රීසි පරිවර්ථන &#8211; Vasala Sutta with Sinhala &#038; English Translations",
+   "link": "https://namo.lk/vasala-sutta/",
+   "date": "2022-06-04T02:59:04",
+   "modified": "2023-08-08T06:47:45",
+   "categories": [
+    18,
+    23,
+    6,
+    24,
+    25
+   ],
+   "content_chars": 42115,
+   "file": "posts/vasala-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 2452,
+   "slug": "nivapa-sutta",
+   "title": "නිවාප සුත්‍රය (නිවාපසුත්තං) සහ සිංහල අර්ථය &#8211; Nivapa Sutta with Sinhala Translation",
+   "link": "https://namo.lk/nivapa-sutta/",
+   "date": "2023-08-09T07:07:00",
+   "modified": "2023-08-09T08:05:15",
+   "categories": [
+    20,
+    29,
+    78,
+    6
+   ],
+   "content_chars": 56079,
+   "file": "posts/nivapa-sutta.json"
+  },
+  {
+   "kind": "posts",
+   "id": 2564,
+   "slug": "angulimala-piritha",
+   "title": "අංගුලිමාල පිරිත පාලි ​හා සිංහලෙ​න්  Angulimala Piritha In Pali With Sinhala Translation",
+   "link": "https://namo.lk/angulimala-piritha/",
+   "date": "2024-09-26T21:54:15",
+   "modified": "2024-09-26T22:32:07",
+   "categories": [
+    8
+   ],
+   "content_chars": 12279,
+   "file": "posts/angulimala-piritha.json"
+  },
+  {
+   "kind": "posts",
+   "id": 2597,
+   "slug": "seevali-piritha-with-sinhala-translation",
+   "title": "සීවලි පිරිත පාලි හා සිංහලෙන් &#8211; Seevali Piritha In Pali With Sinhala Translation",
+   "link": "https://namo.lk/seevali-piritha-with-sinhala-translation/",
+   "date": "2026-10-22T23:18:22",
+   "modified": "2026-10-23T02:09:54",
+   "categories": [
+    8
+   ],
+   "content_chars": 22319,
+   "file": "posts/seevali-piritha-with-sinhala-translation.json"
+  },
+  {
+   "kind": "pages",
+   "id": 27,
+   "slug": "home",
+   "title": "නමෝ.lk &#8211; ලෝක සත්‍යය &#8211; Buddhism &#8211; The Absolute Truth",
+   "link": "https://namo.lk/",
+   "date": "2019-04-02T01:08:51",
+   "modified": "2026-10-22T22:59:13",
+   "categories": null,
+   "content_chars": 20266,
+   "file": "pages/home.json"
+  },
+  {
+   "kind": "pages",
+   "id": 420,
+   "slug": "resources",
+   "title": "Resources",
+   "link": "https://namo.lk/resources/",
+   "date": "2019-04-19T14:48:53",
+   "modified": "2024-01-11T07:06:56",
+   "categories": null,
+   "content_chars": 2733,
+   "file": "pages/resources.json"
+  },
+  {
+   "kind": "pages",
+   "id": 537,
+   "slug": "mahamewnawe-piruwana-poth-wahanse",
+   "title": "Download Mahamewnawe Piruwana Poth Wahanse PDF මහමෙව්නාවේ පාළි සිංහල පිරුවානා පොත් වහන්සේ",
+   "link": "https://namo.lk/mahamewnawe-piruwana-poth-wahanse/",
+   "date": "2019-04-29T17:20:27",
+   "modified": "2020-04-13T03:02:41",
+   "categories": null,
+   "content_chars": 4960,
+   "file": "pages/mahamewnawe-piruwana-poth-wahanse.json"
+  },
+  {
+   "kind": "pages",
+   "id": 1217,
+   "slug": "download-abhidhamma-pitaka-english",
+   "title": "Download Abhidhamma Pitaka English Script PDF Bundle",
+   "link": "https://namo.lk/download-abhidhamma-pitaka-english/",
+   "date": "2020-04-10T11:25:28",
+   "modified": "2020-04-10T23:04:21",
+   "categories": null,
+   "content_chars": 4799,
+   "file": "pages/download-abhidhamma-pitaka-english.json"
+  },
+  {
+   "kind": "pages",
+   "id": 1231,
+   "slug": "download-sutta-pitaka-english",
+   "title": "Download Sutta Pitaka English Script PDF Bundle",
+   "link": "https://namo.lk/download-sutta-pitaka-english/",
+   "date": "2020-04-10T12:05:53",
+   "modified": "2020-04-10T23:07:01",
+   "categories": null,
+   "content_chars": 4841,
+   "file": "pages/download-sutta-pitaka-english.json"
+  },
+  {
+   "kind": "pages",
+   "id": 1236,
+   "slug": "download-vinaya-pitaka-english",
+   "title": "Download Vinaya Pitaka English Script PDF Bundle",
+   "link": "https://namo.lk/download-vinaya-pitaka-english/",
+   "date": "2020-04-10T12:10:17",
+   "modified": "2020-04-10T23:08:10",
+   "categories": null,
+   "content_chars": 4814,
+   "file": "pages/download-vinaya-pitaka-english.json"
+  },
+  {
+   "kind": "pages",
+   "id": 1253,
+   "slug": "about-buddhism",
+   "title": "What is Buddhism?",
+   "link": "https://namo.lk/about-buddhism/",
+   "date": "2020-04-11T00:23:30",
+   "modified": "2020-09-14T12:29:20",
+   "categories": null,
+   "content_chars": 4893,
+   "file": "pages/about-buddhism.json"
+  },
+  {
+   "kind": "pages",
+   "id": 1273,
+   "slug": "buddhist-teachings",
+   "title": "Buddhist Teachings",
+   "link": "https://namo.lk/buddhist-teachings/",
+   "date": "2020-04-11T01:54:08",
+   "modified": "2020-04-11T02:04:32",
+   "categories": null,
+   "content_chars": 7362,
+   "file": "pages/buddhist-teachings.json"
+  },
+  {
+   "kind": "pages",
+   "id": 2476,
+   "slug": "404-not-found",
+   "title": "404 &#8211; Not Found",
+   "link": "https://namo.lk/404-not-found/",
+   "date": "2024-01-09T23:36:47",
+   "modified": "2024-01-10T00:05:33",
+   "categories": null,
+   "content_chars": 1268,
+   "file": "pages/404-not-found.json"
+  }
+ ]
+}

@@ -1,0 +1,346 @@
+{
+ "id": 172,
+ "date": "2019-04-15T03:34:45",
+ "date_gmt": "2019-04-15T03:34:45",
+ "guid": {
+  "rendered": "https://namo.lk/?p=172"
+ },
+ "modified": "2023-08-08T22:16:12",
+ "modified_gmt": "2023-08-08T22:16:12",
+ "slug": "maha-mangala-sutta",
+ "status": "publish",
+ "type": "post",
+ "link": "https://namo.lk/maha-mangala-sutta/",
+ "title": {
+  "rendered": "මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන්  Maha Mangala Sutta in Pali and Sinhala Translation"
+ },
+ "content": {
+  "rendered": "\n[et_pb_section fb_built=&#8221;1&#8243; _builder_version=&#8221;4.21.2&#8243; hover_enabled=&#8221;0&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221; module_class=&#8221;et-dark-mode-capable&#8221; sticky_enabled=&#8221;0&#8243;][et_pb_row column_structure=&#8221;1_2,1_2&#8243; module_class=&#8221;et-dark-mode-capable&#8221; _builder_version=&#8221;4.21.2&#8243; custom_margin=&#8221;-30px||-30px||true|false&#8221; custom_margin_tablet=&#8221;-50px||-50px||true|false&#8221; custom_margin_phone=&#8221;&#8221; custom_margin_last_edited=&#8221;on|desktop&#8221; global_module=&#8221;1441&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;1_2&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_code _builder_version=&#8221;4.16&#8243; text_orientation=&#8221;left&#8221; text_orientation_tablet=&#8221;right&#8221; text_orientation_phone=&#8221;right&#8221; text_orientation_last_edited=&#8221;on|desktop&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<label class='as-label'> පාලි </label><!-- [et_pb_line_break_holder] --><label class='switch'><!-- [et_pb_line_break_holder] --><input type=\"checkbox\" id=\"cb-pali\" checked><!-- [et_pb_line_break_holder] -->  <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] --></label><!-- [et_pb_line_break_holder] --> <!-- [et_pb_line_break_holder] --><label class='as-label'> සිංහල </label><!-- [et_pb_line_break_holder] --><label class='switch'><!-- [et_pb_line_break_holder] --><input type=\"checkbox\" id=\"cb-sinhala\" checked><!-- [et_pb_line_break_holder] -->  <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] --></label>[/et_pb_code][/et_pb_column][et_pb_column type=&#8221;1_2&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_code _builder_version=&#8221;4.9.4&#8243; _module_preset=&#8221;default&#8221; text_orientation=&#8221;right&#8221; global_module=&#8221;2078&#8243; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<div class=\"float\"><!-- [et_pb_line_break_holder] --><span class='as-label'>Font Size</span><!-- [et_pb_line_break_holder] --><button class=\"as-btn\" id=\"btn-fs-minus\"> &#8211; </button><!-- [et_pb_line_break_holder] --><span class=\"as-speed-txt\" id=\"font-size\"></span><!-- [et_pb_line_break_holder] --><button class=\"as-btn\" id=\"btn-fs-plus\">+</button><!-- [et_pb_line_break_holder] --></div>[/et_pb_code][et_pb_code _builder_version=&#8221;4.16&#8243; text_orientation=&#8221;right&#8221; custom_padding=&#8221;|||0px||&#8221; text_orientation_tablet=&#8221;&#8221; text_orientation_phone=&#8221;right&#8221; text_orientation_last_edited=&#8221;on|phone&#8221; custom_css_main_element=&#8221;.switch {||  position: relative;||  display: inline-block;||  width: 60px;||  height: 34px;||}||||.switch input { ||  opacity: 0;||  width: 0;||  height: 0;||}||||.slider {||  position: absolute;||  cursor: pointer;||  top: 0;||  left: 0;||  right: 0;||  bottom: 0;||  background-color: #ccc;||  -webkit-transition: .4s;||  transition: .4s;||}||||.slider:before {||  position: absolute;||  content: %22%22;||  height: 26px;||  width: 26px;||  left: 4px;||  bottom: 4px;||  background-color: white;||  -webkit-transition: .4s;||  transition: .4s;||}||||input:checked + .slider {||  background-color: #2196F3;||}||||input:focus + .slider {||  box-shadow: 0 0 1px #2196F3;||}||||input:checked + .slider:before {||  -webkit-transform: translateX(26px);||  -ms-transform: translateX(26px);||  transform: translateX(26px);||}||||/* Rounded sliders */||.slider.round {||  border-radius: 34px;||}||||.slider.round:before {||  border-radius: 50%;||}&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<div class=\"float\"><!-- [et_pb_line_break_holder] -->  <span class='as-label'>Auto-Scroll</span><!-- [et_pb_line_break_holder] --><!-- [et_pb_line_break_holder] --><label class=\"switch\"><!-- [et_pb_line_break_holder] -->  <input id='as-switch' type=\"checkbox\"><!-- [et_pb_line_break_holder] -->  <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] --></label><!-- [et_pb_line_break_holder] -->   <!-- [et_pb_line_break_holder] -->  <span class='as-label'>Speed</span><!-- [et_pb_line_break_holder] --><button class=\"as-btn\" id=\"btn-minus\"> &#8211; </button><!-- [et_pb_line_break_holder] --><span class=\"as-speed-txt\" id=\"as-speed\"></span><!-- [et_pb_line_break_holder] -->  <button class=\"as-btn\" id=\"btn-plus\">+</button><!-- [et_pb_line_break_holder] --><!-- [et_pb_line_break_holder] --></div><!-- [et_pb_line_break_holder] -->[/et_pb_code][/et_pb_column][/et_pb_row][et_pb_row _builder_version=&#8221;4.16&#8243; collapsed=&#8221;on&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; custom_padding=&#8221;|||&#8221; global_colors_info=&#8221;{}&#8221; custom_padding__hover=&#8221;|||&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.9.4&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; global_module=&#8221;175&#8243; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>ඒවං මේ සුතං. ඒකං සමයං භගවා සාවත්ථියං විහරති ජේතවනේ අනාථපිණ්ඩිකස්ස ආරාමේ. අථ ඛෝ අඤ්ඤතරා දේවතා අභික්කන්තාය රත්තියා අභික්කන්තවණ්ණා කේවලකප්පං ජේතවනං ඕභාසෙත්වා යේන භගවා තේනුපසංකමී. උපසංකමිත්වා භගවන්තං අභිවාදෙත්වා ඒකමන්තං අට්ඨාසි. ඒකමන්තං ඨීතා ඛෝ සා දේවතා භගවන්තං ගාථාය අජ්ඣභාසි.</p>\n[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.9.4&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; global_module=&#8221;181&#8243; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>මා විසින් මෙසේ අසන ලදී. එක් සමයෙක භාග්‍යවත් බුදුරජාණන් වහන්සේ සැවැත් නුවර ජේතවන නම් වූ අනේපිඬු සිටුතුමා ගේ ආරාමයෙහි වැඩ වසන සේක. එකල්හී එක්තරා දෙවියෙක් මධ්‍යම රාත්‍රියෙහි මනස්කාන්ත පැහැයකින් යුතුව මුළු දෙව්රම බබුළුවා ගෙන භාග්‍යවතුන් වහන්සේ ළඟට පැමිණියේ ය. එසේ පැමිණ භාග්‍යවතුන් වහන්සේට ආදරයෙන් වන්දනා කොට එකත්පසව සිට ගත්තේ ය. එකත්පසව සිටි ඒ දෙවියා භාග්‍යවතුන් වහන්සේට ගාථාවකින් මෙසේ පවසුවේ ය.</p>\n[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>බහූදේවා මනුස්සා ච &#8211; මංගලානි අචින්තයුං<br />ආකංඛමානා සොත්ථානං &#8211; බ්‍රෑහි මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>බොහෝ දෙවි මිනිස්සු ද &#8211; සිතුවෝ ය මංගල කරුණු ගැන<br />යහපන කැමති ඔවුනට &#8211; උතුම් මංගල කරුණු ගැන පහදා දෙන්න මුනිඳුනි.</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>අසේවනා ච බාලානං &#8211; පණ්ඩිතානඤ්ච සේවනා<br />පූජා ච පූජනීයානං &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>නරක අය නොම ඇසුර ද &#8211; කළණමිතුරන් සමඟ නිති ඇසුර ද<br />පිදිය යුත්තන් පිදුම ද &#8211; මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>පතිරූපදේසවාසෝ ච &#8211; පුබ්බේ ච කතපුඤ්ඤතා<br />අත්තසම්මාපණිධි ච &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>යහපත් තැනක විසුම ද &#8211; පෙර කළ පින් තිබීම ද<br />තමා යහමඟ යාම ද &#8211; මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>බාහුසච්චඤ්ච සිප්පඤ්ච &#8211; විනයෝ ච සුසික්ඛිතෝ<br />සුභාසිතා ච යා වාචා &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>බොහෝ දැන උගත් බව &#8211; නොයෙකුත් ශිල්ප දත් බව<br />විනයකින් යුතු බව &#8211; මනා කොට හික්මුන බව<br />සුභාසිත වූ යම් බසක් වෙද &#8211; මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>මාතාපිතු උපට්ඨානං &#8211; පුත්තදාරස්ස සංගහෝ<br />අනාකුලා ච කම්මන්තා &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>මව්පිය උපස්ථානය &#8211; අඹුදරුවන්ට සැළකුම<br />මැනැවින් වැඩ කෙරුම &#8211; මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>දානඤ්ච ධම්මචරියා ච &#8211; ඤාතකානඤ්ච සංගහෝ<br />අනවජ්ජානි කම්මානි &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>දන් පැන් පිදීම ද &#8211; දහම තුළ හැසිරීම ද<br />නෑයන්ට සැළකීම ද &#8211; නිවැරදි දේ කිරීම ද<br />මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>ආරති විරති පාපා &#8211; මජ්ජපානා ච සඤ්ඤමෝ<br />අප්පමාදෝ ච ධම්මේසු &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>පවෙහි නො ඇලීම ද &#8211; හැම පවින් වැළකීම ද<br />මත් පැනින් දුරු වීම ද &#8211; දහම තුළ නො පමාව ද<br />මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>ගාරවෝ ච නිවාතෝ ච &#8211; සන්තුට්ඨී ච කතඤ්ඤුතා<br />කාලේන ධම්මසවණං &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>උතුමන්ට ගරු කිරීම ද &#8211; නිහතමානී වීම ද<br />ලද දෙයින් තුටු වීම ද &#8211; කෙළෙහි ගුණ සැලකීම ද<br />නිසි කලට බණ ඇසීම ද &#8211; මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>ඛන්තී ච සෝවචස්සතා &#8211; සමණානඤ්ච දස්සනං<br />කාලේන ධර්මසාකච්ඡා &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>ඉවසන ගුණයෙන් යුතු බව &#8211; යහපතට අවනත බව<br />ශ්‍රමණවරු බැහැ දැකුම ද &#8211; නිසි කල දම් සභාව ද<br />මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>තපෝ ච බ්‍රහ්මචරියඤ්ච &#8211; අරියසච්චානදස්සනං<br />නිබ්බාණසච්ඡිකිරියා ච &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>තපසෙහි විසීම ද &#8211; බඹසරෙහි හැසිරීම ද<br />ආර්ය සත්‍යයන් දැකීම ද &#8211; නිවන අවබෝධ වීම ද<br />මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>ඵුට්ඨස්ස ලෝකධම්මේහි &#8211; චිත්තං යස්ස න කම්පති<br />අසෝකං විරජං ඛේමං &#8211; ඒතං මංගලමුත්තමං</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>අටලෝ දහම එන විට &#8211; නො සැලේද යමෙකුගෙ සිත<br />සෝක නැති කෙලෙසුන් නැති &#8211; බියක් නැති තැන සිටි විට<br />මේවා උතුම් මංගල කරුණු ය</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_width_left=&#8221;15px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>ඒතාදිසානි කත්වාන &#8211; සබ්බත්ථමපරාජිතා<br />සබ්බත්ථ සොත්ථිං ගච්ඡ්න්ති තං &#8211; තේසං මංගලමුත්තමන්ති</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; custom_margin=&#8221;||40px|||&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p>මේ අයුරින් කටයුතු කොට &#8211; අපරාජිත වී හැම තැන<br />යහපතට ම යති හැම තැන &#8211; එය ඔවුන් හට උත්තම මංගල කරුණු ය.</p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; min_height=&#8221;35px&#8221; custom_margin=&#8221;||-3px|||&#8221; custom_padding=&#8221;|30px||30px||true&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p style=\"text-align: center;\">ඒතේන සච්චේන සුවත්ථි හෝතු !</p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<p style=\"text-align: center;\">මේ සත්‍යානුභාවයෙන් සැමට සෙත් වේවා !</p>[/et_pb_text][/et_pb_column][/et_pb_row][/et_pb_section][et_pb_section fb_built=&#8221;1&#8243; _builder_version=&#8221;4.4.3&#8243; global_module=&#8221;1294&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_row _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_text _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]<h2>Related Resources</h2>[/et_pb_text][/et_pb_column][/et_pb_row][et_pb_row _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_blog fullwidth=&#8221;off&#8221; posts_number=&#8221;6&#8243; include_categories=&#8221;current&#8221; use_manual_excerpt=&#8221;off&#8221; show_author=&#8221;off&#8221; show_date=&#8221;off&#8221; show_categories=&#8221;off&#8221; show_excerpt=&#8221;off&#8221; use_overlay=&#8221;on&#8221; overlay_icon_color=&#8221;#ffffff&#8221; hover_overlay_color=&#8221;rgba(224,153,0,0.41)&#8221; hover_icon=&#8221;&#x55;||divi||400&#8243; _builder_version=&#8221;4.16&#8243; header_font=&#8221;|600|||||||&#8221; header_text_align=&#8221;center&#8221; header_font_size=&#8221;20px&#8221; pagination_text_color=&#8221;#000000&#8243; border_radii=&#8221;on|10px|10px|10px|10px&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][/et_pb_blog][/et_pb_column][/et_pb_row][/et_pb_section]\n",
+  "protected": false
+ },
+ "excerpt": {
+  "rendered": "<p>මංගල කරුණු ගැන බුදු රජාණන් වහන්සේ වදාළ දෙසුම</p>\n",
+  "protected": false
+ },
+ "author": 1,
+ "featured_media": 1153,
+ "comment_status": "open",
+ "ping_status": "open",
+ "sticky": true,
+ "template": "",
+ "format": "standard",
+ "meta": {
+  "_et_pb_use_builder": "on",
+  "_et_pb_old_content": "",
+  "_et_gb_content_width": "2880",
+  "_monsterinsights_skip_tracking": false,
+  "footnotes": ""
+ },
+ "categories": [
+  18,
+  66,
+  23,
+  6,
+  24
+ ],
+ "tags": [],
+ "class_list": [
+  "post-172",
+  "post",
+  "type-post",
+  "status-publish",
+  "format-standard",
+  "has-post-thumbnail",
+  "hentry",
+  "category-tripitaka",
+  "category-chullavagga",
+  "category-khuddakanikaya",
+  "category-sutta",
+  "category-suttanipata"
+ ],
+ "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v28.8 - https://yoast.com/product/yoast-seo-wordpress/ -->\n<title>මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation - Namo.lk</title>\n<meta name=\"description\" content=\"Maha Mangala Sutta : Buddha&#039;s Discouse On The Highest Blessings\" />\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://namo.lk/maha-mangala-sutta/\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation - Namo.lk\" />\n<meta property=\"og:description\" content=\"Maha Mangala Sutta : Buddha&#039;s Discouse On The Highest Blessings\" />\n<meta property=\"og:url\" content=\"https://namo.lk/maha-mangala-sutta/\" />\n<meta property=\"og:site_name\" content=\"Namo.lk\" />\n<meta property=\"article:publisher\" content=\"https://www.facebook.com/akonita.co/\" />\n<meta property=\"article:published_time\" content=\"2019-04-15T03:34:45+00:00\" />\n<meta property=\"article:modified_time\" content=\"2023-08-08T22:16:12+00:00\" />\n<meta property=\"og:image\" content=\"https://namo.lk/wp-content/uploads/2019/04/buddha11-scaled.jpg\" />\n\t<meta property=\"og:image:width\" content=\"2560\" />\n\t<meta property=\"og:image:height\" content=\"1440\" />\n\t<meta property=\"og:image:type\" content=\"image/jpeg\" />\n<meta name=\"author\" content=\"Namo LK\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<meta name=\"twitter:creator\" content=\"@akonitaco\" />\n<meta name=\"twitter:site\" content=\"@akonitaco\" />\n<meta name=\"twitter:label1\" content=\"Written by\" />\n\t<meta name=\"twitter:data1\" content=\"Namo LK\" />\n\t<meta name=\"twitter:label2\" content=\"Est. reading time\" />\n\t<meta name=\"twitter:data2\" content=\"5 minutes\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https:\\/\\/schema.org\",\"@graph\":[{\"@type\":\"Article\",\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#article\",\"isPartOf\":{\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/\"},\"author\":{\"name\":\"Namo LK\",\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/person\\/9fb5eda5c73a8df9ae53f54a93fa76b9\"},\"headline\":\"මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation\",\"datePublished\":\"2019-04-15T03:34:45+00:00\",\"dateModified\":\"2023-08-08T22:16:12+00:00\",\"mainEntityOfPage\":{\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/\"},\"wordCount\":1798,\"commentCount\":4,\"publisher\":{\"@id\":\"https:\\/\\/namo.lk\\/#organization\"},\"image\":{\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#primaryimage\"},\"thumbnailUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha11-scaled.jpg\",\"articleSection\":[\"Buddhist Tripitaka - ත්‍රිපිටක​ය\",\"Chulla Vagga\",\"Khuddaka Nikaya - ඛුද්දක නිකාය\",\"Sutta Pitaka - සූත්‍ර පිටක​ය\",\"Suttanipata - සුත්ත නිපාතය\"],\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"CommentAction\",\"name\":\"Comment\",\"target\":[\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#respond\"]}]},{\"@type\":\"WebPage\",\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/\",\"url\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/\",\"name\":\"මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation - Namo.lk\",\"isPartOf\":{\"@id\":\"https:\\/\\/namo.lk\\/#website\"},\"primaryImageOfPage\":{\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#primaryimage\"},\"image\":{\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#primaryimage\"},\"thumbnailUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha11-scaled.jpg\",\"datePublished\":\"2019-04-15T03:34:45+00:00\",\"dateModified\":\"2023-08-08T22:16:12+00:00\",\"description\":\"Maha Mangala Sutta : Buddha's Discouse On The Highest Blessings\",\"breadcrumb\":{\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/\"]}]},{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#primaryimage\",\"url\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha11-scaled.jpg\",\"contentUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha11-scaled.jpg\",\"width\":2560,\"height\":1440},{\"@type\":\"BreadcrumbList\",\"@id\":\"https:\\/\\/namo.lk\\/maha-mangala-sutta\\/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https:\\/\\/namo.lk\\/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation\"}]},{\"@type\":\"WebSite\",\"@id\":\"https:\\/\\/namo.lk\\/#website\",\"url\":\"https:\\/\\/namo.lk\\/\",\"name\":\"නමෝ.lk\",\"description\":\"Teachings of Buddha, the Fully-Enlightened One\",\"publisher\":{\"@id\":\"https:\\/\\/namo.lk\\/#organization\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https:\\/\\/namo.lk\\/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"en-US\"},{\"@type\":\"Organization\",\"@id\":\"https:\\/\\/namo.lk\\/#organization\",\"name\":\"Akonita\",\"url\":\"https:\\/\\/namo.lk\\/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/logo\\/image\\/\",\"url\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/Namo_Logo_Full.png\",\"contentUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/Namo_Logo_Full.png\",\"width\":634,\"height\":254,\"caption\":\"Akonita\"},\"image\":{\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/logo\\/image\\/\"},\"sameAs\":[\"https:\\/\\/www.facebook.com\\/akonita.co\\/\",\"https:\\/\\/x.com\\/akonitaco\",\"https:\\/\\/www.instagram.com\\/akonita.co\"]},{\"@type\":\"Person\",\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/person\\/9fb5eda5c73a8df9ae53f54a93fa76b9\",\"name\":\"Namo LK\",\"image\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/secure.gravatar.com\\/avatar\\/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g\",\"url\":\"https:\\/\\/secure.gravatar.com\\/avatar\\/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g\",\"contentUrl\":\"https:\\/\\/secure.gravatar.com\\/avatar\\/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g\",\"caption\":\"Namo LK\"},\"sameAs\":[\"https:\\/\\/akonita.co\"],\"url\":\"https:\\/\\/namo.lk\\/author\\/root86\\/\"}]}</script>\n<!-- / Yoast SEO plugin. -->",
+ "yoast_head_json": {
+  "title": "මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation - Namo.lk",
+  "description": "Maha Mangala Sutta : Buddha's Discouse On The Highest Blessings",
+  "robots": {
+   "index": "index",
+   "follow": "follow",
+   "max-snippet": "max-snippet:-1",
+   "max-image-preview": "max-image-preview:large",
+   "max-video-preview": "max-video-preview:-1"
+  },
+  "canonical": "https://namo.lk/maha-mangala-sutta/",
+  "og_locale": "en_US",
+  "og_type": "article",
+  "og_title": "මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation - Namo.lk",
+  "og_description": "Maha Mangala Sutta : Buddha's Discouse On The Highest Blessings",
+  "og_url": "https://namo.lk/maha-mangala-sutta/",
+  "og_site_name": "Namo.lk",
+  "article_publisher": "https://www.facebook.com/akonita.co/",
+  "article_published_time": "2019-04-15T03:34:45+00:00",
+  "article_modified_time": "2023-08-08T22:16:12+00:00",
+  "og_image": [
+   {
+    "width": 2560,
+    "height": 1440,
+    "url": "https://namo.lk/wp-content/uploads/2019/04/buddha11-scaled.jpg",
+    "type": "image/jpeg"
+   }
+  ],
+  "author": "Namo LK",
+  "twitter_card": "summary_large_image",
+  "twitter_creator": "@akonitaco",
+  "twitter_site": "@akonitaco",
+  "twitter_misc": {
+   "Written by": "Namo LK",
+   "Est. reading time": "5 minutes"
+  },
+  "schema": {
+   "@context": "https://schema.org",
+   "@graph": [
+    {
+     "@type": "Article",
+     "@id": "https://namo.lk/maha-mangala-sutta/#article",
+     "isPartOf": {
+      "@id": "https://namo.lk/maha-mangala-sutta/"
+     },
+     "author": {
+      "name": "Namo LK",
+      "@id": "https://namo.lk/#/schema/person/9fb5eda5c73a8df9ae53f54a93fa76b9"
+     },
+     "headline": "මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation",
+     "datePublished": "2019-04-15T03:34:45+00:00",
+     "dateModified": "2023-08-08T22:16:12+00:00",
+     "mainEntityOfPage": {
+      "@id": "https://namo.lk/maha-mangala-sutta/"
+     },
+     "wordCount": 1798,
+     "commentCount": 4,
+     "publisher": {
+      "@id": "https://namo.lk/#organization"
+     },
+     "image": {
+      "@id": "https://namo.lk/maha-mangala-sutta/#primaryimage"
+     },
+     "thumbnailUrl": "https://namo.lk/wp-content/uploads/2019/04/buddha11-scaled.jpg",
+     "articleSection": [
+      "Buddhist Tripitaka - ත්‍රිපිටක​ය",
+      "Chulla Vagga",
+      "Khuddaka Nikaya - ඛුද්දක නිකාය",
+      "Sutta Pitaka - සූත්‍ර පිටක​ය",
+      "Suttanipata - සුත්ත නිපාතය"
+     ],
+     "inLanguage": "en-US",
+     "potentialAction": [
+      {
+       "@type": "CommentAction",
+       "name": "Comment",
+       "target": [
+        "https://namo.lk/maha-mangala-sutta/#respond"
+       ]
+      }
+     ]
+    },
+    {
+     "@type": "WebPage",
+     "@id": "https://namo.lk/maha-mangala-sutta/",
+     "url": "https://namo.lk/maha-mangala-sutta/",
+     "name": "මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation - Namo.lk",
+     "isPartOf": {
+      "@id": "https://namo.lk/#website"
+     },
+     "primaryImageOfPage": {
+      "@id": "https://namo.lk/maha-mangala-sutta/#primaryimage"
+     },
+     "image": {
+      "@id": "https://namo.lk/maha-mangala-sutta/#primaryimage"
+     },
+     "thumbnailUrl": "https://namo.lk/wp-content/uploads/2019/04/buddha11-scaled.jpg",
+     "datePublished": "2019-04-15T03:34:45+00:00",
+     "dateModified": "2023-08-08T22:16:12+00:00",
+     "description": "Maha Mangala Sutta : Buddha's Discouse On The Highest Blessings",
+     "breadcrumb": {
+      "@id": "https://namo.lk/maha-mangala-sutta/#breadcrumb"
+     },
+     "inLanguage": "en-US",
+     "potentialAction": [
+      {
+       "@type": "ReadAction",
+       "target": [
+        "https://namo.lk/maha-mangala-sutta/"
+       ]
+      }
+     ]
+    },
+    {
+     "@type": "ImageObject",
+     "inLanguage": "en-US",
+     "@id": "https://namo.lk/maha-mangala-sutta/#primaryimage",
+     "url": "https://namo.lk/wp-content/uploads/2019/04/buddha11-scaled.jpg",
+     "contentUrl": "https://namo.lk/wp-content/uploads/2019/04/buddha11-scaled.jpg",
+     "width": 2560,
+     "height": 1440
+    },
+    {
+     "@type": "BreadcrumbList",
+     "@id": "https://namo.lk/maha-mangala-sutta/#breadcrumb",
+     "itemListElement": [
+      {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://namo.lk/"
+      },
+      {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "මහාමංගල සුත්තං (මහා මංගල සූත්‍රය) පාලි හා සිංහලෙන් Maha Mangala Sutta in Pali and Sinhala Translation"
+      }
+     ]
+    },
+    {
+     "@type": "WebSite",
+     "@id": "https://namo.lk/#website",
+     "url": "https://namo.lk/",
+     "name": "නමෝ.lk",
+     "description": "Teachings of Buddha, the Fully-Enlightened One",
+     "publisher": {
+      "@id": "https://namo.lk/#organization"
+     },
+     "potentialAction": [
+      {
+       "@type": "SearchAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://namo.lk/?s={search_term_string}"
+       },
+       "query-input": {
+        "@type": "PropertyValueSpecification",
+        "valueRequired": true,
+        "valueName": "search_term_string"
+       }
+      }
+     ],
+     "inLanguage": "en-US"
+    },
+    {
+     "@type": "Organization",
+     "@id": "https://namo.lk/#organization",
+     "name": "Akonita",
+     "url": "https://namo.lk/",
+     "logo": {
+      "@type": "ImageObject",
+      "inLanguage": "en-US",
+      "@id": "https://namo.lk/#/schema/logo/image/",
+      "url": "https://namo.lk/wp-content/uploads/2019/04/Namo_Logo_Full.png",
+      "contentUrl": "https://namo.lk/wp-content/uploads/2019/04/Namo_Logo_Full.png",
+      "width": 634,
+      "height": 254,
+      "caption": "Akonita"
+     },
+     "image": {
+      "@id": "https://namo.lk/#/schema/logo/image/"
+     },
+     "sameAs": [
+      "https://www.facebook.com/akonita.co/",
+      "https://x.com/akonitaco",
+      "https://www.instagram.com/akonita.co"
+     ]
+    },
+    {
+     "@type": "Person",
+     "@id": "https://namo.lk/#/schema/person/9fb5eda5c73a8df9ae53f54a93fa76b9",
+     "name": "Namo LK",
+     "image": {
+      "@type": "ImageObject",
+      "inLanguage": "en-US",
+      "@id": "https://secure.gravatar.com/avatar/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g",
+      "url": "https://secure.gravatar.com/avatar/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g",
+      "contentUrl": "https://secure.gravatar.com/avatar/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g",
+      "caption": "Namo LK"
+     },
+     "sameAs": [
+      "https://akonita.co"
+     ],
+     "url": "https://namo.lk/author/root86/"
+    }
+   ]
+  }
+ },
+ "_links": {
+  "self": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/posts/172",
+    "targetHints": {
+     "allow": [
+      "GET"
+     ]
+    }
+   }
+  ],
+  "collection": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/posts"
+   }
+  ],
+  "about": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/types/post"
+   }
+  ],
+  "author": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/users/1"
+   }
+  ],
+  "replies": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/comments?post=172"
+   }
+  ],
+  "version-history": [
+   {
+    "count": 28,
+    "href": "https://namo.lk/wp-json/wp/v2/posts/172/revisions"
+   }
+  ],
+  "predecessor-version": [
+   {
+    "id": 2424,
+    "href": "https://namo.lk/wp-json/wp/v2/posts/172/revisions/2424"
+   }
+  ],
+  "wp:featuredmedia": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/media/1153"
+   }
+  ],
+  "wp:attachment": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/media?parent=172"
+   }
+  ],
+  "wp:term": [
+   {
+    "taxonomy": "category",
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/categories?post=172"
+   },
+   {
+    "taxonomy": "post_tag",
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/tags?post=172"
+   }
+  ],
+  "curies": [
+   {
+    "name": "wp",
+    "href": "https://api.w.org/{rel}",
+    "templated": true
+   }
+  ]
+ }
+}

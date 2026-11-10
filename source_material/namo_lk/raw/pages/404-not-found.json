@@ -1,0 +1,216 @@
+{
+ "id": 2476,
+ "date": "2024-01-09T23:36:47",
+ "date_gmt": "2024-01-09T23:36:47",
+ "guid": {
+  "rendered": "https://namo.lk/?page_id=2476"
+ },
+ "modified": "2024-01-10T00:05:33",
+ "modified_gmt": "2024-01-10T00:05:33",
+ "slug": "404-not-found",
+ "status": "publish",
+ "type": "page",
+ "link": "https://namo.lk/404-not-found/",
+ "title": {
+  "rendered": "404 &#8211; Not Found"
+ },
+ "content": {
+  "rendered": "<p><div class=\"et_pb_section et_pb_section_1 et_section_regular\" >\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t<div class=\"et_pb_row et_pb_row_1\">\n\t\t\t\t<div class=\"et_pb_column et_pb_column_4_4 et_pb_column_1  et_pb_css_mix_blend_mode_passthrough et-last-child\">\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t<div class=\"et_pb_module et_pb_icon et_pb_icon_0\">\n\t\t\t\t<span class=\"et_pb_icon_wrap \"><span class=\"et-pb-icon\"></span></span>\n\t\t\t</div><div class=\"et_pb_module et_pb_text et_pb_text_3  et_pb_text_align_left et_pb_bg_layout_light\">\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t<div class=\"et_pb_text_inner\"><h1 style=\"text-align: center;\">404</h1></div>\n\t\t\t</div><div class=\"et_pb_module et_pb_text et_pb_text_4  et_pb_text_align_left et_pb_bg_layout_light\">\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t<div class=\"et_pb_text_inner\"><h1 style=\"text-align: center;\">Page Not Found</h1></div>\n\t\t\t</div><div class=\"et_pb_button_module_wrapper et_pb_button_0_wrapper et_pb_button_alignment_center et_pb_module \">\n\t\t\t\t<a class=\"et_pb_button et_pb_button_0 et_pb_bg_layout_dark\" href=\"https://namo.lk\" data-icon=\"$\">Go To Homepage</a>\n\t\t\t</div><div class=\"et_pb_module et_pb_text et_pb_text_5  et_pb_text_align_left et_pb_bg_layout_light\">\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t</div>\n\t\t\t</div>\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t</div>\n\t\t\t\t\n\t\t\t\t\n\t\t\t</div></p>\n",
+  "protected": false
+ },
+ "excerpt": {
+  "rendered": "<p>404Page Not Found</p>\n",
+  "protected": false
+ },
+ "author": 2,
+ "featured_media": 0,
+ "parent": 0,
+ "menu_order": 0,
+ "comment_status": "closed",
+ "ping_status": "closed",
+ "template": "page-template-blank.php",
+ "meta": {
+  "_et_pb_use_builder": "on",
+  "_et_pb_old_content": "",
+  "_et_gb_content_width": "",
+  "_monsterinsights_skip_tracking": false,
+  "footnotes": ""
+ },
+ "class_list": [
+  "post-2476",
+  "page",
+  "type-page",
+  "status-publish",
+  "hentry"
+ ],
+ "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v28.8 - https://yoast.com/product/yoast-seo-wordpress/ -->\n<title>404 - Not Found - Namo.lk</title>\n<meta name=\"robots\" content=\"noindex, nofollow\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"404 - Not Found - Namo.lk\" />\n<meta property=\"og:description\" content=\"404Page Not Found\" />\n<meta property=\"og:url\" content=\"https://namo.lk/404-not-found/\" />\n<meta property=\"og:site_name\" content=\"Namo.lk\" />\n<meta property=\"article:publisher\" content=\"https://www.facebook.com/akonita.co/\" />\n<meta property=\"article:modified_time\" content=\"2024-01-10T00:05:33+00:00\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<meta name=\"twitter:site\" content=\"@akonitaco\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https:\\/\\/schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https:\\/\\/namo.lk\\/404-not-found\\/\",\"url\":\"https:\\/\\/namo.lk\\/404-not-found\\/\",\"name\":\"404 - Not Found - Namo.lk\",\"isPartOf\":{\"@id\":\"https:\\/\\/namo.lk\\/#website\"},\"datePublished\":\"2024-01-09T23:36:47+00:00\",\"dateModified\":\"2024-01-10T00:05:33+00:00\",\"breadcrumb\":{\"@id\":\"https:\\/\\/namo.lk\\/404-not-found\\/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https:\\/\\/namo.lk\\/404-not-found\\/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https:\\/\\/namo.lk\\/404-not-found\\/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https:\\/\\/namo.lk\\/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"404 &#8211; Not Found\"}]},{\"@type\":\"WebSite\",\"@id\":\"https:\\/\\/namo.lk\\/#website\",\"url\":\"https:\\/\\/namo.lk\\/\",\"name\":\"නමෝ.lk\",\"description\":\"Teachings of Buddha, the Fully-Enlightened One\",\"publisher\":{\"@id\":\"https:\\/\\/namo.lk\\/#organization\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https:\\/\\/namo.lk\\/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"en-US\"},{\"@type\":\"Organization\",\"@id\":\"https:\\/\\/namo.lk\\/#organization\",\"name\":\"Akonita\",\"url\":\"https:\\/\\/namo.lk\\/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/logo\\/image\\/\",\"url\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/Namo_Logo_Full.png\",\"contentUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/Namo_Logo_Full.png\",\"width\":634,\"height\":254,\"caption\":\"Akonita\"},\"image\":{\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/logo\\/image\\/\"},\"sameAs\":[\"https:\\/\\/www.facebook.com\\/akonita.co\\/\",\"https:\\/\\/x.com\\/akonitaco\",\"https:\\/\\/www.instagram.com\\/akonita.co\"]}]}</script>\n<!-- / Yoast SEO plugin. -->",
+ "yoast_head_json": {
+  "title": "404 - Not Found - Namo.lk",
+  "robots": {
+   "index": "noindex",
+   "follow": "nofollow"
+  },
+  "og_locale": "en_US",
+  "og_type": "article",
+  "og_title": "404 - Not Found - Namo.lk",
+  "og_description": "404Page Not Found",
+  "og_url": "https://namo.lk/404-not-found/",
+  "og_site_name": "Namo.lk",
+  "article_publisher": "https://www.facebook.com/akonita.co/",
+  "article_modified_time": "2024-01-10T00:05:33+00:00",
+  "twitter_card": "summary_large_image",
+  "twitter_site": "@akonitaco",
+  "schema": {
+   "@context": "https://schema.org",
+   "@graph": [
+    {
+     "@type": "WebPage",
+     "@id": "https://namo.lk/404-not-found/",
+     "url": "https://namo.lk/404-not-found/",
+     "name": "404 - Not Found - Namo.lk",
+     "isPartOf": {
+      "@id": "https://namo.lk/#website"
+     },
+     "datePublished": "2024-01-09T23:36:47+00:00",
+     "dateModified": "2024-01-10T00:05:33+00:00",
+     "breadcrumb": {
+      "@id": "https://namo.lk/404-not-found/#breadcrumb"
+     },
+     "inLanguage": "en-US",
+     "potentialAction": [
+      {
+       "@type": "ReadAction",
+       "target": [
+        "https://namo.lk/404-not-found/"
+       ]
+      }
+     ]
+    },
+    {
+     "@type": "BreadcrumbList",
+     "@id": "https://namo.lk/404-not-found/#breadcrumb",
+     "itemListElement": [
+      {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://namo.lk/"
+      },
+      {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "404 &#8211; Not Found"
+      }
+     ]
+    },
+    {
+     "@type": "WebSite",
+     "@id": "https://namo.lk/#website",
+     "url": "https://namo.lk/",
+     "name": "නමෝ.lk",
+     "description": "Teachings of Buddha, the Fully-Enlightened One",
+     "publisher": {
+      "@id": "https://namo.lk/#organization"
+     },
+     "potentialAction": [
+      {
+       "@type": "SearchAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://namo.lk/?s={search_term_string}"
+       },
+       "query-input": {
+        "@type": "PropertyValueSpecification",
+        "valueRequired": true,
+        "valueName": "search_term_string"
+       }
+      }
+     ],
+     "inLanguage": "en-US"
+    },
+    {
+     "@type": "Organization",
+     "@id": "https://namo.lk/#organization",
+     "name": "Akonita",
+     "url": "https://namo.lk/",
+     "logo": {
+      "@type": "ImageObject",
+      "inLanguage": "en-US",
+      "@id": "https://namo.lk/#/schema/logo/image/",
+      "url": "https://namo.lk/wp-content/uploads/2019/04/Namo_Logo_Full.png",
+      "contentUrl": "https://namo.lk/wp-content/uploads/2019/04/Namo_Logo_Full.png",
+      "width": 634,
+      "height": 254,
+      "caption": "Akonita"
+     },
+     "image": {
+      "@id": "https://namo.lk/#/schema/logo/image/"
+     },
+     "sameAs": [
+      "https://www.facebook.com/akonita.co/",
+      "https://x.com/akonitaco",
+      "https://www.instagram.com/akonita.co"
+     ]
+    }
+   ]
+  }
+ },
+ "_links": {
+  "self": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/pages/2476",
+    "targetHints": {
+     "allow": [
+      "GET"
+     ]
+    }
+   }
+  ],
+  "collection": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/pages"
+   }
+  ],
+  "about": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/types/page"
+   }
+  ],
+  "author": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/users/2"
+   }
+  ],
+  "replies": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/comments?post=2476"
+   }
+  ],
+  "version-history": [
+   {
+    "count": 5,
+    "href": "https://namo.lk/wp-json/wp/v2/pages/2476/revisions"
+   }
+  ],
+  "predecessor-version": [
+   {
+    "id": 2486,
+    "href": "https://namo.lk/wp-json/wp/v2/pages/2476/revisions/2486"
+   }
+  ],
+  "wp:attachment": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/media?parent=2476"
+   }
+  ],
+  "curies": [
+   {
+    "name": "wp",
+    "href": "https://api.w.org/{rel}",
+    "templated": true
+   }
+  ]
+ }
+}

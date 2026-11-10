@@ -1,0 +1,4623 @@
+{
+ "source": {
+  "url": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf",
+  "pdf_title": "Namaskara",
+  "pdf_author": "chan.ranasinghe",
+  "pages": 18,
+  "cover": "VANDANA - Homage to the Buddha, Dhamma and Sangha / Mahamevna Bhavana Asapuwa, Markham ON",
+  "stated_reuse_terms": "none printed in the PDF"
+ },
+ "status": "Copied as printed. The Pali is in plain Roman letters WITHOUT diacritics (a, i, u, m, n ... not ā, ī, ū, ṃ, ñ ...), exactly as the PDF has it.",
+ "columns": {
+  "left_column": "Pali in Roman letters",
+  "right_column": "English"
+ },
+ "pages": [
+  {
+   "pdf_page": 1,
+   "full_width": [
+    {
+     "y": 269.6,
+     "x": 258.1,
+     "bold": true,
+     "text": "VANDANA"
+    },
+    {
+     "y": 310.1,
+     "x": 88.5,
+     "bold": true,
+     "text": "HOMAGE TO THE BUDDHA, DHAMMA AND SANGHA"
+    },
+    {
+     "y": 555.9,
+     "x": 174.8,
+     "bold": false,
+     "text": "MAHAMEVNA BHAVANA ASAPUWA"
+    },
+    {
+     "y": 587.0,
+     "x": 215.3,
+     "bold": false,
+     "text": "11175 Kennedy Road, Markham, ON"
+    },
+    {
+     "y": 616.8,
+     "x": 271.9,
+     "bold": false,
+     "text": "905‐927‐7117"
+    }
+   ],
+   "left_column": [],
+   "right_column": []
+  },
+  {
+   "pdf_page": 2,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 93.6,
+     "x": 133.9,
+     "bold": true,
+     "text": "Namaskara"
+    },
+    {
+     "y": 123.8,
+     "x": 40.6,
+     "bold": false,
+     "text": "Namo tassa bhagavato arahato"
+    },
+    {
+     "y": 138.8,
+     "x": 40.6,
+     "bold": false,
+     "text": "sammasambuddhassa"
+    },
+    {
+     "y": 153.9,
+     "x": 40.6,
+     "bold": false,
+     "text": "Namo tassa bhagavato arahato"
+    },
+    {
+     "y": 168.9,
+     "x": 40.6,
+     "bold": false,
+     "text": "sammasambuddhassa"
+    },
+    {
+     "y": 184.0,
+     "x": 40.6,
+     "bold": false,
+     "text": "Namo tassa bhagavato arahato"
+    },
+    {
+     "y": 199.1,
+     "x": 40.6,
+     "bold": false,
+     "text": "sammasambuddhassa"
+    },
+    {
+     "y": 229.4,
+     "x": 141.4,
+     "bold": true,
+     "text": "Tiratana"
+    },
+    {
+     "y": 259.5,
+     "x": 40.6,
+     "bold": false,
+     "text": "Buddham saranam gacchami."
+    },
+    {
+     "y": 274.6,
+     "x": 40.6,
+     "bold": false,
+     "text": "Dhammam saranam gacchami."
+    },
+    {
+     "y": 289.7,
+     "x": 40.6,
+     "bold": false,
+     "text": "Sangham saranam gacchami."
+    },
+    {
+     "y": 319.8,
+     "x": 40.6,
+     "bold": false,
+     "text": "Dutiyam pi Buddham saranam gacchami."
+    },
+    {
+     "y": 334.8,
+     "x": 40.6,
+     "bold": false,
+     "text": "Dutiyam pi Dhammam saranam gacchami."
+    },
+    {
+     "y": 349.9,
+     "x": 40.6,
+     "bold": false,
+     "text": "Dutiyam pi Sangham saranam gacchami."
+    },
+    {
+     "y": 380.0,
+     "x": 40.6,
+     "bold": false,
+     "text": "Tatiyam pi Buddham saranam gacchami."
+    },
+    {
+     "y": 395.1,
+     "x": 40.6,
+     "bold": false,
+     "text": "Tatiyam pi Dhammam saranam gacchami."
+    },
+    {
+     "y": 410.1,
+     "x": 40.6,
+     "bold": false,
+     "text": "Tatiyam pi Sangham saranam gacchami."
+    },
+    {
+     "y": 440.6,
+     "x": 139.6,
+     "bold": true,
+     "text": "Pancasila"
+    },
+    {
+     "y": 470.7,
+     "x": 40.6,
+     "bold": false,
+     "text": "Panatipata veramani-sikkhapadam samadiyami."
+    },
+    {
+     "y": 500.8,
+     "x": 40.6,
+     "bold": false,
+     "text": "Adinnadana veramani-sikkhapadam"
+    },
+    {
+     "y": 515.9,
+     "x": 40.6,
+     "bold": false,
+     "text": "samadiyami."
+    },
+    {
+     "y": 531.0,
+     "x": 40.6,
+     "bold": false,
+     "text": "Kamesu micchacara veramani-sikkhapadam"
+    },
+    {
+     "y": 546.0,
+     "x": 40.6,
+     "bold": false,
+     "text": "samadiyami."
+    },
+    {
+     "y": 561.1,
+     "x": 40.6,
+     "bold": false,
+     "text": "Musavada veramani-sikkhapadam samadiyami."
+    },
+    {
+     "y": 594.1,
+     "x": 40.6,
+     "bold": false,
+     "text": "Suramerayamajjapamadathana veramani-"
+    },
+    {
+     "y": 609.1,
+     "x": 40.6,
+     "bold": false,
+     "text": "sikkhapadam samadiyami"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 93.6,
+     "x": 368.0,
+     "bold": true,
+     "text": "Salutation to the Buddha"
+    },
+    {
+     "y": 123.7,
+     "x": 303.2,
+     "bold": false,
+     "text": "Homage to the Blissful One, the Worthy One, the"
+    },
+    {
+     "y": 138.8,
+     "x": 303.2,
+     "bold": false,
+     "text": "Fully Enlightened One."
+    },
+    {
+     "y": 153.9,
+     "x": 303.2,
+     "bold": false,
+     "text": "Homage to the Blissful One, the Worthy One, the"
+    },
+    {
+     "y": 168.9,
+     "x": 303.2,
+     "bold": false,
+     "text": "Fully Enlightened One."
+    },
+    {
+     "y": 184.0,
+     "x": 303.2,
+     "bold": false,
+     "text": "Homage to the Blissful One, the Worthy One, the"
+    },
+    {
+     "y": 199.0,
+     "x": 303.2,
+     "bold": false,
+     "text": "Fully Enlightened One."
+    },
+    {
+     "y": 229.4,
+     "x": 384.7,
+     "bold": true,
+     "text": "The Three Refuges"
+    },
+    {
+     "y": 259.5,
+     "x": 303.2,
+     "bold": false,
+     "text": "I go to the Buddha for refuge."
+    },
+    {
+     "y": 274.6,
+     "x": 303.2,
+     "bold": false,
+     "text": "I go to the Dhamma for refuge."
+    },
+    {
+     "y": 289.6,
+     "x": 303.2,
+     "bold": false,
+     "text": "I go to the Sangha for refuge."
+    },
+    {
+     "y": 319.8,
+     "x": 303.2,
+     "bold": false,
+     "text": "A second time, I go to the Buddha for refuge."
+    },
+    {
+     "y": 334.8,
+     "x": 303.2,
+     "bold": false,
+     "text": "A second time, I go to the Dhamma for refuge."
+    },
+    {
+     "y": 349.9,
+     "x": 303.2,
+     "bold": false,
+     "text": "A second time, I go to the Sangha for refuge."
+    },
+    {
+     "y": 380.0,
+     "x": 303.2,
+     "bold": false,
+     "text": "A third time, I go to the Buddha for refuge."
+    },
+    {
+     "y": 395.1,
+     "x": 303.2,
+     "bold": false,
+     "text": "A third time, I go to the Dhamma for refuge."
+    },
+    {
+     "y": 410.1,
+     "x": 303.2,
+     "bold": false,
+     "text": "A third time, I go to the Sangha for refuge."
+    },
+    {
+     "y": 440.5,
+     "x": 346.9,
+     "bold": true,
+     "text": "Observation of the Five Precepts"
+    },
+    {
+     "y": 470.6,
+     "x": 303.2,
+     "bold": false,
+     "text": "I undertake the training rule to abstain from killing"
+    },
+    {
+     "y": 485.7,
+     "x": 303.2,
+     "bold": false,
+     "text": "living beings."
+    },
+    {
+     "y": 500.7,
+     "x": 303.2,
+     "bold": false,
+     "text": "I undertake the training rule to abstain from taking"
+    },
+    {
+     "y": 515.8,
+     "x": 303.2,
+     "bold": false,
+     "text": "that which is not given."
+    },
+    {
+     "y": 530.8,
+     "x": 303.2,
+     "bold": false,
+     "text": "I undertake the training rule to abstain from sexual"
+    },
+    {
+     "y": 545.9,
+     "x": 303.2,
+     "bold": false,
+     "text": "misconduct."
+    },
+    {
+     "y": 561.0,
+     "x": 303.2,
+     "bold": false,
+     "text": "I undertake the training rule to abstain from false"
+    },
+    {
+     "y": 576.0,
+     "x": 303.2,
+     "bold": false,
+     "text": "speech."
+    },
+    {
+     "y": 591.1,
+     "x": 303.2,
+     "bold": false,
+     "text": "I undertake the training rule to abstain from"
+    },
+    {
+     "y": 606.1,
+     "x": 303.2,
+     "bold": false,
+     "text": "intoxicants and harmful drugs."
+    }
+   ]
+  },
+  {
+   "pdf_page": 3,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 93.6,
+     "x": 121.1,
+     "bold": true,
+     "text": "Buddhavandana"
+    },
+    {
+     "y": 121.4,
+     "x": 40.6,
+     "bold": false,
+     "text": "Iti pi so bhagava araham sammasambuddho"
+    },
+    {
+     "y": 136.5,
+     "x": 40.6,
+     "bold": false,
+     "text": "vijjacaranasampanno sugato lokavidu anuttaro"
+    },
+    {
+     "y": 151.5,
+     "x": 40.6,
+     "bold": false,
+     "text": "purisadammasarathi satta devamannussanam"
+    },
+    {
+     "y": 166.6,
+     "x": 40.6,
+     "bold": false,
+     "text": "buddho bhagava ti."
+    }
+   ],
+   "right_column": [
+    {
+     "y": 93.6,
+     "x": 370.9,
+     "bold": true,
+     "text": "Homage to the Buddha"
+    },
+    {
+     "y": 123.6,
+     "x": 298.2,
+     "bold": false,
+     "text": "Such indeed is the Blessed One:"
+    },
+    {
+     "y": 138.8,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Araham\" - eradicated greed, hatred, delusion,"
+    },
+    {
+     "y": 153.9,
+     "x": 298.2,
+     "bold": false,
+     "text": "craving, and is free of all taints."
+    },
+    {
+     "y": 169.1,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Sammasambuddho\" - Understood the Four Noble"
+    },
+    {
+     "y": 184.1,
+     "x": 298.2,
+     "bold": false,
+     "text": "Truths, the reality of life, without anyone’s help."
+    },
+    {
+     "y": 199.3,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Vijjacaranasampanno\" - Perfect in True"
+    },
+    {
+     "y": 214.4,
+     "x": 298.2,
+     "bold": false,
+     "text": "Knowledge and Conduct. Buddha acquired 3 kinds"
+    },
+    {
+     "y": 229.4,
+     "x": 298.2,
+     "bold": false,
+     "text": "of knowledge: understood His past lives;"
+    },
+    {
+     "y": 244.5,
+     "x": 298.2,
+     "bold": false,
+     "text": "understood the passing away and arising of other"
+    },
+    {
+     "y": 259.4,
+     "x": 298.2,
+     "bold": false,
+     "text": "beings; understood the nature and the path to"
+    },
+    {
+     "y": 274.4,
+     "x": 298.2,
+     "bold": false,
+     "text": "eradicate taints."
+    },
+    {
+     "y": 289.4,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Sugato\" - Found and followed the Right Noble"
+    },
+    {
+     "y": 304.5,
+     "x": 298.2,
+     "bold": false,
+     "text": "Eightfold Path (the Path leading to the cessation of"
+    },
+    {
+     "y": 319.5,
+     "x": 298.2,
+     "bold": false,
+     "text": "Dukka)."
+    },
+    {
+     "y": 334.7,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Lokavidu\" - Understood the presence and origin of"
+    },
+    {
+     "y": 349.8,
+     "x": 298.2,
+     "bold": false,
+     "text": "all the worlds (hell, ghost, animal, human, heavenly,"
+    },
+    {
+     "y": 364.8,
+     "x": 298.2,
+     "bold": false,
+     "text": "and the pure abodes)."
+    },
+    {
+     "y": 380.0,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Anuttaro purisadammasarathi\" - Incomparable"
+    },
+    {
+     "y": 395.1,
+     "x": 298.2,
+     "bold": false,
+     "text": "Leader of those to be tamed."
+    },
+    {
+     "y": 410.2,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Satta devamannussanam\" - Teacher of gods and"
+    },
+    {
+     "y": 425.3,
+     "x": 298.2,
+     "bold": false,
+     "text": "humans."
+    },
+    {
+     "y": 440.5,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Buddho\" - Understood the Four Noble Truths"
+    },
+    {
+     "y": 455.5,
+     "x": 298.2,
+     "bold": false,
+     "text": "without assistance and was able to teach Dhamma to"
+    },
+    {
+     "y": 470.6,
+     "x": 298.2,
+     "bold": false,
+     "text": "others, without holding anything back."
+    },
+    {
+     "y": 485.8,
+     "x": 298.2,
+     "bold": false,
+     "text": "\"Bhagava\" - Only a Buddha, the Supreme Teacher"
+    },
+    {
+     "y": 500.8,
+     "x": 298.2,
+     "bold": false,
+     "text": "holds these great, extra-ordinary qualities."
+    }
+   ]
+  },
+  {
+   "pdf_page": 4,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 93.6,
+     "x": 110.0,
+     "bold": true,
+     "text": "Dhammavandana"
+    },
+    {
+     "y": 123.6,
+     "x": 34.8,
+     "bold": false,
+     "text": "Svakkhato Bhagavata dhammo sanditthiko"
+    },
+    {
+     "y": 138.7,
+     "x": 34.8,
+     "bold": false,
+     "text": "akaliko ehipassiko opanayiko paccattam"
+    },
+    {
+     "y": 153.8,
+     "x": 34.8,
+     "bold": false,
+     "text": "vedittabbo vinnuhiti."
+    },
+    {
+     "y": 359.5,
+     "x": 114.7,
+     "bold": true,
+     "text": "Sanghavandana"
+    },
+    {
+     "y": 389.5,
+     "x": 34.5,
+     "bold": false,
+     "text": "Supatipanno Bhagavato savakasangho."
+    },
+    {
+     "y": 404.6,
+     "x": 34.5,
+     "bold": false,
+     "text": "Ujupatipanno Bhagavato savakasangho."
+    },
+    {
+     "y": 419.6,
+     "x": 34.5,
+     "bold": false,
+     "text": "Nayapatipanno Bhagavato savakasangho."
+    },
+    {
+     "y": 434.7,
+     "x": 34.5,
+     "bold": false,
+     "text": "Samicipatipanno Bhagavato savakasangho."
+    },
+    {
+     "y": 449.7,
+     "x": 34.5,
+     "bold": false,
+     "text": "Yadidam cattari purisayugani attha"
+    },
+    {
+     "y": 464.8,
+     "x": 34.5,
+     "bold": false,
+     "text": "purisapuggala esa Bhagavato savakasangho."
+    },
+    {
+     "y": 479.8,
+     "x": 34.5,
+     "bold": false,
+     "text": "Ahuneyyo pahuneyyo dakkhineyyo"
+    },
+    {
+     "y": 494.9,
+     "x": 34.5,
+     "bold": false,
+     "text": "anjalikaraniyo anuttaram punnakkhettam"
+    },
+    {
+     "y": 510.0,
+     "x": 34.5,
+     "bold": false,
+     "text": "lokassa ti."
+    }
+   ],
+   "right_column": [
+    {
+     "y": 93.6,
+     "x": 368.9,
+     "bold": true,
+     "text": "Homage to the Dhamma"
+    },
+    {
+     "y": 123.9,
+     "x": 295.8,
+     "bold": false,
+     "text": "\"Svakkhato\" - The Dhamma taught by the Blessed"
+    },
+    {
+     "y": 138.9,
+     "x": 295.8,
+     "bold": false,
+     "text": "One is Excellent in the beginning, Excellent in the"
+    },
+    {
+     "y": 154.0,
+     "x": 295.8,
+     "bold": false,
+     "text": "middle and Excellent in the end - all of Buddha's"
+    },
+    {
+     "y": 169.0,
+     "x": 295.8,
+     "bold": false,
+     "text": "Discourses are consistent and teach the same truth."
+    },
+    {
+     "y": 184.2,
+     "x": 295.8,
+     "bold": false,
+     "text": "\"Sanditthika\" - Dhamma is self-evident and can be"
+    },
+    {
+     "y": 199.3,
+     "x": 295.8,
+     "bold": false,
+     "text": "understood in this life itself."
+    },
+    {
+     "y": 214.5,
+     "x": 295.8,
+     "bold": false,
+     "text": "\"Akaliko\" - Dhamma, Noble Truths, can not be"
+    },
+    {
+     "y": 229.5,
+     "x": 295.8,
+     "bold": false,
+     "text": "changed nor can they be altered over time."
+    },
+    {
+     "y": 244.7,
+     "x": 295.8,
+     "bold": false,
+     "text": "\"Ehipassiko\" - \"come and see\"; Buddha's Dhamma is"
+    },
+    {
+     "y": 259.8,
+     "x": 295.8,
+     "bold": false,
+     "text": "to be investigated."
+    },
+    {
+     "y": 274.9,
+     "x": 295.8,
+     "bold": false,
+     "text": "\"Opanayika\" - Dhamma can only be understood by"
+    },
+    {
+     "y": 290.0,
+     "x": 295.8,
+     "bold": false,
+     "text": "oneself."
+    },
+    {
+     "y": 305.2,
+     "x": 295.8,
+     "bold": false,
+     "text": "\"Paccattam vedittabbo vinnuhiti\" - Dhamma is for"
+    },
+    {
+     "y": 320.2,
+     "x": 295.8,
+     "bold": false,
+     "text": "the wise to understand and realize."
+    },
+    {
+     "y": 359.5,
+     "x": 374.0,
+     "bold": true,
+     "text": "Homage to the Sangha"
+    },
+    {
+     "y": 389.7,
+     "x": 295.5,
+     "bold": false,
+     "text": "\"Supatipanno\" - The Order of the Blessed One are"
+    },
+    {
+     "y": 404.8,
+     "x": 295.5,
+     "bold": false,
+     "text": "training to rid themselves of greed, hatred and"
+    },
+    {
+     "y": 419.8,
+     "x": 295.5,
+     "bold": false,
+     "text": "delusion."
+    },
+    {
+     "y": 435.0,
+     "x": 295.5,
+     "bold": false,
+     "text": "\"Ujupatipanno\" - They follow the direct, Noble"
+    },
+    {
+     "y": 450.1,
+     "x": 295.5,
+     "bold": false,
+     "text": "Eightfold Path."
+    },
+    {
+     "y": 465.3,
+     "x": 295.5,
+     "bold": false,
+     "text": "\"Nayapatipanno\" - The Noble Order understands the"
+    },
+    {
+     "y": 480.3,
+     "x": 295.5,
+     "bold": false,
+     "text": "First Noble Truth and are practising to eradicate"
+    },
+    {
+     "y": 495.4,
+     "x": 295.5,
+     "bold": false,
+     "text": "suffering"
+    },
+    {
+     "y": 510.6,
+     "x": 295.5,
+     "bold": false,
+     "text": "\"Samicipatipanno\" - The Orders spreads the message"
+    },
+    {
+     "y": 525.6,
+     "x": 295.5,
+     "bold": false,
+     "text": "of Dhamma by sharing what the Buddha taught."
+    },
+    {
+     "y": 540.7,
+     "x": 295.5,
+     "bold": false,
+     "text": "In Buddha’s Order are the 8 kinds of individuals: the"
+    },
+    {
+     "y": 555.7,
+     "x": 295.5,
+     "bold": false,
+     "text": "one striving to Enter the Stream of the Noble Path, the"
+    },
+    {
+     "y": 570.8,
+     "x": 295.5,
+     "bold": false,
+     "text": "one who has entered the Stream; the one striving to"
+    },
+    {
+     "y": 585.9,
+     "x": 295.5,
+     "bold": false,
+     "text": "attain the position of Once-Returner, the Once-"
+    },
+    {
+     "y": 600.9,
+     "x": 295.5,
+     "bold": false,
+     "text": "Returner; the one striving to reach the Non- returner"
+    },
+    {
+     "y": 616.0,
+     "x": 295.5,
+     "bold": false,
+     "text": "position, the Non-Returner; the one striving for"
+    },
+    {
+     "y": 631.0,
+     "x": 295.5,
+     "bold": false,
+     "text": "Arahantship and the Arahant. A field of merit is the"
+    },
+    {
+     "y": 646.1,
+     "x": 295.5,
+     "bold": false,
+     "text": "supreme Sangha, worthy of gifts, worthy of"
+    },
+    {
+     "y": 661.2,
+     "x": 295.5,
+     "bold": false,
+     "text": "hospitality, worthy of respect and worship."
+    }
+   ]
+  },
+  {
+   "pdf_page": 5,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 102.3,
+     "x": 130.1,
+     "bold": true,
+     "text": "Sath Budu Vandana"
+    },
+    {
+     "y": 132.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Vipassissa namatthu – cakkhu mantassa"
+    },
+    {
+     "y": 147.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "sirimato."
+    },
+    {
+     "y": 162.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sikhissapi namatthu – sabba bhutanu"
+    },
+    {
+     "y": 177.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "kampino."
+    },
+    {
+     "y": 237.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Vessabhussa namatthu – nahatakassa"
+    },
+    {
+     "y": 252.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "tapassino"
+    },
+    {
+     "y": 267.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Namatthu Kakusandhassa – marasena"
+    },
+    {
+     "y": 282.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "pamaddino"
+    },
+    {
+     "y": 343.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Konagamanassa namatthu – brahmanassa"
+    },
+    {
+     "y": 358.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "vusimato"
+    },
+    {
+     "y": 373.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kassapassa namatthu – vippamuttassa"
+    },
+    {
+     "y": 388.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "sabbadhi"
+    },
+    {
+     "y": 433.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Angirasassa namatthu – sakya puttassa"
+    },
+    {
+     "y": 448.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "sirimato"
+    },
+    {
+     "y": 463.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yo imam Dhamma madesesi –"
+    },
+    {
+     "y": 478.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "sabbadukkha panudanam"
+    },
+    {
+     "y": 508.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Ye capi nibuta loke – yatha bhutam"
+    },
+    {
+     "y": 523.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "vipassisum."
+    },
+    {
+     "y": 538.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Te jana apisuna – mahanta vitasarada."
+    },
+    {
+     "y": 599.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Hitam deva manussanam – yam nanassanti"
+    },
+    {
+     "y": 614.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Gotamam"
+    },
+    {
+     "y": 629.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Vijjacarana sampannam – mahantam"
+    },
+    {
+     "y": 682.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sath Budu Vandana Con’t"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 102.3,
+     "x": 341.5,
+     "bold": true,
+     "text": "Homage to the Seven Buddhas"
+    },
+    {
+     "y": 132.5,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Vipassi Buddha,"
+    },
+    {
+     "y": 147.5,
+     "x": 311.4,
+     "bold": false,
+     "text": "the fortunate Buddha, with eyes of"
+    },
+    {
+     "y": 162.6,
+     "x": 311.4,
+     "bold": false,
+     "text": "Dhamma."
+    },
+    {
+     "y": 177.6,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Sikhi Buddha, the"
+    },
+    {
+     "y": 192.7,
+     "x": 311.4,
+     "bold": false,
+     "text": "Buddha who is compassionate towards all"
+    },
+    {
+     "y": 207.8,
+     "x": 311.4,
+     "bold": false,
+     "text": "beings."
+    },
+    {
+     "y": 237.9,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Vessubhu Buddha,"
+    },
+    {
+     "y": 252.9,
+     "x": 311.4,
+     "bold": false,
+     "text": "who destroyed defilements, with excellent"
+    },
+    {
+     "y": 268.0,
+     "x": 311.4,
+     "bold": false,
+     "text": "effort."
+    },
+    {
+     "y": 283.0,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Kakusandha"
+    },
+    {
+     "y": 298.1,
+     "x": 311.4,
+     "bold": false,
+     "text": "Buddha, the vanquisher of the forces of"
+    },
+    {
+     "y": 313.2,
+     "x": 311.4,
+     "bold": false,
+     "text": "Mara."
+    },
+    {
+     "y": 343.3,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Konagamana"
+    },
+    {
+     "y": 358.3,
+     "x": 311.4,
+     "bold": false,
+     "text": "Buddha, of pure life, who has reached"
+    },
+    {
+     "y": 373.4,
+     "x": 311.4,
+     "bold": false,
+     "text": "perfection."
+    },
+    {
+     "y": 388.5,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Kassapa Buddha,"
+    },
+    {
+     "y": 403.5,
+     "x": 311.4,
+     "bold": false,
+     "text": "completely released of all taints."
+    },
+    {
+     "y": 433.6,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Angirasa, the"
+    },
+    {
+     "y": 448.7,
+     "x": 311.4,
+     "bold": false,
+     "text": "Sakyan son, the Blessed One. He who"
+    },
+    {
+     "y": 463.8,
+     "x": 311.4,
+     "bold": false,
+     "text": "taught this Supreme Dhamma; the dispeller"
+    },
+    {
+     "y": 478.8,
+     "x": 311.4,
+     "bold": false,
+     "text": "of all suffering."
+    },
+    {
+     "y": 508.9,
+     "x": 311.4,
+     "bold": false,
+     "text": "Those who have reached the pleasure of"
+    },
+    {
+     "y": 524.0,
+     "x": 311.4,
+     "bold": false,
+     "text": "liberation, of Nibbana, and have seen the"
+    },
+    {
+     "y": 539.1,
+     "x": 311.4,
+     "bold": false,
+     "text": "reality with wisdom, those Buddhas, non-"
+    },
+    {
+     "y": 554.1,
+     "x": 311.4,
+     "bold": false,
+     "text": "slanderous, great and excellent, escaped the"
+    },
+    {
+     "y": 569.2,
+     "x": 311.4,
+     "bold": false,
+     "text": "fear of Samsara."
+    },
+    {
+     "y": 599.3,
+     "x": 311.4,
+     "bold": false,
+     "text": "Beneficial to devas and humans,"
+    },
+    {
+     "y": 614.4,
+     "x": 311.4,
+     "bold": false,
+     "text": "That Gotama Buddha, whom people"
+    },
+    {
+     "y": 629.4,
+     "x": 311.4,
+     "bold": false,
+     "text": "worship; possessed of higher knowledge"
+    },
+    {
+     "y": 682.4,
+     "x": 311.4,
+     "bold": false,
+     "text": "Homage to the Seven Buddhas Con’t"
+    }
+   ]
+  },
+  {
+   "pdf_page": 6,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 117.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "vitasaradam"
+    },
+    {
+     "y": 162.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Vijjacarana sampannam – Buddham"
+    },
+    {
+     "y": 177.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "vandama Gotamam."
+    },
+    {
+     "y": 237.6,
+     "x": 134.5,
+     "bold": false,
+     "text": "Sadu! Sadu! Sadu!"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 117.1,
+     "x": 311.4,
+     "bold": false,
+     "text": "and good conduct, very Great and free from"
+    },
+    {
+     "y": 132.2,
+     "x": 311.4,
+     "bold": false,
+     "text": "fears."
+    },
+    {
+     "y": 162.3,
+     "x": 311.4,
+     "bold": false,
+     "text": "May there be homage to Gotama Buddha,"
+    },
+    {
+     "y": 177.4,
+     "x": 311.4,
+     "bold": false,
+     "text": "possessed of higher knowledge and extra"
+    },
+    {
+     "y": 192.4,
+     "x": 311.4,
+     "bold": false,
+     "text": "ordinary conduct."
+    },
+    {
+     "y": 237.6,
+     "x": 373.9,
+     "bold": false,
+     "text": "Sadu! Sadu! Sadu!"
+    }
+   ]
+  },
+  {
+   "pdf_page": 7,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 154.9,
+     "x": 118.5,
+     "bold": true,
+     "text": "Buddha Puja"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 154.9,
+     "x": 360.9,
+     "bold": true,
+     "text": "Offerings to the Buddha"
+    },
+    {
+     "y": 184.9,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, is an Arahant."
+    },
+    {
+     "y": 199.9,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, eradicated passion,"
+    },
+    {
+     "y": 215.0,
+     "x": 283.1,
+     "bold": false,
+     "text": "hatred and delusion."
+    },
+    {
+     "y": 230.1,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, eradicated the"
+    },
+    {
+     "y": 245.1,
+     "x": 283.1,
+     "bold": false,
+     "text": "desire of seeing forms."
+    },
+    {
+     "y": 260.2,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, eradicated the"
+    },
+    {
+     "y": 275.2,
+     "x": 283.1,
+     "bold": false,
+     "text": "desire of hearing sounds."
+    },
+    {
+     "y": 290.3,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, eradicated the"
+    },
+    {
+     "y": 305.4,
+     "x": 283.1,
+     "bold": false,
+     "text": "desire of smelling odours."
+    },
+    {
+     "y": 320.4,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, eradicated the"
+    },
+    {
+     "y": 335.5,
+     "x": 283.1,
+     "bold": false,
+     "text": "desire of tasting flavours."
+    },
+    {
+     "y": 350.5,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, eradicated the"
+    },
+    {
+     "y": 365.6,
+     "x": 283.1,
+     "bold": false,
+     "text": "desire of touching tangibles."
+    },
+    {
+     "y": 380.7,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, eradicated the"
+    },
+    {
+     "y": 395.7,
+     "x": 283.1,
+     "bold": false,
+     "text": "desire of thinking thoughts."
+    },
+    {
+     "y": 410.8,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, controlled sense"
+    },
+    {
+     "y": 425.8,
+     "x": 283.1,
+     "bold": false,
+     "text": "faculties, protected sense faculties, tamed sense"
+    },
+    {
+     "y": 440.9,
+     "x": 283.1,
+     "bold": false,
+     "text": "faculties, restrained sense faculties."
+    },
+    {
+     "y": 455.9,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha is free from"
+    },
+    {
+     "y": 471.0,
+     "x": 283.1,
+     "bold": false,
+     "text": "defilements."
+    },
+    {
+     "y": 486.1,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha purified his body,"
+    },
+    {
+     "y": 501.1,
+     "x": 283.1,
+     "bold": false,
+     "text": "speech and mind."
+    },
+    {
+     "y": 516.2,
+     "x": 283.1,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, is an Arahant."
+    },
+    {
+     "y": 531.2,
+     "x": 283.1,
+     "bold": false,
+     "text": "Supreme Buddha understood suffering as a Noble"
+    },
+    {
+     "y": 546.3,
+     "x": 283.1,
+     "bold": false,
+     "text": "Truth, without anyone’s help."
+    },
+    {
+     "y": 561.4,
+     "x": 283.1,
+     "bold": false,
+     "text": "Supreme Buddha eradicated the origin of suffering, as a"
+    },
+    {
+     "y": 576.5,
+     "x": 283.1,
+     "bold": false,
+     "text": "Noble truth, without anyone’s help."
+    },
+    {
+     "y": 591.5,
+     "x": 283.1,
+     "bold": false,
+     "text": "Supreme Buddha attained the cessation of suffering, as"
+    },
+    {
+     "y": 606.6,
+     "x": 283.1,
+     "bold": false,
+     "text": "a Noble Truth, without anyone’s help."
+    },
+    {
+     "y": 621.6,
+     "x": 283.1,
+     "bold": false,
+     "text": "Supreme Buddha followed the Path leading to the"
+    },
+    {
+     "y": 636.7,
+     "x": 283.1,
+     "bold": false,
+     "text": "cessation of suffering, as a Noble Truth without"
+    },
+    {
+     "y": 651.7,
+     "x": 283.1,
+     "bold": false,
+     "text": "anyone’s help."
+    },
+    {
+     "y": 666.8,
+     "x": 283.1,
+     "bold": false,
+     "text": "In this way, Supreme Buddha realized Four Noble"
+    },
+    {
+     "y": 681.9,
+     "x": 283.1,
+     "bold": false,
+     "text": "Truths, escaped suffering and achieved real happiness."
+    }
+   ]
+  },
+  {
+   "pdf_page": 8,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 93.3,
+     "x": 41.2,
+     "bold": false,
+     "text": "Buddha Puja Continued..."
+    },
+    {
+     "y": 437.4,
+     "x": 41.2,
+     "bold": false,
+     "text": "Buddha so Bhagava"
+    },
+    {
+     "y": 452.4,
+     "x": 41.2,
+     "bold": false,
+     "text": "Boddhaya Dhammam de saythi."
+    },
+    {
+     "y": 481.5,
+     "x": 41.2,
+     "bold": false,
+     "text": "Danto so Bhagava"
+    },
+    {
+     "y": 496.5,
+     "x": 41.2,
+     "bold": false,
+     "text": "Dhammataya dhammam de saythi."
+    },
+    {
+     "y": 526.7,
+     "x": 41.2,
+     "bold": false,
+     "text": "Santo so Bhagava"
+    },
+    {
+     "y": 541.7,
+     "x": 41.2,
+     "bold": false,
+     "text": "Sammataya dhammam de saythi."
+    },
+    {
+     "y": 570.8,
+     "x": 41.2,
+     "bold": false,
+     "text": "Thino so Bhagava"
+    },
+    {
+     "y": 585.8,
+     "x": 41.2,
+     "bold": false,
+     "text": "Tharanaya dhammam de saythi."
+    },
+    {
+     "y": 615.9,
+     "x": 41.2,
+     "bold": false,
+     "text": "Parrinibitho so Bhagava"
+    },
+    {
+     "y": 631.0,
+     "x": 41.2,
+     "bold": false,
+     "text": "Parrinibanaya dhammam de saythi."
+    }
+   ],
+   "right_column": [
+    {
+     "y": 93.3,
+     "x": 282.8,
+     "bold": false,
+     "text": "Offerings to the Buddha Continued ..."
+    },
+    {
+     "y": 121.1,
+     "x": 282.8,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, had the"
+    },
+    {
+     "y": 136.2,
+     "x": 282.8,
+     "bold": false,
+     "text": "knowledge to read other’s minds."
+    },
+    {
+     "y": 151.2,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha had the knowledge to recollect past"
+    },
+    {
+     "y": 166.3,
+     "x": 282.8,
+     "bold": false,
+     "text": "lives of beings."
+    },
+    {
+     "y": 181.4,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha had the knowledge to understand the"
+    },
+    {
+     "y": 196.4,
+     "x": 282.8,
+     "bold": false,
+     "text": "passing away and re-appearing of beings."
+    },
+    {
+     "y": 211.5,
+     "x": 282.8,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, had the"
+    },
+    {
+     "y": 226.5,
+     "x": 282.8,
+     "bold": false,
+     "text": "knowledge of the ‘destruction of all taints’."
+    },
+    {
+     "y": 241.6,
+     "x": 282.8,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, developed"
+    },
+    {
+     "y": 256.6,
+     "x": 282.8,
+     "bold": false,
+     "text": "excellent psychic powers."
+    },
+    {
+     "y": 271.7,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha had excellent virtue, concentration"
+    },
+    {
+     "y": 286.8,
+     "x": 282.8,
+     "bold": false,
+     "text": "and wisdom."
+    },
+    {
+     "y": 301.8,
+     "x": 282.8,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, discovered a very"
+    },
+    {
+     "y": 316.9,
+     "x": 282.8,
+     "bold": false,
+     "text": "clear path and attained Nibbana."
+    },
+    {
+     "y": 331.9,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha understood all the worlds, escaped"
+    },
+    {
+     "y": 347.0,
+     "x": 282.8,
+     "bold": false,
+     "text": "from all these worlds."
+    },
+    {
+     "y": 362.1,
+     "x": 282.8,
+     "bold": false,
+     "text": "My great teacher, is taming"
+    },
+    {
+     "y": 377.1,
+     "x": 282.8,
+     "bold": false,
+     "text": "me with great compassion"
+    },
+    {
+     "y": 392.2,
+     "x": 282.8,
+     "bold": false,
+     "text": "My great teacher, Supreme Buddha, is the teacher of"
+    },
+    {
+     "y": 407.2,
+     "x": 282.8,
+     "bold": false,
+     "text": "gods and humans."
+    },
+    {
+     "y": 437.4,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha understood the reality, and teaches"
+    },
+    {
+     "y": 452.4,
+     "x": 282.8,
+     "bold": false,
+     "text": "Dhamma to others so that they may understand reality."
+    },
+    {
+     "y": 482.5,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha was tamed and teaches Dhamma to"
+    },
+    {
+     "y": 497.6,
+     "x": 282.8,
+     "bold": false,
+     "text": "others so that they may be tamed."
+    },
+    {
+     "y": 527.7,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha was calm and teaches Dhamma to"
+    },
+    {
+     "y": 542.8,
+     "x": 282.8,
+     "bold": false,
+     "text": "others so that they may be calm."
+    },
+    {
+     "y": 572.9,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha escaped from suffering and teaches"
+    },
+    {
+     "y": 588.0,
+     "x": 282.8,
+     "bold": false,
+     "text": "Dhamma to others so that they may escape."
+    },
+    {
+     "y": 618.1,
+     "x": 282.8,
+     "bold": false,
+     "text": "Supreme Buddha attained Parinibbana and teaches"
+    },
+    {
+     "y": 633.1,
+     "x": 282.8,
+     "bold": false,
+     "text": "Dhamma to others so that they may attain."
+    }
+   ]
+  },
+  {
+   "pdf_page": 9,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 93.3,
+     "x": 43.4,
+     "bold": false,
+     "text": "Buddha Puja Continued ..."
+    },
+    {
+     "y": 686.2,
+     "x": 105.0,
+     "bold": true,
+     "text": "Patticcasamuppada"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 87.4,
+     "x": 285.0,
+     "bold": false,
+     "text": "Offerings to the Buddha Continued..."
+    },
+    {
+     "y": 117.4,
+     "x": 285.0,
+     "bold": false,
+     "text": "I offer, with great respect, these beautiful flowers,"
+    },
+    {
+     "y": 132.5,
+     "x": 285.0,
+     "bold": false,
+     "text": "sweet drinks and candle light, to my great teacher,"
+    },
+    {
+     "y": 147.5,
+     "x": 285.0,
+     "bold": false,
+     "text": "Supreme Buddha."
+    },
+    {
+     "y": 177.6,
+     "x": 285.0,
+     "bold": false,
+     "text": "Sadu, Sadu, Sadu!"
+    },
+    {
+     "y": 686.2,
+     "x": 361.7,
+     "bold": true,
+     "text": "Dependent Origination"
+    }
+   ]
+  },
+  {
+   "pdf_page": 10,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 102.6,
+     "x": 45.7,
+     "bold": false,
+     "text": "Anuloma"
+    },
+    {
+     "y": 132.6,
+     "x": 45.7,
+     "bold": false,
+     "text": "Avijjapaccaya samkhara. Sankharapaccaya"
+    },
+    {
+     "y": 147.6,
+     "x": 45.7,
+     "bold": false,
+     "text": "vinnianam."
+    },
+    {
+     "y": 162.7,
+     "x": 45.7,
+     "bold": false,
+     "text": "Vinnyana paccaya nama-rupam."
+    },
+    {
+     "y": 177.8,
+     "x": 45.7,
+     "bold": false,
+     "text": "Nama-rupapaccaya salayatanam."
+    },
+    {
+     "y": 192.8,
+     "x": 45.7,
+     "bold": false,
+     "text": "Salayatanapaccaya phasso. Phassapaccaya"
+    },
+    {
+     "y": 207.9,
+     "x": 45.7,
+     "bold": false,
+     "text": "vedana. Vedanapaccaya tanha."
+    },
+    {
+     "y": 222.9,
+     "x": 45.7,
+     "bold": false,
+     "text": "Tanhapaccaya upadnam. Upadanapaccaya"
+    },
+    {
+     "y": 238.0,
+     "x": 45.7,
+     "bold": false,
+     "text": "bhavo. Bhavapaccaya jati. Jatipaccaya"
+    },
+    {
+     "y": 253.0,
+     "x": 45.7,
+     "bold": false,
+     "text": "jaramaranam soka-parideva-dukkha-"
+    },
+    {
+     "y": 268.1,
+     "x": 45.7,
+     "bold": false,
+     "text": "domanassupayasa sambhavanti."
+    },
+    {
+     "y": 283.2,
+     "x": 45.7,
+     "bold": false,
+     "text": "Evametassa kevalassa dukkhakkhandassa"
+    },
+    {
+     "y": 298.2,
+     "x": 45.7,
+     "bold": false,
+     "text": "samudayo hoti."
+    },
+    {
+     "y": 448.7,
+     "x": 106.0,
+     "bold": true,
+     "text": "Patticcasamuppada"
+    },
+    {
+     "y": 478.6,
+     "x": 136.6,
+     "bold": false,
+     "text": "Patiloma"
+    },
+    {
+     "y": 508.7,
+     "x": 47.1,
+     "bold": false,
+     "text": "Avijjaya tve’va asesaviraganirodha"
+    },
+    {
+     "y": 523.8,
+     "x": 47.1,
+     "bold": false,
+     "text": "sankharanirodho. Sankharanirodha"
+    },
+    {
+     "y": 538.8,
+     "x": 47.1,
+     "bold": false,
+     "text": "vinnananirodho. Vinnananirodha nama-"
+    },
+    {
+     "y": 553.9,
+     "x": 47.1,
+     "bold": false,
+     "text": "rupanirodho. Nama-rupanirodha"
+    },
+    {
+     "y": 569.0,
+     "x": 47.1,
+     "bold": false,
+     "text": "salayatananirodho. Salayatananirodha"
+    },
+    {
+     "y": 584.0,
+     "x": 47.1,
+     "bold": false,
+     "text": "phassanirodho. Phassanirodha"
+    },
+    {
+     "y": 599.1,
+     "x": 47.1,
+     "bold": false,
+     "text": "vedananirodho. Vedananirodha"
+    },
+    {
+     "y": 614.1,
+     "x": 47.1,
+     "bold": false,
+     "text": "tanhanirodho. Tanhanirodha"
+    },
+    {
+     "y": 629.2,
+     "x": 47.1,
+     "bold": false,
+     "text": "upadananirodho. Upadananirodha"
+    },
+    {
+     "y": 656.8,
+     "x": 47.1,
+     "bold": false,
+     "text": "Patiloma Continued..."
+    },
+    {
+     "y": 684.6,
+     "x": 47.1,
+     "bold": false,
+     "text": "bhavanirodho. Bhavanirodha jatinirodho."
+    }
+   ],
+   "right_column": [
+    {
+     "y": 102.6,
+     "x": 285.0,
+     "bold": false,
+     "text": "The Arising of Existence"
+    },
+    {
+     "y": 136.7,
+     "x": 285.0,
+     "bold": false,
+     "text": "Dependent on ignorance, sankhara (binding by body,"
+    },
+    {
+     "y": 151.8,
+     "x": 285.0,
+     "bold": false,
+     "text": "speech and mind) arises. Dependent on sankara"
+    },
+    {
+     "y": 166.8,
+     "x": 285.0,
+     "bold": false,
+     "text": "(binding by body, speech and mind), arises"
+    },
+    {
+     "y": 181.9,
+     "x": 285.0,
+     "bold": false,
+     "text": "consciousness. Dependent on consciousness, arises"
+    },
+    {
+     "y": 196.9,
+     "x": 285.0,
+     "bold": false,
+     "text": "mentality-materiality. Dependent on mentality-"
+    },
+    {
+     "y": 212.0,
+     "x": 285.0,
+     "bold": false,
+     "text": "materiality, arises the six-fold base. Dependent on"
+    },
+    {
+     "y": 227.1,
+     "x": 285.0,
+     "bold": false,
+     "text": "the six-fold base, arises contact. Dependent on"
+    },
+    {
+     "y": 242.1,
+     "x": 285.0,
+     "bold": false,
+     "text": "contact, arises feeling. Dependent on feeling, arises"
+    },
+    {
+     "y": 257.2,
+     "x": 285.0,
+     "bold": false,
+     "text": "craving. Dependent on craving, arises clinging."
+    },
+    {
+     "y": 272.2,
+     "x": 285.0,
+     "bold": false,
+     "text": "Dependent on clinging, arises bhava (actions by"
+    },
+    {
+     "y": 287.3,
+     "x": 285.0,
+     "bold": false,
+     "text": "body, speech and mind - the arranging of kamma)."
+    },
+    {
+     "y": 302.4,
+     "x": 285.0,
+     "bold": false,
+     "text": "Dependent on bhava (actions by body, mind and"
+    },
+    {
+     "y": 317.4,
+     "x": 285.0,
+     "bold": false,
+     "text": "speech - the arranging of kamma) arises birth."
+    },
+    {
+     "y": 332.5,
+     "x": 285.0,
+     "bold": false,
+     "text": "Dependent on birth, arises aging, death, sorrow,"
+    },
+    {
+     "y": 347.5,
+     "x": 285.0,
+     "bold": false,
+     "text": "lamentation, pain, grief and despair. Thus, there is"
+    },
+    {
+     "y": 362.6,
+     "x": 285.0,
+     "bold": false,
+     "text": "the arising of this whole mass of suffering."
+    },
+    {
+     "y": 448.7,
+     "x": 361.3,
+     "bold": true,
+     "text": "Dependent Origination"
+    },
+    {
+     "y": 478.6,
+     "x": 355.2,
+     "bold": false,
+     "text": "The Cessation of Existence"
+    },
+    {
+     "y": 508.7,
+     "x": 285.6,
+     "bold": false,
+     "text": "Through the entire cessation of ignorance, sankhara"
+    },
+    {
+     "y": 523.8,
+     "x": 285.6,
+     "bold": false,
+     "text": "(binding by body, speech and mind) ceases. Through"
+    },
+    {
+     "y": 538.8,
+     "x": 285.6,
+     "bold": false,
+     "text": "the cessation of sankhara (binding of body, speech"
+    },
+    {
+     "y": 553.9,
+     "x": 285.6,
+     "bold": false,
+     "text": "and mind), consciousness ceases. Through the"
+    },
+    {
+     "y": 569.0,
+     "x": 285.6,
+     "bold": false,
+     "text": "cessation of consciousness, mentality-materiality"
+    },
+    {
+     "y": 584.0,
+     "x": 285.6,
+     "bold": false,
+     "text": "ceases. Through the cessation of mentality-"
+    },
+    {
+     "y": 599.1,
+     "x": 285.6,
+     "bold": false,
+     "text": "materiality, the six-fold base ceases. Through the"
+    },
+    {
+     "y": 614.1,
+     "x": 285.6,
+     "bold": false,
+     "text": "cessation of the six-fold base, contact ceases."
+    },
+    {
+     "y": 629.2,
+     "x": 285.6,
+     "bold": false,
+     "text": "Through the cessation of contact, feeling ceases."
+    },
+    {
+     "y": 656.8,
+     "x": 285.6,
+     "bold": false,
+     "text": "The Cessation of Existence Continued"
+    },
+    {
+     "y": 684.6,
+     "x": 285.6,
+     "bold": false,
+     "text": "Through the cessation of feeling, craving ceases."
+    }
+   ]
+  },
+  {
+   "pdf_page": 11,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 87.4,
+     "x": 47.1,
+     "bold": false,
+     "text": "Jatinirodha jaramaram soka-parideva-"
+    },
+    {
+     "y": 102.5,
+     "x": 47.1,
+     "bold": false,
+     "text": "dukkha-domanassupayasa nirujjhanti."
+    },
+    {
+     "y": 117.5,
+     "x": 47.1,
+     "bold": false,
+     "text": "Evametassa kevalassa dukkhakkhandhassa"
+    },
+    {
+     "y": 132.6,
+     "x": 47.1,
+     "bold": false,
+     "text": "nirodho hotiti."
+    },
+    {
+     "y": 235.4,
+     "x": 83.8,
+     "bold": true,
+     "text": "Tanha Janeti Imam Geham"
+    },
+    {
+     "y": 265.4,
+     "x": 47.1,
+     "bold": false,
+     "text": "Anekajatisamsaram"
+    },
+    {
+     "y": 280.4,
+     "x": 47.1,
+     "bold": false,
+     "text": "Sandhavissam anibbisam"
+    },
+    {
+     "y": 295.5,
+     "x": 47.1,
+     "bold": false,
+     "text": "Ghahkarakam gavesanto,"
+    },
+    {
+     "y": 310.5,
+     "x": 47.1,
+     "bold": false,
+     "text": "Dukkha jati punappunam"
+    },
+    {
+     "y": 340.7,
+     "x": 47.1,
+     "bold": false,
+     "text": "Gahakaraka ditthosi"
+    },
+    {
+     "y": 355.7,
+     "x": 47.1,
+     "bold": false,
+     "text": "Puna geham na kahasi"
+    },
+    {
+     "y": 370.8,
+     "x": 47.1,
+     "bold": false,
+     "text": "Sabba te phasuika bhagga"
+    },
+    {
+     "y": 404.9,
+     "x": 47.1,
+     "bold": false,
+     "text": "Gahakutam visamkhitam"
+    },
+    {
+     "y": 420.0,
+     "x": 47.1,
+     "bold": false,
+     "text": "Visamkharagatam cittam"
+    },
+    {
+     "y": 435.0,
+     "x": 47.1,
+     "bold": false,
+     "text": "Tanhanam khyaya majjhaga"
+    },
+    {
+     "y": 655.9,
+     "x": 156.1,
+     "bold": true,
+     "text": "Ratana Sutta"
+    },
+    {
+     "y": 685.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yanidha bhutani samagatani"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 87.4,
+     "x": 285.6,
+     "bold": false,
+     "text": "Through the cessation of craving, clinging ceases."
+    },
+    {
+     "y": 102.4,
+     "x": 285.6,
+     "bold": false,
+     "text": "Through the cessation of clinging, bhava (actions by"
+    },
+    {
+     "y": 117.5,
+     "x": 285.6,
+     "bold": false,
+     "text": "body, mind and speech - the arranging of kamma)"
+    },
+    {
+     "y": 132.6,
+     "x": 285.6,
+     "bold": false,
+     "text": "ceases. Through the cessation of bhava (arranging of"
+    },
+    {
+     "y": 147.6,
+     "x": 285.6,
+     "bold": false,
+     "text": "kamma), birth ceases. Through the cessation of birth,"
+    },
+    {
+     "y": 162.7,
+     "x": 285.6,
+     "bold": false,
+     "text": "aging, death, sorrow, lamentation, pain, grief and"
+    },
+    {
+     "y": 177.7,
+     "x": 285.6,
+     "bold": false,
+     "text": "despair ceases. Thus, there is the cessation of this"
+    },
+    {
+     "y": 192.8,
+     "x": 285.6,
+     "bold": false,
+     "text": "whole mass of suffering."
+    },
+    {
+     "y": 238.3,
+     "x": 363.8,
+     "bold": true,
+     "text": "Craving is the Builder"
+    },
+    {
+     "y": 268.3,
+     "x": 285.6,
+     "bold": false,
+     "text": "Through many a birth"
+    },
+    {
+     "y": 283.4,
+     "x": 285.6,
+     "bold": false,
+     "text": "I wandered in samsara"
+    },
+    {
+     "y": 298.5,
+     "x": 285.6,
+     "bold": false,
+     "text": "Seeking, but not finding"
+    },
+    {
+     "y": 313.5,
+     "x": 285.6,
+     "bold": false,
+     "text": "The builder of this house"
+    },
+    {
+     "y": 328.6,
+     "x": 285.6,
+     "bold": false,
+     "text": "Sorrowful is it to be born again and again."
+    },
+    {
+     "y": 358.7,
+     "x": 285.6,
+     "bold": false,
+     "text": "O house-builder! Thou art seen."
+    },
+    {
+     "y": 373.8,
+     "x": 285.6,
+     "bold": false,
+     "text": "Thou shalt build no house again"
+    },
+    {
+     "y": 407.9,
+     "x": 285.6,
+     "bold": false,
+     "text": "All thy rafters are broken."
+    },
+    {
+     "y": 423.0,
+     "x": 285.6,
+     "bold": false,
+     "text": "Thy ridge-pole is shattered."
+    },
+    {
+     "y": 438.0,
+     "x": 285.6,
+     "bold": false,
+     "text": "My mind has attained the unconditioned."
+    },
+    {
+     "y": 453.1,
+     "x": 285.6,
+     "bold": false,
+     "text": "Achieved is the end of craving."
+    },
+    {
+     "y": 468.1,
+     "x": 285.6,
+     "bold": false,
+     "text": "(Builder this house: craving. House: life. Rafters:"
+    },
+    {
+     "y": 483.1,
+     "x": 285.6,
+     "bold": false,
+     "text": "passion. Ridge-pole: ignorance.)"
+    },
+    {
+     "y": 662.0,
+     "x": 396.9,
+     "bold": true,
+     "text": "Jewels Discourse"
+    }
+   ]
+  },
+  {
+   "pdf_page": 12,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 87.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Bhummana va yani va antalikkhe"
+    },
+    {
+     "y": 102.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sabbe=va bhuta sumana bhavantu"
+    },
+    {
+     "y": 117.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Atho pi sakkacca sunantu bhasitam."
+    },
+    {
+     "y": 147.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tasma hi bhuta nisametha sabbe"
+    },
+    {
+     "y": 162.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Mettam karotha manusiya pajaya"
+    },
+    {
+     "y": 178.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Diva ca ratto ca haranti ye balim"
+    },
+    {
+     "y": 193.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tasma hi ne rakkhatha appamatta."
+    },
+    {
+     "y": 223.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yam kinci vittam idha va huram va"
+    },
+    {
+     "y": 238.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Saggesu va yam ratanam panitam"
+    },
+    {
+     "y": 253.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Na no samam atthi Tathagatena"
+    },
+    {
+     "y": 268.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Buddhe ratanam panitam"
+    },
+    {
+     "y": 283.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 313.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Khayam viragam amatam panitam"
+    },
+    {
+     "y": 328.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yad ajjhaga Sakyamuni samahito"
+    },
+    {
+     "y": 343.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Na tena Dhammena samatthi kinci"
+    },
+    {
+     "y": 358.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Dhamme ratana panitam"
+    },
+    {
+     "y": 373.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 403.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yam Buddhasettho parivannayi sucim"
+    },
+    {
+     "y": 418.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Samadhi manantarikannam ahu"
+    },
+    {
+     "y": 434.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Samadhina tena samo na vijjati"
+    },
+    {
+     "y": 449.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Dhamme ratanam panitam"
+    },
+    {
+     "y": 464.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 494.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Ye puggala attha satam pasattha"
+    },
+    {
+     "y": 509.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Cattari etani yugani honti"
+    },
+    {
+     "y": 524.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Te dakkhineyya Sugatassa savaka"
+    },
+    {
+     "y": 539.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etesu dinnani mahapphalani"
+    },
+    {
+     "y": 554.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Sanghe ratanam panitam"
+    },
+    {
+     "y": 569.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 599.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Ye suppayutta manasa dalhena"
+    },
+    {
+     "y": 618.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Nikkamino Gotamasasanamhi"
+    },
+    {
+     "y": 633.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Ratana Sutta Continued"
+    },
+    {
+     "y": 661.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Te pattipatta amatam vigayha"
+    },
+    {
+     "y": 676.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Laddha mudha nibbutim bhunjamana"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 87.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "Whatever beings are here assembled,"
+    },
+    {
+     "y": 102.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "whether terrestrial or celestial,"
+    },
+    {
+     "y": 117.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "May all these beings be happy"
+    },
+    {
+     "y": 132.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "And listen closely to my words."
+    },
+    {
+     "y": 162.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "Pay attention all you beings:"
+    },
+    {
+     "y": 177.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "Show kindness to the humans"
+    },
+    {
+     "y": 192.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "who day and night bring you offerings."
+    },
+    {
+     "y": 207.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "Therefore guard them diligently."
+    },
+    {
+     "y": 237.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "Whatever treasure is here or beyond"
+    },
+    {
+     "y": 252.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "or the precious jewel in the heavens,"
+    },
+    {
+     "y": 267.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "None is equal to the Perfect One."
+    },
+    {
+     "y": 282.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Buddha is this precious jewel."
+    },
+    {
+     "y": 297.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 328.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "The calm Sakyan sage found cessation,"
+    },
+    {
+     "y": 343.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "dispassion, the deathless, the sublime;"
+    },
+    {
+     "y": 358.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "There is nothing equal to that state."
+    },
+    {
+     "y": 373.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Dhamma is this precious jewel."
+    },
+    {
+     "y": 388.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 418.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "That purity praised by the supreme Buddha,"
+    },
+    {
+     "y": 433.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "called concentration with immediate result;"
+    },
+    {
+     "y": 448.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "That concentration has no equal."
+    },
+    {
+     "y": 463.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Dhamma is this precious jewel."
+    },
+    {
+     "y": 478.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 508.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "The Eight Persons praised by the good,"
+    },
+    {
+     "y": 523.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "these Four Pairs are the gift-worthy"
+    },
+    {
+     "y": 538.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "disciples of the Well-gone One."
+    },
+    {
+     "y": 553.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "Gifts to them yield abundant fruit."
+    },
+    {
+     "y": 568.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Sangha is this precious jewel."
+    },
+    {
+     "y": 584.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 614.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "Those who are well established,"
+    },
+    {
+     "y": 633.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "Jewels Discourse Continued"
+    },
+    {
+     "y": 663.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "free from sense pleasures,"
+    },
+    {
+     "y": 678.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "with mind firm in Gautama=s teaching,"
+    }
+   ]
+  },
+  {
+   "pdf_page": 13,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 87.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Sanghe ratanam panitam"
+    },
+    {
+     "y": 102.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 177.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yath=indakhilo pathavim sito siya"
+    },
+    {
+     "y": 193.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Catubbhi vatebhi asampakampiyo"
+    },
+    {
+     "y": 208.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tathupamam suppurisam vadami"
+    },
+    {
+     "y": 223.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yo ariyasaccani avecca passati"
+    },
+    {
+     "y": 238.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Sanghe ratanam panitam"
+    },
+    {
+     "y": 253.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 283.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Ye ariyasaccani vibhavayanti"
+    },
+    {
+     "y": 298.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Gambhirapannena sudesitani"
+    },
+    {
+     "y": 313.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kincapi te honti bhusappamatta"
+    },
+    {
+     "y": 328.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Na te bhavam atthamam adiyanti"
+    },
+    {
+     "y": 343.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Sangge ratanam panitam"
+    },
+    {
+     "y": 358.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etana saccena suvatthi hotu."
+    },
+    {
+     "y": 388.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sahav’assa dassanasampadaya"
+    },
+    {
+     "y": 403.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tayassu dhamma jahita bhavanti:"
+    },
+    {
+     "y": 418.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sakkayaditthi vicikicchitan ca"
+    },
+    {
+     "y": 434.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "silabbatam va pi yad atthi kinci"
+    },
+    {
+     "y": 449.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Catuh’apayehi ca vippamutto"
+    },
+    {
+     "y": 464.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Cha c’abhithanani abhabbo katum"
+    },
+    {
+     "y": 479.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Sanghe ratanam panitam"
+    },
+    {
+     "y": 494.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 524.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kincapi so kammam karoti papakam,"
+    },
+    {
+     "y": 539.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kayena vaca uda cetasa va,"
+    },
+    {
+     "y": 554.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Abhabbo so tassa paticchadaya,"
+    },
+    {
+     "y": 569.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Abhabbata ditthapadassa vutta"
+    },
+    {
+     "y": 584.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Sanghe ratanam panitam,"
+    },
+    {
+     "y": 599.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 627.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Ratana Sutta Con’t"
+    },
+    {
+     "y": 655.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Vanappagumbhe yatha phussitagge,"
+    },
+    {
+     "y": 670.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Gimhanamase pathamasmim gimhe"
+    },
+    {
+     "y": 685.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tathupamam Dhammavaram adesayi"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 87.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "On attaining their goal, plunge into the"
+    },
+    {
+     "y": 102.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "Deathless, freely enjoying the liberation they"
+    },
+    {
+     "y": 117.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "have gained."
+    },
+    {
+     "y": 132.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Sangha is this Precious Jewel."
+    },
+    {
+     "y": 147.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 177.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "As a firm post firmly grounded in the earth"
+    },
+    {
+     "y": 192.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "cannot be shaken by the four winds,"
+    },
+    {
+     "y": 207.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "So is the superior person, I say,"
+    },
+    {
+     "y": 222.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "who definitely sees the Noble Truths."
+    },
+    {
+     "y": 237.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Sangha is this precious jewel."
+    },
+    {
+     "y": 252.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 282.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "Those who comprehend the Noble Truths"
+    },
+    {
+     "y": 297.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "well taught by him of deep wisdom,"
+    },
+    {
+     "y": 312.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "Even if they were slightly negligent,"
+    },
+    {
+     "y": 328.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "would no take an eighth existence."
+    },
+    {
+     "y": 343.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Sangha is this precious jewel."
+    },
+    {
+     "y": 358.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 388.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "For one who has attained to vision,"
+    },
+    {
+     "y": 403.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "three states are at once abandoned:"
+    },
+    {
+     "y": 418.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "View of self, doubt, and clinging"
+    },
+    {
+     "y": 433.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "to needless rules and rituals."
+    },
+    {
+     "y": 448.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "Feed from the four states of misery,"
+    },
+    {
+     "y": 463.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "he cannot do six kinds of evil deeds."
+    },
+    {
+     "y": 478.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Sangha is this precious jewel."
+    },
+    {
+     "y": 493.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 522.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "Though one might do some evil deed"
+    },
+    {
+     "y": 537.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "by body, speech or mind,"
+    },
+    {
+     "y": 552.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "One cannot hide it; such is impossible"
+    },
+    {
+     "y": 567.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "for one who has seen the Path."
+    },
+    {
+     "y": 582.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Sangha is this precious jewel."
+    },
+    {
+     "y": 598.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 625.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "Jewel’s Discourse Con’t"
+    },
+    {
+     "y": 653.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "Like woodland groves in blossom"
+    },
+    {
+     "y": 668.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "in the first heat of summer"
+    },
+    {
+     "y": 683.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "Is the sublime Dhamma that he taught"
+    }
+   ]
+  },
+  {
+   "pdf_page": 14,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 87.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Nibbanagamim paramam hitaya"
+    },
+    {
+     "y": 102.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Buddhe ratanam panitam,"
+    },
+    {
+     "y": 117.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etana saccena suvatthi hotu."
+    },
+    {
+     "y": 150.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Varo varannu varado varaharo,"
+    },
+    {
+     "y": 165.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Anuttaro Dhammavaram adesayi,"
+    },
+    {
+     "y": 180.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Buddhe ratanam panitam,"
+    },
+    {
+     "y": 195.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 240.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Khinam puraman navam n’atthi sambhavam,"
+    },
+    {
+     "y": 255.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Virattacitta ayatike bhavasmim"
+    },
+    {
+     "y": 270.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Te khinabija avirulhicchanda,"
+    },
+    {
+     "y": 285.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Nibbanti dhira yatha ‘yam padipo"
+    },
+    {
+     "y": 300.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Idam pi Sanghe ratanam panitam,"
+    },
+    {
+     "y": 315.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Etena saccena suvatthi hotu."
+    },
+    {
+     "y": 361.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yanidha bhutani samagatani,"
+    },
+    {
+     "y": 376.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Bhummani va yani va antakikkhe,"
+    },
+    {
+     "y": 391.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tathagatam deva-manussa-pujitam,"
+    },
+    {
+     "y": 406.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Buddham namassama suvatthi hotu."
+    },
+    {
+     "y": 451.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yanidha bhutani samagatani,"
+    },
+    {
+     "y": 466.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Bhummani va yani va antalikkhe,"
+    },
+    {
+     "y": 481.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tathagatam deva-manussa-pujitam,"
+    },
+    {
+     "y": 496.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Dhammam namassama suvatthi hotu."
+    },
+    {
+     "y": 541.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Yanidha bhutani samagatani,"
+    },
+    {
+     "y": 556.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Bhummani va yani va antalikkhe,"
+    },
+    {
+     "y": 571.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tathagatam deva-manussa-pujitam,"
+    },
+    {
+     "y": 586.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sangham namassama suvatthi hotu."
+    },
+    {
+     "y": 617.7,
+     "x": 144.0,
+     "bold": true,
+     "text": "Metta Bhavana - Loving Kindness Meditation"
+    },
+    {
+     "y": 647.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "We are very lucky as Supreme Buddha, our Great Teacher, has taught us all about"
+    },
+    {
+     "y": 662.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "morality, concentration and wisdom. Now, without anger, ill will and jealousy, let’s"
+    },
+    {
+     "y": 677.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "spread loving kindness to all beings. Listen to me and think in this way:"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 87.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "leading to Nibbana, the highest good."
+    },
+    {
+     "y": 102.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Buddha is this precious jewel."
+    },
+    {
+     "y": 117.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being"
+    },
+    {
+     "y": 150.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "He, the supreme sublime one,"
+    },
+    {
+     "y": 165.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "knower, giver and bringer of the sublime,"
+    },
+    {
+     "y": 180.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "Taught the sublime Dhamma."
+    },
+    {
+     "y": 195.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Buddha is this precious jewel."
+    },
+    {
+     "y": 210.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 240.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "Their past is extinct with no new arising,"
+    },
+    {
+     "y": 255.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "their minds not drawn to future birth."
+    },
+    {
+     "y": 270.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "Their old seeds destroyed,"
+    },
+    {
+     "y": 285.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "Their desires no more growing, the wise go"
+    },
+    {
+     "y": 300.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "out just like this lamp."
+    },
+    {
+     "y": 315.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "In the Sangha is this precious jewel."
+    },
+    {
+     "y": 330.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "By this truth may there be well-being."
+    },
+    {
+     "y": 361.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "Whatever beings are here assembled,"
+    },
+    {
+     "y": 376.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "whether terrestrial or celestial,"
+    },
+    {
+     "y": 391.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "We salute the perfect Buddha,"
+    },
+    {
+     "y": 406.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "Revered by gods and humans."
+    },
+    {
+     "y": 421.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "May there be well-being!"
+    },
+    {
+     "y": 451.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "Whatever being are here assembled,"
+    },
+    {
+     "y": 466.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "whether terrestrial or celestial,"
+    },
+    {
+     "y": 481.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "We salute the perfect Dhamma,"
+    },
+    {
+     "y": 496.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "Revered by gods and humans."
+    },
+    {
+     "y": 511.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "May there be well-being!"
+    },
+    {
+     "y": 541.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "Whatever beings are here assembled,"
+    },
+    {
+     "y": 556.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "whether terrestrial or celestial,"
+    },
+    {
+     "y": 571.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "We salute the perfect Sangha,"
+    },
+    {
+     "y": 586.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "Revered by gods and humans."
+    },
+    {
+     "y": 601.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "May there be well-being!"
+    }
+   ]
+  },
+  {
+   "pdf_page": 15,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 101.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from anger."
+    },
+    {
+     "y": 116.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from ill will."
+    },
+    {
+     "y": 131.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from jealousy."
+    },
+    {
+     "y": 146.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from mental suffering."
+    },
+    {
+     "y": 161.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from physical suffering."
+    },
+    {
+     "y": 176.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I live in peace."
+    },
+    {
+     "y": 192.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I live happily."
+    },
+    {
+     "y": 222.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from anger."
+    },
+    {
+     "y": 237.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from ill will."
+    },
+    {
+     "y": 252.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from jealousy."
+    },
+    {
+     "y": 267.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from mental suffering."
+    },
+    {
+     "y": 282.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I be free from physical suffering."
+    },
+    {
+     "y": 297.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I live in peace."
+    },
+    {
+     "y": 312.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "May I live happily."
+    },
+    {
+     "y": 342.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "May my parents, teachers, relatives and my friends; may all beings in this monastery:"
+    },
+    {
+     "y": 357.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from anger."
+    },
+    {
+     "y": 372.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from ill will."
+    },
+    {
+     "y": 387.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from jealousy."
+    },
+    {
+     "y": 402.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from mental suffering."
+    },
+    {
+     "y": 417.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from physical suffering."
+    },
+    {
+     "y": 432.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this monastery live in peace."
+    },
+    {
+     "y": 448.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all being in this monastery live happily."
+    },
+    {
+     "y": 478.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this city:"
+    },
+    {
+     "y": 493.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from anger."
+    },
+    {
+     "y": 508.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from ill will."
+    },
+    {
+     "y": 523.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from jealousy."
+    },
+    {
+     "y": 538.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from mental suffering."
+    },
+    {
+     "y": 553.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from physical suffering."
+    },
+    {
+     "y": 568.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this city live in peace."
+    },
+    {
+     "y": 583.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this city live happily."
+    },
+    {
+     "y": 613.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Metta Bhavana – Loving Kindness Meditation Continued"
+    },
+    {
+     "y": 641.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this province:"
+    },
+    {
+     "y": 656.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from anger"
+    },
+    {
+     "y": 671.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from ill will."
+    },
+    {
+     "y": 686.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from jealousy."
+    }
+   ],
+   "right_column": []
+  },
+  {
+   "pdf_page": 16,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 86.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from mental suffering."
+    },
+    {
+     "y": 101.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from physical suffering."
+    },
+    {
+     "y": 116.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this province live in peace."
+    },
+    {
+     "y": 131.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this province live happily."
+    },
+    {
+     "y": 161.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this country:"
+    },
+    {
+     "y": 176.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from anger."
+    },
+    {
+     "y": 192.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from ill will."
+    },
+    {
+     "y": 207.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from jealousy."
+    },
+    {
+     "y": 222.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from mental suffering."
+    },
+    {
+     "y": 237.1,
+     "x": 72.0,
+     "bold": false,
+     "text": ".. be free from physical suffering."
+    },
+    {
+     "y": 252.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this country live in peace."
+    },
+    {
+     "y": 267.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this country live happily."
+    },
+    {
+     "y": 297.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this world:"
+    },
+    {
+     "y": 312.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from anger."
+    },
+    {
+     "y": 327.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from ill will."
+    },
+    {
+     "y": 342.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from jealousy."
+    },
+    {
+     "y": 357.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from mental suffering."
+    },
+    {
+     "y": 372.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from physical suffering."
+    },
+    {
+     "y": 387.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this world live in peace."
+    },
+    {
+     "y": 402.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings in this world live happily... live happily... live happily."
+    },
+    {
+     "y": 432.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings:"
+    },
+    {
+     "y": 448.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from anger."
+    },
+    {
+     "y": 463.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from ill will."
+    },
+    {
+     "y": 478.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from jealousy."
+    },
+    {
+     "y": 493.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from mental suffering."
+    },
+    {
+     "y": 508.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "... be free from physical suffering."
+    },
+    {
+     "y": 523.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings live in peace."
+    },
+    {
+     "y": 538.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "May all beings live happily... live happily... live happily."
+    },
+    {
+     "y": 568.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sadu! Sadu! Sadu!"
+    },
+    {
+     "y": 620.7,
+     "x": 116.7,
+     "bold": true,
+     "text": "Pattanumodana"
+    },
+    {
+     "y": 650.7,
+     "x": 49.0,
+     "bold": false,
+     "text": "Akasattha ca bhummatta"
+    },
+    {
+     "y": 665.8,
+     "x": 49.0,
+     "bold": false,
+     "text": "deva naga mahiddhika"
+    },
+    {
+     "y": 680.8,
+     "x": 49.0,
+     "bold": false,
+     "text": "punnam tam anumoditva"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 620.7,
+     "x": 369.5,
+     "bold": true,
+     "text": "Dedication of Merit"
+    },
+    {
+     "y": 650.7,
+     "x": 284.9,
+     "bold": false,
+     "text": "With Devas / Gods"
+    },
+    {
+     "y": 665.7,
+     "x": 284.9,
+     "bold": false,
+     "text": "May mighty deities and nagas"
+    },
+    {
+     "y": 680.7,
+     "x": 284.9,
+     "bold": false,
+     "text": "dwelling in space and on the earth,"
+    }
+   ]
+  },
+  {
+   "pdf_page": 17,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 87.4,
+     "x": 49.0,
+     "bold": false,
+     "text": "ciram rakkhantu sasanam."
+    },
+    {
+     "y": 117.5,
+     "x": 49.0,
+     "bold": false,
+     "text": "Akasattha ca bhummatta"
+    },
+    {
+     "y": 132.6,
+     "x": 49.0,
+     "bold": false,
+     "text": "deva naga mahiddhika"
+    },
+    {
+     "y": 147.6,
+     "x": 49.0,
+     "bold": false,
+     "text": "punnam tam anumoditva"
+    },
+    {
+     "y": 162.7,
+     "x": 49.0,
+     "bold": false,
+     "text": "ciram rakkhantu desanam."
+    },
+    {
+     "y": 192.8,
+     "x": 49.0,
+     "bold": false,
+     "text": "Akasattha ca bhummatta"
+    },
+    {
+     "y": 207.9,
+     "x": 49.0,
+     "bold": false,
+     "text": "deva naga mahiddhika"
+    },
+    {
+     "y": 222.9,
+     "x": 49.0,
+     "bold": false,
+     "text": "punnam tam anumoditva"
+    },
+    {
+     "y": 238.0,
+     "x": 49.0,
+     "bold": false,
+     "text": "ciram rakkhantu mam param."
+    },
+    {
+     "y": 283.2,
+     "x": 49.0,
+     "bold": false,
+     "text": "Idam me natinam hotu"
+    },
+    {
+     "y": 298.2,
+     "x": 49.0,
+     "bold": false,
+     "text": "sukhita hontu natayo."
+    },
+    {
+     "y": 313.3,
+     "x": 49.0,
+     "bold": false,
+     "text": "Idam me natinam hotu"
+    },
+    {
+     "y": 328.3,
+     "x": 49.0,
+     "bold": false,
+     "text": "sukhita hontu natayo"
+    },
+    {
+     "y": 343.4,
+     "x": 49.0,
+     "bold": false,
+     "text": "Idam me natinam hotu"
+    },
+    {
+     "y": 358.5,
+     "x": 49.0,
+     "bold": false,
+     "text": "sukhita hontu natayo"
+    },
+    {
+     "y": 609.3,
+     "x": 149.6,
+     "bold": true,
+     "text": "Khama Yacana"
+    },
+    {
+     "y": 639.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kayena vaca cittena"
+    },
+    {
+     "y": 654.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Pamadena maya katam"
+    },
+    {
+     "y": 669.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Accayam khama me bhante"
+    },
+    {
+     "y": 684.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Bhuripanna tathagata"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 87.4,
+     "x": 284.9,
+     "bold": false,
+     "text": "rejoice in this merit of ours and long protect the"
+    },
+    {
+     "y": 102.4,
+     "x": 284.9,
+     "bold": false,
+     "text": "Buddha’s dispensation."
+    },
+    {
+     "y": 132.6,
+     "x": 284.9,
+     "bold": false,
+     "text": "May mighty deities and nagas"
+    },
+    {
+     "y": 147.6,
+     "x": 284.9,
+     "bold": false,
+     "text": "dwelling in space and on the earth,"
+    },
+    {
+     "y": 162.7,
+     "x": 284.9,
+     "bold": false,
+     "text": "rejoice in this merit of ours and long protect the"
+    },
+    {
+     "y": 177.7,
+     "x": 284.9,
+     "bold": false,
+     "text": "teaching of the Dhamma."
+    },
+    {
+     "y": 207.9,
+     "x": 284.9,
+     "bold": false,
+     "text": "May mighty deities and nagas"
+    },
+    {
+     "y": 222.9,
+     "x": 284.9,
+     "bold": false,
+     "text": "dwelling in space and on the earth,"
+    },
+    {
+     "y": 238.0,
+     "x": 284.9,
+     "bold": false,
+     "text": "rejoice in this merit of ours and"
+    },
+    {
+     "y": 253.0,
+     "x": 284.9,
+     "bold": false,
+     "text": "long protect myself and others."
+    },
+    {
+     "y": 283.2,
+     "x": 284.9,
+     "bold": false,
+     "text": "With Relatives who have Passed Away"
+    },
+    {
+     "y": 298.1,
+     "x": 284.9,
+     "bold": false,
+     "text": "Let us share this merit with our relatives;"
+    },
+    {
+     "y": 313.2,
+     "x": 284.9,
+     "bold": false,
+     "text": "may our relatives be happy."
+    },
+    {
+     "y": 328.2,
+     "x": 284.9,
+     "bold": false,
+     "text": "Let us share this merit with our relatives;"
+    },
+    {
+     "y": 343.3,
+     "x": 284.9,
+     "bold": false,
+     "text": "may our relatives be happy."
+    },
+    {
+     "y": 358.3,
+     "x": 284.9,
+     "bold": false,
+     "text": "Let us share this merit with our relatives"
+    },
+    {
+     "y": 373.4,
+     "x": 284.9,
+     "bold": false,
+     "text": "may our relatives be happy."
+    },
+    {
+     "y": 403.4,
+     "x": 284.9,
+     "bold": false,
+     "text": "With the Most Venerable Kiribathgoda Gnanananda"
+    },
+    {
+     "y": 418.3,
+     "x": 284.9,
+     "bold": false,
+     "text": "Thero"
+    },
+    {
+     "y": 433.3,
+     "x": 284.9,
+     "bold": false,
+     "text": "Let us share this merit with our teacher, Loku"
+    },
+    {
+     "y": 448.3,
+     "x": 284.9,
+     "bold": false,
+     "text": "Swaminwahanse. May Loku Swanminwahanse have"
+    },
+    {
+     "y": 463.4,
+     "x": 284.9,
+     "bold": false,
+     "text": "the opportunity to understand the Four Noble Truths"
+    },
+    {
+     "y": 478.5,
+     "x": 284.9,
+     "bold": false,
+     "text": "in this very life. Sadu, Sadu, Sadu!"
+    },
+    {
+     "y": 508.6,
+     "x": 284.9,
+     "bold": false,
+     "text": "With our Noble Friends"
+    },
+    {
+     "y": 523.5,
+     "x": 284.9,
+     "bold": false,
+     "text": "Let us share this merit with our Noble friends and"
+    },
+    {
+     "y": 538.6,
+     "x": 284.9,
+     "bold": false,
+     "text": "with all beings. Rejoice with merit, be happy and"
+    },
+    {
+     "y": 553.6,
+     "x": 284.9,
+     "bold": false,
+     "text": "peaceful. Sadu, Sadu, Sadu!"
+    },
+    {
+     "y": 609.3,
+     "x": 379.8,
+     "bold": true,
+     "text": "Asking for Forgiveness"
+    },
+    {
+     "y": 639.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "If, due to negligence, I have done some"
+    },
+    {
+     "y": 654.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "wrong, by body, speech or mind,"
+    },
+    {
+     "y": 669.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "Forgive me of that offence, O Bhante,"
+    },
+    {
+     "y": 684.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "Perfect one of vast wisdom."
+    }
+   ]
+  },
+  {
+   "pdf_page": 18,
+   "full_width": [],
+   "left_column": [
+    {
+     "y": 102.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kayena vaca cittena"
+    },
+    {
+     "y": 117.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Pamadena maya katam"
+    },
+    {
+     "y": 132.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Accayam khama me dhamma"
+    },
+    {
+     "y": 147.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sanditthika akalika."
+    },
+    {
+     "y": 177.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kayena vaca cittena"
+    },
+    {
+     "y": 196.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Pamadena maya katam"
+    },
+    {
+     "y": 211.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Accayam khama me sangha"
+    },
+    {
+     "y": 226.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Supatipanna anuttara."
+    },
+    {
+     "y": 286.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Okasa wandami Bhante"
+    },
+    {
+     "y": 301.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Mayakatam Punnayam"
+    },
+    {
+     "y": 316.9,
+     "x": 72.0,
+     "bold": false,
+     "text": "Swamina annumodhi thabam"
+    },
+    {
+     "y": 332.0,
+     "x": 72.0,
+     "bold": false,
+     "text": "Swamina katthanm pugnnam."
+    },
+    {
+     "y": 362.1,
+     "x": 72.0,
+     "bold": false,
+     "text": "Mahiyam dhathabam"
+    },
+    {
+     "y": 377.2,
+     "x": 72.0,
+     "bold": false,
+     "text": "Sadu, Sadu anumodhami"
+    },
+    {
+     "y": 407.3,
+     "x": 72.0,
+     "bold": false,
+     "text": "Okasa!"
+    },
+    {
+     "y": 422.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Dwaratheyena"
+    },
+    {
+     "y": 437.4,
+     "x": 72.0,
+     "bold": false,
+     "text": "Katthan Sabbam Acchayam"
+    },
+    {
+     "y": 452.5,
+     "x": 72.0,
+     "bold": false,
+     "text": "Kammathe me bhante"
+    },
+    {
+     "y": 482.6,
+     "x": 72.0,
+     "bold": false,
+     "text": "Dutiyam pi"
+    },
+    {
+     "y": 497.7,
+     "x": 72.0,
+     "bold": false,
+     "text": "Okase cammame Bhante!"
+    },
+    {
+     "y": 527.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Tatiyam pi"
+    },
+    {
+     "y": 542.8,
+     "x": 72.0,
+     "bold": false,
+     "text": "Okasa cammeme Bhante!"
+    }
+   ],
+   "right_column": [
+    {
+     "y": 102.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "If, due to negligence, I have done some"
+    },
+    {
+     "y": 117.1,
+     "x": 324.0,
+     "bold": false,
+     "text": "wrong, by body, speech or mind,"
+    },
+    {
+     "y": 132.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "Forgive me of that offence, O Dhamma,"
+    },
+    {
+     "y": 147.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "Visible and unaffected by time."
+    },
+    {
+     "y": 177.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "If, due to negligence, I have done some"
+    },
+    {
+     "y": 196.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "wrong, by body, speech or mind,"
+    },
+    {
+     "y": 211.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "Forgive me of that offence, O Sangha,"
+    },
+    {
+     "y": 226.6,
+     "x": 324.0,
+     "bold": false,
+     "text": "Practising well and supreme."
+    },
+    {
+     "y": 255.9,
+     "x": 324.0,
+     "bold": true,
+     "text": "Paying Homage to the Noble Bhantes"
+    },
+    {
+     "y": 285.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "Please, Bhante, kindly allow me to share with"
+    },
+    {
+     "y": 301.0,
+     "x": 324.0,
+     "bold": false,
+     "text": "you, the merit I have incurred."
+    },
+    {
+     "y": 361.2,
+     "x": 324.0,
+     "bold": false,
+     "text": "Please Bhante, kindly share with me, the"
+    },
+    {
+     "y": 376.3,
+     "x": 324.0,
+     "bold": false,
+     "text": "merit you have incurred."
+    },
+    {
+     "y": 406.4,
+     "x": 324.0,
+     "bold": false,
+     "text": "Forgive me, Oh Bhante, of any offences I"
+    },
+    {
+     "y": 421.5,
+     "x": 324.0,
+     "bold": false,
+     "text": "may have committed."
+    },
+    {
+     "y": 481.7,
+     "x": 324.0,
+     "bold": false,
+     "text": "For a second time, I ask forgiveness, Oh"
+    },
+    {
+     "y": 496.8,
+     "x": 324.0,
+     "bold": false,
+     "text": "Bhante, for offences I may have committed."
+    },
+    {
+     "y": 526.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "For a third time, I ask forgiveness, Oh"
+    },
+    {
+     "y": 541.9,
+     "x": 324.0,
+     "bold": false,
+     "text": "Bhante, for offences I may have committed."
+    }
+   ]
+  }
+ ]
+}

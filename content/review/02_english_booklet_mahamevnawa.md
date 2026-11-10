@@ -1,0 +1,1085 @@
+# English booklet (Mahamevnawa, Canada) — text for checking
+
+- **Source:** https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf
+- **PDF details:** 18 pages; cover reads "VANDANA — Homage to the Buddha, Dhamma and Sangha", Mahamevna Bhavana Asapuwa, Markham, Ontario
+- **Status:** copied exactly as printed (this PDF is ordinary text, so no font conversion was needed).
+- **Pali spelling:** the PDF prints Pali in plain Roman letters with **no accent marks** (for example `sammasambuddhassa`, not `sammāsambuddhassa`). That is how it is kept here.
+- **No translator, date or reuse statement is printed anywhere in the PDF.**
+- **Layout:** each page has Pali on the left and English on the right. Below, each page shows the left column first, then the right column.
+
+---
+
+## PDF page 1
+
+**VANDANA**  
+
+**HOMAGE TO THE BUDDHA, DHAMMA AND SANGHA**  
+
+MAHAMEVNA BHAVANA ASAPUWA  
+
+11175 Kennedy Road, Markham, ON  
+
+905‐927‐7117  
+
+---
+
+## PDF page 2
+
+### Left column — Pali (Roman letters)
+
+**Namaskara**  
+
+Namo tassa bhagavato arahato  
+sammasambuddhassa  
+Namo tassa bhagavato arahato  
+sammasambuddhassa  
+Namo tassa bhagavato arahato  
+sammasambuddhassa  
+
+**Tiratana**  
+
+Buddham saranam gacchami.  
+Dhammam saranam gacchami.  
+Sangham saranam gacchami.  
+
+Dutiyam pi Buddham saranam gacchami.  
+Dutiyam pi Dhammam saranam gacchami.  
+Dutiyam pi Sangham saranam gacchami.  
+
+Tatiyam pi Buddham saranam gacchami.  
+Tatiyam pi Dhammam saranam gacchami.  
+Tatiyam pi Sangham saranam gacchami.  
+
+**Pancasila**  
+
+Panatipata veramani-sikkhapadam samadiyami.  
+
+Adinnadana veramani-sikkhapadam  
+samadiyami.  
+Kamesu micchacara veramani-sikkhapadam  
+samadiyami.  
+Musavada veramani-sikkhapadam samadiyami.  
+
+Suramerayamajjapamadathana veramani-  
+sikkhapadam samadiyami  
+
+### Right column — English
+
+**Salutation to the Buddha**  
+
+Homage to the Blissful One, the Worthy One, the  
+Fully Enlightened One.  
+Homage to the Blissful One, the Worthy One, the  
+Fully Enlightened One.  
+Homage to the Blissful One, the Worthy One, the  
+Fully Enlightened One.  
+
+**The Three Refuges**  
+
+I go to the Buddha for refuge.  
+I go to the Dhamma for refuge.  
+I go to the Sangha for refuge.  
+
+A second time, I go to the Buddha for refuge.  
+A second time, I go to the Dhamma for refuge.  
+A second time, I go to the Sangha for refuge.  
+
+A third time, I go to the Buddha for refuge.  
+A third time, I go to the Dhamma for refuge.  
+A third time, I go to the Sangha for refuge.  
+
+**Observation of the Five Precepts**  
+
+I undertake the training rule to abstain from killing  
+living beings.  
+I undertake the training rule to abstain from taking  
+that which is not given.  
+I undertake the training rule to abstain from sexual  
+misconduct.  
+I undertake the training rule to abstain from false  
+speech.  
+I undertake the training rule to abstain from  
+intoxicants and harmful drugs.  
+
+---
+
+## PDF page 3
+
+### Left column — Pali (Roman letters)
+
+**Buddhavandana**  
+
+Iti pi so bhagava araham sammasambuddho  
+vijjacaranasampanno sugato lokavidu anuttaro  
+purisadammasarathi satta devamannussanam  
+buddho bhagava ti.  
+
+### Right column — English
+
+**Homage to the Buddha**  
+
+Such indeed is the Blessed One:  
+"Araham" - eradicated greed, hatred, delusion,  
+craving, and is free of all taints.  
+"Sammasambuddho" - Understood the Four Noble  
+Truths, the reality of life, without anyone’s help.  
+"Vijjacaranasampanno" - Perfect in True  
+Knowledge and Conduct. Buddha acquired 3 kinds  
+of knowledge: understood His past lives;  
+understood the passing away and arising of other  
+beings; understood the nature and the path to  
+eradicate taints.  
+"Sugato" - Found and followed the Right Noble  
+Eightfold Path (the Path leading to the cessation of  
+Dukka).  
+"Lokavidu" - Understood the presence and origin of  
+all the worlds (hell, ghost, animal, human, heavenly,  
+and the pure abodes).  
+"Anuttaro purisadammasarathi" - Incomparable  
+Leader of those to be tamed.  
+"Satta devamannussanam" - Teacher of gods and  
+humans.  
+"Buddho" - Understood the Four Noble Truths  
+without assistance and was able to teach Dhamma to  
+others, without holding anything back.  
+"Bhagava" - Only a Buddha, the Supreme Teacher  
+holds these great, extra-ordinary qualities.  
+
+---
+
+## PDF page 4
+
+### Left column — Pali (Roman letters)
+
+**Dhammavandana**  
+
+Svakkhato Bhagavata dhammo sanditthiko  
+akaliko ehipassiko opanayiko paccattam  
+vedittabbo vinnuhiti.  
+
+**Sanghavandana**  
+
+Supatipanno Bhagavato savakasangho.  
+Ujupatipanno Bhagavato savakasangho.  
+Nayapatipanno Bhagavato savakasangho.  
+Samicipatipanno Bhagavato savakasangho.  
+Yadidam cattari purisayugani attha  
+purisapuggala esa Bhagavato savakasangho.  
+Ahuneyyo pahuneyyo dakkhineyyo  
+anjalikaraniyo anuttaram punnakkhettam  
+lokassa ti.  
+
+### Right column — English
+
+**Homage to the Dhamma**  
+
+"Svakkhato" - The Dhamma taught by the Blessed  
+One is Excellent in the beginning, Excellent in the  
+middle and Excellent in the end - all of Buddha's  
+Discourses are consistent and teach the same truth.  
+"Sanditthika" - Dhamma is self-evident and can be  
+understood in this life itself.  
+"Akaliko" - Dhamma, Noble Truths, can not be  
+changed nor can they be altered over time.  
+"Ehipassiko" - "come and see"; Buddha's Dhamma is  
+to be investigated.  
+"Opanayika" - Dhamma can only be understood by  
+oneself.  
+"Paccattam vedittabbo vinnuhiti" - Dhamma is for  
+the wise to understand and realize.  
+
+**Homage to the Sangha**  
+
+"Supatipanno" - The Order of the Blessed One are  
+training to rid themselves of greed, hatred and  
+delusion.  
+"Ujupatipanno" - They follow the direct, Noble  
+Eightfold Path.  
+"Nayapatipanno" - The Noble Order understands the  
+First Noble Truth and are practising to eradicate  
+suffering  
+"Samicipatipanno" - The Orders spreads the message  
+of Dhamma by sharing what the Buddha taught.  
+In Buddha’s Order are the 8 kinds of individuals: the  
+one striving to Enter the Stream of the Noble Path, the  
+one who has entered the Stream; the one striving to  
+attain the position of Once-Returner, the Once-  
+Returner; the one striving to reach the Non- returner  
+position, the Non-Returner; the one striving for  
+Arahantship and the Arahant. A field of merit is the  
+supreme Sangha, worthy of gifts, worthy of  
+hospitality, worthy of respect and worship.  
+
+---
+
+## PDF page 5
+
+### Left column — Pali (Roman letters)
+
+**Sath Budu Vandana**  
+
+Vipassissa namatthu – cakkhu mantassa  
+sirimato.  
+Sikhissapi namatthu – sabba bhutanu  
+kampino.  
+
+Vessabhussa namatthu – nahatakassa  
+tapassino  
+Namatthu Kakusandhassa – marasena  
+pamaddino  
+
+Konagamanassa namatthu – brahmanassa  
+vusimato  
+Kassapassa namatthu – vippamuttassa  
+sabbadhi  
+
+Angirasassa namatthu – sakya puttassa  
+sirimato  
+Yo imam Dhamma madesesi –  
+sabbadukkha panudanam  
+
+Ye capi nibuta loke – yatha bhutam  
+vipassisum.  
+Te jana apisuna – mahanta vitasarada.  
+
+Hitam deva manussanam – yam nanassanti  
+Gotamam  
+Vijjacarana sampannam – mahantam  
+
+Sath Budu Vandana Con’t  
+
+### Right column — English
+
+**Homage to the Seven Buddhas**  
+
+May there be homage to Vipassi Buddha,  
+the fortunate Buddha, with eyes of  
+Dhamma.  
+May there be homage to Sikhi Buddha, the  
+Buddha who is compassionate towards all  
+beings.  
+
+May there be homage to Vessubhu Buddha,  
+who destroyed defilements, with excellent  
+effort.  
+May there be homage to Kakusandha  
+Buddha, the vanquisher of the forces of  
+Mara.  
+
+May there be homage to Konagamana  
+Buddha, of pure life, who has reached  
+perfection.  
+May there be homage to Kassapa Buddha,  
+completely released of all taints.  
+
+May there be homage to Angirasa, the  
+Sakyan son, the Blessed One. He who  
+taught this Supreme Dhamma; the dispeller  
+of all suffering.  
+
+Those who have reached the pleasure of  
+liberation, of Nibbana, and have seen the  
+reality with wisdom, those Buddhas, non-  
+slanderous, great and excellent, escaped the  
+fear of Samsara.  
+
+Beneficial to devas and humans,  
+That Gotama Buddha, whom people  
+worship; possessed of higher knowledge  
+
+Homage to the Seven Buddhas Con’t  
+
+---
+
+## PDF page 6
+
+### Left column — Pali (Roman letters)
+
+vitasaradam  
+
+Vijjacarana sampannam – Buddham  
+vandama Gotamam.  
+
+Sadu! Sadu! Sadu!  
+
+### Right column — English
+
+and good conduct, very Great and free from  
+fears.  
+
+May there be homage to Gotama Buddha,  
+possessed of higher knowledge and extra  
+ordinary conduct.  
+
+Sadu! Sadu! Sadu!  
+
+---
+
+## PDF page 7
+
+### Left column — Pali (Roman letters)
+
+**Buddha Puja**  
+
+### Right column — English
+
+**Offerings to the Buddha**  
+
+My great teacher, Supreme Buddha, is an Arahant.  
+My great teacher, Supreme Buddha, eradicated passion,  
+hatred and delusion.  
+My great teacher, Supreme Buddha, eradicated the  
+desire of seeing forms.  
+My great teacher, Supreme Buddha, eradicated the  
+desire of hearing sounds.  
+My great teacher, Supreme Buddha, eradicated the  
+desire of smelling odours.  
+My great teacher, Supreme Buddha, eradicated the  
+desire of tasting flavours.  
+My great teacher, Supreme Buddha, eradicated the  
+desire of touching tangibles.  
+My great teacher, Supreme Buddha, eradicated the  
+desire of thinking thoughts.  
+My great teacher, Supreme Buddha, controlled sense  
+faculties, protected sense faculties, tamed sense  
+faculties, restrained sense faculties.  
+My great teacher, Supreme Buddha is free from  
+defilements.  
+My great teacher, Supreme Buddha purified his body,  
+speech and mind.  
+My great teacher, Supreme Buddha, is an Arahant.  
+Supreme Buddha understood suffering as a Noble  
+Truth, without anyone’s help.  
+Supreme Buddha eradicated the origin of suffering, as a  
+Noble truth, without anyone’s help.  
+Supreme Buddha attained the cessation of suffering, as  
+a Noble Truth, without anyone’s help.  
+Supreme Buddha followed the Path leading to the  
+cessation of suffering, as a Noble Truth without  
+anyone’s help.  
+In this way, Supreme Buddha realized Four Noble  
+Truths, escaped suffering and achieved real happiness.  
+
+---
+
+## PDF page 8
+
+### Left column — Pali (Roman letters)
+
+Buddha Puja Continued...  
+
+Buddha so Bhagava  
+Boddhaya Dhammam de saythi.  
+
+Danto so Bhagava  
+Dhammataya dhammam de saythi.  
+
+Santo so Bhagava  
+Sammataya dhammam de saythi.  
+
+Thino so Bhagava  
+Tharanaya dhammam de saythi.  
+
+Parrinibitho so Bhagava  
+Parrinibanaya dhammam de saythi.  
+
+### Right column — English
+
+Offerings to the Buddha Continued ...  
+
+My great teacher, Supreme Buddha, had the  
+knowledge to read other’s minds.  
+Supreme Buddha had the knowledge to recollect past  
+lives of beings.  
+Supreme Buddha had the knowledge to understand the  
+passing away and re-appearing of beings.  
+My great teacher, Supreme Buddha, had the  
+knowledge of the ‘destruction of all taints’.  
+My great teacher, Supreme Buddha, developed  
+excellent psychic powers.  
+Supreme Buddha had excellent virtue, concentration  
+and wisdom.  
+My great teacher, Supreme Buddha, discovered a very  
+clear path and attained Nibbana.  
+Supreme Buddha understood all the worlds, escaped  
+from all these worlds.  
+My great teacher, is taming  
+me with great compassion  
+My great teacher, Supreme Buddha, is the teacher of  
+gods and humans.  
+
+Supreme Buddha understood the reality, and teaches  
+Dhamma to others so that they may understand reality.  
+
+Supreme Buddha was tamed and teaches Dhamma to  
+others so that they may be tamed.  
+
+Supreme Buddha was calm and teaches Dhamma to  
+others so that they may be calm.  
+
+Supreme Buddha escaped from suffering and teaches  
+Dhamma to others so that they may escape.  
+
+Supreme Buddha attained Parinibbana and teaches  
+Dhamma to others so that they may attain.  
+
+---
+
+## PDF page 9
+
+### Left column — Pali (Roman letters)
+
+Buddha Puja Continued ...  
+
+**Patticcasamuppada**  
+
+### Right column — English
+
+Offerings to the Buddha Continued...  
+
+I offer, with great respect, these beautiful flowers,  
+sweet drinks and candle light, to my great teacher,  
+Supreme Buddha.  
+
+Sadu, Sadu, Sadu!  
+
+**Dependent Origination**  
+
+---
+
+## PDF page 10
+
+### Left column — Pali (Roman letters)
+
+Anuloma  
+
+Avijjapaccaya samkhara. Sankharapaccaya  
+vinnianam.  
+Vinnyana paccaya nama-rupam.  
+Nama-rupapaccaya salayatanam.  
+Salayatanapaccaya phasso. Phassapaccaya  
+vedana. Vedanapaccaya tanha.  
+Tanhapaccaya upadnam. Upadanapaccaya  
+bhavo. Bhavapaccaya jati. Jatipaccaya  
+jaramaranam soka-parideva-dukkha-  
+domanassupayasa sambhavanti.  
+Evametassa kevalassa dukkhakkhandassa  
+samudayo hoti.  
+
+**Patticcasamuppada**  
+
+Patiloma  
+
+Avijjaya tve’va asesaviraganirodha  
+sankharanirodho. Sankharanirodha  
+vinnananirodho. Vinnananirodha nama-  
+rupanirodho. Nama-rupanirodha  
+salayatananirodho. Salayatananirodha  
+phassanirodho. Phassanirodha  
+vedananirodho. Vedananirodha  
+tanhanirodho. Tanhanirodha  
+upadananirodho. Upadananirodha  
+
+Patiloma Continued...  
+
+bhavanirodho. Bhavanirodha jatinirodho.  
+
+### Right column — English
+
+The Arising of Existence  
+
+Dependent on ignorance, sankhara (binding by body,  
+speech and mind) arises. Dependent on sankara  
+(binding by body, speech and mind), arises  
+consciousness. Dependent on consciousness, arises  
+mentality-materiality. Dependent on mentality-  
+materiality, arises the six-fold base. Dependent on  
+the six-fold base, arises contact. Dependent on  
+contact, arises feeling. Dependent on feeling, arises  
+craving. Dependent on craving, arises clinging.  
+Dependent on clinging, arises bhava (actions by  
+body, speech and mind - the arranging of kamma).  
+Dependent on bhava (actions by body, mind and  
+speech - the arranging of kamma) arises birth.  
+Dependent on birth, arises aging, death, sorrow,  
+lamentation, pain, grief and despair. Thus, there is  
+the arising of this whole mass of suffering.  
+
+**Dependent Origination**  
+
+The Cessation of Existence  
+
+Through the entire cessation of ignorance, sankhara  
+(binding by body, speech and mind) ceases. Through  
+the cessation of sankhara (binding of body, speech  
+and mind), consciousness ceases. Through the  
+cessation of consciousness, mentality-materiality  
+ceases. Through the cessation of mentality-  
+materiality, the six-fold base ceases. Through the  
+cessation of the six-fold base, contact ceases.  
+Through the cessation of contact, feeling ceases.  
+
+The Cessation of Existence Continued  
+
+Through the cessation of feeling, craving ceases.  
+
+---
+
+## PDF page 11
+
+### Left column — Pali (Roman letters)
+
+Jatinirodha jaramaram soka-parideva-  
+dukkha-domanassupayasa nirujjhanti.  
+Evametassa kevalassa dukkhakkhandhassa  
+nirodho hotiti.  
+
+**Tanha Janeti Imam Geham**  
+
+Anekajatisamsaram  
+Sandhavissam anibbisam  
+Ghahkarakam gavesanto,  
+Dukkha jati punappunam  
+
+Gahakaraka ditthosi  
+Puna geham na kahasi  
+Sabba te phasuika bhagga  
+
+Gahakutam visamkhitam  
+Visamkharagatam cittam  
+Tanhanam khyaya majjhaga  
+
+**Ratana Sutta**  
+
+Yanidha bhutani samagatani  
+
+### Right column — English
+
+Through the cessation of craving, clinging ceases.  
+Through the cessation of clinging, bhava (actions by  
+body, mind and speech - the arranging of kamma)  
+ceases. Through the cessation of bhava (arranging of  
+kamma), birth ceases. Through the cessation of birth,  
+aging, death, sorrow, lamentation, pain, grief and  
+despair ceases. Thus, there is the cessation of this  
+whole mass of suffering.  
+
+**Craving is the Builder**  
+
+Through many a birth  
+I wandered in samsara  
+Seeking, but not finding  
+The builder of this house  
+Sorrowful is it to be born again and again.  
+
+O house-builder! Thou art seen.  
+Thou shalt build no house again  
+
+All thy rafters are broken.  
+Thy ridge-pole is shattered.  
+My mind has attained the unconditioned.  
+Achieved is the end of craving.  
+(Builder this house: craving. House: life. Rafters:  
+passion. Ridge-pole: ignorance.)  
+
+**Jewels Discourse**  
+
+---
+
+## PDF page 12
+
+### Left column — Pali (Roman letters)
+
+Bhummana va yani va antalikkhe  
+Sabbe=va bhuta sumana bhavantu  
+Atho pi sakkacca sunantu bhasitam.  
+
+Tasma hi bhuta nisametha sabbe  
+Mettam karotha manusiya pajaya  
+Diva ca ratto ca haranti ye balim  
+Tasma hi ne rakkhatha appamatta.  
+
+Yam kinci vittam idha va huram va  
+Saggesu va yam ratanam panitam  
+Na no samam atthi Tathagatena  
+Idam pi Buddhe ratanam panitam  
+Etena saccena suvatthi hotu.  
+
+Khayam viragam amatam panitam  
+Yad ajjhaga Sakyamuni samahito  
+Na tena Dhammena samatthi kinci  
+Idam pi Dhamme ratana panitam  
+Etena saccena suvatthi hotu.  
+
+Yam Buddhasettho parivannayi sucim  
+Samadhi manantarikannam ahu  
+Samadhina tena samo na vijjati  
+Idam pi Dhamme ratanam panitam  
+Etena saccena suvatthi hotu.  
+
+Ye puggala attha satam pasattha  
+Cattari etani yugani honti  
+Te dakkhineyya Sugatassa savaka  
+Etesu dinnani mahapphalani  
+Idam pi Sanghe ratanam panitam  
+Etena saccena suvatthi hotu.  
+
+Ye suppayutta manasa dalhena  
+Nikkamino Gotamasasanamhi  
+Ratana Sutta Continued  
+
+Te pattipatta amatam vigayha  
+Laddha mudha nibbutim bhunjamana  
+
+### Right column — English
+
+Whatever beings are here assembled,  
+whether terrestrial or celestial,  
+May all these beings be happy  
+And listen closely to my words.  
+
+Pay attention all you beings:  
+Show kindness to the humans  
+who day and night bring you offerings.  
+Therefore guard them diligently.  
+
+Whatever treasure is here or beyond  
+or the precious jewel in the heavens,  
+None is equal to the Perfect One.  
+In the Buddha is this precious jewel.  
+By this truth may there be well-being.  
+
+The calm Sakyan sage found cessation,  
+dispassion, the deathless, the sublime;  
+There is nothing equal to that state.  
+In the Dhamma is this precious jewel.  
+By this truth may there be well-being.  
+
+That purity praised by the supreme Buddha,  
+called concentration with immediate result;  
+That concentration has no equal.  
+In the Dhamma is this precious jewel.  
+By this truth may there be well-being.  
+
+The Eight Persons praised by the good,  
+these Four Pairs are the gift-worthy  
+disciples of the Well-gone One.  
+Gifts to them yield abundant fruit.  
+In the Sangha is this precious jewel.  
+By this truth may there be well-being.  
+
+Those who are well established,  
+Jewels Discourse Continued  
+
+free from sense pleasures,  
+with mind firm in Gautama=s teaching,  
+
+---
+
+## PDF page 13
+
+### Left column — Pali (Roman letters)
+
+Idam pi Sanghe ratanam panitam  
+Etena saccena suvatthi hotu.  
+
+Yath=indakhilo pathavim sito siya  
+Catubbhi vatebhi asampakampiyo  
+Tathupamam suppurisam vadami  
+Yo ariyasaccani avecca passati  
+Idam pi Sanghe ratanam panitam  
+Etena saccena suvatthi hotu.  
+
+Ye ariyasaccani vibhavayanti  
+Gambhirapannena sudesitani  
+Kincapi te honti bhusappamatta  
+Na te bhavam atthamam adiyanti  
+Idam pi Sangge ratanam panitam  
+Etana saccena suvatthi hotu.  
+
+Sahav’assa dassanasampadaya  
+Tayassu dhamma jahita bhavanti:  
+Sakkayaditthi vicikicchitan ca  
+silabbatam va pi yad atthi kinci  
+Catuh’apayehi ca vippamutto  
+Cha c’abhithanani abhabbo katum  
+Idam pi Sanghe ratanam panitam  
+Etena saccena suvatthi hotu.  
+
+Kincapi so kammam karoti papakam,  
+Kayena vaca uda cetasa va,  
+Abhabbo so tassa paticchadaya,  
+Abhabbata ditthapadassa vutta  
+Idam pi Sanghe ratanam panitam,  
+Etena saccena suvatthi hotu.  
+
+Ratana Sutta Con’t  
+
+Vanappagumbhe yatha phussitagge,  
+Gimhanamase pathamasmim gimhe  
+Tathupamam Dhammavaram adesayi  
+
+### Right column — English
+
+On attaining their goal, plunge into the  
+Deathless, freely enjoying the liberation they  
+have gained.  
+In the Sangha is this Precious Jewel.  
+By this truth may there be well-being.  
+
+As a firm post firmly grounded in the earth  
+cannot be shaken by the four winds,  
+So is the superior person, I say,  
+who definitely sees the Noble Truths.  
+In the Sangha is this precious jewel.  
+By this truth may there be well-being.  
+
+Those who comprehend the Noble Truths  
+well taught by him of deep wisdom,  
+Even if they were slightly negligent,  
+would no take an eighth existence.  
+In the Sangha is this precious jewel.  
+By this truth may there be well-being.  
+
+For one who has attained to vision,  
+three states are at once abandoned:  
+View of self, doubt, and clinging  
+to needless rules and rituals.  
+Feed from the four states of misery,  
+he cannot do six kinds of evil deeds.  
+In the Sangha is this precious jewel.  
+By this truth may there be well-being.  
+
+Though one might do some evil deed  
+by body, speech or mind,  
+One cannot hide it; such is impossible  
+for one who has seen the Path.  
+In the Sangha is this precious jewel.  
+By this truth may there be well-being.  
+
+Jewel’s Discourse Con’t  
+
+Like woodland groves in blossom  
+in the first heat of summer  
+Is the sublime Dhamma that he taught  
+
+---
+
+## PDF page 14
+
+### Left column — Pali (Roman letters)
+
+Nibbanagamim paramam hitaya  
+Idam pi Buddhe ratanam panitam,  
+Etana saccena suvatthi hotu.  
+
+Varo varannu varado varaharo,  
+Anuttaro Dhammavaram adesayi,  
+Idam pi Buddhe ratanam panitam,  
+Etena saccena suvatthi hotu.  
+
+Khinam puraman navam n’atthi sambhavam,  
+Virattacitta ayatike bhavasmim  
+Te khinabija avirulhicchanda,  
+Nibbanti dhira yatha ‘yam padipo  
+Idam pi Sanghe ratanam panitam,  
+Etena saccena suvatthi hotu.  
+
+Yanidha bhutani samagatani,  
+Bhummani va yani va antakikkhe,  
+Tathagatam deva-manussa-pujitam,  
+Buddham namassama suvatthi hotu.  
+
+Yanidha bhutani samagatani,  
+Bhummani va yani va antalikkhe,  
+Tathagatam deva-manussa-pujitam,  
+Dhammam namassama suvatthi hotu.  
+
+Yanidha bhutani samagatani,  
+Bhummani va yani va antalikkhe,  
+Tathagatam deva-manussa-pujitam,  
+Sangham namassama suvatthi hotu.  
+
+**Metta Bhavana - Loving Kindness Meditation**  
+
+We are very lucky as Supreme Buddha, our Great Teacher, has taught us all about  
+morality, concentration and wisdom. Now, without anger, ill will and jealousy, let’s  
+spread loving kindness to all beings. Listen to me and think in this way:  
+
+### Right column — English
+
+leading to Nibbana, the highest good.  
+In the Buddha is this precious jewel.  
+By this truth may there be well-being  
+
+He, the supreme sublime one,  
+knower, giver and bringer of the sublime,  
+Taught the sublime Dhamma.  
+In the Buddha is this precious jewel.  
+By this truth may there be well-being.  
+
+Their past is extinct with no new arising,  
+their minds not drawn to future birth.  
+Their old seeds destroyed,  
+Their desires no more growing, the wise go  
+out just like this lamp.  
+In the Sangha is this precious jewel.  
+By this truth may there be well-being.  
+
+Whatever beings are here assembled,  
+whether terrestrial or celestial,  
+We salute the perfect Buddha,  
+Revered by gods and humans.  
+May there be well-being!  
+
+Whatever being are here assembled,  
+whether terrestrial or celestial,  
+We salute the perfect Dhamma,  
+Revered by gods and humans.  
+May there be well-being!  
+
+Whatever beings are here assembled,  
+whether terrestrial or celestial,  
+We salute the perfect Sangha,  
+Revered by gods and humans.  
+May there be well-being!  
+
+---
+
+## PDF page 15
+
+### Left column — Pali (Roman letters)
+
+May I be free from anger.  
+May I be free from ill will.  
+May I be free from jealousy.  
+May I be free from mental suffering.  
+May I be free from physical suffering.  
+May I live in peace.  
+May I live happily.  
+
+May I be free from anger.  
+May I be free from ill will.  
+May I be free from jealousy.  
+May I be free from mental suffering.  
+May I be free from physical suffering.  
+May I live in peace.  
+May I live happily.  
+
+May my parents, teachers, relatives and my friends; may all beings in this monastery:  
+... be free from anger.  
+... be free from ill will.  
+... be free from jealousy.  
+... be free from mental suffering.  
+... be free from physical suffering.  
+May all beings in this monastery live in peace.  
+May all being in this monastery live happily.  
+
+May all beings in this city:  
+... be free from anger.  
+... be free from ill will.  
+... be free from jealousy.  
+... be free from mental suffering.  
+... be free from physical suffering.  
+May all beings in this city live in peace.  
+May all beings in this city live happily.  
+
+Metta Bhavana – Loving Kindness Meditation Continued  
+
+May all beings in this province:  
+... be free from anger  
+... be free from ill will.  
+... be free from jealousy.  
+
+---
+
+## PDF page 16
+
+### Left column — Pali (Roman letters)
+
+... be free from mental suffering.  
+... be free from physical suffering.  
+May all beings in this province live in peace.  
+May all beings in this province live happily.  
+
+May all beings in this country:  
+... be free from anger.  
+... be free from ill will.  
+... be free from jealousy.  
+... be free from mental suffering.  
+.. be free from physical suffering.  
+May all beings in this country live in peace.  
+May all beings in this country live happily.  
+
+May all beings in this world:  
+... be free from anger.  
+... be free from ill will.  
+... be free from jealousy.  
+... be free from mental suffering.  
+... be free from physical suffering.  
+May all beings in this world live in peace.  
+May all beings in this world live happily... live happily... live happily.  
+
+May all beings:  
+... be free from anger.  
+... be free from ill will.  
+... be free from jealousy.  
+... be free from mental suffering.  
+... be free from physical suffering.  
+May all beings live in peace.  
+May all beings live happily... live happily... live happily.  
+
+Sadu! Sadu! Sadu!  
+
+**Pattanumodana**  
+
+Akasattha ca bhummatta  
+deva naga mahiddhika  
+punnam tam anumoditva  
+
+### Right column — English
+
+**Dedication of Merit**  
+
+With Devas / Gods  
+May mighty deities and nagas  
+dwelling in space and on the earth,  
+
+---
+
+## PDF page 17
+
+### Left column — Pali (Roman letters)
+
+ciram rakkhantu sasanam.  
+
+Akasattha ca bhummatta  
+deva naga mahiddhika  
+punnam tam anumoditva  
+ciram rakkhantu desanam.  
+
+Akasattha ca bhummatta  
+deva naga mahiddhika  
+punnam tam anumoditva  
+ciram rakkhantu mam param.  
+
+Idam me natinam hotu  
+sukhita hontu natayo.  
+Idam me natinam hotu  
+sukhita hontu natayo  
+Idam me natinam hotu  
+sukhita hontu natayo  
+
+**Khama Yacana**  
+
+Kayena vaca cittena  
+Pamadena maya katam  
+Accayam khama me bhante  
+Bhuripanna tathagata  
+
+### Right column — English
+
+rejoice in this merit of ours and long protect the  
+Buddha’s dispensation.  
+
+May mighty deities and nagas  
+dwelling in space and on the earth,  
+rejoice in this merit of ours and long protect the  
+teaching of the Dhamma.  
+
+May mighty deities and nagas  
+dwelling in space and on the earth,  
+rejoice in this merit of ours and  
+long protect myself and others.  
+
+With Relatives who have Passed Away  
+Let us share this merit with our relatives;  
+may our relatives be happy.  
+Let us share this merit with our relatives;  
+may our relatives be happy.  
+Let us share this merit with our relatives  
+may our relatives be happy.  
+
+With the Most Venerable Kiribathgoda Gnanananda  
+Thero  
+Let us share this merit with our teacher, Loku  
+Swaminwahanse. May Loku Swanminwahanse have  
+the opportunity to understand the Four Noble Truths  
+in this very life. Sadu, Sadu, Sadu!  
+
+With our Noble Friends  
+Let us share this merit with our Noble friends and  
+with all beings. Rejoice with merit, be happy and  
+peaceful. Sadu, Sadu, Sadu!  
+
+**Asking for Forgiveness**  
+
+If, due to negligence, I have done some  
+wrong, by body, speech or mind,  
+Forgive me of that offence, O Bhante,  
+Perfect one of vast wisdom.  
+
+---
+
+## PDF page 18
+
+### Left column — Pali (Roman letters)
+
+Kayena vaca cittena  
+Pamadena maya katam  
+Accayam khama me dhamma  
+Sanditthika akalika.  
+
+Kayena vaca cittena  
+Pamadena maya katam  
+Accayam khama me sangha  
+Supatipanna anuttara.  
+
+Okasa wandami Bhante  
+Mayakatam Punnayam  
+Swamina annumodhi thabam  
+Swamina katthanm pugnnam.  
+
+Mahiyam dhathabam  
+Sadu, Sadu anumodhami  
+
+Okasa!  
+Dwaratheyena  
+Katthan Sabbam Acchayam  
+Kammathe me bhante  
+
+Dutiyam pi  
+Okase cammame Bhante!  
+
+Tatiyam pi  
+Okasa cammeme Bhante!  
+
+### Right column — English
+
+If, due to negligence, I have done some  
+wrong, by body, speech or mind,  
+Forgive me of that offence, O Dhamma,  
+Visible and unaffected by time.  
+
+If, due to negligence, I have done some  
+wrong, by body, speech or mind,  
+Forgive me of that offence, O Sangha,  
+Practising well and supreme.  
+
+**Paying Homage to the Noble Bhantes**  
+
+Please, Bhante, kindly allow me to share with  
+you, the merit I have incurred.  
+
+Please Bhante, kindly share with me, the  
+merit you have incurred.  
+
+Forgive me, Oh Bhante, of any offences I  
+may have committed.  
+
+For a second time, I ask forgiveness, Oh  
+Bhante, for offences I may have committed.  
+
+For a third time, I ask forgiveness, Oh  
+Bhante, for offences I may have committed.  
+

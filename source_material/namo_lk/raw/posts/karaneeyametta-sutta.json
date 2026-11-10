@@ -1,0 +1,346 @@
+{
+ "id": 251,
+ "date": "2019-04-15T17:39:41",
+ "date_gmt": "2019-04-15T17:39:41",
+ "guid": {
+  "rendered": "https://namo.lk/?p=251"
+ },
+ "modified": "2023-08-09T22:03:24",
+ "modified_gmt": "2023-08-09T22:03:24",
+ "slug": "karaneeyametta-sutta",
+ "status": "publish",
+ "type": "post",
+ "link": "https://namo.lk/karaneeyametta-sutta/",
+ "title": {
+  "rendered": "කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation"
+ },
+ "content": {
+  "rendered": "<p>[et_pb_section fb_built=&#8221;1&#8243; module_class=&#8221;et-dark-mode-capable&#8221; _builder_version=&#8221;4.21.2&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_row column_structure=&#8221;3_5,2_5&#8243; _builder_version=&#8221;4.16&#8243; custom_margin=&#8221;-30px||-30px||true|false&#8221; custom_margin_tablet=&#8221;-50px||-50px||true|false&#8221; custom_margin_phone=&#8221;&#8221; custom_margin_last_edited=&#8221;on|desktop&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;3_5&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_code admin_label=&#8221;Code-Sin-Eng-Module&#8221; _builder_version=&#8221;4.21.2&#8243; text_orientation=&#8221;left&#8221; text_orientation_tablet=&#8221;right&#8221; text_orientation_phone=&#8221;right&#8221; text_orientation_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<div><!-- [et_pb_line_break_holder] -->  <label class='as-label'> සිංහල </label><!-- [et_pb_line_break_holder] -->  <label class='switch'><!-- [et_pb_line_break_holder] -->  <input type=\"checkbox\" id=\"cb-sinhala\" checked><!-- [et_pb_line_break_holder] -->    <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] -->  </label><!-- [et_pb_line_break_holder] -->  <label class='as-label'> සිංහල පද්‍ය</label><!-- [et_pb_line_break_holder] -->  <label class='switch'><!-- [et_pb_line_break_holder] -->  <input type=\"checkbox\" id=\"cb-sinhala-poem\"><!-- [et_pb_line_break_holder] -->    <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] -->  </label><!-- [et_pb_line_break_holder] -->  <label class='as-label'> English</label><!-- [et_pb_line_break_holder] -->  <label class='switch'><!-- [et_pb_line_break_holder] -->  <input type=\"checkbox\" id=\"cb-english\" checked><!-- [et_pb_line_break_holder] -->    <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] -->  </label><!-- [et_pb_line_break_holder] -->  <label class='as-label'> Eng. Poem</label><!-- [et_pb_line_break_holder] -->  <label class='switch'><!-- [et_pb_line_break_holder] -->  <input type=\"checkbox\" id=\"cb-english-poem\"><!-- [et_pb_line_break_holder] -->    <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] -->  </label><!-- [et_pb_line_break_holder] --></div>\n<p><!-- [et_pb_line_break_holder] --><!-- [et_pb_line_break_holder] --> <!-- [et_pb_line_break_holder] -->[/et_pb_code][/et_pb_column][et_pb_column type=&#8221;2_5&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_code _builder_version=&#8221;4.9.4&#8243; _module_preset=&#8221;default&#8221; text_orientation=&#8221;right&#8221; global_module=&#8221;2078&#8243; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<div class=\"float\"><!-- [et_pb_line_break_holder] --><span class='as-label'>Font Size</span><!-- [et_pb_line_break_holder] --><button class=\"as-btn\" id=\"btn-fs-minus\"> &#8211; </button><!-- [et_pb_line_break_holder] --><span class=\"as-speed-txt\" id=\"font-size\"></span><!-- [et_pb_line_break_holder] --><button class=\"as-btn\" id=\"btn-fs-plus\">+</button><!-- [et_pb_line_break_holder] --></div>\n<p>[/et_pb_code][et_pb_code _builder_version=&#8221;4.4.3&#8243; text_orientation=&#8221;right&#8221; custom_padding=&#8221;|||0px||&#8221; text_orientation_tablet=&#8221;&#8221; text_orientation_phone=&#8221;right&#8221; text_orientation_last_edited=&#8221;on|phone&#8221; custom_css_main_element=&#8221;.switch {||  position: relative;||  display: inline-block;||  width: 60px;||  height: 34px;||}||||.switch input { ||  opacity: 0;||  width: 0;||  height: 0;||}||||.slider {||  position: absolute;||  cursor: pointer;||  top: 0;||  left: 0;||  right: 0;||  bottom: 0;||  background-color: #ccc;||  -webkit-transition: .4s;||  transition: .4s;||}||||.slider:before {||  position: absolute;||  content: %22%22;||  height: 26px;||  width: 26px;||  left: 4px;||  bottom: 4px;||  background-color: white;||  -webkit-transition: .4s;||  transition: .4s;||}||||input:checked + .slider {||  background-color: #2196F3;||}||||input:focus + .slider {||  box-shadow: 0 0 1px #2196F3;||}||||input:checked + .slider:before {||  -webkit-transform: translateX(26px);||  -ms-transform: translateX(26px);||  transform: translateX(26px);||}||||/* Rounded sliders */||.slider.round {||  border-radius: 34px;||}||||.slider.round:before {||  border-radius: 50%;||}&#8221; global_module=&#8221;1411&#8243; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<div class=\"float\"><!-- [et_pb_line_break_holder] -->  <span class='as-label'>Auto-Scroll</span><!-- [et_pb_line_break_holder] --><!-- [et_pb_line_break_holder] --><label class=\"switch\"><!-- [et_pb_line_break_holder] -->  <input id='as-switch' type=\"checkbox\"><!-- [et_pb_line_break_holder] -->  <span class=\"slider round\"></span><!-- [et_pb_line_break_holder] --></label><!-- [et_pb_line_break_holder] -->   <!-- [et_pb_line_break_holder] -->  <span class='as-label'>Speed</span><!-- [et_pb_line_break_holder] --><button class=\"as-btn\" id=\"btn-minus\"> &#8211; </button><!-- [et_pb_line_break_holder] --><span class=\"as-speed-txt\" id=\"as-speed\"></span><!-- [et_pb_line_break_holder] -->  <button class=\"as-btn\" id=\"btn-plus\">+</button><!-- [et_pb_line_break_holder] --><!-- [et_pb_line_break_holder] --></div>\n<p><!-- [et_pb_line_break_holder] -->[/et_pb_code][/et_pb_column][/et_pb_row][et_pb_row _builder_version=&#8221;4.16&#8243; collapsed=&#8221;on&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; custom_padding=&#8221;|||&#8221; global_colors_info=&#8221;{}&#8221; custom_padding__hover=&#8221;|||&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>1.</p>\n<p>කරණීයමත්ථකුසලේන<br /> යං තං සන්තං පදං අභිසමෙච්ච<br /> සක්කෝ උජු ච සූජූ ච<br /> සුවචෝ චස්ස මුදු අනතිමානී</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>ශාන්ත පදයයි කියනු ලබන නිවනට පැමිණ වසන්නහු විසින් යමක් කටයුතුද, දක්ෂයා විසින් එය කටයුතුයි. හෙතෙම දක්ෂයෙක් වන්නේය. සෘජු වන්නේය. මනාකොට සෘජු වන්නේය. කීකරු වන්නේය. මෘදු වන්නේය. නිහතමානි වන්නේය.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>He who is skilled in (working out his own) well being, and who wishes to attain that state of Calm (Nibbana) should act thus: he should be dexterous, upright, exceedingly upright, obedient, gentle, and humble.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>නිවනට යන මඟ සිටින පතා ගෙන<br /> ඇද නැති බව සිත තුළ රඳවා ගෙන<br /> සුවච සුමුදු ගුණ ඇති කරවා ගෙන<br /> කළ යුතු ම ය අතිමාන නසා ගෙන</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>Who seeks to promote his welfare,<br /> Having glimpsed the state of perfect peace,<br /> Should be able, honest and upright,<br /> Gentle in speech, meek and not proud.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>2.</p>\n<p>සන්තුස්සකෝ ච සුභරෝ ච<br /> අප්පකිච්චෝ ච සල්ලහුකවුත්තී<br /> සන්තින්ද්‍රියෝ ච නිපකෝ ච<br /> අප්පගබ්භෝ කුලේසු අනනුගිද්ධෝ</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>ලද දෙයින් සතුටු වන්නේය. පහසුවෙන් පෝෂණය කළහැක්කේය. ස්වල්ප කටයුතු ඇත්තෙක් වන්නේය. සැහැල්ලු පැවතුම් ඇත්තෙක් වන්නේය.  ප්‍රගල්භය නැතිවන්නේය. කුලයන් කෙරෙහි නොඇලුනෙක් වන්නේය.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Contented, easily supportable, with but few responsibilities, of simple livelihood, controlled in the senses, prudent, courteous, and not hanker after association with families.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>සතුටු ව ලද දෙයකින් සුව සේ හිඳ<br />අඩු කොට වැඩ නිති සැහැල්ලුවෙන් ඉඳ<br />දමනය කළ ඉඳුරන් ද නුවණ මැද<br />හිත මිතුරුව කුලයේ නො ඇලෙන සඳ</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>Contented, he ought to be easy to support,<br /> Not over-busy, and simple in living.<br /> Tranquil his senses, let him be prudent,<br /> And not brazen, nor fawning on families.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>3.</p>\n<p>න ච ඛුද්දං සමාචරේ කිඤ්චි<br />යේන විඤ්ඤූ පරේ උපවදෙය්‍යුං<br />සුඛිනෝ වා ඛේමිනෝ හොන්තු<br />සබ්බේ සත්තා භවන්තු සුඛිතත්තා</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>යම් ක්‍රියාවකින් නුවණැති අන් කෙනෙක් නින්දා කෙරෙත්ද, (එබඳු) ස්වල්පවූ වරදකුදු නොකරන්නේය. සියලු සත්වයෝ සැප ඇත්තෝ වෙත්වා. භය නැත්තෝ වෙත්වා. සුඛිත සිත් ඇත්තෝ වෙත්වා.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Let him not perform the slightest wrong for which wise men may rebuke him. (Let him think:) &#8216;May all beings be happy and safe. May they have happy minds.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>නුවණැතියන් ගෙන් දොස් නොලබන්නේ<br />සුළු වරදක් හෝ නොම කරමින්නේ<br />බිය නැති සැප ඇති දිවි පතමින්නේ<br />සියලු සතුන් හට මෙත් පතුරන්නේ</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]Also, he must refrain from any action<br />\nThat gives the wise reason to reprove him.<br />\n(Then let him cultivate the thought:)<br />\nMay all be well and secure,<br />\nMay all beings be happy![/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>4.</p>\n<p>යේ කේචි පාණභුතත්ථි<br /> තසා වා ථාවරා වා අනවසේසා<br /> දීඝා වා යේ මහන්තා වා<br /> මජ්ඣිමා රස්සකාණුකථූලා</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>(කෙලෙස් සහිත බැවින්) භයින් ත්‍රස්ත වූ හෝ නිර්භය හෙයින් ස්ථාවර වූ සියලු යම්කිසි සත්ව කෙනෙක් වෙත්ද, යම් සත්ව කෙනෙක් දීර්ඝ ජාති ඇත්තාහුද, මහත් සිරුරු ඇත්තාහුද, මධ්‍යම ප්‍රමාණ සිරුරු ඇත්තෝද, මිටි සිරුරු ඇත්තෝද, ඉතා සියුම් සිරුරු ඇත්තෝද, ස්ථුල සිරුරු ඇත්තෝද, </p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Whatever living beings there may be — feeble or strong (or the seekers and the attained) long, stout, or of medium size, short, small, large,</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>බියපත් තැති ගත් සතුන් ද වේවා<br />බිය සැක දුරු කළ රහතුන් වේවා<br />ලොකු පොඩි දිග මහ සතුන් ද වේවා<br />සැමට සැපත ඇති සිත් ඇති වේවා</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]Whatever living creatures there be,<br />\nWithout exception, weak or strong,<br />\nLong, huge or middle-sized,<br />\nOr short, minute or bulky,[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>5.</p>\n<p>දිට්ඨා වා යේව අද්දිට්ඨා<br />යේ ච දූරේ වසන්ති අවිදූරේ<br />භූතා වා සම්භවේසීවා<br />සබ්බේ සත්තා භවන්තු සුඛිතත්තා</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>ඇසට පෙනෙන්නාවූ හෝ නොපෙනෙන්නාවූ යම් සත්ව කෙනෙක් වෙත්ද, යම් සත්ව කෙනෙක් දුර වෙසෙත්ද, නුදුරෙහි වෙසෙත්ද, ඉපදීම අවසන් කළ සත්වයෝ වෙත්ද, ඉපදීම සොයන සත්වයෝද, යන සියලු සත්වයෝ සුඛිත සිත් ඇත්තෝ වෙත්වා.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Those seen or those unseen, those dwelling far or near, those who are born as well as those yet to be born — may all beings have happy minds.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>පෙනෙන නො පෙනෙන සතුන් ද වේවා<br />දුර ළඟ වසනා සතුන් ද වේවා<br />ඉපදුන &#8211; ඉපදෙන සතුන් ද වේවා<br />සැමට සැපත ඇති සිත් ඇති වේවා</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]Whether visible or invisible,<br />\nAnd those living far or near,<br />\nThe born and those seeking birth,<br />\nMay all beings be happy![/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>6.</p>\n<p>න පරෝ පරං නිකුබ්බේථ<br />නාතිමඤ්ඤේථ කත්ථචි නං කඤ්චි<br />ඛ්‍යාරෝසනා පටිඝසඤ්ඤා<br />නාඤ්ඤමඤ්ඤස්ස දුක්ඛමිච්ඡෙය්‍ය</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>අනිකෙක් අනිකෙකු නොරවටනේය. කිසි තැනකහි ඒ කිසිවකුට අවමන් නොකරන්නේය. කාය වාක් විකාරයෙන් වූ කෝපයෙන්ද, මනෝ විකාරයෙන් වූ පටිඝ සංඥායෙන්ද, එකෙක් අනෙකකුට දුකක් නොකමැති වන්නේය.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Let him not deceive another nor despise anyone anywhere. In anger or ill will let him not wish another ill.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>කිසිවෙක් කිසිවෙකු නොම රවටාවා<br />කිසි තනක දි ඉහළින් නො සිතාවා<br />නපුරු දරුණු බස් නොම පවසාවා<br />අනෙකෙකු ගේ දුක කැමති නො වේවා</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]Let none deceive or decry<br />\nHis fellow anywhere;<br />\nLet none wish others harm<br />\nIn resentment or in hate.[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>7.</p>\n<p>මාතා යථා නියං පුත්තං<br />ආයුසා ඒකපුත්තමනුරක්ඛේ<br />ඒවම්පි සබ්බභූතේසු<br />මානසං භාවයේ අපරිමාණං</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>යම්සේ මවක් තම එකම පුතු දිවි පිදීමෙන් රකීද, හැම සතුන් කෙරෙහි අප්‍රමාණ වූ මෛත්‍රී සිත වඩන්නේය.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Just as a mother would protect her only child with her life even so let one cultivate a boundless love towards all beings.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>තම දිවි සම කොට පුතු සුරකින්නේ<br />එක ම පුතෙකු ඇති මව් විලසින්නේ<br />මෙලෙසට ලොව සැම සතුන් දකින්නේ<br />අපමණ මෙත් සිත ම ය පතුරන්නේ</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]Just as with her own life<br />\nA mother shields from hurt<br />\nHer own son, her only child,<br />\nLet all-embracing thoughts<br />\nFor all beings be yours.[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>8.</p>\n<p>මෙත්තං ච සබ්බ ලෝකස්මිං<br />මානසං භාවයේ අපරිමාණං<br />උද්ධං අධෝ ච තිරියඤ්ච<br />අසම්බාධං අවේරං අසපත්තං</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>උඩද, යටද, සිරසද, සම්බාධ නැතිව වෛර නැතිව සතුරන් නැති සියලු සත්වයන් කෙරෙහි අප්‍රමාණ වූ මෛත්‍රී සහගත සිත වඩන්නේය.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Let him radiate boundless love towards the entire world — above, below, and across — unhindered, without ill will, without enmity.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>සියළු ලොවට එක ලෙස සලකන්නේ<br />උඩ-යට-සරසට හැම විලසින්නේ<br />වෛර සතුරු බාධා නැති වන්නේ<br />අපමණ මෙත් සිත ම ය පතුරන්නේ</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]Cultivate an all-embracing mind of love<br />\nFor all throughout the universe,<br />\nIn all its height, depth and breadth —<br />\nLove that is untroubled<br />\nAnd beyond hatred or enmity.[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>9.</p>\n<p>තිට්ඨං චරං නිසින්නෝ වා<br />සයානෝ වා යාවතස්ස විගතමිද්ධෝ<br />ඒතං සතිං අධිට්ඨෙය්‍ය<br />බ්‍රහ්මමේතං විහාරං ඉධමාහු</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>සිටින්නේ හෝ, ඇවිදින්නේ හෝ, උන්නේ හෝ, නිදන්නේ හෝ, යම්තාක්කල් නොනිදා ද, ඒතාක් මේ මෛත්‍රී සහගත සිහිය ඉටන්නේය. මෙය මේ ශාසනයෙහි බ්‍රහ්ම විහාරයයි.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Standing, walking, sitting or reclining, as long as he is awake, let him develop this mindfulness. This, they say, is &#8216;Noble Living&#8217; here.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>සිටගෙන ඇවිදින හෝ හිඳිනා විට<br />නිදන වෙලාවට හෝ නො නිදන විට<br />සිහි කළ යුතු මෙත් සිත ම ය හැම විට<br />බඹවිහරණ ලෙස පවසයි එම විට</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]As you stand, walk, sit or lie,<br />\nSo long as you are awake,<br />\nPursue this awareness with your might:<br />\nIt is deemed the Divine State here.[/et_pb_text][et_pb_text module_class=&#8221;pali-quote&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;|700|on||||||&#8221; text_font_size=&#8221;24px&#8221; text_line_height=&#8221;1.8em&#8221; header_font=&#8221;||||||||&#8221; custom_margin=&#8221;||40px&#8221; custom_padding=&#8221;|||30px||false&#8221; custom_padding_tablet=&#8221;&#8221; custom_padding_phone=&#8221;|||15px&#8221; custom_padding_last_edited=&#8221;on|phone&#8221; text_font_size_tablet=&#8221;22px&#8221; text_font_size_phone=&#8221;20px&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; border_width_left=&#8221;8px&#8221; border_color_left=&#8221;#9b9b9b&#8221; border_style_left=&#8221;groove&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>10.</p>\n<p>දිට්ඨිං ච අනුපගම්ම සීලවා<br />දස්සනේන සම්පන්නෝ<br />කාමේසු විනෙය්‍ය ගේධං<br />නහි ජාතු ගබ්භසෙය්‍යං පුනරේතී ති</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>මිථ්‍යාදෘෂ්ටියට නොපැමිණ සිල්වත් වූයේ, දර්ශනයෙන් යුක්ත වූයේ, වස්තුකාමයන්හි ගිජු බව දුරු කොට, ඒකාන්තයෙන් මවු කුස පිළිසිඳ ගැනිමට නැවත නො එන්නේය.</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;&#8221; text_font_size_last_edited=&#8221;on|desktop&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p><span>Not falling into wrong views — being virtuous, endowed with insight, lust in the senses discarded — verily never again will he return to conceive in a womb.</span></p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;sin-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;20px&#8221; text_line_height=&#8221;1.9em&#8221; text_font_size_tablet=&#8221;18px&#8221; text_font_size_phone=&#8221;18px&#8221; text_font_size_last_edited=&#8221;on|phone&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>මිසදිටුවක සිත නො ම පැටලෙමිනේ<br /> සිල් ගුණ දම් රැක යන මඟ නිවනේ<br /> කම් සැපයට කිසි විට නො ඇලෙමිනේ<br /> මව් කුස නිදනට යළි නො ම පැමිණේ</p>\n<p>[/et_pb_text][et_pb_text module_class=&#8221;eng-meaning-poem&#8221; _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]Holding no more to wrong beliefs,<br />\nWith virtue and vision of the ultimate,<br />\nAnd having overcome all sensual desire,<br />\nNever in a womb is one born again.[/et_pb_text][et_pb_text _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;18px&#8221; text_line_height=&#8221;1.9em&#8221; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p style=\"text-align: center;\">ඒතේන සච්චේන සුවත්ථි හෝතු!<br />මේ සත්‍යානුභාවයෙන් සැමට සෙත් වේවා!</p>\n<p>[/et_pb_text][et_pb_text _builder_version=&#8221;4.16&#8243; text_font=&#8221;||||||||&#8221; text_font_size=&#8221;13px&#8221; text_line_height=&#8221;1.9em&#8221; link_text_color=&#8221;#e09900&#8243; saved_tabs=&#8221;all&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<p>සිංහල අර්ථය මූලාශ්‍රය: පිරුවානා පොත් වහන්සේ<br /> සිංහල පද්‍ය මූලාශ්‍රය: &#8220;මහමෙව්නාවේ පාළි &#8211; සිංහල පිරුවානා පොත් වහන්සේ&#8221;, පුජ්‍ය කිරිබත්ගොඩ ඤාණානන්ද හිමි. (<a href=\"https://namo.lk/mahamewnawe-piruwana-poth-wahanse/\" target=\"_blank\" rel=\"noopener noreferrer\">download ↡ </a>)<br /> English meaning from: <a href=\"https://www.accesstoinsight.org/tipitaka/kn/snp/snp.1.08.piya.html\" target=\"_blank\" rel=\"noopener noreferrer\"><span>Karaniya Metta Sutta: The Discourse on Loving-kindness by Piyadassi Thera</span></a><br /> English poem from: <a href=\"http://www.buddhachannel.tv/portail/spip.php?article3846\">Karaniya Metta Sutta &#8211; The Hymn of Universal Love</a></p>\n<p>[/et_pb_text][/et_pb_column][/et_pb_row][et_pb_row _builder_version=&#8221;4.21.2&#8243; _module_preset=&#8221;default&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column _builder_version=&#8221;4.21.2&#8243; _module_preset=&#8221;default&#8221; type=&#8221;4_4&#8243; theme_builder_area=&#8221;post_content&#8221;][et_pb_video src=&#8221;https://youtu.be/_hk9rZ8sJ0M&#8221; _builder_version=&#8221;4.21.2&#8243; _module_preset=&#8221;default&#8221; theme_builder_area=&#8221;post_content&#8221; hover_enabled=&#8221;0&#8243; sticky_enabled=&#8221;0&#8243;][/et_pb_video][/et_pb_column][/et_pb_row][/et_pb_section][et_pb_section fb_built=&#8221;1&#8243; module_class=&#8221;et-dark-mode-capable&#8221; _builder_version=&#8221;4.21.2&#8243; global_module=&#8221;1294&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_row _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_text _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;]</p>\n<h2>Related Resources</h2>\n<p>[/et_pb_text][/et_pb_column][/et_pb_row][et_pb_row _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][et_pb_blog fullwidth=&#8221;off&#8221; posts_number=&#8221;6&#8243; include_categories=&#8221;current&#8221; use_manual_excerpt=&#8221;off&#8221; show_author=&#8221;off&#8221; show_date=&#8221;off&#8221; show_categories=&#8221;off&#8221; show_excerpt=&#8221;off&#8221; use_overlay=&#8221;on&#8221; overlay_icon_color=&#8221;#ffffff&#8221; hover_overlay_color=&#8221;rgba(224,153,0,0.41)&#8221; hover_icon=&#8221;&#x55;||divi||400&#8243; _builder_version=&#8221;4.16&#8243; header_font=&#8221;|600|||||||&#8221; header_text_align=&#8221;center&#8221; header_font_size=&#8221;20px&#8221; pagination_text_color=&#8221;#000000&#8243; border_radii=&#8221;on|10px|10px|10px|10px&#8221; global_colors_info=&#8221;{}&#8221; theme_builder_area=&#8221;post_content&#8221;][/et_pb_blog][/et_pb_column][/et_pb_row][/et_pb_section]</p>\n",
+  "protected": false
+ },
+ "excerpt": {
+  "rendered": "<p>මෛත්‍රිය පැතිරවීම පිළිබඳ බුදු රජාණන් වහන්සේ වදාළ දෙසුම &#8211; KaraneeyaMetta Sutta — The Buddha&#8217;s Words on Loving-Kindness &#8211; The Hymn of Universal Love &#8211; Loving-Kindness -The Discourse on Loving-kindness &#8211; Good Will</p>\n",
+  "protected": false
+ },
+ "author": 1,
+ "featured_media": 1149,
+ "comment_status": "open",
+ "ping_status": "open",
+ "sticky": true,
+ "template": "",
+ "format": "standard",
+ "meta": {
+  "_et_pb_use_builder": "on",
+  "_et_pb_old_content": "",
+  "_et_gb_content_width": "1080",
+  "_monsterinsights_skip_tracking": false,
+  "footnotes": ""
+ },
+ "categories": [
+  18,
+  23,
+  6,
+  24,
+  25
+ ],
+ "tags": [],
+ "class_list": [
+  "post-251",
+  "post",
+  "type-post",
+  "status-publish",
+  "format-standard",
+  "has-post-thumbnail",
+  "hentry",
+  "category-tripitaka",
+  "category-khuddakanikaya",
+  "category-sutta",
+  "category-suttanipata",
+  "category-uragavagga"
+ ],
+ "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v28.8 - https://yoast.com/product/yoast-seo-wordpress/ -->\n<title>කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation - Namo.lk</title>\n<meta name=\"description\" content=\"KaraneeyaMetta Sutta — The Buddha&#039;s Words on Loving-Kindness - The Hymn of Universal Love - Loving-Kindness -The Discourse on Loving-kindness - Good Will\" />\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://namo.lk/karaneeyametta-sutta/\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation - Namo.lk\" />\n<meta property=\"og:description\" content=\"KaraneeyaMetta Sutta — The Buddha&#039;s Words on Loving-Kindness - The Hymn of Universal Love - Loving-Kindness -The Discourse on Loving-kindness - Good Will\" />\n<meta property=\"og:url\" content=\"https://namo.lk/karaneeyametta-sutta/\" />\n<meta property=\"og:site_name\" content=\"Namo.lk\" />\n<meta property=\"article:publisher\" content=\"https://www.facebook.com/akonita.co/\" />\n<meta property=\"article:published_time\" content=\"2019-04-15T17:39:41+00:00\" />\n<meta property=\"article:modified_time\" content=\"2023-08-09T22:03:24+00:00\" />\n<meta property=\"og:image\" content=\"https://namo.lk/wp-content/uploads/2019/04/buddha_gold2-scaled-e1586504253430.jpg\" />\n\t<meta property=\"og:image:width\" content=\"1560\" />\n\t<meta property=\"og:image:height\" content=\"1040\" />\n\t<meta property=\"og:image:type\" content=\"image/jpeg\" />\n<meta name=\"author\" content=\"Namo LK\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<meta name=\"twitter:creator\" content=\"@akonitaco\" />\n<meta name=\"twitter:site\" content=\"@akonitaco\" />\n<meta name=\"twitter:label1\" content=\"Written by\" />\n\t<meta name=\"twitter:data1\" content=\"Namo LK\" />\n\t<meta name=\"twitter:label2\" content=\"Est. reading time\" />\n\t<meta name=\"twitter:data2\" content=\"9 minutes\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https:\\/\\/schema.org\",\"@graph\":[{\"@type\":\"Article\",\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#article\",\"isPartOf\":{\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/\"},\"author\":{\"name\":\"Namo LK\",\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/person\\/9fb5eda5c73a8df9ae53f54a93fa76b9\"},\"headline\":\"කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation\",\"datePublished\":\"2019-04-15T17:39:41+00:00\",\"dateModified\":\"2023-08-09T22:03:24+00:00\",\"mainEntityOfPage\":{\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/\"},\"wordCount\":3811,\"commentCount\":8,\"publisher\":{\"@id\":\"https:\\/\\/namo.lk\\/#organization\"},\"image\":{\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#primaryimage\"},\"thumbnailUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha_gold2-scaled-e1586504253430.jpg\",\"articleSection\":[\"Buddhist Tripitaka - ත්‍රිපිටක​ය\",\"Khuddaka Nikaya - ඛුද්දක නිකාය\",\"Sutta Pitaka - සූත්‍ර පිටක​ය\",\"Suttanipata - සුත්ත නිපාතය\",\"Uraga Vagga - උරග වග්ග​ය\"],\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"CommentAction\",\"name\":\"Comment\",\"target\":[\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#respond\"]}]},{\"@type\":\"WebPage\",\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/\",\"url\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/\",\"name\":\"කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation - Namo.lk\",\"isPartOf\":{\"@id\":\"https:\\/\\/namo.lk\\/#website\"},\"primaryImageOfPage\":{\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#primaryimage\"},\"image\":{\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#primaryimage\"},\"thumbnailUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha_gold2-scaled-e1586504253430.jpg\",\"datePublished\":\"2019-04-15T17:39:41+00:00\",\"dateModified\":\"2023-08-09T22:03:24+00:00\",\"description\":\"KaraneeyaMetta Sutta — The Buddha's Words on Loving-Kindness - The Hymn of Universal Love - Loving-Kindness -The Discourse on Loving-kindness - Good Will\",\"breadcrumb\":{\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/\"]}]},{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#primaryimage\",\"url\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha_gold2-scaled-e1586504253430.jpg\",\"contentUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/buddha_gold2-scaled-e1586504253430.jpg\",\"width\":1560,\"height\":1040},{\"@type\":\"BreadcrumbList\",\"@id\":\"https:\\/\\/namo.lk\\/karaneeyametta-sutta\\/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https:\\/\\/namo.lk\\/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation\"}]},{\"@type\":\"WebSite\",\"@id\":\"https:\\/\\/namo.lk\\/#website\",\"url\":\"https:\\/\\/namo.lk\\/\",\"name\":\"නමෝ.lk\",\"description\":\"Teachings of Buddha, the Fully-Enlightened One\",\"publisher\":{\"@id\":\"https:\\/\\/namo.lk\\/#organization\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https:\\/\\/namo.lk\\/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"en-US\"},{\"@type\":\"Organization\",\"@id\":\"https:\\/\\/namo.lk\\/#organization\",\"name\":\"Akonita\",\"url\":\"https:\\/\\/namo.lk\\/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/logo\\/image\\/\",\"url\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/Namo_Logo_Full.png\",\"contentUrl\":\"https:\\/\\/namo.lk\\/wp-content\\/uploads\\/2019\\/04\\/Namo_Logo_Full.png\",\"width\":634,\"height\":254,\"caption\":\"Akonita\"},\"image\":{\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/logo\\/image\\/\"},\"sameAs\":[\"https:\\/\\/www.facebook.com\\/akonita.co\\/\",\"https:\\/\\/x.com\\/akonitaco\",\"https:\\/\\/www.instagram.com\\/akonita.co\"]},{\"@type\":\"Person\",\"@id\":\"https:\\/\\/namo.lk\\/#\\/schema\\/person\\/9fb5eda5c73a8df9ae53f54a93fa76b9\",\"name\":\"Namo LK\",\"image\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https:\\/\\/secure.gravatar.com\\/avatar\\/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g\",\"url\":\"https:\\/\\/secure.gravatar.com\\/avatar\\/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g\",\"contentUrl\":\"https:\\/\\/secure.gravatar.com\\/avatar\\/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g\",\"caption\":\"Namo LK\"},\"sameAs\":[\"https:\\/\\/akonita.co\"],\"url\":\"https:\\/\\/namo.lk\\/author\\/root86\\/\"}]}</script>\n<!-- / Yoast SEO plugin. -->",
+ "yoast_head_json": {
+  "title": "කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation - Namo.lk",
+  "description": "KaraneeyaMetta Sutta — The Buddha's Words on Loving-Kindness - The Hymn of Universal Love - Loving-Kindness -The Discourse on Loving-kindness - Good Will",
+  "robots": {
+   "index": "index",
+   "follow": "follow",
+   "max-snippet": "max-snippet:-1",
+   "max-image-preview": "max-image-preview:large",
+   "max-video-preview": "max-video-preview:-1"
+  },
+  "canonical": "https://namo.lk/karaneeyametta-sutta/",
+  "og_locale": "en_US",
+  "og_type": "article",
+  "og_title": "කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation - Namo.lk",
+  "og_description": "KaraneeyaMetta Sutta — The Buddha's Words on Loving-Kindness - The Hymn of Universal Love - Loving-Kindness -The Discourse on Loving-kindness - Good Will",
+  "og_url": "https://namo.lk/karaneeyametta-sutta/",
+  "og_site_name": "Namo.lk",
+  "article_publisher": "https://www.facebook.com/akonita.co/",
+  "article_published_time": "2019-04-15T17:39:41+00:00",
+  "article_modified_time": "2023-08-09T22:03:24+00:00",
+  "og_image": [
+   {
+    "width": 1560,
+    "height": 1040,
+    "url": "https://namo.lk/wp-content/uploads/2019/04/buddha_gold2-scaled-e1586504253430.jpg",
+    "type": "image/jpeg"
+   }
+  ],
+  "author": "Namo LK",
+  "twitter_card": "summary_large_image",
+  "twitter_creator": "@akonitaco",
+  "twitter_site": "@akonitaco",
+  "twitter_misc": {
+   "Written by": "Namo LK",
+   "Est. reading time": "9 minutes"
+  },
+  "schema": {
+   "@context": "https://schema.org",
+   "@graph": [
+    {
+     "@type": "Article",
+     "@id": "https://namo.lk/karaneeyametta-sutta/#article",
+     "isPartOf": {
+      "@id": "https://namo.lk/karaneeyametta-sutta/"
+     },
+     "author": {
+      "name": "Namo LK",
+      "@id": "https://namo.lk/#/schema/person/9fb5eda5c73a8df9ae53f54a93fa76b9"
+     },
+     "headline": "කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation",
+     "datePublished": "2019-04-15T17:39:41+00:00",
+     "dateModified": "2023-08-09T22:03:24+00:00",
+     "mainEntityOfPage": {
+      "@id": "https://namo.lk/karaneeyametta-sutta/"
+     },
+     "wordCount": 3811,
+     "commentCount": 8,
+     "publisher": {
+      "@id": "https://namo.lk/#organization"
+     },
+     "image": {
+      "@id": "https://namo.lk/karaneeyametta-sutta/#primaryimage"
+     },
+     "thumbnailUrl": "https://namo.lk/wp-content/uploads/2019/04/buddha_gold2-scaled-e1586504253430.jpg",
+     "articleSection": [
+      "Buddhist Tripitaka - ත්‍රිපිටක​ය",
+      "Khuddaka Nikaya - ඛුද්දක නිකාය",
+      "Sutta Pitaka - සූත්‍ර පිටක​ය",
+      "Suttanipata - සුත්ත නිපාතය",
+      "Uraga Vagga - උරග වග්ග​ය"
+     ],
+     "inLanguage": "en-US",
+     "potentialAction": [
+      {
+       "@type": "CommentAction",
+       "name": "Comment",
+       "target": [
+        "https://namo.lk/karaneeyametta-sutta/#respond"
+       ]
+      }
+     ]
+    },
+    {
+     "@type": "WebPage",
+     "@id": "https://namo.lk/karaneeyametta-sutta/",
+     "url": "https://namo.lk/karaneeyametta-sutta/",
+     "name": "කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation - Namo.lk",
+     "isPartOf": {
+      "@id": "https://namo.lk/#website"
+     },
+     "primaryImageOfPage": {
+      "@id": "https://namo.lk/karaneeyametta-sutta/#primaryimage"
+     },
+     "image": {
+      "@id": "https://namo.lk/karaneeyametta-sutta/#primaryimage"
+     },
+     "thumbnailUrl": "https://namo.lk/wp-content/uploads/2019/04/buddha_gold2-scaled-e1586504253430.jpg",
+     "datePublished": "2019-04-15T17:39:41+00:00",
+     "dateModified": "2023-08-09T22:03:24+00:00",
+     "description": "KaraneeyaMetta Sutta — The Buddha's Words on Loving-Kindness - The Hymn of Universal Love - Loving-Kindness -The Discourse on Loving-kindness - Good Will",
+     "breadcrumb": {
+      "@id": "https://namo.lk/karaneeyametta-sutta/#breadcrumb"
+     },
+     "inLanguage": "en-US",
+     "potentialAction": [
+      {
+       "@type": "ReadAction",
+       "target": [
+        "https://namo.lk/karaneeyametta-sutta/"
+       ]
+      }
+     ]
+    },
+    {
+     "@type": "ImageObject",
+     "inLanguage": "en-US",
+     "@id": "https://namo.lk/karaneeyametta-sutta/#primaryimage",
+     "url": "https://namo.lk/wp-content/uploads/2019/04/buddha_gold2-scaled-e1586504253430.jpg",
+     "contentUrl": "https://namo.lk/wp-content/uploads/2019/04/buddha_gold2-scaled-e1586504253430.jpg",
+     "width": 1560,
+     "height": 1040
+    },
+    {
+     "@type": "BreadcrumbList",
+     "@id": "https://namo.lk/karaneeyametta-sutta/#breadcrumb",
+     "itemListElement": [
+      {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://namo.lk/"
+      },
+      {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "කරණීයමෙත්ත සුත්තං (කරණීයමෙත්ත සූත්‍රය) පාළි, සිංහල, හා ඉංග්‍රීසියෙන් KaraneeyaMetta Sutta in Pali, Sinhala, and English Translation"
+      }
+     ]
+    },
+    {
+     "@type": "WebSite",
+     "@id": "https://namo.lk/#website",
+     "url": "https://namo.lk/",
+     "name": "නමෝ.lk",
+     "description": "Teachings of Buddha, the Fully-Enlightened One",
+     "publisher": {
+      "@id": "https://namo.lk/#organization"
+     },
+     "potentialAction": [
+      {
+       "@type": "SearchAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://namo.lk/?s={search_term_string}"
+       },
+       "query-input": {
+        "@type": "PropertyValueSpecification",
+        "valueRequired": true,
+        "valueName": "search_term_string"
+       }
+      }
+     ],
+     "inLanguage": "en-US"
+    },
+    {
+     "@type": "Organization",
+     "@id": "https://namo.lk/#organization",
+     "name": "Akonita",
+     "url": "https://namo.lk/",
+     "logo": {
+      "@type": "ImageObject",
+      "inLanguage": "en-US",
+      "@id": "https://namo.lk/#/schema/logo/image/",
+      "url": "https://namo.lk/wp-content/uploads/2019/04/Namo_Logo_Full.png",
+      "contentUrl": "https://namo.lk/wp-content/uploads/2019/04/Namo_Logo_Full.png",
+      "width": 634,
+      "height": 254,
+      "caption": "Akonita"
+     },
+     "image": {
+      "@id": "https://namo.lk/#/schema/logo/image/"
+     },
+     "sameAs": [
+      "https://www.facebook.com/akonita.co/",
+      "https://x.com/akonitaco",
+      "https://www.instagram.com/akonita.co"
+     ]
+    },
+    {
+     "@type": "Person",
+     "@id": "https://namo.lk/#/schema/person/9fb5eda5c73a8df9ae53f54a93fa76b9",
+     "name": "Namo LK",
+     "image": {
+      "@type": "ImageObject",
+      "inLanguage": "en-US",
+      "@id": "https://secure.gravatar.com/avatar/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g",
+      "url": "https://secure.gravatar.com/avatar/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g",
+      "contentUrl": "https://secure.gravatar.com/avatar/7a76a60dc96945b11ddadbe7ce67b0d7fc83f24d7e910087c29cc625c663ccb4?s=96&d=mm&r=g",
+      "caption": "Namo LK"
+     },
+     "sameAs": [
+      "https://akonita.co"
+     ],
+     "url": "https://namo.lk/author/root86/"
+    }
+   ]
+  }
+ },
+ "_links": {
+  "self": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/posts/251",
+    "targetHints": {
+     "allow": [
+      "GET"
+     ]
+    }
+   }
+  ],
+  "collection": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/posts"
+   }
+  ],
+  "about": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/types/post"
+   }
+  ],
+  "author": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/users/1"
+   }
+  ],
+  "replies": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/comments?post=251"
+   }
+  ],
+  "version-history": [
+   {
+    "count": 72,
+    "href": "https://namo.lk/wp-json/wp/v2/posts/251/revisions"
+   }
+  ],
+  "predecessor-version": [
+   {
+    "id": 2472,
+    "href": "https://namo.lk/wp-json/wp/v2/posts/251/revisions/2472"
+   }
+  ],
+  "wp:featuredmedia": [
+   {
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/media/1149"
+   }
+  ],
+  "wp:attachment": [
+   {
+    "href": "https://namo.lk/wp-json/wp/v2/media?parent=251"
+   }
+  ],
+  "wp:term": [
+   {
+    "taxonomy": "category",
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/categories?post=251"
+   },
+   {
+    "taxonomy": "post_tag",
+    "embeddable": true,
+    "href": "https://namo.lk/wp-json/wp/v2/tags?post=251"
+   }
+  ],
+  "curies": [
+   {
+    "name": "wp",
+    "href": "https://api.w.org/{rel}",
+    "templated": true
+   }
+  ]
+ }
+}
