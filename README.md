@@ -1,17 +1,11 @@
-# buddhist_gatha
+# Namo
 
-A digital Buddhist prayer book: gatha and pirith in Sinhala, Pali and English.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Namo is a free, offline Buddhist prayer book for Android, iOS and the web.
+It has no ads, no payments, no analytics and makes no network requests.
+The verses come from content prepared by the owner from namo.lk, read only
+through `tools/build_content.py` from `content/extracted/*.json`.
+The design and plan live in `.superpowers/` and `design/`.
+Run the tests with `flutter test`.
+Run the content check with `python -I -X utf8 tools/build_content.py` (this script arrives in a later stage).
+Run the web build with `flutter build web`.
+The Dart package and folder are still named `buddhist_gatha`.

@@ -98,6 +98,7 @@ flutter:
     - assets/fonts/OFL-NotoSansSinhala.txt
     - assets/fonts/OFL-NotoSerif.txt
     - assets/fonts/OFL-Lora.txt
+    - assets/branding/
 
   fonts:
     - family: NotoSansSinhala
@@ -113,3 +114,21 @@ flutter:
         - asset: assets/fonts/Lora.ttf
         - asset: assets/fonts/Lora-Italic.ttf
           style: italic
+
+flutter_launcher_icons:
+  image_path: "assets/branding/namo_icon_square.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/branding/namo_icon_square.png"
+    background_color: "#2B3837"
+    theme_color: "#2B3837"
+
+flutter_native_splash:
+  color: "#2B3837"
+  image: assets/branding/namo_icon_square.png
+  android: true
+  ios: true
+  web: true

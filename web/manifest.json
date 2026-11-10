@@ -1,11 +1,11 @@
 {
-    "name": "buddhist_gatha",
-    "short_name": "buddhist_gatha",
+    "name": "Namo",
+    "short_name": "Namo",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A digital Buddhist prayer book: gatha and pirith in Sinhala, Pali and English.",
+    "background_color": "#2B3837",
+    "theme_color": "#2B3837",
+    "description": "Namo is a free Buddhist prayer book.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
