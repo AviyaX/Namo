@@ -88,7 +88,11 @@ class PlaceholderCatalogue implements AudioCatalogue {
 
 /// Opens the app at [location] with the bundled content.
 ///
-/// [deviceTextScale] is the device's text size setting, [dark] the theme. [withSaved] fills Saved with bookmarks and a favourite.
+/// [deviceTextScale] is the device's text size setting. [dark] picks the
+/// theme: true or false stores Dark or Light (and sets the device to match);
+/// left null, the theme is whatever [settings] holds (the app's default is
+/// Dark) and the device is light. [withSaved] fills Saved with bookmarks and
+/// a favourite.
 /// [library] replaces the bundled content. [audio] puts the placeholder
 /// recording on every reading; [audioFails] makes the player fail to load it.
 /// [storeExtras] are extra saved values (a remembered reading place, say).
@@ -98,7 +102,7 @@ Future<void> openReal(
   String location, {
   Size size = const Size(390, 844),
   double deviceTextScale = 1.0,
-  bool dark = false,
+  bool? dark,
   AppSettings settings = const AppSettings(),
   bool withSaved = false,
   Library? library,
@@ -110,17 +114,18 @@ Future<void> openReal(
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
   t.platformDispatcher.platformBrightnessTestValue =
-      dark ? Brightness.dark : Brightness.light;
+      (dark ?? false) ? Brightness.dark : Brightness.light;
   addTearDown(() {
     t.platformDispatcher.clearTextScaleFactorTestValue();
     t.platformDispatcher.clearPlatformBrightnessTestValue();
   });
   final store = InMemoryKeyValueStore();
-  // The theme comes from the stored settings, not from the device: [dark]
-  // picks it unless the caller chose a mode on purpose.
-  final stored = settings.themeMode == ThemeMode.dark
-      ? settings.copyWith(themeMode: dark ? ThemeMode.dark : ThemeMode.light)
-      : settings;
+  // The theme comes from the stored settings, not from the device. An
+  // explicit [dark] sets it (Same as device is left to follow the device);
+  // without one the caller's settings stand.
+  final stored = dark == null || settings.themeMode == ThemeMode.system
+      ? settings
+      : settings.copyWith(themeMode: dark ? ThemeMode.dark : ThemeMode.light);
   await store.write(settingsKey, jsonEncode(stored.toJson()));
   for (final e in storeExtras.entries) {
     await store.write(e.key, e.value);
