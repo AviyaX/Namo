@@ -1,3 +1,4 @@
+import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -84,26 +85,26 @@ void main() {
         final node = find.bySemanticsLabel(RegExp('^$tab'));
         expect(node, findsWidgets, reason: tab);
       }
-      final bar = find.byType(NavigationBar);
+      final bar = find.byType(FloatingBar);
       expect(bar, findsOneWidget);
       expect(t.getSize(bar).height, greaterThanOrEqualTo(48));
       for (final tab in tabs) {
         final destination = find.ancestor(
           of: find.text(tab),
-          matching: find.byType(NavigationDestination),
+          matching: find.byKey(ValueKey('nav-${tab.toLowerCase()}')),
         );
         expect(t.getSize(destination).height, greaterThanOrEqualTo(48), reason: tab);
         expect(t.getSize(destination).width, greaterThanOrEqualTo(48), reason: tab);
       }
-      expect(find.byType(NavigationRail), findsNothing);
+      expect(find.byKey(const ValueKey('nav-rail')), findsNothing);
       handle.dispose();
     });
 
     testWidgets('the rail has the four tabs, each labelled and at least 48 x 48', (t) async {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.home, size: const Size(1280, 800));
-      expect(find.byType(NavigationRail), findsOneWidget);
-      expect(find.byType(NavigationBar), findsNothing);
+      expect(find.byKey(const ValueKey('nav-rail')), findsOneWidget);
+      expect(find.byType(FloatingBar), findsNothing);
       for (final tab in tabs) {
         expect(find.bySemanticsLabel(RegExp('^$tab')), findsWidgets, reason: tab);
         final size = t.getSemantics(find.bySemanticsLabel(RegExp('^$tab')).first).rect.size;
@@ -121,7 +122,7 @@ void main() {
       addTearDown(t.view.resetPadding);
       addTearDown(t.view.resetViewPadding);
       await t.pumpAndSettle();
-      final rail = find.byType(NavigationRail);
+      final rail = find.byKey(const ValueKey('nav-rail'));
       expect(t.getTopLeft(rail).dx, greaterThanOrEqualTo(44));
     });
 

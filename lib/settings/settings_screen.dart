@@ -25,7 +25,10 @@ class SettingsScreen extends ConsumerWidget {
           key: const ValueKey('settings-column'),
           constraints: const BoxConstraints(maxWidth: NamoSizes.readingColumn),
           child: ListView(
-            padding: const EdgeInsets.only(bottom: 16),
+            // Clear of the navigation bar floating over the page.
+            padding: EdgeInsets.only(
+              bottom: 16 + MediaQuery.paddingOf(context).bottom,
+            ),
             children: [
               const SettingsHeading('Languages'),
               const LanguageChooser(),

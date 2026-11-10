@@ -42,7 +42,10 @@ class SavedScreen extends ConsumerWidget {
                 maxWidth: NamoSizes.readingColumn,
               ),
               child: ListView(
-                padding: const EdgeInsets.only(bottom: 16),
+                // Clear of the navigation bar floating over the page.
+                padding: EdgeInsets.only(
+                  bottom: 16 + MediaQuery.paddingOf(context).bottom,
+                ),
                 children: [
                   const SettingsHeading('Bookmarks'),
                   if (bookmarks.isEmpty) const _Empty('No bookmarks yet.'),

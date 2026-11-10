@@ -25,13 +25,19 @@ class HomeScreen extends ConsumerWidget {
     final p = NamoPalette.of(context);
     final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
     return Scaffold(
+      // The foot of the list scrolls clear of the navigation bar, which
+      // floats over the page.
       body: SafeArea(
+        bottom: false,
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: wide ? _wideColumn : NamoSizes.readingColumn,
             ),
             child: ListView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom,
+              ),
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'design/widgets/app_shell.dart';
+import 'design/widgets/fade_indexed_stack.dart';
 import 'design/widgets/not_found.dart';
 import 'home/home_screen.dart';
 import 'library/library_screen.dart';
@@ -53,8 +54,12 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
   initialLocation: initialLocation,
   errorBuilder: (context, state) => const NotFoundScreen(),
   routes: [
-    StatefulShellRoute.indexedStack(
+    StatefulShellRoute(
       builder: (context, state, shell) => AppShell(shell: shell),
+      // Every tab stays mounted (its state and scroll position kept); the
+      // switch between tabs is a cross-fade.
+      navigatorContainerBuilder: (context, shell, children) =>
+          FadeIndexedStack(index: shell.currentIndex, children: children),
       branches: [
         StatefulShellBranch(
           routes: [

@@ -81,6 +81,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 }
               }
               return ListView(
+                // Clear of the navigation bar floating over the page.
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom,
+                ),
                 children: [
                   for (final c in library.categories)
                     _CategoryEntry(
