@@ -193,10 +193,34 @@ void main() {
     });
     testWidgets('every line is a stored line of that section', (t) async {
       final lib = await realLibrary(t);
+      final verses = [
+        for (final c in lib.categories)
+          for (final r in c.readings)
+            for (final s in r.sections) ...s.verses,
+      ];
+      String? first(String? Function(Verse) get) {
+        for (final v in verses) {
+          final x = get(v);
+          if (x != null) return x;
+        }
+        return null;
+      }
+
       final head = lib.categories.first.readings.first.sections.first.heading;
-      final q = String.fromCharCodes(head.runes.take(2));
+      final queries = <String>[
+        for (final x in [
+          head,
+          first((v) => v.paliSi),
+          first((v) => v.paliRoman),
+          first((v) => v.sinhala),
+          first((v) => v.english),
+        ])
+          if (x != null) String.fromCharCodes(x.trim().runes.take(3)),
+      ].where((q) => foldForSearch(q).runes.length >= searchMinLength);
+      expect(queries, isNotEmpty);
+      var checked = 0;
       for (final sel in [LanguageSelection.initial, _english, _sinhala]) {
-        for (final query in [q, 'a', 'the', 'sa', 'na']) {
+        for (final query in queries) {
           for (final h in searchLibrary(lib, query, sel)) {
             final line = h.line;
             if (line == null) continue;
@@ -206,9 +230,11 @@ void main() {
                   if (x != null) ...x.split('\n').map((l) => l.trim()),
             };
             expect(stored, contains(line));
+            checked++;
           }
         }
       }
+      expect(checked, greaterThan(0));
     });
   });
 }
