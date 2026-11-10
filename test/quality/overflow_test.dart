@@ -124,6 +124,26 @@ void main() {
       );
     }
     testWidgets(
+      'Home with the largest reading text and spacing does not overflow: ${size.width.round()}x${size.height.round()}, device text 2.0',
+      (t) async {
+        await openReal(
+          t,
+          Routes.home,
+          size: size,
+          deviceTextScale: 2.0,
+          settings: const AppSettings(
+            languages: LanguageSelection([
+              ReadingLanguage.sinhala,
+              ReadingLanguage.english,
+            ]),
+            fontScale: 1.6,
+            lineSpacing: 2.2,
+          ),
+        );
+        await scrollThrough(t);
+      },
+    );
+    testWidgets(
       'Home with several reading cards does not overflow: ${size.width.round()}x${size.height.round()}, device text 2.0',
       (t) async {
         await openReal(
