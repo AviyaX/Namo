@@ -108,7 +108,10 @@ class SourcesScreen extends StatelessWidget {
           key: const ValueKey('sources-column'),
           constraints: const BoxConstraints(maxWidth: NamoSizes.readingColumn),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 16),
+            // Clear of the navigation bar floating over the page.
+            padding: EdgeInsets.only(
+              bottom: 16 + MediaQuery.paddingOf(context).bottom,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

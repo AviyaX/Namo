@@ -225,6 +225,49 @@ void main() {
         });
       }
     }
+
+    // Sources is a page inside the Settings tab, so the bar floats over it
+    // too. Its content is one column in a scroll view.
+    final sources = find.byKey(const ValueKey('screen-sources'));
+    final sourcesScroll = find
+        .descendant(of: sources, matching: find.byType(Scrollable))
+        .first;
+    Finder sourcesContent() => find
+        .descendant(
+          of: find.descendant(
+            of: sources,
+            matching: find.byType(SingleChildScrollView),
+          ),
+          matching: find.byType(Column),
+        )
+        .first;
+    Future<void> toEnd(WidgetTester t) async {
+      final position = t.state<ScrollableState>(sourcesScroll).position;
+      position.jumpTo(position.maxScrollExtent);
+      await t.pumpAndSettle();
+    }
+
+    for (final size in const [Size(390, 844), Size(320, 568)]) {
+      testWidgets('Sources at ${size.width.round()} x ${size.height.round()}: '
+          'the end of the page scrolls above the bar', (t) async {
+        await openReal(t, Routes.sources, size: size);
+        await toEnd(t);
+        final barTop = t.getRect(find.byKey(const ValueKey('nav-bar'))).top;
+        expect(barTop, t.getRect(_bar).top);
+        expect(t.getRect(sourcesContent()).bottom, lessThanOrEqualTo(barTop));
+      });
+    }
+
+    for (final size in const [Size(840, 600), Size(1280, 800)]) {
+      testWidgets('Sources at ${size.width.round()} x ${size.height.round()}: '
+          'beside the rail the page ends 16 above the screen edge', (t) async {
+        await openReal(t, Routes.sources, size: size);
+        expect(find.byKey(const ValueKey('nav-rail')), findsOneWidget);
+        expect(find.byKey(const ValueKey('nav-bar')), findsNothing);
+        await toEnd(t);
+        expect(t.getRect(sourcesContent()).bottom, size.height - 16);
+      });
+    }
   });
 
   group('large text on a small phone', () {
