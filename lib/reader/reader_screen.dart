@@ -22,6 +22,7 @@ import 'reader_bottom_bar.dart';
 import 'reader_items.dart';
 import 'reader_settings_sheet.dart';
 import 'reading_position.dart';
+import 'screen_awake.dart';
 
 /// How close (in pixels) to a heading counts as being at its start.
 const _atStart = 8.0;
@@ -77,6 +78,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   StreamSubscription<ChantState>? _audioSub;
   ChantStatus _audioStatus = ChantStatus.idle;
 
+  /// Keeps the screen on while the page scrolls or a recording plays.
+  late final ScreenAwake _awake;
+  bool _holdingAwake = false;
+
   /// Whether the jump to the section or saved place has been scheduled.
   bool _opened = false;
 
@@ -101,6 +106,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   void initState() {
     super.initState();
     _positions = ref.read(positionProvider.notifier);
+    _awake = ref.read(screenAwakeProvider);
     _lifecycle = AppLifecycleListener(
       onHide: _toBackground,
       onPause: _toBackground,
@@ -122,6 +128,20 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     } else if (!running && _ticker.isActive) {
       _ticker.stop();
     }
+    _updateAwake();
+  }
+
+  /// Holds the screen on while auto-scroll runs or the recording plays, and
+  /// releases it once neither does.
+  void _updateAwake() => _setAwake(
+    _autoScroll.status == AutoScrollStatus.running ||
+        _audioStatus == ChantStatus.playing,
+  );
+
+  void _setAwake(bool hold) {
+    if (hold == _holdingAwake) return;
+    _holdingAwake = hold;
+    unawaited(hold ? _awake.hold() : _awake.release());
   }
 
   void _onTick(Duration elapsed) {
@@ -140,6 +160,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _audioSub?.cancel();
     _audioSub = null;
     _audioStatus = ChantStatus.idle;
+    _updateAwake();
     _player = player;
     _playerReading = readingId;
     if (old != null) unawaited(old.pause());
@@ -163,12 +184,15 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         _autoScroll.status != AutoScrollStatus.running) {
       _autoScroll.play();
     }
+    _updateAwake();
   }
 
   void _toBackground() {
     _autoScroll.pause();
     final player = _player;
     if (player != null) unawaited(player.pause());
+    // The player reports its pause later; the screen is let go now.
+    _setAwake(false);
     _save();
   }
 
@@ -210,6 +234,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     // place is noted now and handed over once this frame is done.
     _saveLater();
     _audioSub?.cancel();
+    _setAwake(false);
     _lifecycle.dispose();
     _ticker.dispose();
     _autoScroll.dispose();
