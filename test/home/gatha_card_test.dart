@@ -28,6 +28,27 @@ GathaPick _pick() {
 void main() {
   setUpAll(loadBundledFonts);
 
+  testWidgets('the verse is drawn at the reader text size and spacing', (t) async {
+    final p = paletteOf(Brightness.dark);
+    await pumpThemed(
+      t,
+      SizedBox(
+        width: 350,
+        child: GathaCard(
+          pick: _pick(),
+          selection: const LanguageSelection([ReadingLanguage.english]),
+          fontScale: 1.4,
+          lineSpacing: 2.0,
+        ),
+      ),
+    );
+    expect(
+      t.widget<Text>(find.byKey(const ValueKey('gatha-text-0'))).style,
+      readingStyle(ReadingLanguage.english,
+          fontScale: 1.4, lineSpacing: 2.0, color: p.text),
+    );
+  });
+
   for (final b in Brightness.values) {
     testWidgets('a gold leading line, the overline, the texts in reading style '
         '12 apart, the heading and "Read in context" ($b)', (t) async {

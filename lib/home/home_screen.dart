@@ -63,6 +63,9 @@ class _Blocks extends ConsumerWidget {
         ? NamoSpace.xl
         : NamoSpace.xxl;
     final selection = ref.watch(settingsProvider.select((s) => s.languages));
+    final fontScale = ref.watch(settingsProvider.select((s) => s.fontScale));
+    final lineSpacing =
+        ref.watch(settingsProvider.select((s) => s.lineSpacing));
     final showContinue = ref.watch(
       positionProvider.select((s) => hasContinue(s, library)),
     );
@@ -72,7 +75,12 @@ class _Blocks extends ConsumerWidget {
     final continueCard = showContinue ? ContinueCard(library: library) : null;
     final gathaCard = pick == null
         ? null
-        : GathaCard(pick: pick, selection: selection);
+        : GathaCard(
+            pick: pick,
+            selection: selection,
+            fontScale: fontScale,
+            lineSpacing: lineSpacing,
+          );
     final featured = first == null ? null : FeaturedCard(category: first);
 
     final blocks = <Widget>[
