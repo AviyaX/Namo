@@ -211,7 +211,7 @@ def pirith_missing(root, sinhala_points, roman_points):
 
     path = root / PIRITH
     if not path.exists():
-        return []
+        raise FileNotFoundError(f"{PIRITH} is missing; the pirith names cannot be checked")
     data = json.loads(path.read_text(encoding="utf-8"))
     bad = []
     for category in data["categories"]:
@@ -237,7 +237,11 @@ def main(argv):
             for ch in missing_characters(text, label):
                 target = in_fallback_only if ord(ch) in fallback else nowhere
                 target.setdefault(ch, []).append((rel, line, text))
-    pirith_bad = pirith_missing(root, label, font_codepoints(fonts / ROMAN_FONT))
+    try:
+        pirith_bad = pirith_missing(root, label, font_codepoints(fonts / ROMAN_FONT))
+    except FileNotFoundError as error:
+        print(f"error: {error}")
+        return 1
     if pirith_bad:
         print("pirith names with a character missing from the font they are drawn in:")
         for reading_id, field, ch in pirith_bad:

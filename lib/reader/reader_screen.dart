@@ -289,7 +289,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   void _followPlace(ChantPlace place) {
     // After the frame, so the block the place has entered is laid out.
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
+      // A hand may have come down since the place changed.
+      if (!mounted || !(_follow?.following ?? false)) return;
       _chase(() => _phraseTarget(place), animate: true);
     });
   }
@@ -341,9 +342,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     } else {
       // Only one of the two at a time; the later request wins.
       _chantWanted = false;
-      if (_chant.value.status == ChantStatus.playing) {
-        unawaited(_player?.pause());
-      }
+      if (_chantLoaded) unawaited(_player?.pause());
       _autoScroll.play();
     }
   }
@@ -696,6 +695,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       _autoScroll.pause();
       final player = _player;
       if (player != null) unawaited(player.pause());
+      // This reader may outlive the hand-over by a frame; it must not
+      // release the screen lock after the next pirith has taken it.
+      _setAwake(false);
       _chantWanted = false;
       _follow?.reset();
       _handedOver = true;

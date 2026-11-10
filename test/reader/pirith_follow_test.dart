@@ -297,6 +297,45 @@ void main() {
     await t.tap(c.phrase(2, 0));
     await t.pump();
     expect(c.player.seeks, [c.time(2).start]);
+    expect(c.player.state.status, ChantStatus.paused,
+        reason: 'a tap never starts sound');
+  });
+
+  testWidgets('paused at the very start: the mark stays and taps still seek',
+      (t) async {
+    final c = await _open(t, size: const Size(390, 2400));
+    await c.advanceTo(t, const Duration(seconds: 1));
+    await t.tap(_play);
+    await t.pump();
+    expect(c.player.state.status, ChantStatus.paused);
+    await t.tap(c.phrase(0, 0));
+    await t.pump();
+    expect(c.player.state.status, ChantStatus.paused);
+    expect(c.player.state.position, c.time(0).start);
+    expect(_activeBlock(t, c), 0, reason: 'the place is kept');
+    await t.tap(c.phrase(2, 0));
+    await t.pump();
+    expect(c.player.seeks, [c.time(0).start, c.time(2).start]);
+    expect(c.player.state.status, ChantStatus.paused);
+    expect(_activeBlock(t, c), 2);
+  });
+
+  testWidgets('a hand down before the frame stops the page being scrolled',
+      (t) async {
+    final c = await _open(t);
+    await c.advanceTo(t, c.middleOf(1));
+    await _settleMotion(t);
+    final held = _scrollOffset(t);
+    // The place moves; the hand comes down before the frame is drawn.
+    c.player.advance(c.middleOf(12) - c.player.state.position);
+    await t.binding.idle();
+    final g = await t.startGesture(
+        t.getTopLeft(find.byType(CustomScrollView)) + const Offset(4, 4));
+    await t.pump();
+    await g.up();
+    await _settleMotion(t);
+    expect(_scrollOffset(t), held);
+    expect(_followButton, findsOneWidget);
   });
 
   testWidgets('Alavaka: its last block cannot be tapped and is never marked',

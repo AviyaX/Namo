@@ -104,6 +104,22 @@ class PirithNames(unittest.TestCase):
         self.assertIn(("pirith-x", "title_roman", "中"), bad)
         self.assertTrue(all(b[0] == "pirith-x" for b in bad))
 
+    def test_a_missing_pirith_file_is_an_error(self):
+        import contextlib
+        import io
+        import tempfile
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(FileNotFoundError):
+                tool.pirith_missing(pathlib.Path(d), self.sinhala, self.roman)
+        out = io.StringIO()
+        with mock.patch.object(tool, "PIRITH", "assets/content/no-such.json"):
+            with contextlib.redirect_stdout(out):
+                code = tool.main(["check_ui_glyphs.py", str(ROOT)])
+        self.assertEqual(code, 1)
+        self.assertIn("no-such.json is missing", out.getvalue())
+
 
 class RealProject(unittest.TestCase):
     def test_the_project_run_exits_zero(self):
