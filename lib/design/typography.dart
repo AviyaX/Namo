@@ -23,7 +23,11 @@ TextStyle namoText(
     TextStyle(
       fontFamily: family,
       fontFamilyFallback: [
-        for (final f in const [NamoFonts.sans, NamoFonts.serif])
+        for (final f in const [
+          NamoFonts.sans,
+          NamoFonts.serif,
+          NamoFonts.romanPali,
+        ])
           if (f != family) f,
       ],
       letterSpacing: letterSpacing,
@@ -50,6 +54,8 @@ abstract final class NamoType {
       size: 15, height: 1.5, weight: 400, color: color);
   static TextStyle label(Color color) => namoText(NamoFonts.sans,
       size: 14, height: 1.3, weight: 500, color: color);
+  static TextStyle romanName(Color color) => namoText(NamoFonts.romanPali,
+      size: 14, height: 1.3, weight: 400, color: color);
   static TextStyle caption(Color color) => namoText(NamoFonts.sans,
       size: 13, height: 1.4, weight: 400, color: color);
   /// A reading's title over its sections when a topic holds several.

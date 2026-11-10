@@ -32,8 +32,8 @@ void main() {
 
   testWidgets('one character keeps the topic list; two matching characters '
       'show the results instead', (t) async {
-    final lib = await realLibrary(t);
-    await openReal(t, Routes.library);
+    final lib = await buddhaOnlyLibrary(t);
+    await openReal(t, Routes.library, library: lib);
     final topic = lib.category(realCategoryId)!;
     expect(find.text(topic.title), findsOneWidget);
     final heading = topic.readings.first.sections[2].heading;
@@ -122,8 +122,8 @@ void main() {
   testWidgets('clearing brings back the topic list with the same topics open', (
     t,
   ) async {
-    final lib = await realLibrary(t);
-    await openReal(t, Routes.library, size: const Size(390, 4000));
+    final lib = await buddhaOnlyLibrary(t);
+    await openReal(t, Routes.library, size: const Size(390, 4000), library: lib);
     final topic = lib.category(realCategoryId)!;
     await t.tap(find.text(topic.title));
     await t.pumpAndSettle();
@@ -176,7 +176,7 @@ void main() {
   testWidgets('header caption for the bundled content, and no chips', (
     t,
   ) async {
-    await openReal(t, Routes.library);
+    await openReal(t, Routes.library, library: await buddhaOnlyLibrary(t));
     expect(find.text('1 collection · 19 sections'), findsOneWidget);
     expect(find.byKey(_chips), findsNothing);
   });

@@ -12,6 +12,7 @@ class Recording {
     required this.label,
     required this.placeholder,
     this.sectionCues = const {},
+    this.blockTimes = const [],
   });
 
   final String readingId;
@@ -27,6 +28,11 @@ class Recording {
 
   /// Where each section starts. Not used yet.
   final Map<String, Duration> sectionCues;
+
+  /// When each block of the reading is chanted; null where it has no time.
+  final List<BlockTime?> blockTimes;
+
+  bool get timed => blockTimes.isNotEmpty;
 }
 
 /// Where the app finds the recording of a reading.
@@ -35,7 +41,7 @@ abstract interface class AudioCatalogue {
   Recording? recordingFor(String readingId);
 }
 
-/// Recordings named by the content. There are none in this release.
+/// Recordings named by the content.
 class ContentAudioCatalogue implements AudioCatalogue {
   ContentAudioCatalogue(Library library)
     : _byReading = {
@@ -48,6 +54,7 @@ class ContentAudioCatalogue implements AudioCatalogue {
                 label: reading.audio!.label,
                 placeholder: false,
                 sectionCues: reading.audio!.sectionCues,
+                blockTimes: reading.audio!.blockTimes,
               ),
       };
 

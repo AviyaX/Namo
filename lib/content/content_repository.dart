@@ -12,19 +12,26 @@ abstract interface class ContentRepository {
 class AssetContentRepository implements ContentRepository {
   AssetContentRepository(
     this.bundle, {
-    this.path = 'assets/content/namaskaraya_to_pin_dima.json',
+    this.paths = const [
+      'assets/content/namaskaraya_to_pin_dima.json',
+      'assets/content/pirith.json',
+    ],
   });
 
   final AssetBundle bundle;
-  final String path;
+  final List<String> paths;
 
   @override
   Future<Library> load() async {
-    final json = jsonDecode(await bundle.loadString(path));
-    if (json is! Map<String, dynamic> || json['schema'] != 1) {
-      throw const FormatException('Unsupported content schema.');
+    final categories = <Category>[];
+    for (final path in paths) {
+      final json = jsonDecode(await bundle.loadString(path));
+      if (json is! Map<String, dynamic> || json['schema'] != 1) {
+        throw const FormatException('Unsupported content schema.');
+      }
+      categories.addAll(Library.fromJson(json).categories);
     }
-    return Library.fromJson(json);
+    return Library(categories: categories);
   }
 }
 

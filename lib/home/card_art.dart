@@ -12,6 +12,7 @@ import '../design/tokens.dart';
 /// in docs/pictures.md and on the Sources page).
 const Map<String, String> cardPictures = {
   'cat-namaskaraya': 'assets/pictures/buddha_wandanawa.jpg',
+  'cat-pirith': 'assets/pictures/pirith.jpg',
 };
 
 /// Category id -> the wide (3 : 1) picture used for the Home banner on wide

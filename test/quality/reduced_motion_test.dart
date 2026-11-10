@@ -1,3 +1,4 @@
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/choosers.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,11 @@ import 'quality_support.dart';
 /// With animations off, one pump after each action is enough to reach the end
 /// state.
 void main() {
-  Future<void> open(WidgetTester t, String location) async {
+  Future<void> open(WidgetTester t, String location, {Library? library}) async {
     t.platformDispatcher.accessibilityFeaturesTestValue =
         const FakeAccessibilityFeatures(disableAnimations: true);
     addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
-    await openReal(t, location, size: const Size(390, 2400));
+    await openReal(t, location, size: const Size(390, 2400), library: library);
   }
 
   testWidgets('switching tab', (t) async {
@@ -24,8 +25,8 @@ void main() {
   });
 
   testWidgets('opening a Library topic', (t) async {
-    final lib = await realLibrary(t);
-    await open(t, Routes.library);
+    final lib = await buddhaOnlyLibrary(t);
+    await open(t, Routes.library, library: lib);
     await t.tap(find.text(lib.category(realCategoryId)!.title));
     await t.pump();
     final column = find.byKey(const ValueKey('open-$realCategoryId'));
@@ -36,8 +37,8 @@ void main() {
   });
 
   testWidgets('opening the reader', (t) async {
-    final lib = await realLibrary(t);
-    await open(t, Routes.library);
+    final lib = await buddhaOnlyLibrary(t);
+    await open(t, Routes.library, library: lib);
     await t.tap(find.text(lib.category(realCategoryId)!.title));
     await t.pump();
     final heading = lib.reading(realReadingId)!.sections.first.heading;

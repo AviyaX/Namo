@@ -75,6 +75,29 @@ String? _text(Object? s) {
   return s;
 }
 
+/// One phrase of a phrased verse: the three languages side by side.
+class Phrase {
+  const Phrase({
+    required this.pali,
+    required this.sinhala,
+    required this.english,
+  });
+
+  factory Phrase.fromJson(Map<String, dynamic> json) => Phrase(
+    pali: json['pali'] as String? ?? '',
+    sinhala: json['sinhala'] as String? ?? '',
+    english: json['english'] as String? ?? '',
+  );
+
+  final String pali, sinhala, english;
+
+  String text(ReadingLanguage l) => switch (l) {
+    ReadingLanguage.sinhala => sinhala,
+    ReadingLanguage.english => english,
+    ReadingLanguage.pali => pali,
+  };
+}
+
 class Verse {
   const Verse({
     required this.id,
@@ -87,6 +110,7 @@ class Verse {
     this.check = CheckStatus.unchecked,
     this.notes = const [],
     this.corrections = const [],
+    this.phrases = const [],
   });
 
   factory Verse.fromJson(Map<String, dynamic> json) => Verse(
@@ -102,6 +126,10 @@ class Verse {
     check: CheckStatus.parse(json['check']),
     notes: [for (final n in (json['notes'] as List?) ?? const []) n as String],
     corrections: _corrections(json['corrections']),
+    phrases: [
+      for (final p in (json['phrases'] as List?) ?? const [])
+        Phrase.fromJson(p as Map<String, dynamic>),
+    ],
   );
 
   final String id;
@@ -112,6 +140,12 @@ class Verse {
   final List<String> notes;
   final List<Correction> corrections;
 
+  /// The phrases of a pirith block; empty for an ordinary verse, whose text
+  /// is in the single fields above.
+  final List<Phrase> phrases;
+
+  bool get isPhrased => phrases.isNotEmpty;
+
   /// The text in [l], or null when it is missing or blank. "Pali" is the
   /// Sinhala-letter Pali; Roman Pali is stored but not shown.
   String? text(ReadingLanguage l) => switch (l) {
@@ -121,15 +155,57 @@ class Verse {
   };
 }
 
+/// When one block of a pirith is chanted in its recording.
+class BlockTime {
+  const BlockTime(this.start, this.end);
+
+  final Duration start, end;
+
+  @override
+  bool operator ==(Object other) =>
+      other is BlockTime && other.start == start && other.end == end;
+
+  @override
+  int get hashCode => Object.hash(start, end);
+
+  @override
+  String toString() => 'BlockTime($start, $end)';
+}
+
+Duration _seconds(num s) => Duration(microseconds: (s * 1000000).round());
+
 class RecordingInfo {
   const RecordingInfo({
     required this.asset,
     required this.label,
     this.sectionCues = const {},
+    this.blockTimes = const [],
+    this.duration,
   });
+
+  factory RecordingInfo.fromJson(Map<String, dynamic> json) => RecordingInfo(
+    asset: json['asset'] as String,
+    label: json['label'] as String? ?? '',
+    duration: json['duration_ms'] == null
+        ? null
+        : Duration(microseconds: ((json['duration_ms'] as num) * 1000).round()),
+    blockTimes: [
+      for (final t in (json['block_times'] as List?) ?? const [])
+        t == null
+            ? null
+            : BlockTime(
+                _seconds((t as List)[0] as num),
+                _seconds(t[1] as num),
+              ),
+    ],
+  );
 
   final String asset, label;
   final Map<String, Duration> sectionCues;
+
+  /// One entry per block of the reading; null where the block has no time.
+  final List<BlockTime?> blockTimes;
+  final Duration? duration;
 }
 
 class Section {
@@ -177,7 +253,7 @@ class Section {
   final List<Verse> verses;
 
   LanguageCover coverOf(ReadingLanguage l) {
-    final have = verses.where((v) => v.text(l) != null).length;
+    final have = verses.where((v) => v.isPhrased || v.text(l) != null).length;
     if (have == 0) return LanguageCover.none;
     return have == verses.length ? LanguageCover.all : LanguageCover.part;
   }
@@ -189,11 +265,16 @@ class Reading {
     required this.title,
     required this.sections,
     this.audio,
+    this.titleRoman,
   });
 
   factory Reading.fromJson(Map<String, dynamic> json) => Reading(
     id: json['id'] as String,
     title: json['title'] as String,
+    titleRoman: json['title_roman'] as String?,
+    audio: json['audio'] == null
+        ? null
+        : RecordingInfo.fromJson(json['audio'] as Map<String, dynamic>),
     sections: [
       for (final s in json['sections'] as List)
         Section.fromJson(s as Map<String, dynamic>),
@@ -204,8 +285,17 @@ class Reading {
   final String title;
   final List<Section> sections;
 
-  /// Null in this release.
+  /// The Roman Pali name, for pirith.
+  final String? titleRoman;
+
+  /// Null when the reading has no recording.
   final RecordingInfo? audio;
+
+  /// True when every verse of every section is phrased (and there is one).
+  bool get isPhrased {
+    final verses = [for (final s in sections) ...s.verses];
+    return verses.isNotEmpty && verses.every((v) => v.isPhrased);
+  }
 }
 
 class Category {
@@ -230,6 +320,10 @@ class Category {
   final String title;
   final String subtitle;
   final List<Reading> readings;
+
+  /// The 1-based position of the reading in this category; 0 if absent.
+  int numberOf(String readingId) =>
+      readings.indexWhere((r) => r.id == readingId) + 1;
 }
 
 class Library {

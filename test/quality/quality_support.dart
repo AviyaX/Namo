@@ -17,6 +17,8 @@ import '../support/pump_app.dart';
 
 const realReadingId = 'namaskaraya';
 const realCategoryId = 'cat-namaskaraya';
+const pirithCategoryId = 'cat-pirith';
+const mangalaReadingId = 'pirith-08-mahamangala';
 
 /// The bundled families, loaded from assets/fonts so the tests measure text
 /// with the real glyphs and not the test font.
@@ -43,6 +45,13 @@ Future<Library> realLibrary(WidgetTester t) async {
   return _library ??= (await t.runAsync(
     () => AssetContentRepository(rootBundle).load(),
   ))!;
+}
+
+/// The bundled content with only Buddha Wandanawa, for tests that are about
+/// one topic (the bundled Library now has Pirith as a second topic).
+Future<Library> buddhaOnlyLibrary(WidgetTester t) async {
+  final lib = await realLibrary(t);
+  return Library(categories: [lib.category(realCategoryId)!]);
 }
 
 /// Four categories, Latin placeholder text, one of them with two readings and
