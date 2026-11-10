@@ -65,12 +65,6 @@ ThemeData namoTheme(Brightness brightness) {
       surfaceTintColor: Colors.transparent,
       titleTextStyle: textTheme.titleLarge,
     ),
-    cardTheme: CardThemeData(
-      elevation: 0,
-      color: p.surface,
-      surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
-    ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         minimumSize: minSize,

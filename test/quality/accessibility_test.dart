@@ -1,4 +1,5 @@
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
+import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,6 +36,17 @@ void main() {
     ('Settings', Routes.settings, const Size(390, 1400), null, false),
     ('Sources', Routes.sources, const Size(390, 6000), null, false),
   ];
+
+  for (final dark in [false, true]) {
+    testWidgets('openReal(dark: $dark) really selects the theme', (t) async {
+      await openReal(t, Routes.home, dark: dark);
+      final expected = dark ? NamoPalette.dark : NamoPalette.light;
+      final context = t.element(find.byType(Scaffold).first);
+      expect(Theme.of(context).brightness, dark ? Brightness.dark : Brightness.light);
+      expect(Theme.of(context).scaffoldBackgroundColor, expected.background);
+      expect(NamoPalette.of(context), expected);
+    });
+  }
 
   for (final dark in [false, true]) {
     for (final (name, location, size, after, saved) in screens) {

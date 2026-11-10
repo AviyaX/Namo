@@ -88,8 +88,7 @@ class PlaceholderCatalogue implements AudioCatalogue {
 
 /// Opens the app at [location] with the bundled content.
 ///
-/// [deviceTextScale] is the device's text size setting, [dark] the device
-/// theme. [withSaved] fills Saved with bookmarks and a favourite.
+/// [deviceTextScale] is the device's text size setting, [dark] the theme. [withSaved] fills Saved with bookmarks and a favourite.
 /// [library] replaces the bundled content. [audio] puts the placeholder
 /// recording on every reading; [audioFails] makes the player fail to load it.
 /// [storeExtras] are extra saved values (a remembered reading place, say).
@@ -117,7 +116,12 @@ Future<void> openReal(
     t.platformDispatcher.clearPlatformBrightnessTestValue();
   });
   final store = InMemoryKeyValueStore();
-  await store.write(settingsKey, jsonEncode(settings.toJson()));
+  // The theme comes from the stored settings, not from the device: [dark]
+  // picks it unless the caller chose a mode on purpose.
+  final stored = settings.themeMode == ThemeMode.dark
+      ? settings.copyWith(themeMode: dark ? ThemeMode.dark : ThemeMode.light)
+      : settings;
+  await store.write(settingsKey, jsonEncode(stored.toJson()));
   for (final e in storeExtras.entries) {
     await store.write(e.key, e.value);
   }

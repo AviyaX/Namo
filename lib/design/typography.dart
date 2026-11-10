@@ -52,6 +52,9 @@ abstract final class NamoType {
       size: 14, height: 1.3, weight: 500, color: color);
   static TextStyle caption(Color color) => namoText(NamoFonts.sans,
       size: 13, height: 1.4, weight: 400, color: color);
+  /// A reading's title over its sections when a topic holds several.
+  static TextStyle readingTitle(Color color) => namoText(NamoFonts.sinhala,
+      size: 14, height: 1.4, weight: 600, color: color);
   /// A tab's name under its icon.
   static TextStyle tabLabel(Color color) => namoText(NamoFonts.sans,
       size: 12, height: 1.3, weight: 500, color: color);

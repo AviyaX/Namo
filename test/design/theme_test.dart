@@ -75,7 +75,6 @@ void main() {
   test('themes are flat', () {
     final t = namoTheme(Brightness.light);
     expect(t.appBarTheme.elevation, 0);
-    expect(t.cardTheme.elevation, 0);
     expect(t.extension<NamoPalette>(), NamoPalette.light);
   });
 

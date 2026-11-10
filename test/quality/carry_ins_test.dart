@@ -106,7 +106,7 @@ void main() {
   group('5, 6. chooser rows', () {
     testWidgets('language rows say checked, theme and layout rows are one-of-a-group', (t) async {
       final handle = t.ensureSemantics();
-      await openReal(t, Routes.settings, size: const Size(390, 1400));
+      await openReal(t, Routes.settings, size: const Size(390, 1400), dark: true);
       ui.SemanticsFlags flags(String label) =>
           t.getSemantics(row(label)).getSemanticsData().flagsCollection;
       expect(flags('Pali').isChecked, ui.CheckedState.isTrue);

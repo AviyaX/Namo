@@ -24,7 +24,7 @@ SystemUiOverlayStyle _style(WidgetTester t) {
 void main() {
   testWidgets('dark theme: dark navigation bar, light icons', (t) async {
     await openReal(t, Routes.settings,
-        settings: const AppSettings(themeMode: ThemeMode.dark));
+        dark: true, settings: const AppSettings(themeMode: ThemeMode.dark));
     final s = _style(t);
     expect(s.systemNavigationBarColor, NamoPalette.dark.background);
     expect(s.statusBarColor, Colors.transparent);
@@ -35,6 +35,7 @@ void main() {
   testWidgets('choosing Light in Settings switches the bars', (t) async {
     await openReal(t, Routes.settings,
         size: const Size(390, 2400),
+        dark: true,
         settings: const AppSettings(themeMode: ThemeMode.dark));
     final handle = t.ensureSemantics();
     await t.tap(find.bySemanticsLabel(RegExp('^Light')));
