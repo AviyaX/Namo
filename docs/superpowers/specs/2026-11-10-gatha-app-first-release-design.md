@@ -166,6 +166,7 @@ The owner said to use the spellings found in the other sources ("use anywhere el
 | විඡ්ඡාචරණ (1) | විජ්ජාචරණ | 18 elsewhere on namo.lk, 4 in the booklet |
 | සමාදියාමී (4) | සමාදියාමි | 10 elsewhere on namo.lk, 5 in the booklet; the page itself uses it twice |
 | සුමාමේරය (1, section 3) | සුරාමේරය | namo.lk's own "ten precepts" page and the booklet both print සුරාමේරය; the page's own Sinhala meaning for the line says සුරාපානය |
+| ධානේසු (1, section 7, in `සබ්බ ධානේසු`) | ඨානේසු | the owner's word, 2026-11-10 ("ඨානේසු is the correct"); namo.lk's own Sinhala meaning says "in all places" and the Brisbane booklet prints "Sabbatane" |
 | අධිවාසේ තුනෝ (1, section 17) | අධිවාසේතු නෝ | spacing only; the page itself prints it this way 3 times, the booklet 11 |
 | බෝදි (1, section 8) | බෝධි | 9 times on the page itself, 15 elsewhere on namo.lk, 13 in the booklet |
 
@@ -184,7 +185,9 @@ The owner said to use the spellings found in the other sources ("use anywhere el
 
 `පුණ්ය` and `භූතයා්` have been checked against the image of the printed page: the booklet itself is typed that way. The rest are checked the same way at the start of Stage 2. If the page image shows the right spelling, the fault is in the conversion and is fixed there instead, not listed as a correction.
 
-**Left as printed and marked "needs checking"** **(my call)**: `සබ්බ ධානේසු` in section 7. It is probably a slip for `ඨානේසු`: namo.lk's own Sinhala meaning says "in all places", and the Brisbane booklet prints "Sabbatane" in Roman letters. No stored source has the word in Sinhala letters, so it is not changed without the owner's word. The second line of the first verse of section 11 is treated the same way (see 5.2).
+**Left as printed and marked "needs checking"** **(my call)**: the second line of the first verse of section 11 (see 5.2). No stored source has the other reading in Sinhala letters, so it is not changed without the owner's word.
+
+**Confirmed by the owner on 2026-11-10** (after seeing the plan): `ඨානේසු` is the correct word in section 7; `සුරාමේරය` is correct in section 3; the Mahamevnawa English stays for sections 4–6.
 
 ### 5.4 Per-section record
 

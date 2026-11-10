@@ -236,7 +236,7 @@ testWidgets('an unknown address shows the not-found page, not an error', (t) asy
 | s19-v3 | 38 | 6–7 | 9–11 |
 
   Page 37 line 0 must be the subheading `දෙවියන්ට පින්දීම` and line 32 `තෙරුවන් සමාකර ගැනීම`. Section 18's heading becomes the owner's spelling by inserting the space (`පින්දීම` → `පින් දීම`), recorded in the section's `corrections` with reason `owner's spelling`. Page 38 lines from 13 on (the closing verse) are not used.
-- *Corrections:* exactly the table in §5.3, each scoped to its source (namo.lk rows to sections 1–17, booklet rows to 18–19), applied to `pali_si` and `sinhala`, each recorded on the verse where it applied with its count. `ම විසින්` matches only where `ම` is a whole word. After building, the total count per row must equal the number in §5.3 (ගච්චාමි 9, විඡ්ඡාචරණ 1, සමාදියාමී 4, සුමාමේරය 1, අධිවාසේ තුනෝ 1, බෝදි 1, රුස්කර 3, පුණ්ය 3, භූතයා් 1, ම විසින් 3, සාසණ 1, පුංඤ්ඤකෙත්තං 1, අනුත්ථරං 1, දේවානාගා 3); otherwise exit with an error naming the row. If a count is off because §5.3 counted lines this release leaves out (the closing verse), stop, correct the number in §5.3 with a note, and tell the owner in the stage report. Never loosen the check.
+- *Corrections:* exactly the table in §5.3, each scoped to its source (namo.lk rows to sections 1–17, booklet rows to 18–19), applied to `pali_si` and `sinhala`, each recorded on the verse where it applied with its count. `ම විසින්` matches only where `ම` is a whole word. After building, the total count per row must equal the number in §5.3 (ගච්චාමි 9, විඡ්ඡාචරණ 1, සමාදියාමී 4, සුමාමේරය 1, ධානේසු 1, අධිවාසේ තුනෝ 1, බෝදි 1, රුස්කර 3, පුණ්ය 3, භූතයා් 1, ම විසින් 3, සාසණ 1, පුංඤ්ඤකෙත්තං 1, අනුත්ථරං 1, දේවානාගා 3); otherwise exit with an error naming the row. If a count is off because §5.3 counted lines this release leaves out (the closing verse), stop, correct the number in §5.3 with a note, and tell the owner in the stage report. Never loosen the check.
 - *English from Mahamevnawa* (`right_column` lines whose `y` lies in the range, bold lines skipped; lines join with `\n`; a gap over 22 pt between lines becomes `\n\n`; a range that crosses a page continues with `\n`). The script asserts the first and last line of each range against the anchors given.
 
 | Verse | Page and y range | Starts with | Ends with | Kind |
@@ -270,7 +270,7 @@ testWidgets('an unknown address shows the not-found page, not an error', (t) asy
 | s18-v1 | 12 | `May all devas share this merit` | `Of happiness and prosperity.` |
 
 - *No English:* s08-v3, s09-v1, s14-v1, s16-v1, s17-v1, s18-v2, s18-v3. `pali_roman` is null for every verse.
-- *Needs checking* (each with a note carrying the wording from §5.2 / §5.3): s07-v1 (`සබ්බ ධානේසු`), s11-v1 (second line; and the English's last line), s12-v2 (`ලභාමි මොක්ඛං` against "cha hothu mokkam"), s18-v4 (`ලෝක සාසනං` against "sasanam"), s19-v3 (ending against "Supatipanna anuttara"). Every other verse is `checked against source`. A section's `check` is `needs checking` if any of its verses is.
+- *Needs checking* (each with a note carrying the wording from §5.2 / §5.3): s11-v1 (second line; and the English's last line), s12-v2 (`ලභාමි මොක්ඛං` against "cha hothu mokkam"), s18-v4 (`ලෝක සාසනං` against "sasanam"), s19-v3 (ending against "Supatipanna anuttara"). Every other verse is `checked against source`. A section's `check` is `needs checking` if any of its verses is.
 - *Sources:* sections 1–17 name `namo.lk`, locator `https://namo.lk/buddha-puja/`, collected `2026-11-09`; 18–19 name the paritha.org booklet with its URL and printed page; English records name the booklet and page.
 
 - [ ] **Step 1: Check the booklet against the printed page.** For each of `රුස්කර`, `ම විසින්`, `සාසණ`, `පුංඤ්ඤකෙත්තං`, `අනුත්ථරං`, `දේවානාගා`, run `python -I tools/fm_line_probe.py source_material/sinhala_pali_paritha_org/Booklet-1.pdf <39 or 40> <hex of the word> <scratchpad png>` and read the image. Then compare page 38 (PDF page 40) lines 0–11 with the page image, line by line. If the print shows the right spelling, the fault is in the conversion: fix `tools/fm_to_unicode.py`, re-run `tools/extract_booklet.py`, and take the row out of §5.3. Write what was found, one line per word, into the commit message.
@@ -281,8 +281,8 @@ HEADINGS = [...]            # the 19 headings, copied from the table in §5.1 of
 VERSES = [1,1,1,1,1,1,1,3,1,1,2,2,1,1,1,1,1,4,3]
 NO_ENGLISH = {"s08-v3","s09-v1","s14-v1","s16-v1","s17-v1","s18-v2","s18-v3"}
 BRISBANE = {"s07-v1","s08-v1","s08-v2","s10-v1","s11-v1","s11-v2","s12-v1","s12-v2","s13-v1","s15-v1","s18-v1"}
-NEEDS = {"s07-v1","s11-v1","s12-v2","s18-v4","s19-v3"}
-COUNTS = {...}              # the 14 rows above: printed form -> count
+NEEDS = {"s11-v1","s12-v2","s18-v4","s19-v3"}
+COUNTS = {...}              # the 15 rows above: printed form -> count
 
 def test_sections(self):      # [s["heading"] for s in sections] == HEADINGS; numbers 1..19; ids s01..s19
 def test_verse_counts(self):  # [len(s["verses"]) for s in sections] == VERSES   (28 verses)
@@ -386,7 +386,7 @@ test('English carries its own source', () {
   expect(verse('s01-v1').englishSource!.translator, 'not named by the source');
   expect(verse('s09-v1').englishSource, isNull);
 });
-test('five verses need checking and say why', ...);   // s07-v1, s11-v1, s12-v2, s18-v4, s19-v3; notes not empty
+test('four verses need checking and say why', ...);   // s11-v1, s12-v2, s18-v4, s19-v3; notes not empty
 test('corrections are read with from, to, count and reason', ...);   // s02-v1 has a correction with count 9
 test('text() treats an empty string as missing', ...);   // Verse.fromJson with "english": "  " -> text(english) == null
 ```
@@ -749,7 +749,7 @@ testWidgets('choosing Dark changes the app theme at once', ...);
 testWidgets('Sources names all four sources and says the app is not connected with namo.lk', (t) async {
   // expects the two exact sentences above, 'namo.lk', 'paritha.org', 'Mahamevnawa', 'Cynthia Gunawardana'
 });
-testWidgets('Sources lists the corrections and the open checks from the content', ...);   // with the bundled file: 14 distinct corrections + 1 heading; 5 verses to check
+testWidgets('Sources lists the corrections and the open checks from the content', ...);   // with the bundled file: 15 distinct corrections + 1 heading; 4 verses to check
 ```
 
 - [ ] **Step 2:** Run → fail. **Step 3:** Implement. **Step 4:** `flutter test` → pass.
@@ -809,8 +809,8 @@ testWidgets('on a wide screen the text column is at most 680 wide and centred', 
 ## Still open after this plan (for the owner, not for a task)
 
 - English for sections 9, 14, 16, 17, the third Bodhi verse and two of the එත්තාවතා verses; Roman-letter Pali for everything.
-- The five verses marked "needs checking" (listed on the Sources page), two of which only the owner or a monk can settle: `සබ්බ ධානේසු` in section 7 and the second line of the first incense verse in section 11.
-- Whether sections 4–6 should use the Brisbane booklet's plain translation instead of Mahamevnawa's explanation (one line in the pairing list).
+- The four verses marked "needs checking" (listed on the Sources page), one of which only the owner or a monk can settle: the second line of the first incense verse in section 11.
+- Settled by the owner on 2026-11-10: `ඨානේසු` in section 7 and `සුරාමේරය` in section 3 are correct (both are in the corrections list); the Mahamevnawa English stays for sections 4–6.
 - Android build (needs the Android toolchain), iOS build (needs a Mac), an Android adaptive icon, permanent app IDs, courtesy notes to the four sources, store publishing, web hosting and offline web.
 - Real chanting recordings; section cue times; lock-screen controls.
 
