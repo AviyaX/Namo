@@ -290,7 +290,8 @@ void main() {
     await t.tap(_play);
     await t.pump();
     await t.tap(_next);
-    await t.pumpAndSettle();
+    // The load ends while the old reader is still on the stack.
+    await t.pump(const Duration(milliseconds: 20));
     player.gate!.complete();
     await t.pumpAndSettle();
     expect(player.state.status, isNot(ChantStatus.playing));
@@ -311,6 +312,24 @@ void main() {
     await t.pumpAndSettle();
     expect(player.state.status, ChantStatus.playing);
     expect(_chantTip(t), 'Pause chanting');
+  });
+
+  testWidgets('leaving a reader with an untimed recording pauses it', (
+    t,
+  ) async {
+    final player = FakeChantPlayer();
+    await openReal(
+      t,
+      Routes.reader(realReadingId),
+      audio: true,
+      player: player,
+    );
+    await t.tap(find.byKey(const ValueKey('audio-play')));
+    await t.pump();
+    expect(player.state.status, ChantStatus.playing);
+    await t.tap(find.byTooltip('Back'));
+    await t.pumpAndSettle();
+    expect(player.state.status, ChantStatus.paused);
   });
 
   testWidgets('after a failure, play asks again and plays', (t) async {

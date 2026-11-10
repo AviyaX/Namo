@@ -329,7 +329,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     // Only a reader that started the chanting and still owns the player
     // silences it; the next pirith's reader may be playing already.
     final player = _player;
-    if (player != null && _startedChant && !_handedOver) {
+    if (player != null && !_handedOver && (_startedChant || _timed == null)) {
       unawaited(player.pause());
     }
     _chant.dispose();
