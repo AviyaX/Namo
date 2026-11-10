@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../tokens.dart';
 import '../typography.dart';
+import 'pressable.dart';
 
-/// A flat, tappable row: optional number, a title, an optional quiet subtitle.
+/// An editorial row: optional leading widget and number, a title, quiet
+/// subtitle and caption, an optional trailing widget. It has no divider of its
+/// own.
 class ListRow extends StatelessWidget {
   const ListRow({
     super.key,
     required this.title,
     required this.onTap,
     this.subtitle,
+    this.caption,
     this.number,
+    this.leading,
     this.titleFamily = NamoFonts.english,
     this.trailing,
     this.expanded,
@@ -19,12 +24,16 @@ class ListRow extends StatelessWidget {
   /// Shown at the right end of the row.
   final Widget? trailing;
 
+  /// Shown before the number and title.
+  final Widget? leading;
+
   /// For a row that opens and closes something: whether it is open now.
   /// Left null for an ordinary row.
   final bool? expanded;
 
   final String title;
   final String? subtitle;
+  final String? caption;
   final int? number;
   final String titleFamily;
   final VoidCallback onTap;
@@ -32,52 +41,53 @@ class ListRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    return Semantics(
-      button: true,
-      container: true,
-      expanded: expanded,
-      excludeSemantics: true,
-      label: [if (number != null) '$number', title, if (subtitle != null) subtitle]
-          .join(', '),
+    final titleStyle = titleFamily == NamoFonts.sinhala
+        ? NamoType.sectionTitleSinhala(p.text).copyWith(fontSize: 18)
+        : NamoType.cardTitle(p.text);
+    return Pressable(
       onTap: onTap,
-      child: InkWell(
-        onTap: onTap,
-        splashFactory: NoSplash.splashFactory,
-        highlightColor: p.surface,
-        hoverColor: p.surface,
-        focusColor: p.focus,
-        child: Container(
-          constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: p.divider, width: 1)),
-          ),
-          child: Row(
-            children: [
-              if (number != null)
-                SizedBox(
-                  width: 36,
-                  child: Text(
-                    '$number',
-                    style: namoText(NamoFonts.english, size: 16, color: p.heading),
-                  ),
-                ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        style: namoText(titleFamily, size: 18, color: p.text)),
-                    if (subtitle != null)
-                      Text(subtitle!,
-                          style: namoText(NamoFonts.sinhala,
-                              size: 14, color: p.textQuiet)),
-                  ],
+      expanded: expanded,
+      excludeChildSemantics: true,
+      semanticLabel: [
+        if (number != null) '$number',
+        title,
+        if (subtitle != null) subtitle,
+      ].join(', '),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: NamoSpace.lg, vertical: NamoSpace.md),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: NamoSpace.md),
+            ],
+            if (number != null)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(end: NamoSpace.md),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: NamoSpace.xl),
+                  child: Text('$number', style: NamoType.cardTitle(p.gold)),
                 ),
               ),
-              ?trailing,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: titleStyle),
+                  if (subtitle != null)
+                    Text(subtitle!, style: NamoType.body(p.textSecondary)),
+                  if (caption != null)
+                    Text(caption!, style: NamoType.caption(p.textSecondary)),
+                ],
+              ),
+            ),
+            if (trailing != null) ...[
+              const SizedBox(width: NamoSpace.md),
+              trailing!,
             ],
-          ),
+          ],
         ),
       ),
     );

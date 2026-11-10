@@ -7,6 +7,7 @@ import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/reader/reader_bottom_bar.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
+import 'package:buddhist_gatha/design/widgets/pressable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -121,7 +122,12 @@ void main() {
 
     testWidgets('every chooser row, list row and speed choice has a focus colour', (t) async {
       await openReal(t, Routes.settings, size: const Size(390, 1400));
-      for (final label in ['Pali', 'Verse by verse', 'Dark', 'Sources', 'Slow']) {
+      // Sources is an editorial ListRow: a Pressable, which draws a focus ring.
+      expect(
+        find.ancestor(of: find.text('Sources'), matching: find.byType(Pressable)),
+        findsOneWidget,
+      );
+      for (final label in ['Pali', 'Verse by verse', 'Dark', 'Slow']) {
         final ink = t.widget<InkWell>(
           find.ancestor(of: find.text(label), matching: find.byType(InkWell)).first,
         );

@@ -6,6 +6,7 @@ import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/typography.dart';
 import 'package:buddhist_gatha/home/reading_card.dart';
 import 'package:buddhist_gatha/router.dart';
+import 'package:buddhist_gatha/design/widgets/pressable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -110,7 +111,7 @@ void main() {
       find
           .ancestor(
             of: find.text('heading 1'),
-            matching: find.byType(Container),
+            matching: find.byType(Pressable),
           )
           .first,
     );
