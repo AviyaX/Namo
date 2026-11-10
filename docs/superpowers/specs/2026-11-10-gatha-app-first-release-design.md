@@ -1,4 +1,4 @@
-# Buddhist Gatha app, first release: design
+# Namo (Buddhist Gatha app), first release: design
 
 Date: 2026-11-10. Status: waiting for the owner's approval.
 
@@ -49,7 +49,10 @@ The first release holds one category, **Namaskaraya to Deviyanta Pin Dima** (the
 - Palette from the spec: warm ivory `#F5F1E8`, soft sand `#E8E0D2`, antique gold `#A88B5B`, forest green `#354638`, charcoal `#292A26`.
 - Fonts are bundled in the app, not fetched: Noto Sans Sinhala for Sinhala and for Pali in Sinhala letters; Noto Serif for Roman Pali; Lora for English. All three are under the SIL Open Font Licence.
 - Sources are credited inside the app.
-- The app has no name yet. The working title is "Buddhist Gatha", from the heading of the owner's spec. The scaffold's placeholder IDs (`com.example.…`) stay until the owner names the app; they must change before anything is published **(my call)**.
+- The app is called **Namo** (owner, 2026-11-10: "We can use Namo"). The name shown under the icon and in the app is "Namo". The project folder and the Dart package keep the name `buddhist_gatha`; users never see it **(my call)**.
+- The owner supplied the app icon: `design/branding/namo_icon_owner_supplied.png` (1254 × 1254, a seated Buddha on a lotus under a Bodhi tree, with the word "Namo"). Stage 1 makes the Android, iOS and web icons from it. iOS does not accept see-through corners, so the corners are filled with the icon's own dark background colour; nothing else in the picture is changed **(my call)**. The icon has a glow and a colour fade; the screens inside the app stay flat and plain as the spec asks, and use the icon only on the start-up screen and the Sources page **(my call)**.
+- The name is the same word as namo.lk, the site most of the text comes from, and the web version will do the same job as that site. People could take the app for namo.lk's own. The Sources page therefore says plainly that the app is not made by or connected with namo.lk, and the note to hi@namo.lk (5.6) should tell them the name **(my call)**.
+- The scaffold's placeholder IDs (`com.example.…`) must change before anything is published. The permanent ID needs a web domain the owner controls; it must not be built on namo.lk's domain.
 - The owner's original spec is kept beside this document as `2026-11-09-owner-spec.md`. Where the two differ, this document is the later decision.
 
 ## 4. Approaches considered
