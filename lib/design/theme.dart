@@ -90,6 +90,32 @@ ThemeData namoTheme(Brightness brightness) {
         shape: const RoundedRectangleBorder(borderRadius: radius),
       ),
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      elevation: 0,
+      backgroundColor: p.background,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      indicatorColor: p.surface,
+      iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
+          color: states.contains(WidgetState.selected)
+              ? p.heading
+              : p.textQuiet)),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) => style(12,
+          weight: 500,
+          color: states.contains(WidgetState.selected)
+              ? p.heading
+              : p.textQuiet)),
+    ),
+    navigationRailTheme: NavigationRailThemeData(
+      elevation: 0,
+      backgroundColor: p.background,
+      indicatorColor: p.surface,
+      labelType: NavigationRailLabelType.all,
+      selectedIconTheme: IconThemeData(color: p.heading),
+      unselectedIconTheme: IconThemeData(color: p.textQuiet),
+      selectedLabelTextStyle: style(12, weight: 500, color: p.heading),
+      unselectedLabelTextStyle: style(12, weight: 500, color: p.textQuiet),
+    ),
     bottomSheetTheme: BottomSheetThemeData(
       elevation: 0,
       backgroundColor: p.background,
