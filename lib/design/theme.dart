@@ -1,0 +1,105 @@
+import 'package:flutter/material.dart';
+
+import 'tokens.dart';
+import 'typography.dart';
+
+ThemeData namoTheme(Brightness brightness) {
+  final p = brightness == Brightness.light
+      ? NamoPalette.light
+      : NamoPalette.dark;
+  TextStyle style(double size, {int weight = 400, Color? color}) => namoText(
+      NamoFonts.english,
+      size: size,
+      color: color ?? p.text,
+      weight: weight);
+  final hairline = BorderSide(color: p.divider, width: 1);
+  const radius = BorderRadius.all(Radius.circular(8));
+
+  final textTheme = TextTheme(
+    displayLarge: style(22, weight: 600, color: p.heading),
+    displayMedium: style(22, weight: 600, color: p.heading),
+    displaySmall: style(22, weight: 600, color: p.heading),
+    headlineLarge: style(22, weight: 600, color: p.heading),
+    headlineMedium: style(22, weight: 600, color: p.heading),
+    headlineSmall: style(20, weight: 600, color: p.heading),
+    titleLarge: style(20, weight: 600, color: p.heading),
+    titleMedium: style(16, weight: 600),
+    titleSmall: style(14, weight: 600),
+    bodyLarge: style(16),
+    bodyMedium: style(16),
+    bodySmall: style(14, color: p.textQuiet),
+    labelLarge: style(16, weight: 500),
+    labelMedium: style(14, weight: 500),
+    labelSmall: style(12, weight: 500, color: p.textQuiet),
+  );
+
+  final scheme = ColorScheme.fromSeed(
+    seedColor: NamoColors.forest,
+    brightness: brightness,
+  ).copyWith(
+    surface: p.background,
+    onSurface: p.text,
+    primary: p.heading,
+    onPrimary: p.background,
+    secondary: p.accent,
+    outline: p.divider,
+    outlineVariant: p.divider,
+    surfaceTint: Colors.transparent,
+  );
+
+  return ThemeData(
+    useMaterial3: true,
+    brightness: brightness,
+    colorScheme: scheme,
+    scaffoldBackgroundColor: p.background,
+    canvasColor: p.background,
+    textTheme: textTheme,
+    extensions: [p],
+    dividerTheme: DividerThemeData(color: p.divider, thickness: 1, space: 1),
+    appBarTheme: AppBarTheme(
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      backgroundColor: p.background,
+      foregroundColor: p.heading,
+      surfaceTintColor: Colors.transparent,
+      titleTextStyle: textTheme.titleLarge,
+    ),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      color: p.background,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
+        shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
+        side: hairline,
+        shape: const RoundedRectangleBorder(borderRadius: radius),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
+        shape: const RoundedRectangleBorder(borderRadius: radius),
+      ),
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      elevation: 0,
+      backgroundColor: p.background,
+      surfaceTintColor: Colors.transparent,
+    ),
+    dialogTheme: DialogThemeData(
+      elevation: 0,
+      backgroundColor: p.background,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
+    ),
+  );
+}
