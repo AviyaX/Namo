@@ -7,5 +7,5 @@ through `tools/build_content.py` from `content/extracted/*.json`.
 The design and plan live in `.superpowers/` and `design/`.
 Run the tests with `flutter test`.
 Run the content check with `python -I -X utf8 tools/build_content.py` (this script arrives in a later stage).
-Run the web build with `flutter build web`.
+Build the web app with `flutter build web --no-web-resources-cdn`. This bundles the drawing engine (CanvasKit) with the app, so nothing is fetched from the internet.
 The Dart package and folder are still named `buddhist_gatha`.

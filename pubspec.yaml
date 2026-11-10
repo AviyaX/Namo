@@ -114,6 +114,11 @@ flutter:
         - asset: assets/fonts/Lora.ttf
         - asset: assets/fonts/Lora-Italic.ttf
           style: italic
+    # Flutter web downloads Roboto from the internet unless a family with
+    # this name is bundled. Pointing it at Lora keeps the app offline.
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Lora.ttf
 
 flutter_launcher_icons:
   image_path: "assets/branding/namo_icon_square.png"

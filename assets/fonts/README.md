@@ -12,3 +12,5 @@ All fonts are variable TTFs from the google/fonts repository, licensed under the
 | OFL-NotoSansSinhala.txt | notosanssinhala/OFL.txt | 2d6f7c43bce61f4b1919379f901bc613484f5285f520b6d29bb7c1f31b17e841 |
 | OFL-NotoSerif.txt | notoserif/OFL.txt | cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a |
 | OFL-Lora.txt | lora/OFL.txt | 1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716 |
+
+The `Roboto` family in `pubspec.yaml` is an alias for the bundled `Lora.ttf`. No Roboto file is shipped. Flutter web downloads Roboto from the internet unless a family with that name is bundled.
