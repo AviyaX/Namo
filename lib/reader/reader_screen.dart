@@ -109,6 +109,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// goes between pirith, so the section buttons are not worked out.
   bool _phrased = false;
 
+  /// Names the latest restore of a place; a touch ends it (see [_goToPlace]).
+  int _restoreGeneration = 0;
+
   double? _width;
   double? _previousTarget;
   double? _nextTarget;
@@ -126,6 +129,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _autoScroll = AutoScrollEngine(
       controller: _scroll,
       speed: ref.read(settingsProvider).scrollSpeed,
+      endKnown: () => _body.currentState?.endBuilt ?? true,
     )..addListener(_onAutoScroll);
     _ticker = createTicker(_onTick);
   }
@@ -406,16 +410,25 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// Returns to [place]. A pirith is built on demand, so where a far block
   /// sits is first an estimate: once the page has been laid out around the
   /// jump the place is looked for again, until it stops moving.
-  void _goToPlace(ReadingPosition place, [int tries = 6]) {
+  ///
+  /// A touch or wheel on the text ends the looking at once, so the page is
+  /// never pulled back from where the person put it.
+  void _goToPlace(ReadingPosition place, [int tries = 6, int? generation]) {
     if (_body.currentState == null || !_scroll.hasClients) return;
+    if (generation == null) _restoreGeneration++;
+    final mine = generation ?? _restoreGeneration;
+    if (mine != _restoreGeneration) return;
     _jumpTo(_offsetOf(place));
     if (!_phrased || tries <= 0) return;
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _body.currentState == null || !_scroll.hasClients) {
+      if (!mounted ||
+          mine != _restoreGeneration ||
+          _body.currentState == null ||
+          !_scroll.hasClients) {
         return;
       }
       if ((_offsetOf(place) - _scroll.offset).abs() > 0.5) {
-        _goToPlace(place, tries - 1);
+        _goToPlace(place, tries - 1, mine);
       }
     });
   }
@@ -462,18 +475,24 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// Null at either end, and for a reading that is not a pirith.
   VoidCallback? _neighbour(Library library, Reading reading, int step) {
     if (!reading.isPhrased) return null;
-    final category = library.categories.firstWhere(
-      (c) => c.readings.any((r) => r.id == reading.id),
-      orElse: () => Category(id: '', title: '', subtitle: '', readings: []),
-    );
-    final at = category.readings.indexWhere((r) => r.id == reading.id);
-    final to = at + step;
-    if (at < 0 || to < 0 || to >= category.readings.length) return null;
-    final id = category.readings[to].id;
+    final category = library.categories
+        .where((c) => c.readings.any((r) => r.id == reading.id))
+        .firstOrNull;
+    if (category == null) return null;
+    final to = category.numberOf(reading.id) - 1 + step;
+    if (to < 0 || to >= category.readings.length) return null;
+    final next = category.readings[to];
     return () {
       _autoScroll.pause();
       _save();
-      context.pushReplacement(Routes.reader(id, from: widget.from));
+      // Always at the beginning, whatever place is remembered for it.
+      context.pushReplacement(
+        Routes.reader(
+          next.id,
+          sectionId: next.sections.first.id,
+          from: widget.from,
+        ),
+      );
     };
   }
 
@@ -566,8 +585,14 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                       // A touch or a mouse wheel on the text pauses
                       // auto-scroll at once.
                       child: Listener(
-                        onPointerDown: (_) => _autoScroll.pause(),
-                        onPointerSignal: (_) => _autoScroll.pause(),
+                        onPointerDown: (_) {
+                          _restoreGeneration++;
+                          _autoScroll.pause();
+                        },
+                        onPointerSignal: (_) {
+                          _restoreGeneration++;
+                          _autoScroll.pause();
+                        },
                         child: ReaderBody(
                           key: _body,
                           items: items,

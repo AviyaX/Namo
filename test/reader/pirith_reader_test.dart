@@ -4,6 +4,7 @@ import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/home/continue_card.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
+import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
@@ -175,7 +176,7 @@ void main() {
 
       await t.tap(_next);
       await t.pumpAndSettle();
-      expect(_location(t), Routes.reader(readings[1].id));
+      expect(_location(t), startsWith(Routes.reader(readings[1].id)));
       expect(
         find.byKey(ValueKey('heading-${readings[1].sections[0].id}')),
         findsOneWidget,
@@ -185,11 +186,11 @@ void main() {
 
       await t.tap(_next);
       await t.pumpAndSettle();
-      expect(_location(t), Routes.reader(readings[2].id));
+      expect(_location(t), startsWith(Routes.reader(readings[2].id)));
 
       await t.tap(find.byTooltip('Previous pirith'));
       await t.pumpAndSettle();
-      expect(_location(t), Routes.reader(readings[1].id));
+      expect(_location(t), startsWith(Routes.reader(readings[1].id)));
 
       await t.tap(_next);
       await t.pumpAndSettle();
@@ -212,12 +213,65 @@ void main() {
       final c = _scroll(t);
       c.jumpTo(c.position.maxScrollExtent / 2);
       await t.pump();
+      // The block at the top of the page, worked out from what is built.
+      final bodyTop = t.getTopLeft(find.byType(ReaderBody)).dy;
+      String? atTop;
+      for (final v in readings[0].sections[0].verses) {
+        final f = find.byKey(ValueKey('block-${v.id}'));
+        if (f.evaluate().isNotEmpty && t.getTopLeft(f).dy <= bodyTop + 0.5) {
+          atTop = v.id;
+        }
+      }
+      expect(atTop, isNotNull);
       await t.tap(_next);
       await t.pumpAndSettle();
-      expect(
-        _container(t).read(positionProvider).byReading[readings[0].id],
-        isNotNull,
+      final kept = _container(
+        t,
+      ).read(positionProvider).byReading[readings[0].id]!.position;
+      expect(kept.verseId, atTop);
+      expect(kept.fraction, inInclusiveRange(0.0, 1.0));
+    });
+
+    testWidgets('next always opens at the beginning, the Library at the '
+        'remembered place', (t) async {
+      final readings = (await _pirith(t)).readings;
+      final target = readings[1];
+      final verses = target.sections[0].verses;
+      final verse = verses[verses.length ~/ 2];
+      final store = jsonEncode(
+        PositionState(
+          byReading: {
+            target.id: ReadingProgress(
+              position: ReadingPosition(
+                readingId: target.id,
+                sectionId: target.sections[0].id,
+                verseId: verse.id,
+                fraction: 0.3,
+              ),
+              progress: 0.5,
+            ),
+          },
+          lastReadingId: target.id,
+        ).toJson(),
       );
+      await openReal(
+        t,
+        Routes.reader(readings[0].id),
+        storeExtras: {positionKey: store},
+      );
+      await t.tap(_next);
+      await t.pumpAndSettle();
+      expect(_location(t), startsWith(Routes.reader(target.id)));
+      expect(_scroll(t).offset, 0);
+
+      // From the Library (a plain reader address) the remembered place shows.
+      _container(t).read(routerProvider).go(Routes.reader(target.id));
+      await t.pumpAndSettle();
+      expect(_scroll(t).offset, greaterThan(0));
+      final block = find.byKey(ValueKey('block-${verse.id}'));
+      expect(block, findsOneWidget);
+      final bodyTop = t.getTopLeft(find.byType(ReaderBody)).dy;
+      expect(t.getTopLeft(block).dy - bodyTop, lessThan(60));
     });
 
     testWidgets('Buddha Wandanawa keeps Previous / Next section', (t) async {
@@ -269,6 +323,168 @@ void main() {
       expect(t.widget<Tooltip>(_play).message, 'Start auto-scroll');
       expect(_scroll(t).offset, _scroll(t).position.maxScrollExtent);
       expect(t.takeException(), isNull);
+    });
+  });
+
+  group('the longest pirith, on demand', () {
+    const size = Size(320, 568);
+    Future<Reading> longest(WidgetTester t) async =>
+        _longest(await _pirith(t));
+
+    testWidgets('a far place (0.7 through) is where it was after reopening', (
+      t,
+    ) async {
+      final reading = await longest(t);
+      await openReal(
+        t,
+        Routes.reader(reading.id),
+        size: size,
+        deviceTextScale: 2.0,
+      );
+      final c = _scroll(t);
+      c.jumpTo(c.position.maxScrollExtent * 0.7);
+      await t.pump();
+      await _lets(t, const Duration(milliseconds: 700));
+      final place = _container(t).read(positionProvider);
+      final verseId = place.byReading[reading.id]!.position.verseId!;
+      final block = find.byKey(ValueKey('block-$verseId'));
+      final before = t.getTopLeft(block).dy;
+      final store = jsonEncode(place.toJson());
+
+      await t.pumpWidget(const SizedBox());
+      await openReal(
+        t,
+        Routes.reader(reading.id),
+        size: size,
+        deviceTextScale: 2.0,
+        storeExtras: {positionKey: store},
+      );
+      await t.pumpAndSettle();
+      expect(block, findsOneWidget);
+      expect(t.getTopLeft(block).dy, closeTo(before, 2));
+    });
+
+    testWidgets('a touch while the place is still being looked for ends it', (
+      t,
+    ) async {
+      final reading = await longest(t);
+      await openReal(
+        t,
+        Routes.reader(reading.id),
+        size: size,
+        deviceTextScale: 2.0,
+      );
+      final c = _scroll(t);
+      c.jumpTo(c.position.maxScrollExtent * 0.7);
+      await t.pump();
+      await _lets(t, const Duration(milliseconds: 700));
+      final place = _container(t).read(positionProvider);
+      final store = jsonEncode(place.toJson());
+
+      // Where a quiet reopening ends up.
+      await t.pumpWidget(const SizedBox());
+      await openReal(
+        t,
+        Routes.reader(reading.id),
+        size: size,
+        deviceTextScale: 2.0,
+        storeExtras: {positionKey: store},
+      );
+      final settled = _scroll(t).offset;
+
+      // The same, touched as soon as the first jump has happened.
+      await t.pumpWidget(const SizedBox());
+      await openReal(
+        t,
+        Routes.reader(reading.id),
+        size: size,
+        deviceTextScale: 2.0,
+        storeExtras: {positionKey: store},
+        settle: false,
+      );
+      for (var i = 0; i < 30; i++) {
+        await t.pump(const Duration(milliseconds: 16));
+        if (find.byType(ReaderBody).evaluate().isNotEmpty &&
+            _scroll(t).offset > 0) {
+          break;
+        }
+      }
+      expect(_scroll(t).offset, greaterThan(0));
+      final touch = await t.startGesture(const Offset(160, 300));
+      final held = _scroll(t).offset;
+      await touch.up();
+      await t.pumpAndSettle();
+      expect(_scroll(t).offset, closeTo(held, 0.5));
+      expect(held, isNot(closeTo(settled, 2)));
+    });
+
+    Future<void> startAt(WidgetTester t, double fraction) async {
+      final reading = await longest(t);
+      await openReal(
+        t,
+        Routes.reader(reading.id),
+        size: size,
+        deviceTextScale: 2.0,
+        settings: const AppSettings(scrollSpeed: 60),
+      );
+      final c = _scroll(t);
+      c.jumpTo(c.position.maxScrollExtent * fraction);
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 100));
+      await t.tap(_play);
+      await t.pump();
+      expect(t.widget<Tooltip>(_play).message, 'Pause auto-scroll');
+    }
+
+    bool finished(WidgetTester t) =>
+        t.widget<Tooltip>(_play).message == 'Start auto-scroll';
+
+    Future<void> expectFinishedAtEnd(WidgetTester t) async {
+      final reading = await longest(t);
+      final last = reading.sections[0].verses.last;
+      expect(find.byKey(ValueKey('block-${last.id}')), findsOneWidget);
+      expect(_scroll(t).offset, _scroll(t).position.maxScrollExtent);
+    }
+
+    testWidgets('started near the end it finishes with the last block built', (
+      t,
+    ) async {
+      await startAt(t, 0.97);
+      for (var i = 0; i < 20000 && !finished(t); i++) {
+        await t.pump(const Duration(milliseconds: 100));
+        if (finished(t)) await expectFinishedAtEnd(t);
+      }
+      expect(finished(t), isTrue);
+      await expectFinishedAtEnd(t);
+      expect(t.takeException(), isNull);
+    });
+
+    testWidgets('started mid-way it does not finish early and a touch '
+        'pauses it', (t) async {
+      await startAt(t, 0.5);
+      final from = _scroll(t).offset;
+      for (var i = 0; i < 300; i++) {
+        await t.pump(const Duration(milliseconds: 100));
+        expect(finished(t), isFalse);
+      }
+      expect(_scroll(t).offset, greaterThan(from));
+      final touch = await t.startGesture(const Offset(160, 300));
+      await t.pump();
+      expect(t.widget<Tooltip>(_play).message, 'Resume auto-scroll');
+      await touch.up();
+      await t.pump();
+      final paused = _scroll(t).offset;
+      await _lets(t, const Duration(milliseconds: 500), stepMs: 16);
+      expect(_scroll(t).offset, paused);
+    });
+
+    testWidgets('started at 0.9 it runs on to the real end', (t) async {
+      await startAt(t, 0.9);
+      for (var i = 0; i < 30000 && !finished(t); i++) {
+        await t.pump(const Duration(milliseconds: 100));
+      }
+      expect(finished(t), isTrue);
+      await expectFinishedAtEnd(t);
     });
   });
 

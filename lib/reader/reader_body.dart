@@ -50,6 +50,13 @@ class ReaderBodyState extends State<ReaderBody> {
 
   ScrollController get controller => widget.controller;
 
+  /// Whether the last item exists, so the scroll extent is the real one.
+  /// Always true for a reading that is built at once.
+  bool get endBuilt =>
+      !_lazy ||
+      (_itemKeys.length >= widget.items.length &&
+          _itemKeys[widget.items.length - 1].currentContext != null);
+
   bool get _lazy => widget.items.any((i) => i is PhraseBlockItem);
 
   /// [box]'s top in scroll coordinates, or null while it has no layout.

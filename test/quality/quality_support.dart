@@ -119,6 +119,7 @@ Future<void> openReal(
   bool audioFails = false,
   List<Override> overrides = const [],
   Map<String, String> storeExtras = const {},
+  bool settle = true,
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -173,6 +174,7 @@ Future<void> openReal(
     ],
     location: location,
     size: size,
+    settle: settle,
   );
 }
 

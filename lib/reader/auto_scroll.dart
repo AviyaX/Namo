@@ -11,8 +11,19 @@ enum AutoScrollStatus { stopped, running, paused, finished }
 /// something else moved it (a finger, a mouse wheel, the keyboard), and the
 /// engine pauses rather than pull the page back.
 class AutoScrollEngine extends ChangeNotifier {
-  AutoScrollEngine({required this._controller, required double speed})
-    : _speed = _clamp(speed);
+  AutoScrollEngine({
+    required this._controller,
+    required double speed,
+    this.endKnown,
+  }) : _speed = _clamp(speed);
+
+  /// For a page built on demand, whose `maxScrollExtent` is only an
+  /// estimate until the last item exists: false while the end is not yet
+  /// real, so the page is neither taken to be at its end nor finished.
+  /// Null (an ordinary page) means the end is always known.
+  final bool Function()? endKnown;
+
+  bool get _endIsReal => endKnown?.call() ?? true;
 
   /// Speeds in logical pixels per second.
   static const slow = 12.0,
@@ -60,7 +71,7 @@ class AutoScrollEngine extends ChangeNotifier {
   void play() {
     if (!_controller.hasClients) return;
     final end = _controller.position.maxScrollExtent;
-    final atEnd = end > 0 && _controller.offset >= end;
+    final atEnd = end > 0 && _controller.offset >= end && _endIsReal;
     if (_status == AutoScrollStatus.finished || atEnd) _controller.jumpTo(0);
     _target = _controller.offset;
     _setStatus(AutoScrollStatus.running);
@@ -100,7 +111,9 @@ class AutoScrollEngine extends ChangeNotifier {
     if (_target >= end) {
       _target = end;
       _controller.jumpTo(end);
-      _setStatus(AutoScrollStatus.finished);
+      // An estimated end is not the end: the page carries on once more of
+      // it has been built.
+      if (_endIsReal) _setStatus(AutoScrollStatus.finished);
     } else {
       _controller.jumpTo(_target);
     }
