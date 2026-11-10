@@ -64,10 +64,7 @@ void main() {
         reason: label,
       );
     }
-    final bars = t.widgetList<AppBar>(find.byType(AppBar));
-    for (final bar in bars) {
-      expect(bar.elevation, 0);
-    }
+    expect(find.byType(AppBar), findsNothing);
     expect(t.takeException(), isNull);
   });
 

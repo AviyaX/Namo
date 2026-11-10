@@ -18,7 +18,7 @@ class NamoSwitch extends StatelessWidget {
       value: value,
       onChanged: onChanged,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      thumbColor: WidgetStatePropertyAll(value ? p.onSage : p.textMuted),
+      thumbColor: WidgetStatePropertyAll(value ? p.onSage : p.textSecondary),
       trackColor: WidgetStatePropertyAll(value ? p.sage : p.border),
       trackOutlineColor: WidgetStatePropertyAll(value ? p.sage : p.textMuted),
     );

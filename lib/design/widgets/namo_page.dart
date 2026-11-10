@@ -27,9 +27,9 @@ class NamoPage extends StatelessWidget {
       body: SingleChildScrollView(
         controller: controller,
         padding: EdgeInsets.fromLTRB(
-          margin,
+          margin + inset.left,
           inset.top + NamoSpace.xl,
-          margin,
+          margin + inset.right,
           inset.bottom + NamoSpace.xl,
         ),
         child: Center(

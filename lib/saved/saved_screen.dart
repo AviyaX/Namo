@@ -60,7 +60,7 @@ class SavedScreen extends ConsumerWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
-                  child: Overline('Bookmarks · ${bookmarks.length}'),
+                  child: Overline('Bookmarks · ${bookmarks.length}', header: true),
                 ),
                 const SizedBox(height: NamoSpace.sm),
                 if (bookmarks.isEmpty) const _Empty('No bookmarks yet.'),
@@ -77,7 +77,7 @@ class SavedScreen extends ConsumerWidget {
                         from: ReaderFrom.saved,
                       ),
                     ),
-                    trailing: NamoIconButton(
+                    action: NamoIconButton(
                       icon: Symbols.close_rounded,
                       tooltip: 'Remove bookmark: ${section.heading}',
                       color: p.textSecondary,
@@ -88,7 +88,7 @@ class SavedScreen extends ConsumerWidget {
                 const SizedBox(height: NamoSpace.xxl),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
-                  child: Overline('Favourites · ${favourites.length}'),
+                  child: Overline('Favourites · ${favourites.length}', header: true),
                 ),
                 const SizedBox(height: NamoSpace.sm),
                 if (favourites.isEmpty) const _Empty('No favourites yet.'),
@@ -102,7 +102,7 @@ class SavedScreen extends ConsumerWidget {
                     onTap: () => context.go(
                       Routes.reader(reading.id, from: ReaderFrom.saved),
                     ),
-                    trailing: NamoIconButton(
+                    action: NamoIconButton(
                       icon: Symbols.close_rounded,
                       tooltip: 'Remove favourite: ${reading.title}',
                       color: p.textSecondary,

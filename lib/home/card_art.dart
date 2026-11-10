@@ -40,6 +40,19 @@ String sectionCountLabel(int n) => n == 1 ? '1 section' : '$n sections';
 /// Width of the bundled pictures; decoding never goes wider.
 const int _maxDecodeWidth = 1600;
 
+/// The width to decode a picture at: the width it is shown at, rounded up to
+/// whole steps of 128 logical pixels, times the device pixel ratio. Resizing
+/// the window by a few pixels then keeps the same decode instead of
+/// decoding the file again for every pixel.
+@visibleForTesting
+int pictureDecodeWidth(double shownWidth, double devicePixelRatio) {
+  if (!shownWidth.isFinite || !devicePixelRatio.isFinite) {
+    return _maxDecodeWidth;
+  }
+  final steps = (shownWidth / 128).ceil().clamp(1, 1 << 20);
+  return (steps * 128 * devicePixelRatio).clamp(1, _maxDecodeWidth).round();
+}
+
 /// The proportion of the bundled card pictures (16 : 9); used to work out how
 /// wide a picture must be decoded to cover a box.
 const double _cardPictureAspect = 16 / 9;
@@ -85,7 +98,6 @@ class TopicPicture extends StatelessWidget {
                   box.maxWidth,
                   box.maxHeight * _cardPictureAspect,
                 );
-                final pixels = cover * MediaQuery.devicePixelRatioOf(context);
                 return Image.asset(
                   asset,
                   key: const ValueKey('card-art-picture'),
@@ -93,9 +105,10 @@ class TopicPicture extends StatelessWidget {
                   alignment: alignment,
                   width: double.infinity,
                   height: double.infinity,
-                  cacheWidth: pixels.isFinite
-                      ? pixels.clamp(1, _maxDecodeWidth).round()
-                      : _maxDecodeWidth,
+                  cacheWidth: pictureDecodeWidth(
+                    cover,
+                    MediaQuery.devicePixelRatioOf(context),
+                  ),
                   // The plain ground shows until the first frame is decoded.
                   // `sync` is true when the picture was already decoded (in
                   // the image cache): show it at once, with no one-frame

@@ -28,7 +28,7 @@ void main() {
       s = t.widget<Switch>(find.byType(Switch));
       expect(s.trackColor!.resolve({}), p.border);
       expect(s.trackOutlineColor!.resolve({}), p.textMuted);
-      expect(s.thumbColor!.resolve({}), p.textMuted);
+      expect(s.thumbColor!.resolve({}), p.textSecondary);
     });
   }
 

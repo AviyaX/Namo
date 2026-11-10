@@ -46,14 +46,20 @@ class PageHeader extends StatelessWidget {
 
 /// A small label above a block, shown as written.
 class Overline extends StatelessWidget {
-  const Overline(this.text, {super.key, this.color});
+  const Overline(this.text, {super.key, this.color, this.header = false});
 
   final String text;
   final Color? color;
 
+  /// True when this labels a group of rows, so screen readers can jump to it.
+  final bool header;
+
   @override
-  Widget build(BuildContext context) => Text(
-        text,
-        style: NamoType.overline(color ?? NamoPalette.of(context).textSecondary),
-      );
+  Widget build(BuildContext context) {
+    final label = Text(
+      text,
+      style: NamoType.overline(color ?? NamoPalette.of(context).textSecondary),
+    );
+    return header ? Semantics(header: true, child: label) : label;
+  }
 }

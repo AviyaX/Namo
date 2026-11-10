@@ -78,31 +78,6 @@ ThemeData namoTheme(Brightness brightness) {
         shape: const RoundedRectangleBorder(borderRadius: radius),
       ),
     ),
-    navigationBarTheme: NavigationBarThemeData(
-      elevation: 0,
-      backgroundColor: p.background,
-      surfaceTintColor: Colors.transparent,
-      shadowColor: Colors.transparent,
-      indicatorColor: p.surface,
-      iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
-          color: states.contains(WidgetState.selected)
-              ? p.sage
-              : p.textSecondary)),
-      labelTextStyle: WidgetStateProperty.resolveWith((states) =>
-          NamoType.overline(states.contains(WidgetState.selected)
-              ? p.sage
-              : p.textSecondary)),
-    ),
-    navigationRailTheme: NavigationRailThemeData(
-      elevation: 0,
-      backgroundColor: p.background,
-      indicatorColor: p.surface,
-      labelType: NavigationRailLabelType.all,
-      selectedIconTheme: IconThemeData(color: p.sage),
-      unselectedIconTheme: IconThemeData(color: p.textSecondary),
-      selectedLabelTextStyle: NamoType.overline(p.sage),
-      unselectedLabelTextStyle: NamoType.overline(p.textSecondary),
-    ),
     snackBarTheme: SnackBarThemeData(
       elevation: 0,
       backgroundColor: p.surface,
@@ -127,15 +102,6 @@ ThemeData namoTheme(Brightness brightness) {
         highlightColor: p.pressed,
         hoverColor: p.hovered,
       ),
-    ),
-    // Off must show: an outline and thumb in the muted text colour.
-    switchTheme: SwitchThemeData(
-      trackColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? p.sage : p.border),
-      trackOutlineColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? p.sage : p.textMuted),
-      thumbColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? p.onSage : p.textSecondary),
     ),
     sliderTheme: SliderThemeData(
       activeTrackColor: p.sage,

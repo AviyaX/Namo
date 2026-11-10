@@ -21,11 +21,36 @@ import 'today.dart';
 /// words need more room).
 const _collectionWidth = 200.0, _collectionHeight = 148.0;
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key = const ValueKey('screen-home')});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// The greeting and the day's verse are worked out from the clock, so
+  /// work them out again when the app comes back after a while away.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final width = MediaQuery.sizeOf(context).width;
     final wide = width >= NamoSizes.wideBreakpoint;
@@ -63,6 +88,9 @@ class _Blocks extends ConsumerWidget {
         ? NamoSpace.xl
         : NamoSpace.xxl;
     final selection = ref.watch(settingsProvider.select((s) => s.languages));
+    final fontScale = ref.watch(settingsProvider.select((s) => s.fontScale));
+    final lineSpacing =
+        ref.watch(settingsProvider.select((s) => s.lineSpacing));
     final showContinue = ref.watch(
       positionProvider.select((s) => hasContinue(s, library)),
     );
@@ -72,7 +100,12 @@ class _Blocks extends ConsumerWidget {
     final continueCard = showContinue ? ContinueCard(library: library) : null;
     final gathaCard = pick == null
         ? null
-        : GathaCard(pick: pick, selection: selection);
+        : GathaCard(
+            pick: pick,
+            selection: selection,
+            fontScale: fontScale,
+            lineSpacing: lineSpacing,
+          );
     final featured = first == null ? null : FeaturedCard(category: first);
 
     final blocks = <Widget>[

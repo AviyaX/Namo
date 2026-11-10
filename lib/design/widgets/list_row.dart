@@ -18,13 +18,19 @@ class ListRow extends StatelessWidget {
     this.leading,
     this.titleFamily = NamoFonts.english,
     this.trailing,
+    this.action,
     this.expanded,
     this.detail,
     this.detailLabel,
   });
 
-  /// Shown at the right end of the row.
+  /// Shown at the right end of the row, inside the tappable row (a chevron,
+  /// say). It is part of the row's one spoken label.
   final Widget? trailing;
+
+  /// A control of its own at the right end (a remove button): it sits beside
+  /// the tappable row, not inside it, so screen readers still find it.
+  final Widget? action;
 
   /// Shown before the number and title.
   final Widget? leading;
@@ -51,7 +57,7 @@ class ListRow extends StatelessWidget {
     final titleStyle = titleFamily == NamoFonts.sinhala
         ? NamoType.sectionTitleSinhala(p.text).copyWith(fontSize: 18)
         : NamoType.cardTitle(p.text);
-    return Pressable(
+    final row = Pressable(
       onTap: onTap,
       expanded: expanded,
       excludeChildSemantics: true,
@@ -99,6 +105,17 @@ class ListRow extends StatelessWidget {
           ],
         ),
       ),
+    );
+    if (action == null) return row;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(child: row),
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: NamoSpace.sm),
+          child: action!,
+        ),
+      ],
     );
   }
 }

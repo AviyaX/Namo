@@ -192,7 +192,11 @@ class _Results extends StatelessWidget {
             number: h.section.number,
             title: h.section.heading,
             titleFamily: NamoFonts.sinhala,
-            detailLabel: h.line,
+            // Spoken as it is drawn: the language is named when it is not
+            // one of the chosen ones.
+            detailLabel: h.line == null || h.lineLanguageChosen
+                ? h.line
+                : '${h.lineLanguage!.label}, ${h.line}',
             detail: h.line == null ? null : _HitLine(hit: h),
             onTap: () => context.go(
               Routes.reader(h.reading.id, sectionId: h.section.id),

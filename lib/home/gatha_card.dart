@@ -13,10 +13,21 @@ import 'today.dart';
 /// Today's verse in the chosen languages (the Pali when none of them has
 /// it), its section heading and a way to read it in its place.
 class GathaCard extends StatelessWidget {
-  const GathaCard({super.key, required this.pick, required this.selection});
+  const GathaCard({
+    super.key,
+    required this.pick,
+    required this.selection,
+    this.fontScale = 1.0,
+    this.lineSpacing = 1.6,
+  });
 
   final GathaPick pick;
   final LanguageSelection selection;
+
+  /// The reader's text size and line spacing, so the verse looks here as it
+  /// does there.
+  final double fontScale;
+  final double lineSpacing;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +47,8 @@ class GathaCard extends StatelessWidget {
               key: ValueKey('gatha-text-$i'),
               style: readingStyle(
                 language,
-                fontScale: 1.0,
-                lineSpacing: 1.6,
+                fontScale: fontScale,
+                lineSpacing: lineSpacing,
                 color: i == 0 ? p.text : p.textSecondary,
               ),
             ),

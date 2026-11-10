@@ -339,7 +339,7 @@ void main() {
         scrollable: find.byType(Scrollable).first);
     await t.drag(find.byType(Scrollable).first, const Offset(0, -2000));
     await t.pump();
-    final bar = t.getRect(find.byKey(const ValueKey('nav-settings')));
+    final bar = t.getRect(find.byKey(const ValueKey('nav-bar')));
     expect(t.getRect(group('About Namo')).bottom, lessThan(bar.top));
   });
 
