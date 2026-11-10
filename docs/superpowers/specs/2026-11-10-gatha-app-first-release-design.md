@@ -1,6 +1,6 @@
 # Namo (Buddhist Gatha app), first release: design
 
-Date: 2026-11-10. Status: waiting for the owner's approval.
+Date: 2026-11-10. Status: approved by the owner on 2026-11-10 ("yes build it"). Changed the same day, after approval, to add the second English source the owner then supplied (5.2, 5.3, 5.5, 5.6).
 
 Lines marked **(my call)** are choices Claude made that the owner has not yet confirmed. Everything else comes from the owner's written spec or from what the owner said in conversation.
 
@@ -28,7 +28,7 @@ The first release holds one category, **Namaskaraya to Deviyanta Pin Dima** (the
 **Non-goals for this release**
 
 - More categories (the other 31 namo.lk articles are stored and can follow).
-- English for the shrine and offering sections (7–17) and for the three එත්තාවතා verses of section 18. Roman-letter Pali for any section. The slots exist; the text does not yet.
+- English for sections 9, 14, 16 and 17, for the third verse of section 8 and for two of the three එත්තාවතා verses of section 18: neither English source has them. Roman-letter Pali for any section. The slots exist; the text does not yet.
 - Offline use and "install to home screen" for the **web** version. Android and iOS are offline by nature. Web offline depends on where the site is hosted, which is not decided **(my call)**.
 - Publishing to the Play Store, the App Store or a public website. This release ends at a working, tested app. Publishing is a separate step with its own decisions (store accounts, icon, permanent app IDs).
 - Real chanting recordings, lock-screen audio controls, audio timed to the verses.
@@ -120,22 +120,35 @@ The booklet follows section 19 with an untitled closing verse (ඉමිනා �
 |---|---|
 | Pali, in Sinhala letters | Present for all 19 sections |
 | Sinhala (the meaning) | Present for all 19 sections |
-| English | Present for sections 1–6 and 19 and for half of section 18. Empty for sections 7–17 |
+| English | Present for sections 1–7, 10–13, 15 and 19, for two of the three verses of section 8 and for four of the six verses of section 18. Empty for sections 9, 14, 16 and 17 |
 | Pali, in Roman letters | Empty |
 
-**English.** The owner supplied the Mahamevnawa "Vandana" PDF as "the English one", and confirmed on 2026-11-10 that the app uses it ("english - use mahamevnawa"). Its English is used wherever it has the same verse. What it has:
+**English** comes from two booklets the owner supplied.
 
-| Sections | What the PDF gives |
+1. The Mahamevnawa "Vandana" PDF. The owner confirmed on 2026-11-10 that the app uses it ("english - use mahamevnawa").
+2. "Daily Buddha Vandana (Pali Gatha and English Translations)", prepared by Cynthia Gunawardana for the Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane. The owner supplied it on 2026-11-10 ("here one english one"), after approving this design. Below it is called the Brisbane booklet.
+
+Where both have the same verse, the Mahamevnawa English is used, because the owner chose it; the Brisbane booklet fills what Mahamevnawa lacks **(my call)**.
+
+| Sections | English used |
 |---|---|
-| 1–3 (homage, refuges, precepts) | A line-for-line translation |
-| 4–6 (qualities of the Buddha, Dhamma and Sangha) | An explanation of each quality, word by word, not a line-for-line translation. It is shown as the English for these sections and the record marks it as an explanation **(my call)** |
-| 18 | The three ආකාසට්ඨා verses. It does not have the three එත්තාවතා verses |
-| 19 | All three forgiveness verses |
-| 7–17 (shrine and offerings) | Nothing. Its "Buddha Puja" is a different text |
+| 1–3 (homage, refuges, precepts) | Mahamevnawa: a line-for-line translation |
+| 4–6 (qualities of the Buddha, Dhamma and Sangha) | Mahamevnawa: an explanation of each quality, word by word, not a line-for-line translation. The record marks it as an explanation **(my call)**. The Brisbane booklet has a plain translation of the same three passages; swapping is one line in the pairing list if the owner prefers it |
+| 7 (shrines) | Brisbane |
+| 8 (Bodhi tree) | Brisbane, for the first two verses. Neither has the third verse (ඉන්ද්‍රනීල වණ්ණ …) |
+| 10 (lamps), 11 (incense, both verses), 12 (flowers, both verses), 13 (water), 15 (gilanpasa) | Brisbane |
+| 18 | Mahamevnawa for the three ආකාසට්ඨා verses. Brisbane for the first එත්තාවතා verse (සබ්බේ දේවා). Neither has the other two (භූතා, සත්තා) |
+| 19 | Mahamevnawa: all three forgiveness verses |
+| 9 (invitation), 14 (food), 16 (betel), 17 (all together) | None. The Brisbane booklet's "Offering of Medicinal Drinks" is a different verse from section 16 and is not used |
 
-Each English verse is paired with its Pali verse by an explicit list in the build script (5.5). Each pairing is checked by reading the Roman-letter Pali that the PDF prints beside the English against the app's Pali. Where the two differ, the difference is recorded on the verse and the verse is marked "needs checking". One is known already: in the first ආකාසට්ඨා verse the booklet reads `ලෝක සාසනං` and the PDF reads "sasanam".
+Each English verse is paired with its Pali verse by an explicit list in the build script (5.5). Each pairing is checked by reading the Roman-letter Pali that the booklet prints with the English against the app's Pali. Where the two differ, the difference is recorded on the verse and the verse is marked "needs checking". Known already:
 
-The PDF's Roman-letter Pali is **not** used **(my call)**. It is printed without the marks Roman Pali needs ("sammasambuddhassa", not "sammāsambuddhassa"), and the spec asks for correct Pali marks.
+- Section 18, first ආකාසට්ඨා verse: the app's Pali reads `ලෝක සාසනං`; Mahamevnawa reads "sasanam". (The Brisbane booklet reads "loka sasanam", as the app does.)
+- Section 19, Sangha verse: the app's Pali ends `පුඤ්ඤක්ඛෙත්තං අනුත්තරං`; Mahamevnawa ends "Supatipanna anuttara".
+- Section 11, first verse: namo.lk prints the second line as `සුගන්ධිනාහං ගන්ධේන – පූජයාමි තථාගතං`, the same line as in the next verse. The Brisbane booklet reads "Pujaye Pujaniyanam tam / Puja bhajana muttamam", and namo.lk's own Sinhala meaning translates that reading. No stored source has that line in Sinhala letters, so the Pali stays as namo.lk prints it and is marked "needs checking". The Brisbane English for this verse also ends with a line that belongs to the lamp verse ("Who dispels the darkness"); it is kept as printed.
+- Section 12, second verse: the app's Pali reads `ලභාමි මොක්ඛං` (the paritha.org booklet reads the same); the Brisbane booklet reads "cha hothu mokkam" and translates that.
+
+Neither booklet's Roman-letter Pali is used **(my call)**. Both print it without the marks Roman Pali needs, or with non-standard ones ("sammasambuddhassa", "Gacchâmi"), and the spec asks for correct Pali marks.
 
 **Rules.** The four slots are stored as separate fields and never derived from each other. An empty field stays empty. Where a chosen language is missing from a section, the section shows one short, quiet line under its heading ("English is not yet available for this section", or "for part of this section") and nothing on each verse **(my call)**.
 
@@ -152,6 +165,8 @@ The owner said to use the spellings found in the other sources ("use anywhere el
 | ගච්චාමි (9 places) | ගච්ඡාමි | 20 uses elsewhere on namo.lk, 9 in the booklet |
 | විඡ්ඡාචරණ (1) | විජ්ජාචරණ | 18 elsewhere on namo.lk, 4 in the booklet |
 | සමාදියාමී (4) | සමාදියාමි | 10 elsewhere on namo.lk, 5 in the booklet; the page itself uses it twice |
+| අධිවාසේ තුනෝ (1, section 17) | අධිවාසේතු නෝ | spacing only; the page itself prints it this way 3 times, the booklet 11 |
+| බෝදි (1, section 8) | බෝධි | 9 times on the page itself, 15 elsewhere on namo.lk, 13 in the booklet |
 
 **paritha.org booklet, pages 37–38 (sections 18–19)**
 
@@ -168,17 +183,17 @@ The owner said to use the spellings found in the other sources ("use anywhere el
 
 `පුණ්ය` and `භූතයා්` have been checked against the image of the printed page: the booklet itself is typed that way. The rest are checked the same way at the start of Stage 2. If the page image shows the right spelling, the fault is in the conversion and is fixed there instead, not listed as a correction.
 
-**Left as printed and marked "needs checking"** **(my call)**: `සබ්බ ධානේසු` in section 7. It is probably a slip for `ඨානේසු`, but no stored source has that verse to confirm it.
+**Left as printed and marked "needs checking"** **(my call)**: `සබ්බ ධානේසු` in section 7. It is probably a slip for `ඨානේසු`: namo.lk's own Sinhala meaning says "in all places", and the Brisbane booklet prints "Sabbatane" in Roman letters. No stored source has the word in Sinhala letters, so it is not changed without the owner's word. The second line of the first verse of section 11 is treated the same way (see 5.2).
 
 ### 5.4 Per-section record
 
-Each section carries: its heading; its verses in order; for each verse the four language fields above; source name, source address or page, and date collected; translator (none of the three sources names one, so this reads "not named by the source"); a check status (`unchecked`, `checked against source`, or `needs checking`); and its list of corrections. English carries its own source, since it comes from a different place than the Pali and Sinhala.
+Each section carries: its heading; its verses in order; for each verse the four language fields above; source name, source address or page, and date collected; translator (namo.lk, the paritha.org booklet and the Mahamevnawa PDF name none, so this reads "not named by the source"; English from the Brisbane booklet reads "prepared by Cynthia Gunawardana"); a check status (`unchecked`, `checked against source`, or `needs checking`); and its list of corrections. English carries its own source, since it comes from a different place than the Pali and Sinhala.
 
 Audio is recorded on the reading, not on each section: see section 8.
 
 ### 5.5 How the content file is made
 
-A script in `tools/` builds `assets/content/namaskaraya_to_pin_dima.json` from the three already-extracted files in `content/extracted/` (`namo_lk.json`, `paritha_booklet.json`, `mahamevnawa_vandana.json`). It applies only the corrections listed in 5.3 and the English pairing list described in 5.2. It stops with an error if a correction does not match the number of places expected. Nobody types verse text by hand. The script can be re-run at any time and must produce the same file.
+A script in `tools/` builds `assets/content/namaskaraya_to_pin_dima.json` from the four already-extracted files in `content/extracted/` (`namo_lk.json`, `paritha_booklet.json`, `mahamevnawa_vandana.json`, `yasodhara_vandana.json`). It applies only the corrections listed in 5.3 and the English pairing list described in 5.2. It stops with an error if a correction does not match the number of places expected. Nobody types verse text by hand. The script can be re-run at any time and must produce the same file.
 
 Booklet page 37 has been compared line by line with the image of the printed page and matches. Page 38 is compared the same way at the start of Stage 2, before its text is used.
 
@@ -188,9 +203,10 @@ Settings has a "Sources" page that names, with links:
 
 - namo.lk, for sections 1–17;
 - the paritha.org booklet (compiled by Devapriya and Shyamali from the Piruwana Poth Wahanse, "for free distribution"), for sections 18–19;
-- the "Vandana" booklet of Mahamevnawa Bhavana Asapuwa, Markham, Ontario, for the English.
+- the "Vandana" booklet of Mahamevnawa Bhavana Asapuwa, Markham, Ontario, for part of the English;
+- "Daily Buddha Vandana", prepared by Cynthia Gunawardana, Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane, for the rest of the English.
 
-What each source says about reuse: namo.lk states no terms. The booklet says free distribution only, which a free app meets. The Mahamevnawa PDF prints no terms and names no translator; its parent organisation's website asks that its material be kept to private use. The owner's position is that this material is free to share. A short note to each (hi@namo.lk; medism@gmail.com; info@mahamevnawa.ca) before any public release is still recommended, and matters most for the English. It is the owner's to send and does not block building.
+What each source says about reuse: namo.lk states no terms. The booklet says free distribution only, which a free app meets. The Mahamevnawa PDF prints no terms and names no translator; its parent organisation's website asks that its material be kept to private use. The Brisbane booklet prints no terms; it names the teacher who prepared it and the temple's Dhamma school. The owner's position is that this material is free to share. A short note to each (hi@namo.lk; medism@gmail.com; info@mahamevnawa.ca; the Brisbane temple, whose address is not yet looked up) before any public release is still recommended, and matters most for the English. It is the owner's to send and does not block building.
 
 ## 6. Structure of the app
 
