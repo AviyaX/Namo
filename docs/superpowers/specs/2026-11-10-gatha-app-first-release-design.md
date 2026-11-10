@@ -120,7 +120,7 @@ The booklet follows section 19 with an untitled closing verse (ඉමිනා �
 |---|---|
 | Pali, in Sinhala letters | Present for all 19 sections |
 | Sinhala (the meaning) | Present for all 19 sections |
-| English | Present for sections 1–7, 10–13, 15 and 19, for two of the three verses of section 8 and for four of the six verses of section 18. Empty for sections 9, 14, 16 and 17 |
+| English | Present for sections 1–7, 10–13, 15 and 19, for two of the three verses of section 8 and for two of the four verses of section 18. Empty for sections 9, 14, 16 and 17 |
 | Pali, in Roman letters | Empty |
 
 **English** comes from two booklets the owner supplied.
