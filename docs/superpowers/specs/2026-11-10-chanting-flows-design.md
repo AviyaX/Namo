@@ -1,6 +1,6 @@
 # Namo — My Flows (personal chanting sequences) — Design
 
-Date: 2026-11-10. Status: waiting for the owner's approval.
+Date: 2026-11-10. Status: approved by the owner on 2026-11-10 ("yes thats right"), including the calls in section 10. Built after the premium redesign is finished; its plan is written then, against the redesign's real components.
 
 ## 1. What the owner asked for
 
