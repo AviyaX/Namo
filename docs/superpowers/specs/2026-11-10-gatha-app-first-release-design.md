@@ -123,7 +123,7 @@ The booklet follows section 19 with an untitled closing verse (ඉමිනා �
 | English | Present for sections 1–6 and 19 and for half of section 18. Empty for sections 7–17 |
 | Pali, in Roman letters | Empty |
 
-**English.** The owner supplied the Mahamevnawa "Vandana" PDF as "the English one", so its English is used wherever it has the same verse **(my call: the owner has not said this in so many words)**. What it has:
+**English.** The owner supplied the Mahamevnawa "Vandana" PDF as "the English one", and confirmed on 2026-11-10 that the app uses it ("english - use mahamevnawa"). Its English is used wherever it has the same verse. What it has:
 
 | Sections | What the PDF gives |
 |---|---|
