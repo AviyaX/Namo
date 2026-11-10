@@ -99,6 +99,7 @@ flutter:
     - assets/fonts/OFL-NotoSerif.txt
     - assets/fonts/OFL-Lora.txt
     - assets/branding/
+    - assets/content/
 
   fonts:
     - family: NotoSansSinhala

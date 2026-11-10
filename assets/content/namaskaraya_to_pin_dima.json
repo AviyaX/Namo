@@ -1,0 +1,922 @@
+{
+ "schema": 1,
+ "categories": [
+  {
+   "id": "cat-namaskaraya",
+   "title": "Namaskaraya to Deviyanta Pin Dima",
+   "subtitle": "නමස්කාරය – දෙවියන්ට පින් දීම",
+   "readings": [
+    {
+     "id": "namaskaraya",
+     "title": "Namaskaraya to Deviyanta Pin Dima",
+     "audio": null,
+     "sections": [
+      {
+       "id": "s01",
+       "number": 1,
+       "heading": "නමස්කාරය",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s01-v1",
+         "pali_si": "නමෝ තස්ස භගවතෝ අරහතෝ සම්මා සම්බුද්ධස්ස.\nනමෝ තස්ස භගවතෝ අරහතෝ සම්මා සම්බුද්ධස්ස.\nනමෝ තස්ස භගවතෝ අරහතෝ සම්මා සම්බුද්ධස්ස.",
+         "pali_roman": null,
+         "sinhala": "ඒ භාග්‍යවත් අරහත් සම්‍යක් සම්බුදු රජාණන් වහන්සේට මාගේ නමස්කාරය වේවා.\nඒ භාග්‍යවත් අරහත් සම්‍යක් සම්බුදු රජාණන් වහන්සේට මාගේ නමස්කාරය වේවා.\nඒ භාග්‍යවත් අරහත් සම්‍යක් සම්බුදු රජාණන් වහන්සේට මාගේ නමස්කාරය වේවා.",
+         "english": "Homage to the Blissful One, the Worthy One, the\nFully Enlightened One.\nHomage to the Blissful One, the Worthy One, the\nFully Enlightened One.\nHomage to the Blissful One, the Worthy One, the\nFully Enlightened One.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 2",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s02",
+       "number": 2,
+       "heading": "තිසරණ සරණයාම",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s02-v1",
+         "pali_si": "බුද්ධං සරණං ගච්ඡාමි\nධම්මං සරණං ගච්ඡාමි\nසංඝං සරණං ගච්ඡාමි\n\nදුතියම්පි බුද්ධං සරණං ගච්ඡාමි\nදුතියම්පි ධම්මං සරණං ගච්ඡාමි\nදුතියම්පි සංඝං සරණං ගච්ඡාමි\n\nතතියම්පි බුද්ධං සරණං ගච්ඡාමි\nතතියම්පි ධම්මං සරණං ගච්ඡාමි\nතතියම්පි සංඝං සරණං ගච්ඡාමි",
+         "pali_roman": null,
+         "sinhala": "මම බුදුරජාණන් වහන්සේ සරණ යමි.\nමම ශ්‍රී සද්ධර්මය සරණ යමි.\nමම ආර්ය මහා සංඝරත්නය සරණ යමි.\n\nදෙවනුව ද මම බුදුරජාණන් වහන්සේ සරණ යමි.\nදෙවනුව ද මම ශ්‍රී සද්ධර්මය සරණ යමි.\nදෙවනුව ද මම ආර්ය මහා සංඝරත්නය සරණ යමි.\n\nතෙවනුව ද මම බුදුරජාණන් වහන්සේ සරණ යමි.\nතෙවනුව ද මම ශ්‍රී සද්ධර්මය සරණ යමි.\nතෙවනුව ද මම ආර්ය මහා සංඝරත්නය සරණ යමි.",
+         "english": "I go to the Buddha for refuge.\nI go to the Dhamma for refuge.\nI go to the Sangha for refuge.\n\nA second time, I go to the Buddha for refuge.\nA second time, I go to the Dhamma for refuge.\nA second time, I go to the Sangha for refuge.\n\nA third time, I go to the Buddha for refuge.\nA third time, I go to the Dhamma for refuge.\nA third time, I go to the Sangha for refuge.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 2",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "ගච්චාමි",
+           "to": "ගච්ඡාමි",
+           "count": 9,
+           "reason": "20 uses elsewhere on namo.lk, 9 in the booklet"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s03",
+       "number": 3,
+       "heading": "පංචශීලය සමාදන්වීම",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s03-v1",
+         "pali_si": "පාණාතිපාතා වේරමණී සික්ඛාපදං සමාදියාමි\nඅදින්නාදානා වේරමණී සික්ඛාපදං සමාදියාමි\nකාමේසු මිච්ඡාචාරා වේරමණී සික්ඛාපදං සමාදියාමි\nමුසාවාදා වේරමණී සික්ඛාපදං සමාදියාමි\nසුරාමේරය මජ්ජපමාදට්ඨානා වේරමණී සික්ඛාපදං සමාදියාමි\n\nතිසරණේන සද්ධිං පංචසීලං සමාදියාමි",
+         "pali_roman": null,
+         "sinhala": "මම සතුන් මැරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම සොරකම් කිරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම කාමයෙහි වරදවා හැසිරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම බොරු කීමෙන්, කේලාම් කීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම මදයට, ප්‍රමාදයට කරුණුවන මත්කුඩු, රහ මෙර, සුරාපානය කිරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.",
+         "english": "I undertake the training rule to abstain from killing\nliving beings.\nI undertake the training rule to abstain from taking\nthat which is not given.\nI undertake the training rule to abstain from sexual\nmisconduct.\nI undertake the training rule to abstain from false\nspeech.\nI undertake the training rule to abstain from\nintoxicants and harmful drugs.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 2",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "සමාදියාමී",
+           "to": "සමාදියාමි",
+           "count": 4,
+           "reason": "10 elsewhere on namo.lk, 5 in the booklet; the page itself uses it twice"
+          },
+          {
+           "field": "pali_si",
+           "from": "සුමාමේරය",
+           "to": "සුරාමේරය",
+           "count": 1,
+           "reason": "namo.lk's own \"ten precepts\" page and the booklet both print සුරාමේරය; the page's own Sinhala meaning for the line says සුරාපානය"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s04",
+       "number": 4,
+       "heading": "බුදු ගුණ සිහි කිරීම",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s04-v1",
+         "pali_si": "ඉතිපි සෝ භගවා අරහං සම්මා සම්බුද්ධෝ\nවිජ්ජාචරණ සම්පන්නෝ සුගතෝ ලෝකවිදූ අනුත්තරෝ\nපුරිසදම්මසාරථී සත්ථා දේවමනුස්සානං බුද්ධෝ භගවාතී",
+         "pali_roman": null,
+         "sinhala": "ස්වාමීණී! වාසනා සහිත සකල ක්ලේෂයන් දුරු කළ හෙයින්ද, සියලු කෙලෙස් සතුරන් නැසූ හෙයින්ද, සංසාර චක්‍රයේ අරටු සිඳලූ හෙයින්ද, ලෝවැසියන්ගේ ආමිස පූජා, ප්‍රතිපත්ති පූජා පිළිගැනීමට සුදුසු වන හෙයින් ද, රහසින්වත් පව් නොකළ හෙයින් ද අරහත් නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ චතුරාර්‍ය සත්‍ය ධර්මයන් තමන් වහන්සේ විසින්ම අවබෝධ කළ හෙයින් සම්මා සම්බුද්ධ නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ අෂ්ඨ විද්‍යාවෙන් හා පසළොස්චරණ ධර්මයන්ගෙන් යුක්ත වූ හෙයින් විජ්ඡාචරණ සම්පන්න නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ ශෝභන වූ ගමන් ඇති හෙයින් ද, සුන්දර වූ තැනට පැමිණි හෙයින් ද සුභාශිත වචන වදාළ හෙයින් සුගත නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ සියලු ලෝකයන් තත්වූ පරිද්දෙන් දන්නා හෙයින් ලෝකවිදු නම් වන සේක.\nඒ භාග්‍යවතුන්වහන්සේ සියල්ලන් දමනය කළ හෙයින් අනුත්තර පුරිස දම්ම සාරථී නම් වන සේක.\nදමනය කර නිවන කරා පමුණුවන හෙයින් ඒ භග්‍යවතුන් වහන්සේ දෙව් මිනිසුන් ප්‍රධාන සත්වයන්ට අනුශාසනා කරන හෙයින් සත්ථා නම් වන සේක.\nඒ භාග්‍යවතුන්වහන්සේ සංසාර ස්වභාවය සම්පූර්ණයෙන්ම දැන වදාළ හෙයින් බුද්ධ නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ භග ධර්මයන් ඇති හෙයින් ද, සියලු කෙළෙස් මුලිනිපුටා දැමූ හෙයින් ද, සසර ගමන සිඳලූ හෙයින් ද, නාම රූප ධර්මයන් විභාග කොට දෙසූ හෙයින් ද, භගවා නම් වන සේක.",
+         "english": "Such indeed is the Blessed One:\n\"Araham\" - eradicated greed, hatred, delusion,\ncraving, and is free of all taints.\n\"Sammasambuddho\" - Understood the Four Noble\nTruths, the reality of life, without anyone’s help.\n\"Vijjacaranasampanno\" - Perfect in True\nKnowledge and Conduct. Buddha acquired 3 kinds\nof knowledge: understood His past lives;\nunderstood the passing away and arising of other\nbeings; understood the nature and the path to\neradicate taints.\n\"Sugato\" - Found and followed the Right Noble\nEightfold Path (the Path leading to the cessation of\nDukka).\n\"Lokavidu\" - Understood the presence and origin of\nall the worlds (hell, ghost, animal, human, heavenly,\nand the pure abodes).\n\"Anuttaro purisadammasarathi\" - Incomparable\nLeader of those to be tamed.\n\"Satta devamannussanam\" - Teacher of gods and\nhumans.\n\"Buddho\" - Understood the Four Noble Truths\nwithout assistance and was able to teach Dhamma to\nothers, without holding anything back.\n\"Bhagava\" - Only a Buddha, the Supreme Teacher\nholds these great, extra-ordinary qualities.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 3",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "explanation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "විඡ්ඡාචරණ",
+           "to": "විජ්ජාචරණ",
+           "count": 1,
+           "reason": "18 elsewhere on namo.lk, 4 in the booklet"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s05",
+       "number": 5,
+       "heading": "දහම් වැඳීම",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s05-v1",
+         "pali_si": "ස්වාක්ඛාතෝ, භගවතා ධම්මෝ සන්දිට්ඨිකො, අකාලිකෝ,\nඒහිපස්සිකෝ, ඕපනයිකො, පච්චත්තං වේදිතබ්බො විඤ්ඤුහීති",
+         "pali_roman": null,
+         "sinhala": "භාග්‍යවතුන් වහන්සේ විසින් ඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය මනා කොට දේශනා කරන ලදී. එහෙයින් ස්වාක්ඛාත නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය තමා විසින් ම අවබෝධ කර ගත යුතු හෙයින් සන්දිට්ඨික නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය මාර්ග සිතට අනතුරුව ම කල් නොයොවා ඵල සිත පහළ වන හෙයින් අකාලික නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය සිතෙහි පිහිටුවා ගත යුතු හෙයින් ඕපනයික නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය නුවණැත්තන් විසින් තම තමන්ම දත යුතු හෙයින් පච්චත්තවේදිතබ්බ නම් වන සේක.",
+         "english": "\"Svakkhato\" - The Dhamma taught by the Blessed\nOne is Excellent in the beginning, Excellent in the\nmiddle and Excellent in the end - all of Buddha's\nDiscourses are consistent and teach the same truth.\n\"Sanditthika\" - Dhamma is self-evident and can be\nunderstood in this life itself.\n\"Akaliko\" - Dhamma, Noble Truths, can not be\nchanged nor can they be altered over time.\n\"Ehipassiko\" - \"come and see\"; Buddha's Dhamma is\nto be investigated.\n\"Opanayika\" - Dhamma can only be understood by\noneself.\n\"Paccattam vedittabbo vinnuhiti\" - Dhamma is for\nthe wise to understand and realize.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 4",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "explanation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s06",
+       "number": 6,
+       "heading": "සඟුන් වැඳීම",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s06-v1",
+         "pali_si": "සුපටිපන්නෝ භගවතො සාවක සංඝෝ\nඋජුපටිපන්නෝ භගවතො සාවක සංඝෝ\nඤායපටිපන්නෝ භගවතො සාවක සංඝෝ\nසාමීචිපටිපන්නෝ භගවතො සාවක සංඝෝ\nයදිදං චත්තාරි පුරිස යුගානි අට්ඨපුරිස පුග්ගලා\nඒස භගවතෝ සාවක සංඝෝ\nආහුනෙයියෝ පාහුනෙයියෝ දක්ඛිනෙයියෝ\nඅඤ්ජලිකරණීයෝ අනුත්තරං පුඤ්ඤක්ඛෙත්තං\nලෝකස්සාති",
+         "pali_roman": null,
+         "sinhala": "භාග්‍යවතුන් වහන්සේ ආර්ය මහා සංඝරත්නය සසුන් මගට මනාව පිළිපන් හෙයින් සුපටිපන්න නම් වන සේක. මධ්‍යම ප්‍රතිපදාවට පිළිපන් හෙයින් උජුපටිපන්න නම් වන සේක. නිවන් පිළිස මනාව පිලිපන් හෙයින් ඤායපටිපන්න නම් වන සේක. සසර දුක නැති කරන ප්‍රතිපදාවන්ට මනාව පිලිපන් හෙයින් සාමීචිපටිපන්න නම් වන සේක. දුර බැහැර සිට පූජා ද්‍රව්‍යයන් ගෙනවුත් පිදීමට සුදුසු වන හෙයින් ආහුණ්‍යෙය නම් වන සේක. දුර බැහැරින් එන ඤාතීන්ට පිළියෙල කළ භෝජන පූජා කිරීමට සුදුසු වන හෙයින් පාහුණ්‍යෙය නම් වන සේක. දෙඅත් මුදුනෙහි තබා වැඳීමට සුදුසු වන හෙයින් අඤ්ජලිකරණීය නම් වන සේක. ලෝකයාට උසස් වු පින් කෙතක් වන හෙයින් අනුත්තර පිඤ්ඤඛෙත්ත නම් වන සේක.",
+         "english": "\"Supatipanno\" - The Order of the Blessed One are\ntraining to rid themselves of greed, hatred and\ndelusion.\n\"Ujupatipanno\" - They follow the direct, Noble\nEightfold Path.\n\"Nayapatipanno\" - The Noble Order understands the\nFirst Noble Truth and are practising to eradicate\nsuffering\n\"Samicipatipanno\" - The Orders spreads the message\nof Dhamma by sharing what the Buddha taught.\nIn Buddha’s Order are the 8 kinds of individuals: the\none striving to Enter the Stream of the Noble Path, the\none who has entered the Stream; the one striving to\nattain the position of Once-Returner, the Once-\nReturner; the one striving to reach the Non- returner\nposition, the Non-Returner; the one striving for\nArahantship and the Arahant. A field of merit is the\nsupreme Sangha, worthy of gifts, worthy of\nhospitality, worthy of respect and worship.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 4",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "explanation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s07",
+       "number": 7,
+       "heading": "චෛත්‍ය වන්දනාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s07-v1",
+         "pali_si": "වන්දාමි චේතියං සබ්බං – සබ්බ ඨානේසු පතිට්ඨිතං\nසාරීරික ධාතු මහා බෝධිං – බුද්ධ රූපං සකලං සදා",
+         "pali_roman": null,
+         "sinhala": "සියලු ස්ථානයන්හි පිහිටි චෛත්‍යයන්ද, ශාරීරික ධාතුන් වහන්සේලා ද, සියලු බුද්ධ ප්‍රතිමාවන් ද, මම සැමදා වඳිමි.",
+         "english": "I salute every chetiya\nThat may stand in any place\nThe bodily relics the great Bodhi\nAnd all images of the Buddha.",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 8",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "ධානේසු",
+           "to": "ඨානේසු",
+           "count": 1,
+           "reason": "the owner's word, 2026-11-10 (\"ඨානේසු is the correct\"); namo.lk's own Sinhala meaning says \"in all places\" and the Brisbane booklet prints \"Sabbatane\""
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s08",
+       "number": 8,
+       "heading": "බෝධි වන්දනාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s08-v1",
+         "pali_si": "යස්සමූලේ නිසින්නෝච – සබ්බාරි විජයං අකා\nපත්තෝ සබ්බඤ්ඤුතං සත්ථා – වන්දේතංබෝධිපාදපං",
+         "pali_roman": null,
+         "sinhala": "යම්කිසි වෘක්ෂ මූලයක වැඩහිඳ දසමරුන් පරදා අප ශාස්තෘ වූ බුදුරජාණන් වහන්සේ, උතුම් සර්වඥතා ඤාණය උපදවා ගත්තේද, ඒ උතුම් බෝධි වෘක්ෂ රාජයාණන් වහන්සේට මාගේ නමස්කාරය වේවා! වන්දනාමාන වේවා!",
+         "english": "Seated at whose base,\nThe teacher overcame all foes,\nAttaining Omniscience\nThat very bodhi tree do I adore",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 9",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v2",
+         "pali_si": "ඉමේ ඒතේ මහාබෝධී – ලෝකනාථේන පූජිතා\nඅහංපි තේ නමස්සාමි – බෝධිරාජා නමත්ථු තෙ",
+         "pali_roman": null,
+         "sinhala": "ලෝකනාථ වූ මාගේ බුදුරජාණන් වහන්සේ සත් දිනක් අනිමිස ලෝචන පූජාවෙන් පිදුම් කළා වූ ඒ උතුම් බෝධිරාජයාණන් වහන්සේට මම ද ගෞරවයෙන් යුතුව මෙසේ නමස්කාර කරමි.",
+         "english": "These great trees of enlightenment\nBy the lord of the world\nI too shall salute you\nMay there be homage to you. O great Bodhi.",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 9",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v3",
+         "pali_si": "ඉන්ද්‍රනීල වණ්ණ පත්ත සේත ඛන්ද භාසුරං\nසත්ථු නෙත්ත පංකජාහි පූජිතග්ග සාතදං\nඅග්ග බෝධි නාම වාම දේවරුක්ඛ සණ්ණිභං\nතං විසාල බෝධි පාදපං නමාමි සබ්බදා",
+         "pali_roman": null,
+         "sinhala": "ඉඳුනිල් මාණික්‍ය වැනි පත්‍ර වලින් හා සුදුපාට කඳින් බබලන්නා වූත්, මාගේ බුදුරජාණන් වහන්සේගේ නෙත් පියුම් වලින් පූජා ලැබුවා වූත්, අග්‍ර මිහිර ගෙන දෙන අග්‍ර බෝධි නම් සුන්දර වූ දෙව් රුකක් සේ වර්ණිත විශාල, එම බෝධි වෘක්ෂ රාජයාණන් වහන්සේ මම හැම කල්හිම වඳිමි.",
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "බෝදි",
+           "to": "බෝධි",
+           "count": 1,
+           "reason": "9 times on the page itself, 15 elsewhere on namo.lk, 13 in the booklet"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s09",
+       "number": 9,
+       "heading": "බුද්ධ පූජා ආරාධනාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s09-v1",
+         "pali_si": "නිවේදයාමි සම්බුද්ධං – වීතරාගං මහාමුනිං\nනිමන්තයාමි සුගතං – ලෝකජෙට්ඨං නරාසභං",
+         "pali_roman": null,
+         "sinhala": "වීතරාග මහා මුණි වූ, ලෝකාග්‍ර වූ, නර ශ්‍රේෂ්ඨ වූ, සුගත වූ, සම්බුදුරජාණන් වහන්සේට ආරාධනා කරමි.",
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s10",
+       "number": 10,
+       "heading": "පහන් පූජාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s10-v1",
+         "pali_si": "ඝනසාරප්ප දිත්තේන – දීපේන තමධංසිනා\nතිලෝකදීපං සම්බුද්ධං – පූජයාමි තමෝනුදං",
+         "pali_roman": null,
+         "sinhala": "ශ්‍රද්ධාවෙන් දල්වන ලද අඳුර දුරලන්නාවූ මේ පහන් ආලෝකයෙන් තුන් ලොවට මහා පහන් කණුවක් වැනි වූ මෝහන්ධකාරය දුරු කරන ලද බුදුරජාණන් වහන්සේ පුදමි.",
+         "english": "With lights brightly shining\nAbolishing this gloom\nI adore the Enlightened One\nThe Light of the three worlds*\nwho dispels the darkness ( of ignorance )\n\n(*three worlds – kama loka, rupa loka and arupa loka)",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 10",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s11",
+       "number": 11,
+       "heading": "සුවඳ දුම් පූජාව",
+       "check": "needs checking",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s11-v1",
+         "pali_si": "ගන්ධ සම්භාර යුත්තේන – ධුපේනාහං සුගන්ධිනා\nසුගන්ධිනාහං ගන්ධේන – පූජයාමි තථාගතං",
+         "pali_roman": null,
+         "sinhala": "පූජාවන්ට සුදුසු වූ, පූජා ලැබුවා වූ, උතුම් බුදුරජාණන් වහන්සේට මේ සුවඳ දුමින් පුදමි.",
+         "english": "With perfumed incense,\nFrom fragrant substances,\nI worship the exalted one, worthy of worship,\nWho dispels the darkness (of ignorance)",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 10",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [
+          "namo.lk prints the second line as \"සුගන්ධිනාහං ගන්ධේන – පූජයාමි තථාගතං\", the same line as in the next verse. The Brisbane booklet reads \"Pujaye Pujaniyanam tam / Puja bhajana muttamam\", and namo.lk's own Sinhala meaning translates that reading. No stored source has that line in Sinhala letters, so the Pali stays as namo.lk prints it and is not changed without the owner's word.",
+          "The Brisbane English for this verse also ends with a line that belongs to the lamp verse (\"Who dispels the darkness\"); it is kept as printed."
+         ],
+         "corrections": []
+        },
+        {
+         "id": "s11-v2",
+         "pali_si": "සුගන්ධිකාය වදනං – අනන්ත ගුණගන්ධිනා\nසුගන්ධිනාහං ගන්ධේන – පූජයාමි තථාගතං",
+         "pali_roman": null,
+         "sinhala": "අපමණ ගුණ සුවඳවත් වදන් ඇති, තථාගතයන් වහන්සේට සුවඳින් පුදමි.",
+         "english": "Fragrant of voice and form,\nFragrant of infinite virtues,\nThe fragrant one, Thathagatha (the exalted one),\nWith fragrance I worship.",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 10",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s12",
+       "number": 12,
+       "heading": "මල් පූජාව",
+       "check": "needs checking",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s12-v1",
+         "pali_si": "වණ්ණ ගන්ධ ගුණෝපේතං – ඒතං කුසුම සන්තතිං\nපූජයාමි මුනින්දස්ස – සිරීපාද සරෝරුහේ",
+         "pali_roman": null,
+         "sinhala": "පැහැයෙන් හා සුවඳින් යුත් මේ මල් රැස මුනිඳුන් සිරිපා පියුමට පුදනෙමි.",
+         "english": "This mass of flowers fresh, fragrant and colorful\nI offer at the sacred lotus like feet of the noble sage",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 9",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s12-v2",
+         "pali_si": "පූජේමි බුද්ධං කුසුමේනනේන\nපුඤ්ඤේනමේතේන ලභාමි මොක්ඛං\nපුප්ඵං මිලායාති යථා ඉදම්මේ\nකායෝ තථායාති විනාස භාවං",
+         "pali_roman": null,
+         "sinhala": "මේ කුසුමින් බුදුන් පුදමි. මේ පිනෙන් මොක් සුවට ලබමි! මේ මල් මැලවී යන්නා සේ මාගේ සිරුරද විනාශයට පත් වේයි.",
+         "english": "I worship the Buddha with these flowers;\nMay this virtue be helpful for my emancipation;\nJust as these flowers fade,\nOur body will undergo decay.",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 9",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [
+          "The app's Pali reads \"ලභාමි මොක්ඛං\" (the paritha.org booklet reads the same); the Brisbane booklet reads \"cha hothu mokkam\" and translates that."
+         ],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s13",
+       "number": 13,
+       "heading": "පැන් පූජාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s13-v1",
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – පානීයං පරිකප්පිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "pali_roman": null,
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ පැන් අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
+         "english": "O Lord! The blessed one\nMay this water\nBe kindly accepted by you\nOut of great compassion on us.",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 11",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s14",
+       "number": 14,
+       "heading": "ආහාර පූජාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s14-v1",
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – භෝජනං උපනාමිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "pali_roman": null,
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ බොජුන් අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s15",
+       "number": 15,
+       "heading": "ගිලන්පස පූජාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s15-v1",
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – ගිලාන පච්චයං ඉමං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "pali_roman": null,
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ ගිලන් පස අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
+         "english": "O Lord! The blessed one\nMay these gilan pasa\nBe kindly accepted by you\nOut of great compassion on us.\n\n(Gilan pasa – permissible food & drinks for Buddhist monks and nuns\nfrom noon to the following morning such as fruit juices, sugar candy)",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 11",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s16",
+       "number": 16,
+       "heading": "දැහැත් පූජාව",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s16-v1",
+         "pali_si": "නාග වල්ලී දලූ පේතං – චුණ්ණ පූග සමායුතං\nතාම්බූලං පතිගණ්හාතු – සතං පූජේමිදං පිනෝ",
+         "pali_roman": null,
+         "sinhala": "බුලතින් හා හුණු පුවක් කප්‍රින් යුත්, මේ දැහැත්, තථාගතයන් වහන්සේ ඉවසා වදාරණ සේක්වා !",
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s17",
+       "number": 17,
+       "heading": "සියල්ල එකවිට පූජා කිරීම",
+       "check": "checked against source",
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s17-v1",
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – සබ්බං සද්ධාය පූජිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "pali_roman": null,
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ සැදැහෙන් පුදන ලද මේ සියල්ල අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා !\n\nසාධූ! සාධූ! සාධූ!",
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "අධිවාසේ තුනෝ",
+           "to": "අධිවාසේතු නෝ",
+           "count": 1,
+           "reason": "spacing only; the page itself prints it this way 3 times, the booklet 11"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s18",
+       "number": 18,
+       "heading": "දෙවියන්ට පින් දීම",
+       "check": "needs checking",
+       "source": {
+        "name": "paritha.org booklet (Wandana Gatha)",
+        "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed page 37",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [
+        {
+         "field": "heading",
+         "from": "පින්දීම",
+         "to": "පින් දීම",
+         "count": 1,
+         "reason": "owner's spelling"
+        }
+       ],
+       "verses": [
+        {
+         "id": "s18-v1",
+         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ දේවා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
+         "pali_roman": null,
+         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු දෙවියෝ වෙත අනුමෝදන් වෙත්වා.",
+         "english": "May all devas share this merit\nWhich we have thus accumulated\nFor the acquisition of all kinds\nOf happiness and prosperity.",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 12",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "රුස්කර",
+           "to": "රැස්කර",
+           "count": 1,
+           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "පුණ්ය",
+           "to": "පුණ්‍ය",
+           "count": 1,
+           "reason": "the booklet's own other use; namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s18-v2",
+         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ භූතා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
+         "pali_roman": null,
+         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු භූතයෝ වෙත අනුමෝදන් වෙත්වා.",
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "රුස්කර",
+           "to": "රැස්කර",
+           "count": 1,
+           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "පුණ්ය",
+           "to": "පුණ්‍ය",
+           "count": 1,
+           "reason": "the booklet's own other use; namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "භූතයා්",
+           "to": "භූතයෝ",
+           "count": 1,
+           "reason": "3 times elsewhere in the booklet, 2 on namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s18-v3",
+         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ සත්තා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
+         "pali_roman": null,
+         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු සත්වයෝ වෙත අනුමෝදන් වෙත්වා.",
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "රුස්කර",
+           "to": "රැස්කර",
+           "count": 1,
+           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "පුණ්ය",
+           "to": "පුණ්‍ය",
+           "count": 1,
+           "reason": "the booklet's own other use; namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s18-v4",
+         "pali_si": "ආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු ලෝක සාසනං\n\nආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු දේසනං\n\nආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු මං පරං",
+         "pali_roman": null,
+         "sinhala": "අහසෙහි වසන්නා වූද, පොළොවෙහි වසන්නා වූද, මහත් සෘද්ධි ඇති දෙවියෝ ද, නාගයෝ ද මේ පින් අනුමෝදන්ව නිරතුරුව ලෝකයත් සාසනයත් බොහෝ කල් යහතින් ආරක්ෂා කරත්වා.",
+         "english": "May mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and long protect the\nBuddha’s dispensation.\n\nMay mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and long protect the\nteaching of the Dhamma.\n\nMay mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and\nlong protect myself and others.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF pages 16–17",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [
+          "The app's Pali reads \"ලෝක සාසනං\"; Mahamevnawa reads \"sasanam\". (The Brisbane booklet reads \"loka sasanam\", as the app does.)"
+         ],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "සාසණ",
+           "to": "සාසන",
+           "count": 1,
+           "reason": "8 elsewhere in the booklet, 5 on namo.lk"
+          },
+          {
+           "field": "pali_si",
+           "from": "දේවානාගා",
+           "to": "දේවා නාගා",
+           "count": 3,
+           "reason": "spacing only; both sources print two words elsewhere"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s19",
+       "number": 19,
+       "heading": "තෙරුවන් සමාකර ගැනීම",
+       "check": "needs checking",
+       "source": {
+        "name": "paritha.org booklet (Wandana Gatha)",
+        "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed pages 37–38",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s19-v1",
+         "pali_si": "කායේන වාචා චිත්තේන පමාදේන මයා කතං\nඅච්චයං ඛම මේ භන්තේ භූරිපඤ්ඤ තථාගත",
+         "pali_roman": null,
+         "sinhala": "මා විසින් සිතින් හෝ කයින් හෝ වචනයෙන් හෝ යන තුන් දොරින් නොදැනුවත්ව සිදුකරන ලද යම් වරදක් වේ නම්, ඒ වරදට බුදුරජාණන් වහන්ස මට සමාව දෙන සේක්වා.",
+         "english": "If, due to negligence, I have done some\nwrong, by body, speech or mind,\nForgive me of that offence, O Bhante,\nPerfect one of vast wisdom.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 17",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "ම විසින්",
+           "to": "මා විසින්",
+           "count": 1,
+           "reason": "5 elsewhere in the booklet, 42 on namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s19-v2",
+         "pali_si": "කායේන වාචා චිත්තේන පමාදේන මයා කතං\nඅච්චයං ඛම මේ ධම්ම සන්දිට්ඨික අකාලික",
+         "pali_roman": null,
+         "sinhala": "මා විසින් සිතින් හෝ කයින් හෝ වචනයෙන් හෝ යන තුන් දොරින් නොදැනුවත්ව සිදුකරන ලද යම් වරදක් වේ නම්, ඒ වරදට සන්දිට්ඨික වූ අකාලික වූ ධර්මරත්නය මට සමාව දෙන සේක්වා.",
+         "english": "If, due to negligence, I have done some\nwrong, by body, speech or mind,\nForgive me of that offence, O Dhamma,\nVisible and unaffected by time.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 18",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "ම විසින්",
+           "to": "මා විසින්",
+           "count": 1,
+           "reason": "5 elsewhere in the booklet, 42 on namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s19-v3",
+         "pali_si": "කායේන වාචා චිත්තේන පමාදේන මයා කතං\nඅච්චයං ඛම මේ සංඝ පුඤ්ඤක්ඛෙත්තං අනුත්තරං",
+         "pali_roman": null,
+         "sinhala": "මා විසින් සිතින් හෝ කයින් හෝ වචනයෙන් හෝ යන තුන් දොරින් නොදැනුවත්ව සිදුකරන ලද යම් වරදක් වේ නම්, ඒ වරදට පිං කෙතක් බදු වූ අෂ්ටාර්ය පුද්ගල මහා සංඝරත්නය මට සමාව දෙන සේක්වා.",
+         "english": "If, due to negligence, I have done some\nwrong, by body, speech or mind,\nForgive me of that offence, O Sangha,\nPractising well and supreme.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF page 18",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [
+          "The app's Pali ends \"පුඤ්ඤක්ඛෙත්තං අනුත්තරං\"; Mahamevnawa ends \"Supatipanna anuttara\"."
+         ],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "ම විසින්",
+           "to": "මා විසින්",
+           "count": 1,
+           "reason": "5 elsewhere in the booklet, 42 on namo.lk"
+          },
+          {
+           "field": "pali_si",
+           "from": "පුංඤ්ඤකෙත්තං",
+           "to": "පුඤ්ඤක්ඛෙත්තං",
+           "count": 1,
+           "reason": "2 elsewhere in the booklet, 6 on namo.lk"
+          },
+          {
+           "field": "pali_si",
+           "from": "අනුත්ථරං",
+           "to": "අනුත්තරං",
+           "count": 1,
+           "reason": "3 elsewhere in the booklet, 10 on namo.lk"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

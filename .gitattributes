@@ -1,0 +1,2 @@
+assets/content/*.json text eol=lf
+content/extracted/*.json text eol=lf
