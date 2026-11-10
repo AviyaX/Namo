@@ -32,6 +32,27 @@ void main() {
       expect(taps, 1);
     });
 
+    testWidgets('detail shows under the title and joins the spoken label', (t) async {
+      final handle = t.ensureSemantics();
+      await pumpThemed(
+        t,
+        SizedBox(
+          width: 390,
+          child: ListRow(
+            title: 'Title',
+            number: 2,
+            detail: const Text('Line', key: ValueKey('detail')),
+            detailLabel: 'Line',
+            onTap: () {},
+          ),
+        ),
+      );
+      expect(t.getTopLeft(find.byKey(const ValueKey('detail'))).dy,
+          greaterThan(t.getTopLeft(find.text('Title')).dy));
+      expect(find.bySemanticsLabel('2, Title, Line'), findsOneWidget);
+      handle.dispose();
+    });
+
     testWidgets('leading and caption render', (t) async {
       await pumpThemed(
         t,

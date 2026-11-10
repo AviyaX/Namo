@@ -145,6 +145,9 @@ void main() {
 
   testWidgets('Enter on the focused card toggles it', (t) async {
     await pumpApp(t, overrides: fake, location: Routes.library);
+    // The search box comes first in the focus order, then the topic row.
+    await t.sendKeyEvent(LogicalKeyboardKey.tab);
+    await t.pump();
     await t.sendKeyEvent(LogicalKeyboardKey.tab);
     await t.pump();
     await t.sendKeyEvent(LogicalKeyboardKey.enter);
@@ -293,12 +296,16 @@ void main() {
       t.getSize(find.byKey(const ValueKey('open-c1'))).height,
       greaterThan(100),
     );
+    // The page's scroll view reports its new extent in one more frame; no
+    // animation is running after it.
+    await t.pump();
     expect(t.binding.hasScheduledFrame, isFalse);
 
     // And closes at once.
     await t.tap(find.text('category 1'));
     await t.pump();
     expect(find.byKey(const ValueKey('open-c1')), findsNothing);
+    await t.pump();
     expect(t.binding.hasScheduledFrame, isFalse);
   });
 
@@ -355,9 +362,10 @@ void main() {
       location: Routes.library,
       size: const Size(390, 2000),
     );
-    await t.tap(find.text('category 1'));
+    // The chips repeat the titles; the topic rows come after them.
+    await t.tap(find.text('category 1').last);
     await t.pumpAndSettle();
-    await t.tap(find.text('category 2'));
+    await t.tap(find.text('category 2').last);
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('open-c1')), findsOneWidget);
     expect(find.byKey(const ValueKey('open-c2')), findsOneWidget);
@@ -365,7 +373,7 @@ void main() {
     expect(find.text('Alpha one'), findsOneWidget);
 
     // Closing one leaves the other open.
-    await t.tap(find.text('category 1'));
+    await t.tap(find.text('category 1').last);
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('open-c1')), findsNothing);
     expect(find.text('Alpha one'), findsOneWidget);

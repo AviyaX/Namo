@@ -19,6 +19,8 @@ class ListRow extends StatelessWidget {
     this.titleFamily = NamoFonts.english,
     this.trailing,
     this.expanded,
+    this.detail,
+    this.detailLabel,
   });
 
   /// Shown at the right end of the row.
@@ -30,6 +32,11 @@ class ListRow extends StatelessWidget {
   /// For a row that opens and closes something: whether it is open now.
   /// Left null for an ordinary row.
   final bool? expanded;
+
+  /// Shown under the title, subtitle and caption (a search hit's verse line,
+  /// say). [detailLabel] is its text for screen readers.
+  final Widget? detail;
+  final String? detailLabel;
 
   final String title;
   final String? subtitle;
@@ -52,6 +59,7 @@ class ListRow extends StatelessWidget {
         if (number != null) '$number',
         title,
         if (subtitle != null) subtitle,
+        ?detailLabel,
       ].join(', '),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -80,6 +88,7 @@ class ListRow extends StatelessWidget {
                     Text(subtitle!, style: NamoType.body(p.textSecondary)),
                   if (caption != null)
                     Text(caption!, style: NamoType.caption(p.textSecondary)),
+                  ?detail,
                 ],
               ),
             ),
