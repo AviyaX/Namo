@@ -93,4 +93,43 @@ void main() {
     await t.pumpAndSettle();
     expect(find.byType(LicensePage), findsOneWidget);
   });
+
+  testWidgets(
+    'Sources prints no arrow character; corrections show both forms and say the relation in words',
+    (t) async {
+      final handle = t.ensureSemantics();
+      await openSources(t);
+      final arrows = RegExp('[←-⇿]');
+      for (final w in t.widgetList<Text>(find.byType(Text))) {
+        expect(w.data ?? w.textSpan?.toPlainText() ?? '', isNot(contains(arrows)));
+      }
+      for (final w in t.widgetList<SelectableText>(find.byType(SelectableText))) {
+        expect(w.data ?? '', isNot(contains(arrows)));
+      }
+      // Both printed forms are on the first row, apart from each other.
+      final row = find.byKey(const ValueKey('correction-0'));
+      expect(
+        find.descendant(of: row, matching: find.text('ගච්චාමි')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: row, matching: find.text('ගච්ඡාමි')),
+        findsOneWidget,
+      );
+      expect(
+        t.getSemantics(row).label,
+        startsWith('ගච්චාමි, corrected to ගච්ඡාමි'),
+      );
+      handle.dispose();
+    },
+  );
+
+  testWidgets('a correction row with long forms wraps without overflow', (t) async {
+    await openSources(t);
+    expect(t.takeException(), isNull);
+    for (var i = 0; i < 16; i++) {
+      final box = t.getRect(find.byKey(ValueKey('correction-$i')));
+      expect(box.right, lessThanOrEqualTo(390));
+    }
+  });
 }

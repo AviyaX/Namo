@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../content/model.dart';
 import '../design/tokens.dart';
@@ -233,28 +234,40 @@ class _CorrectionRow extends StatelessWidget {
     final where = entry.sections.length == 1
         ? 'Section ${entry.sections.single}'
         : 'Sections ${entry.sections.join(', ')}';
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: p.divider, width: 1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '${c.from} → ${c.to}',
-            style: namoText(NamoFonts.sinhala, size: 18, color: p.text),
-          ),
-          Text(
-            where,
-            style: namoText(NamoFonts.english, size: 14, color: p.textQuiet),
-          ),
-          if (c.reason.isNotEmpty)
-            Text(
-              c.reason,
-              style: namoText(NamoFonts.english, size: 14, color: p.textQuiet),
+    final form = namoText(NamoFonts.sinhala, size: 18, color: p.text);
+    final detail = namoText(NamoFonts.english, size: 14, color: p.textQuiet);
+    // The arrow is drawn from the bundled icon font: a text arrow is in none
+    // of the bundled text fonts and would be fetched from the network.
+    return Semantics(
+      container: true,
+      excludeSemantics: true,
+      label: [
+        '${c.from}, corrected to ${c.to}',
+        where,
+        if (c.reason.isNotEmpty) c.reason,
+      ].join(', '),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: p.divider, width: 1)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 2,
+              children: [
+                Text(c.from, style: form),
+                Icon(Symbols.arrow_right_alt_rounded, size: 22, color: p.textQuiet),
+                Text(c.to, style: form),
+              ],
             ),
-        ],
+            Text(where, style: detail),
+            if (c.reason.isNotEmpty) Text(c.reason, style: detail),
+          ],
+        ),
       ),
     );
   }
