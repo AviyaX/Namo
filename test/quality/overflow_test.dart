@@ -1,3 +1,4 @@
+import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
@@ -82,9 +83,11 @@ void main() {
           );
           expect(t.takeException(), isNull);
           await scrollThrough(t);
-          // The recording controls leave room for the text.
-          final body = t.getSize(find.byType(ReaderBody));
-          expect(body.height, greaterThan(size.height * 0.3));
+          // The recording controls leave room for the text: the reading area
+          // visible above the floating bar (the text runs under the bar).
+          final body = t.getRect(find.byType(ReaderBody));
+          final bar = t.getRect(find.byType(FloatingBar));
+          expect(bar.top - body.top, greaterThan(size.height * 0.3));
         },
       );
     }
