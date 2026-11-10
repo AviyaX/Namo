@@ -105,7 +105,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             }
             final categories = library.categories;
             final n = categories.length;
-            final sections = categories.fold(0, (a, c) => a + sectionCount(c));
             // A request from the address shows everything: the search and the
             // chip are emptied right after this frame.
             final query = asked ? '' : _query.text;
@@ -119,9 +118,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               children: [
                 PageHeader(
                   title: 'Library',
-                  caption:
-                      '$n ${n == 1 ? 'collection' : 'collections'}'
-                      ' · ${sectionCountLabel(sections)}',
+                  caption: '$n ${n == 1 ? 'collection' : 'collections'}',
                 ),
                 const SizedBox(height: NamoSpace.lg),
                 SearchField(

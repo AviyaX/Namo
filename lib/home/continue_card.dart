@@ -67,7 +67,12 @@ class ContinueCard extends ConsumerWidget {
               children: [
                 const Overline('Continue reading'),
                 const SizedBox(height: NamoSpace.xs),
-                Text(reading.title, style: NamoType.cardTitle(p.text)),
+                Text(
+                  reading.title,
+                  style: phrased
+                      ? NamoType.sectionTitleSinhala(p.text).copyWith(fontSize: 18)
+                      : NamoType.cardTitle(p.text),
+                ),
                 if (heading != null)
                   Text(
                     heading,

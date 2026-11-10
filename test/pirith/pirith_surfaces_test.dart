@@ -334,6 +334,10 @@ void main() {
       await t.pumpAndSettle();
       expect(find.text(r.title), findsOneWidget);
       expect(find.text(r.titleRoman!), findsOneWidget);
+      expect(
+        t.widget<Text>(find.text(r.title)).style!.fontFamily,
+        contains('NotoSansSinhala'),
+      );
       await t.tap(find.text(r.title));
       await t.pumpAndSettle();
       expect(_location(t), startsWith('/read/$mangalaReadingId'));

@@ -103,18 +103,18 @@ class SettingsScreen extends ConsumerWidget {
                   onChanged: controller.setAutoScrollWithAudio,
                 ),
                 Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      NamoSpace.lg,
-                      NamoSpace.xs,
-                      NamoSpace.lg,
-                      0,
-                    ),
-                    child: Text(
-                      'Pirith follow the chanting by themselves.',
-                      softWrap: true,
-                      style: NamoType.caption(p.textSecondary),
-                    ),
+                  padding: const EdgeInsets.fromLTRB(
+                    NamoSpace.lg,
+                    NamoSpace.xs,
+                    NamoSpace.lg,
+                    0,
                   ),
+                  child: Text(
+                    'Pirith follow the chanting by themselves.',
+                    softWrap: true,
+                    style: NamoType.caption(p.textSecondary),
+                  ),
+                ),
               ],
             ),
           ],
