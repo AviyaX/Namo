@@ -29,31 +29,54 @@ void main() {
       expect(contrastRatio(p.text, p.background), greaterThanOrEqualTo(7.0));
       expect(contrastRatio(p.heading, p.background), greaterThanOrEqualTo(4.5));
       expect(
-          contrastRatio(p.textQuiet, p.background), greaterThanOrEqualTo(4.5));
+        contrastRatio(p.textQuiet, p.background),
+        greaterThanOrEqualTo(4.5),
+      );
     }
     expect(
-        contrastRatio(NamoPalette.dark.accent, NamoPalette.dark.background),
-        greaterThanOrEqualTo(4.5));
+      contrastRatio(NamoPalette.dark.accent, NamoPalette.dark.background),
+      greaterThanOrEqualTo(4.5),
+    );
   });
 
-  test('every theme text style uses a bundled family and the Sinhala fallback',
-      () {
-    for (final b in Brightness.values) {
-      final t = namoTheme(b).textTheme;
-      for (final s in [
-        t.titleLarge,
-        t.titleMedium,
-        t.bodyLarge,
-        t.bodyMedium,
-        t.labelLarge,
-        t.bodySmall
-      ]) {
-        expect(s!.fontFamily, NamoFonts.english);
-        expect(s.fontFamilyFallback, contains(NamoFonts.sinhala));
-        expect(s.fontSize, lessThanOrEqualTo(22));
+  test(
+    'every theme text style uses a bundled family and the Sinhala fallback',
+    () {
+      for (final b in Brightness.values) {
+        final t = namoTheme(b).textTheme;
+        // All 15 roles: a role without the fallback would make Flutter web
+        // download a font.
+        final roles = {
+          'displayLarge': t.displayLarge,
+          'displayMedium': t.displayMedium,
+          'displaySmall': t.displaySmall,
+          'headlineLarge': t.headlineLarge,
+          'headlineMedium': t.headlineMedium,
+          'headlineSmall': t.headlineSmall,
+          'titleLarge': t.titleLarge,
+          'titleMedium': t.titleMedium,
+          'titleSmall': t.titleSmall,
+          'bodyLarge': t.bodyLarge,
+          'bodyMedium': t.bodyMedium,
+          'bodySmall': t.bodySmall,
+          'labelLarge': t.labelLarge,
+          'labelMedium': t.labelMedium,
+          'labelSmall': t.labelSmall,
+        };
+        expect(roles, hasLength(15));
+        for (final MapEntry(key: role, value: s) in roles.entries) {
+          expect(s, isNotNull, reason: role);
+          expect(s!.fontFamily, NamoFonts.english, reason: role);
+          expect(
+            s.fontFamilyFallback,
+            contains(NamoFonts.sinhala),
+            reason: role,
+          );
+          expect(s.fontSize, lessThanOrEqualTo(22), reason: role);
+        }
       }
-    }
-  });
+    },
+  );
 
   test('themes are flat', () {
     final t = namoTheme(Brightness.light);
