@@ -170,6 +170,24 @@ void main() {
       );
       expect(find.text('Good evening'), findsOneWidget);
     });
+
+    testWidgets('the greeting refreshes when the app comes back', (t) async {
+      var now = DateTime(2026, 3, 4, 8);
+      await openReal(
+        t,
+        Routes.home,
+        overrides: [clockProvider.overrideWithValue(() => now)],
+      );
+      expect(find.text('Good morning'), findsOneWidget);
+      now = DateTime(2026, 3, 4, 21);
+      await t.pump();
+      expect(find.text('Good morning'), findsOneWidget);
+      t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await t.pump();
+      expect(find.text('Good evening'), findsOneWidget);
+      expect(find.text('Good morning'), findsNothing);
+    });
   });
 
   group('continue reading and the featured button', () {
