@@ -160,44 +160,55 @@ class _HeadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final section = item.section;
+    // The bookmark button is 48 high; the heading's first line is centred on
+    // it, whatever the text size, and the rest wraps beneath.
+    final firstLine = MediaQuery.textScalerOf(context)
+        .scale(20 * fontScale * 1.4);
+    final inset = firstLine >= NamoSizes.touchTarget
+        ? 0.0
+        : (NamoSizes.touchTarget - firstLine) / 2;
     return Padding(
       padding: const EdgeInsets.only(top: 28, bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Semantics(
                   header: true,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        '${section.number}',
-                        softWrap: true,
-                        style: namoText(
-                          NamoFonts.english,
-                          size: 18 * fontScale,
-                          color: p.accent,
-                          weight: 600,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          section.heading,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: inset),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          '${section.number}',
                           softWrap: true,
                           style: namoText(
-                            NamoFonts.sinhala,
-                            size: 20 * fontScale,
+                            NamoFonts.english,
+                            size: 18 * fontScale,
                             color: p.heading,
                             weight: 600,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            section.heading,
+                            softWrap: true,
+                            style: namoText(
+                              NamoFonts.sinhala,
+                              size: 20 * fontScale,
+                              color: p.heading,
+                              weight: 600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

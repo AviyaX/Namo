@@ -26,6 +26,13 @@ import 'reading_position.dart';
 /// How close (in pixels) to a heading counts as being at its start.
 const _atStart = 8.0;
 
+/// The reader's top bar: two title lines (20 px, line height 1.2) and one
+/// category line (14 px, line height 1.4), at least 76.
+double _toolbarHeight(TextScaler scaler) {
+  final height = scaler.scale(20 * 1.2) * 2 + scaler.scale(14 * 1.4) + 8;
+  return height < 76 ? 76 : height;
+}
+
 /// How long the page must be still before its place is saved.
 const _saveDelay = Duration(milliseconds: 400);
 
@@ -138,7 +145,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// The one link between audio and auto-scroll: audio starting starts the
   /// scroll, if the setting asks for it.
   void _onAudio(ChantState state) {
-    final started = state.status == ChantStatus.playing &&
+    final started =
+        state.status == ChantStatus.playing &&
         _audioStatus != ChantStatus.playing;
     _audioStatus = state.status;
     if (started &&
@@ -427,8 +435,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                 onPressed: _back,
               ),
               titleSpacing: 0,
-              // Room for a title on two lines and the category beneath.
-              toolbarHeight: 76,
+              // Room for a title on two lines and the category beneath, at
+              // the device's text size.
+              toolbarHeight: _toolbarHeight(MediaQuery.textScalerOf(context)),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -437,9 +446,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                     reading.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(
-                      context,
-                    ).appBarTheme.titleTextStyle?.copyWith(height: 1.2),
+                    style: Theme.of(context).appBarTheme.titleTextStyle
+                        ?.copyWith(height: 1.2),
                   ),
                   if (category != null && category.title != reading.title)
                     Text(

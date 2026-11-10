@@ -60,40 +60,54 @@ class ReaderBottomBar extends StatelessWidget {
                 ),
               ),
             ),
-            ?audio,
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    key: const ValueKey('reader-prev'),
-                    tooltip: 'Previous section',
-                    icon: const Icon(Icons.skip_previous),
-                    onPressed: onPrevious,
-                  ),
-                  IconButton(
-                    key: const ValueKey('reader-play'),
-                    tooltip: switch (autoScroll) {
-                      AutoScrollStatus.running => 'Pause auto-scroll',
-                      AutoScrollStatus.paused => 'Resume auto-scroll',
-                      AutoScrollStatus.stopped ||
-                      AutoScrollStatus.finished => 'Start auto-scroll',
-                    },
-                    icon: Icon(
-                      autoScroll == AutoScrollStatus.running
-                          ? Icons.pause
-                          : Icons.play_arrow,
+            // The controls sit in the reading column, as the text does.
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: NamoSizes.readingColumn,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ?audio,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                            key: const ValueKey('reader-prev'),
+                            tooltip: 'Previous section',
+                            icon: const Icon(Icons.skip_previous),
+                            onPressed: onPrevious,
+                          ),
+                          IconButton(
+                            key: const ValueKey('reader-play'),
+                            tooltip: switch (autoScroll) {
+                              AutoScrollStatus.running => 'Pause auto-scroll',
+                              AutoScrollStatus.paused => 'Resume auto-scroll',
+                              AutoScrollStatus.stopped ||
+                              AutoScrollStatus.finished => 'Start auto-scroll',
+                            },
+                            icon: Icon(
+                              autoScroll == AutoScrollStatus.running
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                            ),
+                            onPressed: onPlay,
+                          ),
+                          IconButton(
+                            key: const ValueKey('reader-next'),
+                            tooltip: 'Next section',
+                            icon: const Icon(Icons.skip_next),
+                            onPressed: onNext,
+                          ),
+                        ],
+                      ),
                     ),
-                    onPressed: onPlay,
-                  ),
-                  IconButton(
-                    key: const ValueKey('reader-next'),
-                    tooltip: 'Next section',
-                    icon: const Icon(Icons.skip_next),
-                    onPressed: onNext,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

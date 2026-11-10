@@ -86,21 +86,6 @@ class ScrollSpeedControl extends StatelessWidget {
               ],
             ],
           ),
-          if (custom)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: ExcludeSemantics(
-                child: Text(
-                  'Custom',
-                  softWrap: true,
-                  style: namoText(
-                    NamoFonts.english,
-                    size: 14,
-                    color: p.textQuiet,
-                  ),
-                ),
-              ),
-            ),
           MergeSemantics(
             child: Semantics(
               label: 'Scroll speed',
@@ -116,6 +101,22 @@ class ScrollSpeedControl extends StatelessWidget {
               ),
             ),
           ),
+          // Under the slider, so the slider does not move when it appears.
+          if (custom)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: ExcludeSemantics(
+                child: Text(
+                  'Custom',
+                  softWrap: true,
+                  style: namoText(
+                    NamoFonts.english,
+                    size: 14,
+                    color: p.textQuiet,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -152,6 +153,7 @@ class _SpeedChoice extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
         highlightColor: p.surface,
         hoverColor: p.surface,
+        focusColor: p.focus,
         child: Container(
           constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
           alignment: Alignment.center,

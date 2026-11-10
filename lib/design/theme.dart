@@ -133,6 +133,16 @@ ThemeData namoTheme(Brightness brightness) {
         hoverColor: p.surface,
       ),
     ),
+    // Off must show: an outline and thumb in the quiet text colour (the
+    // default is a pale grey on a pale track).
+    switchTheme: SwitchThemeData(
+      trackColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected) ? p.heading : p.background),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected) ? p.heading : p.textQuiet),
+      thumbColor: WidgetStateProperty.resolveWith((states) =>
+          states.contains(WidgetState.selected) ? p.background : p.textQuiet),
+    ),
     sliderTheme: SliderThemeData(
       activeTrackColor: p.heading,
       inactiveTrackColor: p.divider,

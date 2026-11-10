@@ -89,6 +89,7 @@ class _ContinueReading extends ConsumerWidget {
         splashFactory: NoSplash.splashFactory,
         highlightColor: p.surface,
         hoverColor: p.surface,
+        focusColor: p.focus,
         child: Container(
           constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),

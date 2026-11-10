@@ -97,6 +97,7 @@ class SourcesScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Sources')),
       body: Center(
         child: ConstrainedBox(
+          key: const ValueKey('sources-column'),
           constraints: const BoxConstraints(maxWidth: NamoSizes.readingColumn),
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 16),
@@ -211,9 +212,17 @@ class _CreditBlock extends StatelessWidget {
           ),
           if (credit.address != null) ...[
             const SizedBox(height: 4),
-            SelectableText(
-              credit.address!,
-              style: namoText(NamoFonts.english, size: 14, color: p.heading),
+            // A screen reader reads the address as a label; the text can
+            // still be selected and copied by touch or mouse.
+            Semantics(
+              container: true,
+              label: credit.address!,
+              child: ExcludeSemantics(
+                child: SelectableText(
+                  credit.address!,
+                  style: namoText(NamoFonts.english, size: 14, color: p.heading),
+                ),
+              ),
             ),
           ],
         ],

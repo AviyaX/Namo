@@ -32,17 +32,21 @@ class AppShell extends StatelessWidget {
       return Scaffold(
         body: Row(
           children: [
-            NavigationRail(
-              selectedIndex: shell.currentIndex,
-              onDestinationSelected: _select,
-              labelType: NavigationRailLabelType.all,
-              destinations: [
-                for (final t in _tabs)
-                  NavigationRailDestination(
-                    icon: Icon(t.icon, weight: 300),
-                    label: Text(t.label),
-                  ),
-              ],
+            // Clear of a display cut-out or a rounded edge on the left.
+            SafeArea(
+              right: false,
+              child: NavigationRail(
+                selectedIndex: shell.currentIndex,
+                onDestinationSelected: _select,
+                labelType: NavigationRailLabelType.all,
+                destinations: [
+                  for (final t in _tabs)
+                    NavigationRailDestination(
+                      icon: Icon(t.icon, weight: 300),
+                      label: Text(t.label),
+                    ),
+                ],
+              ),
             ),
             const VerticalDivider(),
             Expanded(child: shell),

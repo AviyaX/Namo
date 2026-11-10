@@ -36,6 +36,7 @@ class SavedScreen extends ConsumerWidget {
           ];
           return Center(
             child: ConstrainedBox(
+              key: const ValueKey('saved-column'),
               constraints: const BoxConstraints(
                 maxWidth: NamoSizes.readingColumn,
               ),
@@ -133,6 +134,7 @@ class _SavedRow extends StatelessWidget {
                 splashFactory: NoSplash.splashFactory,
                 highlightColor: p.surface,
                 hoverColor: p.surface,
+                focusColor: p.focus,
                 child: Container(
                   constraints: const BoxConstraints(
                     minHeight: NamoSizes.touchTarget,

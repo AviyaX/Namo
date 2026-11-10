@@ -66,6 +66,7 @@ class SettingsScreen extends ConsumerWidget {
               ])
                 _ChoiceRow(
                   label: label,
+                  oneOfGroup: true,
                   selected: settings.themeMode == mode,
                   onTap: () => controller.setThemeMode(mode),
                 ),
@@ -90,10 +91,14 @@ class _ChoiceRow extends StatelessWidget {
     required this.onTap,
     this.hint,
     this.enabled = true,
+    this.oneOfGroup = false,
   });
 
   final String label;
   final bool selected;
+
+  /// True when choosing this row switches the others off (theme, layout).
+  final bool oneOfGroup;
   final VoidCallback onTap;
   final String? hint;
   final bool enabled;
@@ -107,7 +112,8 @@ class _ChoiceRow extends StatelessWidget {
       excludeSemantics: true,
       button: true,
       enabled: enabled,
-      selected: selected,
+      checked: selected,
+      inMutuallyExclusiveGroup: oneOfGroup,
       label: label,
       hint: hint,
       onTap: enabled ? onTap : null,
@@ -116,6 +122,7 @@ class _ChoiceRow extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
         highlightColor: p.surface,
         hoverColor: p.surface,
+        focusColor: p.focus,
         child: Container(
           constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -180,27 +187,29 @@ class LayoutChooser extends ConsumerWidget {
     final p = NamoPalette.of(context);
     return Column(
       children: [
+        for (final layout in TwoLanguageLayout.values)
+          _ChoiceRow(
+            label: layout.label,
+            oneOfGroup: true,
+            selected: settings.layout == layout,
+            enabled: enabled,
+            hint: enabled ? null : 'Needs two languages',
+            onTap: () => ref.read(settingsProvider.notifier).setLayout(layout),
+          ),
         if (!enabled)
-          // Rows already carry the hint for screen readers; this is the
-          // visible copy, so it is not announced a second time.
+          // Below the rows, so they do not move when it appears. The rows
+          // already carry the hint for screen readers; this is the visible
+          // copy, so it is not announced a second time.
           ExcludeSemantics(
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
                 child: Text('Needs two languages',
                     style: namoText(NamoFonts.english,
                         size: 14, color: p.textQuiet)),
               ),
             ),
-          ),
-        for (final layout in TwoLanguageLayout.values)
-          _ChoiceRow(
-            label: layout.label,
-            selected: settings.layout == layout,
-            enabled: enabled,
-            hint: enabled ? null : 'Needs two languages',
-            onTap: () => ref.read(settingsProvider.notifier).setLayout(layout),
           ),
       ],
     );

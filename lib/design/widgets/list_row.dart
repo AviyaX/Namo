@@ -35,6 +35,7 @@ class ListRow extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
         highlightColor: p.surface,
         hoverColor: p.surface,
+        focusColor: p.focus,
         child: Container(
           constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -48,7 +49,7 @@ class ListRow extends StatelessWidget {
                   width: 36,
                   child: Text(
                     '$number',
-                    style: namoText(NamoFonts.english, size: 16, color: p.accent),
+                    style: namoText(NamoFonts.english, size: 16, color: p.heading),
                   ),
                 ),
               Expanded(

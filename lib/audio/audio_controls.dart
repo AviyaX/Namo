@@ -13,6 +13,8 @@ String formatTime(Duration? d) {
   return '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';
 }
 
+const _failedMessage = 'The recording could not be played.';
+
 /// Play or pause, restart, and the time, for [recording]. The reader loads
 /// the recording into the player.
 class AudioControls extends ConsumerWidget {
@@ -46,12 +48,19 @@ class _Controls extends StatelessWidget {
     if (state.status == ChantStatus.failed) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Text('The recording could not be played.', style: style),
+        // Announced when it appears: the recording was asked for and is not
+        // coming.
+        child: Semantics(
+          liveRegion: true,
+          container: true,
+          label: _failedMessage,
+          child: ExcludeSemantics(child: Text(_failedMessage, style: style)),
+        ),
       );
     }
     final playing = state.status == ChantStatus.playing;
-    final ready = state.status != ChantStatus.idle &&
-        state.status != ChantStatus.loading;
+    final ready =
+        state.status != ChantStatus.idle && state.status != ChantStatus.loading;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -61,7 +70,13 @@ class _Controls extends StatelessWidget {
           if (recording.placeholder)
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(recording.label, maxLines: 2, style: style),
+              child: Semantics(
+                container: true,
+                label: recording.label,
+                child: ExcludeSemantics(
+                  child: Text(recording.label, maxLines: 2, style: style),
+                ),
+              ),
             ),
           Row(
             children: [

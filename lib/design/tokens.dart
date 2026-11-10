@@ -56,6 +56,9 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     accent: Color(0xFFC9AE7C),
   );
 
+  /// The tint a keyboard-focused row is drawn in: the heading colour, faint.
+  Color get focus => heading.withValues(alpha: 0.18);
+
   static NamoPalette of(BuildContext context) =>
       Theme.of(context).extension<NamoPalette>()!;
 
