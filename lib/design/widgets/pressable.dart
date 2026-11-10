@@ -16,6 +16,9 @@ class Pressable extends StatefulWidget {
     this.selected,
     this.expanded,
     this.excludeChildSemantics = false,
+    this.checked,
+    this.inMutuallyExclusiveGroup,
+    this.hint,
   });
 
   final VoidCallback? onTap;
@@ -29,6 +32,15 @@ class Pressable extends StatefulWidget {
 
   /// Replace the child's own semantics with [semanticLabel].
   final bool excludeChildSemantics;
+
+  /// For a choice that is on or off (a check box, or one of a group).
+  final bool? checked;
+
+  /// True when choosing this switches the others in its group off.
+  final bool? inMutuallyExclusiveGroup;
+
+  /// Extra words for screen readers, such as why a control is disabled.
+  final String? hint;
 
   @override
   State<Pressable> createState() => _PressableState();
@@ -61,6 +73,9 @@ class _PressableState extends State<Pressable> {
       enabled: enabled,
       label: widget.semanticLabel,
       selected: widget.selected,
+      checked: widget.checked,
+      inMutuallyExclusiveGroup: widget.inMutuallyExclusiveGroup,
+      hint: widget.hint,
       expanded: widget.expanded,
       excludeSemantics: widget.excludeChildSemantics,
       onTap: widget.onTap,

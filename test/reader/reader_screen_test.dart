@@ -5,7 +5,7 @@ import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
-import 'package:buddhist_gatha/settings/settings_screen.dart';
+import 'package:buddhist_gatha/settings/choosers.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';

@@ -127,7 +127,15 @@ void main() {
         find.ancestor(of: find.text('Sources'), matching: find.byType(Pressable)),
         findsOneWidget,
       );
-      for (final label in ['Pali', 'Verse by verse', 'Dark', 'Slow']) {
+      // The language, layout and theme segments are Pressables too.
+      for (final label in ['Pali', 'Verse by verse', 'Dark']) {
+        expect(
+          find.ancestor(of: find.text(label), matching: find.byType(Pressable)),
+          findsOneWidget,
+          reason: label,
+        );
+      }
+      for (final label in ['Slow']) {
         final ink = t.widget<InkWell>(
           find.ancestor(of: find.text(label), matching: find.byType(InkWell)).first,
         );
@@ -144,7 +152,8 @@ void main() {
     await t.pumpAndSettle();
     expect(find.text('Needs two languages'), findsOneWidget);
     expect(t.getTopLeft(row('Section by section')).dy, before);
-    expect(t.getTopLeft(row('Verse by verse')).dy, greaterThan(before));
+    // Side by side, so the second segment stays level with the first.
+    expect(t.getTopLeft(row('Verse by verse')).dy, before);
   });
 
   testWidgets('10. the speed slider stays put when "Custom" appears', (t) async {

@@ -6,7 +6,7 @@ import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../settings/settings.dart';
 import '../settings/setting_controls.dart';
-import '../settings/settings_screen.dart';
+import '../settings/choosers.dart';
 
 /// Opens the reader settings over the reader.
 Future<void> showReaderSettingsSheet(
