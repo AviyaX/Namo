@@ -133,11 +133,11 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/branding/namo_icon_square.png"
-    background_color: "#2B3837"
-    theme_color: "#2B3837"
+    background_color: "#151714"
+    theme_color: "#151714"
 
 flutter_native_splash:
-  color: "#2B3837"
+  color: "#151714"
   image: assets/branding/namo_icon_square.png
   android: true
   ios: true
