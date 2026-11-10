@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/buttons.dart';
 import '../design/widgets/list_row.dart';
+import '../design/widgets/namo_page.dart';
+import '../design/widgets/page_header.dart';
+import '../design/widgets/surface_card.dart';
 import '../library/library_gate.dart';
-import 'setting_controls.dart';
+import '../router.dart';
 
 /// One credited source. An address is shown as text to copy, never opened.
 class _Credit {
@@ -105,102 +110,117 @@ class SourcesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    TextStyle body({Color? color}) =>
-        namoText(NamoFonts.english, size: 16, color: color ?? p.text);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Sources')),
-      body: Center(
-        child: ConstrainedBox(
-          key: const ValueKey('sources-column'),
-          constraints: const BoxConstraints(maxWidth: NamoSizes.readingColumn),
-          child: SingleChildScrollView(
-            // Clear of the navigation bar floating over the page.
-            padding: EdgeInsets.only(
-              bottom: 16 + MediaQuery.paddingOf(context).bottom,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: Center(
-                    child: SizedBox(
-                      key: const ValueKey('sources-icon'),
-                      width: 96,
-                      height: 96,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/branding/namo_icon_square.png',
-                          semanticLabel: 'Namo',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Text(
-                    'Namo is free. It has no ads and nothing to buy.',
-                    textAlign: TextAlign.center,
-                    style: body(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                  child: Text(
-                    'Namo is not made by, or connected with, namo.lk.',
-                    textAlign: TextAlign.center,
-                    style: body(),
-                  ),
-                ),
-                for (final credit in _credits) _CreditBlock(credit),
-                const SettingsHeading('Pictures'),
-                for (final credit in _pictureCredits) _CreditBlock(credit),
-                LibraryGate(
-                  builder: (context, library) {
-                    final corrections = _collectCorrections(library);
-                    final checks = _collectChecks(library);
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (corrections.isNotEmpty) ...[
-                          const SettingsHeading('Corrections'),
-                          for (final (i, e) in corrections.indexed)
-                            _CorrectionRow(
-                              key: ValueKey('correction-$i'),
-                              entry: e,
-                            ),
-                        ],
-                        if (checks.isNotEmpty) ...[
-                          const SettingsHeading('Still to be checked'),
-                          for (final (id, section, notes) in checks)
-                            _CheckRow(
-                              key: ValueKey('check-$id'),
-                              section: section,
-                              notes: notes,
-                            ),
-                        ],
-                      ],
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                ListRow(
-                  title: 'Font licences',
-                  onTap: () => showLicensePage(
-                    context: context,
-                    applicationName: 'Namo',
-                  ),
-                ),
-              ],
+    return NamoPage(
+      columnKey: const ValueKey('sources-column'),
+      children: [
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: NamoIconButton(
+            icon: Symbols.arrow_back_rounded,
+            tooltip: 'Back',
+            onPressed: () => context.go(Routes.settings),
+          ),
+        ),
+        const SizedBox(height: NamoSpace.sm),
+        const PageHeader(title: 'Sources'),
+        const SizedBox(height: NamoSpace.xl),
+        Center(
+          child: SizedBox(
+            key: const ValueKey('sources-icon'),
+            width: 96,
+            height: 96,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(NamoRadius.sm),
+              child: Image.asset(
+                'assets/branding/namo_icon_square.png',
+                semanticLabel: 'Namo',
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
-      ),
+        const SizedBox(height: NamoSpace.lg),
+        Text(
+          'Namo is free. It has no ads and nothing to buy.',
+          textAlign: TextAlign.center,
+          style: NamoType.body(p.text),
+        ),
+        const SizedBox(height: NamoSpace.sm),
+        Text(
+          'Namo is not made by, or connected with, namo.lk.',
+          textAlign: TextAlign.center,
+          style: NamoType.body(p.text),
+        ),
+        for (final credit in _credits) _CreditBlock(credit),
+        const _SectionLabel('Pictures'),
+        for (final credit in _pictureCredits) _CreditBlock(credit),
+        LibraryGate(
+          builder: (context, library) {
+            final corrections = _collectCorrections(library);
+            final checks = _collectChecks(library);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (corrections.isNotEmpty) ...[
+                  const _SectionLabel('Corrections'),
+                  for (final (i, e) in corrections.indexed)
+                    _CorrectionRow(key: ValueKey('correction-$i'), entry: e),
+                ],
+                if (checks.isNotEmpty) ...[
+                  const _SectionLabel('Still to be checked'),
+                  for (final (id, section, notes) in checks)
+                    _CheckRow(
+                      key: ValueKey('check-$id'),
+                      section: section,
+                      notes: notes,
+                    ),
+                ],
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: NamoSpace.lg),
+        ListRow(
+          title: 'Font licences',
+          onTap: () =>
+              showLicensePage(context: context, applicationName: 'Namo'),
+        ),
+      ],
     );
   }
+}
+
+/// A heading over a run of cards.
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: NamoSpace.xl),
+    child: Semantics(
+      header: true,
+      child: Text(
+        text,
+        softWrap: true,
+        style: NamoType.overline(NamoPalette.of(context).textSecondary),
+      ),
+    ),
+  );
+}
+
+/// A card in a run of cards, 16 below the one before.
+class _SourceCard extends StatelessWidget {
+  const _SourceCard({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: NamoSpace.lg),
+    child: SurfaceCard(child: child),
+  );
 }
 
 class _CreditBlock extends StatelessWidget {
@@ -211,26 +231,18 @@ class _CreditBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    return Container(
-      margin: const EdgeInsets.only(top: 16),
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: p.divider, width: 1)),
-      ),
+    return _SourceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            credit.name,
-            style: namoText(NamoFonts.english, size: 18, color: p.text),
+          SizedBox(
+            width: double.infinity,
+            child: Text(credit.name, style: NamoType.cardTitle(p.text)),
           ),
-          const SizedBox(height: 4),
-          Text(
-            credit.supplied,
-            style: namoText(NamoFonts.english, size: 16, color: p.textQuiet),
-          ),
+          const SizedBox(height: NamoSpace.xs),
+          Text(credit.supplied, style: NamoType.body(p.textSecondary)),
           if (credit.address != null) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: NamoSpace.xs),
             // A screen reader reads the address as a label; the text can
             // still be selected and copied by touch or mouse.
             Semantics(
@@ -239,7 +251,7 @@ class _CreditBlock extends StatelessWidget {
               child: ExcludeSemantics(
                 child: SelectableText(
                   credit.address!,
-                  style: namoText(NamoFonts.english, size: 14, color: p.heading),
+                  style: NamoType.caption(p.sage),
                 ),
               ),
             ),
@@ -263,7 +275,7 @@ class _CorrectionRow extends StatelessWidget {
         ? 'Section ${entry.sections.single}'
         : 'Sections ${entry.sections.join(', ')}';
     final form = namoText(NamoFonts.sinhala, size: 18, color: p.text);
-    final detail = namoText(NamoFonts.english, size: 14, color: p.textQuiet);
+    final detail = NamoType.caption(p.textSecondary);
     // The arrow is drawn from the bundled icon font: a text arrow is in none
     // of the bundled text fonts and would be fetched from the network.
     return Semantics(
@@ -274,21 +286,22 @@ class _CorrectionRow extends StatelessWidget {
         where,
         if (c.reason.isNotEmpty) c.reason,
       ].join(', '),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: p.divider, width: 1)),
-        ),
+      child: _SourceCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 8,
-              runSpacing: 2,
+              spacing: NamoSpace.sm,
+              runSpacing: NamoSpace.xs,
               children: [
                 Text(c.from, style: form),
-                Icon(Symbols.arrow_right_alt_rounded, size: 22, color: p.textQuiet),
+                Icon(
+                  Symbols.arrow_right_alt_rounded,
+                  size: NamoSizes.icon,
+                  weight: 300,
+                  color: p.textSecondary,
+                ),
                 Text(c.to, style: form),
               ],
             ),
@@ -310,29 +323,18 @@ class _CheckRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: p.divider, width: 1)),
-      ),
+    return _SourceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Section $section',
-            style: namoText(NamoFonts.english, size: 16, color: p.text),
+          SizedBox(
+            width: double.infinity,
+            child: Text('Section $section', style: NamoType.label(p.text)),
           ),
           for (final note in notes)
             Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                note,
-                style: namoText(
-                  NamoFonts.english,
-                  size: 14,
-                  color: p.textQuiet,
-                ),
-              ),
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
+              child: Text(note, style: NamoType.caption(p.textSecondary)),
             ),
         ],
       ),
