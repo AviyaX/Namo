@@ -53,6 +53,23 @@ void main() {
       handle.dispose();
     });
 
+    testWidgets('subtitleFamily romanPali draws the subtitle in the serif', (t) async {
+      await pumpThemed(
+        t,
+        SizedBox(
+          width: 390,
+          child: ListRow(
+            title: 'Title',
+            subtitle: 'Sub',
+            subtitleFamily: NamoFonts.romanPali,
+            onTap: () {},
+          ),
+        ),
+      );
+      expect(t.widget<Text>(find.text('Sub')).style!.fontFamily,
+          contains('NotoSerif'));
+    });
+
     testWidgets('leading and caption render', (t) async {
       await pumpThemed(
         t,

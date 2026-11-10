@@ -45,7 +45,7 @@ class FeaturedCard extends ConsumerWidget {
       ),
     );
     final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
-    final count = sectionCountLabel(sectionCount(category));
+    final count = topicCountLabel(category);
     final open = _opener(context);
     final overline = featuredOverlines[category.id];
     const onPicture = NamoPalette.onPicture;

@@ -37,6 +37,18 @@ int sectionCount(Category c) =>
 
 String sectionCountLabel(int n) => n == 1 ? '1 section' : '$n sections';
 
+String pirithCountLabel(int n) => '$n pirith';
+
+/// True for a topic whose readings are all phrased pirith: it is counted and
+/// listed by reading, not by section.
+bool isPirithTopic(Category c) =>
+    c.readings.isNotEmpty && c.readings.every((r) => r.isPhrased);
+
+/// The count shown for [c]: its pirith, or its sections.
+String topicCountLabel(Category c) => isPirithTopic(c)
+    ? pirithCountLabel(c.readings.length)
+    : sectionCountLabel(sectionCount(c));
+
 /// Width of the bundled pictures; decoding never goes wider.
 const int _maxDecodeWidth = 1600;
 

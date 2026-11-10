@@ -1,4 +1,3 @@
-import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/widgets/page_header.dart';
 import 'package:buddhist_gatha/reader/auto_scroll.dart';
@@ -13,7 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 
-import '../quality/quality_support.dart' show PlaceholderCatalogue;
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
 
@@ -315,22 +313,14 @@ void main() {
     expect(line.top - text.bottom, greaterThanOrEqualTo(24));
   });
 
-  testWidgets('"No recordings are included yet." shows with the bundled content',
-      (t) async {
+  testWidgets('the recordings line is gone and the switch has its hint', (
+    t,
+  ) async {
     await openSettings(t, size: const Size(390, 2400));
-    expect(find.text('No recordings are included yet.'), findsOneWidget);
-    expect(inGroup('Audio', find.text('No recordings are included yet.')),
-        findsOneWidget);
-  });
-
-  testWidgets('"No recordings are included yet." hides when a reading has one',
-      (t) async {
-    await openSettings(
-      t,
-      size: const Size(390, 2400),
-      extra: [audioCatalogueProvider.overrideWithValue(PlaceholderCatalogue())],
-    );
     expect(find.text('No recordings are included yet.'), findsNothing);
+    expect(find.text('Start auto-scroll when a recording starts'), findsOneWidget);
+    expect(inGroup('Audio', find.text('Pirith follow the chanting by themselves.')),
+        findsOneWidget);
   });
 
   testWidgets('the last group scrolls clear of the navigation bar', (t) async {

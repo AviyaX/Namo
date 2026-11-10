@@ -228,6 +228,12 @@ void main() {
               for (final v in h.section.verses)
                 for (final x in [v.paliSi, v.paliRoman, v.sinhala, v.english])
                   if (x != null) ...x.split('\n').map((l) => l.trim()),
+              // A pirith hit's line is the text of one of its phrases.
+              for (final s in h.reading.sections)
+                for (final v in s.verses)
+                  for (final ph in v.phrases)
+                    for (final x in [ph.pali, ph.sinhala, ph.english])
+                      ...x.split('\n').map((l) => l.trim()),
             };
             expect(stored, contains(line));
             checked++;

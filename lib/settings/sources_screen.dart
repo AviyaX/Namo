@@ -39,6 +39,15 @@ const _credits = [
         'Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane',
     'The rest of the English.',
   ),
+  _Credit(
+    'pitaka.lk/pirith (pathnirvana)',
+    'Pirith: Pali text and Sinhala meaning from the Piruwana Poth Wahanse, '
+        'as published at pitaka.lk/pirith; English meaning as given there '
+        '(its origin is not stated). Chanted by Ven. Nauyane Ariyadhamma '
+        'Thero. Licence named by the source: Creative Commons '
+        'Attribution-NoDerivatives 4.0 International.',
+    'https://pitaka.lk/pirith/',
+  ),
 ];
 
 const _pictureCredits = [
@@ -52,6 +61,11 @@ const _pictureCredits = [
     'Shown across the top of Home on wide screens. Made for this app by its '
         'owner with an AI image tool; a generated picture, not a photograph '
         'of a real place.',
+  ),
+  _Credit(
+    'Pirith card picture',
+    'Shown on the Pirith card. Made for this app by its owner with an AI '
+        'image tool; a generated picture, not a photograph of a real place.',
   ),
 ];
 
@@ -147,7 +161,7 @@ class SourcesScreen extends StatelessWidget {
         ),
         const SizedBox(height: NamoSpace.sm),
         Text(
-          'Namo is not made by, or connected with, namo.lk.',
+          'Namo is not made by, or connected with, namo.lk or pitaka.lk.',
           textAlign: TextAlign.center,
           style: NamoType.body(p.text),
         ),

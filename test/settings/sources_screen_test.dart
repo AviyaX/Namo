@@ -24,7 +24,7 @@ Future<void> openSources(WidgetTester t) async {
       keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
     ],
     location: Routes.sources,
-    size: const Size(390, 6000),
+    size: const Size(390, 8000),
   );
 }
 
@@ -49,7 +49,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        text('Namo is not made by, or connected with, namo.lk.'),
+        text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
         findsOneWidget,
       );
       expect(find.textContaining('namo.lk', findRichText: true), findsWidgets);
@@ -69,12 +69,35 @@ void main() {
         findsOneWidget,
       );
       // Addresses are selectable text, not links.
-      expect(find.byType(SelectableText), findsNWidgets(3));
+      expect(find.byType(SelectableText), findsNWidgets(4));
 
       final icon = t.getSize(find.byKey(const ValueKey('sources-icon')));
       expect(icon, const Size(96, 96));
     },
   );
+
+  testWidgets('Sources credits pitaka.lk/pirith and never says permission', (
+    t,
+  ) async {
+    await openSources(t);
+    expect(text('pitaka.lk/pirith (pathnirvana)'), findsOneWidget);
+    expect(
+      text(
+        'Pirith: Pali text and Sinhala meaning from the Piruwana Poth '
+        'Wahanse, as published at pitaka.lk/pirith; English meaning as '
+        'given there (its origin is not stated). Chanted by Ven. Nauyane '
+        'Ariyadhamma Thero. Licence named by the source: Creative Commons '
+        'Attribution-NoDerivatives 4.0 International.',
+      ),
+      findsOneWidget,
+    );
+    expect(text('https://pitaka.lk/pirith/'), findsOneWidget);
+    expect(text('Pirith card picture'), findsOneWidget);
+    expect(
+      find.textContaining('used with permission', findRichText: true),
+      findsNothing,
+    );
+  });
 
   testWidgets(
     'Sources shows the Pictures heading with the "Home card picture" credit and no address under it',
@@ -87,8 +110,8 @@ void main() {
       expect(find.text('Pictures'), findsOneWidget);
       expect(text('Home card picture'), findsOneWidget);
       expect(text(detail), findsOneWidget);
-      // Only the three text sources have an address.
-      expect(find.byType(SelectableText), findsNWidgets(3));
+      // Only the four text sources have an address.
+      expect(find.byType(SelectableText), findsNWidgets(4));
       // After the text sources, before Corrections.
       final y = t.getTopLeft(find.text('Pictures')).dy;
       expect(y, greaterThan(t.getTopLeft(text('The rest of the English.')).dy));
@@ -99,9 +122,9 @@ void main() {
       expect(note.top, greaterThan(name));
       expect(note.bottom, lessThan(corrections));
       // Nothing between the picture credits and the next heading but their
-      // padding: the Home banner credit is the last one.
+      // padding: the Pirith picture credit is the last one.
       final last = t.getRect(
-        find.textContaining('the top of Home on wide screens', findRichText: true),
+        find.textContaining('Shown on the Pirith card', findRichText: true),
       );
       expect(last.top, greaterThan(note.bottom));
       expect(corrections - last.bottom, lessThan(48));
@@ -206,8 +229,8 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 4 text sources + 2 pictures + 16 corrections + 4 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(26));
+    // 5 text sources + 3 pictures + 16 corrections + 4 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(28));
   });
 
   for (final dark in [false, true]) {

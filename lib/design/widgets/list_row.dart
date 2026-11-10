@@ -17,6 +17,7 @@ class ListRow extends StatelessWidget {
     this.number,
     this.leading,
     this.titleFamily = NamoFonts.english,
+    this.subtitleFamily,
     this.trailing,
     this.action,
     this.expanded,
@@ -49,6 +50,10 @@ class ListRow extends StatelessWidget {
   final String? caption;
   final int? number;
   final String titleFamily;
+
+  /// The family of the subtitle; [NamoFonts.romanPali] draws a Roman Pali
+  /// name. Left null, the subtitle is ordinary body text.
+  final String? subtitleFamily;
   final VoidCallback onTap;
 
   @override
@@ -91,7 +96,12 @@ class ListRow extends StatelessWidget {
                 children: [
                   Text(title, style: titleStyle),
                   if (subtitle != null)
-                    Text(subtitle!, style: NamoType.body(p.textSecondary)),
+                    Text(
+                      subtitle!,
+                      style: subtitleFamily == NamoFonts.romanPali
+                          ? NamoType.romanName(p.textSecondary)
+                          : NamoType.body(p.textSecondary),
+                    ),
                   if (caption != null)
                     Text(caption!, style: NamoType.caption(p.textSecondary)),
                   ?detail,

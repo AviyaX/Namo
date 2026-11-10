@@ -36,10 +36,15 @@ class ContinueCard extends ConsumerWidget {
     final progress = id == null ? null : position.byReading[id];
     final reading = id == null ? null : library.reading(id);
     if (progress == null || reading == null) return const SizedBox.shrink();
-    final heading = reading.sections
-        .where((s) => s.id == progress.position.sectionId)
-        .firstOrNull
-        ?.heading;
+    // A pirith has no section headings worth showing; its Roman name goes
+    // second instead.
+    final phrased = reading.isPhrased;
+    final heading = phrased
+        ? reading.titleRoman
+        : reading.sections
+              .where((s) => s.id == progress.position.sectionId)
+              .firstOrNull
+              ?.heading;
     final percent = (progress.progress * 100).round();
     final categoryId = library.categoryOf(reading.id)?.id ?? '';
     final p = NamoPalette.of(context);
@@ -64,7 +69,12 @@ class ContinueCard extends ConsumerWidget {
                 const SizedBox(height: NamoSpace.xs),
                 Text(reading.title, style: NamoType.cardTitle(p.text)),
                 if (heading != null)
-                  Text(heading, style: NamoType.caption(p.textSecondary)),
+                  Text(
+                    heading,
+                    style: phrased
+                        ? NamoType.romanName(p.textSecondary)
+                        : NamoType.caption(p.textSecondary),
+                  ),
                 const SizedBox(height: NamoSpace.md),
                 Row(
                   children: [
