@@ -33,7 +33,11 @@ Library _twoReadings() => Library(
           title: 'Alpha reading',
           sections: [_section('a01', 1), _section('a02', 2)],
         ),
-        Reading(id: 'rb', title: 'Beta reading', sections: [_section('b01', 1)]),
+        Reading(
+          id: 'rb',
+          title: 'Beta reading',
+          sections: [_section('b01', 1)],
+        ),
       ],
     ),
   ],
@@ -46,7 +50,13 @@ Library _manyCategories(int n) => Library(
         id: 'c$i',
         title: 'Category $i',
         subtitle: 'Subtitle $i',
-        readings: [Reading(id: 'r$i', title: 'Reading $i', sections: [_section('s$i', 1)])],
+        readings: [
+          Reading(
+            id: 'r$i',
+            title: 'Reading $i',
+            sections: [_section('s$i', 1)],
+          ),
+        ],
       ),
   ],
 );
@@ -62,9 +72,18 @@ void main() {
       expect(find.byType(ReadingCard), findsNWidgets(lib.categories.length));
       final c = lib.categories.first;
       final card = find.byType(ReadingCard).first;
-      expect(find.descendant(of: card, matching: find.text(c.title)), findsOneWidget);
-      expect(find.descendant(of: card, matching: find.text(c.subtitle)), findsOneWidget);
-      expect(find.descendant(of: card, matching: find.text('19 sections')), findsOneWidget);
+      expect(
+        find.descendant(of: card, matching: find.text(c.title)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: card, matching: find.text(c.subtitle)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: card, matching: find.text('19 sections')),
+        findsOneWidget,
+      );
     },
   );
 
@@ -73,7 +92,9 @@ void main() {
     expect(find.text('1 section'), findsOneWidget);
   });
 
-  testWidgets('tapping the card opens the reader for a one-reading category', (t) async {
+  testWidgets('tapping the card opens the reader for a one-reading category', (
+    t,
+  ) async {
     await openReal(t, Routes.home);
     await t.tap(find.byType(ReadingCard).first);
     await t.pumpAndSettle();
@@ -124,22 +145,37 @@ void main() {
     },
   );
 
-  testWidgets('at 1280x800 the cards wrap into a grid with 16 px gaps', (t) async {
-    await openReal(t, Routes.home, size: const Size(1280, 800), library: _manyCategories(4));
+  testWidgets('at 1280x800 the cards wrap into a grid with 16 px gaps', (
+    t,
+  ) async {
+    await openReal(
+      t,
+      Routes.home,
+      size: const Size(1280, 800),
+      library: _manyCategories(4),
+    );
     final a = find.byType(ReadingCard).at(0);
     final b = find.byType(ReadingCard).at(1);
     final c = find.byType(ReadingCard).at(2);
+    final d = find.byType(ReadingCard).at(3);
     expect(t.getTopLeft(b).dy, t.getTopLeft(a).dy);
     expect(t.getTopLeft(b).dx - t.getTopRight(a).dx, closeTo(16, 0.01));
-    if (t.getTopLeft(c).dy > t.getTopLeft(a).dy) {
-      expect(t.getTopLeft(c).dy - t.getBottomLeft(a).dy, closeTo(16, 0.01));
-    }
+    // At 1280x800 (pinned above) three cards fit a row, so the fourth
+    // always starts the second row and the row gap is always checked.
+    expect(t.getTopLeft(c).dy, t.getTopLeft(a).dy);
+    expect(t.getTopLeft(d).dx, t.getTopLeft(a).dx);
+    expect(t.getTopLeft(d).dy - t.getBottomLeft(a).dy, closeTo(16, 0.01));
     for (final i in [0, 1, 2, 3]) {
-      expect(t.getSize(find.byType(ReadingCard).at(i)).width, inInclusiveRange(320, 360));
+      expect(
+        t.getSize(find.byType(ReadingCard).at(i)).width,
+        inInclusiveRange(320, 360),
+      );
     }
   });
 
-  testWidgets('on a phone each card takes the full width of the column', (t) async {
+  testWidgets('on a phone each card takes the full width of the column', (
+    t,
+  ) async {
     await openReal(t, Routes.home, library: _manyCategories(2));
     expect(t.getSize(find.byType(ReadingCard).first).width, 390 - 32);
     expect(
@@ -148,28 +184,38 @@ void main() {
     );
   });
 
-  testWidgets('Continue reading still shows above the cards after something was read',
-      (t) async {
-    await pumpApp(
-      t,
-      overrides: [
-        contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
-        keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
-      ],
-    );
-    final c = ProviderScope.containerOf(t.element(find.byType(Scaffold).first));
-    c.read(positionProvider.notifier).save(
-          const ReadingPosition(readingId: 'r1', sectionId: 's02', fraction: 0),
-          0.5,
-        );
-    await t.pumpAndSettle();
-    expect(find.text('Continue reading'), findsOneWidget);
-    expect(find.byType(ReadingCard), findsOneWidget);
-    expect(
-      t.getTopLeft(find.text('Continue reading')).dy,
-      lessThan(t.getTopLeft(find.byType(ReadingCard)).dy),
-    );
-  });
+  testWidgets(
+    'Continue reading still shows above the cards after something was read',
+    (t) async {
+      await pumpApp(
+        t,
+        overrides: [
+          contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
+          keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+        ],
+      );
+      final c = ProviderScope.containerOf(
+        t.element(find.byType(Scaffold).first),
+      );
+      c
+          .read(positionProvider.notifier)
+          .save(
+            const ReadingPosition(
+              readingId: 'r1',
+              sectionId: 's02',
+              fraction: 0,
+            ),
+            0.5,
+          );
+      await t.pumpAndSettle();
+      expect(find.text('Continue reading'), findsOneWidget);
+      expect(find.byType(ReadingCard), findsOneWidget);
+      expect(
+        t.getTopLeft(find.text('Continue reading')).dy,
+        lessThan(t.getTopLeft(find.byType(ReadingCard)).dy),
+      );
+    },
+  );
 
   testWidgets(
     'Home shows Continue reading only after something was read, and reopens at that place',
@@ -184,7 +230,9 @@ void main() {
       expect(find.text('Continue reading'), findsNothing);
       expect(find.text('category 1'), findsOneWidget);
 
-      final c = ProviderScope.containerOf(t.element(find.byType(Scaffold).first));
+      final c = ProviderScope.containerOf(
+        t.element(find.byType(Scaffold).first),
+      );
       c
           .read(positionProvider.notifier)
           .save(
@@ -216,28 +264,32 @@ void main() {
     },
   );
 
-  testWidgets('Continue reading is absent when the reading is not in the content',
-      (t) async {
-    final store = InMemoryKeyValueStore();
-    await pumpApp(
-      t,
-      overrides: [
-        contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
-        keyValueStoreProvider.overrideWithValue(store),
-      ],
-    );
-    final c = ProviderScope.containerOf(t.element(find.byType(Scaffold).first));
-    c
-        .read(positionProvider.notifier)
-        .save(
-          const ReadingPosition(
-            readingId: 'gone',
-            sectionId: 's01',
-            fraction: 0,
-          ),
-          0.2,
-        );
-    await t.pumpAndSettle();
-    expect(find.text('Continue reading'), findsNothing);
-  });
+  testWidgets(
+    'Continue reading is absent when the reading is not in the content',
+    (t) async {
+      final store = InMemoryKeyValueStore();
+      await pumpApp(
+        t,
+        overrides: [
+          contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
+          keyValueStoreProvider.overrideWithValue(store),
+        ],
+      );
+      final c = ProviderScope.containerOf(
+        t.element(find.byType(Scaffold).first),
+      );
+      c
+          .read(positionProvider.notifier)
+          .save(
+            const ReadingPosition(
+              readingId: 'gone',
+              sectionId: 's01',
+              fraction: 0,
+            ),
+            0.2,
+          );
+      await t.pumpAndSettle();
+      expect(find.text('Continue reading'), findsNothing);
+    },
+  );
 }
