@@ -6,9 +6,14 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/buttons.dart';
+import '../design/widgets/empty_state.dart';
+import '../design/widgets/list_row.dart';
+import '../design/widgets/namo_page.dart';
+import '../design/widgets/page_header.dart';
+import '../home/card_art.dart';
 import '../library/library_gate.dart';
 import '../router.dart';
-import '../settings/setting_controls.dart';
 import 'saved.dart';
 
 class SavedScreen extends ConsumerWidget {
@@ -18,70 +23,97 @@ class SavedScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final saved = ref.watch(savedProvider);
     final controller = ref.read(savedProvider.notifier);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Saved')),
-      body: LibraryGate(
-        builder: (context, library) {
-          // Entries the content no longer has are left out, not deleted.
-          final bookmarks = <(Bookmark, Reading, Section)>[];
-          for (final b in saved.bookmarks) {
-            final reading = library.reading(b.readingId);
-            if (reading == null) continue;
-            for (final s in reading.sections) {
-              if (s.id == b.sectionId) bookmarks.add((b, reading, s));
+    final p = NamoPalette.of(context);
+    return NamoPage(
+      columnKey: const ValueKey('saved-column'),
+      children: [
+        const PageHeader(title: 'Saved'),
+        const SizedBox(height: NamoSpace.lg),
+        LibraryGate(
+          builder: (context, library) {
+            // Entries the content no longer has are left out, not deleted.
+            final bookmarks = <(Bookmark, Reading, Section)>[];
+            for (final b in saved.bookmarks) {
+              final reading = library.reading(b.readingId);
+              if (reading == null) continue;
+              for (final s in reading.sections) {
+                if (s.id == b.sectionId) bookmarks.add((b, reading, s));
+              }
             }
-          }
-          final favourites = <Reading>[
-            for (final id in saved.favourites.toList().reversed)
-              ?library.reading(id),
-          ];
-          return Center(
-            child: ConstrainedBox(
-              key: const ValueKey('saved-column'),
-              constraints: const BoxConstraints(
-                maxWidth: NamoSizes.readingColumn,
-              ),
-              child: ListView(
-                // Clear of the navigation bar floating over the page.
-                padding: EdgeInsets.only(
-                  bottom: 16 + MediaQuery.paddingOf(context).bottom,
+            final favourites = <Reading>[
+              for (final id in saved.favourites.toList().reversed)
+                ?library.reading(id),
+            ];
+            if (bookmarks.isEmpty && favourites.isEmpty) {
+              return EmptyState(
+                icon: Symbols.bookmark_rounded,
+                title: 'Nothing saved yet',
+                message:
+                    'Bookmark a section or favourite a reading and it will '
+                    'wait for you here.',
+                actionLabel: 'Open the Library',
+                onAction: () => context.go(Routes.library),
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
+                  child: Overline('Bookmarks · ${bookmarks.length}'),
                 ),
-                children: [
-                  const SettingsHeading('Bookmarks'),
-                  if (bookmarks.isEmpty) const _Empty('No bookmarks yet.'),
-                  for (final (b, reading, section) in bookmarks)
-                    _SavedRow(
-                      title: section.heading,
-                      titleFamily: NamoFonts.sinhala,
-                      subtitle: reading.title,
-                      removeLabel: 'Remove bookmark: ${section.heading}',
-                      onOpen: () => context.go(
-                        Routes.reader(
-                          reading.id,
-                          sectionId: section.id,
-                          from: ReaderFrom.saved,
-                        ),
+                const SizedBox(height: NamoSpace.sm),
+                if (bookmarks.isEmpty) const _Empty('No bookmarks yet.'),
+                for (final (b, reading, section) in bookmarks)
+                  ListRow(
+                    number: section.number,
+                    title: section.heading,
+                    titleFamily: NamoFonts.sinhala,
+                    subtitle: reading.title,
+                    onTap: () => context.go(
+                      Routes.reader(
+                        reading.id,
+                        sectionId: section.id,
+                        from: ReaderFrom.saved,
                       ),
-                      onRemove: () =>
+                    ),
+                    trailing: NamoIconButton(
+                      icon: Symbols.close_rounded,
+                      tooltip: 'Remove bookmark: ${section.heading}',
+                      color: p.textSecondary,
+                      onPressed: () =>
                           controller.toggleBookmark(b.readingId, b.sectionId),
                     ),
-                  const SettingsHeading('Favourites'),
-                  if (favourites.isEmpty) const _Empty('No favourites yet.'),
-                  for (final reading in favourites)
-                    _SavedRow(
-                      title: reading.title,
-                      removeLabel: 'Remove favourite: ${reading.title}',
-                      onOpen: () => context.go(
-                        Routes.reader(reading.id, from: ReaderFrom.saved),
-                      ),
-                      onRemove: () => controller.toggleFavourite(reading.id),
+                  ),
+                const SizedBox(height: NamoSpace.xxl),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
+                  child: Overline('Favourites · ${favourites.length}'),
+                ),
+                const SizedBox(height: NamoSpace.sm),
+                if (favourites.isEmpty) const _Empty('No favourites yet.'),
+                for (final reading in favourites)
+                  ListRow(
+                    leading: TopicThumbnail(
+                      categoryId: library.categoryOf(reading.id)?.id ?? '',
                     ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                    title: reading.title,
+                    subtitle: library.categoryOf(reading.id)?.subtitle,
+                    onTap: () => context.go(
+                      Routes.reader(reading.id, from: ReaderFrom.saved),
+                    ),
+                    trailing: NamoIconButton(
+                      icon: Symbols.close_rounded,
+                      tooltip: 'Remove favourite: ${reading.title}',
+                      color: p.textSecondary,
+                      onPressed: () => controller.toggleFavourite(reading.id),
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -93,98 +125,13 @@ class _Empty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+    padding: const EdgeInsets.symmetric(
+      horizontal: NamoSpace.lg,
+      vertical: NamoSpace.sm,
+    ),
     child: Text(
       text,
-      style: namoText(
-        NamoFonts.english,
-        size: 16,
-        color: NamoPalette.of(context).textQuiet,
-      ),
+      style: NamoType.body(NamoPalette.of(context).textSecondary),
     ),
   );
-}
-
-/// A row that opens its entry, with a remove button at the end.
-class _SavedRow extends StatelessWidget {
-  const _SavedRow({
-    required this.title,
-    required this.removeLabel,
-    required this.onOpen,
-    required this.onRemove,
-    this.titleFamily = NamoFonts.english,
-    this.subtitle,
-  });
-
-  final String title;
-  final String titleFamily;
-  final String? subtitle;
-  final String removeLabel;
-  final VoidCallback onOpen;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = NamoPalette.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: p.divider, width: 1)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Semantics(
-              button: true,
-              container: true,
-              excludeSemantics: true,
-              label: [title, ?subtitle].join(', '),
-              onTap: onOpen,
-              child: InkWell(
-                onTap: onOpen,
-                splashFactory: NoSplash.splashFactory,
-                highlightColor: p.surface,
-                hoverColor: p.surface,
-                focusColor: p.focus,
-                child: Container(
-                  constraints: const BoxConstraints(
-                    minHeight: NamoSizes.touchTarget,
-                  ),
-                  alignment: AlignmentDirectional.centerStart,
-                  padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: namoText(titleFamily, size: 18, color: p.text),
-                      ),
-                      if (subtitle != null)
-                        Text(
-                          subtitle!,
-                          style: namoText(
-                            NamoFonts.english,
-                            size: 14,
-                            color: p.textQuiet,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Symbols.close_rounded, weight: 300),
-            tooltip: removeLabel,
-            color: p.textQuiet,
-            constraints: const BoxConstraints(
-              minWidth: NamoSizes.touchTarget,
-              minHeight: NamoSizes.touchTarget,
-            ),
-            onPressed: onRemove,
-          ),
-        ],
-      ),
-    );
-  }
 }
