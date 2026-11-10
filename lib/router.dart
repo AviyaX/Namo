@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'design/transitions.dart';
 import 'design/widgets/app_shell.dart';
 import 'design/widgets/fade_indexed_stack.dart';
 import 'design/widgets/not_found.dart';
@@ -109,7 +110,11 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               routes: [
                 GoRoute(
                   path: 'sources',
-                  builder: (context, state) => const SourcesScreen(),
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    child: const SourcesScreen(),
+                    context: context,
+                  ),
                 ),
               ],
             ),
@@ -119,10 +124,15 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
     ),
     GoRoute(
       path: '/read/:id',
-      builder: (context, state) => ReaderScreen(
-        readingId: state.pathParameters['id']!,
-        sectionId: state.uri.queryParameters['section'],
-        from: ReaderFrom.values.asNameMap()[state.uri.queryParameters['from']],
+      pageBuilder: (context, state) => namoPage(
+        key: state.pageKey,
+        context: context,
+        child: ReaderScreen(
+          readingId: state.pathParameters['id']!,
+          sectionId: state.uri.queryParameters['section'],
+          from:
+              ReaderFrom.values.asNameMap()[state.uri.queryParameters['from']],
+        ),
       ),
     ),
   ],

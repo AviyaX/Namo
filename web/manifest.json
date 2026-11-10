@@ -3,8 +3,8 @@
     "short_name": "Namo",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#2B3837",
-    "theme_color": "#2B3837",
+    "background_color": "#151714",
+    "theme_color": "#151714",
     "description": "Namo is a free Buddhist prayer book.",
     "prefer_related_applications": false,
     "icons": [
