@@ -75,8 +75,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 final key = '${widget.openCategory}|${widget.openReading}';
                 if (_handled != key) {
                   _handled = key;
-                  WidgetsBinding.instance
-                      .addPostFrameCallback((_) => _settle(requested));
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => _settle(requested),
+                  );
                 }
               }
               return ListView(
@@ -152,10 +153,16 @@ class _CategoryEntry extends ConsumerWidget {
                           padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                           child: Semantics(
                             header: true,
+                            // A reading title may be Sinhala: the same
+                            // family as the section rows beneath it.
                             child: Text(
                               r.title,
-                              style: namoText(NamoFonts.english,
-                                  size: 14, color: p.heading, weight: 600),
+                              style: namoText(
+                                NamoFonts.sinhala,
+                                size: 14,
+                                color: p.heading,
+                                weight: 600,
+                              ),
                             ),
                           ),
                         ),
@@ -164,8 +171,8 @@ class _CategoryEntry extends ConsumerWidget {
                           number: s.number,
                           title: s.heading,
                           titleFamily: NamoFonts.sinhala,
-                          onTap: () => context
-                              .go(Routes.reader(r.id, sectionId: s.id)),
+                          onTap: () =>
+                              context.go(Routes.reader(r.id, sectionId: s.id)),
                         ),
                     ],
                   ],
