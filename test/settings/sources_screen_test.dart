@@ -68,10 +68,40 @@ void main() {
         findsOneWidget,
       );
       // Addresses are selectable text, not links.
-      expect(find.byType(SelectableText), findsNWidgets(3));
+      expect(find.byType(SelectableText), findsNWidgets(4));
 
       final icon = t.getSize(find.byKey(const ValueKey('sources-icon')));
       expect(icon, const Size(96, 96));
+    },
+  );
+
+  testWidgets(
+    'Sources shows a Pictures heading with the Samadhi Buddha credit and its address as text',
+    (t) async {
+      final handle = t.ensureSemantics();
+      await openSources(t);
+      const address =
+          'https://commons.wikimedia.org/wiki/File:Samadhi_Statue_Anuradhapura.jpg';
+      expect(find.text('Pictures'), findsOneWidget);
+      expect(text('Samadhi Buddha statue, Anuradhapura'), findsOneWidget);
+      expect(
+        text(
+          'Photograph by Price Zero on Wikimedia Commons, given to the public '
+          'domain (CC0). Cropped for the card.',
+        ),
+        findsOneWidget,
+      );
+      expect(text(address), findsOneWidget);
+      expect(find.byType(SelectableText), findsNWidgets(4));
+      expect(find.bySemanticsLabel(address), findsOneWidget);
+      // After the text sources, before Corrections.
+      final y = t.getTopLeft(find.text('Pictures')).dy;
+      expect(y, greaterThan(t.getTopLeft(text('The rest of the English.')).dy));
+      expect(y, lessThan(t.getTopLeft(find.text('Corrections')).dy));
+      expect(t.getTopLeft(text(address)).dy, greaterThan(y));
+      expect(t.getTopLeft(text(address)).dy,
+          lessThan(t.getTopLeft(find.text('Corrections')).dy));
+      handle.dispose();
     },
   );
 

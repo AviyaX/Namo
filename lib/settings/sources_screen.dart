@@ -36,6 +36,15 @@ const _credits = [
   ),
 ];
 
+const _pictureCredits = [
+  _Credit(
+    'Samadhi Buddha statue, Anuradhapura',
+    'Photograph by Price Zero on Wikimedia Commons, given to the public '
+        'domain (CC0). Cropped for the card.',
+    'https://commons.wikimedia.org/wiki/File:Samadhi_Statue_Anuradhapura.jpg',
+  ),
+];
+
 /// A correction as the content file records it, with every section it was
 /// made in.
 class _CorrectionEntry {
@@ -139,6 +148,8 @@ class SourcesScreen extends StatelessWidget {
                   ),
                 ),
                 for (final credit in _credits) _CreditBlock(credit),
+                const SettingsHeading('Pictures'),
+                for (final credit in _pictureCredits) _CreditBlock(credit),
                 LibraryGate(
                   builder: (context, library) {
                     final corrections = _collectCorrections(library);
