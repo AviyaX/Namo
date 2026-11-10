@@ -10,6 +10,7 @@ import 'library/reading_contents_screen.dart';
 import 'reader/reader_screen.dart';
 import 'saved/saved_screen.dart';
 import 'settings/settings_screen.dart';
+import 'settings/sources_screen.dart';
 
 abstract final class Routes {
   static const home = '/';
@@ -61,7 +62,12 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
             StatefulShellBranch(routes: [
               GoRoute(
                   path: Routes.settings,
-                  builder: (context, state) => const SettingsScreen()),
+                  builder: (context, state) => const SettingsScreen(),
+                  routes: [
+                    GoRoute(
+                        path: 'sources',
+                        builder: (context, state) => const SourcesScreen()),
+                  ]),
             ]),
           ],
         ),
