@@ -31,14 +31,25 @@ class LibraryScreen extends ConsumerStatefulWidget {
 }
 
 class _LibraryScreenState extends ConsumerState<LibraryScreen> {
-  /// Opens what the address asks for, then clears it from the address so
-  /// that asking again later (from Home, say) is seen as a new request.
-  void _applyAddress(Library library) {
-    final category = widget.openCategory != null
-        ? library.category(widget.openCategory!)
-        : widget.openReading != null
-            ? library.categoryOf(widget.openReading!)
-            : null;
+  /// The request that was last handed to [_settle], so that frames built
+  /// while it is pending do not queue it again.
+  String? _handled;
+
+  /// The category the address asks for, if it names one that exists.
+  Category? _requested(Library library) {
+    if (widget.openCategory != null) {
+      return library.category(widget.openCategory!);
+    }
+    if (widget.openReading != null) {
+      return library.categoryOf(widget.openReading!);
+    }
+    return null;
+  }
+
+  /// Stores the request as open, then clears it from the address so that
+  /// asking again later (from Home, say) is seen as a new request.
+  void _settle(Category? category) {
+    if (!mounted) return;
     if (category != null) {
       ref.read(openCategoriesProvider.notifier).open(category.id);
     }
@@ -48,6 +59,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     final asked = widget.openCategory != null || widget.openReading != null;
+    if (!asked) _handled = null;
     final open = ref.watch(openCategoriesProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Library')),
@@ -56,15 +68,25 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           constraints: const BoxConstraints(maxWidth: NamoSizes.readingColumn),
           child: LibraryGate(
             builder: (context, library) {
+              // The requested category counts as open in this very frame
+              // (without animation); the provider catches up after it.
+              final requested = asked ? _requested(library) : null;
               if (asked) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) _applyAddress(library);
-                });
+                final key = '${widget.openCategory}|${widget.openReading}';
+                if (_handled != key) {
+                  _handled = key;
+                  WidgetsBinding.instance
+                      .addPostFrameCallback((_) => _settle(requested));
+                }
               }
               return ListView(
                 children: [
                   for (final c in library.categories)
-                    _CategoryEntry(category: c, open: open.contains(c.id)),
+                    _CategoryEntry(
+                      category: c,
+                      open: open.contains(c.id) || c.id == requested?.id,
+                      animate: c.id != requested?.id,
+                    ),
                 ],
               );
             },
@@ -76,15 +98,22 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 }
 
 class _CategoryEntry extends ConsumerWidget {
-  const _CategoryEntry({required this.category, required this.open});
+  const _CategoryEntry({
+    required this.category,
+    required this.open,
+    required this.animate,
+  });
 
   final Category category;
   final bool open;
 
+  /// False for the frame that shows a request from the address.
+  final bool animate;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = NamoPalette.of(context);
-    final duration = MediaQuery.disableAnimationsOf(context)
+    final duration = !animate || MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 200);
     final severalReadings = category.readings.length > 1;

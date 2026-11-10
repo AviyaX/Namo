@@ -4,6 +4,7 @@ import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
+import 'package:buddhist_gatha/app.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -219,5 +220,71 @@ void main() {
     await t.pump();
     expect(find.text('heading 1'), findsOneWidget);
     expect(t.getSize(find.byKey(const ValueKey('open-c1'))).height, greaterThan(100));
+  });
+
+  group('an address request', () {
+    Future<void> pumpUntilLibrary(WidgetTester t) async {
+      for (var i = 0; i < 20 && find.text('category 1').evaluate().isEmpty; i++) {
+        await t.pump();
+      }
+      expect(find.text('category 1'), findsOneWidget);
+    }
+
+    testWidgets('opens the list on the first frame that shows the Library, with no animation', (t) async {
+      t.view.physicalSize = const Size(390, 844);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(ProviderScope(
+        overrides: [
+          ...fake,
+          routerProvider.overrideWith((ref) => buildRouter(initialLocation: Routes.category('c1'))),
+        ],
+        child: const NamoApp(),
+      ));
+      await pumpUntilLibrary(t);
+      expect(find.text('heading 1'), findsOneWidget);
+      final height = t.getSize(find.byKey(const ValueKey('open-c1'))).height;
+      await t.pumpAndSettle();
+      expect(t.getSize(find.byKey(const ValueKey('open-c1'))).height, height);
+    });
+
+    testWidgets('opens the list on the first frame when the Library is kept alive (from Home)', (t) async {
+      await pumpApp(t, overrides: fake, location: Routes.library);
+      await t.tap(find.text('Home'));
+      await t.pumpAndSettle();
+      await t.tap(find.text('category 1'));
+      await t.pump();
+      expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+      expect(find.text('heading 1'), findsOneWidget);
+      final height = t.getSize(find.byKey(const ValueKey('open-c1'))).height;
+      await t.pumpAndSettle();
+      expect(t.getSize(find.byKey(const ValueKey('open-c1'))).height, height);
+    });
+
+    testWidgets('is handled exactly once, however often the screen rebuilds', (t) async {
+      var changes = 0;
+      t.view.physicalSize = const Size(390, 844);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(ProviderScope(
+        overrides: [
+          ...fake,
+          routerProvider.overrideWith((ref) {
+            final r = buildRouter(initialLocation: Routes.category('c1'));
+            r.routeInformationProvider.addListener(() => changes++);
+            return r;
+          }),
+        ],
+        child: const NamoApp(),
+      ));
+      // Several frames while the request is pending.
+      for (var i = 0; i < 5; i++) {
+        await t.pump();
+      }
+      await t.pumpAndSettle();
+      expect(changes, 1);
+      expect(_location(t), '/library');
+      expect(find.text('heading 1'), findsOneWidget);
+    });
   });
 }
