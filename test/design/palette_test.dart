@@ -21,6 +21,8 @@ Map<String, Color> roles(NamoPalette p) => {
       'gold': p.gold,
       'onSage': p.onSage,
       'shadow': p.shadow,
+      'error': p.error,
+      'onError': p.onError,
     };
 
 void main() {
@@ -37,6 +39,8 @@ void main() {
       'gold': 0xFFC6A879,
       'onSage': 0xFF151714,
       'shadow': 0x4D000000,
+      'error': 0xFFE08A7C,
+      'onError': 0xFF151714,
     };
     final actual = roles(NamoPalette.dark);
     for (final e in expected.entries) {
@@ -57,6 +61,8 @@ void main() {
       'gold': 0xFF7F6130,
       'onSage': 0xFFFDFBF6,
       'shadow': 0x1F22251F,
+      'error': 0xFF9B3B2F,
+      'onError': 0xFFFDFBF6,
     };
     final actual = roles(NamoPalette.light);
     for (final e in expected.entries) {
@@ -78,6 +84,8 @@ void main() {
         expect(contrast(p.sage, g), greaterThanOrEqualTo(3.0));
       }
       expect(contrast(p.onSage, p.sage), greaterThanOrEqualTo(4.5));
+      expect(contrast(p.onError, p.error), greaterThanOrEqualTo(4.5));
+      expect(contrast(p.error, p.background), greaterThanOrEqualTo(3.0));
     });
   }
 

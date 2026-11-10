@@ -60,6 +60,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     required this.gold,
     required this.onSage,
     required this.shadow,
+    required this.error,
+    required this.onError,
   });
 
   final Color background;
@@ -73,6 +75,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   final Color gold;
   final Color onSage;
   final Color shadow;
+  final Color error;
+  final Color onError;
 
   static const dark = NamoPalette(
     background: Color(0xFF151714),
@@ -86,6 +90,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     gold: Color(0xFFC6A879),
     onSage: Color(0xFF151714),
     shadow: Color(0x4D000000),
+    error: Color(0xFFE08A7C),
+    onError: Color(0xFF151714),
   );
 
   static const light = NamoPalette(
@@ -100,6 +106,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     gold: Color(0xFF7F6130),
     onSage: Color(0xFFFDFBF6),
     shadow: Color(0x1F22251F),
+    error: Color(0xFF9B3B2F),
+    onError: Color(0xFFFDFBF6),
   );
 
   /// Text drawn over a picture, and the scrim colour it sits on.
@@ -141,6 +149,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     Color? gold,
     Color? onSage,
     Color? shadow,
+    Color? error,
+    Color? onError,
   }) =>
       NamoPalette(
         background: background ?? this.background,
@@ -154,6 +164,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
         gold: gold ?? this.gold,
         onSage: onSage ?? this.onSage,
         shadow: shadow ?? this.shadow,
+        error: error ?? this.error,
+        onError: onError ?? this.onError,
       );
 
   @override
@@ -172,6 +184,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
       gold: mix(gold, other.gold),
       onSage: mix(onSage, other.onSage),
       shadow: mix(shadow, other.shadow),
+      error: mix(error, other.error),
+      onError: mix(onError, other.onError),
     );
   }
 }

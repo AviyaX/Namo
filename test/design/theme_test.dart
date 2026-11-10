@@ -89,6 +89,8 @@ void main() {
       expect(t.scaffoldBackgroundColor, p.background);
       expect(t.splashFactory, NoSplash.splashFactory);
       expect(t.colorScheme.primary, p.sage);
+      expect(t.colorScheme.error, p.error);
+      expect(t.colorScheme.onError, p.onError);
     }
   });
 

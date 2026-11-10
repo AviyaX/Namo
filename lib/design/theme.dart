@@ -34,12 +34,8 @@ ThemeData namoTheme(Brightness brightness) {
     onPrimary: p.onSage,
     secondary: p.gold,
     onSecondary: p.onSage,
-    error: brightness == Brightness.light
-        ? const Color(0xFF9B3B2F)
-        : const Color(0xFFE08A7C),
-    onError: brightness == Brightness.light
-        ? const Color(0xFFFDFBF6)
-        : const Color(0xFF151714),
+    error: p.error,
+    onError: p.onError,
     surface: p.surface,
     onSurface: p.text,
     outline: p.textMuted,
