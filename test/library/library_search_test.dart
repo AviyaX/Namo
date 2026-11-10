@@ -1,3 +1,4 @@
+import 'package:buddhist_gatha/design/widgets/list_row.dart';
 import 'package:buddhist_gatha/library/search.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/router.dart';
@@ -81,6 +82,13 @@ void main() {
     ).firstWhere((h) => h.line != null);
     await _type(t, chosenQuery);
     expect(find.text(chosen.line!), findsWidgets);
+    // A chosen language is not named, as on screen.
+    expect(
+      t
+          .widgetList<ListRow>(find.byType(ListRow))
+          .map((r) => r.detailLabel),
+      contains(chosen.line),
+    );
 
     // A language that is not chosen: its name is shown with the line.
     final english = lib
@@ -99,6 +107,13 @@ void main() {
     await _type(t, q);
     expect(find.text(hit.line!), findsWidgets);
     expect(find.text(hit.lineLanguage!.label), findsWidgets);
+    // Screen readers are told the language too.
+    expect(
+      t
+          .widgetList<ListRow>(find.byType(ListRow))
+          .map((r) => r.detailLabel),
+      contains('${hit.lineLanguage!.label}, ${hit.line}'),
+    );
   });
 
   testWidgets('no match shows the nothing-found state', (t) async {
