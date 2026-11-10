@@ -40,6 +40,22 @@ void main() {
       expect(t.getSize(find.byKey(_column)).width, 1040);
     });
 
+    testWidgets('side safe-area insets push the column in', (t) async {
+      await pumpThemed(
+        t,
+        SizedBox(width: 390, height: 844, child: _page()),
+        padding: const EdgeInsets.only(left: 47),
+      );
+      expect(t.getTopLeft(find.byKey(_column)).dx, 67);
+      await pumpThemed(
+        t,
+        SizedBox(width: 390, height: 844, child: _page()),
+        padding: const EdgeInsets.only(right: 47),
+      );
+      expect(t.getTopLeft(find.byKey(_column)).dx, 20);
+      expect(t.getSize(find.byKey(_column)).width, 350 - 47);
+    });
+
     testWidgets('top padding is the safe area plus 24', (t) async {
       await pumpThemed(
         t,
