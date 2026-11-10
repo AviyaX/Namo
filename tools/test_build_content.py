@@ -4,7 +4,10 @@ Run: python -I -X utf8 tools/test_build_content.py
 (-I leaves this folder off the import path, so the build script is loaded by file path.)
 """
 import importlib.util
+import json
 import pathlib
+import re
+import subprocess
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -121,6 +124,77 @@ class BuildContentTest(unittest.TestCase):
         for s in self.sections:
             expected = "needs checking" if any(v["id"] in NEEDS for v in s["verses"]) else "checked against source"
             self.assertEqual(s["check"], expected, s["id"])
+
+    def english(self, verse_id):
+        return {v["id"]: v for v in self.verses}[verse_id]["english"]
+
+    def test_reflow_short_sections(self):
+        line = "Homage to the Blissful One, the Worthy One, the Fully Enlightened One."
+        self.assertEqual(self.english("s01-v1").split("\n"), [line] * 3)
+        self.assertEqual(len(self.english("s02-v1").split("\n")), 11)
+        lines = self.english("s03-v1").split("\n")
+        self.assertEqual(len(lines), 5)
+        self.assertEqual(lines[0], "I undertake the training rule to abstain from killing living beings.")
+        self.assertEqual(lines[-1], "I undertake the training rule to abstain from intoxicants and harmful drugs.")
+
+    def test_reflow_explanations(self):
+        s04 = self.english("s04-v1").split("\n")
+        self.assertEqual(len(s04), 10)
+        self.assertEqual(s04[0], "Such indeed is the Blessed One:")
+        self.assertEqual(s04[1], '"Araham" - eradicated greed, hatred, delusion, craving, and is free of all taints.')
+        self.assertTrue(all(ln.startswith('"') for ln in s04[1:]))
+        s05 = self.english("s05-v1").split("\n")
+        self.assertEqual(len(s05), 6)
+        self.assertTrue(all(ln.startswith('"') for ln in s05))
+        s06 = self.english("s06-v1").split("\n")
+        self.assertEqual(len(s06), 5)
+        self.assertEqual(s06[2], '"Nayapatipanno" - The Noble Order understands the First Noble Truth '
+                                 'and are practising to eradicate suffering')
+        self.assertTrue(s06[4].startswith("In Buddha’s Order are the 8 kinds of individuals:"))
+        self.assertIn("the position of Once-Returner, the Once-Returner; the one striving to reach "
+                      "the Non- returner position", s06[4])
+
+    def test_verse_english_keeps_its_lines(self):
+        base = self.baseline()
+        for verse_id in ("s07-v1", "s08-v1", "s10-v1", "s18-v4", "s19-v1"):
+            self.assertEqual(self.english(verse_id), base[verse_id], verse_id)
+
+    def test_footnote_is_one_line(self):
+        self.assertTrue(self.english("s15-v1").endswith(
+            "\n\n(Gilan pasa – permissible food & drinks for Buddhist monks and nuns from noon to the "
+            "following morning such as fruit juices, sugar candy)"))
+        self.assertEqual(len(self.english("s15-v1").split("\n")), 6)
+
+    def baseline(self, field="english"):
+        """Every verse's `field` from the content file committed at a448a3c, before the reflow."""
+        raw = subprocess.run(["git", "show", "a448a3c:assets/content/namaskaraya_to_pin_dima.json"],
+                             cwd=ROOT, check=True, capture_output=True).stdout
+        data = json.loads(raw.decode("utf-8"))
+        return {v["id"]: v[field] for s in data["categories"][0]["readings"][0]["sections"]
+                for v in s["verses"]}
+
+    def test_reflow_changes_only_whitespace(self):
+        base = self.baseline()
+        checked = 0
+        for v in self.verses:
+            if v["english"] is None:
+                self.assertIsNone(base[v["id"]], v["id"])
+                continue
+            checked += 1
+            self.assertEqual(re.sub(r"\s+", "", v["english"]), re.sub(r"\s+", "", base[v["id"]]), v["id"])
+        self.assertEqual(checked, 21)
+
+    def test_pali_and_sinhala_unchanged(self):
+        for field in ("pali_si", "sinhala"):
+            base = self.baseline(field)
+            for v in self.verses:
+                self.assertEqual(v[field], base[v["id"]], v["id"])
+
+    def test_reflow_function(self):
+        reflow = build_content._reflow_prose
+        self.assertEqual(reflow('A b\nc.\nd e\n\nf\n"g" h-\ni j'), 'A b c.\nd e\n\nf\n"g" h-i j')
+        with self.assertRaises(build_content.BuildError):
+            build_content._check_whitespace_only("a b", "a c")
 
     def test_nothing_from_outside(self):
         rendered = build_content.render(self.data).decode("utf-8")

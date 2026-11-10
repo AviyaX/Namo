@@ -101,6 +101,10 @@ MAHAMEVNAWA = [
      "Practising well and supreme.", "translation"),
 ]
 
+# Sections 1-6 are prose set in a narrow column and are re-set as sentences; the others are verse,
+# whose line breaks are the translator's and stay.
+MAHAMEVNAWA_PROSE = {"s01-v1", "s02-v1", "s03-v1", "s04-v1", "s05-v1", "s06-v1"}
+
 # English from the Brisbane booklet: non-bold lines of one block, first anchor through last anchor.
 # (verse id, pdf page, block, first line starts with, last line starts with)
 BRISBANE = [
@@ -258,6 +262,46 @@ def _join_by_gap(lines: list[tuple[int, float, str]]) -> str:
     return out
 
 
+def _check_whitespace_only(before: str, after: str) -> None:
+    if re.sub(r"\s+", "", before) != re.sub(r"\s+", "", after):
+        raise BuildError("reflowing English changed more than line breaks and spaces")
+
+
+def _reflow_prose(text: str) -> str:
+    """Re-set column-wrapped prose as sentences: a source line starts a new line only when it is the
+    first of its paragraph, follows a line ending in '.' or ':', or itself starts with a double quote.
+    Otherwise it joins the line before with one space, or with none after a letter and '-'."""
+    paragraphs = []
+    for paragraph in text.split("\n\n"):
+        out = ""
+        for k, line in enumerate(paragraph.split("\n")):
+            if k == 0:
+                out = line
+            elif out.endswith((".", ":")) or line.startswith('"'):
+                out += "\n" + line
+            elif re.search(r"[^\W\d_]-$", out):
+                out += line
+            else:
+                out += " " + line
+        paragraphs.append(out)
+    result = "\n\n".join(paragraphs)
+    _check_whitespace_only(text, result)
+    return result
+
+
+def _join_footnote(text: str) -> str:
+    """Join each paragraph that is a '( ... )' footnote into one line."""
+    paragraphs = []
+    for paragraph in text.split("\n\n"):
+        lines = paragraph.split("\n")
+        if lines[0].startswith("(") and lines[-1].endswith(")"):
+            paragraph = " ".join(lines)
+        paragraphs.append(paragraph)
+    result = "\n\n".join(paragraphs)
+    _check_whitespace_only(text, result)
+    return result
+
+
 def _mahamevnawa_english(maha: dict) -> dict:
     pages = {p["pdf_page"]: p["right_column"] for p in maha["pages"]}
     url = maha["source"]["url"]
@@ -273,7 +317,10 @@ def _mahamevnawa_english(maha: dict) -> dict:
             raise BuildError(f"{verse_id}: Mahamevnawa range does not end with {last!r}")
         first_page, last_page = ranges[0][0], ranges[-1][0]
         where = f"PDF page {first_page}" if first_page == last_page else f"PDF pages {first_page}–{last_page}"
-        result[verse_id] = (_join_by_gap(lines), kind, {
+        text = _join_by_gap(lines)
+        if verse_id in MAHAMEVNAWA_PROSE:
+            text = _reflow_prose(text)
+        result[verse_id] = (text, kind, {
             "name": MAHAMEVNAWA_NAME, "locator": f"{url}, {where}", "collected": MAHAMEVNAWA_COLLECTED,
             "translator": NOT_NAMED})
     return result
@@ -298,7 +345,7 @@ def _brisbane_english(yaso: dict) -> dict:
             raise BuildError(f"{verse_id}: Brisbane anchors {first!r} .. {last!r} not found once, in order, "
                              f"on page {page} block {block}")
         chosen = [(page, ln["y"], ln["text"]) for ln in lines[starts[0]:ends[0] + 1]]
-        result[verse_id] = (_join_by_gap(chosen), "translation", {
+        result[verse_id] = (_join_footnote(_join_by_gap(chosen)), "translation", {
             "name": BRISBANE_NAME, "locator": f"{file_name}, PDF page {page}", "collected": BRISBANE_COLLECTED,
             "translator": BRISBANE_TRANSLATOR})
     return result
