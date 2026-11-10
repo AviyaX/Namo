@@ -23,10 +23,10 @@ class ReadingCard extends StatelessWidget {
   String get _count => _sections == 1 ? '1 section' : '$_sections sections';
 
   void _open(BuildContext context) => context.go(
-        category.readings.length == 1
-            ? Routes.reader(category.readings.single.id)
-            : Routes.category(category.id),
-      );
+    category.readings.length == 1
+        ? Routes.reader(category.readings.single.id, from: ReaderFrom.home)
+        : Routes.category(category.id),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +59,31 @@ class ReadingCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(category.title,
-                          style: namoText(NamoFonts.english,
-                              size: 18, color: p.text)),
-                      Text(category.subtitle,
-                          style: namoText(NamoFonts.sinhala,
-                              size: 14, color: p.textQuiet)),
+                      Text(
+                        category.title,
+                        style: namoText(
+                          NamoFonts.english,
+                          size: 18,
+                          color: p.text,
+                        ),
+                      ),
+                      Text(
+                        category.subtitle,
+                        style: namoText(
+                          NamoFonts.sinhala,
+                          size: 14,
+                          color: p.textQuiet,
+                        ),
+                      ),
                       const SizedBox(height: 8),
-                      Text(_count,
-                          style: namoText(NamoFonts.english,
-                              size: 14, color: p.textQuiet)),
+                      Text(
+                        _count,
+                        style: namoText(
+                          NamoFonts.english,
+                          size: 14,
+                          color: p.textQuiet,
+                        ),
+                      ),
                     ],
                   ),
                 ),

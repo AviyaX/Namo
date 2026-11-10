@@ -26,66 +26,102 @@ abstract final class Routes {
   static String contents(String readingId) =>
       '/library?reading=${Uri.encodeQueryComponent(readingId)}';
 
-  static String reader(String readingId, {String? sectionId}) =>
-      sectionId == null
-          ? '/read/$readingId'
-          : '/read/$readingId?section=$sectionId';
+  /// The reader; [from] names the page Back returns to (the Library when
+  /// absent).
+  static String reader(
+    String readingId, {
+    String? sectionId,
+    ReaderFrom? from,
+  }) {
+    final query = [
+      if (sectionId != null) 'section=$sectionId',
+      if (from != null) 'from=${from.name}',
+    ];
+    return query.isEmpty
+        ? '/read/$readingId'
+        : '/read/$readingId?${query.join('&')}';
+  }
 }
 
+/// The pages that open the reader and want Back to return to them. The
+/// reader is opened with `go`, so it is the only page on the stack; Back
+/// goes by this value in the address instead, the same way on every
+/// platform and after a reload of the web page.
+enum ReaderFrom { home, saved }
+
 GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
-      initialLocation: initialLocation,
-      errorBuilder: (context, state) => const NotFoundScreen(),
-      routes: [
-        StatefulShellRoute.indexedStack(
-          builder: (context, state, shell) => AppShell(shell: shell),
-          branches: [
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: Routes.home,
-                  builder: (context, state) => const HomeScreen()),
-            ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: Routes.library,
-                  builder: (context, state) => LibraryScreen(
-                      openCategory: state.uri.queryParameters['open'],
-                      openReading: state.uri.queryParameters['reading']),
-                  routes: [
-                    // Saved links from before the in-place list.
-                    GoRoute(
-                        path: 'category/:id',
-                        redirect: (context, state) =>
-                            Routes.category(state.pathParameters['id']!)),
-                    GoRoute(
-                        path: 'reading/:id',
-                        redirect: (context, state) =>
-                            Routes.contents(state.pathParameters['id']!)),
-                  ]),
-            ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: Routes.saved,
-                  builder: (context, state) => const SavedScreen()),
-            ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: Routes.settings,
-                  builder: (context, state) => const SettingsScreen(),
-                  routes: [
-                    GoRoute(
-                        path: 'sources',
-                        builder: (context, state) => const SourcesScreen()),
-                  ]),
-            ]),
+  initialLocation: initialLocation,
+  errorBuilder: (context, state) => const NotFoundScreen(),
+  routes: [
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, shell) => AppShell(shell: shell),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.home,
+              builder: (context, state) => const HomeScreen(),
+            ),
           ],
         ),
-        GoRoute(
-            path: '/read/:id',
-            builder: (context, state) => ReaderScreen(
-                readingId: state.pathParameters['id']!,
-                sectionId: state.uri.queryParameters['section'])),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.library,
+              builder: (context, state) => LibraryScreen(
+                openCategory: state.uri.queryParameters['open'],
+                openReading: state.uri.queryParameters['reading'],
+              ),
+              routes: [
+                // Saved links from before the in-place list.
+                GoRoute(
+                  path: 'category/:id',
+                  redirect: (context, state) =>
+                      Routes.category(state.pathParameters['id']!),
+                ),
+                GoRoute(
+                  path: 'reading/:id',
+                  redirect: (context, state) =>
+                      Routes.contents(state.pathParameters['id']!),
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.saved,
+              builder: (context, state) => const SavedScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.settings,
+              builder: (context, state) => const SettingsScreen(),
+              routes: [
+                GoRoute(
+                  path: 'sources',
+                  builder: (context, state) => const SourcesScreen(),
+                ),
+              ],
+            ),
+          ],
+        ),
       ],
-    );
+    ),
+    GoRoute(
+      path: '/read/:id',
+      builder: (context, state) => ReaderScreen(
+        readingId: state.pathParameters['id']!,
+        sectionId: state.uri.queryParameters['section'],
+        from: ReaderFrom.values.asNameMap()[state.uri.queryParameters['from']],
+      ),
+    ),
+  ],
+);
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = buildRouter();

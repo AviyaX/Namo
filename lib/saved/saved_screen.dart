@@ -52,7 +52,11 @@ class SavedScreen extends ConsumerWidget {
                       subtitle: reading.title,
                       removeLabel: 'Remove bookmark: ${section.heading}',
                       onOpen: () => context.go(
-                        Routes.reader(reading.id, sectionId: section.id),
+                        Routes.reader(
+                          reading.id,
+                          sectionId: section.id,
+                          from: ReaderFrom.saved,
+                        ),
                       ),
                       onRemove: () =>
                           controller.toggleBookmark(b.readingId, b.sectionId),
@@ -63,7 +67,9 @@ class SavedScreen extends ConsumerWidget {
                     _SavedRow(
                       title: reading.title,
                       removeLabel: 'Remove favourite: ${reading.title}',
-                      onOpen: () => context.go(Routes.reader(reading.id)),
+                      onOpen: () => context.go(
+                        Routes.reader(reading.id, from: ReaderFrom.saved),
+                      ),
                       onRemove: () => controller.toggleFavourite(reading.id),
                     ),
                 ],

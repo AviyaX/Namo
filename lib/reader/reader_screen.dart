@@ -37,13 +37,22 @@ double _toolbarHeight(TextScaler scaler) {
 const _saveDelay = Duration(milliseconds: 400);
 
 class ReaderScreen extends ConsumerStatefulWidget {
-  const ReaderScreen({super.key, required this.readingId, this.sectionId});
+  const ReaderScreen({
+    super.key,
+    required this.readingId,
+    this.sectionId,
+    this.from,
+  });
 
   final String readingId;
 
   /// The section to open at; null opens at the saved place, an unknown one
   /// at the top.
   final String? sectionId;
+
+  /// The page Back returns to; null for the Library with this reading's
+  /// sections showing.
+  final ReaderFrom? from;
 
   @override
   ConsumerState<ReaderScreen> createState() => _ReaderScreenState();
@@ -372,12 +381,18 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _positions.clear(widget.readingId);
   }
 
+  /// The top-bar arrow and the system Back: to the page the reading was
+  /// opened from.
   void _back() {
     if (context.canPop()) {
       context.pop();
-    } else {
-      context.go(Routes.contents(widget.readingId));
+      return;
     }
+    context.go(switch (widget.from) {
+      ReaderFrom.home => Routes.home,
+      ReaderFrom.saved => Routes.saved,
+      null => Routes.contents(widget.readingId),
+    });
   }
 
   @override
@@ -427,100 +442,108 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             (_) => _afterScroll(scrolled: false),
           );
 
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                tooltip: 'Back',
-                icon: const Icon(Icons.arrow_back),
-                onPressed: _back,
-              ),
-              titleSpacing: 0,
-              // Room for a title on two lines and the category beneath, at
-              // the device's text size.
-              toolbarHeight: _toolbarHeight(MediaQuery.textScalerOf(context)),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    reading.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).appBarTheme.titleTextStyle
-                        ?.copyWith(height: 1.2),
-                  ),
-                  if (category != null && category.title != reading.title)
+          // The reader is the only page on the stack, so a system Back
+          // (Android's button or gesture) would otherwise leave the app.
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, _) {
+              if (!didPop) _back();
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  tooltip: 'Back',
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: _back,
+                ),
+                titleSpacing: 0,
+                // Room for a title on two lines and the category beneath, at
+                // the device's text size.
+                toolbarHeight: _toolbarHeight(MediaQuery.textScalerOf(context)),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
-                      category.title,
-                      maxLines: 1,
+                      reading.title,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: namoText(
-                        NamoFonts.english,
-                        size: 14,
-                        color: p.textQuiet,
-                      ),
+                      style: Theme.of(context).appBarTheme.titleTextStyle
+                          ?.copyWith(height: 1.2),
                     ),
+                    if (category != null && category.title != reading.title)
+                      Text(
+                        category.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: namoText(
+                          NamoFonts.english,
+                          size: 14,
+                          color: p.textQuiet,
+                        ),
+                      ),
+                  ],
+                ),
+                actions: [
+                  IconButton(
+                    tooltip: favourite
+                        ? 'Remove from favourites'
+                        : 'Add to favourites',
+                    icon: Icon(
+                      favourite ? Icons.favorite : Icons.favorite_border,
+                      color: favourite ? p.accent : p.heading,
+                    ),
+                    onPressed: () => ref
+                        .read(savedProvider.notifier)
+                        .toggleFavourite(reading.id),
+                  ),
+                  IconButton(
+                    key: const ValueKey('reader-settings'),
+                    tooltip: 'Reading settings',
+                    icon: const Icon(Icons.tune),
+                    onPressed: () => showReaderSettingsSheet(
+                      context,
+                      onBackToBeginning: _backToBeginning,
+                    ),
+                  ),
                 ],
               ),
-              actions: [
-                IconButton(
-                  tooltip: favourite
-                      ? 'Remove from favourites'
-                      : 'Add to favourites',
-                  icon: Icon(
-                    favourite ? Icons.favorite : Icons.favorite_border,
-                    color: favourite ? p.accent : p.heading,
-                  ),
-                  onPressed: () => ref
+              // A touch or a mouse wheel on the text pauses auto-scroll at
+              // once.
+              body: Listener(
+                onPointerDown: (_) => _autoScroll.pause(),
+                onPointerSignal: (_) => _autoScroll.pause(),
+                child: ReaderBody(
+                  key: _body,
+                  items: items,
+                  controller: _scroll,
+                  fontScale: settings.fontScale,
+                  lineSpacing: settings.lineSpacing,
+                  bookmarkedSections: {
+                    for (final b in saved.bookmarks)
+                      if (b.readingId == reading.id) b.sectionId,
+                  },
+                  onToggleBookmark: (sectionId) => ref
                       .read(savedProvider.notifier)
-                      .toggleFavourite(reading.id),
+                      .toggleBookmark(reading.id, sectionId),
                 ),
-                IconButton(
-                  key: const ValueKey('reader-settings'),
-                  tooltip: 'Reading settings',
-                  icon: const Icon(Icons.tune),
-                  onPressed: () => showReaderSettingsSheet(
-                    context,
-                    onBackToBeginning: _backToBeginning,
-                  ),
-                ),
-              ],
-            ),
-            // A touch or a mouse wheel on the text pauses auto-scroll at
-            // once.
-            body: Listener(
-              onPointerDown: (_) => _autoScroll.pause(),
-              onPointerSignal: (_) => _autoScroll.pause(),
-              child: ReaderBody(
-                key: _body,
-                items: items,
-                controller: _scroll,
-                fontScale: settings.fontScale,
-                lineSpacing: settings.lineSpacing,
-                bookmarkedSections: {
-                  for (final b in saved.bookmarks)
-                    if (b.readingId == reading.id) b.sectionId,
-                },
-                onToggleBookmark: (sectionId) => ref
-                    .read(savedProvider.notifier)
-                    .toggleBookmark(reading.id, sectionId),
               ),
-            ),
-            bottomNavigationBar: ListenableBuilder(
-              listenable: Listenable.merge([_progress, _autoScroll]),
-              builder: (context, _) => ReaderBottomBar(
-                progress: _progress.value,
-                onPrevious: _previousTarget == null
-                    ? null
-                    : () => _jumpTo(_previousTarget!),
-                onNext: _nextTarget == null
-                    ? null
-                    : () => _jumpTo(_nextTarget!),
-                onPlay: _playOrPause,
-                autoScroll: _autoScroll.status,
-                audio: recording == null
-                    ? null
-                    : AudioControls(recording: recording),
+              bottomNavigationBar: ListenableBuilder(
+                listenable: Listenable.merge([_progress, _autoScroll]),
+                builder: (context, _) => ReaderBottomBar(
+                  progress: _progress.value,
+                  onPrevious: _previousTarget == null
+                      ? null
+                      : () => _jumpTo(_previousTarget!),
+                  onNext: _nextTarget == null
+                      ? null
+                      : () => _jumpTo(_nextTarget!),
+                  onPlay: _playOrPause,
+                  autoScroll: _autoScroll.status,
+                  audio: recording == null
+                      ? null
+                      : AudioControls(recording: recording),
+                ),
               ),
             ),
           );

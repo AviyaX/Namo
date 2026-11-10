@@ -29,16 +29,23 @@ class HomeScreen extends ConsumerWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-                maxWidth: wide ? _wideColumn : NamoSizes.readingColumn),
+              maxWidth: wide ? _wideColumn : NamoSizes.readingColumn,
+            ),
             child: ListView(
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
                   child: Semantics(
                     header: true,
-                    child: Text('Namo',
-                        style: namoText(NamoFonts.english,
-                            size: 32, color: p.heading, weight: 600)),
+                    child: Text(
+                      'Namo',
+                      style: namoText(
+                        NamoFonts.english,
+                        size: 32,
+                        color: p.heading,
+                        weight: 600,
+                      ),
+                    ),
                   ),
                 ),
                 LibraryGate(
@@ -77,10 +84,14 @@ class _Cards extends StatelessWidget {
           final width = box.maxWidth;
           final double cardWidth;
           if (wide) {
-            final perRow =
-                ((width + _gap) / (_cardMin + _gap)).floor().clamp(1, 1000);
-            cardWidth =
-                ((width - (perRow - 1) * _gap) / perRow).clamp(_cardMin, _cardMax);
+            final perRow = ((width + _gap) / (_cardMin + _gap)).floor().clamp(
+              1,
+              1000,
+            );
+            cardWidth = ((width - (perRow - 1) * _gap) / perRow).clamp(
+              _cardMin,
+              _cardMax,
+            );
           } else {
             cardWidth = width;
           }
@@ -89,7 +100,10 @@ class _Cards extends StatelessWidget {
             runSpacing: _gap,
             children: [
               for (final c in categories)
-                SizedBox(width: cardWidth, child: ReadingCard(category: c)),
+                SizedBox(
+                  width: cardWidth,
+                  child: ReadingCard(category: c),
+                ),
             ],
           );
         },
@@ -102,6 +116,9 @@ class _Cards extends StatelessWidget {
 /// Absent until something was read, or if that reading is no longer there.
 class _ContinueReading extends ConsumerWidget {
   const _ContinueReading();
+
+  void _open(BuildContext context, String readingId) =>
+      context.go(Routes.reader(readingId, from: ReaderFrom.home));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -126,9 +143,9 @@ class _ContinueReading extends ConsumerWidget {
         ?heading,
         '${(progress.progress * 100).round()} percent',
       ].join(', '),
-      onTap: () => context.go(Routes.reader(reading.id)),
+      onTap: () => _open(context, reading.id),
       child: InkWell(
-        onTap: () => context.go(Routes.reader(reading.id)),
+        onTap: () => _open(context, reading.id),
         splashFactory: NoSplash.splashFactory,
         highlightColor: p.surface,
         hoverColor: p.surface,
