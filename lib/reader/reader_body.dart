@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../audio/chant_timing.dart' show ChantPlace;
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -26,6 +28,8 @@ class ReaderBody extends StatefulWidget {
     required this.lineSpacing,
     required this.bookmarkedSections,
     required this.onToggleBookmark,
+    this.chantPlace,
+    this.onTapBlock,
   });
 
   final List<ReaderItem> items;
@@ -38,6 +42,13 @@ class ReaderBody extends StatefulWidget {
 
   /// Called with a section id when its heading's bookmark button is pressed.
   final ValueChanged<String> onToggleBookmark;
+
+  /// The block and phrase being chanted; null for a reading without chanting.
+  final ValueListenable<ChantPlace?>? chantPlace;
+
+  /// Called with a block's index when it is tapped. A block has no tap at all
+  /// (and no tap semantics) while this is null.
+  final ValueChanged<int>? onTapBlock;
 
   @override
   State<ReaderBody> createState() => ReaderBodyState();
@@ -71,8 +82,8 @@ class ReaderBodyState extends State<ReaderBody> {
       while (r != null && r.parentData is! SliverMultiBoxAdaptorParentData) {
         r = r.parent;
       }
-      final offset = (r?.parentData as SliverMultiBoxAdaptorParentData?)
-          ?.layoutOffset;
+      final offset =
+          (r?.parentData as SliverMultiBoxAdaptorParentData?)?.layoutOffset;
       if (offset == null) return null;
       final inside = box.localToGlobal(Offset.zero, ancestor: r as RenderBox);
       return offset + inside.dy;
@@ -153,7 +164,10 @@ class ReaderBodyState extends State<ReaderBody> {
       height: 0,
     ));
     for (var i = first; i <= last; i++) {
-      out[i] = (top: tops[i] ?? out[i - 1].top + out[i - 1].height, height: heights[i]);
+      out[i] = (
+        top: tops[i] ?? out[i - 1].top + out[i - 1].height,
+        height: heights[i],
+      );
     }
     for (var i = first - 1; i >= 0; i--) {
       out[i] = (top: out[i + 1].top - average, height: average);
@@ -212,6 +226,10 @@ class ReaderBodyState extends State<ReaderBody> {
         gap: gap,
         fontScale: widget.fontScale,
         lineSpacing: widget.lineSpacing,
+        chantPlace: widget.chantPlace,
+        onTap: widget.onTapBlock == null
+            ? null
+            : () => widget.onTapBlock!(item.index),
       ),
       VerseTextItem() => _VerseView(
         key: ValueKey('verse-${item.verseId}-${item.language.code}'),
@@ -470,27 +488,88 @@ class _VerseView extends StatelessWidget {
   }
 }
 
+/// How many times each block (by verse id) has been built; for tests of what
+/// a place change rebuilds.
+@visibleForTesting
+final Map<String, int> blockBuildCounts = {};
+
 /// One block of a pirith: each phrase with its meaning under it (narrow) or
-/// beside it (wide, two languages), a small gap between phrases.
-class _PhraseBlockView extends StatelessWidget {
+/// beside it (wide, two languages), a small gap between phrases. While it is
+/// the block being chanted it has a quiet background, and the phrase being
+/// chanted a bar at its leading edge.
+///
+/// It listens to the place itself and rebuilds only when its own part of the
+/// place changes: the blocks a place change leaves and enters.
+class _PhraseBlockView extends StatefulWidget {
   const _PhraseBlockView({
     super.key,
     required this.item,
     required this.gap,
     required this.fontScale,
     required this.lineSpacing,
+    required this.chantPlace,
+    required this.onTap,
   });
 
   final PhraseBlockItem item;
   final double gap;
   final double fontScale;
   final double lineSpacing;
+  final ValueListenable<ChantPlace?>? chantPlace;
+  final VoidCallback? onTap;
+
+  @override
+  State<_PhraseBlockView> createState() => _PhraseBlockViewState();
+}
+
+class _PhraseBlockViewState extends State<_PhraseBlockView> {
+  /// The phrase being chanted when this is the active block, else null.
+  int? _active;
+
+  int? _phraseNow() {
+    final place = widget.chantPlace?.value;
+    return place != null && place.block == widget.item.index
+        ? place.phrase
+        : null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _active = _phraseNow();
+    widget.chantPlace?.addListener(_onPlace);
+  }
+
+  @override
+  void didUpdateWidget(_PhraseBlockView old) {
+    super.didUpdateWidget(old);
+    if (!identical(old.chantPlace, widget.chantPlace)) {
+      old.chantPlace?.removeListener(_onPlace);
+      widget.chantPlace?.addListener(_onPlace);
+      _active = _phraseNow();
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.chantPlace?.removeListener(_onPlace);
+    super.dispose();
+  }
+
+  void _onPlace() {
+    final now = _phraseNow();
+    if (now != _active) setState(() => _active = now);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final item = widget.item;
+    assert(() {
+      blockBuildCounts.update(item.verseId, (n) => n + 1, ifAbsent: () => 1);
+      return true;
+    }());
     final p = NamoPalette.of(context);
-    final wide =
-        MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
+    final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
     Widget text(Phrase phrase, int which) {
       final l = item.languages[which];
       return Text(
@@ -498,8 +577,8 @@ class _PhraseBlockView extends StatelessWidget {
         softWrap: true,
         style: readingStyle(
           l,
-          fontScale: fontScale,
-          lineSpacing: lineSpacing,
+          fontScale: widget.fontScale,
+          lineSpacing: widget.lineSpacing,
           color: which == 0 ? p.text : p.textSecondary,
         ),
       );
@@ -535,18 +614,75 @@ class _PhraseBlockView extends StatelessWidget {
       return Padding(
         key: ValueKey('phrase-${item.verseId}-$i'),
         padding: EdgeInsets.only(top: i == 0 ? 0 : NamoSpace.md),
-        child: content,
+        child: _active == i
+            ? Stack(
+                fit: StackFit.passthrough,
+                clipBehavior: Clip.none,
+                children: [
+                  content,
+                  // Shape as well as colour: a bar in the margin beside it.
+                  Positioned(
+                    left: -(NamoSpace.sm - 1),
+                    top: 0,
+                    bottom: 0,
+                    width: 3,
+                    child: ExcludeSemantics(
+                      child: ColoredBox(
+                        key: const ValueKey('phrase-active'),
+                        color: p.sage,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : content,
       );
     }
 
-    return Padding(
-      padding: EdgeInsets.only(top: gap),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    Widget block = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < item.phrases.length; i++) row(item.phrases[i], i),
+      ],
+    );
+    if (_active != null) {
+      block = Stack(
+        fit: StackFit.passthrough,
+        clipBehavior: Clip.none,
         children: [
-          for (var i = 0; i < item.phrases.length; i++) row(item.phrases[i], i),
+          Positioned(
+            left: -NamoSpace.sm,
+            right: -NamoSpace.sm,
+            top: -NamoSpace.xs,
+            bottom: -NamoSpace.xs,
+            child: ExcludeSemantics(
+              child: DecoratedBox(
+                key: const ValueKey('block-active'),
+                decoration: BoxDecoration(
+                  color: p.sageTint,
+                  borderRadius: BorderRadius.circular(NamoRadius.sm),
+                ),
+              ),
+            ),
+          ),
+          block,
         ],
-      ),
+      );
+    }
+    if (widget.onTap != null) {
+      block = GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.onTap,
+        // A short block is still a full-size target.
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
+          child: block,
+        ),
+      );
+    }
+    return Padding(
+      padding: EdgeInsets.only(top: widget.gap),
+      child: block,
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/audio_catalogue.dart';
 import '../audio/audio_controls.dart';
+import '../audio/chant_timing.dart';
 import '../audio/chant_player.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
@@ -20,6 +21,7 @@ import '../router.dart';
 import '../saved/saved.dart';
 import '../settings/settings.dart';
 import 'auto_scroll.dart';
+import 'chant_follow.dart';
 import 'position_controller.dart';
 import 'reader_body.dart';
 import 'reader_bottom_bar.dart';
@@ -87,6 +89,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// for the recording; the player is not asked before that.
   final _chant = ValueNotifier<ChantState>(const ChantState());
   bool _chantLoaded = false;
+
+  /// The chanting's place on the page and whether the page follows it; null
+  /// for a reading without chant timing.
+  ChantFollow? _follow;
 
   /// Whether the person's last word is "chant": set by Play chanting, cleared
   /// by auto-scroll starting, the app going to the background and leaving
@@ -189,7 +195,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// Loads [recording] into [player] (both null for a reading without
   /// one) and watches it. Called on every build; does nothing new unless
   /// the reading or the player changed.
-  void _bindAudio(Recording? recording, ChantPlayer? player) {
+  void _bindAudio(Reading reading, Recording? recording, ChantPlayer? player) {
     final readingId = recording?.readingId;
     if (identical(player, _player) && readingId == _playerReading) return;
     final old = _player;
@@ -202,6 +208,14 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _timed = recording != null && recording.timed ? recording : null;
     _chantLoaded = false;
     _chant.value = const ChantState();
+    _setFollow(
+      _timed == null
+          ? null
+          : ChantFollow(
+              times: _timed!.blockTimes,
+              paliLengths: paliLengthsOf(reading),
+            ),
+    );
     if (old != null) unawaited(old.pause());
     if (recording == null || player == null) return;
     if (_timed != null) {
@@ -225,7 +239,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (_timed != null) {
       _audioStatus = state.status;
       // What a player left from another reading is not this one's chanting.
-      if (_chantLoaded) _chant.value = state;
+      if (_chantLoaded) {
+        _chant.value = state;
+        _follow?.onState(state);
+      }
       _updateAwake();
       return;
     }
@@ -239,6 +256,73 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       _autoScroll.play();
     }
     _updateAwake();
+  }
+
+  /// Replaces the follower; the old one is cleared (leaving that pirith).
+  /// Never notifies: this runs during build.
+  void _setFollow(ChantFollow? next) {
+    final old = _follow;
+    if (old != null) {
+      old.removeListener(_onFollowChanged);
+      old.place.removeListener(_onPlace);
+      old.reset();
+      SchedulerBinding.instance.addPostFrameCallback((_) => old.dispose());
+    }
+    _follow = next;
+    next?.addListener(_onFollowChanged);
+    next?.place.addListener(_onPlace);
+  }
+
+  /// Started or following changed: what shows (the follow button, the
+  /// blocks' tap) is looked at again.
+  void _onFollowChanged() {
+    if (mounted) setState(() {});
+  }
+
+  /// The place moved: the page goes with it, if it is following.
+  void _onPlace() {
+    final follow = _follow, place = follow?.place.value;
+    if (follow == null || place == null || !follow.following) return;
+    _followPlace(place);
+  }
+
+  void _followPlace(ChantPlace place) {
+    // After the frame, so the block the place has entered is laid out.
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _chase(() => _phraseTarget(place), animate: true);
+    });
+  }
+
+  /// A hand on the text (touch or wheel): the page is no longer pulled back
+  /// to where it was, and following stops until it is asked for.
+  void _onHand() {
+    _restoreGeneration++;
+    _autoScroll.pause();
+    _follow?.pausedByHand();
+  }
+
+  /// The person asks the page to follow again.
+  void _resumeFollowing() {
+    final follow = _follow;
+    if (follow == null) return;
+    follow.resume();
+    final place = follow.place.value;
+    if (place != null) _followPlace(place);
+  }
+
+  /// A tap on block [block] while the chanting is started: chant from there,
+  /// and follow. An untimed block, and any tap before the chanting started
+  /// or when it is neither playing nor paused, does nothing.
+  void _tapBlock(int block) {
+    final follow = _follow, recording = _timed;
+    if (follow == null || recording == null || !follow.started) return;
+    final status = _chant.value.status;
+    if (status != ChantStatus.playing && status != ChantStatus.paused) return;
+    final start = blockStart(recording.blockTimes, block);
+    if (start == null) return;
+    follow.resume();
+    unawaited(_player?.seek(start));
   }
 
   void _toBackground() {
@@ -332,6 +416,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (player != null && !_handedOver && (_startedChant || _timed == null)) {
       unawaited(player.pause());
     }
+    _setFollow(null);
     _chant.dispose();
     _setAwake(false);
     _lifecycle.dispose();
@@ -491,18 +576,58 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     }
   }
 
-  /// Returns to [place]. A pirith is built on demand, so where a far block
-  /// sits is first an estimate: once the page has been laid out around the
-  /// jump the place is looked for again, until it stops moving.
+  /// Returns to [place].
+  void _goToPlace(ReadingPosition place) =>
+      _chase(() => (offset: _offsetOf(place), exact: true));
+
+  /// Where the active phrase's top sits one third of the way down the text
+  /// area. A block that is not built yet has no exact place: its estimated
+  /// start is gone to first (not [exact]).
+  ({double offset, bool exact}) _phraseTarget(ChantPlace place) {
+    final body = _body.currentState!;
+    final third = _scroll.position.viewportDimension / 3;
+    final top = body.offsetOfPhrase(place.block, place.phrase);
+    if (top != null) return (offset: top - third, exact: true);
+    final index = body.widget.items.indexWhere(
+      (i) => i is PhraseBlockItem && i.index == place.block,
+    );
+    final extents = body.extents();
+    if (index < 0 || index >= extents.length) {
+      return (offset: _scroll.offset, exact: true);
+    }
+    return (offset: extents[index].top, exact: false);
+  }
+
+  /// Goes to what [target] says. A pirith is built on demand, so where a far
+  /// block sits is first an estimate: once the page has been laid out around
+  /// the jump the target is asked again, until it stops moving. With
+  /// [animate], the last, exact step glides (a jump when the person wants no
+  /// motion).
   ///
   /// A touch or wheel on the text ends the looking at once, so the page is
   /// never pulled back from where the person put it.
-  void _goToPlace(ReadingPosition place, [int tries = 6, int? generation]) {
+  void _chase(
+    ({double offset, bool exact}) Function() target, {
+    bool animate = false,
+    int tries = 6,
+    int? generation,
+  }) {
     if (_body.currentState == null || !_scroll.hasClients) return;
     if (generation == null) _restoreGeneration++;
     final mine = generation ?? _restoreGeneration;
     if (mine != _restoreGeneration) return;
-    _jumpTo(_offsetOf(place));
+    final now = target();
+    final duration = NamoMotion.of(context, NamoMotion.open);
+    if (animate && now.exact && duration > Duration.zero) {
+      final to = now.offset.clamp(0.0, _scroll.position.maxScrollExtent);
+      if ((to - _scroll.offset).abs() > 0.5) {
+        unawaited(
+          _scroll.animateTo(to, duration: duration, curve: NamoMotion.curve),
+        );
+      }
+      return;
+    }
+    _jumpTo(now.offset);
     if (!_phrased || tries <= 0) return;
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (!mounted ||
@@ -511,8 +636,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           !_scroll.hasClients) {
         return;
       }
-      if ((_offsetOf(place) - _scroll.offset).abs() > 0.5) {
-        _goToPlace(place, tries - 1, mine);
+      final again = target();
+      if (!again.exact || (again.offset - _scroll.offset).abs() > 0.5) {
+        _chase(target, animate: animate, tries: tries - 1, generation: mine);
       }
     });
   }
@@ -571,6 +697,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       final player = _player;
       if (player != null) unawaited(player.pause());
       _chantWanted = false;
+      _follow?.reset();
       _handedOver = true;
       _audioSub?.cancel();
       _audioSub = null;
@@ -621,6 +748,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               .watch(audioCatalogueProvider)
               .recordingFor(reading.id);
           _bindAudio(
+            reading,
             recording,
             recording == null ? null : ref.watch(chantPlayerProvider),
           );
@@ -647,59 +775,65 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               // The text runs under the floating control bar, which hands
               // its whole height to the body in MediaQuery.padding.bottom.
               extendBody: true,
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              body: Stack(
                 children: [
-                  _TopBar(
-                    title: reading.title,
-                    favourite: favourite,
-                    onBack: _back,
-                    onFavourite: () => ref
-                        .read(savedProvider.notifier)
-                        .toggleFavourite(reading.id),
-                    onSettings: () => showReaderSettingsSheet(
-                      context,
-                      onBackToBeginning: _backToBeginning,
-                      showLayout: !reading.isPhrased,
-                    ),
-                  ),
-                  ValueListenableBuilder<double>(
-                    valueListenable: _progress,
-                    builder: (context, progress, _) =>
-                        ProgressLine(value: progress),
-                  ),
-                  Expanded(
-                    child: SafeArea(
-                      top: false,
-                      bottom: false,
-                      // A touch or a mouse wheel on the text pauses
-                      // auto-scroll at once.
-                      child: Listener(
-                        onPointerDown: (_) {
-                          _restoreGeneration++;
-                          _autoScroll.pause();
-                        },
-                        onPointerSignal: (_) {
-                          _restoreGeneration++;
-                          _autoScroll.pause();
-                        },
-                        child: ReaderBody(
-                          key: _body,
-                          items: items,
-                          controller: _scroll,
-                          fontScale: settings.fontScale,
-                          lineSpacing: settings.lineSpacing,
-                          bookmarkedSections: {
-                            for (final b in saved.bookmarks)
-                              if (b.readingId == reading.id) b.sectionId,
-                          },
-                          onToggleBookmark: (sectionId) => ref
-                              .read(savedProvider.notifier)
-                              .toggleBookmark(reading.id, sectionId),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _TopBar(
+                        title: reading.title,
+                        favourite: favourite,
+                        onBack: _back,
+                        onFavourite: () => ref
+                            .read(savedProvider.notifier)
+                            .toggleFavourite(reading.id),
+                        onSettings: () => showReaderSettingsSheet(
+                          context,
+                          onBackToBeginning: _backToBeginning,
+                          showLayout: !reading.isPhrased,
                         ),
                       ),
-                    ),
+                      ValueListenableBuilder<double>(
+                        valueListenable: _progress,
+                        builder: (context, progress, _) =>
+                            ProgressLine(value: progress),
+                      ),
+                      Expanded(
+                        child: SafeArea(
+                          top: false,
+                          bottom: false,
+                          // A touch or a mouse wheel on the text pauses
+                          // auto-scroll at once.
+                          child: Listener(
+                            onPointerDown: (_) => _onHand(),
+                            onPointerSignal: (_) => _onHand(),
+                            child: ReaderBody(
+                              key: _body,
+                              items: items,
+                              controller: _scroll,
+                              fontScale: settings.fontScale,
+                              lineSpacing: settings.lineSpacing,
+                              bookmarkedSections: {
+                                for (final b in saved.bookmarks)
+                                  if (b.readingId == reading.id) b.sectionId,
+                              },
+                              onToggleBookmark: (sectionId) => ref
+                                  .read(savedProvider.notifier)
+                                  .toggleBookmark(reading.id, sectionId),
+                              chantPlace: _follow?.place,
+                              // No tap, and no tap semantics, until the
+                              // chanting has been started.
+                              onTapBlock: _follow?.started ?? false
+                                  ? _tapBlock
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  if (_follow case final follow?)
+                    _FollowButton(follow: follow, onPressed: _resumeFollowing),
                 ],
               ),
               bottomNavigationBar: ListenableBuilder(
@@ -809,6 +943,49 @@ class _TopBar extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Floats above the control bar while the chanting has started and the page
+/// is not following it; asks the page to follow again.
+class _FollowButton extends StatelessWidget {
+  const _FollowButton({required this.follow, required this.onPressed});
+
+  final ChantFollow follow;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    // The body runs under the floating bar, whose height arrives here as the
+    // bottom padding.
+    final bottom = MediaQuery.paddingOf(context).bottom + NamoSpace.sm;
+    return ListenableBuilder(
+      listenable: Listenable.merge([follow, follow.place]),
+      builder: (context, _) {
+        if (!follow.started || follow.following || follow.place.value == null) {
+          return const SizedBox.shrink();
+        }
+        return Positioned(
+          left: 0,
+          right: 0,
+          bottom: bottom,
+          child: Center(
+            child: DecoratedBox(
+              key: const ValueKey('follow-chanting'),
+              decoration: BoxDecoration(
+                color: p.surface,
+                borderRadius: BorderRadius.circular(NamoRadius.lg),
+              ),
+              child: QuietButton(
+                label: 'Follow the chanting',
+                onPressed: onPressed,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
