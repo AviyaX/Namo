@@ -9,10 +9,25 @@ sealed class ReaderItem {
 
 /// A section heading with any notes about missing or explanatory text.
 class HeadingItem extends ReaderItem {
-  HeadingItem(this.section, this.notes);
+  HeadingItem(
+    this.section,
+    this.notes, {
+    this.romanTitle,
+    this.credit,
+    this.canBookmark = true,
+  });
 
   final Section section;
   final List<String> notes;
+
+  /// The Roman Pali name shown under the heading (a pirith).
+  final String? romanTitle;
+
+  /// The line crediting the recording (a pirith).
+  final String? credit;
+
+  /// False for a pirith, which has no separate bookmark inside it.
+  final bool canBookmark;
 
   @override
   String get sectionId => section.id;
@@ -39,6 +54,27 @@ class VerseTextItem extends ReaderItem {
   final ReadingLanguage language;
   final String text;
   final bool secondary;
+}
+
+/// One block of a pirith: its phrases together, shown in [languages] (the
+/// chosen selection, in order). [index] is the block's zero-based position
+/// in the reading.
+class PhraseBlockItem extends ReaderItem {
+  PhraseBlockItem({
+    required this.sectionId,
+    required this.verseId,
+    required this.index,
+    required this.phrases,
+    required this.languages,
+  });
+
+  @override
+  final String sectionId;
+  @override
+  final String verseId;
+  final int index;
+  final List<Phrase> phrases;
+  final List<ReadingLanguage> languages;
 }
 
 const _explanationNote =
@@ -76,6 +112,34 @@ List<ReaderItem> buildReaderItems(
 ) {
   final languages = selection.languages;
   final items = <ReaderItem>[];
+
+  if (reading.isPhrased) {
+    // A pirith: always phrase by phrase, whatever the layout setting.
+    var block = 0;
+    for (final s in reading.sections) {
+      items.add(
+        HeadingItem(
+          s,
+          const [],
+          romanTitle: reading.titleRoman,
+          credit: reading.audio?.label,
+          canBookmark: false,
+        ),
+      );
+      for (final v in s.verses) {
+        items.add(
+          PhraseBlockItem(
+            sectionId: s.id,
+            verseId: v.id,
+            index: block++,
+            phrases: v.phrases,
+            languages: languages,
+          ),
+        );
+      }
+    }
+    return items;
+  }
 
   VerseTextItem? item(Section s, Verse v, int index) {
     final text = v.text(languages[index]);

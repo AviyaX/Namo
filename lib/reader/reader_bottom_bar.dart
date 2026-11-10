@@ -25,7 +25,13 @@ class ReaderBottomBar extends StatelessWidget {
     this.onPlay,
     this.autoScroll = AutoScrollStatus.stopped,
     this.audio,
+    this.previousTooltip = 'Previous section',
+    this.nextTooltip = 'Next section',
   });
+
+  /// What the two outer buttons are called (a pirith's go to the previous
+  /// and next pirith).
+  final String previousTooltip, nextTooltip;
 
   /// The recording's controls, above the buttons inside the same bar; null
   /// when the reading has no recording.
@@ -76,7 +82,7 @@ class ReaderBottomBar extends StatelessWidget {
                   children: [
                     NamoIconButton(
                       key: const ValueKey('reader-prev'),
-                      tooltip: 'Previous section',
+                      tooltip: previousTooltip,
                       icon: Symbols.skip_previous_rounded,
                       onPressed: onPrevious,
                     ),
@@ -85,7 +91,7 @@ class ReaderBottomBar extends StatelessWidget {
                     const SizedBox(width: NamoSpace.xl),
                     NamoIconButton(
                       key: const ValueKey('reader-next'),
-                      tooltip: 'Next section',
+                      tooltip: nextTooltip,
                       icon: Symbols.skip_next_rounded,
                       onPressed: onNext,
                     ),

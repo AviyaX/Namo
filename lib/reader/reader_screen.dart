@@ -9,6 +9,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../audio/audio_catalogue.dart';
 import '../audio/audio_controls.dart';
 import '../audio/chant_player.dart';
+import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/buttons.dart';
@@ -103,6 +104,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// Saves while the page keeps moving ([_saveWhileMoving]); started by the
   /// first scroll after a save, not restarted by later ones.
   Timer? _movingSaveTimer;
+
+  /// Whether the open reading is a pirith (set by each build): its bar
+  /// goes between pirith, so the section buttons are not worked out.
+  bool _phrased = false;
 
   double? _width;
   double? _previousTarget;
@@ -311,8 +316,11 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   void _onScroll() {
     // The scroll position can change during layout; the page is looked at
     // once that frame is done.
-    if (SchedulerBinding.instance.schedulerPhase ==
-        SchedulerPhase.persistentCallbacks) {
+    // A pirith is built on demand, so where its blocks are is only known
+    // once the new offset has been laid out.
+    if (_phrased ||
+        SchedulerBinding.instance.schedulerPhase ==
+            SchedulerPhase.persistentCallbacks) {
       SchedulerBinding.instance.addPostFrameCallback(
         (_) => _afterScroll(scrolled: true),
       );
@@ -341,6 +349,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   void _updateButtons() {
+    if (_phrased) return;
     final tops = _headingTops();
     double? previous, next;
     if (tops.isNotEmpty) {
@@ -390,8 +399,25 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (section != null) {
       _jumpTo(body.offsetOfSection(section));
     } else if (saved != null) {
-      _jumpTo(_offsetOf(saved.position));
+      _goToPlace(saved.position);
     }
+  }
+
+  /// Returns to [place]. A pirith is built on demand, so where a far block
+  /// sits is first an estimate: once the page has been laid out around the
+  /// jump the place is looked for again, until it stops moving.
+  void _goToPlace(ReadingPosition place, [int tries = 6]) {
+    if (_body.currentState == null || !_scroll.hasClients) return;
+    _jumpTo(_offsetOf(place));
+    if (!_phrased || tries <= 0) return;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _body.currentState == null || !_scroll.hasClients) {
+        return;
+      }
+      if ((_offsetOf(place) - _scroll.offset).abs() > 0.5) {
+        _goToPlace(place, tries - 1);
+      }
+    });
   }
 
   /// Before the reading is laid out again (other languages, layout, text
@@ -405,8 +431,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (!mounted || _pendingRestore != place) return;
       _pendingRestore = null;
-      if (_body.currentState == null || !_scroll.hasClients) return;
-      _jumpTo(_offsetOf(place));
+      _goToPlace(place);
     });
   }
 
@@ -430,6 +455,26 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       ReaderFrom.saved => Routes.saved,
       null => Routes.contents(widget.readingId),
     });
+  }
+
+  /// Replaces this reader with the reading [step] places away in its
+  /// category (a pirith's previous or next); the place left is saved first.
+  /// Null at either end, and for a reading that is not a pirith.
+  VoidCallback? _neighbour(Library library, Reading reading, int step) {
+    if (!reading.isPhrased) return null;
+    final category = library.categories.firstWhere(
+      (c) => c.readings.any((r) => r.id == reading.id),
+      orElse: () => Category(id: '', title: '', subtitle: '', readings: []),
+    );
+    final at = category.readings.indexWhere((r) => r.id == reading.id);
+    final to = at + step;
+    if (at < 0 || to < 0 || to >= category.readings.length) return null;
+    final id = category.readings[to].id;
+    return () {
+      _autoScroll.pause();
+      _save();
+      context.pushReplacement(Routes.reader(id, from: widget.from));
+    };
   }
 
   @override
@@ -459,7 +504,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             settings.languages,
             settings.layout,
           );
+          _phrased = reading.isPhrased;
           final favourite = saved.isFavourite(reading.id);
+          final previousReading = _neighbour(library, reading, -1);
+          final nextReading = _neighbour(library, reading, 1);
           final recording = ref
               .watch(audioCatalogueProvider)
               .recordingFor(reading.id);
@@ -503,6 +551,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                     onSettings: () => showReaderSettingsSheet(
                       context,
                       onBackToBeginning: _backToBeginning,
+                      showLayout: !reading.isPhrased,
                     ),
                   ),
                   ValueListenableBuilder<double>(
@@ -541,10 +590,20 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               bottomNavigationBar: ListenableBuilder(
                 listenable: _autoScroll,
                 builder: (context, _) => ReaderBottomBar(
-                  onPrevious: _previousTarget == null
+                  previousTooltip: reading.isPhrased
+                      ? 'Previous pirith'
+                      : 'Previous section',
+                  nextTooltip: reading.isPhrased
+                      ? 'Next pirith'
+                      : 'Next section',
+                  onPrevious: reading.isPhrased
+                      ? previousReading
+                      : _previousTarget == null
                       ? null
                       : () => _jumpTo(_previousTarget!),
-                  onNext: _nextTarget == null
+                  onNext: reading.isPhrased
+                      ? nextReading
+                      : _nextTarget == null
                       ? null
                       : () => _jumpTo(_nextTarget!),
                   onPlay: _playOrPause,

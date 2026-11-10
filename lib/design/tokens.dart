@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 abstract final class NamoSizes {
   static const readingColumn = 680.0;
   static const wideBreakpoint = 840.0;
+
+  /// The reading column of a phrased reading (a pirith): wide enough for a
+  /// phrase and its meaning side by side.
+  static const phraseColumn = 920.0;
   static const touchTarget = 48.0;
   static const homeColumn = 1040.0;
   static const iconSmall = 20.0;

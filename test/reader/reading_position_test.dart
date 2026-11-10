@@ -528,4 +528,46 @@ void main() {
       expect(s.lastReadingId, 'r1');
     });
   });
+
+  group('a pirith block is placed like a verse', () {
+    PhraseBlockItem b(String verseId, int index) => PhraseBlockItem(
+      sectionId: 's01',
+      verseId: verseId,
+      index: index,
+      phrases: const [],
+      languages: const [pi],
+    );
+    final items = [h('s01'), b('s01-b1', 0), b('s01-b2', 1)];
+    final extents = [e(0, 40), e(40, 100), e(140, 60)];
+
+    test('captures the block, with no language', () {
+      final p = capturePosition(
+        readingId: 'r1',
+        items: items,
+        extents: extents,
+        scrollOffset: 190,
+      )!;
+      expect(p.verseId, 's01-b2');
+      expect(p.language, isNull);
+      expect(p.fraction, closeTo(50 / 60, 1e-9));
+    });
+
+    test('returns to the same block and fraction', () {
+      final p = capturePosition(
+        readingId: 'r1',
+        items: items,
+        extents: extents,
+        scrollOffset: 90,
+      )!;
+      expect(
+        offsetForPosition(
+          position: p,
+          items: items,
+          extents: extents,
+          maxScrollExtent: 1000,
+        ),
+        90,
+      );
+    });
+  });
 }

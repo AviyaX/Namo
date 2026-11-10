@@ -1,3 +1,4 @@
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/reader/reader_items.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,6 +19,7 @@ List<String> _kinds(List<ReaderItem> items) => [
     switch (i) {
       HeadingItem() => 'H(${i.sectionId})',
       VerseTextItem() => 'V(${i.verseId}, ${i.language.code})',
+      PhraseBlockItem() => 'B(${i.verseId}, ${i.index})',
     },
 ];
 
@@ -151,5 +153,66 @@ void main() {
       expect(verses.any((v) => v.secondary), isTrue);
       expect(verses.any((v) => !v.secondary), isTrue);
     }
+  });
+
+  group('a phrased reading', () {
+    Phrase p(String s) => Phrase(pali: 'p$s', sinhala: 's$s', english: 'e$s');
+    final reading = Reading(
+      id: 'x',
+      title: 'Title',
+      titleRoman: 'Roman',
+      audio: const RecordingInfo(asset: 'a.m4a', label: 'Credit line'),
+      sections: [
+        Section(
+          id: 'x-s',
+          number: 1,
+          heading: 'Title',
+          verses: [
+            Verse(id: 'x-1', phrases: [p('1'), p('2')]),
+            Verse(id: 'x-2', phrases: [p('3')]),
+            Verse(id: 'x-3', phrases: [p('4'), p('5'), p('6')]),
+          ],
+        ),
+      ],
+    );
+
+    test('gives a heading and one block per verse, whatever the layout', () {
+      for (final layout in TwoLanguageLayout.values) {
+        final items = buildReaderItems(
+          reading,
+          const LanguageSelection([_pali, _english]),
+          layout,
+        );
+        expect(_kinds(items), ['H(x-s)', 'B(x-1, 0)', 'B(x-2, 1)', 'B(x-3, 2)']);
+        final blocks = items.whereType<PhraseBlockItem>().toList();
+        for (var i = 0; i < blocks.length; i++) {
+          expect(blocks[i].phrases, same(reading.sections[0].verses[i].phrases));
+          expect(blocks[i].languages, [_pali, _english]);
+          expect(blocks[i].sectionId, 'x-s');
+        }
+      }
+    });
+
+    test('the heading carries the Roman name and credit, and no bookmark', () {
+      final heading =
+          buildReaderItems(
+                reading,
+                LanguageSelection.initial,
+                TwoLanguageLayout.verse,
+              ).first
+              as HeadingItem;
+      expect(heading.romanTitle, 'Roman');
+      expect(heading.credit, 'Credit line');
+      expect(heading.canBookmark, isFalse);
+      expect(heading.notes, isEmpty);
+    });
+
+    test('an ordinary reading heading can be bookmarked', () {
+      final heading =
+          _build([_pali], TwoLanguageLayout.verse).first as HeadingItem;
+      expect(heading.canBookmark, isTrue);
+      expect(heading.romanTitle, isNull);
+      expect(heading.credit, isNull);
+    });
   });
 }
