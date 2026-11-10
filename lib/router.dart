@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'design/widgets/app_shell.dart';
 import 'design/widgets/not_found.dart';
 import 'home/home_screen.dart';
-import 'library/category_screen.dart';
 import 'library/library_screen.dart';
-import 'library/reading_contents_screen.dart';
 import 'reader/reader_screen.dart';
 import 'saved/saved_screen.dart';
 import 'settings/settings_screen.dart';
@@ -19,8 +17,15 @@ abstract final class Routes {
   static const settings = '/settings';
   static const sources = '/settings/sources';
 
-  static String category(String id) => '/library/category/$id';
-  static String contents(String readingId) => '/library/reading/$readingId';
+  /// The Library with this category's sections showing.
+  static String category(String id) =>
+      '/library?open=${Uri.encodeQueryComponent(id)}';
+
+  /// The Library with the sections of the category holding this reading
+  /// showing (the Library works out which category that is).
+  static String contents(String readingId) =>
+      '/library?reading=${Uri.encodeQueryComponent(readingId)}';
+
   static String reader(String readingId, {String? sectionId}) =>
       sectionId == null
           ? '/read/$readingId'
@@ -42,16 +47,19 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
             StatefulShellBranch(routes: [
               GoRoute(
                   path: Routes.library,
-                  builder: (context, state) => const LibraryScreen(),
+                  builder: (context, state) => LibraryScreen(
+                      openCategory: state.uri.queryParameters['open'],
+                      openReading: state.uri.queryParameters['reading']),
                   routes: [
+                    // Saved links from before the in-place list.
                     GoRoute(
                         path: 'category/:id',
-                        builder: (context, state) => CategoryScreen(
-                            categoryId: state.pathParameters['id']!)),
+                        redirect: (context, state) =>
+                            Routes.category(state.pathParameters['id']!)),
                     GoRoute(
                         path: 'reading/:id',
-                        builder: (context, state) => ReadingContentsScreen(
-                            readingId: state.pathParameters['id']!)),
+                        redirect: (context, state) =>
+                            Routes.contents(state.pathParameters['id']!)),
                   ]),
             ]),
             StatefulShellBranch(routes: [

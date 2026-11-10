@@ -26,9 +26,8 @@ void main() {
   // scrolls, so everything is on screen) and what to do once it is open.
   final screens = <(String, String, Size, Future<void> Function(WidgetTester)?, bool)>[
     ('Home', Routes.home, const Size(390, 844), null, false),
-    ('Library', Routes.library, const Size(390, 844), null, false),
-    ('Category', Routes.category(realCategoryId), const Size(390, 844), null, false),
-    ('Contents list', Routes.contents(realReadingId), const Size(390, 1800), null, false),
+    ('Library (closed)', Routes.library, const Size(390, 844), null, false),
+    ('Library (open)', Routes.category(realCategoryId), const Size(390, 1800), null, false),
     ('Reader', Routes.reader(realReadingId), const Size(390, 844), null, false),
     ('Reader sheet', Routes.reader(realReadingId), const Size(390, 844), openSheet, false),
     ('Saved', Routes.saved, const Size(390, 844), null, true),

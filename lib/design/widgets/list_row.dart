@@ -12,7 +12,16 @@ class ListRow extends StatelessWidget {
     this.subtitle,
     this.number,
     this.titleFamily = NamoFonts.english,
+    this.trailing,
+    this.expanded,
   });
+
+  /// Shown at the right end of the row.
+  final Widget? trailing;
+
+  /// For a row that opens and closes something: whether it is open now.
+  /// Left null for an ordinary row.
+  final bool? expanded;
 
   final String title;
   final String? subtitle;
@@ -26,6 +35,7 @@ class ListRow extends StatelessWidget {
     return Semantics(
       button: true,
       container: true,
+      expanded: expanded,
       excludeSemantics: true,
       label: [if (number != null) '$number', title, if (subtitle != null) subtitle]
           .join(', '),
@@ -65,6 +75,7 @@ class ListRow extends StatelessWidget {
                   ],
                 ),
               ),
+              ?trailing,
             ],
           ),
         ),

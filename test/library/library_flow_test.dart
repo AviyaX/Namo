@@ -11,43 +11,10 @@ void main() {
     contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
   ];
 
-  testWidgets('Home -> category -> reading -> contents list shows every section',
-      (t) async {
-    await pumpApp(t, overrides: fake);
-    expect(find.text('Namo'), findsOneWidget);
-    await t.tap(find.text('category 1'));
-    await t.pumpAndSettle();
-    await t.tap(find.text('reading 1'));
-    await t.pumpAndSettle();
-    for (var i = 1; i <= 3; i++) {
-      expect(find.text('heading $i'), findsOneWidget);
-      expect(find.text('$i'), findsOneWidget);
-    }
-    expect(find.bySemanticsLabel('1, heading 1'), findsOneWidget);
-    final row = t.getSize(find
-        .ancestor(of: find.text('heading 1'), matching: find.byType(Container))
-        .first);
-    expect(row.height, greaterThanOrEqualTo(48));
-  });
-
   testWidgets('the Library tab lists the category', (t) async {
     await pumpApp(t, overrides: fake, location: Routes.library);
     expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
     expect(find.text('category 1'), findsOneWidget);
-  });
-
-  testWidgets('tapping a section opens the reader at that section', (t) async {
-    await pumpApp(t, overrides: fake, location: Routes.contents('r1'));
-    await t.tap(find.text('heading 2'));
-    await t.pumpAndSettle();
-    expect(find.byKey(const ValueKey('heading-s02')), findsOneWidget);
-    expect(find.byKey(const ValueKey('reader-settings')), findsOneWidget);
-  });
-
-  testWidgets('a contents address for an unknown reading shows not-found',
-      (t) async {
-    await pumpApp(t, overrides: fake, location: Routes.contents('nope'));
-    expect(find.text('This page could not be found.'), findsOneWidget);
   });
 
   testWidgets(

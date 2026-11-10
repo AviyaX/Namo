@@ -93,9 +93,8 @@ void main() {
   // The same sizes for every other screen, at the largest device text size.
   final others = <(String, String, bool)>[
     ('Home', Routes.home, false),
-    ('Library', Routes.library, false),
-    ('Category', Routes.category(realCategoryId), false),
-    ('Contents list', Routes.contents(realReadingId), false),
+    ('Library (closed)', Routes.library, false),
+    ('Library (open)', Routes.category(realCategoryId), false),
     ('Saved (empty)', Routes.saved, false),
     ('Saved (with entries)', Routes.saved, true),
     ('Settings', Routes.settings, false),
