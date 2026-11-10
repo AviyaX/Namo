@@ -103,7 +103,7 @@ class SettingsController extends Notifier<AppSettings> {
     state = next;
     ref
         .read(keyValueStoreProvider)
-        .write(settingsKey, jsonEncode(next.toJson()));
+        .save(settingsKey, jsonEncode(next.toJson()));
   }
 
   ToggleOutcome toggleLanguage(ReadingLanguage l) {

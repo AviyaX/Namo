@@ -87,7 +87,7 @@ class PositionController extends Notifier<PositionState> {
     state = next;
     ref
         .read(keyValueStoreProvider)
-        .write(positionKey, jsonEncode(next.toJson()));
+        .save(positionKey, jsonEncode(next.toJson()));
   }
 
   /// Does nothing once the app's providers are gone (the reader can save as

@@ -87,7 +87,7 @@ class SavedController extends Notifier<SavedState> {
 
   void _set(SavedState next) {
     state = next;
-    ref.read(keyValueStoreProvider).write(savedKey, jsonEncode(next.toJson()));
+    ref.read(keyValueStoreProvider).save(savedKey, jsonEncode(next.toJson()));
   }
 
   void toggleBookmark(String readingId, String sectionId) {

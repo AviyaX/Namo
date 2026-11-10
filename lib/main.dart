@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
+import 'storage/key_value_store.dart';
 
 void _registerFontLicences() {
   const files = {
@@ -19,7 +20,14 @@ void _registerFontLicences() {
   });
 }
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   _registerFontLicences();
-  runApp(const ProviderScope(child: NamoApp()));
+  final store = await openKeyValueStore();
+  runApp(
+    ProviderScope(
+      overrides: [keyValueStoreProvider.overrideWithValue(store)],
+      child: const NamoApp(),
+    ),
+  );
 }
