@@ -14,7 +14,6 @@ class NotFoundScreen extends StatelessWidget {
       body: EmptyState(
         icon: Symbols.explore_off_rounded,
         title: 'This page could not be found.',
-        message: '',
         actionLabel: 'Go to Home',
         onAction: () => context.go(Routes.home),
       ),

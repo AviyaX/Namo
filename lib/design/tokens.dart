@@ -122,17 +122,6 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   List<BoxShadow> get floatShadow =>
       [BoxShadow(color: shadow, blurRadius: 24, offset: const Offset(0, 8))];
 
-  // Old name, removed in Task 14
-  Color get divider => border;
-  // Old name, removed in Task 14
-  Color get textQuiet => textSecondary;
-  // Old name, removed in Task 14
-  Color get heading => text;
-  // Old name, removed in Task 14
-  Color get accent => gold;
-  // Old name, removed in Task 14
-  Color get focus => sageTint;
-
   static NamoPalette of(BuildContext context) =>
       Theme.of(context).extension<NamoPalette>()!;
 

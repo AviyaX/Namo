@@ -105,15 +105,6 @@ void main() {
     expect(p.floatShadow.single.color, p.shadow);
   });
 
-  test('old names map onto the new roles', () {
-    final p = NamoPalette.light;
-    expect(p.divider, p.border);
-    expect(p.textQuiet, p.textSecondary);
-    expect(p.heading, p.text);
-    expect(p.accent, p.gold);
-    expect(p.focus, p.sageTint);
-  });
-
   test('lerp at 0 and 1 gives the ends', () {
     final a = roles(NamoPalette.dark.lerp(NamoPalette.light, 0));
     final b = roles(NamoPalette.dark.lerp(NamoPalette.light, 1));

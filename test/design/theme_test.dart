@@ -17,14 +17,14 @@ void main() {
   test('text roles meet contrast in both themes', () {
     for (final p in [NamoPalette.light, NamoPalette.dark]) {
       expect(contrastRatio(p.text, p.background), greaterThanOrEqualTo(7.0));
-      expect(contrastRatio(p.heading, p.background), greaterThanOrEqualTo(4.5));
+      expect(contrastRatio(p.text, p.background), greaterThanOrEqualTo(4.5));
       expect(
-        contrastRatio(p.textQuiet, p.background),
+        contrastRatio(p.textSecondary, p.background),
         greaterThanOrEqualTo(4.5),
       );
     }
     expect(
-      contrastRatio(NamoPalette.dark.accent, NamoPalette.dark.background),
+      contrastRatio(NamoPalette.dark.gold, NamoPalette.dark.background),
       greaterThanOrEqualTo(4.5),
     );
   });

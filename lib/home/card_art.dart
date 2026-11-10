@@ -146,9 +146,9 @@ class _LotusPanel extends StatelessWidget {
           ? LayoutBuilder(
               builder: (context, box) => Center(
                 child: Icon(
-                  Symbols.spa,
+                  Symbols.spa_rounded,
                   size: box.maxHeight * 0.4,
-                  weight: 200,
+                  weight: 300,
                   color: p.gold.withValues(alpha: 0.45),
                 ),
               ),

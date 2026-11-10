@@ -52,6 +52,12 @@ abstract final class NamoType {
       size: 14, height: 1.3, weight: 500, color: color);
   static TextStyle caption(Color color) => namoText(NamoFonts.sans,
       size: 13, height: 1.4, weight: 400, color: color);
+  /// A tab's name under its icon.
+  static TextStyle tabLabel(Color color) => namoText(NamoFonts.sans,
+      size: 12, height: 1.3, weight: 500, color: color);
+  /// A word in Sinhala letters set large enough to compare two spellings.
+  static TextStyle spelling(Color color) => namoText(NamoFonts.sinhala,
+      size: 18, height: 1.4, weight: 400, color: color);
   static TextStyle overline(Color color) => namoText(NamoFonts.sans,
       size: 12, height: 1.3, weight: 600, letterSpacing: 0.8, color: color);
 }

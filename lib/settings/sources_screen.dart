@@ -274,7 +274,7 @@ class _CorrectionRow extends StatelessWidget {
     final where = entry.sections.length == 1
         ? 'Section ${entry.sections.single}'
         : 'Sections ${entry.sections.join(', ')}';
-    final form = namoText(NamoFonts.sinhala, size: 18, color: p.text);
+    final form = NamoType.spelling(p.text);
     final detail = NamoType.caption(p.textSecondary);
     // The arrow is drawn from the bundled icon font: a text arrow is in none
     // of the bundled text fonts and would be fetched from the network.

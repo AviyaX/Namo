@@ -41,7 +41,13 @@ class SettingsScreen extends ConsumerWidget {
         const SettingsGroup(
           icon: Symbols.palette_rounded,
           label: 'Appearance',
-          children: [SettingLabel('Theme'), ThemeChooser()],
+          children: [
+            // A label and its control are one row: no line between them.
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [SettingLabel('Theme'), ThemeChooser()],
+            ),
+          ],
         ),
         const SizedBox(height: NamoSpace.lg),
         SettingsGroup(
@@ -133,6 +139,7 @@ class SettingsScreen extends ConsumerWidget {
               sliderKey: const ValueKey('setting-scroll-speed'),
               value: settings.scrollSpeed,
               onChanged: controller.setScrollSpeed,
+              topPadding: 0,
             ),
           ],
         ),

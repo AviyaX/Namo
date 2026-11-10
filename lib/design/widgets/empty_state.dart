@@ -11,14 +11,14 @@ class EmptyState extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
-    required this.message,
+    this.message,
     this.actionLabel,
     this.onAction,
   });
 
   final IconData icon;
   final String title;
-  final String message;
+  final String? message;
   final String? actionLabel;
   final VoidCallback? onAction;
 
@@ -49,10 +49,12 @@ class EmptyState extends StatelessWidget {
               Text(title,
                   textAlign: TextAlign.center,
                   style: NamoType.cardTitle(p.text)),
-              const SizedBox(height: NamoSpace.sm),
-              Text(message,
-                  textAlign: TextAlign.center,
-                  style: NamoType.body(p.textSecondary)),
+              if (message != null) ...[
+                const SizedBox(height: NamoSpace.sm),
+                Text(message!,
+                    textAlign: TextAlign.center,
+                    style: NamoType.body(p.textSecondary)),
+              ],
               if (actionLabel != null) ...[
                 const SizedBox(height: NamoSpace.xl),
                 PrimaryButton(label: actionLabel!, onPressed: onAction),

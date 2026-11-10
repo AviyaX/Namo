@@ -207,6 +207,19 @@ void main() {
       find.descendant(of: group(label), matching: what);
   Finder keyed(String key) => find.byKey(ValueKey(key));
 
+  testWidgets('a label and its control are one row: no line between them',
+      (t) async {
+    await openSettings(t, size: const Size(390, 2400));
+    Finder lines(String g) =>
+        inGroup(g, find.byType(Divider));
+    // Appearance and Reading hold one or three rows; Theme and its chooser
+    // are a single row, so Appearance has no line at all.
+    expect(lines('Appearance'), findsNothing);
+    expect(lines('Languages'), findsNothing);
+    // Reading: three rows, two lines; the layout label and chooser add none.
+    expect(lines('Reading'), findsNWidgets(2));
+  });
+
   testWidgets('Settings shows its six groups in order', (t) async {
     await openSettings(t, size: const Size(390, 2400));
     expect(find.byType(SettingsGroup), findsNWidgets(6));

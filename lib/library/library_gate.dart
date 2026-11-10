@@ -33,7 +33,6 @@ class LibraryGate extends ConsumerWidget {
           error: (_, _) => const EmptyState(
             icon: Symbols.error_outline_rounded,
             title: 'The text could not be loaded.',
-            message: '',
           ),
         );
   }

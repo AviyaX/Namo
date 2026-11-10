@@ -92,6 +92,7 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// theme. [withSaved] fills Saved with bookmarks and a favourite.
 /// [library] replaces the bundled content. [audio] puts the placeholder
 /// recording on every reading; [audioFails] makes the player fail to load it.
+/// [storeExtras] are extra saved values (a remembered reading place, say).
 /// [overrides] are added to the app's provider overrides (a fixed clock, say).
 Future<void> openReal(
   WidgetTester t,
@@ -105,6 +106,7 @@ Future<void> openReal(
   bool audio = false,
   bool audioFails = false,
   List<Override> overrides = const [],
+  Map<String, String> storeExtras = const {},
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -116,6 +118,9 @@ Future<void> openReal(
   });
   final store = InMemoryKeyValueStore();
   await store.write(settingsKey, jsonEncode(settings.toJson()));
+  for (final e in storeExtras.entries) {
+    await store.write(e.key, e.value);
+  }
   if (withSaved) {
     final sections = lib.categories.first.readings.first.sections;
     final readingId = lib.categories.first.readings.first.id;

@@ -71,13 +71,6 @@ ThemeData namoTheme(Brightness brightness) {
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        minimumSize: minSize,
-        shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
-      ),
-    ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         minimumSize: minSize,

@@ -312,12 +312,7 @@ class _CategoryEntry extends ConsumerWidget {
                             // family as the section rows beneath it.
                             child: Text(
                               r.title,
-                              style: namoText(
-                                NamoFonts.sinhala,
-                                size: 14,
-                                color: p.text,
-                                weight: 600,
-                              ),
+                              style: NamoType.label(p.text),
                             ),
                           ),
                         ),

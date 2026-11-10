@@ -26,8 +26,7 @@ const _railWidth = 88.0;
 /// Room around a destination's icon and label, inside its pill.
 const _pillPadding = NamoSpace.xs;
 
-TextStyle _labelStyle(Color color) => namoText(NamoFonts.sans,
-    size: 12, height: 1.3, weight: 500, color: color);
+TextStyle _labelStyle(Color color) => NamoType.tabLabel(color);
 
 /// The tabs: a floating bar at the foot of a phone screen, a rail at the
 /// left of a wide one. Pressing the active tab takes it back to its first

@@ -77,34 +77,6 @@ class SettingsGroup extends StatelessWidget {
   }
 }
 
-/// A small quiet heading over a group of controls.
-class SettingsHeading extends StatelessWidget {
-  const SettingsHeading(this.text, {super.key});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = NamoPalette.of(context);
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-      child: Semantics(
-        header: true,
-        child: Text(
-          text,
-          softWrap: true,
-          style: namoText(
-            NamoFonts.english,
-            size: 14,
-            color: p.textQuiet,
-            weight: 600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 /// A row label, with an optional quiet hint under it.
 class SettingLabel extends StatelessWidget {
   const SettingLabel(this.text, {super.key, this.hint});
@@ -191,11 +163,16 @@ class ScrollSpeedControl extends StatelessWidget {
     required this.sliderKey,
     required this.value,
     required this.onChanged,
+    this.topPadding = NamoSpace.xs,
   });
 
   final Key sliderKey;
   final double value;
   final ValueChanged<double> onChanged;
+
+  /// Space above the presets; the reader's sheet keeps the default under its
+  /// label, a Settings group row has none of its own.
+  final double topPadding;
 
   static const _presets = [
     ('Slow', AutoScrollEngine.slow),
@@ -216,12 +193,7 @@ class ScrollSpeedControl extends StatelessWidget {
     final range = AppSettings.scrollSpeedRange;
     final custom = _presetName(value) == null;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        NamoSpace.lg,
-        NamoSpace.xs,
-        NamoSpace.lg,
-        0,
-      ),
+      padding: EdgeInsets.fromLTRB(NamoSpace.lg, topPadding, NamoSpace.lg, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

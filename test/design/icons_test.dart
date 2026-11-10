@@ -1,7 +1,6 @@
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
-import 'package:buddhist_gatha/home/card_art.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -45,17 +44,7 @@ Future<ProviderContainer> open(WidgetTester t, String location) async {
 /// Every icon on screen is a thin-line rounded Material Symbol at the
 /// weight the tabs use.
 void expectThinLineIcons(WidgetTester t, String where) {
-  // The lotus on a topic thumbnail's fallback panel is decoration, drawn
-  // thinner than the controls on purpose.
-  final icons = t
-      .widgetList<Icon>(find.byType(Icon))
-      .where(
-        (i) => find
-            .ancestor(of: find.byWidget(i), matching: find.byType(TopicPicture))
-            .evaluate()
-            .isEmpty,
-      )
-      .toList();
+  final icons = t.widgetList<Icon>(find.byType(Icon)).toList();
   expect(icons, isNotEmpty, reason: where);
   for (final icon in icons) {
     expect(

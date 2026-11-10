@@ -62,23 +62,12 @@ class FeaturedCard extends ConsumerWidget {
           ],
           Text(
             category.title,
-            style: namoText(
-              NamoFonts.serif,
-              size: 26,
-              height: 1.25,
-              weight: 500,
-              color: onPicture,
-            ),
+            style: NamoType.screenTitle(onPicture),
           ),
           const SizedBox(height: NamoSpace.xs),
           Text(
             category.subtitle,
-            style: namoText(
-              NamoFonts.sinhala,
-              size: 15,
-              height: 1.5,
-              color: onPicture,
-            ),
+            style: NamoType.body(onPicture),
           ),
           const SizedBox(height: NamoSpace.sm),
           Text(count, style: NamoType.caption(onPicture)),

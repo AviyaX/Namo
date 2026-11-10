@@ -194,8 +194,8 @@ void main() {
       await _pumpArt(t, brightness: brightness);
       final p = brightness == Brightness.light ? NamoPalette.light : NamoPalette.dark;
       final icon = t.widget<Icon>(find.byType(Icon));
-      expect(icon.icon, Symbols.spa);
-      expect(icon.weight, 200);
+      expect(icon.icon, Symbols.spa_rounded);
+      expect(icon.weight, 300);
       expect(icon.color!.toARGB32() & 0x00FFFFFF, p.gold.toARGB32() & 0x00FFFFFF);
       expect(icon.color!.a, lessThan(0.6));
       expect(icon.size, closeTo(t.getSize(find.byKey(_panel)).height * 0.4, 0.5));

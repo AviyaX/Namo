@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
+import 'package:buddhist_gatha/reader/position_controller.dart';
+import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
@@ -175,5 +179,119 @@ void main() {
         expect(t.takeException(), isNull);
       },
     );
+  }
+
+  // Every screen at the five sizes the design is drawn for, at the normal
+  // and a larger text size, in both themes: no overflow, no exception.
+  const matrixSizes = [
+    Size(360, 800),
+    Size(390, 844),
+    Size(840, 900),
+    Size(1280, 800),
+    Size(844, 390),
+  ];
+
+  Future<void> typeSearch(WidgetTester t, String q) async {
+    await t.enterText(find.byKey(const ValueKey('library-search')), q);
+    await t.pumpAndSettle();
+  }
+
+  Future<void> openSheet(WidgetTester t) async {
+    await t.tap(find.byKey(const ValueKey('reader-settings')));
+    await t.pumpAndSettle();
+  }
+
+  final screens = <(
+    String,
+    String,
+    AppSettings,
+    bool,
+    bool,
+    Future<void> Function(WidgetTester)?,
+  )>[
+    ('Home (fresh)', Routes.home, const AppSettings(), false, false, null),
+    ('Home (remembered place)', Routes.home, const AppSettings(), false, true, null),
+    ('Library (closed)', Routes.library, const AppSettings(), false, false, null),
+    ('Library (topic open)', Routes.category(realCategoryId), const AppSettings(), false, false, null),
+    (
+      'Library (search results)',
+      Routes.library,
+      const AppSettings(),
+      false,
+      false,
+      (t) async {
+        final lib = await realLibrary(t);
+        final heading = lib.category(realCategoryId)!.readings.first.sections[2].heading;
+        await typeSearch(t, String.fromCharCodes(heading.runes.take(2)));
+      },
+    ),
+    (
+      'Library (nothing found)',
+      Routes.library,
+      const AppSettings(),
+      false,
+      false,
+      (t) => typeSearch(t, 'zzzz'),
+    ),
+    ('Reader (one language)', Routes.reader(realReadingId), AppSettings(languages: const LanguageSelection([ReadingLanguage.english])), false, false, null),
+    ('Reader (two languages)', Routes.reader(realReadingId), AppSettings(languages: const LanguageSelection([ReadingLanguage.pali, ReadingLanguage.sinhala])), false, false, null),
+    ('Reader (settings sheet)', Routes.reader(realReadingId), const AppSettings(), false, false, openSheet),
+    ('Saved (empty)', Routes.saved, const AppSettings(), false, false, null),
+    ('Saved (filled)', Routes.saved, const AppSettings(), true, false, null),
+    ('Settings', Routes.settings, const AppSettings(), false, false, null),
+    ('Sources', Routes.sources, const AppSettings(), false, false, null),
+    ('Not found', '/no/such/place', const AppSettings(), false, false, null),
+  ];
+
+  for (final size in matrixSizes) {
+    for (final textScale in [1.0, 1.5]) {
+      for (final dark in [false, true]) {
+        for (final (name, location, settings, saved, remembered, after) in screens) {
+          testWidgets(
+            'matrix: $name, ${size.width.round()}x${size.height.round()}, '
+            'text ${textScale}x, ${dark ? 'dark' : 'light'}',
+            (t) async {
+              String? place;
+              if (remembered) {
+                final lib = await realLibrary(t);
+                final reading = lib.category(realCategoryId)!.readings.first;
+                place = jsonEncode(
+                  PositionState(
+                    byReading: {
+                      reading.id: ReadingProgress(
+                        position: ReadingPosition(
+                          readingId: reading.id,
+                          sectionId: reading.sections[1].id,
+                          fraction: 0.4,
+                        ),
+                        progress: 0.4,
+                      ),
+                    },
+                    lastReadingId: reading.id,
+                  ).toJson(),
+                );
+              }
+              await openReal(
+                t,
+                location,
+                size: size,
+                deviceTextScale: textScale,
+                dark: dark,
+                settings: settings,
+                withSaved: saved,
+                storeExtras: {positionKey: ?place},
+              );
+              if (after != null) await after(t);
+              expect(t.takeException(), isNull);
+              if (find.byType(Scrollable).evaluate().isNotEmpty &&
+                  !name.contains('sheet')) {
+                await scrollThrough(t);
+              }
+              expect(t.takeException(), isNull);
+            },
+          );
+        }
+      }
+    }
   }
 }
