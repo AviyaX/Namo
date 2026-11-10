@@ -1,6 +1,6 @@
 # Namo (Buddhist Gatha app), first release: design
 
-Date: 2026-11-10. Status: approved by the owner on 2026-11-10 ("yes build it"). Changed the same day, after approval, to add the second English source the owner then supplied (5.2, 5.3, 5.5, 5.6).
+Date: 2026-11-10. Status: approved by the owner on 2026-11-10 ("yes build it"). Changed the same day, after approval, to add the second English source the owner then supplied (5.2, 5.3, 5.5, 5.6) and one more spelling correction found while planning (සුමාමේරය, 5.3).
 
 Lines marked **(my call)** are choices Claude made that the owner has not yet confirmed. Everything else comes from the owner's written spec or from what the owner said in conversation.
 
@@ -165,6 +165,7 @@ The owner said to use the spellings found in the other sources ("use anywhere el
 | ගච්චාමි (9 places) | ගච්ඡාමි | 20 uses elsewhere on namo.lk, 9 in the booklet |
 | විඡ්ඡාචරණ (1) | විජ්ජාචරණ | 18 elsewhere on namo.lk, 4 in the booklet |
 | සමාදියාමී (4) | සමාදියාමි | 10 elsewhere on namo.lk, 5 in the booklet; the page itself uses it twice |
+| සුමාමේරය (1, section 3) | සුරාමේරය | namo.lk's own "ten precepts" page and the booklet both print සුරාමේරය; the page's own Sinhala meaning for the line says සුරාපානය |
 | අධිවාසේ තුනෝ (1, section 17) | අධිවාසේතු නෝ | spacing only; the page itself prints it this way 3 times, the booklet 11 |
 | බෝදි (1, section 8) | බෝධි | 9 times on the page itself, 15 elsewhere on namo.lk, 13 in the booklet |
 
