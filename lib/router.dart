@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'design/widgets/app_shell.dart';
 import 'design/widgets/not_found.dart';
 import 'home/home_screen.dart';
+import 'library/category_screen.dart';
 import 'library/library_screen.dart';
+import 'library/reading_contents_screen.dart';
 import 'saved/saved_screen.dart';
 import 'settings/settings_screen.dart';
 
@@ -38,7 +40,17 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
             StatefulShellBranch(routes: [
               GoRoute(
                   path: Routes.library,
-                  builder: (context, state) => const LibraryScreen()),
+                  builder: (context, state) => const LibraryScreen(),
+                  routes: [
+                    GoRoute(
+                        path: 'category/:id',
+                        builder: (context, state) => CategoryScreen(
+                            categoryId: state.pathParameters['id']!)),
+                    GoRoute(
+                        path: 'reading/:id',
+                        builder: (context, state) => ReadingContentsScreen(
+                            readingId: state.pathParameters['id']!)),
+                  ]),
             ]),
             StatefulShellBranch(routes: [
               GoRoute(
@@ -52,6 +64,9 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
             ]),
           ],
         ),
+        GoRoute(
+            path: '/read/:id',
+            builder: (context, state) => const ReaderPlaceholderScreen()),
       ],
     );
 
