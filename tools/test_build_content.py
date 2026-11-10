@@ -7,7 +7,6 @@ import importlib.util
 import json
 import pathlib
 import re
-import subprocess
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -16,6 +15,7 @@ build_content = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(build_content)
 
 ASSET = ROOT / "assets" / "content" / "namaskaraya_to_pin_dima.json"
+BASELINE = ROOT / "tools" / "test_data" / "content_before_reflow_a448a3c.json"
 
 # The 19 headings, copied from the table in §5.1 of the design.
 HEADINGS = ['නමස්කාරය', 'තිසරණ සරණයාම', 'පංචශීලය සමාදන්වීම', 'බුදු ගුණ සිහි කිරීම', 'දහම් වැඳීම',
@@ -174,10 +174,11 @@ class BuildContentTest(unittest.TestCase):
         self.assertEqual(len(self.english("s15-v1").split("\n")), 6)
 
     def baseline(self, field="english"):
-        """Every verse's `field` from the content file committed at a448a3c, before the reflow."""
-        raw = subprocess.run(["git", "show", "a448a3c:assets/content/namaskaraya_to_pin_dima.json"],
-                             cwd=ROOT, check=True, capture_output=True).stdout
-        data = json.loads(raw.decode("utf-8"))
+        """Every verse's `field` from the content file committed at a448a3c, before the reflow.
+
+        BASELINE is that file exactly as `git show a448a3c:...` gives it, kept in the
+        repository so these tests do not need the commit (a squash or a shallow clone)."""
+        data = json.loads(BASELINE.read_bytes().decode("utf-8"))
         return {v["id"]: v[field] for s in data["categories"][0]["readings"][0]["sections"]
                 for v in s["verses"]}
 
@@ -203,6 +204,21 @@ class BuildContentTest(unittest.TestCase):
         self.assertEqual(reflow('A b\nc.\nd e\n\nf\n"g" h-\ni j'), 'A b c.\nd e\n\nf\n"g" h-i j')
         with self.assertRaises(build_content.BuildError):
             build_content._check_whitespace_only("a b", "a c")
+
+    def test_whole_word_correction(self):
+        """ම විසින් is corrected only where ම stands alone, never at the end of a longer word."""
+        row = next(r for r in build_content.CORRECTIONS if r[1] == "ම විසින්")
+        printed, corrected = row[1], row[2]
+        letter = chr(0x0D9A)  # a Sinhala letter, to make ම the end of a longer word
+        alone = f"{printed}\n{printed}"
+        inside = f"{letter}{printed}"
+        verse = {"pali_si": inside, "sinhala": alone, "corrections": []}
+        totals = {printed: 0}
+        build_content._correct(verse, [row], totals)
+        self.assertEqual(verse["sinhala"], f"{corrected}\n{corrected}")
+        self.assertEqual(verse["pali_si"], inside)
+        self.assertEqual(totals[printed], 2)
+        self.assertEqual([(c["field"], c["count"]) for c in verse["corrections"]], [("sinhala", 2)])
 
     def test_nothing_from_outside(self):
         rendered = build_content.render(self.data).decode("utf-8")
