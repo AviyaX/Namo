@@ -9,6 +9,7 @@ import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/list_row.dart';
 import '../design/widgets/namo_page.dart';
+import '../design/widgets/namo_switch.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/pressable.dart';
 import '../router.dart';
@@ -199,20 +200,7 @@ class _SwitchRow extends StatelessWidget {
               const SizedBox(width: NamoSpace.md),
               // The row takes the taps; the switch only shows the state.
               IgnorePointer(
-                child: Switch(
-                  value: value,
-                  onChanged: (_) {},
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  thumbColor: WidgetStatePropertyAll(
-                    value ? p.onSage : p.textMuted,
-                  ),
-                  trackColor: WidgetStatePropertyAll(
-                    value ? p.sage : p.border,
-                  ),
-                  trackOutlineColor: WidgetStatePropertyAll(
-                    value ? p.sage : p.textMuted,
-                  ),
-                ),
+                child: NamoSwitch(value: value, onChanged: (_) {}),
               ),
             ],
           ),
