@@ -38,10 +38,9 @@ const _credits = [
 
 const _pictureCredits = [
   _Credit(
-    'Samadhi Buddha statue, Anuradhapura',
-    'Photograph by Price Zero on Wikimedia Commons, given to the public '
-        'domain (CC0). Cropped for the card.',
-    'https://commons.wikimedia.org/wiki/File:Samadhi_Statue_Anuradhapura.jpg',
+    'Home card picture',
+    'Made for this app by its owner with an AI image tool. It is a '
+        'generated picture, not a photograph of a real statue or place.',
   ),
 ];
 

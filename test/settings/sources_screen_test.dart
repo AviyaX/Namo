@@ -68,7 +68,7 @@ void main() {
         findsOneWidget,
       );
       // Addresses are selectable text, not links.
-      expect(find.byType(SelectableText), findsNWidgets(4));
+      expect(find.byType(SelectableText), findsNWidgets(3));
 
       final icon = t.getSize(find.byKey(const ValueKey('sources-icon')));
       expect(icon, const Size(96, 96));
@@ -76,34 +76,39 @@ void main() {
   );
 
   testWidgets(
-    'Sources shows a Pictures heading with the Samadhi Buddha credit and its address as text',
+    'Sources shows the Pictures heading with the "Home card picture" credit and no address under it',
     (t) async {
       final handle = t.ensureSemantics();
       await openSources(t);
-      const address =
-          'https://commons.wikimedia.org/wiki/File:Samadhi_Statue_Anuradhapura.jpg';
+      const detail =
+          'Made for this app by its owner with an AI image tool. It is a '
+          'generated picture, not a photograph of a real statue or place.';
       expect(find.text('Pictures'), findsOneWidget);
-      expect(text('Samadhi Buddha statue, Anuradhapura'), findsOneWidget);
-      expect(
-        text(
-          'Photograph by Price Zero on Wikimedia Commons, given to the public '
-          'domain (CC0). Cropped for the card.',
-        ),
-        findsOneWidget,
-      );
-      expect(text(address), findsOneWidget);
-      expect(find.byType(SelectableText), findsNWidgets(4));
-      expect(find.bySemanticsLabel(address), findsOneWidget);
+      expect(text('Home card picture'), findsOneWidget);
+      expect(text(detail), findsOneWidget);
+      // Only the three text sources have an address.
+      expect(find.byType(SelectableText), findsNWidgets(3));
       // After the text sources, before Corrections.
       final y = t.getTopLeft(find.text('Pictures')).dy;
       expect(y, greaterThan(t.getTopLeft(text('The rest of the English.')).dy));
-      expect(y, lessThan(t.getTopLeft(find.text('Corrections')).dy));
-      expect(t.getTopLeft(text(address)).dy, greaterThan(y));
-      expect(t.getTopLeft(text(address)).dy,
-          lessThan(t.getTopLeft(find.text('Corrections')).dy));
+      final name = t.getTopLeft(text('Home card picture')).dy;
+      final note = t.getRect(text(detail));
+      final corrections = t.getTopLeft(find.text('Corrections')).dy;
+      expect(name, greaterThan(y));
+      expect(note.top, greaterThan(name));
+      expect(note.bottom, lessThan(corrections));
+      // Nothing between the credit and the next heading but its padding.
+      expect(corrections - note.bottom, lessThan(40));
       handle.dispose();
     },
   );
+
+  testWidgets('Sources no longer mentions Wikimedia or Price Zero', (t) async {
+    await openSources(t);
+    expect(find.textContaining('Wikimedia', findRichText: true), findsNothing);
+    expect(find.textContaining('Price Zero', findRichText: true), findsNothing);
+    expect(find.textContaining('Samadhi', findRichText: true), findsNothing);
+  });
 
   testWidgets('Sources lists the corrections and the open checks from the content',
       (t) async {

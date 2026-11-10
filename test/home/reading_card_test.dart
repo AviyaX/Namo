@@ -60,7 +60,7 @@ void main() {
   setUpAll(loadBundledFonts);
 
   testWidgets(
-    'the Buddha Wandanawa card shows the bundled picture, not the drawn panel',
+    'the Buddha Wandanawa card shows assets/pictures/buddha_wandanawa.jpg',
     (t) async {
       await openReal(t, Routes.home);
       await _untilDecoded(t);
@@ -73,7 +73,7 @@ void main() {
       expect((image.image as ResizeImage).width, lessThanOrEqualTo(1600));
       expect(
         ((image.image as ResizeImage).imageProvider as AssetImage).assetName,
-        'assets/pictures/samadhi_buddha_anuradhapura.jpg',
+        'assets/pictures/buddha_wandanawa.jpg',
       );
     },
   );
@@ -83,7 +83,7 @@ void main() {
     () async {
       expect(
         cardPictures['cat-namaskaraya'],
-        'assets/pictures/samadhi_buddha_anuradhapura.jpg',
+        'assets/pictures/buddha_wandanawa.jpg',
       );
       final pubspec = File('pubspec.yaml').readAsStringSync();
       for (final path in cardPictures.values) {
@@ -113,7 +113,7 @@ void main() {
       );
       expect(
         find.bySemanticsLabel(
-          RegExp('samadhi|Anuradhapura|picture', caseSensitive: false),
+          RegExp('buddha_wandanawa|jpg|picture', caseSensitive: false),
         ),
         findsNothing,
       );
@@ -146,7 +146,7 @@ void main() {
     (t) async {
       await _pumpArt(
         t,
-        pictures: {'c1': 'assets/pictures/samadhi_buddha_anuradhapura.jpg'},
+        pictures: {'c1': 'assets/pictures/buddha_wandanawa.jpg'},
       );
       expect(find.byKey(_loading), findsOneWidget);
       expect(find.byKey(_panel), findsNothing);

@@ -1,18 +1,24 @@
 # Pictures
 
-Pictures in the app must be free to reuse; every picture gets an entry here and a credit on the Sources page.
+Pictures in the app must be free to reuse or made for the app; every picture gets an entry here, and every bundled picture a credit on the Sources page.
 
-## assets/pictures/samadhi_buddha_anuradhapura.jpg
+## Bundled
 
-Shown on the Home card for Buddha Wandanawa (`cat-namaskaraya`).
+`assets/pictures/buddha_wandanawa.jpg` — supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded). JPEG, 1600 x 900, SHA-1 `57b612a216db6b3f97c9f9af38b41b46abdd51aa`. Used on the Buddha Wandanawa card (`cat-namaskaraya`).
 
-| | |
-|---|---|
-| Subject | The Samadhi Buddha statue, Anuradhapura, Sri Lanka |
-| Wikimedia Commons file | `File:Samadhi Statue Anuradhapura.jpg` |
-| Page | https://commons.wikimedia.org/wiki/File:Samadhi_Statue_Anuradhapura.jpg |
-| Author (as named on the page) | Price Zero (own work, photographed 2024-03-17, uploaded 2024-08-11) |
-| Licence | CC0 1.0, public domain dedication: https://creativecommons.org/publicdomain/zero/1.0/ |
-| Original | 2956 x 2956, SHA-1 `ed96c3283f23d76375f4cdd9b923489e65acaa08` |
-| Change made | Cropped to 16:9 (box left 130, top 762, width 2540, height 1429) and resized to 1600 x 900; metadata removed |
-| File in the app | JPEG, 1600 x 900, 306132 bytes, SHA-1 `cb3511bd414ec5155b89b0bb9b75927132a2b85c` |
+## Kept for later, not bundled
+
+In `design/card_images/` (not listed in `pubspec.yaml`). Same origin as above: supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded).
+
+| File | Pixels | SHA-1 | Meant for |
+|---|---|---|---|
+| `pirith.jpg` | 1600 x 900 | `461ee9b62b683276482de9994c4c58d606cc7344` | the Pirith topic |
+| `bodhi_tree.jpg` | 1600 x 900 | `b66ad8f7214b7b71488d9b6330ae7f85953a84ee` | the Meditation topic |
+| `stupa_dusk.jpg` | 1280 x 720 | `bcc99eea8c0d821f3af832b4bdf540c42315a9ba` | spare |
+| `home_banner.jpg` | 1280 x 427 | `c8f5705c0528d81867d9d4e7ab9e429d75e2d9b6` | a wide banner for Home, not used yet |
+
+`design/card_images/buddha_wandanawa.jpg` is a copy of the bundled picture.
+
+## No longer used
+
+The Wikimedia Commons photograph `File:Samadhi Statue Anuradhapura.jpg` by Price Zero (CC0) was on the card in commit `48eee81` and was replaced by the owner's picture.

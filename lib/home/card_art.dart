@@ -7,7 +7,7 @@ import '../design/tokens.dart';
 /// picture gets registered (and its file listed in pubspec.yaml and credited
 /// in docs/pictures.md and on the Sources page).
 const Map<String, String> cardPictures = {
-  'cat-namaskaraya': 'assets/pictures/samadhi_buddha_anuradhapura.jpg',
+  'cat-namaskaraya': 'assets/pictures/buddha_wandanawa.jpg',
 };
 
 /// The picture slot of a reading card: the category's picture when one is

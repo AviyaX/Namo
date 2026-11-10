@@ -19,7 +19,7 @@ The Sources page in the app credits each of these:
 - The paritha.org booklet, compiled by Devapriya and Shyamali from the Piruwana Poth Wahanse: sections 18–19.
 - The "Vandana" booklet of Mahamevnawa Bhavana Asapuwa, Markham, Ontario: part of the English.
 - "Daily Buddha Vandana", prepared by Cynthia Gunawardana, Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane: the rest of the English.
-- The Home card picture: the Samadhi Buddha statue, Anuradhapura, photographed by Price Zero (Wikimedia Commons, CC0). Every picture is recorded in `docs/pictures.md`.
+- The Home card picture: made for this app by its owner with an AI image tool (a generated picture, not a photograph). Every picture is recorded in `docs/pictures.md`.
 
 Namo is not made by, or connected with, namo.lk.
 
