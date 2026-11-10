@@ -109,6 +109,7 @@ Contrast ratio against `background` / `backgroundAlt` / `surface`:
 
 - Text people need to read uses `text`, `textSecondary`, `sage` or `gold` (all at least 4.5 : 1 everywhere).
 - **`textMuted` is below 4.5 : 1** in the owner's dark palette, so it is never used for text people need. It is used for: disabled controls, purely decorative marks, and the outlines of controls (it is at least 3 : 1 everywhere, which is the rule for non-text marks). **(my call — the owner's value is kept as given; only its use is limited.)**
+- Placeholders (the search field) and hints that explain something (such as "Needs two languages") are needed text: they use `textSecondary`. Only the label of the disabled control itself may be `textMuted`.
 - `border` is decoration. Nothing depends on seeing it: cards are also separated by their surface colour and spacing.
 - Accents are used sparingly: on one screen, sage marks what is active or primary, gold marks numbers and saved things. Never large filled areas of either, except the one primary button.
 - State is never shown by colour alone: active tabs also get a filled icon and a pill; selected segments also get a tick or a raised thumb; saved things use a filled icon instead of an outline.
@@ -176,13 +177,15 @@ Order on a phone, top to bottom, with 24–32 between blocks:
 3. **Featured: the first topic** (Buddha Wandanawa). A large picture card, radius 24, the owner's statue picture cropped square on phones (the whole figure stays in view), at most 420 high. A dark fade rises from the bottom only as far as the text needs. On it: overline "Buddha Vandana", title "Buddha Wandanawa", Sinhala subtitle "බුද්ධ වන්දනාව", "19 sections" (counted from the content), and one sage button: "Begin", or "Continue" when a place is remembered. The card and the button open the reader.
 4. **Today's gatha** (the brief's "Daily Gatha"). A `surface` card with a thin gold line on its leading edge: overline "Today's gatha", one whole verse in the reader's chosen language or languages (first in `text`, second in `textSecondary`, exactly as the reader draws them), the section's heading as a caption, and "Read in context", which opens the reader at that section. Rules **(my call)**:
    - Only verses marked "checked against source" are eligible; the four marked "needs checking" never appear.
-   - Only short verses are eligible: Pali of at most 4 lines and no language over 320 characters. Today that is 19 of the 28 verses. The verse is shown whole, never cut.
-   - The choice depends only on the local date (day number modulo the count of eligible verses, in content order), so it is the same all day, the same on every device, and needs no storage or network.
+   - Only short verses are eligible: Pali of at most 4 lines and no language over 320 characters. This is measured on the stored text of every language the verse has (a missing language counts as nothing), whatever languages the reader has chosen, so the eligible set is the same for everyone. Lines are counted by line breaks, length by characters. Today that is 19 of the 28 verses. The verse is shown whole, never cut.
+   - The choice depends only on the local date: the number of days from 1 January 1970 to today's date on the device's calendar, modulo the count of eligible verses, taken in content order. So it is the same all day, the same on every device in the same date, and needs no storage or network. The clock is read through one provider that tests can replace; the greeting uses the same one.
    - If a chosen language has no text for that verse, that language is left out, as the reader does. If nothing would be left, the Pali is shown.
 5. **In Buddha Wandanawa.** A row that scrolls sideways: one small card per section (gold number, Sinhala heading), each opening the reader at that section. "See all" opens the Library with the topic open.
 6. **Collections.** Appears only when there are two or more topics: a sideways row of picture cards for the other topics. With one topic today it is absent. This is where Pirith and Meditation will appear when the owner supplies them.
 
-**Wide screens:** the featured card becomes a full-width banner using the owner's wide picture (`design/card_images/home_banner.jpg`, statue on the right, text on the left), which gets bundled and credited on Sources **(my call)**. Under it, "Continue reading" and "Today's gatha" sit side by side; then the section row.
+**Wide screens:** the featured card becomes a full-width banner using the owner's wide picture (`design/card_images/home_banner.jpg`, statue on the right, text on the left), which gets bundled and credited on Sources **(my call)**. Its origin is already recorded in `docs/pictures.md` (supplied by the owner on 2026-11-10, made with an AI image tool); its Sources credit says the same as the existing picture's, and `docs/pictures.md` moves it to "Bundled". Under it, "Continue reading" and "Today's gatha" sit side by side; then the section row.
+
+**Pictures.** The other pictures in `design/card_images/` (`pirith.jpg`, `bodhi_tree.jpg`, `stupa_dusk.jpg`) stay unbundled; they are for later topics. A topic with no picture of its own gets the drawn lotus panel that `lib/home/card_art.dart` already has, restyled in the new colours, wherever a picture or thumbnail would be: Home, Library, Saved, and the Collections row. Thumbnails are the same picture decoded small.
 
 While content loads or if it fails, the existing loading and error states show, restyled.
 
@@ -198,6 +201,7 @@ While content loads or if it fails, the existing loading and error states show, 
 
 - Works offline over what is bundled: topic titles and subtitles, section headings, and verse text in all three languages, whatever reading languages are chosen.
 - Starts at 2 characters. While there is a query, the topic list is replaced by results: one row per matching section, in content order, showing the section number and heading, plus — when the match was in a verse — the matching line of that verse (at most two lines on screen). Tapping opens the reader at that section.
+- When several texts of a section match, the line shown comes from the reader's chosen languages first (in their chosen order), then from the others in the order Pali, Sinhala, English. A line in a language that is not currently chosen carries a small label with that language's name.
 - Matching is plain "contains": letter case ignored; Latin diacritics ignored (so "sangha" finds "Saṅgha"); spaces collapsed; invisible joiner characters in Sinhala ignored. No stemming, no fuzzy matching.
 - Nothing found: an empty state saying so, with the query, and the line "Try a word from a section title or a verse."
 - The query is not saved between app starts.
@@ -251,7 +255,9 @@ Restyled with the same parts; wording unchanged. Sources gains a credit line for
 
 - A new install starts in **dark**. Settings → Appearance offers Dark, Light, Same as device. **(my call — the brief says dark is "the primary experience"; the owner asked for light as well.)**
 - A choice already stored on a device is kept as it is. Note: the app has stored "Same as device" until now, so a browser that has already used the app keeps following the device until Dark or Light is picked once.
-- The status bar and system navigation bar (Android, iOS) and the browser theme colour follow the theme in use.
+- In the code this is only a change of the default: stored settings with no theme, or none at all, give dark; a stored "system" stays system. No key, version or flag is added.
+- The status bar and system navigation bar (Android, iOS) and the browser theme colour follow the theme in use, not the device's theme, set per theme from the app.
+- Tabs are already kept alive side by side by the router (`StatefulShellRoute.indexedStack`); the cross-fade must keep that, so each tab's place and scroll position survive as today.
 - The splash screen and web page background change from `#2B3837` to `#151714` on all three platforms. One dark splash for everyone, because the splash shows before the app can read the saved theme. **(my call.)** After re-running the splash tool, the iOS project's asset-catalog setting is checked (it has broken before).
 
 ## 11. Shared components
