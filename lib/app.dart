@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'design/theme.dart';
 import 'router.dart';
+import 'settings/settings.dart';
 
 class NamoApp extends ConsumerWidget {
   const NamoApp({super.key});
@@ -13,6 +14,7 @@ class NamoApp extends ConsumerWidget {
       title: 'Namo',
       theme: namoTheme(Brightness.light),
       darkTheme: namoTheme(Brightness.dark),
+      themeMode: ref.watch(settingsProvider.select((s) => s.themeMode)),
       routerConfig: ref.watch(routerProvider),
     );
   }

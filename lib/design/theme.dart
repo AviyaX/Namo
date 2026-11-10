@@ -116,6 +116,14 @@ ThemeData namoTheme(Brightness brightness) {
       selectedLabelTextStyle: style(12, weight: 500, color: p.heading),
       unselectedLabelTextStyle: style(12, weight: 500, color: p.textQuiet),
     ),
+    snackBarTheme: SnackBarThemeData(
+      elevation: 0,
+      backgroundColor: p.surface,
+      contentTextStyle: style(16),
+      actionTextColor: p.heading,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
+    ),
     bottomSheetTheme: BottomSheetThemeData(
       elevation: 0,
       backgroundColor: p.background,
