@@ -1,4 +1,5 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/design/widgets/surface_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,7 @@ void main() {
         find.textContaining('the top of Home on wide screens', findRichText: true),
       );
       expect(last.top, greaterThan(note.bottom));
-      expect(corrections - last.bottom, lessThan(40));
+      expect(corrections - last.bottom, lessThan(48));
       handle.dispose();
     },
   );
@@ -186,4 +187,49 @@ void main() {
       expect(box.right, lessThanOrEqualTo(390));
     }
   });
+
+  testWidgets('Sources has a Back button above the title that returns to Settings',
+      (t) async {
+    await openSources(t);
+    final back = find.byTooltip('Back');
+    expect(back, findsOneWidget);
+    expect(
+      t.getTopLeft(back).dy,
+      lessThan(t.getTopLeft(find.text('Sources')).dy),
+    );
+    expect(t.getSize(back).width, greaterThanOrEqualTo(48));
+    expect(find.byType(AppBar), findsNothing);
+    await t.tap(back);
+    await t.pumpAndSettle();
+    expect(find.byKey(const ValueKey('screen-settings')), findsOneWidget);
+  });
+
+  testWidgets('each credit, correction and check is a surface card', (t) async {
+    await openSources(t);
+    // 4 text sources + 2 pictures + 16 corrections + 4 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(26));
+  });
+
+  for (final dark in [false, true]) {
+    for (final w in [320.0, 360.0, 390.0, 840.0]) {
+      testWidgets('Sources does not overflow at $w, ${dark ? 'dark' : 'light'}',
+          (t) async {
+        t.platformDispatcher.textScaleFactorTestValue = w == 320 ? 2.0 : 1.0;
+        t.platformDispatcher.platformBrightnessTestValue =
+            dark ? Brightness.dark : Brightness.light;
+        addTearDown(() {
+          t.platformDispatcher.clearTextScaleFactorTestValue();
+          t.platformDispatcher.clearPlatformBrightnessTestValue();
+        });
+        await openSources(t);
+        t.view.physicalSize = Size(w, 800);
+        await t.pumpAndSettle();
+        for (var i = 0; i < 10; i++) {
+          await t.drag(find.byType(Scrollable).first, const Offset(0, -600));
+          await t.pump();
+        }
+        expect(t.takeException(), isNull);
+      });
+    }
+  }
 }

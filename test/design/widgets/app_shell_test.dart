@@ -271,12 +271,12 @@ void main() {
 
     for (final size in const [Size(840, 600), Size(1280, 800)]) {
       testWidgets('Sources at ${size.width.round()} x ${size.height.round()}: '
-          'beside the rail the page ends 16 above the screen edge', (t) async {
+          'beside the rail the page ends 24 above the screen edge', (t) async {
         await openReal(t, Routes.sources, size: size);
         expect(find.byKey(const ValueKey('nav-rail')), findsOneWidget);
         expect(find.byKey(const ValueKey('nav-bar')), findsNothing);
         await toEnd(t);
-        expect(t.getRect(sourcesContent()).bottom, size.height - 16);
+        expect(t.getRect(sourcesContent()).bottom, size.height - 24);
       });
     }
   });

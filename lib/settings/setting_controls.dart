@@ -2,11 +2,80 @@ import 'package:flutter/material.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/surface_card.dart';
 import '../design/widgets/segmented_selector.dart';
 import '../reader/auto_scroll.dart';
 import 'settings.dart';
 
 /// The controls the Settings screen and the reader's settings sheet share.
+
+/// A titled card of related settings: an icon and an overline label, then the
+/// [children] separated by 1 px lines. Every child gets the same comfortable
+/// vertical padding, so sliders, choosers and switches never sit tight.
+class SettingsGroup extends StatelessWidget {
+  const SettingsGroup({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.children,
+  });
+
+  final IconData icon;
+  final String label;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return SurfaceCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              NamoSpace.lg,
+              NamoSpace.lg,
+              NamoSpace.lg,
+              NamoSpace.xs,
+            ),
+            child: Row(
+              children: [
+                ExcludeSemantics(
+                  child: Icon(
+                    icon,
+                    size: NamoSizes.iconSmall,
+                    weight: 300,
+                    fill: 0,
+                    color: p.textSecondary,
+                  ),
+                ),
+                const SizedBox(width: NamoSpace.sm),
+                Expanded(
+                  child: Semantics(
+                    header: true,
+                    child: Text(
+                      label,
+                      softWrap: true,
+                      style: NamoType.overline(p.textSecondary),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          for (final (i, child) in children.indexed) ...[
+            if (i > 0) Divider(height: 1, thickness: 1, color: p.border),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: NamoSpace.md),
+              child: child,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
 
 /// A small quiet heading over a group of controls.
 class SettingsHeading extends StatelessWidget {

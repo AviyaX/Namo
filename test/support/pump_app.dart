@@ -16,6 +16,7 @@ Future<void> pumpApp(
   String? location,
   Size size = const Size(390, 844),
   ScreenAwake? screenAwake,
+  bool settle = true,
 }) async {
   t.view.physicalSize = size;
   t.view.devicePixelRatio = 1;
@@ -33,5 +34,5 @@ Future<void> pumpApp(
       child: const NamoApp(),
     ),
   );
-  await t.pumpAndSettle();
+  if (settle) await t.pumpAndSettle();
 }

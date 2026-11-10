@@ -1,22 +1,30 @@
+import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/design/widgets/page_header.dart';
 import 'package:buddhist_gatha/reader/auto_scroll.dart';
 import 'package:buddhist_gatha/router.dart';
+import 'package:buddhist_gatha/settings/choosers.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
+import 'package:buddhist_gatha/settings/setting_controls.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 
+import '../quality/quality_support.dart' show PlaceholderCatalogue;
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
 
 Future<ProviderContainer> openSettings(
   WidgetTester t, {
-  Size size = const Size(390, 844),
+  Size size = const Size(390, 2400),
+  List<Override> extra = const [],
 }) async {
   await pumpApp(t,
       overrides: [
+        ...extra,
         contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
         keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
       ],
@@ -181,24 +189,167 @@ void main() {
     expect(now().themeMode, ThemeMode.system);
   });
 
-  testWidgets('Settings shows its parts in order', (t) async {
+  const groupLabels = [
+    'Appearance',
+    'Reading',
+    'Languages',
+    'Audio',
+    'Auto-scroll',
+    'About Namo',
+  ];
+
+  // The card a group's label sits in.
+  Finder group(String label) => find.ancestor(
+    of: find.text(label),
+    matching: find.byType(SettingsGroup),
+  );
+  Finder inGroup(String label, Finder what) =>
+      find.descendant(of: group(label), matching: what);
+  Finder keyed(String key) => find.byKey(ValueKey(key));
+
+  testWidgets('Settings shows its six groups in order', (t) async {
     await openSettings(t, size: const Size(390, 2400));
+    expect(find.byType(SettingsGroup), findsNWidgets(6));
     var last = -1.0;
-    for (final label in [
-      'Languages',
-      'Layout',
-      'Text size',
-      'Line spacing',
-      'Scroll speed',
-      'Start auto-scroll when a recording starts',
-      'Theme',
-      'Sources',
-    ]) {
-      final y = t.getTopLeft(find.text(label).first).dy;
+    for (final label in groupLabels) {
+      final y = t.getTopLeft(find.text(label)).dy;
       expect(y, greaterThan(last), reason: label);
       last = y;
     }
+    expect(
+      find.descendant(
+        of: find.byType(PageHeader),
+        matching: find.text('Settings'),
+      ),
+      findsOneWidget,
+    );
+    // Groups are 16 apart.
+    final rects = [for (final l in groupLabels) t.getRect(group(l))];
+    for (var i = 1; i < rects.length; i++) {
+      expect(rects[i].top - rects[i - 1].bottom, 16);
+    }
   });
+
+  testWidgets('each control is inside its group', (t) async {
+    await openSettings(t, size: const Size(390, 2400));
+    expect(inGroup('Appearance', find.byType(ThemeChooser)), findsOneWidget);
+    expect(inGroup('Appearance', find.text('Theme')), findsOneWidget);
+    expect(inGroup('Reading', keyed('setting-text-size')), findsOneWidget);
+    expect(inGroup('Reading', keyed('setting-line-spacing')), findsOneWidget);
+    expect(inGroup('Reading', find.byType(LayoutChooser)), findsOneWidget);
+    expect(
+      inGroup('Reading', find.text('When two languages show')),
+      findsOneWidget,
+    );
+    expect(inGroup('Languages', find.byType(LanguageChooser)), findsOneWidget);
+    expect(inGroup('Languages', find.text('Choose one or two.')), findsOneWidget);
+    expect(inGroup('Audio', find.byType(Switch)), findsOneWidget);
+    expect(
+      inGroup('Audio', find.text('Start auto-scroll when a recording starts')),
+      findsOneWidget,
+    );
+    expect(
+      inGroup('Auto-scroll', keyed('setting-scroll-speed')),
+      findsOneWidget,
+    );
+    expect(
+      inGroup('About Namo', find.text('Free. No ads. Works offline.')),
+      findsOneWidget,
+    );
+    expect(inGroup('About Namo', find.text('Sources')), findsOneWidget);
+  });
+
+  testWidgets('Settings uses no SwitchListTile, Card or AppBar', (t) async {
+    await openSettings(t, size: const Size(390, 2400));
+    expect(find.byType(SwitchListTile), findsNothing);
+    expect(find.byType(Card), findsNothing);
+    expect(find.byType(AppBar), findsNothing);
+  });
+
+  testWidgets('the audio switch is one toggle with its label', (t) async {
+    final h = t.ensureSemantics();
+    final c = await openSettings(t, size: const Size(390, 2400));
+    final node = find.bySemanticsLabel('Start auto-scroll when a recording starts');
+    expect(node, findsOneWidget);
+    expect(t.getSemantics(node), isSemantics(isToggled: false));
+    expect(t.getSize(node).height, greaterThanOrEqualTo(48));
+    await t.tap(node);
+    await t.pump();
+    expect(c.read(settingsProvider).autoScrollWithAudio, isTrue);
+    expect(t.getSemantics(node), isSemantics(isToggled: true));
+    h.dispose();
+  });
+
+  testWidgets('the group labels are headers for screen readers', (t) async {
+    final h = t.ensureSemantics();
+    await openSettings(t, size: const Size(390, 2400));
+    for (final label in groupLabels) {
+      expect(
+        t.getSemantics(find.text(label)),
+        isSemantics(label: label, isHeader: true),
+        reason: label,
+      );
+    }
+    h.dispose();
+  });
+
+  testWidgets('rows in a group are evenly padded, sliders not cramped',
+      (t) async {
+    await openSettings(t, size: const Size(390, 2400));
+    final text = t.getRect(keyed('setting-text-size'));
+    final line = t.getRect(keyed('setting-line-spacing'));
+    // The gap between two sliders holds a divider and padding on both sides.
+    expect(line.top - text.bottom, greaterThanOrEqualTo(24));
+  });
+
+  testWidgets('"No recordings are included yet." shows with the bundled content',
+      (t) async {
+    await openSettings(t, size: const Size(390, 2400));
+    expect(find.text('No recordings are included yet.'), findsOneWidget);
+    expect(inGroup('Audio', find.text('No recordings are included yet.')),
+        findsOneWidget);
+  });
+
+  testWidgets('"No recordings are included yet." hides when a reading has one',
+      (t) async {
+    await openSettings(
+      t,
+      size: const Size(390, 2400),
+      extra: [audioCatalogueProvider.overrideWithValue(PlaceholderCatalogue())],
+    );
+    expect(find.text('No recordings are included yet.'), findsNothing);
+  });
+
+  testWidgets('the last group scrolls clear of the navigation bar', (t) async {
+    await openSettings(t, size: const Size(390, 844));
+    await t.scrollUntilVisible(find.text('Sources'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await t.drag(find.byType(Scrollable).first, const Offset(0, -2000));
+    await t.pump();
+    final bar = t.getRect(find.byKey(const ValueKey('nav-settings')));
+    expect(t.getRect(group('About Namo')).bottom, lessThan(bar.top));
+  });
+
+  for (final dark in [false, true]) {
+    for (final w in [320.0, 360.0, 390.0, 600.0]) {
+      testWidgets('Settings does not overflow at $w, ${dark ? 'dark' : 'light'}',
+          (t) async {
+        t.platformDispatcher.textScaleFactorTestValue = w == 320 ? 2.0 : 1.0;
+        t.platformDispatcher.platformBrightnessTestValue =
+            dark ? Brightness.dark : Brightness.light;
+        addTearDown(() {
+          t.platformDispatcher.clearTextScaleFactorTestValue();
+          t.platformDispatcher.clearPlatformBrightnessTestValue();
+        });
+        await openSettings(t, size: Size(w, 800));
+        for (var i = 0; i < 6; i++) {
+          await t.drag(find.byType(Scrollable).first, const Offset(0, -400));
+          await t.pump();
+        }
+        expect(t.takeException(), isNull);
+      });
+    }
+  }
 
   testWidgets('choosing a theme changes the app theme at once', (t) async {
     await openSettings(t, size: const Size(390, 2400));
