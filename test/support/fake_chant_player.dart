@@ -10,11 +10,14 @@ class FakeChantPlayer implements ChantPlayer {
     this.length = const Duration(seconds: 20),
   });
 
-  /// Makes [load] end in [ChantStatus.failed].
-  final bool failOnLoad;
+  /// Makes [load] end in [ChantStatus.failed]; a test may switch it off.
+  bool failOnLoad;
 
   /// The length of every recording this player loads.
   final Duration length;
+
+  /// While set, [load] stays in [ChantStatus.loading] until it completes.
+  Completer<void>? gate;
 
   /// Every recording passed to [load], in order.
   final loaded = <Recording>[];
@@ -50,6 +53,11 @@ class FakeChantPlayer implements ChantPlayer {
   @override
   Future<void> load(Recording r) async {
     loaded.add(r);
+    final g = gate;
+    if (g != null) {
+      _set(const ChantState(status: ChantStatus.loading));
+      await g.future;
+    }
     _set(failOnLoad
         ? const ChantState(status: ChantStatus.failed)
         : ChantState(status: ChantStatus.ready, duration: length));

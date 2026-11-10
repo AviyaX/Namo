@@ -1,6 +1,5 @@
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/design/theme.dart';
-import 'package:buddhist_gatha/reader/auto_scroll.dart';
 import 'package:buddhist_gatha/reader/chant_bar.dart';
 import 'package:buddhist_gatha/reader/reader_bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +67,27 @@ void main() {
       _app(_bar(const ChantState(status: ChantStatus.loading))),
     );
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets('loading under reduced motion shows a still ring', (t) async {
+    await t.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: _app(_bar(const ChantState(status: ChantStatus.loading))),
+      ),
+    );
+    final ring = t.widget<CircularProgressIndicator>(
+      find.byType(CircularProgressIndicator),
+    );
+    expect(ring.value, 1);
+    await t.pumpWidget(
+      _app(_bar(const ChantState(status: ChantStatus.loading))),
+    );
+    expect(
+      t.widget<CircularProgressIndicator>(find.byType(CircularProgressIndicator))
+          .value,
+      isNull,
+    );
   });
 
   testWidgets('the slider is named, valued, and disabled until loaded', (
@@ -185,6 +205,5 @@ void main() {
       onSeek: null,
     );
     expect(s.key, const ValueKey('chant-slider'));
-    expect(AutoScrollStatus.values, isNotEmpty);
   });
 }

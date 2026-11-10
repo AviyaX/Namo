@@ -88,6 +88,18 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   final _chant = ValueNotifier<ChantState>(const ChantState());
   bool _chantLoaded = false;
 
+  /// Whether the person's last word is "chant": set by Play chanting, cleared
+  /// by auto-scroll starting, the app going to the background and leaving
+  /// this reader. A load that finishes while it is false does not play.
+  bool _chantWanted = false;
+
+  /// Whether this reader has asked the player for its recording.
+  bool _startedChant = false;
+
+  /// Set once Previous or Next pirith has paused the player; the reader
+  /// that replaces this one owns the player from then on.
+  bool _handedOver = false;
+
   /// Keeps the screen on while the page scrolls or a recording plays.
   late final ScreenAwake _awake;
   bool _holdingAwake = false;
@@ -230,6 +242,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   void _toBackground() {
+    _chantWanted = false;
     _autoScroll.pause();
     final player = _player;
     if (player != null) unawaited(player.pause());
@@ -242,7 +255,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (_autoScroll.status == AutoScrollStatus.running) {
       _autoScroll.pause();
     } else {
-      // Only one of the two at a time.
+      // Only one of the two at a time; the later request wins.
+      _chantWanted = false;
       if (_chant.value.status == ChantStatus.playing) {
         unawaited(_player?.pause());
       }
@@ -258,20 +272,24 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     final status = _chant.value.status;
     if (status == ChantStatus.loading) return;
     if (status == ChantStatus.playing) {
+      _chantWanted = false;
       await player.pause();
       return;
     }
+    _chantWanted = true;
     _autoScroll.pause();
     if (!_chantLoaded || status == ChantStatus.failed) {
       _chantLoaded = true;
+      _startedChant = true;
       _chant.value = const ChantState(status: ChantStatus.loading);
       await player.load(recording);
-      if (!mounted || !identical(_player, player)) return;
+      if (!mounted || !identical(_player, player) || !_chantWanted) return;
     }
     await player.play();
   }
 
   void _chantRestart() {
+    _chantWanted = true;
     _autoScroll.pause();
     unawaited(_player?.restart());
   }
@@ -307,8 +325,13 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _saveLater();
     _audioSub?.cancel();
     // Quiet before the player is let go.
+    _chantWanted = false;
+    // Only a reader that started the chanting and still owns the player
+    // silences it; the next pirith's reader may be playing already.
     final player = _player;
-    if (player != null) unawaited(player.pause());
+    if (player != null && _startedChant && !_handedOver) {
+      unawaited(player.pause());
+    }
     _chant.dispose();
     _setAwake(false);
     _lifecycle.dispose();
@@ -547,6 +570,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       _autoScroll.pause();
       final player = _player;
       if (player != null) unawaited(player.pause());
+      _chantWanted = false;
+      _handedOver = true;
+      _audioSub?.cancel();
+      _audioSub = null;
       _save();
       // Always at the beginning, whatever place is remembered for it.
       context.pushReplacement(

@@ -102,9 +102,9 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// left null, the theme is whatever [settings] holds (the app's default is
 /// Dark) and the device is light. [withSaved] fills Saved with bookmarks and
 /// a favourite.
-/// [library] replaces the bundled content. [player] is the one the reader gets (a fake that fails to load when
-/// [audioFails]). [audio] puts the placeholder
-/// recording on every reading; [audioFails] makes the player fail to load it.
+/// [library] replaces the bundled content. [player] is the player the reader
+/// gets (by default a fake, which fails to load when [audioFails]). [audio]
+/// puts the placeholder recording on every reading.
 /// [storeExtras] are extra saved values (a remembered reading place, say).
 /// [overrides] are added to the app's provider overrides (a fixed clock, say).
 Future<void> openReal(

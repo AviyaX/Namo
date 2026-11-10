@@ -148,25 +148,25 @@ class ReaderBottomBar extends StatelessWidget {
                   _chantRow(chantState!)
                 else
                   Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    NamoIconButton(
-                      key: const ValueKey('reader-prev'),
-                      tooltip: previousTooltip,
-                      icon: Symbols.skip_previous_rounded,
-                      onPressed: onPrevious,
-                    ),
-                    const SizedBox(width: NamoSpace.xl),
-                    _PlayButton(status: autoScroll, onPressed: onPlay),
-                    const SizedBox(width: NamoSpace.xl),
-                    NamoIconButton(
-                      key: const ValueKey('reader-next'),
-                      tooltip: nextTooltip,
-                      icon: Symbols.skip_next_rounded,
-                      onPressed: onNext,
-                    ),
-                  ],
-                ),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      NamoIconButton(
+                        key: const ValueKey('reader-prev'),
+                        tooltip: previousTooltip,
+                        icon: Symbols.skip_previous_rounded,
+                        onPressed: onPrevious,
+                      ),
+                      const SizedBox(width: NamoSpace.xl),
+                      _PlayButton(status: autoScroll, onPressed: onPlay),
+                      const SizedBox(width: NamoSpace.xl),
+                      NamoIconButton(
+                        key: const ValueKey('reader-next'),
+                        tooltip: nextTooltip,
+                        icon: Symbols.skip_next_rounded,
+                        onPressed: onNext,
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -269,6 +269,13 @@ class _ChantPlayButton extends StatelessWidget {
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         color: p.onSage,
+                        // A still ring when the person has asked for no
+                        // animation.
+                        value:
+                            NamoMotion.of(context, NamoMotion.quick) ==
+                                Duration.zero
+                            ? 1
+                            : null,
                       ),
                     ),
                   )

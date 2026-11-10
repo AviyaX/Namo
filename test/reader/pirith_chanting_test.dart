@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/router.dart';
@@ -252,6 +254,76 @@ void main() {
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
     expect(player.state.status, ChantStatus.paused);
+  });
+
+  testWidgets('a second tap while loading loads once', (t) async {
+    final player = await _open(t, player: FakeChantPlayer()..gate = Completer());
+    await t.tap(_play);
+    await t.pump();
+    expect(player.state.status, ChantStatus.loading);
+    await t.tap(_play, warnIfMissed: false);
+    await t.pump();
+    player.gate!.complete();
+    await t.pump();
+    expect(player.loaded, hasLength(1));
+    expect(player.state.status, ChantStatus.playing);
+  });
+
+  testWidgets('auto-scroll asked for while loading wins over the chanting', (
+    t,
+  ) async {
+    final player = await _open(t, player: FakeChantPlayer()..gate = Completer());
+    await t.tap(_play);
+    await t.pump();
+    await t.tap(_scrollButton);
+    await t.pump();
+    expect(_scrollTip(t), 'Pause auto-scroll');
+    player.gate!.complete();
+    await t.pump();
+    expect(player.state.status, ChantStatus.ready);
+    expect(_scrollTip(t), 'Pause auto-scroll');
+    expect(_chantTip(t), 'Play chanting');
+  });
+
+  testWidgets('Next pirith while loading: the old one never starts', (t) async {
+    final player = await _open(t, player: FakeChantPlayer()..gate = Completer());
+    await t.tap(_play);
+    await t.pump();
+    await t.tap(_next);
+    await t.pumpAndSettle();
+    player.gate!.complete();
+    await t.pumpAndSettle();
+    expect(player.state.status, isNot(ChantStatus.playing));
+    expect(_chantTip(t), 'Play chanting');
+  });
+
+  testWidgets('the old reader leaving does not silence the next pirith', (
+    t,
+  ) async {
+    final player = await _open(t);
+    await t.tap(_play);
+    await t.pump();
+    await t.tap(_next);
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 50));
+    await t.tap(_play);
+    await t.pump();
+    await t.pumpAndSettle();
+    expect(player.state.status, ChantStatus.playing);
+    expect(_chantTip(t), 'Pause chanting');
+  });
+
+  testWidgets('after a failure, play asks again and plays', (t) async {
+    final player = await _open(t, player: FakeChantPlayer(failOnLoad: true));
+    await t.tap(_play);
+    await t.pump();
+    expect(find.text('The recording could not be played.'), findsOneWidget);
+    player.failOnLoad = false;
+    await t.tap(_play);
+    await t.pump();
+    expect(player.loaded, hasLength(2));
+    expect(player.state.status, ChantStatus.playing);
+    expect(find.text('The recording could not be played.'), findsNothing);
   });
 
   for (final dark in [false, true]) {
