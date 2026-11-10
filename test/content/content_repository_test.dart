@@ -19,7 +19,8 @@ void main() {
   test('the bundled content loads: 1 category, 1 reading, 19 sections', () async {
     final lib = await AssetContentRepository(rootBundle).load();
     final r = lib.categories.single.readings.single;
-    expect(lib.categories.single.title, 'Namaskaraya to Deviyanta Pin Dima');
+    expect(lib.categories.single.title, 'Buddha Wandanawa');
+    expect(lib.categories.single.subtitle, 'බුද්ධ වන්දනාව');
     expect(r.sections.length, 19);
     expect(r.sections.map((s) => s.number), List.generate(19, (i) => i + 1));
     expect(lib.reading('namaskaraya'), same(r));

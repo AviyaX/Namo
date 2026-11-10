@@ -16,6 +16,8 @@ import re
 import sys
 
 OUTPUT = pathlib.Path("assets/content/namaskaraya_to_pin_dima.json")
+TITLE = "Buddha Wandanawa"
+SUBTITLE = "බුද්ධ වන්දනාව"
 NOT_NAMED = "not named by the source"
 BRISBANE_TRANSLATOR = "prepared by Cynthia Gunawardana"
 CHECKED = "checked against source"
@@ -386,11 +388,9 @@ def build(root: pathlib.Path) -> dict:
         out_sections.append({"id": f"s{number:02d}", "number": number, "heading": section["heading"],
                              "check": check, "source": section["source"],
                              "corrections": section["corrections"], "verses": section["verses"]})
-    title = "Namaskaraya to Deviyanta Pin Dima"
     return {"schema": 1, "categories": [{
-        "id": "cat-namaskaraya", "title": title,
-        "subtitle": f"{out_sections[0]['heading']} – {out_sections[17]['heading']}",
-        "readings": [{"id": "namaskaraya", "title": title, "audio": None, "sections": out_sections}]}]}
+        "id": "cat-namaskaraya", "title": TITLE, "subtitle": SUBTITLE,
+        "readings": [{"id": "namaskaraya", "title": TITLE, "audio": None, "sections": out_sections}]}]}
 
 
 def render(data: dict) -> bytes:

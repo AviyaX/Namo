@@ -52,6 +52,14 @@ class BuildContentTest(unittest.TestCase):
         self.assertEqual([s["number"] for s in self.sections], list(range(1, 20)))
         self.assertEqual([s["id"] for s in self.sections], [f"s{n:02d}" for n in range(1, 20)])
 
+    def test_title_and_subtitle(self):
+        category = self.data["categories"][0]
+        reading = category["readings"][0]
+        self.assertEqual((category["id"], reading["id"]), ("cat-namaskaraya", "namaskaraya"))
+        self.assertEqual(category["title"], "Buddha Wandanawa")
+        self.assertEqual(reading["title"], "Buddha Wandanawa")
+        self.assertEqual(category["subtitle"], "බුද්ධ වන්දනාව")
+
     def test_verse_counts(self):
         self.assertEqual([len(s["verses"]) for s in self.sections], VERSES)
         self.assertEqual(len(self.verses), 28)
