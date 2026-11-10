@@ -36,11 +36,12 @@ void main() {
     expect(find.text('category 1'), findsOneWidget);
   });
 
-  testWidgets('tapping a section opens the reader placeholder', (t) async {
+  testWidgets('tapping a section opens the reader at that section', (t) async {
     await pumpApp(t, overrides: fake, location: Routes.contents('r1'));
     await t.tap(find.text('heading 2'));
     await t.pumpAndSettle();
-    expect(find.text('The reader arrives in Stage 4.'), findsOneWidget);
+    expect(find.byKey(const ValueKey('heading-s02')), findsOneWidget);
+    expect(find.byKey(const ValueKey('reader-settings')), findsOneWidget);
   });
 
   testWidgets('a contents address for an unknown reading shows not-found',

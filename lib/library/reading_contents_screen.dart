@@ -42,16 +42,3 @@ class ReadingContentsScreen extends StatelessWidget {
     });
   }
 }
-
-/// Stands in for the reader until it is built.
-class ReaderPlaceholderScreen extends StatelessWidget {
-  const ReaderPlaceholderScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: const Center(child: Text('The reader arrives in Stage 4.')),
-    );
-  }
-}

@@ -124,10 +124,34 @@ ThemeData namoTheme(Brightness brightness) {
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: radius, side: hairline),
     ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(
+        minimumSize: const Size(NamoSizes.touchTarget, NamoSizes.touchTarget),
+        foregroundColor: p.heading,
+        disabledForegroundColor: p.textQuiet.withValues(alpha: 0.5),
+        highlightColor: p.surface,
+        hoverColor: p.surface,
+      ),
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: p.heading,
+      inactiveTrackColor: p.divider,
+      thumbColor: p.heading,
+      overlayColor: p.surface,
+      activeTickMarkColor: Colors.transparent,
+      inactiveTickMarkColor: Colors.transparent,
+    ),
     bottomSheetTheme: BottomSheetThemeData(
       elevation: 0,
+      modalElevation: 0,
       backgroundColor: p.background,
+      modalBackgroundColor: p.background,
       surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      dragHandleColor: p.divider,
+      shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+          side: hairline),
     ),
     dialogTheme: DialogThemeData(
       elevation: 0,

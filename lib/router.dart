@@ -7,6 +7,7 @@ import 'home/home_screen.dart';
 import 'library/category_screen.dart';
 import 'library/library_screen.dart';
 import 'library/reading_contents_screen.dart';
+import 'reader/reader_screen.dart';
 import 'saved/saved_screen.dart';
 import 'settings/settings_screen.dart';
 
@@ -66,7 +67,9 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
         ),
         GoRoute(
             path: '/read/:id',
-            builder: (context, state) => const ReaderPlaceholderScreen()),
+            builder: (context, state) => ReaderScreen(
+                readingId: state.pathParameters['id']!,
+                sectionId: state.uri.queryParameters['section'])),
       ],
     );
 
