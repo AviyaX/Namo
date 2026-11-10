@@ -330,3 +330,27 @@ Every stage: `flutter analyze` clean, all tests pass, content check passes, web 
 ## 17. Left to the builder
 
 Widget and file names; exact paddings within the spacing scale; how the tab cross-fade and page transitions are wired in go_router; how bottom space behind the floating bars is provided; the exact height of the picture fade (verified by measuring text contrast on the picture); picture alignment per crop; the fold table for Latin diacritics in search.
+
+## 18. What the ui-ux-pro-max skill added
+
+The owner asked for the `ui-ux-pro-max` skill to be used ("use ui-ux-pro-max-skill and redesighn this", 2026-11-10). Its searches were run for this product on 2026-11-10 (design system for a calm, minimal, dark meditation and reading app; then navigation, contrast, motion, empty states, reading text, and Flutter guidance). What was taken from it, and what was not:
+
+**Taken**
+
+- Style direction "Minimalism": spacious, clear type hierarchy, few effects. Motion dial "subtle".
+- Its heading font for calm and wellness products is Lora, which the app already bundles and this design uses for titles.
+- Reading text: line height between 1.5 and 1.75 (the reader's default is 1.6) and a bounded line length (the 680 reading column).
+- Motion: timings chosen by purpose, not one duration everywhere; leaving is quicker than arriving (a page or sheet closes in 200 ms, opens in 300 ms); a new page fades in with a small rise of 12 px, never a long slide; at most one or two things move on a screen at once; everything is instant with reduced motion.
+- Fixed bars never cover content (the bottom space rule in 9.1 and 9.4).
+- Search with nothing found shows a suggestion, never a blank page (9.3).
+- On the web: a pointer cursor and a hover tint on everything that can be clicked, and a visible 2 px focus ring of at least 3 : 1 (the sage ring).
+- Flutter: colours and type only through the theme and its extension; `MediaQuery.textScalerOf` for large text; `Semantics` on every custom control; implicit animations for simple changes and disposed controllers for the rest.
+- Final inspection also at 375, 768, 1024 and 1440 wide, in addition to the widths in section 14.
+- Its pre-delivery checklist (`references/pro-rules.md`) is the last gate before the work is called finished.
+
+**Not taken**
+
+- Its colour palette (a lavender and green set) — the owner's palette governs.
+- Its page pattern (a marketing page with testimonials) — this is an app, not a landing page.
+- Its second font (Raleway) and its web font links — no new fonts, nothing loaded from the network.
+- Its suggestion of a network image package — all pictures are bundled.
