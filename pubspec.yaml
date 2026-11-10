@@ -138,7 +138,7 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#151714"
-  image: assets/branding/namo_icon_square.png
+  image: design/branding/namo_icon_owner_supplied.png
   android: true
   ios: true
   web: true
