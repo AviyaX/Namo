@@ -37,6 +37,10 @@ double _toolbarHeight(TextScaler scaler) {
 /// How long the page must be still before its place is saved.
 const _saveDelay = Duration(milliseconds: 400);
 
+/// While the page keeps moving (auto-scroll), the place is saved at most
+/// this often.
+const _saveWhileMoving = Duration(milliseconds: 2500);
+
 class ReaderScreen extends ConsumerStatefulWidget {
   const ReaderScreen({
     super.key,
@@ -96,7 +100,13 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   ReadingPosition? _latest;
   double _latestProgress = 0;
   bool _dirty = false;
+
+  /// Saves once the page is still ([_saveDelay]); restarted by each scroll.
   Timer? _saveTimer;
+
+  /// Saves while the page keeps moving ([_saveWhileMoving]); started by the
+  /// first scroll after a save, not restarted by later ones.
+  Timer? _movingSaveTimer;
 
   double? _width;
   double? _previousTarget;
@@ -243,10 +253,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     super.dispose();
   }
 
-  /// Saves the place at the top now, if it changed since the last save.
-  void _save() {
+  void _cancelSaveTimers() {
     _saveTimer?.cancel();
     _saveTimer = null;
+    _movingSaveTimer?.cancel();
+    _movingSaveTimer = null;
+  }
+
+  /// Saves the place at the top now, if it changed since the last save.
+  void _save() {
+    _cancelSaveTimers();
     final latest = _latest;
     if (!_dirty || latest == null) return;
     _dirty = false;
@@ -256,8 +272,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// [_save] for life-cycle methods, where providers cannot change: the
   /// unsaved place is taken now and saved at the end of the frame.
   void _saveLater() {
-    _saveTimer?.cancel();
-    _saveTimer = null;
+    _cancelSaveTimers();
     final latest = _latest;
     if (!_dirty || latest == null) return;
     _dirty = false;
@@ -311,7 +326,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   /// Updates the buttons and the progress line; after a scroll, also notes
-  /// the place at the top and saves it once the page is still.
+  /// the place at the top and saves it once the page is still, or every
+  /// [_saveWhileMoving] while it keeps moving.
   void _afterScroll({required bool scrolled}) {
     if (!mounted || !_scroll.hasClients) return;
     _updateButtons();
@@ -325,6 +341,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _dirty = true;
     _saveTimer?.cancel();
     _saveTimer = Timer(_saveDelay, _save);
+    _movingSaveTimer ??= Timer(_saveWhileMoving, _save);
   }
 
   void _updateButtons() {
@@ -399,8 +416,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
 
   void _backToBeginning() {
     _autoScroll.reset();
-    _saveTimer?.cancel();
-    _saveTimer = null;
+    _cancelSaveTimers();
     _latest = null;
     _dirty = false;
     _positions.clear(widget.readingId);

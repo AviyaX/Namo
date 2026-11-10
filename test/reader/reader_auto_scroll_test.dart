@@ -1,4 +1,5 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
@@ -25,6 +26,17 @@ Future<ProviderContainer> openAt(WidgetTester t, String location) async {
     location: location,
   );
   return ProviderScope.containerOf(t.element(find.byType(MaterialApp)));
+}
+
+/// Counts the writes of the reading place.
+class _CountingStore extends InMemoryKeyValueStore {
+  int positionWrites = 0;
+
+  @override
+  Future<void> write(String key, String value) {
+    if (key == positionKey) positionWrites++;
+    return super.write(key, value);
+  }
 }
 
 ScrollController scroll(WidgetTester t) =>
@@ -138,7 +150,8 @@ void main() {
 
     await t.tap(find.byKey(const ValueKey('reader-next')));
     await t.pump();
-    final s02 = t.state<ReaderBodyState>(find.byType(ReaderBody))
+    final s02 = t
+        .state<ReaderBodyState>(find.byType(ReaderBody))
         .offsetOfSection('s02');
     expect(scroll(t).offset, closeTo(s02, 1));
     expect(playLabel(t), _pause);
@@ -152,9 +165,7 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('speed can be changed from the sheet while scrolling', (
-    t,
-  ) async {
+  testWidgets('speed can be changed from the sheet while scrolling', (t) async {
     final c = await openAt(t, Routes.reader('r1'));
     await startPlaying(t);
     await openSheetWhileScrolling(t);
@@ -179,8 +190,10 @@ void main() {
     expect(c.read(settingsProvider).scrollSpeed, 60);
     expect(find.text('Custom'), findsOneWidget);
     expect(playLabel(t), _pause);
-    expect(await distanceIn(t, const Duration(milliseconds: 500)),
-        closeTo(30, 1));
+    expect(
+      await distanceIn(t, const Duration(milliseconds: 500)),
+      closeTo(30, 1),
+    );
 
     await tapInSheet(t, find.text('Normal'));
     expect(c.read(settingsProvider).scrollSpeed, 22);
@@ -206,8 +219,10 @@ void main() {
           hasSelectedState: true,
         ),
       );
-      expect(t.getSize(find.bySemanticsLabel(label)).height,
-          greaterThanOrEqualTo(48));
+      expect(
+        t.getSize(find.bySemanticsLabel(label)).height,
+        greaterThanOrEqualTo(48),
+      );
     }
     expect(
       t.getSemantics(find.byKey(const ValueKey('reader-scroll-speed'))),
@@ -248,6 +263,47 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('while the page keeps moving its place is saved every few '
+      'seconds, and once more when it stops', (t) async {
+    final store = _CountingStore();
+    await pumpApp(
+      t,
+      overrides: [
+        contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
+        keyValueStoreProvider.overrideWithValue(store),
+      ],
+      location: Routes.reader('r1'),
+      // A short window, so the page has room to move for ten seconds.
+      size: const Size(390, 400),
+    );
+    final c = ProviderScope.containerOf(t.element(find.byType(MaterialApp)));
+    expect(scroll(t).position.maxScrollExtent, greaterThan(250));
+    expect(store.positionWrites, 0);
+
+    await startPlaying(t);
+    await runFor(t, _second);
+    expect(store.positionWrites, 0);
+    await runFor(t, const Duration(seconds: 2));
+    expect(store.positionWrites, 1);
+    final first = c.read(positionProvider).byReading['r1']!.progress;
+    expect(first, greaterThan(0));
+
+    await runFor(t, const Duration(seconds: 3));
+    expect(store.positionWrites, 2);
+    expect(
+      c.read(positionProvider).byReading['r1']!.progress,
+      greaterThan(first),
+    );
+    expect(playLabel(t), _pause);
+
+    // Pausing saves once, after the page is still.
+    await t.tap(_play);
+    await t.pump();
+    await runFor(t, const Duration(seconds: 3));
+    expect(store.positionWrites, 3);
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('going to the background pauses it', (t) async {
     await openAt(t, Routes.reader('r1'));
     await startPlaying(t);
@@ -264,9 +320,7 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('leaving the reader while scrolling stops the ticker', (
-    t,
-  ) async {
+  testWidgets('leaving the reader while scrolling stops the ticker', (t) async {
     final c = await openAt(t, Routes.reader('r1'));
     await startPlaying(t);
     await runFor(t, _second);
