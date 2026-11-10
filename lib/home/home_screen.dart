@@ -3,12 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../content/content_repository.dart';
+import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
-import '../design/widgets/list_row.dart';
 import '../library/library_gate.dart';
 import '../reader/position_controller.dart';
 import '../router.dart';
+import 'reading_card.dart';
+
+/// The width of the Home column on wide screens: room for a few cards a row.
+const _wideColumn = 1040.0;
+
+/// A wide card is between these widths.
+const _cardMin = 320.0, _cardMax = 360.0, _gap = 16.0;
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key = const ValueKey('screen-home')});
@@ -16,12 +23,13 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = NamoPalette.of(context);
+    final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
-            constraints:
-                const BoxConstraints(maxWidth: NamoSizes.readingColumn),
+            constraints: BoxConstraints(
+                maxWidth: wide ? _wideColumn : NamoSizes.readingColumn),
             child: ListView(
               children: [
                 Padding(
@@ -35,14 +43,10 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 LibraryGate(
                   builder: (context, library) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const _ContinueReading(),
-                      for (final c in library.categories)
-                        ListRow(
-                          title: c.title,
-                          subtitle: c.subtitle,
-                          onTap: () => context.go(Routes.category(c.id)),
-                        ),
+                      _Cards(categories: library.categories, wide: wide),
                     ],
                   ),
                 ),
@@ -50,6 +54,45 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The category cards: one a row, as wide as the column, on a phone; a
+/// wrapping grid of cards [_cardMin]-[_cardMax] wide, from the left edge, on
+/// a wide screen.
+class _Cards extends StatelessWidget {
+  const _Cards({required this.categories, required this.wide});
+
+  final List<Category> categories;
+  final bool wide;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      child: LayoutBuilder(
+        builder: (context, box) {
+          final width = box.maxWidth;
+          final double cardWidth;
+          if (wide) {
+            final perRow =
+                ((width + _gap) / (_cardMin + _gap)).floor().clamp(1, 1000);
+            cardWidth =
+                ((width - (perRow - 1) * _gap) / perRow).clamp(_cardMin, _cardMax);
+          } else {
+            cardWidth = width;
+          }
+          return Wrap(
+            spacing: _gap,
+            runSpacing: _gap,
+            children: [
+              for (final c in categories)
+                SizedBox(width: cardWidth, child: ReadingCard(category: c)),
+            ],
+          );
+        },
       ),
     );
   }

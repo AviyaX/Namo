@@ -117,6 +117,20 @@ void main() {
       );
     }
     testWidgets(
+      'Home with several reading cards does not overflow: ${size.width.round()}x${size.height.round()}, device text 2.0',
+      (t) async {
+        await openReal(
+          t,
+          Routes.home,
+          size: size,
+          deviceTextScale: 2.0,
+          library: severalCategories(),
+        );
+        await scrollThrough(t);
+        expect(find.byKey(const ValueKey('card-art-panel')), findsWidgets);
+      },
+    );
+    testWidgets(
       'Settings with one language does not overflow: ${size.width.round()}x${size.height.round()}, device text 2.0',
       (t) async {
         await openReal(

@@ -44,6 +44,37 @@ Future<Library> realLibrary(WidgetTester t) async {
   ))!;
 }
 
+/// Four categories, Latin placeholder text, one of them with two readings and
+/// a long title, so that Home has several cards to lay out.
+Library severalCategories() => Library(
+  categories: [
+    for (var i = 1; i <= 4; i++)
+      Category(
+        id: 'c$i',
+        title: i == 2
+            ? 'A category with a rather long title that has to wrap onto lines'
+            : 'Category $i',
+        subtitle: 'Subtitle $i',
+        readings: [
+          for (var j = 1; j <= (i == 2 ? 2 : 1); j++)
+            Reading(
+              id: 'r$i$j',
+              title: 'Reading $i$j',
+              sections: [
+                for (var k = 1; k <= 12; k++)
+                  Section(
+                    id: 's$i$j$k',
+                    number: k,
+                    heading: 'Heading $k',
+                    verses: [Verse(id: 's$i$j$k-v', paliSi: 'pali', sinhala: 'sinhala')],
+                  ),
+              ],
+            ),
+        ],
+      ),
+  ],
+);
+
 class PlaceholderCatalogue implements AudioCatalogue {
   @override
   Recording? recordingFor(String readingId) => Recording(

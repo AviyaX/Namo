@@ -50,6 +50,22 @@ void main() {
     }
   }
 
+  for (final dark in [false, true]) {
+    for (final size in const [Size(390, 1800), Size(1280, 800)]) {
+      testWidgets(
+        'Home with several reading cards (${dark ? 'dark' : 'light'}, ${size.width.round()}x${size.height.round()}) '
+        'meets tap-target, label and contrast guidelines',
+        (t) async {
+          final handle = t.ensureSemantics();
+          await openReal(t, Routes.home, size: size, dark: dark, library: severalCategories());
+          expect(find.byKey(const ValueKey('card-art-panel')), findsNWidgets(4));
+          await expectGuidelines(t);
+          handle.dispose();
+        },
+      );
+    }
+  }
+
   testWidgets('the reader with a recording meets the guidelines', (t) async {
     final handle = t.ensureSemantics();
     await openReal(t, Routes.reader(realReadingId), audio: true);

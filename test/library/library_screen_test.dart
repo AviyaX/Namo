@@ -2,6 +2,7 @@ import 'dart:ui' show Tristate;
 
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/home/reading_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
 import 'package:buddhist_gatha/app.dart';
@@ -151,13 +152,22 @@ void main() {
     expect(find.text('heading 1'), findsOneWidget);
   });
 
-  testWidgets('Home category row lands on the Library with the list open', (t) async {
-    await pumpApp(t, overrides: fake);
-    await t.tap(find.text('category 1'));
+  testWidgets('Home category card lands on the Library with the list open', (t) async {
+    // A category with one reading opens the reader from Home, so this one
+    // has two.
+    await pumpApp(
+      t,
+      overrides: [
+        contentRepositoryProvider.overrideWithValue(
+          FakeContentRepository(library: _twoReadings()),
+        ),
+      ],
+    );
+    await t.tap(find.byType(ReadingCard));
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
-    expect(find.text('heading 1'), findsOneWidget);
-    expect(find.text('heading 3'), findsOneWidget);
+    expect(find.text('Alpha one'), findsOneWidget);
+    expect(find.text('Beta one'), findsOneWidget);
   });
 
   for (final old in ['/library/category/c1', '/library/reading/r1']) {
@@ -249,13 +259,21 @@ void main() {
     });
 
     testWidgets('opens the list on the first frame when the Library is kept alive (from Home)', (t) async {
-      await pumpApp(t, overrides: fake, location: Routes.library);
+      await pumpApp(
+        t,
+        overrides: [
+          contentRepositoryProvider.overrideWithValue(
+            FakeContentRepository(library: _twoReadings()),
+          ),
+        ],
+        location: Routes.library,
+      );
       await t.tap(find.text('Home'));
       await t.pumpAndSettle();
-      await t.tap(find.text('category 1'));
+      await t.tap(find.byType(ReadingCard));
       await t.pump();
       expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
-      expect(find.text('heading 1'), findsOneWidget);
+      expect(find.text('Alpha one'), findsOneWidget);
       final height = t.getSize(find.byKey(const ValueKey('open-c1'))).height;
       await t.pumpAndSettle();
       expect(t.getSize(find.byKey(const ValueKey('open-c1'))).height, height);
