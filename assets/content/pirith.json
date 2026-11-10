@@ -7,2246 +7,9 @@
    "subtitle": "පිරිත්",
    "readings": [
     {
-     "id": "pirith-02-saranagamanam",
-     "title": "සරණාගමනං",
-     "title_roman": "Saraṇāgamanaṃ",
-     "audio": {
-      "asset": "assets/audio/pirith/02-saranagamanam.m4a",
-      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 101000,
-      "bytes": 306807,
-      "sha256": "3ab37028e9f28b36ebda7fcf34d89049f305d7681d304f90787695def79a319b",
-      "block_times": [
-       [
-        0.306631,
-        8.202377
-       ],
-       [
-        8.611218,
-        16.788042
-       ],
-       [
-        17.222436,
-        26.319153
-       ],
-       [
-        27.647887,
-        34.138242
-       ],
-       [
-        34.700398,
-        41.369621
-       ],
-       [
-        41.752909,
-        48.601
-       ],
-       [
-        48.984288,
-        57.161113
-       ],
-       [
-        57.544401,
-        65.440147
-       ],
-       [
-        65.848989,
-        74.230234
-       ],
-       [
-        74.639075,
-        82.764794
-       ],
-       [
-        83.199188,
-        91.197144
-       ],
-       [
-        91.605985,
-        100.038335
-       ]
-      ]
-     },
-     "sections": [
-      {
-       "id": "p",
-       "number": 1,
-       "heading": "සරණාගමනං",
-       "check": "checked against source",
-       "source": {
-        "name": "pitaka.lk/pirith",
-        "locator": "https://pitaka.lk/pirith/ (02-saranagamanam)",
-        "collected": "2026-11-10",
-        "translator": ""
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "b1",
-         "phrases": [
-          {
-           "pali": "නමො තස්ස භගවතො අරහතො සම්මා සම්බුද්ධස්ස",
-           "sinhala": "ඒ භාග්‍යවත් අර්හත් සම්මා සම්බුදුරජාණන් වහන්සේට නමස්කාර වේවා.",
-           "english": "Homage to the Blessed One, the Worthy One, the Fully Enlightened One."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b2",
-         "phrases": [
-          {
-           "pali": "නමො තස්ස භගවතො අරහතො සම්මා සම්බුද්ධස්ස",
-           "sinhala": "ඒ භාග්‍යවත් අර්හත් සම්මා සම්බුදුරජාණන් වහන්සේට නමස්කාර වේවා.",
-           "english": "Homage to the Blessed One, the Worthy One, the Fully Enlightened One."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b3",
-         "phrases": [
-          {
-           "pali": "නමො තස්ස භගවතො අරහතො සම්මා සම්බුද්ධස්ස",
-           "sinhala": "ඒ භාග්‍යවත් අර්හත් සම්මා සම්බුදුරජාණන් වහන්සේට නමස්කාර වේවා.",
-           "english": "Homage to the Blessed One, the Worthy One, the Fully Enlightened One."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b4",
-         "phrases": [
-          {
-           "pali": "බුද්ධං සරණං ගච්ඡාමි.",
-           "sinhala": "බුදුන් සරණ කොට යමි.",
-           "english": "I go to the Buddha for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b5",
-         "phrases": [
-          {
-           "pali": "ධම්මං සරණං ගච්ඡාමි.",
-           "sinhala": "දහම් සරණ කොට යමි.",
-           "english": "I go to the Dhamma for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b6",
-         "phrases": [
-          {
-           "pali": "සංඝං සරණං ගච්ඡාමි.",
-           "sinhala": "සඟුන් සරණ කොට යමි.",
-           "english": "I go to the Sangha for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b7",
-         "phrases": [
-          {
-           "pali": "දුතියම්පි බුද්ධං සරණං ගච්ඡාමි.",
-           "sinhala": "දෙවනුව ද බුදුන් සරණ කොට යමි.",
-           "english": "For the second time, I go to the Buddha for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b8",
-         "phrases": [
-          {
-           "pali": "දුතියම්පි ධම්මං සරණං ගච්ඡාමි.",
-           "sinhala": "දෙවනුව ද දහම් සරණ කොට යමි.",
-           "english": "For the second time, I go to the Dhamma for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b9",
-         "phrases": [
-          {
-           "pali": "දුතියම්පි සංඝං සරණං ගච්ඡාමි.",
-           "sinhala": "දෙවනුව ද සඟුන් සරණ කොට යමි.",
-           "english": "For the second time, I go to the Sangha for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b10",
-         "phrases": [
-          {
-           "pali": "තතියම්පි බුද්ධං සරණං ගච්ඡාමි.",
-           "sinhala": "තෙවනුව ද බුදුන් සරණ කොට යමි.",
-           "english": "For the third time, I go to the Buddha for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b11",
-         "phrases": [
-          {
-           "pali": "තතියම්පි ධම්මං සරණං ගච්ඡාමි.",
-           "sinhala": "තෙවනුව ද දහම් සරණ කොට යමි.",
-           "english": "For the third time, I go to the Dhamma for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b12",
-         "phrases": [
-          {
-           "pali": "තතියම්පි සංඝං සරණං ගච්ඡාමි.",
-           "sinhala": "තෙවනුව ද සඟුන් සරණ කොට යමි.",
-           "english": "For the third time, I go to the Sangha for refuge."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "pirith-03-dasasikkhapadani",
-     "title": "දස සික්ඛාපදානි",
-     "title_roman": "Dasa Sikkhāpadāni",
-     "audio": {
-      "asset": "assets/audio/pirith/03-dasasikkhapadani.m4a",
-      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 108000,
-      "bytes": 327245,
-      "sha256": "afe17198f16eb46a6745bf5726fe72606b4a4133de9890c5e1b8ce6e12da7578",
-      "block_times": [
-       [
-        0.464348,
-        9.095761
-       ],
-       [
-        9.560109,
-        17.699859
-       ],
-       [
-        18.191522,
-        26.877563
-       ],
-       [
-        27.369226,
-        35.345088
-       ],
-       [
-        35.809436,
-        47.554713
-       ],
-       [
-        48.019061,
-        56.404642
-       ],
-       [
-        56.868991,
-        68.614267
-       ],
-       [
-        69.297132,
-        84.32016
-       ],
-       [
-        85.38543,
-        95.19137
-       ],
-       [
-        95.683033,
-        106.882017
-       ]
-      ]
-     },
-     "sections": [
-      {
-       "id": "p",
-       "number": 1,
-       "heading": "දස සික්ඛාපදානි",
-       "check": "checked against source",
-       "source": {
-        "name": "pitaka.lk/pirith",
-        "locator": "https://pitaka.lk/pirith/ (03-dasasikkhapadani)",
-        "collected": "2026-11-10",
-        "translator": ""
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "b1",
-         "phrases": [
-          {
-           "pali": "පාණාතිපාතා",
-           "sinhala": "ප්‍රාණඝාතයෙන්",
-           "english": "From destroying living beings"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b2",
-         "phrases": [
-          {
-           "pali": "අදින්නාද‍ානා",
-           "sinhala": "නුදුන් දෙය ගැනීමෙන්",
-           "english": "From taking what is not given"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b3",
-         "phrases": [
-          {
-           "pali": "අබ්‍රහ්මචරියා",
-           "sinhala": "අබ්‍රහ්මචරියාවෙන් (මෙවුන්දමෙහි හැසිරීමෙන්)",
-           "english": "From unchastity"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b4",
-         "phrases": [
-          {
-           "pali": "මුසාවාද‍ා",
-           "sinhala": "මුසාවාදයෙන්",
-           "english": "From false speech"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b5",
-         "phrases": [
-          {
-           "pali": "සුරාමෙරය මජ්ජපමාදට්ඨානා",
-           "sinhala": "මදයට හා ප්‍රමාදයට කාරණ වූ රහමෙරින්",
-           "english": "From intoxicating drinks and drugs that lead to heedlessness"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b6",
-         "phrases": [
-          {
-           "pali": "විකාලභොජනා",
-           "sinhala": "විකල් බොජුනෙන්",
-           "english": "From eating at the wrong time"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b7",
-         "phrases": [
-          {
-           "pali": "නච්ච ගීත වාදිත විසූක දස්සනා",
-           "sinhala": "නැටීම, ගැයීම, වැයීම, විසුලු බැලීම යන මෙයින්",
-           "english": "From dancing, singing, instrumental music, and watching entertainments"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b8",
-         "phrases": [
-          {
-           "pali": "මාලා ගන්ධවිලේපන ධාරණ මණ්ඩන විභූසනට්ඨානා",
-           "sinhala": "මල්, ගඳ, විලවුන් ද‍ැරීම, සැරසීම, වෙසෙසින් සැරසීම යන කාරණයෙන්",
-           "english": "From wearing garlands, using perfumes, and beautifying with cosmetics"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b9",
-         "phrases": [
-          {
-           "pali": "උච්චාසයන මහාසයනා",
-           "sinhala": "උසසුන් මහ අස්නෙන්",
-           "english": "From high and large sleeping places"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b10",
-         "phrases": [
-          {
-           "pali": "ජාතරූප රජත පටිග්ගහණා",
-           "sinhala": "රන්, රිදී, මසු, කහවණු පිළිගැනීමෙන්",
-           "english": "From accepting gold and silver"
-          },
-          {
-           "pali": "වෙරමණී සික්ඛාපදං",
-           "sinhala": "වැළකීමේ ශික්ෂා පදය",
-           "english": "the training precept of abstaining"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "pirith-04-samanera-panha",
-     "title": "සාමණේර පඤ්හො",
-     "title_roman": "Sāmaṇera Pañho",
-     "audio": {
-      "asset": "assets/audio/pirith/04-samanera-panha.m4a",
-      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 113000,
-      "bytes": 339366,
-      "sha256": "457a0eaa612f06c70895376db7670d46d435d7e174014bb39dc4269733d7e2be",
-      "block_times": [
-       [
-        0.511942,
-        12.684794
-       ],
-       [
-        13.253619,
-        22.354816
-       ],
-       [
-        22.8952,
-        31.512896
-       ],
-       [
-        32.024839,
-        43.145364
-       ],
-       [
-        43.571983,
-        53.441094
-       ],
-       [
-        53.924595,
-        64.931356
-       ],
-       [
-        65.301092,
-        74.203201
-       ],
-       [
-        74.629819,
-        85.494374
-       ],
-       [
-        85.892551,
-        94.652454
-       ],
-       [
-        95.079072,
-        111.205257
-       ]
-      ]
-     },
-     "sections": [
-      {
-       "id": "p",
-       "number": 1,
-       "heading": "සාමණේර පඤ්හො",
-       "check": "checked against source",
-       "source": {
-        "name": "pitaka.lk/pirith",
-        "locator": "https://pitaka.lk/pirith/ (04-samanera-panha)",
-        "collected": "2026-11-10",
-        "translator": ""
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "b1",
-         "phrases": [
-          {
-           "pali": "එක නාම කිං?",
-           "sinhala": "(මේ සසුනෙහි) එක නම් කිම?",
-           "english": "What is the one?"
-          },
-          {
-           "pali": "සබ්බේ සත්තා",
-           "sinhala": "හැම සත්හු",
-           "english": "All beings"
-          },
-          {
-           "pali": "ආහාරට්ඨිතිකා",
-           "sinhala": "ආහාර හේතුවෙන් සිටිති",
-           "english": "subsist on food."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b2",
-         "phrases": [
-          {
-           "pali": "ද්වෙ නාම කිං?",
-           "sinhala": "දෙක නම් කිම?",
-           "english": "What is the two?"
-          },
-          {
-           "pali": "නාමඤ්ච රූපඤ්ච",
-           "sinhala": "නාමය හා රූපයයි",
-           "english": "Name and form."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b3",
-         "phrases": [
-          {
-           "pali": "තීණි නාම කිම?",
-           "sinhala": "තුන නම් කිම?",
-           "english": "What is the three?"
-          },
-          {
-           "pali": "තිස්සෝ වෙදනා",
-           "sinhala": "(සුඛ, දුඃඛ, උපේක්ෂා යන) තුන් වේදනාවෝ ය.",
-           "english": "The three feelings."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b4",
-         "phrases": [
-          {
-           "pali": "චත්තාරි නාම කිං?",
-           "sinhala": "සතර නම් කිම?",
-           "english": "What is the four?"
-          },
-          {
-           "pali": "චත්තාරි අරිය සච්චානි",
-           "sinhala": "(දුඃඛ, සමුදය, නිරෝධ, මාර්ග යන) සතර ආර්ය සත්‍යයෝ ය.",
-           "english": "The four Noble Truths."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b5",
-         "phrases": [
-          {
-           "pali": "පඤ්ච නාම කිං?",
-           "sinhala": "පස නම් කිම?",
-           "english": "What is the five?"
-          },
-          {
-           "pali": "පඤ්චුපාද‍ානක්ඛන්ධා",
-           "sinhala": "(රූප, වේදනා, සංඥා, සංස්කාර, විඥාන යන) පස් උපාදානස්කන්ධයෝ ය.",
-           "english": "The five aggregates of clinging."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b6",
-         "phrases": [
-          {
-           "pali": "ඡනාම කිං?",
-           "sinhala": "සය නම් කිම?",
-           "english": "What is the six?"
-          },
-          {
-           "pali": "ඡඅඡ්ඣත්තිකානි ආයතනානි",
-           "sinhala": "(චක්ඛු, සෝත, ඝාන, ජිව්හා, කාය, මන යන) ආධ්‍යාත්මික ආයතනයෝ සය ය.",
-           "english": "The six internal sense bases."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b7",
-         "phrases": [
-          {
-           "pali": "සත්ත නාම කිං?",
-           "sinhala": "සත නම් කිම?",
-           "english": "What is the seven?"
-          },
-          {
-           "pali": "සත්‌ත බොජ්‌ඣඞ්‌ගා",
-           "sinhala": "(සති, ධම්මවිචය, පීති, විරිය, පස්සද්ධි, සමාධි, උපෙක්ඛා යන) බොජ්ඣඞ්ග සත ය.",
-           "english": "The seven factors of enlightenment."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b8",
-         "phrases": [
-          {
-           "pali": "අට්ඨ නාම කිං?",
-           "sinhala": "අට නම් කිම?",
-           "english": "What is the eight?"
-          },
-          {
-           "pali": "අරියො අට්ඞ්ගිකො මග්ගො",
-           "sinhala": "(සම්මාදිට්ඨි, සම්මාසඞ්කප්ප, සම්මාවාචා, සම්මාකම්මන්ත, සම්මාආජීව, සම්මාවායාම, සම්මාසති, සම්මාසමාධි යන) අරි අටඟි මග ය.",
-           "english": "The Noble Eightfold Path."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b9",
-         "phrases": [
-          {
-           "pali": "නව නාම කිං?",
-           "sinhala": "නවය නම් කිම?",
-           "english": "What is the nine?"
-          },
-          {
-           "pali": "නව සත්‌තාවාසා",
-           "sinhala": "(නානත්තකාය නානත්තසඤ්ඤි ය, නානත්තකාය එකත්තසඤ්ඤි ය, එකත්තකාය නානත්තසඤ්ඤි ය, එකත්තකාය එකත්තසඤ්ඤි ය, අසඤ්ඤි ය, ආකාසානඤ්චායතනූපග ය, විඤ්ඤාණඤ්චායතනූපග ය, ආකිඤ්චඤ්ඤායතනූපග ය, නෙවසඤ්ඤානාසඤ්ඤායතනූපග ය යන) සත්තාවාස නවය ය.",
-           "english": "The nine abodes of beings."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b10",
-         "phrases": [
-          {
-           "pali": "දස නාම කිං?",
-           "sinhala": "දස නම් කිම?",
-           "english": "What is the ten?"
-          },
-          {
-           "pali": "දසහඞ්ගෙහි",
-           "sinhala": "(අසේඛ සම්මාදිට්ඨි ය, අසේඛ සම්මාසඞ්කප්ප ය, අසේඛ සම්මාවාචා ය, අසේඛ සම්මාකම්මන්ත ය, අසේඛ සම්මාආජීව ය, අසේඛ සම්මාවායාම ය, අසේඛ සම්මාසති ය, අසේඛ සම්මාසමාධි ය, අසේඛ සම්මාඤාණ ය, අසේඛ සම්මාවිමුත්ති ය යන) දසඟින්",
-           "english": "With ten factors"
-          },
-          {
-           "pali": "සමන්නාගතො",
-           "sinhala": "යුක්ත වූයේ",
-           "english": "endowed,"
-          },
-          {
-           "pali": "අරහාති",
-           "sinhala": "අරහත්ය යි",
-           "english": "\"an Arahant,\""
-          },
-          {
-           "pali": "වුච්චතීති",
-           "sinhala": "කියනු ලැබේ.",
-           "english": "one is called."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "pirith-05-dvattimsakaraya",
-     "title": "ද්වත්තිංසාකාරො",
-     "title_roman": "Dvattiṃsākāro",
-     "audio": {
-      "asset": "assets/audio/pirith/05-dvattimsakaraya.m4a",
-      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 69000,
-      "bytes": 209211,
-      "sha256": "2ef0efb4518de3c09cef3bec8b44ca83865de32beda143dbb71ac2a960082e78",
-      "block_times": [
-       [
-        0.69428,
-        13.759374
-       ],
-       [
-        14.138072,
-        24.646952
-       ],
-       [
-        24.930976,
-        35.313623
-       ],
-       [
-        35.818554,
-        44.591733
-       ],
-       [
-        44.970431,
-        55.289961
-       ],
-       [
-        55.66866,
-        67.692333
-       ]
-      ]
-     },
-     "sections": [
-      {
-       "id": "p",
-       "number": 1,
-       "heading": "ද්වත්තිංසාකාරො",
-       "check": "checked against source",
-       "source": {
-        "name": "pitaka.lk/pirith",
-        "locator": "https://pitaka.lk/pirith/ (05-dvattimsakaraya)",
-        "collected": "2026-11-10",
-        "translator": ""
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "b1",
-         "phrases": [
-          {
-           "pali": "අත‍්ථි",
-           "sinhala": "ඇත.",
-           "english": "There are"
-          },
-          {
-           "pali": "ඉමස්මිං කායෙ",
-           "sinhala": "මේ සිරුරෙහි",
-           "english": "in this body:"
-          },
-          {
-           "pali": "කෙසා",
-           "sinhala": "කේසයෝ ය",
-           "english": "head hairs,"
-          },
-          {
-           "pali": "ලොමා",
-           "sinhala": "ලෝම‍යෝ ය",
-           "english": "body hairs,"
-          },
-          {
-           "pali": "නඛා",
-           "sinhala": "නිය ය",
-           "english": "nails,"
-          },
-          {
-           "pali": "දන්තා",
-           "sinhala": "දත් ය",
-           "english": "teeth,"
-          },
-          {
-           "pali": "තචො",
-           "sinhala": "සම ය",
-           "english": "skin,"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b2",
-         "phrases": [
-          {
-           "pali": "මංසං",
-           "sinhala": "මස් ය",
-           "english": "flesh,"
-          },
-          {
-           "pali": "නහාරු",
-           "sinhala": "නහර ය",
-           "english": "sinews,"
-          },
-          {
-           "pali": "අට්ඨි",
-           "sinhala": "ඇට ය",
-           "english": "bones,"
-          },
-          {
-           "pali": "අට්ඨිමිඤ්ජා",
-           "sinhala": "ඇටමිදුලු ය",
-           "english": "bone marrow,"
-          },
-          {
-           "pali": "වක්කං",
-           "sinhala": "වකුගඩුව ය",
-           "english": "kidneys,"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b3",
-         "phrases": [
-          {
-           "pali": "හදයං",
-           "sinhala": "හෘදය මාංස ය",
-           "english": "heart,"
-          },
-          {
-           "pali": "යකනං",
-           "sinhala": "අක්මාව ය",
-           "english": "liver,"
-          },
-          {
-           "pali": "කිලොමකං",
-           "sinhala": "දලබුව ය",
-           "english": "pleura,"
-          },
-          {
-           "pali": "පිහකං",
-           "sinhala": "බඩදිව ය",
-           "english": "spleen,"
-          },
-          {
-           "pali": "පප්ඵාසං",
-           "sinhala": "පෙනහලු ය",
-           "english": "lungs,"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b4",
-         "phrases": [
-          {
-           "pali": "අන්තං",
-           "sinhala": "බඩවැල ය",
-           "english": "intestines,"
-          },
-          {
-           "pali": "අන්තගුණං",
-           "sinhala": "අතුණු බහන් ය",
-           "english": "mesentery,"
-          },
-          {
-           "pali": "උදරියං",
-           "sinhala": "(නොපැසුණු අහරය) උදරිය ය",
-           "english": "undigested food,"
-          },
-          {
-           "pali": "කරිසං",
-           "sinhala": "අහර මල ය",
-           "english": "feces,"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b5",
-         "phrases": [
-          {
-           "pali": "පිත්තං",
-           "sinhala": "පිත ය",
-           "english": "bile,"
-          },
-          {
-           "pali": "සෙම්හං",
-           "sinhala": "සෙම ය",
-           "english": "phlegm,"
-          },
-          {
-           "pali": "පුබ්බො",
-           "sinhala": "(සැරවය) පූයා ය",
-           "english": "pus,"
-          },
-          {
-           "pali": "ලොහිතං",
-           "sinhala": "ලෙහෙ ය",
-           "english": "blood,"
-          },
-          {
-           "pali": "සෙදො",
-           "sinhala": "දහඩිය ය",
-           "english": "sweat,"
-          },
-          {
-           "pali": "මෙදො",
-           "sinhala": "මේද ය",
-           "english": "fat,"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b6",
-         "phrases": [
-          {
-           "pali": "අස්සු",
-           "sinhala": "කඳුලු ය",
-           "english": "tears,"
-          },
-          {
-           "pali": "වසා",
-           "sinhala": "වුරුණු ය",
-           "english": "grease,"
-          },
-          {
-           "pali": "ඛෙලො",
-           "sinhala": "කෙළ ය",
-           "english": "saliva,"
-          },
-          {
-           "pali": "සිංඝානිකා",
-           "sinhala": "මුකුණු ය (සොටු ය)",
-           "english": "mucus,"
-          },
-          {
-           "pali": "ලසිකා",
-           "sinhala": "සඳමිදුලු ය",
-           "english": "synovial fluid,"
-          },
-          {
-           "pali": "මුත්තං",
-           "sinhala": "මූත්‍ර ය",
-           "english": "urine,"
-          },
-          {
-           "pali": "මත්ථකෙ",
-           "sinhala": "හිස මුදුනෙහි",
-           "english": "and in the head,"
-          },
-          {
-           "pali": "මත්ථලුඞ්ගන්ති",
-           "sinhala": "හිස් මොලය යි යන මේ දෙතිස් කුණපයෝ",
-           "english": "the brain. (These are the thirty-two impure parts)."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "pirith-06-paccavekkhana",
-     "title": "පච්චවෙක්ඛණා",
-     "title_roman": "Paccavekkhaṇā",
-     "audio": {
-      "asset": "assets/audio/pirith/06-paccavekkhana.m4a",
-      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 204000,
-      "bytes": 614582,
-      "sha256": "92dd20b037044b88f4fda630be1f4fe1fb80a1cd9e23d014aa0a33330cae6702",
-      "block_times": [
-       [
-        0,
-        46.414089
-       ],
-       [
-        46.414089,
-        116.626903
-       ],
-       [
-        116.626903,
-        166.459593
-       ],
-       [
-        166.459593,
-        202.486393
-       ]
-      ]
-     },
-     "sections": [
-      {
-       "id": "p",
-       "number": 1,
-       "heading": "පච්චවෙක්ඛණා",
-       "check": "checked against source",
-       "source": {
-        "name": "pitaka.lk/pirith",
-        "locator": "https://pitaka.lk/pirith/ (06-paccavekkhana)",
-        "collected": "2026-11-10",
-        "translator": ""
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "b1",
-         "phrases": [
-          {
-           "pali": "පටිසංඛායොනිසො",
-           "sinhala": "නුවණින් මෙනෙහි කොට",
-           "english": "Reflecting wisely,"
-          },
-          {
-           "pali": "චීවරං පටිසේවාමි",
-           "sinhala": "සිවුරු පරිභෝග කරමි.",
-           "english": "I make use of the robes,"
-          },
-          {
-           "pali": "යාවදෙව",
-           "sinhala": "යම්තාක්",
-           "english": "strictly"
-          },
-          {
-           "pali": "සීතස්ස පටිඝාතාය",
-           "sinhala": "සීත නසනු පිණිස",
-           "english": "to ward off the cold,"
-          },
-          {
-           "pali": "උණ්හසස පටිඝාතාය",
-           "sinhala": "උෂ්ණ නසනු පිණිස",
-           "english": "to ward off the heat,"
-          },
-          {
-           "pali": "ඩංස",
-           "sinhala": "ඩැහැ ලේ බොන මැසි ය (ඇටමැසිය)",
-           "english": "gadflies,"
-          },
-          {
-           "pali": "මකස",
-           "sinhala": "මදුරු ය",
-           "english": "mosquitoes,"
-          },
-          {
-           "pali": "වාතා’තප",
-           "sinhala": "වාතය, අවුව ය",
-           "english": "wind and sun,"
-          },
-          {
-           "pali": "සිරිංසප",
-           "sinhala": "සිරිංසප ය (සර්පයෝ ය) යන මොවුන් ගේ",
-           "english": "and creeping creatures,"
-          },
-          {
-           "pali": "සම්ඵස්සානං",
-           "sinhala": "ස්පර්ශය",
-           "english": "the touch of"
-          },
-          {
-           "pali": "පටිඝාතාය",
-           "sinhala": "නසනු පිණිස",
-           "english": "to ward off,"
-          },
-          {
-           "pali": "යාවදෙව",
-           "sinhala": "යම්තාක්",
-           "english": "and strictly"
-          },
-          {
-           "pali": "හිරිකොපීන",
-           "sinhala": "ලජ්ජාව උපදවන අඟපසඟ",
-           "english": "the parts of the body that cause shame"
-          },
-          {
-           "pali": "පටිච්ඡාදනත්ථං",
-           "sinhala": "වැසීම පිණිස",
-           "english": "for the purpose of covering."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b2",
-         "phrases": [
-          {
-           "pali": "පටිසංඛායොනිසො",
-           "sinhala": "නුවණින් මෙනෙහි කොට",
-           "english": "Reflecting wisely,"
-          },
-          {
-           "pali": "පිණ්ඩපාතං",
-           "sinhala": "පිණ්ඩපාතය",
-           "english": "the almsfood"
-          },
-          {
-           "pali": "පටිසේවාමි",
-           "sinhala": "වළඳමි",
-           "english": "I partake of,"
-          },
-          {
-           "pali": "නෙවදවාය",
-           "sinhala": "ක්‍රීඩා පිණිස නොවේ",
-           "english": "neither for amusement,"
-          },
-          {
-           "pali": "න මද‍ාය",
-           "sinhala": "මදය පිණිස නොවේ (පුරුෂ මද, බලමද ආදිය පිණිස)",
-           "english": "nor for intoxication,"
-          },
-          {
-           "pali": "න මණ්ඩනාය",
-           "sinhala": "අලංකාර පිණිස නොවේ",
-           "english": "nor for fattening,"
-          },
-          {
-           "pali": "න විභුසනාය",
-           "sinhala": "සැරසීම පිණිස නොවේ",
-           "english": "nor for beautification,"
-          },
-          {
-           "pali": "යාවදෙව",
-           "sinhala": "යම්තාක්",
-           "english": "but strictly"
-          },
-          {
-           "pali": "ඉමස්ස කායස්ස",
-           "sinhala": "මේ ශරීරයා ගේ",
-           "english": "of this body"
-          },
-          {
-           "pali": "ඨිතියා",
-           "sinhala": "පැවැත්ම පිණිස",
-           "english": "for the continuation"
-          },
-          {
-           "pali": "යාපනාය",
-           "sinhala": "යැපීම පිණිස",
-           "english": "and nourishment,"
-          },
-          {
-           "pali": "විහිං සුපරතියා",
-           "sinhala": "බඩගින්න නමැති පීඩාව සංසිඳවීම පිණිස",
-           "english": "for the alleviation of the discomfort of hunger,"
-          },
-          {
-           "pali": "බ්‍රහ්මචරියානුග්ගහාය",
-           "sinhala": "බ්‍රහ්මචර්යාවට අනුග්‍රහ පිණිස ය",
-           "english": "and for assisting in the holy life."
-          },
-          {
-           "pali": "ඉති",
-           "sinhala": "මෙසේ",
-           "english": "(Thinking) thus:"
-          },
-          {
-           "pali": "පුරාණඤ්ච වෙදනං",
-           "sinhala": "පැරණි වේදනාව ද (බඩගින්න)",
-           "english": "the old feeling of hunger"
-          },
-          {
-           "pali": "පටිහංඛාමි",
-           "sinhala": "නසන්නෙමි",
-           "english": "I will destroy,"
-          },
-          {
-           "pali": "නවං ච වෙදනං",
-           "sinhala": "අලුත් වේදනාවක් ද (අධිකව කෑමෙන් වන)",
-           "english": "and a new feeling from overeating"
-          },
-          {
-           "pali": "න උප්පාදෙස්සාමි",
-           "sinhala": "නො උපදවමි",
-           "english": "I will not produce."
-          },
-          {
-           "pali": "යාත්‍රා ච",
-           "sinhala": "ඉරියව් පැවැත්ම ද",
-           "english": "And survival"
-          },
-          {
-           "pali": "මෙ",
-           "sinhala": "මට",
-           "english": "for me"
-          },
-          {
-           "pali": "භවිස්සති",
-           "sinhala": "වන්නේය යි (සළකා අහර වළඳමි.)",
-           "english": "there will be,"
-          },
-          {
-           "pali": "අනවජ්ජතා ච",
-           "sinhala": "නිවරද බව ද",
-           "english": "as well as blamelessness,"
-          },
-          {
-           "pali": "ඵසුවිහාරොචාති",
-           "sinhala": "පහසු විහරණය ද",
-           "english": "and a comfortable abiding."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b3",
-         "phrases": [
-          {
-           "pali": "පටිසංඛායොනිසො",
-           "sinhala": "නුවණින් මෙනෙහි කොට",
-           "english": "Reflecting wisely,"
-          },
-          {
-           "pali": "සෙනාසනං",
-           "sinhala": "සෙනසුන්",
-           "english": "the lodging"
-          },
-          {
-           "pali": "පටිසේවාමි",
-           "sinhala": "වැළඳ ගනිමි (පරිභෝග කරමි.)",
-           "english": "I make use of,"
-          },
-          {
-           "pali": "යාවදෙව",
-           "sinhala": "යම්තාක්",
-           "english": "strictly"
-          },
-          {
-           "pali": "සීතස්ස පටිඝාතාය",
-           "sinhala": "සීත පීඩා නසනු පිණිස",
-           "english": "to ward off the cold,"
-          },
-          {
-           "pali": "උණ්හස්ස පටිඝාතාය",
-           "sinhala": "උෂ්ණ පීඩා නසනු පිණිස",
-           "english": "to ward off the heat,"
-          },
-          {
-           "pali": "ඩංස",
-           "sinhala": "ඩැහැ ලේ බොන මැසි ය",
-           "english": "gadflies,"
-          },
-          {
-           "pali": "මකස",
-           "sinhala": "විද ලේබොන මදුරු ය",
-           "english": "mosquitoes,"
-          },
-          {
-           "pali": "වාතා’තප",
-           "sinhala": "වාතය, අවුව ය",
-           "english": "wind and sun,"
-          },
-          {
-           "pali": "සිරිංසප",
-           "sinhala": "සිරිංසප ය (සර්පයෝ ය) යන මොවුන්ගේ",
-           "english": "and creeping creatures,"
-          },
-          {
-           "pali": "සම්ඵස්සානං පටිඝාතාය",
-           "sinhala": "ස්පර්ශ නසනු පිණිස",
-           "english": "to ward off the touch of,"
-          },
-          {
-           "pali": "යාවදෙව",
-           "sinhala": "යම්තාක්",
-           "english": "strictly"
-          },
-          {
-           "pali": "උතුපරිස්සය",
-           "sinhala": "සෘතු උපද්‍රව",
-           "english": "the dangers of climate and weather"
-          },
-          {
-           "pali": "විනොදනං",
-           "sinhala": "දුරු කිරීම පිණිස",
-           "english": "for dispelling,"
-          },
-          {
-           "pali": "පටිසල්ලානාරාමත්ථං",
-           "sinhala": "හුදෙකලා විවේකයේ ඇලෙනු පිණිස",
-           "english": "and for the purpose of enjoying seclusion."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b4",
-         "phrases": [
-          {
-           "pali": "පටිසංඛායොනිසො",
-           "sinhala": "නුවණින් මෙනෙහි කොට",
-           "english": "Reflecting wisely,"
-          },
-          {
-           "pali": "ගිලානපච්චය භෙසජ්ජ පරික්ඛාරං",
-           "sinhala": "ගිලන්පස බෙහෙත් පිරිකර",
-           "english": "the medicinal requisites for curing the sick"
-          },
-          {
-           "pali": "පටිසේවාමි",
-           "sinhala": "වළඳමි.",
-           "english": "I make use of,"
-          },
-          {
-           "pali": "යාවදෙව",
-           "sinhala": "යම්තාක්",
-           "english": "strictly"
-          },
-          {
-           "pali": "උප්පන්නානං",
-           "sinhala": "උපන්",
-           "english": "arisen"
-          },
-          {
-           "pali": "වෙය්‍යාබාධිකානං",
-           "sinhala": "සිරුර පෙළන",
-           "english": "oppressive"
-          },
-          {
-           "pali": "වෙදනානං",
-           "sinhala": "වේදනාවන්",
-           "english": "painful feelings,"
-          },
-          {
-           "pali": "පටිඝාතාය",
-           "sinhala": "නසනු පිණිස",
-           "english": "to ward off,"
-          },
-          {
-           "pali": "අඛ්‍යාපජ්ඣ",
-           "sinhala": "නිරෝගිබව",
-           "english": "with absolute freedom from affliction"
-          },
-          {
-           "pali": "පරමතායාති",
-           "sinhala": "උතුම් අරමුණ කරගෙන ය",
-           "english": "as the highest goal."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "pirith-07-dasadhamma",
-     "title": "දසධම්ම සුත්තං",
-     "title_roman": "Dasadhamma Suttaṃ",
-     "audio": {
-      "asset": "assets/audio/pirith/07-dasadhamma.m4a",
-      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 324000,
-      "bytes": 980754,
-      "sha256": "615957c5121a418ac37904972f09f791165efe96158e88c8bff38fb2845e5dd7",
-      "block_times": [
-       [
-        0.921807,
-        2.654805
-       ],
-       [
-        2.654805,
-        23.966991
-       ],
-       [
-        24.280405,
-        47.731184
-       ],
-       [
-        48.081471,
-        62.830388
-       ],
-       [
-        63.346601,
-        79.164815
-       ],
-       [
-        79.533537,
-        94.577433
-       ],
-       [
-        94.983028,
-        111.169965
-       ],
-       [
-        111.538688,
-        129.790474
-       ],
-       [
-        130.232941,
-        154.16306
-       ],
-       [
-        154.458038,
-        175.622735
-       ],
-       [
-        176.286436,
-        218.652701
-       ],
-       [
-        219.021424,
-        237.789422
-       ],
-       [
-        238.231889,
-        255.561867
-       ],
-       [
-        255.967463,
-        293.245352
-       ],
-       [
-        294.277776,
-        307.920524
-       ],
-       [
-        308.215503,
-        322.337591
-       ]
-      ]
-     },
-     "sections": [
-      {
-       "id": "p",
-       "number": 1,
-       "heading": "දසධම්ම සුත්තං",
-       "check": "checked against source",
-       "source": {
-        "name": "pitaka.lk/pirith",
-        "locator": "https://pitaka.lk/pirith/ (07-dasadhamma)",
-        "collected": "2026-11-10",
-        "translator": ""
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "b1",
-         "phrases": [
-          {
-           "pali": "දසධම්ම සුතං",
-           "sinhala": "දස ධම්ම සූත්‍රය",
-           "english": "The Discourse on the Ten Dhammas"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b2",
-         "phrases": [
-          {
-           "pali": "එවං මෙ සුතං",
-           "sinhala": "මා විසින් මෙසේ අසන ලදී",
-           "english": "Thus have I heard:"
-          },
-          {
-           "pali": "එකං සමයං",
-           "sinhala": "එක් සමයෙක",
-           "english": "On one occasion"
-          },
-          {
-           "pali": "භගවා",
-           "sinhala": "භාග්‍යවතුන් වහන්සේ",
-           "english": "the Blessed One"
-          },
-          {
-           "pali": "සාවත්ථියං",
-           "sinhala": "සැවැත් නුවරැ",
-           "english": "in Savatthi"
-          },
-          {
-           "pali": "විහරති",
-           "sinhala": "වැඩ වසන සේක",
-           "english": "was dwelling"
-          },
-          {
-           "pali": "ජෙතවනෙ",
-           "sinhala": "ජේතවන නම් වූ",
-           "english": "at Jeta's Grove,"
-          },
-          {
-           "pali": "අනාථ පිණ්ඩිකස්ස",
-           "sinhala": "අනේපිඬු සිටුහු ගේ",
-           "english": "in Anathapindika's"
-          },
-          {
-           "pali": "ආරාමේ",
-           "sinhala": "ආරාමයෙහි",
-           "english": "monastery."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b3",
-         "phrases": [
-          {
-           "pali": "තත්‍ර ඛො",
-           "sinhala": "එකල්හි",
-           "english": "There,"
-          },
-          {
-           "pali": "භගවා",
-           "sinhala": "භාග්‍යවතුන් වහන්සේ",
-           "english": "the Blessed One"
-          },
-          {
-           "pali": "භික්ඛු ආමන්තෙසි",
-           "sinhala": "භික්ෂූන් ඇමතූසේක",
-           "english": "addressed the monks,"
-          },
-          {
-           "pali": "භික්ඛවොති",
-           "sinhala": "මහණෙනි කියා",
-           "english": "saying, 'Monks!'"
-          },
-          {
-           "pali": "භදන්තෙති",
-           "sinhala": "ස්වාමීන් වහන්සැ’යි කියා",
-           "english": "'Venerable sir,' "
-          },
-          {
-           "pali": "තෙ භික්ඛු",
-           "sinhala": "ඒ භික්ෂූහු",
-           "english": "those monks"
-          },
-          {
-           "pali": "භගවතො",
-           "sinhala": "භාග්‍යවතුන් වහන්සේට",
-           "english": "to the Blessed One"
-          },
-          {
-           "pali": "පච්චස්සොසුං",
-           "sinhala": "පිළිවදන් දුන්හු ය",
-           "english": "replied."
-          },
-          {
-           "pali": "භගවා",
-           "sinhala": "බුදුරජාණන් වහන්සේ",
-           "english": "The Blessed One"
-          },
-          {
-           "pali": "එතදවොච",
-           "sinhala": "මෙය වද‍ාළ සේක",
-           "english": "said this:"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b4",
-         "phrases": [
-          {
-           "pali": "දස ඉමෙ",
-           "sinhala": "මේ දස",
-           "english": "These ten"
-          },
-          {
-           "pali": "භික්ඛවෙ",
-           "sinhala": "මහණෙනි",
-           "english": "monks,"
-          },
-          {
-           "pali": "ධම්මා",
-           "sinhala": "ධර්මයෝ",
-           "english": "things"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බා",
-           "sinhala": "ප්‍රත්‍යවෙක්ෂා කටයුත්තාහු ය",
-           "english": "should be reflected upon."
-          },
-          {
-           "pali": "කතමෙ දස?",
-           "sinhala": "කවර දස ධර්මයෝ ද යත්",
-           "english": "What are the ten?"
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b5",
-         "phrases": [
-          {
-           "pali": "වෙවණ්ණියම්හි",
-           "sinhala": "විවර්ණ බවට (වෙනස් වර්‍ණයකට)",
-           "english": "'To a different appearance (a casteless state)"
-          },
-          {
-           "pali": "අජ්ඣූපගතොති",
-           "sinhala": "පැමිණියේ වෙමි’යි",
-           "english": "I have arrived,'"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිරතුරුව",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "ප්‍රත්‍යවෙක්ෂා කටයුතු යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b6",
-         "phrases": [
-          {
-           "pali": "පරපටිබද්ධා",
-           "sinhala": "පරා (අනුන්) පිළිබඳය යි",
-           "english": "'Dependent on others"
-          },
-          {
-           "pali": "මෙ ජීවිකාති",
-           "sinhala": "මාගේ දිවි පැවත්ම",
-           "english": "is my livelihood,'"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "මෙනෙහි කටයුතු යි.",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b7",
-         "phrases": [
-          {
-           "pali": "අඤ්ඤ‍ො",
-           "sinhala": "අන්‍ය වූ (ගිහියන්ගෙන් වෙනස්වූ)",
-           "english": "'Different"
-          },
-          {
-           "pali": "මෙ",
-           "sinhala": "මා විසින්",
-           "english": "is the"
-          },
-          {
-           "pali": "ආකප්පො",
-           "sinhala": "ආකල්පයෙක් (හැසිරීමක්)",
-           "english": "behavior"
-          },
-          {
-           "pali": "කරණීයොති",
-           "sinhala": "කටයුතුය යි",
-           "english": "I must adopt,'"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b8",
-         "phrases": [
-          {
-           "pali": "කච්චිනු ඛො",
-           "sinhala": "කිම හෝ",
-           "english": "'I wonder if"
-          },
-          {
-           "pali": "මෙ අත්තා",
-           "sinhala": "මාගේ ආත්මය (සිත)",
-           "english": "my own mind"
-          },
-          {
-           "pali": "සීලතො",
-           "sinhala": "සීලයෙන්",
-           "english": "with regard to virtue"
-          },
-          {
-           "pali": "න උපවදතිති",
-           "sinhala": "උපවාද නො කෙරේ හෝයි",
-           "english": "does not reproach me?'"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "මෙනෙහි කටයුතු ය",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b9",
-         "phrases": [
-          {
-           "pali": "කච්චිනු ඛො",
-           "sinhala": "කිම හෝ",
-           "english": "'I wonder if"
-          },
-          {
-           "pali": "මං",
-           "sinhala": "මා",
-           "english": "me,"
-          },
-          {
-           "pali": "අනුවිච්ච",
-           "sinhala": "විචාර",
-           "english": "having investigated,"
-          },
-          {
-           "pali": "විඤ්ඤු සබ්‍රහ්මචාරී",
-           "sinhala": "නුවණැති සබ්‍රම්සරහු",
-           "english": "wise fellow monastics"
-          },
-          {
-           "pali": "සීලතො",
-           "sinhala": "සීලයෙන්",
-           "english": "with regard to virtue"
-          },
-          {
-           "pali": "න උපවදන්ති’ ති",
-           "sinhala": "පරිභව නො බෙණෙද්දෝ හෝ යි",
-           "english": "do not reproach?'"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b10",
-         "phrases": [
-          {
-           "pali": "සබ්බෙහි",
-           "sinhala": "සියලු දෙනාගෙන් සහ සියලු දෙයින්",
-           "english": "'From all"
-          },
-          {
-           "pali": "මෙ",
-           "sinhala": "මාගේ",
-           "english": "that is my"
-          },
-          {
-           "pali": "පියෙහි",
-           "sinhala": "ප්‍රිය වූ",
-           "english": "dear"
-          },
-          {
-           "pali": "මනාපෙහි",
-           "sinhala": "මනාප වූ",
-           "english": "and appealing,"
-          },
-          {
-           "pali": "නානාභාවො",
-           "sinhala": "නානාභාවය",
-           "english": "there will be alteration"
-          },
-          {
-           "pali": "විනාභාවොති",
-           "sinhala": "විනාශ භාවය වේයයි",
-           "english": "and separation,'"
-          },
-          {
-           "pali": "පබ්බජිතෙත",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "ප්‍රත්‍යවෙක්ෂා කටයුතු යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b11",
-         "phrases": [
-          {
-           "pali": "කම්මස්සකොම්හි",
-           "sinhala": "කර්මය තමා අයත් කොට ඇත්තේ වෙමි",
-           "english": "'I am the owner of my actions,"
-          },
-          {
-           "pali": "කම්ම ද‍ායාද‍ො‍‍‍",
-           "sinhala": "කර්මය ද‍ායාද කොට ඇත්තෙමි",
-           "english": "heir to my actions,"
-          },
-          {
-           "pali": "කම්ම යොනි",
-           "sinhala": "කර්මය යෝනි කොට ඇත්තෙමි",
-           "english": "born of my actions,"
-          },
-          {
-           "pali": "කම්ම බන්ධු",
-           "sinhala": "කර්මය නෑ කොට ඇත්තෙමි",
-           "english": "related to my actions,"
-          },
-          {
-           "pali": "කම්ම පටිසරණො",
-           "sinhala": "කර්මය පිළිසරණ කොට ඇත්තෙමි",
-           "english": "and have my actions as my refuge."
-          },
-          {
-           "pali": "යං කම්මං",
-           "sinhala": "යම් කර්මයක්",
-           "english": "Whatever action"
-          },
-          {
-           "pali": "කරිස්සාමි",
-           "sinhala": "කෙරෙම් ද",
-           "english": "I shall do,"
-          },
-          {
-           "pali": "කල්‍යාණං වා",
-           "sinhala": "යහපත් වූ හෝ",
-           "english": "whether good"
-          },
-          {
-           "pali": "පාපකං වා",
-           "sinhala": "පවිටු වූ හෝ",
-           "english": "or evil,"
-          },
-          {
-           "pali": "තස්ස ද‍ායාද‍ො භවිස්සාමීති",
-           "sinhala": "ඒ කර්මය විසින් දෙන ලද්ද අයත් වෙමි යි",
-           "english": "of that I will become the heir,'"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b12",
-         "phrases": [
-          {
-           "pali": "කථංභූතස්ස මෙ",
-           "sinhala": "කෙසේ වූ මට",
-           "english": "'For me, being in this state,"
-          },
-          {
-           "pali": "රත්තිං දිවා",
-           "sinhala": "රෑ දවල්හු",
-           "english": "how do the days and nights"
-          },
-          {
-           "pali": "වීතිපතන්තීති",
-           "sinhala": "ඉක්මෙත් දෝහෝ යි",
-           "english": "pass by?'"
-          },
-          {
-           "pali": "පබ්බජිත්තෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b13",
-         "phrases": [
-          {
-           "pali": "කච්චනුඛොහං",
-           "sinhala": "කිමැ හෝ මම",
-           "english": "'I wonder if I"
-          },
-          {
-           "pali": "සුඤ්ඤ‍ාගාරෙ",
-           "sinhala": "ශුන්‍යාගාරයෙහි (හිස් පෙදෙසෙහි)",
-           "english": "in empty places"
-          },
-          {
-           "pali": "අභිරමාමීති",
-           "sinhala": "ඇලෙම්දෝ හෝ යි",
-           "english": "take delight?'"
-          },
-          {
-           "pali": "පබ්බජිතෙත",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි(මෙනෙහි කටයුතු යි)",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b14",
-         "phrases": [
-          {
-           "pali": "අත්ථිනු ඛො",
-           "sinhala": "ඇද්දෝ හෝ යි",
-           "english": "'Is there"
-          },
-          {
-           "pali": "මෙ",
-           "sinhala": "මා වෙත",
-           "english": "in me"
-          },
-          {
-           "pali": "උත්තරිමනුස්ස ධම්මා",
-           "sinhala": "උතුරු මිනිස් දම්",
-           "english": "any superhuman state,"
-          },
-          {
-           "pali": "අලමරියඤාණදස්සන විසෙසො අධිගතො",
-           "sinhala": "පොහොසත් ආර්යඤාණදර්ශන විශේෂයෙක් ලබන ලද්දේ හෝ",
-           "english": "any fully noble distinction in knowledge and vision attained,"
-          },
-          {
-           "pali": "සොහං",
-           "sinhala": "ඒ මම",
-           "english": "so that I,"
-          },
-          {
-           "pali": "පච්ඡිමෙ කාලෙ",
-           "sinhala": "පශ්චිම කාලයෙහි (මරණ කාලයෙහි)",
-           "english": "in my final days,"
-          },
-          {
-           "pali": "සබ්‍රහ්මචාරිහි",
-           "sinhala": "සබ්‍රම්සරුන් විසින්",
-           "english": "by fellow monastics"
-          },
-          {
-           "pali": "පුට්ඨො",
-           "sinhala": "විචාරණ ලද්දෙම්",
-           "english": "when questioned,"
-          },
-          {
-           "pali": "න මංකුභවිස්සාමීති",
-           "sinhala": "තේජස් රහිත නො වෙම් දෝ හෝ යි",
-           "english": "will not be dismayed?'"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බං",
-           "sinhala": "මෙනෙහි කටයුතු යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b15",
-         "phrases": [
-          {
-           "pali": "ඉමෙ ඛො",
-           "sinhala": "මේ",
-           "english": "These"
-          },
-          {
-           "pali": "භික්ඛවෙ",
-           "sinhala": "මහණෙනි",
-           "english": "monks,"
-          },
-          {
-           "pali": "දස ධම්මා",
-           "sinhala": "දස ධර්මයෝ",
-           "english": "ten things"
-          },
-          {
-           "pali": "පබ්බජිතෙන",
-           "sinhala": "පැවිද්දහු විසින්",
-           "english": "by one who has gone forth"
-          },
-          {
-           "pali": "අභිණ්හං",
-           "sinhala": "නිතොර",
-           "english": "constantly"
-          },
-          {
-           "pali": "පච්චවෙක්ඛිතබ්බාති",
-           "sinhala": "මෙනෙහි කළ යුත්තාහු ය’යි",
-           "english": "should be reflected upon."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        },
-        {
-         "id": "b16",
-         "phrases": [
-          {
-           "pali": "ඉදමවොච",
-           "sinhala": "මේ දේශනාව වදාළ සේක",
-           "english": "This was said"
-          },
-          {
-           "pali": "භගවා",
-           "sinhala": "බුදුරදුන් වහන්සේ",
-           "english": "by the Blessed One."
-          },
-          {
-           "pali": "අත්තමානා",
-           "sinhala": "සතුටු සිත් ඇති",
-           "english": "Elated in mind,"
-          },
-          {
-           "pali": "තෙ භික්ඛු",
-           "sinhala": "ඒ භික්ෂූහු",
-           "english": "those monks"
-          },
-          {
-           "pali": "භගවතො",
-           "sinhala": "භාග්‍යවතුන් වහන්සේ ගේ",
-           "english": "in the Blessed One's"
-          },
-          {
-           "pali": "භාසිතං",
-           "sinhala": "දේශනාවට",
-           "english": "words"
-          },
-          {
-           "pali": "අභිනන්දුන්ති",
-           "sinhala": "විශේෂයෙන් සතුටු වූවාහු ය.",
-           "english": "rejoiced."
-          }
-         ],
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      }
-     ]
-    },
-    {
      "id": "pirith-08-mahamangala",
      "title": "මහා මඞ්ගල සුත්තං",
-     "title_roman": "Mahā Maṅgala Suttaṃ",
+     "title_roman": "Maha Mangala Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/08-mahamangala.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -3206,7 +969,7 @@
     {
      "id": "pirith-09-rathana",
      "title": "රතන සුත්තං",
-     "title_roman": "Ratana Suttaṃ",
+     "title_roman": "Rathana Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/09-rathana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -5031,7 +2794,7 @@
     {
      "id": "pirith-10-karaniya",
      "title": "කරණීය මෙත්ත සුත්තං",
-     "title_roman": "Karaṇīya Metta Suttaṃ",
+     "title_roman": "Karaniyameththa Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/10-karaniya.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -5787,9 +3550,2246 @@
      ]
     },
     {
+     "id": "pirith-02-saranagamanam",
+     "title": "සරණාගමනං",
+     "title_roman": "Saranagamanaya",
+     "audio": {
+      "asset": "assets/audio/pirith/02-saranagamanam.m4a",
+      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+      "duration_ms": 101000,
+      "bytes": 306807,
+      "sha256": "3ab37028e9f28b36ebda7fcf34d89049f305d7681d304f90787695def79a319b",
+      "block_times": [
+       [
+        0.306631,
+        8.202377
+       ],
+       [
+        8.611218,
+        16.788042
+       ],
+       [
+        17.222436,
+        26.319153
+       ],
+       [
+        27.647887,
+        34.138242
+       ],
+       [
+        34.700398,
+        41.369621
+       ],
+       [
+        41.752909,
+        48.601
+       ],
+       [
+        48.984288,
+        57.161113
+       ],
+       [
+        57.544401,
+        65.440147
+       ],
+       [
+        65.848989,
+        74.230234
+       ],
+       [
+        74.639075,
+        82.764794
+       ],
+       [
+        83.199188,
+        91.197144
+       ],
+       [
+        91.605985,
+        100.038335
+       ]
+      ]
+     },
+     "sections": [
+      {
+       "id": "p",
+       "number": 1,
+       "heading": "සරණාගමනං",
+       "check": "checked against source",
+       "source": {
+        "name": "pitaka.lk/pirith",
+        "locator": "https://pitaka.lk/pirith/ (02-saranagamanam)",
+        "collected": "2026-11-10",
+        "translator": ""
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "b1",
+         "phrases": [
+          {
+           "pali": "නමො තස්ස භගවතො අරහතො සම්මා සම්බුද්ධස්ස",
+           "sinhala": "ඒ භාග්‍යවත් අර්හත් සම්මා සම්බුදුරජාණන් වහන්සේට නමස්කාර වේවා.",
+           "english": "Homage to the Blessed One, the Worthy One, the Fully Enlightened One."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b2",
+         "phrases": [
+          {
+           "pali": "නමො තස්ස භගවතො අරහතො සම්මා සම්බුද්ධස්ස",
+           "sinhala": "ඒ භාග්‍යවත් අර්හත් සම්මා සම්බුදුරජාණන් වහන්සේට නමස්කාර වේවා.",
+           "english": "Homage to the Blessed One, the Worthy One, the Fully Enlightened One."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b3",
+         "phrases": [
+          {
+           "pali": "නමො තස්ස භගවතො අරහතො සම්මා සම්බුද්ධස්ස",
+           "sinhala": "ඒ භාග්‍යවත් අර්හත් සම්මා සම්බුදුරජාණන් වහන්සේට නමස්කාර වේවා.",
+           "english": "Homage to the Blessed One, the Worthy One, the Fully Enlightened One."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b4",
+         "phrases": [
+          {
+           "pali": "බුද්ධං සරණං ගච්ඡාමි.",
+           "sinhala": "බුදුන් සරණ කොට යමි.",
+           "english": "I go to the Buddha for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b5",
+         "phrases": [
+          {
+           "pali": "ධම්මං සරණං ගච්ඡාමි.",
+           "sinhala": "දහම් සරණ කොට යමි.",
+           "english": "I go to the Dhamma for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b6",
+         "phrases": [
+          {
+           "pali": "සංඝං සරණං ගච්ඡාමි.",
+           "sinhala": "සඟුන් සරණ කොට යමි.",
+           "english": "I go to the Sangha for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b7",
+         "phrases": [
+          {
+           "pali": "දුතියම්පි බුද්ධං සරණං ගච්ඡාමි.",
+           "sinhala": "දෙවනුව ද බුදුන් සරණ කොට යමි.",
+           "english": "For the second time, I go to the Buddha for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b8",
+         "phrases": [
+          {
+           "pali": "දුතියම්පි ධම්මං සරණං ගච්ඡාමි.",
+           "sinhala": "දෙවනුව ද දහම් සරණ කොට යමි.",
+           "english": "For the second time, I go to the Dhamma for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b9",
+         "phrases": [
+          {
+           "pali": "දුතියම්පි සංඝං සරණං ගච්ඡාමි.",
+           "sinhala": "දෙවනුව ද සඟුන් සරණ කොට යමි.",
+           "english": "For the second time, I go to the Sangha for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b10",
+         "phrases": [
+          {
+           "pali": "තතියම්පි බුද්ධං සරණං ගච්ඡාමි.",
+           "sinhala": "තෙවනුව ද බුදුන් සරණ කොට යමි.",
+           "english": "For the third time, I go to the Buddha for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b11",
+         "phrases": [
+          {
+           "pali": "තතියම්පි ධම්මං සරණං ගච්ඡාමි.",
+           "sinhala": "තෙවනුව ද දහම් සරණ කොට යමි.",
+           "english": "For the third time, I go to the Dhamma for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b12",
+         "phrases": [
+          {
+           "pali": "තතියම්පි සංඝං සරණං ගච්ඡාමි.",
+           "sinhala": "තෙවනුව ද සඟුන් සරණ කොට යමි.",
+           "english": "For the third time, I go to the Sangha for refuge."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pirith-03-dasasikkhapadani",
+     "title": "දස සික්ඛාපදානි",
+     "title_roman": "Dasa Sikkhapada",
+     "audio": {
+      "asset": "assets/audio/pirith/03-dasasikkhapadani.m4a",
+      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+      "duration_ms": 108000,
+      "bytes": 327245,
+      "sha256": "afe17198f16eb46a6745bf5726fe72606b4a4133de9890c5e1b8ce6e12da7578",
+      "block_times": [
+       [
+        0.464348,
+        9.095761
+       ],
+       [
+        9.560109,
+        17.699859
+       ],
+       [
+        18.191522,
+        26.877563
+       ],
+       [
+        27.369226,
+        35.345088
+       ],
+       [
+        35.809436,
+        47.554713
+       ],
+       [
+        48.019061,
+        56.404642
+       ],
+       [
+        56.868991,
+        68.614267
+       ],
+       [
+        69.297132,
+        84.32016
+       ],
+       [
+        85.38543,
+        95.19137
+       ],
+       [
+        95.683033,
+        106.882017
+       ]
+      ]
+     },
+     "sections": [
+      {
+       "id": "p",
+       "number": 1,
+       "heading": "දස සික්ඛාපදානි",
+       "check": "checked against source",
+       "source": {
+        "name": "pitaka.lk/pirith",
+        "locator": "https://pitaka.lk/pirith/ (03-dasasikkhapadani)",
+        "collected": "2026-11-10",
+        "translator": ""
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "b1",
+         "phrases": [
+          {
+           "pali": "පාණාතිපාතා",
+           "sinhala": "ප්‍රාණඝාතයෙන්",
+           "english": "From destroying living beings"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b2",
+         "phrases": [
+          {
+           "pali": "අදින්නාද‍ානා",
+           "sinhala": "නුදුන් දෙය ගැනීමෙන්",
+           "english": "From taking what is not given"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b3",
+         "phrases": [
+          {
+           "pali": "අබ්‍රහ්මචරියා",
+           "sinhala": "අබ්‍රහ්මචරියාවෙන් (මෙවුන්දමෙහි හැසිරීමෙන්)",
+           "english": "From unchastity"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b4",
+         "phrases": [
+          {
+           "pali": "මුසාවාද‍ා",
+           "sinhala": "මුසාවාදයෙන්",
+           "english": "From false speech"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b5",
+         "phrases": [
+          {
+           "pali": "සුරාමෙරය මජ්ජපමාදට්ඨානා",
+           "sinhala": "මදයට හා ප්‍රමාදයට කාරණ වූ රහමෙරින්",
+           "english": "From intoxicating drinks and drugs that lead to heedlessness"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b6",
+         "phrases": [
+          {
+           "pali": "විකාලභොජනා",
+           "sinhala": "විකල් බොජුනෙන්",
+           "english": "From eating at the wrong time"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b7",
+         "phrases": [
+          {
+           "pali": "නච්ච ගීත වාදිත විසූක දස්සනා",
+           "sinhala": "නැටීම, ගැයීම, වැයීම, විසුලු බැලීම යන මෙයින්",
+           "english": "From dancing, singing, instrumental music, and watching entertainments"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b8",
+         "phrases": [
+          {
+           "pali": "මාලා ගන්ධවිලේපන ධාරණ මණ්ඩන විභූසනට්ඨානා",
+           "sinhala": "මල්, ගඳ, විලවුන් ද‍ැරීම, සැරසීම, වෙසෙසින් සැරසීම යන කාරණයෙන්",
+           "english": "From wearing garlands, using perfumes, and beautifying with cosmetics"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b9",
+         "phrases": [
+          {
+           "pali": "උච්චාසයන මහාසයනා",
+           "sinhala": "උසසුන් මහ අස්නෙන්",
+           "english": "From high and large sleeping places"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b10",
+         "phrases": [
+          {
+           "pali": "ජාතරූප රජත පටිග්ගහණා",
+           "sinhala": "රන්, රිදී, මසු, කහවණු පිළිගැනීමෙන්",
+           "english": "From accepting gold and silver"
+          },
+          {
+           "pali": "වෙරමණී සික්ඛාපදං",
+           "sinhala": "වැළකීමේ ශික්ෂා පදය",
+           "english": "the training precept of abstaining"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pirith-04-samanera-panha",
+     "title": "සාමණේර පඤ්හො",
+     "title_roman": "Samanera Prashnaya",
+     "audio": {
+      "asset": "assets/audio/pirith/04-samanera-panha.m4a",
+      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+      "duration_ms": 113000,
+      "bytes": 339366,
+      "sha256": "457a0eaa612f06c70895376db7670d46d435d7e174014bb39dc4269733d7e2be",
+      "block_times": [
+       [
+        0.511942,
+        12.684794
+       ],
+       [
+        13.253619,
+        22.354816
+       ],
+       [
+        22.8952,
+        31.512896
+       ],
+       [
+        32.024839,
+        43.145364
+       ],
+       [
+        43.571983,
+        53.441094
+       ],
+       [
+        53.924595,
+        64.931356
+       ],
+       [
+        65.301092,
+        74.203201
+       ],
+       [
+        74.629819,
+        85.494374
+       ],
+       [
+        85.892551,
+        94.652454
+       ],
+       [
+        95.079072,
+        111.205257
+       ]
+      ]
+     },
+     "sections": [
+      {
+       "id": "p",
+       "number": 1,
+       "heading": "සාමණේර පඤ්හො",
+       "check": "checked against source",
+       "source": {
+        "name": "pitaka.lk/pirith",
+        "locator": "https://pitaka.lk/pirith/ (04-samanera-panha)",
+        "collected": "2026-11-10",
+        "translator": ""
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "b1",
+         "phrases": [
+          {
+           "pali": "එක නාම කිං?",
+           "sinhala": "(මේ සසුනෙහි) එක නම් කිම?",
+           "english": "What is the one?"
+          },
+          {
+           "pali": "සබ්බේ සත්තා",
+           "sinhala": "හැම සත්හු",
+           "english": "All beings"
+          },
+          {
+           "pali": "ආහාරට්ඨිතිකා",
+           "sinhala": "ආහාර හේතුවෙන් සිටිති",
+           "english": "subsist on food."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b2",
+         "phrases": [
+          {
+           "pali": "ද්වෙ නාම කිං?",
+           "sinhala": "දෙක නම් කිම?",
+           "english": "What is the two?"
+          },
+          {
+           "pali": "නාමඤ්ච රූපඤ්ච",
+           "sinhala": "නාමය හා රූපයයි",
+           "english": "Name and form."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b3",
+         "phrases": [
+          {
+           "pali": "තීණි නාම කිම?",
+           "sinhala": "තුන නම් කිම?",
+           "english": "What is the three?"
+          },
+          {
+           "pali": "තිස්සෝ වෙදනා",
+           "sinhala": "(සුඛ, දුඃඛ, උපේක්ෂා යන) තුන් වේදනාවෝ ය.",
+           "english": "The three feelings."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b4",
+         "phrases": [
+          {
+           "pali": "චත්තාරි නාම කිං?",
+           "sinhala": "සතර නම් කිම?",
+           "english": "What is the four?"
+          },
+          {
+           "pali": "චත්තාරි අරිය සච්චානි",
+           "sinhala": "(දුඃඛ, සමුදය, නිරෝධ, මාර්ග යන) සතර ආර්ය සත්‍යයෝ ය.",
+           "english": "The four Noble Truths."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b5",
+         "phrases": [
+          {
+           "pali": "පඤ්ච නාම කිං?",
+           "sinhala": "පස නම් කිම?",
+           "english": "What is the five?"
+          },
+          {
+           "pali": "පඤ්චුපාද‍ානක්ඛන්ධා",
+           "sinhala": "(රූප, වේදනා, සංඥා, සංස්කාර, විඥාන යන) පස් උපාදානස්කන්ධයෝ ය.",
+           "english": "The five aggregates of clinging."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b6",
+         "phrases": [
+          {
+           "pali": "ඡනාම කිං?",
+           "sinhala": "සය නම් කිම?",
+           "english": "What is the six?"
+          },
+          {
+           "pali": "ඡඅඡ්ඣත්තිකානි ආයතනානි",
+           "sinhala": "(චක්ඛු, සෝත, ඝාන, ජිව්හා, කාය, මන යන) ආධ්‍යාත්මික ආයතනයෝ සය ය.",
+           "english": "The six internal sense bases."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b7",
+         "phrases": [
+          {
+           "pali": "සත්ත නාම කිං?",
+           "sinhala": "සත නම් කිම?",
+           "english": "What is the seven?"
+          },
+          {
+           "pali": "සත්‌ත බොජ්‌ඣඞ්‌ගා",
+           "sinhala": "(සති, ධම්මවිචය, පීති, විරිය, පස්සද්ධි, සමාධි, උපෙක්ඛා යන) බොජ්ඣඞ්ග සත ය.",
+           "english": "The seven factors of enlightenment."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b8",
+         "phrases": [
+          {
+           "pali": "අට්ඨ නාම කිං?",
+           "sinhala": "අට නම් කිම?",
+           "english": "What is the eight?"
+          },
+          {
+           "pali": "අරියො අට්ඞ්ගිකො මග්ගො",
+           "sinhala": "(සම්මාදිට්ඨි, සම්මාසඞ්කප්ප, සම්මාවාචා, සම්මාකම්මන්ත, සම්මාආජීව, සම්මාවායාම, සම්මාසති, සම්මාසමාධි යන) අරි අටඟි මග ය.",
+           "english": "The Noble Eightfold Path."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b9",
+         "phrases": [
+          {
+           "pali": "නව නාම කිං?",
+           "sinhala": "නවය නම් කිම?",
+           "english": "What is the nine?"
+          },
+          {
+           "pali": "නව සත්‌තාවාසා",
+           "sinhala": "(නානත්තකාය නානත්තසඤ්ඤි ය, නානත්තකාය එකත්තසඤ්ඤි ය, එකත්තකාය නානත්තසඤ්ඤි ය, එකත්තකාය එකත්තසඤ්ඤි ය, අසඤ්ඤි ය, ආකාසානඤ්චායතනූපග ය, විඤ්ඤාණඤ්චායතනූපග ය, ආකිඤ්චඤ්ඤායතනූපග ය, නෙවසඤ්ඤානාසඤ්ඤායතනූපග ය යන) සත්තාවාස නවය ය.",
+           "english": "The nine abodes of beings."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b10",
+         "phrases": [
+          {
+           "pali": "දස නාම කිං?",
+           "sinhala": "දස නම් කිම?",
+           "english": "What is the ten?"
+          },
+          {
+           "pali": "දසහඞ්ගෙහි",
+           "sinhala": "(අසේඛ සම්මාදිට්ඨි ය, අසේඛ සම්මාසඞ්කප්ප ය, අසේඛ සම්මාවාචා ය, අසේඛ සම්මාකම්මන්ත ය, අසේඛ සම්මාආජීව ය, අසේඛ සම්මාවායාම ය, අසේඛ සම්මාසති ය, අසේඛ සම්මාසමාධි ය, අසේඛ සම්මාඤාණ ය, අසේඛ සම්මාවිමුත්ති ය යන) දසඟින්",
+           "english": "With ten factors"
+          },
+          {
+           "pali": "සමන්නාගතො",
+           "sinhala": "යුක්ත වූයේ",
+           "english": "endowed,"
+          },
+          {
+           "pali": "අරහාති",
+           "sinhala": "අරහත්ය යි",
+           "english": "\"an Arahant,\""
+          },
+          {
+           "pali": "වුච්චතීති",
+           "sinhala": "කියනු ලැබේ.",
+           "english": "one is called."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pirith-05-dvattimsakaraya",
+     "title": "ද්වත්තිංසාකාරො",
+     "title_roman": "Dvaththinsakaraya",
+     "audio": {
+      "asset": "assets/audio/pirith/05-dvattimsakaraya.m4a",
+      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+      "duration_ms": 69000,
+      "bytes": 209211,
+      "sha256": "2ef0efb4518de3c09cef3bec8b44ca83865de32beda143dbb71ac2a960082e78",
+      "block_times": [
+       [
+        0.69428,
+        13.759374
+       ],
+       [
+        14.138072,
+        24.646952
+       ],
+       [
+        24.930976,
+        35.313623
+       ],
+       [
+        35.818554,
+        44.591733
+       ],
+       [
+        44.970431,
+        55.289961
+       ],
+       [
+        55.66866,
+        67.692333
+       ]
+      ]
+     },
+     "sections": [
+      {
+       "id": "p",
+       "number": 1,
+       "heading": "ද්වත්තිංසාකාරො",
+       "check": "checked against source",
+       "source": {
+        "name": "pitaka.lk/pirith",
+        "locator": "https://pitaka.lk/pirith/ (05-dvattimsakaraya)",
+        "collected": "2026-11-10",
+        "translator": ""
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "b1",
+         "phrases": [
+          {
+           "pali": "අත‍්ථි",
+           "sinhala": "ඇත.",
+           "english": "There are"
+          },
+          {
+           "pali": "ඉමස්මිං කායෙ",
+           "sinhala": "මේ සිරුරෙහි",
+           "english": "in this body:"
+          },
+          {
+           "pali": "කෙසා",
+           "sinhala": "කේසයෝ ය",
+           "english": "head hairs,"
+          },
+          {
+           "pali": "ලොමා",
+           "sinhala": "ලෝම‍යෝ ය",
+           "english": "body hairs,"
+          },
+          {
+           "pali": "නඛා",
+           "sinhala": "නිය ය",
+           "english": "nails,"
+          },
+          {
+           "pali": "දන්තා",
+           "sinhala": "දත් ය",
+           "english": "teeth,"
+          },
+          {
+           "pali": "තචො",
+           "sinhala": "සම ය",
+           "english": "skin,"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b2",
+         "phrases": [
+          {
+           "pali": "මංසං",
+           "sinhala": "මස් ය",
+           "english": "flesh,"
+          },
+          {
+           "pali": "නහාරු",
+           "sinhala": "නහර ය",
+           "english": "sinews,"
+          },
+          {
+           "pali": "අට්ඨි",
+           "sinhala": "ඇට ය",
+           "english": "bones,"
+          },
+          {
+           "pali": "අට්ඨිමිඤ්ජා",
+           "sinhala": "ඇටමිදුලු ය",
+           "english": "bone marrow,"
+          },
+          {
+           "pali": "වක්කං",
+           "sinhala": "වකුගඩුව ය",
+           "english": "kidneys,"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b3",
+         "phrases": [
+          {
+           "pali": "හදයං",
+           "sinhala": "හෘදය මාංස ය",
+           "english": "heart,"
+          },
+          {
+           "pali": "යකනං",
+           "sinhala": "අක්මාව ය",
+           "english": "liver,"
+          },
+          {
+           "pali": "කිලොමකං",
+           "sinhala": "දලබුව ය",
+           "english": "pleura,"
+          },
+          {
+           "pali": "පිහකං",
+           "sinhala": "බඩදිව ය",
+           "english": "spleen,"
+          },
+          {
+           "pali": "පප්ඵාසං",
+           "sinhala": "පෙනහලු ය",
+           "english": "lungs,"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b4",
+         "phrases": [
+          {
+           "pali": "අන්තං",
+           "sinhala": "බඩවැල ය",
+           "english": "intestines,"
+          },
+          {
+           "pali": "අන්තගුණං",
+           "sinhala": "අතුණු බහන් ය",
+           "english": "mesentery,"
+          },
+          {
+           "pali": "උදරියං",
+           "sinhala": "(නොපැසුණු අහරය) උදරිය ය",
+           "english": "undigested food,"
+          },
+          {
+           "pali": "කරිසං",
+           "sinhala": "අහර මල ය",
+           "english": "feces,"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b5",
+         "phrases": [
+          {
+           "pali": "පිත්තං",
+           "sinhala": "පිත ය",
+           "english": "bile,"
+          },
+          {
+           "pali": "සෙම්හං",
+           "sinhala": "සෙම ය",
+           "english": "phlegm,"
+          },
+          {
+           "pali": "පුබ්බො",
+           "sinhala": "(සැරවය) පූයා ය",
+           "english": "pus,"
+          },
+          {
+           "pali": "ලොහිතං",
+           "sinhala": "ලෙහෙ ය",
+           "english": "blood,"
+          },
+          {
+           "pali": "සෙදො",
+           "sinhala": "දහඩිය ය",
+           "english": "sweat,"
+          },
+          {
+           "pali": "මෙදො",
+           "sinhala": "මේද ය",
+           "english": "fat,"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b6",
+         "phrases": [
+          {
+           "pali": "අස්සු",
+           "sinhala": "කඳුලු ය",
+           "english": "tears,"
+          },
+          {
+           "pali": "වසා",
+           "sinhala": "වුරුණු ය",
+           "english": "grease,"
+          },
+          {
+           "pali": "ඛෙලො",
+           "sinhala": "කෙළ ය",
+           "english": "saliva,"
+          },
+          {
+           "pali": "සිංඝානිකා",
+           "sinhala": "මුකුණු ය (සොටු ය)",
+           "english": "mucus,"
+          },
+          {
+           "pali": "ලසිකා",
+           "sinhala": "සඳමිදුලු ය",
+           "english": "synovial fluid,"
+          },
+          {
+           "pali": "මුත්තං",
+           "sinhala": "මූත්‍ර ය",
+           "english": "urine,"
+          },
+          {
+           "pali": "මත්ථකෙ",
+           "sinhala": "හිස මුදුනෙහි",
+           "english": "and in the head,"
+          },
+          {
+           "pali": "මත්ථලුඞ්ගන්ති",
+           "sinhala": "හිස් මොලය යි යන මේ දෙතිස් කුණපයෝ",
+           "english": "the brain. (These are the thirty-two impure parts)."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pirith-06-paccavekkhana",
+     "title": "පච්චවෙක්ඛණා",
+     "title_roman": "Pachchavekkhana",
+     "audio": {
+      "asset": "assets/audio/pirith/06-paccavekkhana.m4a",
+      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+      "duration_ms": 204000,
+      "bytes": 614582,
+      "sha256": "92dd20b037044b88f4fda630be1f4fe1fb80a1cd9e23d014aa0a33330cae6702",
+      "block_times": [
+       [
+        0,
+        46.414089
+       ],
+       [
+        46.414089,
+        116.626903
+       ],
+       [
+        116.626903,
+        166.459593
+       ],
+       [
+        166.459593,
+        202.486393
+       ]
+      ]
+     },
+     "sections": [
+      {
+       "id": "p",
+       "number": 1,
+       "heading": "පච්චවෙක්ඛණා",
+       "check": "checked against source",
+       "source": {
+        "name": "pitaka.lk/pirith",
+        "locator": "https://pitaka.lk/pirith/ (06-paccavekkhana)",
+        "collected": "2026-11-10",
+        "translator": ""
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "b1",
+         "phrases": [
+          {
+           "pali": "පටිසංඛායොනිසො",
+           "sinhala": "නුවණින් මෙනෙහි කොට",
+           "english": "Reflecting wisely,"
+          },
+          {
+           "pali": "චීවරං පටිසේවාමි",
+           "sinhala": "සිවුරු පරිභෝග කරමි.",
+           "english": "I make use of the robes,"
+          },
+          {
+           "pali": "යාවදෙව",
+           "sinhala": "යම්තාක්",
+           "english": "strictly"
+          },
+          {
+           "pali": "සීතස්ස පටිඝාතාය",
+           "sinhala": "සීත නසනු පිණිස",
+           "english": "to ward off the cold,"
+          },
+          {
+           "pali": "උණ්හසස පටිඝාතාය",
+           "sinhala": "උෂ්ණ නසනු පිණිස",
+           "english": "to ward off the heat,"
+          },
+          {
+           "pali": "ඩංස",
+           "sinhala": "ඩැහැ ලේ බොන මැසි ය (ඇටමැසිය)",
+           "english": "gadflies,"
+          },
+          {
+           "pali": "මකස",
+           "sinhala": "මදුරු ය",
+           "english": "mosquitoes,"
+          },
+          {
+           "pali": "වාතා’තප",
+           "sinhala": "වාතය, අවුව ය",
+           "english": "wind and sun,"
+          },
+          {
+           "pali": "සිරිංසප",
+           "sinhala": "සිරිංසප ය (සර්පයෝ ය) යන මොවුන් ගේ",
+           "english": "and creeping creatures,"
+          },
+          {
+           "pali": "සම්ඵස්සානං",
+           "sinhala": "ස්පර්ශය",
+           "english": "the touch of"
+          },
+          {
+           "pali": "පටිඝාතාය",
+           "sinhala": "නසනු පිණිස",
+           "english": "to ward off,"
+          },
+          {
+           "pali": "යාවදෙව",
+           "sinhala": "යම්තාක්",
+           "english": "and strictly"
+          },
+          {
+           "pali": "හිරිකොපීන",
+           "sinhala": "ලජ්ජාව උපදවන අඟපසඟ",
+           "english": "the parts of the body that cause shame"
+          },
+          {
+           "pali": "පටිච්ඡාදනත්ථං",
+           "sinhala": "වැසීම පිණිස",
+           "english": "for the purpose of covering."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b2",
+         "phrases": [
+          {
+           "pali": "පටිසංඛායොනිසො",
+           "sinhala": "නුවණින් මෙනෙහි කොට",
+           "english": "Reflecting wisely,"
+          },
+          {
+           "pali": "පිණ්ඩපාතං",
+           "sinhala": "පිණ්ඩපාතය",
+           "english": "the almsfood"
+          },
+          {
+           "pali": "පටිසේවාමි",
+           "sinhala": "වළඳමි",
+           "english": "I partake of,"
+          },
+          {
+           "pali": "නෙවදවාය",
+           "sinhala": "ක්‍රීඩා පිණිස නොවේ",
+           "english": "neither for amusement,"
+          },
+          {
+           "pali": "න මද‍ාය",
+           "sinhala": "මදය පිණිස නොවේ (පුරුෂ මද, බලමද ආදිය පිණිස)",
+           "english": "nor for intoxication,"
+          },
+          {
+           "pali": "න මණ්ඩනාය",
+           "sinhala": "අලංකාර පිණිස නොවේ",
+           "english": "nor for fattening,"
+          },
+          {
+           "pali": "න විභුසනාය",
+           "sinhala": "සැරසීම පිණිස නොවේ",
+           "english": "nor for beautification,"
+          },
+          {
+           "pali": "යාවදෙව",
+           "sinhala": "යම්තාක්",
+           "english": "but strictly"
+          },
+          {
+           "pali": "ඉමස්ස කායස්ස",
+           "sinhala": "මේ ශරීරයා ගේ",
+           "english": "of this body"
+          },
+          {
+           "pali": "ඨිතියා",
+           "sinhala": "පැවැත්ම පිණිස",
+           "english": "for the continuation"
+          },
+          {
+           "pali": "යාපනාය",
+           "sinhala": "යැපීම පිණිස",
+           "english": "and nourishment,"
+          },
+          {
+           "pali": "විහිං සුපරතියා",
+           "sinhala": "බඩගින්න නමැති පීඩාව සංසිඳවීම පිණිස",
+           "english": "for the alleviation of the discomfort of hunger,"
+          },
+          {
+           "pali": "බ්‍රහ්මචරියානුග්ගහාය",
+           "sinhala": "බ්‍රහ්මචර්යාවට අනුග්‍රහ පිණිස ය",
+           "english": "and for assisting in the holy life."
+          },
+          {
+           "pali": "ඉති",
+           "sinhala": "මෙසේ",
+           "english": "(Thinking) thus:"
+          },
+          {
+           "pali": "පුරාණඤ්ච වෙදනං",
+           "sinhala": "පැරණි වේදනාව ද (බඩගින්න)",
+           "english": "the old feeling of hunger"
+          },
+          {
+           "pali": "පටිහංඛාමි",
+           "sinhala": "නසන්නෙමි",
+           "english": "I will destroy,"
+          },
+          {
+           "pali": "නවං ච වෙදනං",
+           "sinhala": "අලුත් වේදනාවක් ද (අධිකව කෑමෙන් වන)",
+           "english": "and a new feeling from overeating"
+          },
+          {
+           "pali": "න උප්පාදෙස්සාමි",
+           "sinhala": "නො උපදවමි",
+           "english": "I will not produce."
+          },
+          {
+           "pali": "යාත්‍රා ච",
+           "sinhala": "ඉරියව් පැවැත්ම ද",
+           "english": "And survival"
+          },
+          {
+           "pali": "මෙ",
+           "sinhala": "මට",
+           "english": "for me"
+          },
+          {
+           "pali": "භවිස්සති",
+           "sinhala": "වන්නේය යි (සළකා අහර වළඳමි.)",
+           "english": "there will be,"
+          },
+          {
+           "pali": "අනවජ්ජතා ච",
+           "sinhala": "නිවරද බව ද",
+           "english": "as well as blamelessness,"
+          },
+          {
+           "pali": "ඵසුවිහාරොචාති",
+           "sinhala": "පහසු විහරණය ද",
+           "english": "and a comfortable abiding."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b3",
+         "phrases": [
+          {
+           "pali": "පටිසංඛායොනිසො",
+           "sinhala": "නුවණින් මෙනෙහි කොට",
+           "english": "Reflecting wisely,"
+          },
+          {
+           "pali": "සෙනාසනං",
+           "sinhala": "සෙනසුන්",
+           "english": "the lodging"
+          },
+          {
+           "pali": "පටිසේවාමි",
+           "sinhala": "වැළඳ ගනිමි (පරිභෝග කරමි.)",
+           "english": "I make use of,"
+          },
+          {
+           "pali": "යාවදෙව",
+           "sinhala": "යම්තාක්",
+           "english": "strictly"
+          },
+          {
+           "pali": "සීතස්ස පටිඝාතාය",
+           "sinhala": "සීත පීඩා නසනු පිණිස",
+           "english": "to ward off the cold,"
+          },
+          {
+           "pali": "උණ්හස්ස පටිඝාතාය",
+           "sinhala": "උෂ්ණ පීඩා නසනු පිණිස",
+           "english": "to ward off the heat,"
+          },
+          {
+           "pali": "ඩංස",
+           "sinhala": "ඩැහැ ලේ බොන මැසි ය",
+           "english": "gadflies,"
+          },
+          {
+           "pali": "මකස",
+           "sinhala": "විද ලේබොන මදුරු ය",
+           "english": "mosquitoes,"
+          },
+          {
+           "pali": "වාතා’තප",
+           "sinhala": "වාතය, අවුව ය",
+           "english": "wind and sun,"
+          },
+          {
+           "pali": "සිරිංසප",
+           "sinhala": "සිරිංසප ය (සර්පයෝ ය) යන මොවුන්ගේ",
+           "english": "and creeping creatures,"
+          },
+          {
+           "pali": "සම්ඵස්සානං පටිඝාතාය",
+           "sinhala": "ස්පර්ශ නසනු පිණිස",
+           "english": "to ward off the touch of,"
+          },
+          {
+           "pali": "යාවදෙව",
+           "sinhala": "යම්තාක්",
+           "english": "strictly"
+          },
+          {
+           "pali": "උතුපරිස්සය",
+           "sinhala": "සෘතු උපද්‍රව",
+           "english": "the dangers of climate and weather"
+          },
+          {
+           "pali": "විනොදනං",
+           "sinhala": "දුරු කිරීම පිණිස",
+           "english": "for dispelling,"
+          },
+          {
+           "pali": "පටිසල්ලානාරාමත්ථං",
+           "sinhala": "හුදෙකලා විවේකයේ ඇලෙනු පිණිස",
+           "english": "and for the purpose of enjoying seclusion."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b4",
+         "phrases": [
+          {
+           "pali": "පටිසංඛායොනිසො",
+           "sinhala": "නුවණින් මෙනෙහි කොට",
+           "english": "Reflecting wisely,"
+          },
+          {
+           "pali": "ගිලානපච්චය භෙසජ්ජ පරික්ඛාරං",
+           "sinhala": "ගිලන්පස බෙහෙත් පිරිකර",
+           "english": "the medicinal requisites for curing the sick"
+          },
+          {
+           "pali": "පටිසේවාමි",
+           "sinhala": "වළඳමි.",
+           "english": "I make use of,"
+          },
+          {
+           "pali": "යාවදෙව",
+           "sinhala": "යම්තාක්",
+           "english": "strictly"
+          },
+          {
+           "pali": "උප්පන්නානං",
+           "sinhala": "උපන්",
+           "english": "arisen"
+          },
+          {
+           "pali": "වෙය්‍යාබාධිකානං",
+           "sinhala": "සිරුර පෙළන",
+           "english": "oppressive"
+          },
+          {
+           "pali": "වෙදනානං",
+           "sinhala": "වේදනාවන්",
+           "english": "painful feelings,"
+          },
+          {
+           "pali": "පටිඝාතාය",
+           "sinhala": "නසනු පිණිස",
+           "english": "to ward off,"
+          },
+          {
+           "pali": "අඛ්‍යාපජ්ඣ",
+           "sinhala": "නිරෝගිබව",
+           "english": "with absolute freedom from affliction"
+          },
+          {
+           "pali": "පරමතායාති",
+           "sinhala": "උතුම් අරමුණ කරගෙන ය",
+           "english": "as the highest goal."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pirith-07-dasadhamma",
+     "title": "දසධම්ම සුත්තං",
+     "title_roman": "Dasadhamma Suthraya",
+     "audio": {
+      "asset": "assets/audio/pirith/07-dasadhamma.m4a",
+      "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+      "duration_ms": 324000,
+      "bytes": 980754,
+      "sha256": "615957c5121a418ac37904972f09f791165efe96158e88c8bff38fb2845e5dd7",
+      "block_times": [
+       [
+        0.921807,
+        2.654805
+       ],
+       [
+        2.654805,
+        23.966991
+       ],
+       [
+        24.280405,
+        47.731184
+       ],
+       [
+        48.081471,
+        62.830388
+       ],
+       [
+        63.346601,
+        79.164815
+       ],
+       [
+        79.533537,
+        94.577433
+       ],
+       [
+        94.983028,
+        111.169965
+       ],
+       [
+        111.538688,
+        129.790474
+       ],
+       [
+        130.232941,
+        154.16306
+       ],
+       [
+        154.458038,
+        175.622735
+       ],
+       [
+        176.286436,
+        218.652701
+       ],
+       [
+        219.021424,
+        237.789422
+       ],
+       [
+        238.231889,
+        255.561867
+       ],
+       [
+        255.967463,
+        293.245352
+       ],
+       [
+        294.277776,
+        307.920524
+       ],
+       [
+        308.215503,
+        322.337591
+       ]
+      ]
+     },
+     "sections": [
+      {
+       "id": "p",
+       "number": 1,
+       "heading": "දසධම්ම සුත්තං",
+       "check": "checked against source",
+       "source": {
+        "name": "pitaka.lk/pirith",
+        "locator": "https://pitaka.lk/pirith/ (07-dasadhamma)",
+        "collected": "2026-11-10",
+        "translator": ""
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "b1",
+         "phrases": [
+          {
+           "pali": "දසධම්ම සුතං",
+           "sinhala": "දස ධම්ම සූත්‍රය",
+           "english": "The Discourse on the Ten Dhammas"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b2",
+         "phrases": [
+          {
+           "pali": "එවං මෙ සුතං",
+           "sinhala": "මා විසින් මෙසේ අසන ලදී",
+           "english": "Thus have I heard:"
+          },
+          {
+           "pali": "එකං සමයං",
+           "sinhala": "එක් සමයෙක",
+           "english": "On one occasion"
+          },
+          {
+           "pali": "භගවා",
+           "sinhala": "භාග්‍යවතුන් වහන්සේ",
+           "english": "the Blessed One"
+          },
+          {
+           "pali": "සාවත්ථියං",
+           "sinhala": "සැවැත් නුවරැ",
+           "english": "in Savatthi"
+          },
+          {
+           "pali": "විහරති",
+           "sinhala": "වැඩ වසන සේක",
+           "english": "was dwelling"
+          },
+          {
+           "pali": "ජෙතවනෙ",
+           "sinhala": "ජේතවන නම් වූ",
+           "english": "at Jeta's Grove,"
+          },
+          {
+           "pali": "අනාථ පිණ්ඩිකස්ස",
+           "sinhala": "අනේපිඬු සිටුහු ගේ",
+           "english": "in Anathapindika's"
+          },
+          {
+           "pali": "ආරාමේ",
+           "sinhala": "ආරාමයෙහි",
+           "english": "monastery."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b3",
+         "phrases": [
+          {
+           "pali": "තත්‍ර ඛො",
+           "sinhala": "එකල්හි",
+           "english": "There,"
+          },
+          {
+           "pali": "භගවා",
+           "sinhala": "භාග්‍යවතුන් වහන්සේ",
+           "english": "the Blessed One"
+          },
+          {
+           "pali": "භික්ඛු ආමන්තෙසි",
+           "sinhala": "භික්ෂූන් ඇමතූසේක",
+           "english": "addressed the monks,"
+          },
+          {
+           "pali": "භික්ඛවොති",
+           "sinhala": "මහණෙනි කියා",
+           "english": "saying, 'Monks!'"
+          },
+          {
+           "pali": "භදන්තෙති",
+           "sinhala": "ස්වාමීන් වහන්සැ’යි කියා",
+           "english": "'Venerable sir,' "
+          },
+          {
+           "pali": "තෙ භික්ඛු",
+           "sinhala": "ඒ භික්ෂූහු",
+           "english": "those monks"
+          },
+          {
+           "pali": "භගවතො",
+           "sinhala": "භාග්‍යවතුන් වහන්සේට",
+           "english": "to the Blessed One"
+          },
+          {
+           "pali": "පච්චස්සොසුං",
+           "sinhala": "පිළිවදන් දුන්හු ය",
+           "english": "replied."
+          },
+          {
+           "pali": "භගවා",
+           "sinhala": "බුදුරජාණන් වහන්සේ",
+           "english": "The Blessed One"
+          },
+          {
+           "pali": "එතදවොච",
+           "sinhala": "මෙය වද‍ාළ සේක",
+           "english": "said this:"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b4",
+         "phrases": [
+          {
+           "pali": "දස ඉමෙ",
+           "sinhala": "මේ දස",
+           "english": "These ten"
+          },
+          {
+           "pali": "භික්ඛවෙ",
+           "sinhala": "මහණෙනි",
+           "english": "monks,"
+          },
+          {
+           "pali": "ධම්මා",
+           "sinhala": "ධර්මයෝ",
+           "english": "things"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බා",
+           "sinhala": "ප්‍රත්‍යවෙක්ෂා කටයුත්තාහු ය",
+           "english": "should be reflected upon."
+          },
+          {
+           "pali": "කතමෙ දස?",
+           "sinhala": "කවර දස ධර්මයෝ ද යත්",
+           "english": "What are the ten?"
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b5",
+         "phrases": [
+          {
+           "pali": "වෙවණ්ණියම්හි",
+           "sinhala": "විවර්ණ බවට (වෙනස් වර්‍ණයකට)",
+           "english": "'To a different appearance (a casteless state)"
+          },
+          {
+           "pali": "අජ්ඣූපගතොති",
+           "sinhala": "පැමිණියේ වෙමි’යි",
+           "english": "I have arrived,'"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිරතුරුව",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "ප්‍රත්‍යවෙක්ෂා කටයුතු යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b6",
+         "phrases": [
+          {
+           "pali": "පරපටිබද්ධා",
+           "sinhala": "පරා (අනුන්) පිළිබඳය යි",
+           "english": "'Dependent on others"
+          },
+          {
+           "pali": "මෙ ජීවිකාති",
+           "sinhala": "මාගේ දිවි පැවත්ම",
+           "english": "is my livelihood,'"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "මෙනෙහි කටයුතු යි.",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b7",
+         "phrases": [
+          {
+           "pali": "අඤ්ඤ‍ො",
+           "sinhala": "අන්‍ය වූ (ගිහියන්ගෙන් වෙනස්වූ)",
+           "english": "'Different"
+          },
+          {
+           "pali": "මෙ",
+           "sinhala": "මා විසින්",
+           "english": "is the"
+          },
+          {
+           "pali": "ආකප්පො",
+           "sinhala": "ආකල්පයෙක් (හැසිරීමක්)",
+           "english": "behavior"
+          },
+          {
+           "pali": "කරණීයොති",
+           "sinhala": "කටයුතුය යි",
+           "english": "I must adopt,'"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b8",
+         "phrases": [
+          {
+           "pali": "කච්චිනු ඛො",
+           "sinhala": "කිම හෝ",
+           "english": "'I wonder if"
+          },
+          {
+           "pali": "මෙ අත්තා",
+           "sinhala": "මාගේ ආත්මය (සිත)",
+           "english": "my own mind"
+          },
+          {
+           "pali": "සීලතො",
+           "sinhala": "සීලයෙන්",
+           "english": "with regard to virtue"
+          },
+          {
+           "pali": "න උපවදතිති",
+           "sinhala": "උපවාද නො කෙරේ හෝයි",
+           "english": "does not reproach me?'"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "මෙනෙහි කටයුතු ය",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b9",
+         "phrases": [
+          {
+           "pali": "කච්චිනු ඛො",
+           "sinhala": "කිම හෝ",
+           "english": "'I wonder if"
+          },
+          {
+           "pali": "මං",
+           "sinhala": "මා",
+           "english": "me,"
+          },
+          {
+           "pali": "අනුවිච්ච",
+           "sinhala": "විචාර",
+           "english": "having investigated,"
+          },
+          {
+           "pali": "විඤ්ඤු සබ්‍රහ්මචාරී",
+           "sinhala": "නුවණැති සබ්‍රම්සරහු",
+           "english": "wise fellow monastics"
+          },
+          {
+           "pali": "සීලතො",
+           "sinhala": "සීලයෙන්",
+           "english": "with regard to virtue"
+          },
+          {
+           "pali": "න උපවදන්ති’ ති",
+           "sinhala": "පරිභව නො බෙණෙද්දෝ හෝ යි",
+           "english": "do not reproach?'"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b10",
+         "phrases": [
+          {
+           "pali": "සබ්බෙහි",
+           "sinhala": "සියලු දෙනාගෙන් සහ සියලු දෙයින්",
+           "english": "'From all"
+          },
+          {
+           "pali": "මෙ",
+           "sinhala": "මාගේ",
+           "english": "that is my"
+          },
+          {
+           "pali": "පියෙහි",
+           "sinhala": "ප්‍රිය වූ",
+           "english": "dear"
+          },
+          {
+           "pali": "මනාපෙහි",
+           "sinhala": "මනාප වූ",
+           "english": "and appealing,"
+          },
+          {
+           "pali": "නානාභාවො",
+           "sinhala": "නානාභාවය",
+           "english": "there will be alteration"
+          },
+          {
+           "pali": "විනාභාවොති",
+           "sinhala": "විනාශ භාවය වේයයි",
+           "english": "and separation,'"
+          },
+          {
+           "pali": "පබ්බජිතෙත",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "ප්‍රත්‍යවෙක්ෂා කටයුතු යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b11",
+         "phrases": [
+          {
+           "pali": "කම්මස්සකොම්හි",
+           "sinhala": "කර්මය තමා අයත් කොට ඇත්තේ වෙමි",
+           "english": "'I am the owner of my actions,"
+          },
+          {
+           "pali": "කම්ම ද‍ායාද‍ො‍‍‍",
+           "sinhala": "කර්මය ද‍ායාද කොට ඇත්තෙමි",
+           "english": "heir to my actions,"
+          },
+          {
+           "pali": "කම්ම යොනි",
+           "sinhala": "කර්මය යෝනි කොට ඇත්තෙමි",
+           "english": "born of my actions,"
+          },
+          {
+           "pali": "කම්ම බන්ධු",
+           "sinhala": "කර්මය නෑ කොට ඇත්තෙමි",
+           "english": "related to my actions,"
+          },
+          {
+           "pali": "කම්ම පටිසරණො",
+           "sinhala": "කර්මය පිළිසරණ කොට ඇත්තෙමි",
+           "english": "and have my actions as my refuge."
+          },
+          {
+           "pali": "යං කම්මං",
+           "sinhala": "යම් කර්මයක්",
+           "english": "Whatever action"
+          },
+          {
+           "pali": "කරිස්සාමි",
+           "sinhala": "කෙරෙම් ද",
+           "english": "I shall do,"
+          },
+          {
+           "pali": "කල්‍යාණං වා",
+           "sinhala": "යහපත් වූ හෝ",
+           "english": "whether good"
+          },
+          {
+           "pali": "පාපකං වා",
+           "sinhala": "පවිටු වූ හෝ",
+           "english": "or evil,"
+          },
+          {
+           "pali": "තස්ස ද‍ායාද‍ො භවිස්සාමීති",
+           "sinhala": "ඒ කර්මය විසින් දෙන ලද්ද අයත් වෙමි යි",
+           "english": "of that I will become the heir,'"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b12",
+         "phrases": [
+          {
+           "pali": "කථංභූතස්ස මෙ",
+           "sinhala": "කෙසේ වූ මට",
+           "english": "'For me, being in this state,"
+          },
+          {
+           "pali": "රත්තිං දිවා",
+           "sinhala": "රෑ දවල්හු",
+           "english": "how do the days and nights"
+          },
+          {
+           "pali": "වීතිපතන්තීති",
+           "sinhala": "ඉක්මෙත් දෝහෝ යි",
+           "english": "pass by?'"
+          },
+          {
+           "pali": "පබ්බජිත්තෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b13",
+         "phrases": [
+          {
+           "pali": "කච්චනුඛොහං",
+           "sinhala": "කිමැ හෝ මම",
+           "english": "'I wonder if I"
+          },
+          {
+           "pali": "සුඤ්ඤ‍ාගාරෙ",
+           "sinhala": "ශුන්‍යාගාරයෙහි (හිස් පෙදෙසෙහි)",
+           "english": "in empty places"
+          },
+          {
+           "pali": "අභිරමාමීති",
+           "sinhala": "ඇලෙම්දෝ හෝ යි",
+           "english": "take delight?'"
+          },
+          {
+           "pali": "පබ්බජිතෙත",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "ප්‍රත්‍යවේක්ෂා කටයුතු යි(මෙනෙහි කටයුතු යි)",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b14",
+         "phrases": [
+          {
+           "pali": "අත්ථිනු ඛො",
+           "sinhala": "ඇද්දෝ හෝ යි",
+           "english": "'Is there"
+          },
+          {
+           "pali": "මෙ",
+           "sinhala": "මා වෙත",
+           "english": "in me"
+          },
+          {
+           "pali": "උත්තරිමනුස්ස ධම්මා",
+           "sinhala": "උතුරු මිනිස් දම්",
+           "english": "any superhuman state,"
+          },
+          {
+           "pali": "අලමරියඤාණදස්සන විසෙසො අධිගතො",
+           "sinhala": "පොහොසත් ආර්යඤාණදර්ශන විශේෂයෙක් ලබන ලද්දේ හෝ",
+           "english": "any fully noble distinction in knowledge and vision attained,"
+          },
+          {
+           "pali": "සොහං",
+           "sinhala": "ඒ මම",
+           "english": "so that I,"
+          },
+          {
+           "pali": "පච්ඡිමෙ කාලෙ",
+           "sinhala": "පශ්චිම කාලයෙහි (මරණ කාලයෙහි)",
+           "english": "in my final days,"
+          },
+          {
+           "pali": "සබ්‍රහ්මචාරිහි",
+           "sinhala": "සබ්‍රම්සරුන් විසින්",
+           "english": "by fellow monastics"
+          },
+          {
+           "pali": "පුට්ඨො",
+           "sinhala": "විචාරණ ලද්දෙම්",
+           "english": "when questioned,"
+          },
+          {
+           "pali": "න මංකුභවිස්සාමීති",
+           "sinhala": "තේජස් රහිත නො වෙම් දෝ හෝ යි",
+           "english": "will not be dismayed?'"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බං",
+           "sinhala": "මෙනෙහි කටයුතු යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b15",
+         "phrases": [
+          {
+           "pali": "ඉමෙ ඛො",
+           "sinhala": "මේ",
+           "english": "These"
+          },
+          {
+           "pali": "භික්ඛවෙ",
+           "sinhala": "මහණෙනි",
+           "english": "monks,"
+          },
+          {
+           "pali": "දස ධම්මා",
+           "sinhala": "දස ධර්මයෝ",
+           "english": "ten things"
+          },
+          {
+           "pali": "පබ්බජිතෙන",
+           "sinhala": "පැවිද්දහු විසින්",
+           "english": "by one who has gone forth"
+          },
+          {
+           "pali": "අභිණ්හං",
+           "sinhala": "නිතොර",
+           "english": "constantly"
+          },
+          {
+           "pali": "පච්චවෙක්ඛිතබ්බාති",
+           "sinhala": "මෙනෙහි කළ යුත්තාහු ය’යි",
+           "english": "should be reflected upon."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "b16",
+         "phrases": [
+          {
+           "pali": "ඉදමවොච",
+           "sinhala": "මේ දේශනාව වදාළ සේක",
+           "english": "This was said"
+          },
+          {
+           "pali": "භගවා",
+           "sinhala": "බුදුරදුන් වහන්සේ",
+           "english": "by the Blessed One."
+          },
+          {
+           "pali": "අත්තමානා",
+           "sinhala": "සතුටු සිත් ඇති",
+           "english": "Elated in mind,"
+          },
+          {
+           "pali": "තෙ භික්ඛු",
+           "sinhala": "ඒ භික්ෂූහු",
+           "english": "those monks"
+          },
+          {
+           "pali": "භගවතො",
+           "sinhala": "භාග්‍යවතුන් වහන්සේ ගේ",
+           "english": "in the Blessed One's"
+          },
+          {
+           "pali": "භාසිතං",
+           "sinhala": "දේශනාවට",
+           "english": "words"
+          },
+          {
+           "pali": "අභිනන්දුන්ති",
+           "sinhala": "විශේෂයෙන් සතුටු වූවාහු ය.",
+           "english": "rejoiced."
+          }
+         ],
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      }
+     ]
+    },
+    {
      "id": "pirith-11-khandha-parittam",
      "title": "ඛන්ධ පරිත්තං",
-     "title_roman": "Khandha Parittaṃ",
+     "title_roman": "Khandha Piritha",
      "audio": {
       "asset": "assets/audio/pirith/11-khandha-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -6723,7 +6723,7 @@
     {
      "id": "pirith-12-mettanisamsa",
      "title": "මෙත්තානිසංස සුත්තං",
-     "title_roman": "Mettānisaṃsa Suttaṃ",
+     "title_roman": "Meththanisansa Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/12-mettanisamsa.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -7225,7 +7225,7 @@
     {
      "id": "pirith-13-mittanisamsa",
      "title": "මිත්තානිසංස සුත්තං",
-     "title_roman": "Mittānisaṃsa Suttaṃ",
+     "title_roman": "Miththanisansa Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/13-mittanisamsa.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -7853,7 +7853,7 @@
     {
      "id": "pirith-14-mora-parittam",
      "title": "මොර පරිත්තං",
-     "title_roman": "Mora Parittaṃ",
+     "title_roman": "Mora Piritha",
      "audio": {
       "asset": "assets/audio/pirith/14-mora-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -8348,7 +8348,7 @@
     {
      "id": "pirith-15-canda-parittam",
      "title": "චන්ද පරිත්තං",
-     "title_roman": "Canda Parittaṃ",
+     "title_roman": "Chanda Piritha",
      "audio": {
       "asset": "assets/audio/pirith/15-canda-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -8916,7 +8916,7 @@
     {
      "id": "pirith-16-suriya-parittam",
      "title": "සූරිය පරිත්තං",
-     "title_roman": "Sūriya Parittaṃ",
+     "title_roman": "Suriya Piritha",
      "audio": {
       "asset": "assets/audio/pirith/16-suriya-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -9566,7 +9566,7 @@
     {
      "id": "pirith-17-dhajagga-parittam",
      "title": "ධජග්ග පරිත්තං",
-     "title_roman": "Dhajagga Parittaṃ",
+     "title_roman": "Dhajagga Piritha",
      "audio": {
       "asset": "assets/audio/pirith/17-dhajagga-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -11237,7 +11237,7 @@
     {
      "id": "pirith-18-kassapa-bojjhanga",
      "title": "මහා කස්සප බොජ්ඣංග සුත්තං",
-     "title_roman": "Mahā Kassapa Bojjhaṃga Suttaṃ",
+     "title_roman": "Maha Kassapa Bojjhanga Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/18-kassapa-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -12287,7 +12287,7 @@
     {
      "id": "pirith-19-moggallana-bojjhanga",
      "title": "මහා මොග්ගල්ලාන බොජ්ඣංග සුත්තං",
-     "title_roman": "Mahā Moggallāna Bojjhaṃga Suttaṃ",
+     "title_roman": "Maha Moggallana Bojjhanga Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/19-moggallana-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -13337,7 +13337,7 @@
     {
      "id": "pirith-20-chunda-bojjhanga",
      "title": "මහා චුන්ද බොජ්ඣංග සුත්තං",
-     "title_roman": "Mahā Cunda Bojjhaṃga Suttaṃ",
+     "title_roman": "Maha Chunda Bojjhanga Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/20-chunda-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -14275,7 +14275,7 @@
     {
      "id": "pirith-21-girimananda-suttam",
      "title": "ගිරිමානන්ද සුත්තං",
-     "title_roman": "Girimānanda Suttaṃ",
+     "title_roman": "Girimananda Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/21-girimananda-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -18089,7 +18089,7 @@
     {
      "id": "pirith-22-isigili-suttam",
      "title": "ඉසිගිලි සුත්තං",
-     "title_roman": "Isigili Suttaṃ",
+     "title_roman": "Isigili Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/22-isigili-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -19696,7 +19696,7 @@
     {
      "id": "pirith-23-dhammacakkappavattana",
      "title": "ධම්මචක්කප්පවත්තන සුත්තං",
-     "title_roman": "Dhammacakkappavattana Suttaṃ",
+     "title_roman": "Dhammachakkappavaththana Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/23-dhammacakkappavattana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -23111,7 +23111,7 @@
     {
      "id": "pirith-24-mahasamaya-suttam",
      "title": "මහාසමය සුත්තං",
-     "title_roman": "Mahāsamaya Suttaṃ",
+     "title_roman": "Maha Samaya Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/24-mahasamaya-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -29178,7 +29178,7 @@
     {
      "id": "pirith-25-alavaka-suttam",
      "title": "ආළවක සුත්තං",
-     "title_roman": "Āḷavaka Suttaṃ",
+     "title_roman": "Alavaka Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/25-alavaka-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -30151,7 +30151,7 @@
     {
      "id": "pirith-26-kasibharadvaja-suttam",
      "title": "කසිභාරද්වාජ සුත්තං",
-     "title_roman": "Kasibhāradvāja Suttaṃ",
+     "title_roman": "Kasibharadvaja Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/26-kasibharadvaja-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -30865,7 +30865,7 @@
     {
      "id": "pirith-27-parabhava-suttam",
      "title": "පරාභව සුත්තං",
-     "title_roman": "Parābhava Suttaṃ",
+     "title_roman": "Parabhava Suthraya",
      "audio": {
       "asset": "assets/audio/pirith/27-parabhava-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -31876,7 +31876,7 @@
     {
      "id": "pirith-50-angulimala",
      "title": "අංගුලිමාල පරිත්තං",
-     "title_roman": "Aṃgulimāla Parittaṃ",
+     "title_roman": "Angulimala Piritha",
      "audio": {
       "asset": "assets/audio/pirith/50-angulimala.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -32196,7 +32196,7 @@
     {
      "id": "pirith-51-atavisi",
      "title": "අටවිසි පරිත්තං",
-     "title_roman": "Aṭavisi Parittaṃ",
+     "title_roman": "Atavisi Piritha",
      "audio": {
       "asset": "assets/audio/pirith/51-atavisi.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -32547,7 +32547,7 @@
     {
      "id": "pirith-52-wattaka",
      "title": "වට්ටක පරිත්තං",
-     "title_roman": "Vaṭṭaka Parittaṃ",
+     "title_roman": "Vattaka Piritha",
      "audio": {
       "asset": "assets/audio/pirith/52-wattaka.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -32814,7 +32814,7 @@
     {
      "id": "pirith-53-jaya-mangala-attha-gatha",
      "title": "ජය මංගල අට්ඨ ගාථා",
-     "title_roman": "Jaya Maṃgala Aṭṭha Gāthā",
+     "title_roman": "Jaya Mangala Gatha",
      "audio": {
       "asset": "assets/audio/pirith/53-jaya-mangala-attha-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -33150,7 +33150,7 @@
     {
      "id": "pirith-54-narasiha-gatha",
      "title": "නරසීහ ගාථා",
-     "title_roman": "Narasīha Gāthā",
+     "title_roman": "Narasiha Gatha",
      "audio": {
       "asset": "assets/audio/pirith/54-narasiha-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -33469,7 +33469,7 @@
     {
      "id": "pirith-55-maha-jaya-mangala-gatha",
      "title": "මහා ජයමංගල ගාථා",
-     "title_roman": "Mahā Jayamaṃgala Gāthā",
+     "title_roman": "Maha Jaya Mangala Gatha",
      "audio": {
       "asset": "assets/audio/pirith/55-maha-jaya-mangala-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -34308,7 +34308,7 @@
     {
      "id": "pirith-56-jaya-parittam",
      "title": "ජය පරිත්තං",
-     "title_roman": "Jaya Parittaṃ",
+     "title_roman": "Jaya Piritha",
      "audio": {
       "asset": "assets/audio/pirith/56-jaya-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -34744,7 +34744,7 @@
     {
      "id": "pirith-57-jvara-parittam",
      "title": "ජ්වර පරිත්තං",
-     "title_roman": "Jvara Parittaṃ",
+     "title_roman": "Jvara Piritha",
      "audio": {
       "asset": "assets/audio/pirith/57-jvara-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -35863,7 +35863,7 @@
     {
      "id": "pirith-58-antharaya-nivarana-parittam",
      "title": "අන්තරාය නිවාරණ පරිත්තං",
-     "title_roman": "Antarāya Nivāraṇa Parittaṃ",
+     "title_roman": "Antharaya Nivarana Piritha",
      "audio": {
       "asset": "assets/audio/pirith/58-antharaya-nivarana-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -36026,7 +36026,7 @@
     {
      "id": "pirith-59-jinapanjara-parittam",
      "title": "ජිනපඤ්ජර පරිත්තං",
-     "title_roman": "Jinapañjara Parittaṃ",
+     "title_roman": "Jinapanjara Piritha",
      "audio": {
       "asset": "assets/audio/pirith/59-jinapanjara-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -36737,7 +36737,7 @@
     {
      "id": "pirith-60-dasa-disa-parittam",
      "title": "දස දිසා පරිත්තං",
-     "title_roman": "Dasa Disā Parittaṃ",
+     "title_roman": "Dasa Disa Piritha",
      "audio": {
       "asset": "assets/audio/pirith/60-dasa-disa-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -36910,7 +36910,7 @@
     {
      "id": "pirith-61-bojjhanga-parittam",
      "title": "බොජ්ඣංග පරිත්තං",
-     "title_roman": "Bojjhaṃga Parittaṃ",
+     "title_roman": "Bojjhanga Piritha",
      "audio": {
       "asset": "assets/audio/pirith/61-bojjhanga-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
@@ -37320,7 +37320,7 @@
     {
      "id": "pirith-62-samantha-pattana",
      "title": "සමන්ත පට්ඨානය",
-     "title_roman": "Samanta Paṭṭhānaya",
+     "title_roman": "Samantha Patthanaya",
      "audio": {
       "asset": "assets/audio/pirith/62-samantha-pattana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",

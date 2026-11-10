@@ -26,58 +26,28 @@ class BuildError(Exception):
     pass
 
 
-# Sinhala -> Roman Pali, letter for letter. Anything not listed is refused.
-CONSONANTS = {
-    "ක": "k", "ඛ": "kh", "ග": "g", "ඝ": "gh", "ඞ": "ṅ",
-    "ච": "c", "ඡ": "ch", "ජ": "j", "ඣ": "jh", "ඤ": "ñ",
-    "ට": "ṭ", "ඨ": "ṭh", "ඩ": "ḍ", "ඪ": "ḍh", "ණ": "ṇ",
-    "ත": "t", "ථ": "th", "ද": "d", "ධ": "dh", "න": "n",
-    "ප": "p", "ඵ": "ph", "බ": "b", "භ": "bh", "ම": "m",
-    "ය": "y", "ර": "r", "ල": "l", "ව": "v", "ස": "s", "හ": "h", "ළ": "ḷ",
-}
-VOWELS = {
-    "අ": "a", "ආ": "ā", "ඇ": "æ", "ඈ": "ǣ", "ඉ": "i", "ඊ": "ī", "උ": "u", "ඌ": "ū",
-    "ඍ": "ṛ", "එ": "e", "ඒ": "e", "ඓ": "ai", "ඔ": "o", "ඕ": "o", "ඖ": "au",
-}
-SIGNS = {
-    "ා": "ā", "ැ": "æ", "ෑ": "ǣ", "ි": "i", "ී": "ī", "ු": "u", "ූ": "ū", "ෘ": "ṛ",
-    "ෙ": "e", "ේ": "e", "ෛ": "ai", "ො": "o", "ෝ": "o", "ෞ": "au",
-}
-HAL = "්"
-ZWJ = chr(0x200D)
-PASS = set(" 0123456789-()[]")
+# Readings listed first, in this order (owner decision 2026-11-10); the rest follow in the source's order.
+FIRST = ("08-mahamangala", "09-rathana", "10-karaniya")
+NAMES_EN = pathlib.Path("content/pirith_names_en.json")
 
 
-def romanise(title_si: str) -> str:
-    out: list[str] = []
-    text = title_si.replace(ZWJ, "")
-    i = 0
-    while i < len(text):
-        ch = text[i]
-        nxt = text[i + 1] if i + 1 < len(text) else ""
-        if ch in CONSONANTS:
-            if nxt == HAL:
-                out.append(CONSONANTS[ch])
-                i += 2
-            elif nxt in SIGNS:
-                out.append(CONSONANTS[ch] + SIGNS[nxt])
-                i += 2
-            else:
-                out.append(CONSONANTS[ch] + "a")
-                i += 1
-        elif ch in VOWELS:
-            out.append(VOWELS[ch])
-            i += 1
-        elif ch == "ං":
-            out.append("ṃ")
-            i += 1
-        elif ch in PASS:
-            out.append(ch)
-            i += 1
-        else:
-            raise BuildError(f"cannot romanise {title_si!r}: no rule for the character "
-                             f"{ch!r} (U+{ord(ch):04X})")
-    return " ".join(w[:1].upper() + w[1:] for w in "".join(out).split(" "))
+def _roman_names(root: pathlib.Path, ids: list[str]) -> dict[str, str]:
+    """Roman names keyed by site id, from the fixed table keyed by the id's number prefix."""
+    try:
+        table = json.loads((root / NAMES_EN).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        raise BuildError(f"cannot read {NAMES_EN.as_posix()}: {e}")
+    prefixes = {i.split("-", 1)[0]: i for i in ids}
+    for key in table:
+        if key not in prefixes:
+            raise BuildError(f"{NAMES_EN.as_posix()}: entry {key!r} matches no reading")
+    for key, site_id in prefixes.items():
+        if key not in table:
+            raise BuildError(f"{NAMES_EN.as_posix()}: no name for {site_id}")
+    for key, name in table.items():
+        if not isinstance(name, str) or not name.strip() or not name.isascii():
+            raise BuildError(f"{NAMES_EN.as_posix()}: entry {key!r} must be a non-empty ASCII name")
+    return {prefixes[k]: v for k, v in table.items()}
 
 
 def _load(root: pathlib.Path) -> dict:
@@ -110,7 +80,7 @@ def _times(blocks: list[dict]) -> list:
     return [None if b["start"] is None or b["end"] is None else [b["start"], b["end"]] for b in blocks]
 
 
-def _reading(root: pathlib.Path, src: dict, item: dict, collected: str) -> dict:
+def _reading(root: pathlib.Path, src: dict, item: dict, collected: str, roman: str) -> dict:
     sha, size = _sha_and_size(root / AUDIO_DIR / f"{item['id']}.m4a")
     if size != item["audio_bytes"]:
         raise BuildError(f"{item['id']}.m4a is {size} bytes, expected {item['audio_bytes']}")
@@ -118,7 +88,7 @@ def _reading(root: pathlib.Path, src: dict, item: dict, collected: str) -> dict:
     return {
         "id": f"pirith-{item['id']}",
         "title": item["title_si"],
-        "title_roman": romanise(item["title_si"]),
+        "title_roman": roman,
         "audio": {"asset": f"assets/audio/pirith/{item['id']}.m4a",
                   "label": f"Chanted by Ven. {chanter}",
                   "duration_ms": _duration_ms(item["duration"]),
@@ -138,10 +108,17 @@ def _reading(root: pathlib.Path, src: dict, item: dict, collected: str) -> dict:
     }
 
 
-def build(root: pathlib.Path) -> dict:
+def build(root: pathlib.Path, first: tuple[str, ...] = FIRST) -> dict:
     src = _load(root)
     collected = src["fetched_utc"][:10]
-    readings = [_reading(root, src, it, collected) for it in src["items"] if it["blocks"]]
+    items = [it for it in src["items"] if it["blocks"]]
+    by_id = {it["id"]: it for it in items}
+    for f in first:
+        if f not in by_id:
+            raise BuildError(f"{f} is not among the readings")
+    items = [by_id[f] for f in first] + [it for it in items if it["id"] not in first]
+    roman = _roman_names(root, [it["id"] for it in items])
+    readings = [_reading(root, src, it, collected, roman[it["id"]]) for it in items]
     return {"schema": 1, "categories": [{"id": "cat-pirith", "title": "Pirith", "subtitle": "පිරිත්",
                                          "readings": readings}]}
 
@@ -150,24 +127,18 @@ def render(data: dict) -> bytes:
     return (json.dumps(data, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
 
 
-def _length(ms: int) -> str:
-    s = ms // 1000
-    return f"{s // 3600}:{s % 3600 // 60:02d}:{s % 60:02d}" if s >= 3600 else f"{s // 60}:{s % 60:02d}"
-
-
 def render_names(root: pathlib.Path, data: dict) -> bytes:
     src = _load(root)
     lines = ["# Pirith in Namo", "",
-             "Generated by tools/build_pirith.py; do not edit. The Roman name is made by a fixed",
-             "letter-for-letter rule from the Sinhala name.", "",
-             f"Source: {src.get('source', '')} . {src.get('reuse_terms_on_site', '').strip()}", "",
-             "| No. | Site id | Sinhala name | Roman name | Length |", "|---|---|---|---|---|"]
+             "Generated by tools/build_pirith.py; do not edit. The position is the pirith's number in",
+             "the list; Roman names come from content/pirith_names_en.json.", "",
+             f"Source: {src.get('source', '')}", "",
+             f"Licence on the source site: {' '.join(src.get('reuse_terms_on_site', '').split())}", "",
+             "| No. | Site id | Sinhala name | Roman name |", "|---|---|---|---|"]
     for number, r in enumerate(data["categories"][0]["readings"], 1):
-        a = r["audio"]["asset"]
-        site_id = a.rsplit("/", 1)[1][:-len(".m4a")]
-        lines.append(f"| {number} | {site_id} | {r['title']} | {r['title_roman']} | "
-                     f"{_length(r['audio']['duration_ms'])} |")
-    return ("\n".join(lines) + "\n").encode("utf-8")
+        site_id = r["id"][len("pirith-"):]
+        lines.append(f"| {number} | {site_id} | {r['title']} | {r['title_roman']} |")
+    return (chr(10).join(lines) + chr(10)).encode("utf-8")
 
 
 def import_audio(root: pathlib.Path, audio_dir: pathlib.Path) -> None:

@@ -1,5 +1,7 @@
 # Namo — Pirith (text, chanting and read-along) — Design
 
+> Owner decision 2026-11-10: Roman names come from the fixed table `content/pirith_names_en.json` in plain spelling (the letter-rule transliteration is dropped), and the list order is Maha Mangala, Rathana, Karaniyameththa first, then the book's order; a pirith's number is its position in the list.
+
 Date: 2026-11-10. Status: approved by the owner on 2026-11-10 ("yes this is good"), including the calls in section 8. Built after the premium redesign is finished and before My flows. Its plan is written once this is approved, against the redesign's real components.
 
 ## 1. What the owner asked for
