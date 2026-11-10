@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../design/tokens.dart';
+import 'auto_scroll.dart';
 
 /// Previous section, play and next section, under a 2-px progress line.
 /// A null callback shows its button disabled.
@@ -10,14 +11,18 @@ class ReaderBottomBar extends StatelessWidget {
     required this.onPrevious,
     required this.onNext,
     this.onPlay,
+    this.autoScroll = AutoScrollStatus.stopped,
     this.progress = 0,
   });
 
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
 
-  /// Starts auto-scroll; wired in Task 11.
+  /// Starts, pauses or resumes auto-scroll.
   final VoidCallback? onPlay;
+
+  /// Where auto-scroll is; sets the play button's icon and label.
+  final AutoScrollStatus autoScroll;
 
   /// How far through the reading the page is, 0–1.
   final double progress;
@@ -62,8 +67,18 @@ class ReaderBottomBar extends StatelessWidget {
                     onPressed: onPrevious,
                   ),
                   IconButton(
-                    tooltip: 'Play',
-                    icon: const Icon(Icons.play_arrow),
+                    key: const ValueKey('reader-play'),
+                    tooltip: switch (autoScroll) {
+                      AutoScrollStatus.running => 'Pause auto-scroll',
+                      AutoScrollStatus.paused => 'Resume auto-scroll',
+                      AutoScrollStatus.stopped ||
+                      AutoScrollStatus.finished => 'Start auto-scroll',
+                    },
+                    icon: Icon(
+                      autoScroll == AutoScrollStatus.running
+                          ? Icons.pause
+                          : Icons.play_arrow,
+                    ),
                     onPressed: onPlay,
                   ),
                   IconButton(

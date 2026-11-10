@@ -8,6 +8,7 @@ import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/settings/settings_screen.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -98,7 +99,7 @@ void main() {
         'Add to favourites',
         'Reading settings',
         'Previous section',
-        'Play',
+        'Start auto-scroll',
         'Next section',
       ]) {
         final f = find.byTooltip(label);
@@ -109,12 +110,53 @@ void main() {
         expect(size.width, greaterThanOrEqualTo(48), reason: label);
         expect(size.height, greaterThanOrEqualTo(48), reason: label);
       }
-      // The control not yet wired does nothing when tapped.
-      await t.tap(find.byTooltip('Play'), warnIfMissed: false);
-      await t.pumpAndSettle();
       expect(t.takeException(), isNull);
     },
   );
+
+  testWidgets('a long title wraps onto two lines on a narrow screen', (
+    t,
+  ) async {
+    // In the test font every letter is 20 px wide: too long for one line
+    // of the 238 px the title has at this width, short enough for two.
+    const title = 'the long title';
+    final library = testLibrary();
+    final reading = library.categories.single.readings.single;
+    final long = Library(
+      categories: [
+        Category(
+          id: 'c1',
+          title: 'category 1',
+          subtitle: 'subtitle 1',
+          readings: [
+            Reading(id: 'r1', title: title, sections: reading.sections),
+          ],
+        ),
+      ],
+    );
+    await pumpApp(
+      t,
+      overrides: [
+        contentRepositoryProvider.overrideWithValue(
+          FakeContentRepository(library: long),
+        ),
+        keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+      ],
+      location: Routes.reader('r1'),
+    );
+    expect(t.view.physicalSize, const Size(390, 844));
+    final paragraph = t.renderObject<RenderParagraph>(find.text(title));
+    // Two lines, with the whole title laid out and nothing cut off.
+    final boxes = paragraph.getBoxesForSelection(
+      const TextSelection(baseOffset: 0, extentOffset: title.length),
+    );
+    expect({for (final b in boxes) b.top}, hasLength(2));
+    expect(paragraph.didExceedMaxLines, isFalse);
+    // The category still shows beneath, inside the top bar.
+    final bar = t.getRect(find.byType(AppBar));
+    expect(bar.contains(t.getBottomLeft(find.text('category 1'))), isTrue);
+    expect(t.takeException(), isNull);
+  });
 
   testWidgets('a reading titled like its category shows the title once', (
     t,

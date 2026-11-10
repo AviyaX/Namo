@@ -5,6 +5,7 @@ import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../settings/settings.dart';
 import '../settings/settings_screen.dart';
+import 'auto_scroll.dart';
 
 /// Opens the reader settings over the reader.
 Future<void> showReaderSettingsSheet(
@@ -17,8 +18,8 @@ Future<void> showReaderSettingsSheet(
   builder: (_) => ReaderSettingsSheet(onBackToBeginning: onBackToBeginning),
 );
 
-/// Languages, layout, text size and line spacing. Each change applies to the
-/// reader at once.
+/// Languages, layout, text size, line spacing and scroll speed. Each change
+/// applies to the reader at once.
 class ReaderSettingsSheet extends ConsumerWidget {
   const ReaderSettingsSheet({super.key, required this.onBackToBeginning});
 
@@ -67,7 +68,11 @@ class ReaderSettingsSheet extends ConsumerWidget {
                     describe: (v) => v.toStringAsFixed(1),
                     onChanged: controller.setLineSpacing,
                   ),
-                  // Task 11 adds the scroll speed control here.
+                  const _SheetTitle('Scroll speed'),
+                  _ScrollSpeedControl(
+                    value: settings.scrollSpeed,
+                    onChanged: controller.setScrollSpeed,
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
                     child: Align(
@@ -122,6 +127,145 @@ class _SheetTitle extends StatelessWidget {
             size: 14,
             color: p.textQuiet,
             weight: 600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Three preset speeds and a slider for any speed between; a slider value
+/// that is not a preset shows 'Custom'.
+class _ScrollSpeedControl extends StatelessWidget {
+  const _ScrollSpeedControl({required this.value, required this.onChanged});
+
+  final double value;
+  final ValueChanged<double> onChanged;
+
+  static const _presets = [
+    ('Slow', AutoScrollEngine.slow),
+    ('Normal', AutoScrollEngine.normal),
+    ('Fast', AutoScrollEngine.fast),
+  ];
+
+  static String? _presetName(double v) {
+    for (final (name, speed) in _presets) {
+      if (v == speed) return name;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    final range = AppSettings.scrollSpeedRange;
+    final custom = _presetName(value) == null;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              for (final (i, (name, speed)) in _presets.indexed) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _SpeedChoice(
+                    label: name,
+                    selected: value == speed,
+                    onTap: () => onChanged(speed),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          if (custom)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: ExcludeSemantics(
+                child: Text(
+                  'Custom',
+                  softWrap: true,
+                  style: namoText(
+                    NamoFonts.english,
+                    size: 14,
+                    color: p.textQuiet,
+                  ),
+                ),
+              ),
+            ),
+          MergeSemantics(
+            child: Semantics(
+              label: 'Scroll speed',
+              child: Slider(
+                key: const ValueKey('reader-scroll-speed'),
+                value: value.clamp(range.min, range.max),
+                min: range.min,
+                max: range.max,
+                divisions: (range.max - range.min).round(),
+                semanticFormatterCallback: (v) =>
+                    _presetName(v) ?? 'Custom, ${v.round()}',
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One preset speed: a hairline-bordered button, outlined in the heading
+/// colour when it is on.
+class _SpeedChoice extends StatelessWidget {
+  const _SpeedChoice({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    final radius = BorderRadius.circular(8);
+    return Semantics(
+      container: true,
+      excludeSemantics: true,
+      button: true,
+      selected: selected,
+      label: label,
+      onTap: onTap,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: radius,
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: p.surface,
+        hoverColor: p.surface,
+        child: Container(
+          constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            border: Border.all(
+              color: selected ? p.heading : p.divider,
+              width: 1,
+            ),
+          ),
+          child: Text(
+            label,
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: namoText(
+              NamoFonts.english,
+              size: 16,
+              color: selected ? p.heading : p.text,
+              weight: selected ? 600 : 400,
+            ),
           ),
         ),
       ),
