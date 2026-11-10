@@ -11,6 +11,8 @@ import '../audio/audio_controls.dart';
 import '../audio/chant_player.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/buttons.dart';
+import '../design/widgets/progress_line.dart';
 import '../design/widgets/not_found.dart';
 import '../library/library_gate.dart';
 import '../router.dart';
@@ -27,13 +29,6 @@ import 'screen_awake.dart';
 
 /// How close (in pixels) to a heading counts as being at its start.
 const _atStart = 8.0;
-
-/// The reader's top bar: two title lines (20 px, line height 1.2) and one
-/// category line (14 px, line height 1.4), at least 76.
-double _toolbarHeight(TextScaler scaler) {
-  final height = scaler.scale(20 * 1.2) * 2 + scaler.scale(14 * 1.4) + 8;
-  return height < 76 ? 76 : height;
-}
 
 /// How long the page must be still before its place is saved.
 const _saveDelay = Duration(milliseconds: 400);
@@ -459,7 +454,6 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         builder: (context, library) {
           final reading = library.reading(widget.readingId);
           if (reading == null) return const NotFoundScreen();
-          final category = library.categoryOf(reading.id);
           final items = buildReaderItems(
             reading,
             settings.languages,
@@ -492,90 +486,61 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               if (!didPop) _back();
             },
             child: Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  tooltip: 'Back',
-                  icon: const Icon(Symbols.arrow_back_rounded, weight: 300),
-                  onPressed: _back,
-                ),
-                titleSpacing: 0,
-                // Room for a title on two lines and the category beneath, at
-                // the device's text size.
-                toolbarHeight: _toolbarHeight(MediaQuery.textScalerOf(context)),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      reading.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).appBarTheme.titleTextStyle
-                          ?.copyWith(height: 1.2),
-                    ),
-                    if (category != null && category.title != reading.title)
-                      Text(
-                        category.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: namoText(
-                          NamoFonts.english,
-                          size: 14,
-                          color: p.textQuiet,
-                        ),
-                      ),
-                  ],
-                ),
-                actions: [
-                  IconButton(
-                    tooltip: favourite
-                        ? 'Remove from favourites'
-                        : 'Add to favourites',
-                    icon: Icon(
-                      Symbols.favorite_rounded,
-                      fill: favourite ? 1 : 0,
-                      weight: 300,
-                      color: favourite ? p.accent : p.heading,
-                    ),
-                    onPressed: () => ref
+              backgroundColor: p.background,
+              // The text runs under the floating control bar, which hands
+              // its whole height to the body in MediaQuery.padding.bottom.
+              extendBody: true,
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _TopBar(
+                    title: reading.title,
+                    favourite: favourite,
+                    onBack: _back,
+                    onFavourite: () => ref
                         .read(savedProvider.notifier)
                         .toggleFavourite(reading.id),
-                  ),
-                  IconButton(
-                    key: const ValueKey('reader-settings'),
-                    tooltip: 'Reading settings',
-                    icon: const Icon(Symbols.tune_rounded, weight: 300),
-                    onPressed: () => showReaderSettingsSheet(
+                    onSettings: () => showReaderSettingsSheet(
                       context,
                       onBackToBeginning: _backToBeginning,
                     ),
                   ),
+                  ValueListenableBuilder<double>(
+                    valueListenable: _progress,
+                    builder: (context, progress, _) =>
+                        ProgressLine(value: progress),
+                  ),
+                  Expanded(
+                    child: SafeArea(
+                      top: false,
+                      bottom: false,
+                      // A touch or a mouse wheel on the text pauses
+                      // auto-scroll at once.
+                      child: Listener(
+                        onPointerDown: (_) => _autoScroll.pause(),
+                        onPointerSignal: (_) => _autoScroll.pause(),
+                        child: ReaderBody(
+                          key: _body,
+                          items: items,
+                          controller: _scroll,
+                          fontScale: settings.fontScale,
+                          lineSpacing: settings.lineSpacing,
+                          bookmarkedSections: {
+                            for (final b in saved.bookmarks)
+                              if (b.readingId == reading.id) b.sectionId,
+                          },
+                          onToggleBookmark: (sectionId) => ref
+                              .read(savedProvider.notifier)
+                              .toggleBookmark(reading.id, sectionId),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              // A touch or a mouse wheel on the text pauses auto-scroll at
-              // once.
-              body: Listener(
-                onPointerDown: (_) => _autoScroll.pause(),
-                onPointerSignal: (_) => _autoScroll.pause(),
-                child: ReaderBody(
-                  key: _body,
-                  items: items,
-                  controller: _scroll,
-                  fontScale: settings.fontScale,
-                  lineSpacing: settings.lineSpacing,
-                  bookmarkedSections: {
-                    for (final b in saved.bookmarks)
-                      if (b.readingId == reading.id) b.sectionId,
-                  },
-                  onToggleBookmark: (sectionId) => ref
-                      .read(savedProvider.notifier)
-                      .toggleBookmark(reading.id, sectionId),
-                ),
-              ),
               bottomNavigationBar: ListenableBuilder(
-                listenable: Listenable.merge([_progress, _autoScroll]),
+                listenable: _autoScroll,
                 builder: (context, _) => ReaderBottomBar(
-                  progress: _progress.value,
                   onPrevious: _previousTarget == null
                       ? null
                       : () => _jumpTo(_previousTarget!),
@@ -592,6 +557,77 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// The reader's quiet top bar: Back, the reading's title on one line,
+/// favourite and reading settings. Flat, on the page's background, inside
+/// the top safe area.
+class _TopBar extends StatelessWidget {
+  const _TopBar({
+    required this.title,
+    required this.favourite,
+    required this.onBack,
+    required this.onFavourite,
+    required this.onSettings,
+  });
+
+  final String title;
+  final bool favourite;
+  final VoidCallback onBack;
+  final VoidCallback onFavourite;
+  final VoidCallback onSettings;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return ColoredBox(
+      key: const ValueKey('reader-top-bar'),
+      color: p.background,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.all(NamoSpace.xs),
+          child: Row(
+            children: [
+              NamoIconButton(
+                icon: Symbols.arrow_back_rounded,
+                tooltip: 'Back',
+                onPressed: onBack,
+              ),
+              const SizedBox(width: NamoSpace.xs),
+              Expanded(
+                child: Semantics(
+                  header: true,
+                  child: Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: NamoType.label(p.textSecondary),
+                  ),
+                ),
+              ),
+              const SizedBox(width: NamoSpace.xs),
+              NamoIconButton(
+                icon: Symbols.favorite_rounded,
+                tooltip: favourite
+                    ? 'Remove from favourites'
+                    : 'Add to favourites',
+                filled: favourite,
+                color: favourite ? p.gold : p.text,
+                onPressed: onFavourite,
+              ),
+              NamoIconButton(
+                key: const ValueKey('reader-settings'),
+                icon: Symbols.tune_rounded,
+                tooltip: 'Reading settings',
+                onPressed: onSettings,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

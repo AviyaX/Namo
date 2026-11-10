@@ -6,6 +6,7 @@ import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,7 +46,11 @@ ScrollController scroll(WidgetTester t) =>
 final _play = find.byKey(const ValueKey('reader-play'));
 
 /// The play button's label, which is also its tooltip.
-String playLabel(WidgetTester t) => t.widget<IconButton>(_play).tooltip!;
+String playLabel(WidgetTester t) => t.widget<Tooltip>(_play).message!;
+
+/// The semantics node of the button [f] finds: the one its icon belongs to.
+SemanticsNode buttonNode(WidgetTester t, Finder f) =>
+    t.getSemantics(find.descendant(of: f, matching: find.byType(Icon)));
 
 /// Lets [time] pass in 16-ms screen frames.
 Future<void> runFor(WidgetTester t, Duration time) async {
@@ -93,7 +98,7 @@ void main() {
     expect(size.width, greaterThanOrEqualTo(48));
     expect(size.height, greaterThanOrEqualTo(48));
     expect(
-      t.getSemantics(_play),
+      buttonNode(t, _play),
       isSemantics(tooltip: _start, isButton: true, isEnabled: true),
     );
 
@@ -101,7 +106,7 @@ void main() {
     await runFor(t, _second);
     final moved = scroll(t).offset;
     expect(moved, closeTo(22, 1));
-    expect(t.getSemantics(_play), isSemantics(tooltip: _pause));
+    expect(buttonNode(t, _play), isSemantics(tooltip: _pause));
 
     final touch = await t.startGesture(t.getCenter(find.byType(ReaderBody)));
     await t.pump();

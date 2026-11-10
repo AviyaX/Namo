@@ -1,5 +1,6 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
+import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
@@ -8,6 +9,7 @@ import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -70,6 +72,10 @@ Finder inHeading(String sectionId, Finder f) => find.descendant(
 
 Icon iconOf(WidgetTester t, Finder button) =>
     t.widget<Icon>(find.descendant(of: button, matching: find.byType(Icon)));
+
+/// The semantics node of the button [f] finds: the one its icon belongs to.
+SemanticsNode buttonNode(WidgetTester t, Finder f) =>
+    t.getSemantics(find.descendant(of: f, matching: find.byType(Icon)));
 
 void main() {
   testWidgets('changing text size keeps the same verse at the top', (t) async {
@@ -229,7 +235,7 @@ void main() {
       final off = inHeading('s02', find.byTooltip('Bookmark this section'));
       final offButton = find.ancestor(
         of: off,
-        matching: find.byType(IconButton),
+        matching: find.byType(NamoIconButton),
       );
       final size = t.getSize(offButton);
       expect(size.width, greaterThanOrEqualTo(48));
@@ -241,9 +247,9 @@ void main() {
       );
       expect(iconOf(t, offButton).icon, Symbols.bookmark_rounded);
       expect(iconOf(t, offButton).fill, 0);
-      expect(iconOf(t, offButton).color, palette.textQuiet);
+      expect(iconOf(t, offButton).color, palette.textSecondary);
       expect(
-        t.getSemantics(off),
+        buttonNode(t, off),
         isSemantics(tooltip: 'Bookmark this section', isButton: true),
       );
 
@@ -251,12 +257,15 @@ void main() {
       await t.pump();
       final on = inHeading('s02', find.byTooltip('Remove bookmark'));
       expect(on, findsOneWidget);
-      final onButton = find.ancestor(of: on, matching: find.byType(IconButton));
+      final onButton = find.ancestor(
+        of: on,
+        matching: find.byType(NamoIconButton),
+      );
       expect(iconOf(t, onButton).icon, Symbols.bookmark_rounded);
       expect(iconOf(t, onButton).fill, 1);
-      expect(iconOf(t, onButton).color, palette.accent);
+      expect(iconOf(t, onButton).color, palette.gold);
       expect(
-        t.getSemantics(on),
+        buttonNode(t, on),
         isSemantics(tooltip: 'Remove bookmark', isButton: true),
       );
       expect(c.read(savedProvider).isBookmarked('r1', 's02'), isTrue);
@@ -277,12 +286,12 @@ void main() {
       // Favourite.
       final add = find.byTooltip('Add to favourites');
       expect(
-        t.getSemantics(add),
+        buttonNode(t, add),
         isSemantics(tooltip: 'Add to favourites', isButton: true),
       );
       final emptyHeart = iconOf(
         t,
-        find.ancestor(of: add, matching: find.byType(IconButton)),
+        find.ancestor(of: add, matching: find.byType(NamoIconButton)),
       );
       expect(emptyHeart.icon, Symbols.favorite_rounded);
       expect(emptyHeart.fill, 0);
@@ -292,16 +301,16 @@ void main() {
       expect(remove, findsOneWidget);
       expect(find.byTooltip('Add to favourites'), findsNothing);
       expect(
-        t.getSemantics(remove),
+        buttonNode(t, remove),
         isSemantics(tooltip: 'Remove from favourites', isButton: true),
       );
       final heart = iconOf(
         t,
-        find.ancestor(of: remove, matching: find.byType(IconButton)),
+        find.ancestor(of: remove, matching: find.byType(NamoIconButton)),
       );
       expect(heart.icon, Symbols.favorite_rounded);
       expect(heart.fill, 1);
-      expect(heart.color, palette.accent);
+      expect(heart.color, palette.gold);
       expect(c.read(savedProvider).isFavourite('r1'), isTrue);
 
       await t.tap(remove);

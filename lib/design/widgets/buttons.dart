@@ -34,6 +34,9 @@ class NamoIconButton extends StatelessWidget {
       child: Pressable(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(NamoSizes.touchTarget / 2),
+        // One node, named by the tooltip: without this the focus node
+        // inside is a second, unlabelled tap target.
+        excludeChildSemantics: true,
         child: Icon(
           icon,
           size: size,

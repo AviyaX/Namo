@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/buttons.dart';
 import 'audio_catalogue.dart';
 import 'chant_player.dart';
 
@@ -45,10 +46,13 @@ class _Controls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    final style = namoText(NamoFonts.english, size: 14, color: p.textQuiet);
+    final style = NamoType.caption(p.textSecondary);
     if (state.status == ChantStatus.failed) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: NamoSpace.sm,
+          vertical: NamoSpace.md,
+        ),
         // Announced when it appears: the recording was asked for and is not
         // coming.
         child: Semantics(
@@ -62,58 +66,58 @@ class _Controls extends StatelessWidget {
     final playing = state.status == ChantStatus.playing;
     final ready =
         state.status != ChantStatus.idle && state.status != ChantStatus.loading;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (recording.placeholder)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Semantics(
-                container: true,
-                label: recording.label,
-                child: ExcludeSemantics(
-                  child: Text(recording.label, maxLines: 2, style: style),
-                ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (recording.placeholder)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              NamoSpace.sm,
+              NamoSpace.xs,
+              NamoSpace.sm,
+              0,
+            ),
+            child: Semantics(
+              container: true,
+              label: recording.label,
+              child: ExcludeSemantics(
+                child: Text(recording.label, maxLines: 2, style: style),
               ),
             ),
-          Row(
-            children: [
-              IconButton(
-                key: const ValueKey('audio-play'),
-                tooltip: playing ? 'Pause recording' : 'Play recording',
-                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                icon: Icon(
-                  playing
-                      ? Symbols.pause_circle_rounded
-                      : Symbols.play_circle_rounded,
-                  weight: 300,
-                ),
-                onPressed: ready
-                    ? () => playing ? player.pause() : player.play()
-                    : null,
-              ),
-              IconButton(
-                key: const ValueKey('audio-restart'),
-                tooltip: 'Restart recording',
-                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                icon: const Icon(Symbols.replay_rounded, weight: 300),
-                onPressed: ready ? player.restart : null,
-              ),
-              Expanded(
+          ),
+        Row(
+          children: [
+            NamoIconButton(
+              key: const ValueKey('audio-play'),
+              tooltip: playing ? 'Pause recording' : 'Play recording',
+              icon: playing
+                  ? Symbols.pause_circle_rounded
+                  : Symbols.play_circle_rounded,
+              onPressed: ready
+                  ? () => playing ? player.pause() : player.play()
+                  : null,
+            ),
+            NamoIconButton(
+              key: const ValueKey('audio-restart'),
+              tooltip: 'Restart recording',
+              icon: Symbols.replay_rounded,
+              onPressed: ready ? player.restart : null,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(end: NamoSpace.sm),
                 child: Text(
                   '${formatTime(state.position)} / '
                   '${formatTime(state.duration)}',
                   textAlign: TextAlign.end,
-                  style: style,
+                  style: NamoType.label(p.textSecondary),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

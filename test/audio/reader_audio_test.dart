@@ -7,6 +7,7 @@ import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -72,9 +73,12 @@ Future<void> pumpStream(WidgetTester t) async {
   await t.pump();
 }
 
-String audioLabel(WidgetTester t) => t.widget<IconButton>(_audioPlay).tooltip!;
-String scrollLabel(WidgetTester t) =>
-    t.widget<IconButton>(_scrollPlay).tooltip!;
+String audioLabel(WidgetTester t) => t
+    .widget<Tooltip>(
+      find.descendant(of: _audioPlay, matching: find.byType(Tooltip)),
+    )
+    .message!;
+String scrollLabel(WidgetTester t) => t.widget<Tooltip>(_scrollPlay).message!;
 
 ScrollController scroll(WidgetTester t) =>
     t.state<ReaderBodyState>(find.byType(ReaderBody)).controller;
@@ -85,6 +89,10 @@ Future<void> runFor(WidgetTester t, Duration time) async {
     await t.pump(frame);
   }
 }
+
+/// The semantics node of the button [f] finds: the one its icon belongs to.
+SemanticsNode buttonNode(WidgetTester t, Finder f) =>
+    t.getSemantics(find.descendant(of: f, matching: find.byType(Icon)));
 
 void main() {
   test('times are shown as m:ss, an unknown one as –:––', () {
@@ -124,11 +132,11 @@ void main() {
       expect(size.height, greaterThanOrEqualTo(48));
     }
     expect(
-      t.getSemantics(_audioPlay),
+      buttonNode(t, _audioPlay),
       isSemantics(tooltip: 'Play recording', isButton: true, isEnabled: true),
     );
     expect(
-      t.getSemantics(_audioRestart),
+      buttonNode(t, _audioRestart),
       isSemantics(
         tooltip: 'Restart recording',
         isButton: true,

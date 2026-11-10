@@ -170,7 +170,7 @@ void main() {
     for (final size in const [Size(320, 568), Size(390, 844)]) {
       for (final scale in [1.5, 2.0]) {
         testWidgets(
-          'a two-line title and its category fit: ${size.width.round()}x${size.height.round()}, device text $scale',
+          'a long title fits the top bar on one line: ${size.width.round()}x${size.height.round()}, device text $scale',
           (t) async {
             await openReal(
               t,
@@ -180,12 +180,14 @@ void main() {
               library: longLibrary(),
             );
             expect(t.takeException(), isNull);
-            // The title shows in full height: two lines, the category beneath.
-            expect(find.textContaining('Reading Lorem'), findsOneWidget);
-            expect(find.textContaining('Category Lorem'), findsOneWidget);
-            final bar = t.getRect(find.byType(AppBar));
-            final category = t.getRect(find.textContaining('Category Lorem'));
-            expect(category.bottom, lessThanOrEqualTo(bar.bottom));
+            // The title shows in full height on one line, cut short, inside
+            // the top bar.
+            final title = find.textContaining('Reading Lorem');
+            expect(title, findsOneWidget);
+            final bar = t.getRect(find.byKey(const ValueKey('reader-top-bar')));
+            final words = t.getRect(title);
+            expect(words.top, greaterThanOrEqualTo(bar.top));
+            expect(words.bottom, lessThanOrEqualTo(bar.bottom));
           },
         );
       }
@@ -195,16 +197,25 @@ void main() {
   testWidgets('9. the bookmark button lines up with the first line of a wrapped heading', (t) async {
     Future<double> offset(Size size) async {
       await openReal(t, Routes.reader('r1'), size: size, library: longLibrary());
+      // Measured from the section number, which sits on the heading's first
+      // line (the room above a heading differs between the first and the
+      // rest).
       final b = t.getRect(find.byTooltip('Bookmark this section').first);
-      final h = t.getRect(find.byKey(const ValueKey('heading-s01')));
-      return b.center.dy - h.top;
+      final n = t.getRect(find.descendant(
+        of: find.byKey(const ValueKey('heading-s01')),
+        matching: find.text('1'),
+      ));
+      return b.center.dy - n.top;
     }
 
     final wrapped = await offset(const Size(320, 700));
     // Section 2's heading is one line; the same offset applies to it.
-    final h2 = t.getRect(find.byKey(const ValueKey('heading-s02')));
+    final n2 = t.getRect(find.descendant(
+      of: find.byKey(const ValueKey('heading-s02')),
+      matching: find.text('2'),
+    ));
     final b2 = t.getRect(find.byTooltip('Bookmark this section').last);
-    expect(wrapped, closeTo(b2.center.dy - h2.top, 0.5));
+    expect(wrapped, closeTo(b2.center.dy - n2.top, 0.5));
   });
 
   group('11-13. audio row', () {

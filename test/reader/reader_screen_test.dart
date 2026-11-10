@@ -1,6 +1,7 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
+import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
@@ -48,8 +49,8 @@ void expectHeadingAtTop(WidgetTester t, String sectionId) {
   );
 }
 
-IconButton button(WidgetTester t, String key) =>
-    t.widget<IconButton>(find.byKey(ValueKey(key)));
+NamoIconButton button(WidgetTester t, String key) =>
+    t.widget<NamoIconButton>(find.byKey(ValueKey(key)));
 
 Text verseText(WidgetTester t, String key) => t.widget<Text>(
   find.descendant(of: find.byKey(ValueKey(key)), matching: find.byType(Text)),
@@ -72,54 +73,50 @@ bool aHeadingIsOnScreen(WidgetTester t) {
 }
 
 void main() {
-  testWidgets(
-    'shows the title, the category beneath, and every section heading',
-    (t) async {
-      await openAt(t, Routes.reader('r1'));
-      expect(find.text('reading 1'), findsOneWidget);
-      expect(find.text('category 1'), findsOneWidget);
-      expect(
-        t.getTopLeft(find.text('category 1')).dy,
-        greaterThan(t.getTopLeft(find.text('reading 1')).dy),
-      );
-      expect(
-        t.widget<Text>(find.text('category 1')).style!.color,
-        NamoPalette.dark.textQuiet, // the app opens dark
-      );
-      for (var i = 1; i <= 3; i++) {
-        expect(find.byKey(ValueKey('heading-s0$i')), findsOneWidget);
-        expect(find.text('heading $i'), findsOneWidget);
-      }
-      expect(find.byKey(const ValueKey('verse-s01-v1-pi')), findsOneWidget);
-      expect(find.byKey(const ValueKey('verse-s01-v1-si')), findsOneWidget);
-
-      // Every control has a label and a 48 x 48 touch area.
-      for (final label in [
-        'Back',
-        'Add to favourites',
-        'Reading settings',
-        'Previous section',
-        'Start auto-scroll',
-        'Next section',
-      ]) {
-        final f = find.byTooltip(label);
-        expect(f, findsOneWidget, reason: label);
-        final size = t.getSize(
-          find.ancestor(of: f, matching: find.byType(IconButton)).first,
-        );
-        expect(size.width, greaterThanOrEqualTo(48), reason: label);
-        expect(size.height, greaterThanOrEqualTo(48), reason: label);
-      }
-      expect(t.takeException(), isNull);
-    },
-  );
-
-  testWidgets('a long title wraps onto two lines on a narrow screen', (
+  testWidgets('shows the title in the top bar and every section heading', (
     t,
   ) async {
-    // In the test font every letter is 20 px wide: too long for one line
-    // of the 238 px the title has at this width, short enough for two.
-    const title = 'the long title';
+    await openAt(t, Routes.reader('r1'));
+    final bar = find.byKey(const ValueKey('reader-top-bar'));
+    expect(
+      find.descendant(of: bar, matching: find.text('reading 1')),
+      findsOneWidget,
+    );
+    expect(
+      t.widget<Text>(find.text('reading 1')).style!.color,
+      NamoPalette.dark.textSecondary, // the app opens dark
+    );
+    for (var i = 1; i <= 3; i++) {
+      expect(find.byKey(ValueKey('heading-s0$i')), findsOneWidget);
+      expect(find.text('heading $i'), findsOneWidget);
+    }
+    expect(find.byKey(const ValueKey('verse-s01-v1-pi')), findsOneWidget);
+    expect(find.byKey(const ValueKey('verse-s01-v1-si')), findsOneWidget);
+
+    // Every control has a label and a 48 x 48 touch area.
+    for (final label in [
+      'Back',
+      'Add to favourites',
+      'Reading settings',
+      'Previous section',
+      'Start auto-scroll',
+      'Next section',
+    ]) {
+      final f = find.byTooltip(label);
+      expect(f, findsOneWidget, reason: label);
+      final size = t.getSize(f);
+      expect(size.width, greaterThanOrEqualTo(48), reason: label);
+      expect(size.height, greaterThanOrEqualTo(48), reason: label);
+    }
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('a long title stays on one line, cut short, inside the top bar', (
+    t,
+  ) async {
+    // In the test font every letter is as wide as the text is tall: far too
+    // long for one line of the top bar at this width.
+    const title = 'the long title of this reading';
     final library = testLibrary();
     final reading = library.categories.single.readings.single;
     final long = Library(
@@ -146,15 +143,21 @@ void main() {
     );
     expect(t.view.physicalSize, const Size(390, 844));
     final paragraph = t.renderObject<RenderParagraph>(find.text(title));
-    // Two lines, with the whole title laid out and nothing cut off.
     final boxes = paragraph.getBoxesForSelection(
       const TextSelection(baseOffset: 0, extentOffset: title.length),
     );
-    expect({for (final b in boxes) b.top}, hasLength(2));
-    expect(paragraph.didExceedMaxLines, isFalse);
-    // The category still shows beneath, inside the top bar.
-    final bar = t.getRect(find.byType(AppBar));
-    expect(bar.contains(t.getBottomLeft(find.text('category 1'))), isTrue);
+    expect({for (final b in boxes) b.top}, hasLength(1));
+    expect(paragraph.didExceedMaxLines, isTrue);
+    final bar = t.getRect(find.byKey(const ValueKey('reader-top-bar')));
+    final words = t.getRect(find.text(title));
+    expect(bar.contains(words.topLeft), isTrue);
+    expect(bar.contains(words.bottomRight), isTrue);
+    // The buttons beside it keep their place.
+    expect(find.byTooltip('Reading settings'), findsOneWidget);
+    expect(
+      t.getRect(find.byTooltip('Reading settings')).right,
+      lessThanOrEqualTo(390),
+    );
     expect(t.takeException(), isNull);
   });
 

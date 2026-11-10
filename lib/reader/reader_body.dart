@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/buttons.dart';
 import 'reader_items.dart';
 
 /// The reading itself: every item laid out at once in one scrolling column,
@@ -69,12 +72,31 @@ class ReaderBodyState extends State<ReaderBody> {
     return ex.isEmpty ? 0 : ex[index].top;
   }
 
+  /// The room above item [index]: 32 above a heading that is not the first,
+  /// 12 between the two languages of one verse, 24 between verses, 16
+  /// between a heading and its first verse.
+  double _gapAbove(int index) {
+    final item = widget.items[index];
+    final before = index == 0 ? null : widget.items[index - 1];
+    return switch (item) {
+      HeadingItem() => before == null ? NamoSpace.xl : NamoSpace.xxl,
+      VerseTextItem() => switch (before) {
+        VerseTextItem(:final verseId) when verseId == item.verseId =>
+          NamoSpace.md,
+        VerseTextItem() => NamoSpace.xl,
+        _ => NamoSpace.lg,
+      },
+    };
+  }
+
   Widget _item(int index) {
     final item = widget.items[index];
+    final gap = _gapAbove(index);
     final child = switch (item) {
       HeadingItem() => _HeadingView(
         key: ValueKey('heading-${item.sectionId}'),
         item: item,
+        gap: gap,
         fontScale: widget.fontScale,
         bookmarked: widget.bookmarkedSections.contains(item.sectionId),
         onToggleBookmark: () => widget.onToggleBookmark(item.sectionId),
@@ -82,6 +104,7 @@ class ReaderBodyState extends State<ReaderBody> {
       VerseTextItem() => _VerseView(
         key: ValueKey('verse-${item.verseId}-${item.language.code}'),
         item: item,
+        gap: gap,
         fontScale: widget.fontScale,
         lineSpacing: widget.lineSpacing,
       ),
@@ -100,6 +123,7 @@ class ReaderBodyState extends State<ReaderBody> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        final margin = NamoSizes.pageMargin(constraints.maxWidth);
         return SingleChildScrollView(
           controller: widget.controller,
           child: KeyedSubtree(
@@ -111,7 +135,15 @@ class ReaderBodyState extends State<ReaderBody> {
                   maxWidth: NamoSizes.readingColumn,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+                  // At the foot, room to bring the last line fully above the
+                  // floating control bar: the bar's whole height arrives in
+                  // the bottom padding (the body runs under it).
+                  padding: EdgeInsets.fromLTRB(
+                    margin,
+                    0,
+                    margin,
+                    MediaQuery.paddingOf(context).bottom + NamoSpace.xl,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -147,12 +179,14 @@ class _HeadingView extends StatelessWidget {
   const _HeadingView({
     super.key,
     required this.item,
+    required this.gap,
     required this.fontScale,
     required this.bookmarked,
     required this.onToggleBookmark,
   });
 
   final HeadingItem item;
+  final double gap;
   final double fontScale;
   final bool bookmarked;
   final VoidCallback onToggleBookmark;
@@ -161,17 +195,20 @@ class _HeadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final section = item.section;
+    final size = 20 * fontScale;
+    final heading = NamoType.sectionTitleSinhala(p.text)
+        .copyWith(fontSize: size);
     // The bookmark button is 48 high; the heading's first line is centred on
     // it, whatever the text size, and the rest wraps beneath.
     final firstLine = MediaQuery.textScalerOf(context)
-        .scale(20 * fontScale * 1.4);
+        .scale(size * heading.height!);
     final inset = firstLine >= NamoSizes.touchTarget
         ? 0.0
         : (NamoSizes.touchTarget - firstLine) / 2;
     return Padding(
-      padding: const EdgeInsets.only(top: 28, bottom: 8),
+      padding: EdgeInsets.only(top: gap),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,24 +225,15 @@ class _HeadingView extends StatelessWidget {
                         Text(
                           '${section.number}',
                           softWrap: true,
-                          style: namoText(
-                            NamoFonts.english,
-                            size: 18 * fontScale,
-                            color: p.heading,
-                            weight: 600,
-                          ),
+                          style: NamoType.sectionTitle(p.gold)
+                              .copyWith(fontSize: size),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: NamoSpace.md),
                         Expanded(
                           child: Text(
                             section.heading,
                             softWrap: true,
-                            style: namoText(
-                              NamoFonts.sinhala,
-                              size: 20 * fontScale,
-                              color: p.heading,
-                              weight: 600,
-                            ),
+                            style: heading,
                           ),
                         ),
                       ],
@@ -213,38 +241,31 @@ class _HeadingView extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 4),
-              IconButton(
+              const SizedBox(width: NamoSpace.xs),
+              NamoIconButton(
                 tooltip: bookmarked
                     ? 'Remove bookmark'
                     : 'Bookmark this section',
-                constraints: const BoxConstraints(
-                  minWidth: NamoSizes.touchTarget,
-                  minHeight: NamoSizes.touchTarget,
-                ),
-                icon: Icon(
-                  Symbols.bookmark_rounded,
-                  fill: bookmarked ? 1 : 0,
-                  weight: 300,
-                  color: bookmarked ? p.accent : p.textQuiet,
-                ),
+                icon: Symbols.bookmark_rounded,
+                filled: bookmarked,
+                color: bookmarked ? p.gold : p.textSecondary,
                 onPressed: onToggleBookmark,
               ),
             ],
           ),
           for (final note in item.notes)
             Padding(
-              padding: const EdgeInsets.only(top: 6),
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
               child: Text(
                 note,
                 softWrap: true,
-                style: namoText(
-                  NamoFonts.english,
-                  size: 14 * fontScale,
-                  color: p.textQuiet,
-                ),
+                // Follows the reading's text size, never below 12.
+                style: NamoType.caption(p.textSecondary)
+                    .copyWith(fontSize: max(12.0, 13 * fontScale)),
               ),
             ),
+          const SizedBox(height: NamoSpace.md),
+          SizedBox(height: 1, child: ColoredBox(color: p.border)),
         ],
       ),
     );
@@ -255,11 +276,13 @@ class _VerseView extends StatelessWidget {
   const _VerseView({
     super.key,
     required this.item,
+    required this.gap,
     required this.fontScale,
     required this.lineSpacing,
   });
 
   final VerseTextItem item;
+  final double gap;
   final double fontScale;
   final double lineSpacing;
 
@@ -267,7 +290,7 @@ class _VerseView extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.only(top: gap),
       child: Text(
         item.text,
         softWrap: true,
@@ -275,7 +298,7 @@ class _VerseView extends StatelessWidget {
           item.language,
           fontScale: fontScale,
           lineSpacing: lineSpacing,
-          color: item.secondary ? p.textQuiet : p.text,
+          color: item.secondary ? p.textSecondary : p.text,
         ),
       ),
     );
