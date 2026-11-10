@@ -67,13 +67,16 @@ Library testLibrary() => const Library(
 );
 
 class FakeContentRepository implements ContentRepository {
-  FakeContentRepository({this.failWith});
+  FakeContentRepository({this.failWith, this.library});
 
   final Object? failWith;
+
+  /// Content to give instead of [testLibrary].
+  final Library? library;
 
   @override
   Future<Library> load() async {
     if (failWith != null) throw failWith!;
-    return testLibrary();
+    return library ?? testLibrary();
   }
 }

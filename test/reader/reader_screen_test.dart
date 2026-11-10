@@ -1,4 +1,5 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
@@ -108,13 +109,53 @@ void main() {
         expect(size.width, greaterThanOrEqualTo(48), reason: label);
         expect(size.height, greaterThanOrEqualTo(48), reason: label);
       }
-      // The controls not yet wired do nothing when tapped.
-      await t.tap(find.byTooltip('Add to favourites'), warnIfMissed: false);
+      // The control not yet wired does nothing when tapped.
       await t.tap(find.byTooltip('Play'), warnIfMissed: false);
       await t.pumpAndSettle();
       expect(t.takeException(), isNull);
     },
   );
+
+  testWidgets('a reading titled like its category shows the title once', (
+    t,
+  ) async {
+    const same = Library(
+      categories: [
+        Category(
+          id: 'c1',
+          title: 'same title',
+          subtitle: 'subtitle 1',
+          readings: [
+            Reading(
+              id: 'r1',
+              title: 'same title',
+              sections: [
+                Section(
+                  id: 's01',
+                  number: 1,
+                  heading: 'heading 1',
+                  verses: [Verse(id: 's01-v1', paliSi: 'pali 1')],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+    await pumpApp(
+      t,
+      overrides: [
+        contentRepositoryProvider.overrideWithValue(
+          FakeContentRepository(library: same),
+        ),
+        keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+      ],
+      location: Routes.reader('r1'),
+    );
+    expect(find.text('same title'), findsOneWidget);
+    expect(find.byKey(const ValueKey('heading-s01')), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
 
   testWidgets('opening at ?section=s02 puts that heading at the top', (
     t,

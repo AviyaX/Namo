@@ -16,12 +16,20 @@ class ReaderBody extends StatefulWidget {
     required this.controller,
     required this.fontScale,
     required this.lineSpacing,
+    required this.bookmarkedSections,
+    required this.onToggleBookmark,
   });
 
   final List<ReaderItem> items;
   final ScrollController controller;
   final double fontScale;
   final double lineSpacing;
+
+  /// The ids of this reading's bookmarked sections.
+  final Set<String> bookmarkedSections;
+
+  /// Called with a section id when its heading's bookmark button is pressed.
+  final ValueChanged<String> onToggleBookmark;
 
   @override
   State<ReaderBody> createState() => ReaderBodyState();
@@ -67,6 +75,8 @@ class ReaderBodyState extends State<ReaderBody> {
         key: ValueKey('heading-${item.sectionId}'),
         item: item,
         fontScale: widget.fontScale,
+        bookmarked: widget.bookmarkedSections.contains(item.sectionId),
+        onToggleBookmark: () => widget.onToggleBookmark(item.sectionId),
       ),
       VerseTextItem() => _VerseView(
         key: ValueKey('verse-${item.verseId}-${item.language.code}'),
@@ -133,10 +143,18 @@ class ReaderBodyState extends State<ReaderBody> {
 }
 
 class _HeadingView extends StatelessWidget {
-  const _HeadingView({super.key, required this.item, required this.fontScale});
+  const _HeadingView({
+    super.key,
+    required this.item,
+    required this.fontScale,
+    required this.bookmarked,
+    required this.onToggleBookmark,
+  });
 
   final HeadingItem item;
   final double fontScale;
+  final bool bookmarked;
+  final VoidCallback onToggleBookmark;
 
   @override
   Widget build(BuildContext context) {
@@ -147,37 +165,58 @@ class _HeadingView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Semantics(
-            header: true,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  '${section.number}',
-                  softWrap: true,
-                  style: namoText(
-                    NamoFonts.english,
-                    size: 18 * fontScale,
-                    color: p.accent,
-                    weight: 600,
+          Row(
+            children: [
+              Expanded(
+                child: Semantics(
+                  header: true,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        '${section.number}',
+                        softWrap: true,
+                        style: namoText(
+                          NamoFonts.english,
+                          size: 18 * fontScale,
+                          color: p.accent,
+                          weight: 600,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          section.heading,
+                          softWrap: true,
+                          style: namoText(
+                            NamoFonts.sinhala,
+                            size: 20 * fontScale,
+                            color: p.heading,
+                            weight: 600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    section.heading,
-                    softWrap: true,
-                    style: namoText(
-                      NamoFonts.sinhala,
-                      size: 20 * fontScale,
-                      color: p.heading,
-                      weight: 600,
-                    ),
-                  ),
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                tooltip: bookmarked
+                    ? 'Remove bookmark'
+                    : 'Bookmark this section',
+                constraints: const BoxConstraints(
+                  minWidth: NamoSizes.touchTarget,
+                  minHeight: NamoSizes.touchTarget,
                 ),
-              ],
-            ),
+                icon: Icon(
+                  bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                  color: bookmarked ? p.accent : p.textQuiet,
+                ),
+                onPressed: onToggleBookmark,
+              ),
+            ],
           ),
           for (final note in item.notes)
             Padding(

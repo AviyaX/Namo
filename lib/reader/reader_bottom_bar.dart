@@ -19,12 +19,13 @@ class ReaderBottomBar extends StatelessWidget {
   /// Starts auto-scroll; wired in Task 11.
   final VoidCallback? onPlay;
 
-  /// How far through the reading the page is, 0–1; driven by Task 10.
+  /// How far through the reading the page is, 0–1.
   final double progress;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
+    final fraction = progress.clamp(0.0, 1.0);
     return Material(
       color: p.background,
       child: SafeArea(
@@ -33,14 +34,19 @@ class ReaderBottomBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ExcludeSemantics(
-              child: Container(
-                height: 2,
-                color: p.divider,
-                alignment: AlignmentDirectional.centerStart,
-                child: FractionallySizedBox(
-                  widthFactor: progress.clamp(0.0, 1.0),
-                  child: ColoredBox(color: p.accent),
+            Semantics(
+              container: true,
+              label: 'Reading progress',
+              value: '${(fraction * 100).round()}%',
+              child: ExcludeSemantics(
+                child: Container(
+                  height: 2,
+                  color: p.divider,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: FractionallySizedBox(
+                    widthFactor: fraction,
+                    child: ColoredBox(color: p.accent),
+                  ),
                 ),
               ),
             ),

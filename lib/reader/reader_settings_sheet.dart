@@ -7,23 +7,29 @@ import '../settings/settings.dart';
 import '../settings/settings_screen.dart';
 
 /// Opens the reader settings over the reader.
-Future<void> showReaderSettingsSheet(BuildContext context) =>
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (_) => const ReaderSettingsSheet(),
-    );
+Future<void> showReaderSettingsSheet(
+  BuildContext context, {
+  required VoidCallback onBackToBeginning,
+}) => showModalBottomSheet<void>(
+  context: context,
+  isScrollControlled: true,
+  showDragHandle: true,
+  builder: (_) => ReaderSettingsSheet(onBackToBeginning: onBackToBeginning),
+);
 
 /// Languages, layout, text size and line spacing. Each change applies to the
 /// reader at once.
 class ReaderSettingsSheet extends ConsumerWidget {
-  const ReaderSettingsSheet({super.key});
+  const ReaderSettingsSheet({super.key, required this.onBackToBeginning});
+
+  /// Called after the sheet closes for 'Back to the beginning'.
+  final VoidCallback onBackToBeginning;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final controller = ref.read(settingsProvider.notifier);
+    final p = NamoPalette.of(context);
     // The sheet has its own messenger so the choosers' messages show on top
     // of it rather than on the reader underneath. A Scaffold needs a set
     // height; the content scrolls within it.
@@ -61,8 +67,31 @@ class ReaderSettingsSheet extends ConsumerWidget {
                     describe: (v) => v.toStringAsFixed(1),
                     onChanged: controller.setLineSpacing,
                   ),
-                  // Task 11 adds the scroll speed control here, and Task 10
-                  // adds 'Back to the beginning' below it.
+                  // Task 11 adds the scroll speed control here.
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: TextButton.icon(
+                        icon: const Icon(Icons.vertical_align_top),
+                        label: Text(
+                          'Back to the beginning',
+                          softWrap: true,
+                          style: namoText(
+                            NamoFonts.english,
+                            size: 16,
+                            color: p.heading,
+                            weight: 500,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(foregroundColor: p.heading),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          onBackToBeginning();
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
