@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -222,7 +223,9 @@ class _HeadingView extends StatelessWidget {
                   minHeight: NamoSizes.touchTarget,
                 ),
                 icon: Icon(
-                  bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                  Symbols.bookmark_rounded,
+                  fill: bookmarked ? 1 : 0,
+                  weight: 300,
                   color: bookmarked ? p.accent : p.textQuiet,
                 ),
                 onPressed: onToggleBookmark,

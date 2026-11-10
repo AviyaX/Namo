@@ -5,6 +5,7 @@ import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
@@ -99,7 +100,7 @@ void main() {
       // Nothing of them is shown, so both lists read as empty.
       expect(find.text('No bookmarks yet.'), findsOneWidget);
       expect(find.text('No favourites yet.'), findsOneWidget);
-      expect(find.byIcon(Icons.close), findsNothing);
+      expect(find.byIcon(Symbols.close_rounded), findsNothing);
     },
   );
 

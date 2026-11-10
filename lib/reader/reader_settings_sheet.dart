@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -71,7 +72,10 @@ class ReaderSettingsSheet extends ConsumerWidget {
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: TextButton.icon(
-                        icon: const Icon(Icons.vertical_align_top),
+                        icon: const Icon(
+                          Symbols.vertical_align_top_rounded,
+                          weight: 300,
+                        ),
                         label: Text(
                           'Back to the beginning',
                           softWrap: true,

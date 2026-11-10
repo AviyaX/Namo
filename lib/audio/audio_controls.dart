@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -84,7 +85,12 @@ class _Controls extends StatelessWidget {
                 key: const ValueKey('audio-play'),
                 tooltip: playing ? 'Pause recording' : 'Play recording',
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                icon: Icon(playing ? Icons.pause_circle : Icons.play_circle),
+                icon: Icon(
+                  playing
+                      ? Symbols.pause_circle_rounded
+                      : Symbols.play_circle_rounded,
+                  weight: 300,
+                ),
                 onPressed: ready
                     ? () => playing ? player.pause() : player.play()
                     : null,
@@ -93,7 +99,7 @@ class _Controls extends StatelessWidget {
                 key: const ValueKey('audio-restart'),
                 tooltip: 'Restart recording',
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                icon: const Icon(Icons.replay),
+                icon: const Icon(Symbols.replay_rounded, weight: 300),
                 onPressed: ready ? player.restart : null,
               ),
               Expanded(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/audio_catalogue.dart';
 import '../audio/audio_controls.dart';
@@ -494,7 +495,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               appBar: AppBar(
                 leading: IconButton(
                   tooltip: 'Back',
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(Symbols.arrow_back_rounded, weight: 300),
                   onPressed: _back,
                 ),
                 titleSpacing: 0,
@@ -531,7 +532,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                         ? 'Remove from favourites'
                         : 'Add to favourites',
                     icon: Icon(
-                      favourite ? Icons.favorite : Icons.favorite_border,
+                      Symbols.favorite_rounded,
+                      fill: favourite ? 1 : 0,
+                      weight: 300,
                       color: favourite ? p.accent : p.heading,
                     ),
                     onPressed: () => ref
@@ -541,7 +544,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                   IconButton(
                     key: const ValueKey('reader-settings'),
                     tooltip: 'Reading settings',
-                    icon: const Icon(Icons.tune),
+                    icon: const Icon(Symbols.tune_rounded, weight: 300),
                     onPressed: () => showReaderSettingsSheet(
                       context,
                       onBackToBeginning: _backToBeginning,

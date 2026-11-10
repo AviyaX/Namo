@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import 'auto_scroll.dart';
@@ -79,7 +80,10 @@ class ReaderBottomBar extends StatelessWidget {
                           IconButton(
                             key: const ValueKey('reader-prev'),
                             tooltip: 'Previous section',
-                            icon: const Icon(Icons.skip_previous),
+                            icon: const Icon(
+                              Symbols.skip_previous_rounded,
+                              weight: 300,
+                            ),
                             onPressed: onPrevious,
                           ),
                           IconButton(
@@ -92,15 +96,19 @@ class ReaderBottomBar extends StatelessWidget {
                             },
                             icon: Icon(
                               autoScroll == AutoScrollStatus.running
-                                  ? Icons.pause
-                                  : Icons.play_arrow,
+                                  ? Symbols.pause_rounded
+                                  : Symbols.play_arrow_rounded,
+                              weight: 300,
                             ),
                             onPressed: onPlay,
                           ),
                           IconButton(
                             key: const ValueKey('reader-next'),
                             tooltip: 'Next section',
-                            icon: const Icon(Icons.skip_next),
+                            icon: const Icon(
+                              Symbols.skip_next_rounded,
+                              weight: 300,
+                            ),
                             onPressed: onNext,
                           ),
                         ],

@@ -10,6 +10,7 @@ import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
@@ -238,7 +239,8 @@ void main() {
         t.getTopLeft(offButton).dx,
         greaterThan(t.getTopRight(find.text('heading 2')).dx),
       );
-      expect(iconOf(t, offButton).icon, Icons.bookmark_border);
+      expect(iconOf(t, offButton).icon, Symbols.bookmark_rounded);
+      expect(iconOf(t, offButton).fill, 0);
       expect(iconOf(t, offButton).color, palette.textQuiet);
       expect(
         t.getSemantics(off),
@@ -250,7 +252,8 @@ void main() {
       final on = inHeading('s02', find.byTooltip('Remove bookmark'));
       expect(on, findsOneWidget);
       final onButton = find.ancestor(of: on, matching: find.byType(IconButton));
-      expect(iconOf(t, onButton).icon, Icons.bookmark);
+      expect(iconOf(t, onButton).icon, Symbols.bookmark_rounded);
+      expect(iconOf(t, onButton).fill, 1);
       expect(iconOf(t, onButton).color, palette.accent);
       expect(
         t.getSemantics(on),
@@ -277,13 +280,12 @@ void main() {
         t.getSemantics(add),
         isSemantics(tooltip: 'Add to favourites', isButton: true),
       );
-      expect(
-        iconOf(
-          t,
-          find.ancestor(of: add, matching: find.byType(IconButton)),
-        ).icon,
-        Icons.favorite_border,
+      final emptyHeart = iconOf(
+        t,
+        find.ancestor(of: add, matching: find.byType(IconButton)),
       );
+      expect(emptyHeart.icon, Symbols.favorite_rounded);
+      expect(emptyHeart.fill, 0);
       await t.tap(add);
       await t.pump();
       final remove = find.byTooltip('Remove from favourites');
@@ -297,7 +299,8 @@ void main() {
         t,
         find.ancestor(of: remove, matching: find.byType(IconButton)),
       );
-      expect(heart.icon, Icons.favorite);
+      expect(heart.icon, Symbols.favorite_rounded);
+      expect(heart.fill, 1);
       expect(heart.color, palette.accent);
       expect(c.read(savedProvider).isFavourite('r1'), isTrue);
 

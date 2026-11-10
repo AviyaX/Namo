@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -132,11 +133,18 @@ class _ChoiceRow extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(label,
-                    style: namoText(NamoFonts.english, size: 18, color: color)),
+                child: Text(
+                  label,
+                  style: namoText(NamoFonts.english, size: 18, color: color),
+                ),
               ),
               if (selected)
-                Icon(Icons.check, size: 22, color: enabled ? p.heading : color),
+                Icon(
+                  Symbols.check_rounded,
+                  size: 22,
+                  weight: 300,
+                  color: enabled ? p.heading : color,
+                ),
             ],
           ),
         ),
@@ -158,8 +166,9 @@ class LanguageChooser extends ConsumerWidget {
             label: l.label,
             selected: selection.has(l),
             onTap: () {
-              final outcome =
-                  ref.read(settingsProvider.notifier).toggleLanguage(l);
+              final outcome = ref
+                  .read(settingsProvider.notifier)
+                  .toggleLanguage(l);
               final message = switch (outcome) {
                 ToggleOutcome.changed => null,
                 ToggleOutcome.refusedThird =>
@@ -205,9 +214,14 @@ class LayoutChooser extends ConsumerWidget {
               alignment: AlignmentDirectional.centerStart,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                child: Text('Needs two languages',
-                    style: namoText(NamoFonts.english,
-                        size: 14, color: p.textQuiet)),
+                child: Text(
+                  'Needs two languages',
+                  style: namoText(
+                    NamoFonts.english,
+                    size: 14,
+                    color: p.textQuiet,
+                  ),
+                ),
               ),
             ),
           ),
