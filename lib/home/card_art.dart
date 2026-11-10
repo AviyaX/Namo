@@ -36,8 +36,8 @@ class CardArt extends StatelessWidget {
           : LayoutBuilder(
               builder: (context, box) {
                 // Decode at the size of the slot, not the full file.
-                final pixels = box.maxWidth *
-                    MediaQuery.devicePixelRatioOf(context);
+                final pixels =
+                    box.maxWidth * MediaQuery.devicePixelRatioOf(context);
                 return Image.asset(
                   asset,
                   key: const ValueKey('card-art-picture'),
@@ -49,12 +49,14 @@ class CardArt extends StatelessWidget {
                       ? pixels.clamp(1, _maxDecodeWidth).round()
                       : _maxDecodeWidth,
                   // The gradient shows until the first frame is decoded.
+                  // `sync` is true when the picture was already decoded
+                  // (in the image cache): show it at once, with no
+                  // one-frame flash of the gradient.
                   frameBuilder: (context, child, frame, sync) =>
                       frame == null && !sync
-                          ? const _DrawnPanel(lotus: false)
-                          : child,
-                  errorBuilder: (context, error, stack) =>
-                      const _DrawnPanel(),
+                      ? const _DrawnPanel(lotus: false)
+                      : child,
+                  errorBuilder: (context, error, stack) => const _DrawnPanel(),
                 );
               },
             ),
