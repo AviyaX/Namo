@@ -14,6 +14,7 @@ import '../settings/settings.dart';
 import 'card_art.dart';
 import 'continue_card.dart';
 import 'featured_card.dart';
+import 'flows_row.dart';
 import 'gatha_card.dart';
 import 'section_strip.dart';
 import 'today.dart';
@@ -109,6 +110,8 @@ class _Blocks extends ConsumerWidget {
             lineSpacing: lineSpacing,
           );
     final featured = first == null ? null : FeaturedCard(category: first);
+    // Only with a flow, so Home without flows keeps its gaps as they were.
+    final flowsRow = flows.flows.isEmpty ? null : FlowsRow(library: library);
 
     final blocks = <Widget>[
       if (wide) ...[
@@ -124,8 +127,10 @@ class _Blocks extends ConsumerWidget {
           )
         else
           ?(continueCard ?? gathaCard),
+        ?flowsRow,
       ] else ...[
         ?continueCard,
+        ?flowsRow,
         ?featured,
         ?gathaCard,
       ],

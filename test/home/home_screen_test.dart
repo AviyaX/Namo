@@ -712,6 +712,90 @@ void main() {
     });
   });
 
+  group('your flows', () {
+    final stored = {
+      flowsKey: jsonEncode(
+        const FlowsState(
+          flows: [
+            Flow(
+              id: 'flow-1',
+              name: 'Flow one',
+              sections: [FlowRef(readingId: 'r1', sectionId: 's01')],
+            ),
+          ],
+          nextNumber: 2,
+        ).toJson(),
+      ),
+    };
+    final row = find.byKey(const ValueKey('home-flows'));
+    double top(WidgetTester t, Finder f) => t.getTopLeft(f).dy;
+
+    testWidgets('with nothing to continue the row comes first, before the '
+        'featured card', (t) async {
+      await openReal(t, Routes.home, library: testLibrary(), storeExtras: stored);
+      expect(find.byType(ContinueCard), findsNothing);
+      expect(top(t, row), lessThan(top(t, find.byType(FeaturedCard))));
+      expect(top(t, row), greaterThan(top(t, find.text('Good morning'))));
+    });
+
+    testWidgets('after Continue reading, before the featured card', (t) async {
+      await openReal(t, Routes.home, library: testLibrary(), storeExtras: stored);
+      await _remember(t, 'r1', 's02', 0.5);
+      expect(top(t, row), greaterThan(top(t, find.byType(ContinueCard))));
+      expect(top(t, row), lessThan(top(t, find.byType(FeaturedCard))));
+    });
+
+    testWidgets('wide: after the Continue reading and gatha row', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        size: const Size(1280, 800),
+        overrides: [_clock(DateTime(2026, 3, 4, 8))],
+        storeExtras: stored,
+      );
+      final lib = await realLibrary(t);
+      final reading = lib.categories.first.readings.first;
+      await _remember(t, reading.id, reading.sections[3].id, 0.25);
+      expect(
+        top(t, row),
+        greaterThan(t.getBottomLeft(find.byType(GathaCard)).dy),
+      );
+      expect(
+        top(t, row),
+        greaterThan(t.getBottomLeft(find.byType(ContinueCard)).dy),
+      );
+      expect(
+        top(t, row),
+        lessThan(top(t, find.byType(SectionStrip))),
+      );
+    });
+
+    testWidgets('wide, nothing to continue: after the gatha', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        size: const Size(1280, 800),
+        overrides: [_clock(DateTime(2026, 3, 4, 8))],
+        storeExtras: stored,
+      );
+      expect(
+        top(t, row),
+        greaterThan(t.getBottomLeft(find.byType(GathaCard)).dy),
+      );
+    });
+
+    testWidgets('the row goes when the last flow is deleted', (t) async {
+      await openReal(t, Routes.home, library: testLibrary(), storeExtras: stored);
+      expect(row, findsOneWidget);
+      final before = top(t, find.byType(FeaturedCard));
+      _container(t).read(flowsProvider.notifier).delete('flow-1');
+      await t.pumpAndSettle();
+      expect(row, findsNothing);
+      expect(find.text('Your flows'), findsNothing);
+      expect(top(t, find.byType(FeaturedCard)), lessThan(before));
+    });
+  });
+
   testWidgets('the last block can be scrolled above the navigation bar at '
       '390 x 844', (t) async {
     await openReal(t, Routes.home, library: severalCategories());
