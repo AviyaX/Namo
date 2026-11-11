@@ -65,6 +65,7 @@ class MyFlowsPart extends ConsumerWidget {
               leading: const _FlowMark(),
               title: flow.name,
               caption: sectionCount(liveRefs(flow, library).length),
+              speakCaption: true,
               onTap: () => context.go(Routes.reader(flow.id)),
               action: NamoIconButton(
                 key: ValueKey('flow-edit-${flow.id}'),

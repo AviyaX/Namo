@@ -183,7 +183,7 @@ class _NewFlowSheetState extends State<_NewFlowSheet> {
         color: chosen ? p.sage : p.textSecondary,
       ),
       title: title,
-      titleFamily: NamoFonts.sinhala,
+      titleFamily: reading == null ? NamoFonts.english : NamoFonts.sinhala,
       subtitle: subtitle,
       subtitleFamily: NamoFonts.romanPali,
       checked: chosen,

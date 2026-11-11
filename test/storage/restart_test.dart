@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
+import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -204,6 +205,11 @@ void main() {
       );
       expect(t.takeException(), isNull, reason: at);
       expect(find.text('Your flows'), findsNothing, reason: at);
+      if (at == Routes.home) {
+        // Home itself drew, with its content: not a blank or error page.
+        expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+        expect(find.byType(FeaturedCard), findsOneWidget);
+      }
     }
     expect(find.text('Make your own flow'), findsOneWidget);
   });

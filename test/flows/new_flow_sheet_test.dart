@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/design/typography.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart' hide Flow;
@@ -102,6 +103,23 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+
+  testWidgets('"Nothing" is drawn in the English font, the readings in the '
+      'Sinhala one', (t) async {
+    await openFlows(t, Routes.library, {});
+    await _openSheet(t);
+    String? family(String key, String text) => t
+        .widget<Text>(
+          find.descendant(
+            of: find.byKey(ValueKey(key)),
+            matching: find.text(text),
+          ),
+        )
+        .style
+        ?.fontFamily;
+    expect(family('start-from-nothing', 'Nothing'), NamoFonts.english);
+    expect(family('start-from-r1', 'reading 1'), NamoFonts.sinhala);
   });
 
   testWidgets('Create with no name and "Nothing" makes an empty "My flow" '

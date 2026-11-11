@@ -14,6 +14,7 @@ class ListRow extends StatelessWidget {
     required this.onTap,
     this.subtitle,
     this.caption,
+    this.speakCaption = false,
     this.number,
     this.leading,
     this.titleFamily = NamoFonts.english,
@@ -58,6 +59,10 @@ class ListRow extends StatelessWidget {
   final String title;
   final String? subtitle;
   final String? caption;
+
+  /// Whether [caption] is part of the row's spoken label (a flow's section
+  /// count, say). Left false, it is only drawn.
+  final bool speakCaption;
   final int? number;
   final String titleFamily;
 
@@ -82,6 +87,7 @@ class ListRow extends StatelessWidget {
         if (number != null) '$number',
         title,
         if (subtitle != null) subtitle,
+        if (speakCaption && caption != null) caption,
         ?detailLabel,
       ].join(', '),
       child: Padding(

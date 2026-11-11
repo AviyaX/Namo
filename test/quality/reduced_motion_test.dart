@@ -139,6 +139,8 @@ void main() {
           .first;
       final id = '$realReadingId~${first.id}';
       await openFlows(t, Routes.flowEditor('flow-1'));
+      final row = find.byKey(ValueKey('flow-row-$id'));
+      final before = t.getRect(row);
       // The menu is in its place at once. (Its anchor keeps asking for
       // frames while they come quicker than 100 ms apart, with or without
       // reduced motion, so this is measured by place, not by
@@ -154,8 +156,8 @@ void main() {
       await t.pump();
       await t.pump(const Duration(milliseconds: 16));
       expect(item, findsNothing);
-      final row = find.byKey(ValueKey('flow-row-$id'));
       final moved = t.getRect(row);
+      expect(moved.top, greaterThan(before.top), reason: 'the row moved down');
       await t.pumpAndSettle();
       expect(t.getRect(row), moved);
       await tapAndStop(t, 'flow-remove-$id');

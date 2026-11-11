@@ -52,6 +52,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   /// The topic chosen with the chips; null is "All". Not stored.
   String? _chip;
 
+  /// Each topic's header row, so that a topic opened from the address can be
+  /// brought into view.
+  final _headers = <String, GlobalKey>{};
+
   @override
   void dispose() {
     _query.dispose();
@@ -69,17 +73,41 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     return null;
   }
 
-  /// Stores the request as open, empties the search and the chip, then clears
+  /// Stores the request as open and brings its topic into view, empties the
+  /// search and the chip, then clears
   /// the request from the address so that asking again later (from Home, say)
   /// is seen as a new request.
   void _settle(Category? category) {
     if (!mounted) return;
     if (category != null) {
       ref.read(openCategoriesProvider.notifier).open(category.id);
+      _reveal(category.id);
     }
     _query.clear();
     setState(() => _chip = null);
     context.replace(Routes.library);
+  }
+
+  /// Scrolls [categoryId]'s header to the top of the page when it is not
+  /// wholly in view (the person's flows can push the topics below the fold);
+  /// a header already in view leaves the page where it is.
+  void _reveal(String categoryId) {
+    final header = _headers[categoryId]?.currentContext;
+    if (header == null) return;
+    final box = header.findRenderObject();
+    final view = Scrollable.maybeOf(header)?.context.findRenderObject();
+    if (box is! RenderBox || view is! RenderBox) return;
+    final inset = MediaQuery.paddingOf(context);
+    final top = box.localToGlobal(Offset.zero, ancestor: view).dy;
+    if (top >= inset.top &&
+        top + box.size.height <= view.size.height - inset.bottom) {
+      return;
+    }
+    Scrollable.ensureVisible(
+      header,
+      duration: NamoMotion.of(context, NamoMotion.open),
+      curve: NamoMotion.curve,
+    );
   }
 
   @override
@@ -154,6 +182,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                   for (final c in categories)
                     if (chip == null || chip == c.id)
                       _CategoryEntry(
+                        headerKey: _headers.putIfAbsent(c.id, GlobalKey.new),
                         category: c,
                         open: open.contains(c.id) || c.id == requested?.id,
                         animate: c.id != requested?.id,
@@ -256,11 +285,13 @@ class _HitLine extends StatelessWidget {
 
 class _CategoryEntry extends ConsumerWidget {
   const _CategoryEntry({
+    required this.headerKey,
     required this.category,
     required this.open,
     required this.animate,
   });
 
+  final GlobalKey headerKey;
   final Category category;
   final bool open;
 
@@ -278,6 +309,7 @@ class _CategoryEntry extends ConsumerWidget {
     return Column(
       children: [
         ListRow(
+          key: headerKey,
           leading: TopicThumbnail(categoryId: category.id),
           title: category.title,
           subtitle: category.subtitle,

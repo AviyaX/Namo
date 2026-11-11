@@ -5,6 +5,7 @@ import 'package:buddhist_gatha/flows/flows.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:flutter/widgets.dart' show StringCharacters;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -52,6 +53,42 @@ void main() {
     expect(flowName('x' * 500, []).length, 40);
     expect(flowName('a\nb', []), 'a b');
     expect(flowName('${'x' * 39} yyy', []), 'x' * 39);
+  });
+
+  group('flowName counts visible characters', () {
+    // Test data for a name box: a two-code-unit Sinhala syllable repeated.
+    const ka = 'කා';
+    // Consonant, virama, zero-width joiner, consonant.
+    const conjunct = 'ක්‍ෂ';
+    const family = '\u{1F468}‍\u{1F469}‍\u{1F467}';
+
+    test('a Sinhala name of exactly 40 is kept whole', () {
+      final name = ka * 40;
+      expect(flowName(name, []), name);
+    });
+
+    test('a Sinhala name of 41 is cut at a character boundary', () {
+      final name = ka * 41;
+      final cut = flowName(name, []);
+      expect(cut.characters.length, 40);
+      expect(name.startsWith(cut), isTrue);
+      expect(cut, ka * 40);
+    });
+
+    test('a joined conjunct is not split', () {
+      final name = '${ka * 38}$conjunct${ka * 5}';
+      final cut = flowName(name, []);
+      expect(cut, name.characters.take(40).toString());
+      expect(cut.characters.length, 40);
+      expect(cut.endsWith('්'), isFalse);
+      expect(cut.endsWith('‍'), isFalse);
+    });
+
+    test('an emoji at the end is not split', () {
+      final name = '${'x' * 39}$family';
+      expect(flowName(name, []), name);
+      expect(flowName('$name tail', []), name);
+    });
   });
 
   test('sectionCount', () {

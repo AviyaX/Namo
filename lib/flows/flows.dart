@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' show StringCharacters;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../content/model.dart';
@@ -135,11 +136,15 @@ class FlowsState {
   }
 }
 
-/// Trimmed, line breaks turned to spaces, cut to 40; empty gives "My flow",
+/// Trimmed, line breaks turned to spaces, cut to 40 visible characters
+/// (grapheme clusters, as the name box counts them); empty gives "My flow",
 /// "My flow 2" … (first not in [taken]).
 String flowName(String raw, Iterable<String> taken) {
   var name = raw.trim().replaceAll(RegExp(r'\r\n|\r|\n'), ' ');
-  if (name.length > flowNameMax) name = name.substring(0, flowNameMax);
+  final visible = name.characters;
+  if (visible.length > flowNameMax) {
+    name = visible.take(flowNameMax).toString();
+  }
   name = name.trim();
   if (name.isNotEmpty) return name;
   final used = taken.toSet();

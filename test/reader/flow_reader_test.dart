@@ -206,6 +206,27 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('the settings sheet offers the layout choice in a mixed flow '
+      'but not in a flow of pirith only', (t) async {
+    final [a, b] = await _longPirith(t);
+    final library = await _withPirith(t);
+    Future<void> openSheet(List<FlowRef> sections) async {
+      await t.pumpWidget(const SizedBox());
+      await _open(t, Routes.reader('flow-1'), {
+        'flow-1': sections,
+      }, library: library);
+      await t.tap(find.byKey(const ValueKey('reader-settings')));
+      await t.pumpAndSettle();
+      expect(find.text('Languages'), findsOneWidget);
+    }
+
+    await openSheet([_ref(a.id, 'p'), _ref(b.id, 'p')]);
+    expect(find.text('When two languages show'), findsNothing);
+
+    await openSheet([_ref('r1', 's01'), _ref(a.id, 'p')]);
+    expect(find.text('When two languages show'), findsOneWidget);
+  });
+
   testWidgets('a bookmark in a flow is the original section\'s', (t) async {
     await _open(
       t,

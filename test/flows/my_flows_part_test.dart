@@ -83,6 +83,22 @@ void main() {
       expect(_top(t, add), lessThan(_top(t, find.text('subtitle 1'))));
     });
 
+    testWidgets('a row is announced as its name and its count; a topic row '
+        'as before', (t) async {
+      await openFlows(t, Routes.library, {
+        'flow-1': [],
+        'flow-2': [a],
+        'flow-3': [a, b],
+      });
+      final h = t.ensureSemantics();
+      expect(find.bySemanticsLabel('Flow 1, 0 sections'), findsOneWidget);
+      expect(find.bySemanticsLabel('Flow 2, 1 section'), findsOneWidget);
+      expect(find.bySemanticsLabel('Flow 3, 2 sections'), findsOneWidget);
+      // A topic row says its title and subtitle, not its count.
+      expect(find.bySemanticsLabel('category 1, subtitle 1'), findsOneWidget);
+      h.dispose();
+    });
+
     testWidgets('tapping a row opens the flow in the reader', (t) async {
       final container = await openFlows(t, Routes.library, {
         'flow-1': [a, b],
@@ -152,6 +168,65 @@ void main() {
         expect(size.width, greaterThanOrEqualTo(48), reason: key);
         expect(size.height, greaterThanOrEqualTo(48), reason: key);
       }
+    });
+  });
+
+  group('a topic asked for by the address', () {
+    const small = Size(320, 568);
+    final many = {
+      for (var i = 1; i <= 8; i++) 'flow-$i': [a],
+    };
+
+    /// Whether [f] lies wholly on the screen, above the floating tab bar.
+    bool onScreen(WidgetTester t, Finder f) {
+      final r = t.getRect(f);
+      final bar = t.getRect(find.byKey(const ValueKey('nav-bar')));
+      return r.top >= 0 && r.bottom <= bar.top;
+    }
+
+    double offset(WidgetTester t) => t
+        .state<ScrollableState>(
+          find.descendant(
+            of: find.byKey(const ValueKey('screen-library')),
+            matching: find.byType(Scrollable),
+          ).first,
+        )
+        .position
+        .pixels;
+
+    for (final (name, at) in [
+      ('open=', Routes.category('c2')),
+      ('reading=', Routes.contents('r2')),
+    ]) {
+      testWidgets('with many flows, $name opens the topic on screen',
+          (t) async {
+        await openFlows(t, at, many, size: small);
+        expect(find.byKey(const ValueKey('open-c2')), findsOneWidget);
+        expect(onScreen(t, find.text('subtitle 2')), isTrue);
+        expect(t.takeException(), isNull);
+      });
+    }
+
+    testWidgets('with reduced motion the topic is on screen without a glide',
+        (t) async {
+      t.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+      final container = await openFlows(t, Routes.library, many, size: small);
+      expect(onScreen(t, find.text('subtitle 2')), isFalse);
+      container.read(routerProvider).go(Routes.category('c2'));
+      await t.pump();
+      await t.pump();
+      expect(t.hasRunningAnimations, isFalse);
+      expect(onScreen(t, find.text('subtitle 2')), isTrue);
+    });
+
+    testWidgets('with no flows, a topic already in view does not move the '
+        'page', (t) async {
+      await openFlows(t, Routes.category('c2'), {});
+      expect(find.byKey(const ValueKey('open-c2')), findsOneWidget);
+      expect(onScreen(t, find.text('subtitle 2')), isTrue);
+      expect(offset(t), 0);
     });
   });
 
