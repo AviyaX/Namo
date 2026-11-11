@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../quality/quality_support.dart';
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
 
@@ -161,5 +162,14 @@ void main() {
     expect(find.text('Text size'), findsOneWidget);
     expect(find.text('Scroll speed'), findsOneWidget);
     expect(find.text('Back to the beginning'), findsOneWidget);
+  });
+
+  testWidgets('no layout choice for the Introduction', (t) async {
+    await openReal(t, Routes.reader(spIntroductionId));
+    await t.tap(find.byKey(const ValueKey('reader-settings')));
+    await t.pumpAndSettle();
+    expect(find.text('Languages'), findsOneWidget);
+    expect(find.text('When two languages show'), findsNothing);
+    expect(find.text('Text size'), findsOneWidget);
   });
 }

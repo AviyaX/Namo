@@ -45,6 +45,11 @@ String pirithCountLabel(int n) => '$n pirith';
 bool isPirithTopic(Category c) =>
     c.readings.isNotEmpty && c.readings.every((r) => r.isPhrased);
 
+/// True for a topic of several readings that are each one section (Pirith,
+/// Samantha Pattana): it is gone through reading by reading.
+bool listsReadings(Category c) =>
+    c.readings.length > 1 && c.readings.every((r) => r.sections.length == 1);
+
 /// The count shown for [c]: its pirith, or its sections.
 String topicCountLabel(Category c) => isPirithTopic(c)
     ? pirithCountLabel(c.readings.length)

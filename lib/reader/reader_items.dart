@@ -59,6 +59,10 @@ class VerseTextItem extends ReaderItem {
 /// One block of a pirith: its phrases together, shown in [languages] (the
 /// chosen selection, in order). [index] is the block's zero-based position
 /// in the reading.
+///
+/// A unit kept line by line ([keepLines]) shows its phrases one per line,
+/// and its Sinhala is [meaning], one passage under the lines; its
+/// [languages] are only those it shows, the lines first.
 class PhraseBlockItem extends ReaderItem {
   PhraseBlockItem({
     required this.sectionId,
@@ -66,6 +70,8 @@ class PhraseBlockItem extends ReaderItem {
     required this.index,
     required this.phrases,
     required this.languages,
+    this.keepLines = false,
+    this.meaning,
   });
 
   @override
@@ -75,6 +81,46 @@ class PhraseBlockItem extends ReaderItem {
   final int index;
   final List<Phrase> phrases;
   final List<ReadingLanguage> languages;
+  final bool keepLines;
+  final String? meaning;
+}
+
+/// The block for phrased verse [v] of section [s]. A unit kept line by line
+/// shows the chosen languages its lines have text in, then its meaning when
+/// Sinhala is chosen and it has one; nothing stands in for a language it
+/// lacks, as in a pirith.
+PhraseBlockItem _block(
+  Section s,
+  Verse v,
+  int index,
+  List<ReadingLanguage> languages,
+) {
+  if (!v.keepLines) {
+    return PhraseBlockItem(
+      sectionId: s.id,
+      verseId: v.id,
+      index: index,
+      phrases: v.phrases,
+      languages: languages,
+    );
+  }
+  final meaning = v.sinhala;
+  return PhraseBlockItem(
+    sectionId: s.id,
+    verseId: v.id,
+    index: index,
+    phrases: v.phrases,
+    languages: [
+      for (final l in languages)
+        if (l != ReadingLanguage.sinhala &&
+            v.phrases.any((p) => p.text(l).isNotEmpty))
+          l,
+      if (meaning != null && languages.contains(ReadingLanguage.sinhala))
+        ReadingLanguage.sinhala,
+    ],
+    keepLines: true,
+    meaning: meaning,
+  );
 }
 
 const _explanationNote =
@@ -103,6 +149,17 @@ List<String> _notes(Section section, List<ReadingLanguage> languages) {
   return notes;
 }
 
+/// True for a section whose verses are all shown whatever the languages
+/// (an introduction).
+bool isAlwaysShown(Section s) =>
+    s.verses.isNotEmpty && s.verses.every((v) => v.alwaysShown);
+
+/// True when [reading] shows the same whatever the two-language layout: a
+/// pirith, or a reading of introductions only.
+bool ignoresLayout(Reading reading) =>
+    reading.isPhrased ||
+    (reading.sections.isNotEmpty && reading.sections.every(isAlwaysShown));
+
 /// What the reader shows for [reading], in order. A verse with no text in a
 /// language gives no item for that language.
 List<ReaderItem> buildReaderItems(
@@ -127,15 +184,7 @@ List<ReaderItem> buildReaderItems(
         ),
       );
       for (final v in s.verses) {
-        items.add(
-          PhraseBlockItem(
-            sectionId: s.id,
-            verseId: v.id,
-            index: block++,
-            phrases: v.phrases,
-            languages: languages,
-          ),
-        );
+        items.add(_block(s, v, block++, languages));
       }
     }
     return items;
@@ -160,13 +209,23 @@ List<ReaderItem> buildReaderItems(
     if (s.verses.isNotEmpty && s.verses.every((v) => v.isPhrased)) {
       items.add(HeadingItem(s, const [], canBookmark: false));
       for (final v in s.verses) {
+        items.add(_block(s, v, block++, languages));
+      }
+      continue;
+    }
+    if (isAlwaysShown(s)) {
+      // An introduction: its Sinhala paragraphs whatever the languages.
+      items.add(HeadingItem(s, const [], canBookmark: false));
+      for (final v in s.verses) {
+        final text = v.sinhala;
+        if (text == null) continue;
         items.add(
-          PhraseBlockItem(
+          VerseTextItem(
             sectionId: s.id,
             verseId: v.id,
-            index: block++,
-            phrases: v.phrases,
-            languages: languages,
+            language: ReadingLanguage.sinhala,
+            text: text,
+            secondary: false,
           ),
         );
       }

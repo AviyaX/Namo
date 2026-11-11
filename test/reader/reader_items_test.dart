@@ -318,4 +318,174 @@ void main() {
       expect(heading.credit, isNull);
     });
   });
+
+  group('a reading of units kept line by line', () {
+    Phrase line(String s) => Phrase(pali: 'l$s', sinhala: '', english: '');
+    final reading = Reading(
+      id: 'k',
+      title: 'Units',
+      titleRoman: 'Roman units',
+      audio: const RecordingInfo(asset: 'a.m4a', label: 'Credit line'),
+      sections: [
+        Section(
+          id: 'k-s',
+          number: 1,
+          heading: 'Units',
+          verses: [
+            Verse(
+              id: 'k-1',
+              keepLines: true,
+              sinhala: 'mone\nmtwo',
+              phrases: [line('1'), line('2')],
+            ),
+            Verse(id: 'k-2', keepLines: true, phrases: [line('3')]),
+          ],
+        ),
+      ],
+    );
+
+    List<PhraseBlockItem> blocks(List<ReadingLanguage> languages) {
+      final items = buildReaderItems(
+        reading,
+        LanguageSelection(languages),
+        TwoLanguageLayout.verse,
+      );
+      expect(_kinds(items), ['H(k-s)', 'B(k-1, 0)', 'B(k-2, 1)']);
+      return items.whereType<PhraseBlockItem>().toList();
+    }
+
+    test('each unit is one block that keeps its lines and carries its '
+        'meaning', () {
+      final b = blocks([_pali]);
+      expect(b.map((x) => x.keepLines), [true, true]);
+      expect(b[0].meaning, 'mone\nmtwo');
+      expect(b[1].meaning, isNull);
+      expect(b[0].phrases, same(reading.sections[0].verses[0].phrases));
+    });
+
+    test('Pali shows the lines', () {
+      expect(blocks([_pali]).map((x) => x.languages), [
+        [_pali],
+        [_pali],
+      ]);
+    });
+
+    test('Sinhala shows the meaning, and nothing for a unit without one', () {
+      expect(blocks([_sinhala]).map((x) => x.languages), [
+        [_sinhala],
+        <ReadingLanguage>[],
+      ]);
+    });
+
+    test('English shows nothing, as in a pirith without English', () {
+      expect(blocks([_english]).map((x) => x.languages), [
+        <ReadingLanguage>[],
+        <ReadingLanguage>[],
+      ]);
+    });
+
+    test('Pali with Sinhala shows the lines and the meaning under them, in '
+        'either order of choosing', () {
+      for (final chosen in [
+        [_pali, _sinhala],
+        [_sinhala, _pali],
+      ]) {
+        expect(blocks(chosen).map((x) => x.languages), [
+          [_pali, _sinhala],
+          [_pali],
+        ]);
+      }
+    });
+
+    test('English with Sinhala shows the meaning only', () {
+      expect(blocks([_english, _sinhala]).map((x) => x.languages), [
+        [_sinhala],
+        <ReadingLanguage>[],
+      ]);
+    });
+
+    test('the heading is a pirith heading', () {
+      final heading =
+          buildReaderItems(
+                reading,
+                const LanguageSelection([_english]),
+                TwoLanguageLayout.verse,
+              ).first
+              as HeadingItem;
+      expect(heading.romanTitle, 'Roman units');
+      expect(heading.credit, 'Credit line');
+      expect(heading.canBookmark, isFalse);
+      expect(heading.notes, isEmpty);
+    });
+
+    test('a pirith block keeps neither lines nor a meaning', () {
+      final items = buildReaderItems(
+        Reading(
+          id: 'x',
+          title: 'Title',
+          sections: [
+            Section(
+              id: 'x-s',
+              number: 1,
+              heading: 'Title',
+              verses: [
+                Verse(
+                  id: 'x-1',
+                  sinhala: 'unused',
+                  phrases: const [Phrase(pali: 'a', sinhala: 'b', english: '')],
+                ),
+              ],
+            ),
+          ],
+        ),
+        const LanguageSelection([_english, _sinhala]),
+        TwoLanguageLayout.verse,
+      );
+      final block = items.whereType<PhraseBlockItem>().single;
+      expect(block.keepLines, isFalse);
+      expect(block.meaning, isNull);
+      expect(block.languages, [_english, _sinhala]);
+    });
+  });
+
+  group('verses shown whatever the languages', () {
+    final reading = Reading(
+      id: 'i',
+      title: 'Intro',
+      sections: [
+        Section(
+          id: 'i-s',
+          number: 1,
+          heading: 'Intro',
+          verses: [
+            Verse(id: 'i-1', sinhala: 'aone', alwaysShown: true),
+            Verse(id: 'i-2', sinhala: 'atwo', alwaysShown: true),
+          ],
+        ),
+      ],
+    );
+
+    for (final chosen in [
+      [_pali],
+      [_english],
+    ]) {
+      test('${chosen.single.label} only shows each paragraph in Sinhala, in '
+          'the main colour, with no note and no bookmark', () {
+        for (final layout in TwoLanguageLayout.values) {
+          final items = buildReaderItems(
+            reading,
+            LanguageSelection(chosen),
+            layout,
+          );
+          expect(_kinds(items), ['H(i-s)', 'V(i-1, si)', 'V(i-2, si)']);
+          final heading = items.first as HeadingItem;
+          expect(heading.notes, isEmpty);
+          expect(heading.canBookmark, isFalse);
+          final verses = items.whereType<VerseTextItem>().toList();
+          expect(verses.map((v) => v.text), ['aone', 'atwo']);
+          expect(verses.every((v) => !v.secondary), isTrue);
+        }
+      });
+    }
+  });
 }

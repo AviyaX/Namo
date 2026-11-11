@@ -540,7 +540,8 @@ final Map<String, int> blockBuildCounts = {};
 
 /// For each phrase of [item], where its text starts and ends (end
 /// exclusive) in the passage in [language], which is the phrase texts joined
-/// by single spaces; null for a phrase with no text in [language].
+/// by single spaces (single line breaks in a unit kept line by line); null
+/// for a phrase with no text in [language].
 List<(int, int)?> _passageRanges(PhraseBlockItem item, ReadingLanguage language) {
   final out = <(int, int)?>[];
   var at = 0;
@@ -651,11 +652,19 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
         decorationColor: p.sage,
       );
       final spans = <InlineSpan>[];
-      for (var i = 0; i < item.phrases.length; i++) {
-        final t = item.phrases[i].text(l);
-        if (t.isEmpty) continue;
-        if (spans.isNotEmpty) spans.add(const TextSpan(text: ' '));
-        spans.add(TextSpan(text: t, style: _active == i ? marked : null));
+      if (item.keepLines && l == ReadingLanguage.sinhala) {
+        // A unit's Sinhala is its meaning, with its own line breaks.
+        final meaning = item.meaning;
+        if (meaning != null) spans.add(TextSpan(text: meaning));
+      } else {
+        // A unit's lines each start a line; a pirith's phrases flow.
+        final gap = TextSpan(text: item.keepLines ? '\n' : ' ');
+        for (var i = 0; i < item.phrases.length; i++) {
+          final t = item.phrases[i].text(l);
+          if (t.isEmpty) continue;
+          if (spans.isNotEmpty) spans.add(gap);
+          spans.add(TextSpan(text: t, style: _active == i ? marked : null));
+        }
       }
       if (spans.isEmpty) return null;
       return Text.rich(
@@ -669,7 +678,8 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
       for (var w = 0; w < item.languages.length; w++) passage(w),
     ].whereType<Widget>().toList();
     Widget block;
-    if (wide && passages.length == 2) {
+    // A unit's meaning is always under its lines.
+    if (wide && passages.length == 2 && !item.keepLines) {
       block = Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -19,6 +19,7 @@ import '../design/widgets/progress_line.dart';
 import '../design/widgets/not_found.dart';
 import '../flows/flow_reading.dart';
 import '../flows/flows.dart' show flowsProvider, isFlowId;
+import '../home/card_art.dart' show isPirithTopic, listsReadings;
 import '../library/library_gate.dart';
 import '../router.dart';
 import '../saved/saved.dart';
@@ -135,10 +136,11 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// first scroll after a save, not restarted by later ones.
   Timer? _movingSaveTimer;
 
-  /// Whether the open reading is a pirith (set by each build): its bar
-  /// goes between pirith, so the section buttons are not worked out. Never
-  /// true for a flow, even one of pirith sections only.
-  bool _pirith = false;
+  /// Whether the open reading's bar goes between readings (set by each
+  /// build): a pirith, or a reading of a topic that lists its readings. The
+  /// section buttons are then not worked out. Never true for a flow, even
+  /// one of pirith sections only.
+  bool _byReading = false;
 
   /// Whether the text holds passages (set by each build), so that the body
   /// is built on demand and where far items sit is first an estimate.
@@ -531,7 +533,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   void _updateButtons() {
-    if (_pirith) return;
+    if (_byReading) return;
     final tops = _headingTops();
     int? previous, next;
     if (tops.isNotEmpty) {
@@ -713,15 +715,24 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     });
   }
 
+  /// The category holding [reading]; null for a flow.
+  static Category? _categoryOf(Library library, Reading reading) => library
+      .categories
+      .where((c) => c.readings.any((r) => r.id == reading.id))
+      .firstOrNull;
+
+  /// Whether [reading]'s bar goes between readings: a pirith, or a reading
+  /// of a topic that lists its readings; never a flow.
+  static bool _goesByReading(Reading reading, Category? category) =>
+      !isFlowId(reading.id) &&
+      (reading.isPhrased || (category != null && listsReadings(category)));
+
   /// Replaces this reader with the reading [step] places away in its
   /// category (a pirith's previous or next); the place left is saved first.
-  /// Null at either end, and for a reading that is not a pirith (a flow
-  /// never is).
-  VoidCallback? _neighbour(Library library, Reading reading, int step) {
-    if (isFlowId(reading.id) || !reading.isPhrased) return null;
-    final category = library.categories
-        .where((c) => c.readings.any((r) => r.id == reading.id))
-        .firstOrNull;
+  /// Null at either end, and for a reading whose bar does not go between
+  /// readings (a flow never does).
+  VoidCallback? _neighbour(Category? category, Reading reading, int step) {
+    if (!_goesByReading(reading, category)) return null;
     if (category == null) return null;
     final to = category.numberOf(reading.id) - 1 + step;
     if (to < 0 || to >= category.readings.length) return null;
@@ -808,11 +819,19 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             settings.languages,
             settings.layout,
           );
-          _pirith = !flow && reading.isPhrased;
+          final category = flow ? null : _categoryOf(library, reading);
+          _byReading = _goesByReading(reading, category);
+          // Pirith say so; another topic's readings are just readings.
+          final unit =
+              category != null &&
+                  listsReadings(category) &&
+                  !isPirithTopic(category)
+              ? 'reading'
+              : 'pirith';
           _lazy = items.any((i) => i is PhraseBlockItem);
           final favourite = saved.isFavourite(reading.id);
-          final previousReading = _neighbour(library, reading, -1);
-          final nextReading = _neighbour(library, reading, 1);
+          final previousReading = _neighbour(category, reading, -1);
+          final nextReading = _neighbour(category, reading, 1);
           final recording = flow
               ? null
               : ref.watch(audioCatalogueProvider).recordingFor(reading.id);
@@ -861,7 +880,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                         onSettings: () => showReaderSettingsSheet(
                           context,
                           onBackToBeginning: _backToBeginning,
-                          showLayout: !reading.isPhrased,
+                          showLayout: !ignoresLayout(reading),
                         ),
                       ),
                       ValueListenableBuilder<double>(
@@ -925,16 +944,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               bottomNavigationBar: ListenableBuilder(
                 listenable: Listenable.merge([_autoScroll, _chant]),
                 builder: (context, _) => ReaderBottomBar(
-                  previousTooltip: _pirith
-                      ? 'Previous pirith'
+                  previousTooltip: _byReading
+                      ? 'Previous $unit'
                       : 'Previous section',
-                  nextTooltip: _pirith ? 'Next pirith' : 'Next section',
-                  onPrevious: _pirith
+                  nextTooltip: _byReading ? 'Next $unit' : 'Next section',
+                  onPrevious: _byReading
                       ? previousReading
                       : _previousHeading == null || empty
                       ? null
                       : () => _toHeading(_previousHeading!),
-                  onNext: _pirith
+                  onNext: _byReading
                       ? nextReading
                       : _nextHeading == null || empty
                       ? null

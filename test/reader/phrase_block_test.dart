@@ -370,6 +370,107 @@ void main() {
     final blockTop = t.getTopLeft(find.byKey(const ValueKey('block-y-0'))).dy;
     expect(state.offsetOfPhrase(0, 1), closeTo(blockTop + c.offset, 0.5));
   });
+
+  testWidgets('a pirith block is unchanged', (t) async {
+    await _pump(t, _reading(), [_pali], width: 390, dark: false, scale: 1);
+    expect(passageText(t, passage('x-0', 'pali')), joined(0, (p) => p.pali));
+    expect(passageText(t, passage('x-0', 'pali')), isNot(contains('\n')));
+  });
+
+  group('a unit kept line by line', () {
+    const lines = [
+      Phrase(pali: 'lone', sinhala: '', english: ''),
+      Phrase(pali: 'ltwo', sinhala: '', english: ''),
+      Phrase(pali: 'lthree', sinhala: '', english: ''),
+    ];
+    Reading units() => Reading(
+      id: 'u',
+      title: 'Title',
+      sections: [
+        Section(
+          id: 'u-s',
+          number: 1,
+          heading: 'Title',
+          verses: [
+            Verse(
+              id: 'u-0',
+              keepLines: true,
+              sinhala: 'mone\nmtwo',
+              phrases: lines,
+            ),
+            Verse(id: 'u-1', keepLines: true, phrases: lines),
+          ],
+        ),
+      ],
+    );
+
+    testWidgets('its Pali passage is the lines joined by line breaks', (
+      t,
+    ) async {
+      await _pump(t, units(), [_pali], width: 390, dark: false, scale: 1);
+      expect(passageText(t, passage('u-0', 'pali')), 'lone\nltwo\nlthree');
+    });
+
+    testWidgets('the meaning is absent with Pali only', (t) async {
+      await _pump(t, units(), [_pali], width: 390, dark: false, scale: 1);
+      expect(passage('u-0', 'sinhala'), findsNothing);
+    });
+
+    testWidgets('the meaning is under the lines, with its line breaks, in '
+        'the quiet colour', (t) async {
+      await _pump(
+        t,
+        units(),
+        [_sinhala, _pali],
+        width: 390,
+        dark: false,
+        scale: 1,
+      );
+      final meaning = passage('u-0', 'sinhala');
+      expect(passageText(t, meaning), 'mone\nmtwo');
+      expect(
+        t.getRect(meaning).top,
+        greaterThanOrEqualTo(t.getRect(passage('u-0', 'pali')).bottom),
+      );
+      final context = t.element(meaning);
+      final style = (t.widget<Text>(meaning).textSpan! as TextSpan).style!;
+      expect(style.color, NamoPalette.of(context).textSecondary);
+    });
+
+    testWidgets('wide, the meaning is still under the lines', (t) async {
+      await _pump(
+        t,
+        units(),
+        [_pali, _sinhala],
+        width: 1280,
+        dark: false,
+        scale: 1,
+      );
+      expect(
+        t.getRect(passage('u-0', 'sinhala')).top,
+        greaterThanOrEqualTo(t.getRect(passage('u-0', 'pali')).bottom),
+      );
+    });
+
+    testWidgets('Sinhala alone shows the meaning alone', (t) async {
+      await _pump(t, units(), [_sinhala], width: 390, dark: false, scale: 1);
+      expect(passageText(t, passage('u-0', 'sinhala')), 'mone\nmtwo');
+      expect(passage('u-0', 'pali'), findsNothing);
+    });
+
+    testWidgets('a unit with no meaning has no Sinhala passage', (t) async {
+      await _pump(
+        t,
+        units(),
+        [_pali, _sinhala],
+        width: 390,
+        dark: false,
+        scale: 1,
+      );
+      expect(passage('u-1', 'pali'), findsOneWidget);
+      expect(passage('u-1', 'sinhala'), findsNothing);
+    });
+  });
 }
 
 Reading _single(List<Phrase> phrases) => Reading(
