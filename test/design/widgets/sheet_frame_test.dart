@@ -114,6 +114,31 @@ void main() {
       expect(t.takeException(), isNull);
     });
 
+    testWidgets('the builder form builds rows only as they come into view, '
+        'at the same width as the list form', (t) async {
+      await pumpThemed(
+        t,
+        SheetFrame.builder(
+          title: 'Sheet title',
+          itemCount: 200,
+          itemBuilder: (context, i) =>
+              SizedBox(height: 48, key: Key('row-$i'), child: Text('row $i')),
+        ),
+        size: const Size(1000, 800),
+      );
+      expect(find.text('Sheet title'), findsOneWidget);
+      expect(find.byKey(const Key('row-0')), findsOneWidget);
+      expect(find.byKey(const Key('row-199')), findsNothing);
+      expect(t.getSize(find.byKey(const Key('row-0'))).width, 680);
+      await t.scrollUntilVisible(
+        find.byKey(const Key('row-199')),
+        400,
+        scrollable: find.byType(Scrollable),
+      );
+      expect(find.byKey(const Key('row-199')), findsOneWidget);
+      expect(t.takeException(), isNull);
+    });
+
     for (final b in Brightness.values) {
       testWidgets('does not overflow at 320 wide, text 2.0 ($b)', (t) async {
         await pumpThemed(

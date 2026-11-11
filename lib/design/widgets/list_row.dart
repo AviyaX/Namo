@@ -21,6 +21,7 @@ class ListRow extends StatelessWidget {
     this.trailing,
     this.action,
     this.expanded,
+    this.checked,
     this.detail,
     this.detailLabel,
   });
@@ -39,6 +40,10 @@ class ListRow extends StatelessWidget {
   /// For a row that opens and closes something: whether it is open now.
   /// Left null for an ordinary row.
   final bool? expanded;
+
+  /// For a row that is ticked on or off (a section in a flow, say): whether
+  /// it is ticked now. Left null for an ordinary row.
+  final bool? checked;
 
   /// Shown under the title, subtitle and caption (a search hit's verse line,
   /// say). [detailLabel] is its text for screen readers.
@@ -65,6 +70,7 @@ class ListRow extends StatelessWidget {
     final row = Pressable(
       onTap: onTap,
       expanded: expanded,
+      checked: checked,
       excludeChildSemantics: true,
       semanticLabel: [
         if (number != null) '$number',

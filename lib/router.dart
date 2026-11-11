@@ -5,6 +5,7 @@ import 'design/transitions.dart';
 import 'design/widgets/app_shell.dart';
 import 'design/widgets/fade_indexed_stack.dart';
 import 'design/widgets/not_found.dart';
+import 'flows/flow_editor_screen.dart';
 import 'home/home_screen.dart';
 import 'library/library_screen.dart';
 import 'reader/reader_screen.dart';
@@ -93,6 +94,16 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                   path: 'reading/:id',
                   redirect: (context, state) =>
                       Routes.contents(state.pathParameters['id']!),
+                ),
+                GoRoute(
+                  path: 'flow/:id',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: FlowEditorScreen(
+                      flowId: state.pathParameters['id']!,
+                    ),
+                  ),
                 ),
               ],
             ),

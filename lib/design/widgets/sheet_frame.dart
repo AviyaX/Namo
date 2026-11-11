@@ -7,10 +7,23 @@ import '../typography.dart';
 /// grab handle, a title and content that scrolls when it is taller than the
 /// sheet. The sheet is never taller than 90 % of the screen.
 class SheetFrame extends StatelessWidget {
-  const SheetFrame({super.key, required this.title, required this.children});
+  const SheetFrame({super.key, required this.title, required this.children})
+    : itemCount = 0,
+      itemBuilder = null;
+
+  /// A sheet whose rows are built only as they scroll into view, for a long
+  /// list.
+  const SheetFrame.builder({
+    super.key,
+    required this.title,
+    required this.itemCount,
+    required IndexedWidgetBuilder this.itemBuilder,
+  }) : children = const [];
 
   final String title;
   final List<Widget> children;
+  final int itemCount;
+  final IndexedWidgetBuilder? itemBuilder;
 
   static const _maxContentWidth = 680.0;
   static const _sidePadding = 20.0;
@@ -20,6 +33,12 @@ class SheetFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final media = MediaQuery.of(context);
+    final padding = EdgeInsets.fromLTRB(
+      _sidePadding,
+      0,
+      _sidePadding,
+      media.padding.bottom + NamoSpace.xl,
+    );
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: media.size.height * _maxHeightShare,
@@ -77,28 +96,37 @@ class SheetFrame extends StatelessWidget {
                 ),
               ),
             ),
-            Flexible(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                  _sidePadding,
-                  0,
-                  _sidePadding,
-                  media.padding.bottom + NamoSpace.xl,
-                ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: _maxContentWidth,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: children,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            Flexible(child: _content(padding)),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// The rows under the title, in one scroll view, each no wider than
+  /// [_maxContentWidth].
+  Widget _content(EdgeInsets padding) {
+    Widget column(Widget child) => Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: _maxContentWidth),
+        child: child,
+      ),
+    );
+    final builder = itemBuilder;
+    if (builder != null) {
+      return ListView.builder(
+        padding: padding,
+        itemCount: itemCount,
+        itemBuilder: (context, i) =>
+            column(SizedBox(width: double.infinity, child: builder(context, i))),
+      );
+    }
+    return SingleChildScrollView(
+      padding: padding,
+      child: column(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: children,
         ),
       ),
     );

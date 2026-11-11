@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/typography.dart';
 import 'package:buddhist_gatha/design/widgets/list_row.dart';
@@ -115,6 +117,32 @@ void main() {
       );
       final data = t.getSemantics(find.bySemanticsLabel('Title')).getSemanticsData();
       expect(data.flagsCollection.isExpanded.name, 'isTrue');
+      handle.dispose();
+    });
+
+    testWidgets('a row that can be ticked announces whether it is', (t) async {
+      final handle = t.ensureSemantics();
+      await pumpThemed(
+        t,
+        SizedBox(
+          width: 390,
+          child: Column(
+            children: [
+              ListRow(title: 'On', checked: true, onTap: () {}),
+              ListRow(title: 'Off', checked: false, onTap: () {}),
+              ListRow(title: 'Plain', onTap: () {}),
+            ],
+          ),
+        ),
+      );
+      ui.CheckedState checked(String label) => t
+          .getSemantics(find.bySemanticsLabel(label))
+          .getSemanticsData()
+          .flagsCollection
+          .isChecked;
+      expect(checked('On'), ui.CheckedState.isTrue);
+      expect(checked('Off'), ui.CheckedState.isFalse);
+      expect(checked('Plain'), ui.CheckedState.none);
       handle.dispose();
     });
 
