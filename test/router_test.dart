@@ -2,6 +2,7 @@ import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/widgets/empty_state.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/design/widgets/not_found.dart';
+import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,6 +15,10 @@ final _loaded = [
 ];
 
 void main() {
+  test('the flow editor\'s address', () {
+    expect(Routes.flowEditor('flow-3'), '/library/flow/flow-3');
+  });
+
   testWidgets('four tabs switch screens', (t) async {
     await pumpApp(t, overrides: _loaded);
     for (final label in ['Home', 'Library', 'Saved', 'Settings']) {

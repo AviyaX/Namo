@@ -6,6 +6,7 @@ import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/namo_page.dart';
+import '../flows/flows.dart' show flowsProvider;
 import '../library/library_gate.dart';
 import '../reader/position_controller.dart';
 import '../router.dart';
@@ -91,8 +92,9 @@ class _Blocks extends ConsumerWidget {
     final fontScale = ref.watch(settingsProvider.select((s) => s.fontScale));
     final lineSpacing =
         ref.watch(settingsProvider.select((s) => s.lineSpacing));
+    final flows = ref.watch(flowsProvider);
     final showContinue = ref.watch(
-      positionProvider.select((s) => hasContinue(s, library)),
+      positionProvider.select((s) => hasContinue(s, library, flows)),
     );
     final first = library.categories.firstOrNull;
     final pick = gathaForDay(library, now);

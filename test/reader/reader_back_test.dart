@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/flows/flows.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
@@ -6,20 +9,42 @@ import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
 
-Future<ProviderContainer> openAt(WidgetTester t, String location) async {
+Future<ProviderContainer> openAt(
+  WidgetTester t,
+  String location, {
+  bool withFlow = false,
+}) async {
   await t.pumpWidget(const SizedBox());
+  final store = InMemoryKeyValueStore();
+  if (withFlow) {
+    await store.write(
+      flowsKey,
+      jsonEncode(
+        const FlowsState(
+          flows: [
+            Flow(
+              id: 'flow-1',
+              name: 'Flow one',
+              sections: [FlowRef(readingId: 'r1', sectionId: 's02')],
+            ),
+          ],
+          nextNumber: 2,
+        ).toJson(),
+      ),
+    );
+  }
   await pumpApp(
     t,
     overrides: [
       contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
-      keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+      keyValueStoreProvider.overrideWithValue(store),
     ],
     location: location,
   );
@@ -48,6 +73,9 @@ void expectLibraryWithListOpen() {
   expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
   expect(find.bySemanticsLabel('1, heading 1'), findsOneWidget);
 }
+
+String location(ProviderContainer c) =>
+    c.read(routerProvider).routeInformationProvider.value.uri.toString();
 
 void main() {
   for (final way in Way.values) {
@@ -114,6 +142,44 @@ void main() {
     testWidgets('${way.name} Back: opened by address, back to the Library '
         'with the list open', (t) async {
       await openAt(t, Routes.reader('r1'));
+      await goBack(t, way);
+      expectLibraryWithListOpen();
+    });
+
+    testWidgets('${way.name} Back: a flow opened from Home, back to Home', (
+      t,
+    ) async {
+      await openAt(
+        t,
+        Routes.reader('flow-1', from: ReaderFrom.home),
+        withFlow: true,
+      );
+      await goBack(t, way);
+      expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+    });
+
+    testWidgets('${way.name} Back: a flow opened from its editor, back to '
+        'the editor', (t) async {
+      final c = await openAt(
+        t,
+        Routes.reader('flow-1', from: ReaderFrom.editor),
+        withFlow: true,
+      );
+      await goBack(t, way);
+      expect(location(c), '/library/flow/flow-1');
+    });
+
+    testWidgets('${way.name} Back: a flow opened from the Library or by '
+        'address, back to the Library', (t) async {
+      final c = await openAt(t, Routes.reader('flow-1'), withFlow: true);
+      await goBack(t, way);
+      expect(location(c), Routes.library);
+      expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+    });
+
+    testWidgets('${way.name} Back: a reading opened with from=editor goes '
+        'back as with no from', (t) async {
+      await openAt(t, Routes.reader('r1', from: ReaderFrom.editor));
       await goBack(t, way);
       expectLibraryWithListOpen();
     });

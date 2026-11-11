@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/design/widgets/progress_line.dart';
+import 'package:buddhist_gatha/flows/flows.dart';
 import 'package:buddhist_gatha/home/continue_card.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/home/gatha_card.dart';
@@ -12,7 +15,7 @@ import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -294,6 +297,70 @@ void main() {
         find.descendant(of: _featuredButton, matching: find.text('Begin')),
         findsOneWidget,
       );
+    });
+
+    /// [sections] as flow-1, "Flow one", in the stored flows.
+    Map<String, String> flowOne(List<FlowRef> sections) => {
+      flowsKey: jsonEncode(
+        FlowsState(
+          flows: [Flow(id: 'flow-1', name: 'Flow one', sections: sections)],
+          nextNumber: 2,
+        ).toJson(),
+      ),
+    };
+
+    testWidgets('a flow last read: the card shows its name and the section, '
+        'and opens the flow from Home', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        library: testLibrary(),
+        storeExtras: flowOne(const [
+          FlowRef(readingId: 'r1', sectionId: 's03'),
+          FlowRef(readingId: 'r1', sectionId: 's02'),
+        ]),
+      );
+      await _remember(t, 'flow-1', 'r1~s02', 0.5);
+      final card = find.byType(ContinueCard);
+      expect(card, findsOneWidget);
+      expect(
+        find.descendant(of: card, matching: find.text('Flow one')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: card, matching: find.text('heading 2')),
+        findsOneWidget,
+      );
+      await t.tap(card);
+      await t.pumpAndSettle();
+      expect(_location(t), '/read/flow-1?from=home');
+      expect(find.byKey(const ValueKey('heading-r1~s02')), findsOneWidget);
+    });
+
+    for (final (what, sections) in [
+      ('emptied', const <FlowRef>[]),
+      ('left with no live sections', const [
+        FlowRef(readingId: 'r1', sectionId: 'gone'),
+      ]),
+    ]) {
+      testWidgets('a flow $what is not offered', (t) async {
+        await openReal(
+          t,
+          Routes.home,
+          library: testLibrary(),
+          storeExtras: flowOne(sections),
+        );
+        await _remember(t, 'flow-1', 'r1~s02', 0.5);
+        expect(find.byType(ContinueCard), findsNothing);
+        expect(find.text('Continue reading'), findsNothing);
+      });
+    }
+
+    testWidgets('a deleted flow is not offered', (t) async {
+      await openReal(t, Routes.home, library: testLibrary());
+      await _remember(t, 'flow-1', 'r1~s02', 0.5);
+      expect(find.byType(ContinueCard), findsNothing);
+      expect(find.text('Continue reading'), findsNothing);
     });
   });
 

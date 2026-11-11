@@ -14,8 +14,11 @@ import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/buttons.dart';
+import '../design/widgets/empty_state.dart';
 import '../design/widgets/progress_line.dart';
 import '../design/widgets/not_found.dart';
+import '../flows/flow_reading.dart';
+import '../flows/flows.dart' show flowsProvider, isFlowId;
 import '../library/library_gate.dart';
 import '../router.dart';
 import '../saved/saved.dart';
@@ -133,15 +136,22 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   Timer? _movingSaveTimer;
 
   /// Whether the open reading is a pirith (set by each build): its bar
-  /// goes between pirith, so the section buttons are not worked out.
-  bool _phrased = false;
+  /// goes between pirith, so the section buttons are not worked out. Never
+  /// true for a flow, even one of pirith sections only.
+  bool _pirith = false;
+
+  /// Whether the text holds passages (set by each build), so that the body
+  /// is built on demand and where far items sit is first an estimate.
+  bool _lazy = false;
 
   /// Names the latest restore of a place; a touch ends it (see [_goToPlace]).
   int _restoreGeneration = 0;
 
   double? _width;
-  double? _previousTarget;
-  double? _nextTarget;
+
+  /// The headings (counted from the first) Previous and Next go to.
+  int? _previousHeading;
+  int? _nextHeading;
 
   @override
   void initState() {
@@ -488,9 +498,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   void _onScroll() {
     // The scroll position can change during layout; the page is looked at
     // once that frame is done.
-    // A pirith is built on demand, so where its blocks are is only known
-    // once the new offset has been laid out.
-    if (_phrased ||
+    // Passages are built on demand, so where they are is only known once
+    // the new offset has been laid out.
+    if (_lazy ||
         SchedulerBinding.instance.schedulerPhase ==
             SchedulerPhase.persistentCallbacks) {
       SchedulerBinding.instance.addPostFrameCallback(
@@ -521,28 +531,39 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   void _updateButtons() {
-    if (_phrased) return;
+    if (_pirith) return;
     final tops = _headingTops();
-    double? previous, next;
+    int? previous, next;
     if (tops.isNotEmpty) {
       final offset = _scroll.offset;
       final current = _currentSection(tops, offset);
       if (current >= 0 && offset - tops[current] > _atStart) {
-        previous = tops[current];
+        previous = current;
       } else if (current > 0) {
-        previous = tops[current - 1];
+        previous = current - 1;
       }
       if (current + 1 < tops.length && tops[current + 1] > offset) {
-        next = tops[current + 1];
+        next = current + 1;
       }
     }
-    if (previous != _previousTarget || next != _nextTarget) {
+    if (previous != _previousHeading || next != _nextHeading) {
       setState(() {
-        _previousTarget = previous;
-        _nextTarget = next;
+        _previousHeading = previous;
+        _nextHeading = next;
       });
     }
   }
+
+  /// Brings heading [index] (counted from the first) to the top. Where a
+  /// heading among passages sits is first an estimate, so it is looked for
+  /// again once the page is laid out there (see [_chase]).
+  void _toHeading(int index) => _chase(() {
+    final tops = _headingTops();
+    return (
+      offset: index < tops.length ? tops[index] : _scroll.offset,
+      exact: true,
+    );
+  });
 
   /// Moves the page on purpose; auto-scroll carries on from there.
   void _jumpTo(double offset) {
@@ -569,7 +590,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     final saved = ref.read(positionProvider).byReading[widget.readingId];
     _restored = true;
     if (section != null) {
-      _jumpTo(body.offsetOfSection(section));
+      _chase(
+        () =>
+            (offset: _body.currentState!.offsetOfSection(section), exact: true),
+      );
     } else if (saved != null) {
       _goToPlace(saved.position);
     }
@@ -597,9 +621,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     return (offset: extents[index].top, exact: false);
   }
 
-  /// Goes to what [target] says. A pirith is built on demand, so where a far
-  /// block sits is first an estimate: once the page has been laid out around
-  /// the jump the target is asked again, until it stops moving. With
+  /// Goes to what [target] says. Passages are built on demand, so where a
+  /// far one sits is first an estimate: once the page has been laid out
+  /// around the jump the target is asked again, until it stops moving. With
   /// [animate], the last, exact step glides (a jump when the person wants no
   /// motion).
   ///
@@ -627,7 +651,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       return;
     }
     _jumpTo(now.offset);
-    if (!_phrased || tries <= 0) return;
+    if (!_lazy || tries <= 0) return;
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (!mounted ||
           mine != _restoreGeneration ||
@@ -666,24 +690,35 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   /// The top-bar arrow and the system Back: to the page the reading was
-  /// opened from.
+  /// opened from. A flow goes back to Home, its editor, or else the Library;
+  /// for any other reading the editor means nothing.
   void _back() {
     if (context.canPop()) {
       context.pop();
       return;
     }
+    final id = widget.readingId;
+    if (isFlowId(id)) {
+      context.go(switch (widget.from) {
+        ReaderFrom.home => Routes.home,
+        ReaderFrom.editor => Routes.flowEditor(id),
+        ReaderFrom.saved || null => Routes.library,
+      });
+      return;
+    }
     context.go(switch (widget.from) {
       ReaderFrom.home => Routes.home,
       ReaderFrom.saved => Routes.saved,
-      null => Routes.contents(widget.readingId),
+      ReaderFrom.editor || null => Routes.contents(id),
     });
   }
 
   /// Replaces this reader with the reading [step] places away in its
   /// category (a pirith's previous or next); the place left is saved first.
-  /// Null at either end, and for a reading that is not a pirith.
+  /// Null at either end, and for a reading that is not a pirith (a flow
+  /// never is).
   VoidCallback? _neighbour(Library library, Reading reading, int step) {
-    if (!reading.isPhrased) return null;
+    if (isFlowId(reading.id) || !reading.isPhrased) return null;
     final category = library.categories
         .where((c) => c.readings.any((r) => r.id == reading.id))
         .firstOrNull;
@@ -715,6 +750,28 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     };
   }
 
+  /// The ids of [reading]'s sections shown as bookmarked. A flow's section
+  /// is when the original section it shows is.
+  static Set<String> _bookmarkedSections(Reading reading, SavedState saved) {
+    if (!isFlowId(reading.id)) {
+      return {
+        for (final b in saved.bookmarks)
+          if (b.readingId == reading.id) b.sectionId,
+      };
+    }
+    return {
+      for (final s in reading.sections)
+        if (refOfFlowSection(s.id) case final original?
+            when saved.bookmarks.contains(
+              Bookmark(
+                readingId: original.readingId,
+                sectionId: original.sectionId,
+              ),
+            ))
+          s.id,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(settingsProvider, (previous, next) {
@@ -735,20 +792,30 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       color: p.background,
       child: LibraryGate(
         builder: (context, library) {
-          final reading = library.reading(widget.readingId);
+          final reading = resolveReading(
+            library,
+            ref.watch(flowsProvider),
+            widget.readingId,
+          );
           if (reading == null) return const NotFoundScreen();
+          // A flow has no favourite, no recording and no neighbours, and is
+          // gone through section by section even when it holds only pirith.
+          final flow = isFlowId(reading.id);
+          // Only a flow can have no sections.
+          final empty = flow && reading.sections.isEmpty;
           final items = buildReaderItems(
             reading,
             settings.languages,
             settings.layout,
           );
-          _phrased = reading.isPhrased;
+          _pirith = !flow && reading.isPhrased;
+          _lazy = items.any((i) => i is PhraseBlockItem);
           final favourite = saved.isFavourite(reading.id);
           final previousReading = _neighbour(library, reading, -1);
           final nextReading = _neighbour(library, reading, 1);
-          final recording = ref
-              .watch(audioCatalogueProvider)
-              .recordingFor(reading.id);
+          final recording = flow
+              ? null
+              : ref.watch(audioCatalogueProvider).recordingFor(reading.id);
           _bindAudio(
             reading,
             recording,
@@ -786,13 +853,15 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                         title: reading.title,
                         favourite: favourite,
                         onBack: _back,
-                        onFavourite: () => ref
-                            .read(savedProvider.notifier)
-                            .toggleFavourite(reading.id),
+                        onFavourite: flow
+                            ? null
+                            : () => ref
+                                  .read(savedProvider.notifier)
+                                  .toggleFavourite(reading.id),
                         onSettings: () => showReaderSettingsSheet(
                           context,
                           onBackToBeginning: _backToBeginning,
-                          showLayout: !reading.isPhrased,
+                          showLayout: flow || !reading.isPhrased,
                         ),
                       ),
                       ValueListenableBuilder<double>(
@@ -806,30 +875,45 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                           bottom: false,
                           // A touch or a mouse wheel on the text pauses
                           // auto-scroll at once.
-                          child: Listener(
-                            onPointerDown: (_) => _onHand(),
-                            onPointerSignal: (_) => _onHand(),
-                            child: ReaderBody(
-                              key: _body,
-                              items: items,
-                              controller: _scroll,
-                              fontScale: settings.fontScale,
-                              lineSpacing: settings.lineSpacing,
-                              bookmarkedSections: {
-                                for (final b in saved.bookmarks)
-                                  if (b.readingId == reading.id) b.sectionId,
-                              },
-                              onToggleBookmark: (sectionId) => ref
-                                  .read(savedProvider.notifier)
-                                  .toggleBookmark(reading.id, sectionId),
-                              chantPlace: _follow?.place,
-                              // No tap, and no tap semantics, until the
-                              // chanting has been started.
-                              onTapBlock: _follow?.started ?? false
-                                  ? _tapBlock
-                                  : null,
-                            ),
-                          ),
+                          child: empty
+                              ? const EmptyState(
+                                  icon: Symbols.playlist_add_rounded,
+                                  title: 'This flow has no sections yet.',
+                                )
+                              : Listener(
+                                  onPointerDown: (_) => _onHand(),
+                                  onPointerSignal: (_) => _onHand(),
+                                  child: ReaderBody(
+                                    key: _body,
+                                    items: items,
+                                    controller: _scroll,
+                                    fontScale: settings.fontScale,
+                                    lineSpacing: settings.lineSpacing,
+                                    bookmarkedSections: _bookmarkedSections(
+                                      reading,
+                                      saved,
+                                    ),
+                                    onToggleBookmark: (sectionId) {
+                                      // A flow's section is bookmarked as the
+                                      // original it shows.
+                                      final original = flow
+                                          ? refOfFlowSection(sectionId)
+                                          : null;
+                                      ref
+                                          .read(savedProvider.notifier)
+                                          .toggleBookmark(
+                                            original?.readingId ?? reading.id,
+                                            original?.sectionId ?? sectionId,
+                                          );
+                                    },
+                                    chantPlace: _follow?.place,
+                                    // No tap, and no tap semantics, until the
+                                    // chanting has been started.
+                                    onTapBlock: _follow?.started ?? false
+                                        ? _tapBlock
+                                        : null,
+                                  ),
+                                ),
                         ),
                       ),
                     ],
@@ -841,23 +925,21 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               bottomNavigationBar: ListenableBuilder(
                 listenable: Listenable.merge([_autoScroll, _chant]),
                 builder: (context, _) => ReaderBottomBar(
-                  previousTooltip: reading.isPhrased
+                  previousTooltip: _pirith
                       ? 'Previous pirith'
                       : 'Previous section',
-                  nextTooltip: reading.isPhrased
-                      ? 'Next pirith'
-                      : 'Next section',
-                  onPrevious: reading.isPhrased
+                  nextTooltip: _pirith ? 'Next pirith' : 'Next section',
+                  onPrevious: _pirith
                       ? previousReading
-                      : _previousTarget == null
+                      : _previousHeading == null || empty
                       ? null
-                      : () => _jumpTo(_previousTarget!),
-                  onNext: reading.isPhrased
+                      : () => _toHeading(_previousHeading!),
+                  onNext: _pirith
                       ? nextReading
-                      : _nextTarget == null
+                      : _nextHeading == null || empty
                       ? null
-                      : () => _jumpTo(_nextTarget!),
-                  onPlay: _playOrPause,
+                      : () => _toHeading(_nextHeading!),
+                  onPlay: empty ? null : _playOrPause,
                   autoScroll: _autoScroll.status,
                   audio: recording == null || recording.timed
                       ? null
@@ -893,7 +975,9 @@ class _TopBar extends StatelessWidget {
   final String title;
   final bool favourite;
   final VoidCallback onBack;
-  final VoidCallback onFavourite;
+
+  /// Null leaves the favourite button out (a flow has none).
+  final VoidCallback? onFavourite;
   final VoidCallback onSettings;
 
   @override
@@ -926,15 +1010,16 @@ class _TopBar extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: NamoSpace.xs),
-              NamoIconButton(
-                icon: Symbols.favorite_rounded,
-                tooltip: favourite
-                    ? 'Remove from favourites'
-                    : 'Add to favourites',
-                filled: favourite,
-                color: favourite ? p.gold : p.text,
-                onPressed: onFavourite,
-              ),
+              if (onFavourite != null)
+                NamoIconButton(
+                  icon: Symbols.favorite_rounded,
+                  tooltip: favourite
+                      ? 'Remove from favourites'
+                      : 'Add to favourites',
+                  filled: favourite,
+                  color: favourite ? p.gold : p.text,
+                  onPressed: onFavourite,
+                ),
               NamoIconButton(
                 key: const ValueKey('reader-settings'),
                 icon: Symbols.tune_rounded,

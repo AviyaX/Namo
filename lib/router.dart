@@ -43,13 +43,17 @@ abstract final class Routes {
         ? '/read/$readingId'
         : '/read/$readingId?${query.join('&')}';
   }
+
+  /// The editor of one flow.
+  static String flowEditor(String flowId) => '/library/flow/$flowId';
 }
 
 /// The pages that open the reader and want Back to return to them. The
 /// reader is opened with `go`, so it is the only page on the stack; Back
 /// goes by this value in the address instead, the same way on every
-/// platform and after a reload of the web page.
-enum ReaderFrom { home, saved }
+/// platform and after a reload of the web page. [editor] is a flow's editor,
+/// and means nothing for a reading that is not a flow.
+enum ReaderFrom { home, saved, editor }
 
 GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
   initialLocation: initialLocation,
