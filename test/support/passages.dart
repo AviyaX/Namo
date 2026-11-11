@@ -13,12 +13,12 @@ final Finder passages = find.byWidgetPredicate(
 Finder passage(String verseId, String language) =>
     find.byKey(ValueKey('passage-$verseId-$language'));
 
-/// The phrase spans of a passage, in order (the single-space separators
-/// between them left out).
+/// The phrase spans of a passage, in order (the separators between them, a
+/// single space in a pirith and a line break in a unit, left out).
 List<TextSpan> phraseSpans(WidgetTester t, Finder passage) {
   final text = t.widget<Text>(passage);
   final children = (text.textSpan! as TextSpan).children!.cast<TextSpan>();
-  return [for (final c in children) if (c.text != ' ') c];
+  return [for (final c in children) if (c.text != ' ' && c.text != '\n') c];
 }
 
 /// The whole text of a passage.

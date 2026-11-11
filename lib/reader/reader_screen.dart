@@ -226,6 +226,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           : ChantFollow(
               times: _timed!.blockTimes,
               paliLengths: paliLengthsOf(reading),
+              lineTimes: _timed!.lineTimes,
             ),
     );
     if (old != null) unawaited(old.pause());
@@ -327,12 +328,17 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// A tap on block [block] while the chanting is started: chant from there,
   /// and follow. An untimed block, and any tap before the chanting started
   /// or when it is neither playing nor paused, does nothing.
-  void _tapBlock(int block) {
-    final follow = _follow, recording = _timed;
-    if (follow == null || recording == null || !follow.started) return;
+  void _tapBlock(int block) => _tapLine(block, -1);
+
+  /// A tap on line [line] of block [block] (`-1`: not on a line): chant from
+  /// that line's time, or from the block's start when the line has none.
+  /// Otherwise as [_tapBlock].
+  void _tapLine(int block, int line) {
+    final follow = _follow;
+    if (follow == null || _timed == null || !follow.started) return;
     final status = _chant.value.status;
     if (status != ChantStatus.playing && status != ChantStatus.paused) return;
-    final start = blockStart(recording.blockTimes, block);
+    final start = follow.lineStart(block, line);
     if (start == null) return;
     follow.resume();
     unawaited(_player?.seek(start));
@@ -930,6 +936,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                                     // chanting has been started.
                                     onTapBlock: _follow?.started ?? false
                                         ? _tapBlock
+                                        : null,
+                                    onTapLine: _follow?.started ?? false
+                                        ? _tapLine
                                         : null,
                                   ),
                                 ),

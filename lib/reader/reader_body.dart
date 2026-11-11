@@ -30,6 +30,7 @@ class ReaderBody extends StatefulWidget {
     required this.onToggleBookmark,
     this.chantPlace,
     this.onTapBlock,
+    this.onTapLine,
   });
 
   final List<ReaderItem> items;
@@ -49,6 +50,12 @@ class ReaderBody extends StatefulWidget {
   /// Called with a block's index when it is tapped. A block has no tap at all
   /// (and no tap semantics) while this is null.
   final ValueChanged<int>? onTapBlock;
+
+  /// Called with a unit's block index and the line tapped (`-1` for a tap
+  /// that is not on one of its Pali lines) for a pointer tap on a unit; its
+  /// semantic tap still goes to [onTapBlock]. A pirith's block uses
+  /// [onTapBlock] alone.
+  final void Function(int block, int phrase)? onTapLine;
 
   @override
   State<ReaderBody> createState() => ReaderBodyState();
@@ -275,6 +282,9 @@ class ReaderBodyState extends State<ReaderBody> {
         onTap: widget.onTapBlock == null
             ? null
             : () => widget.onTapBlock!(item.index),
+        onTapLine: widget.onTapLine == null || !item.keepLines
+            ? null
+            : (line) => widget.onTapLine!(item.index, line),
       ),
       VerseTextItem() => _VerseView(
         key: ValueKey('verse-${item.verseId}-${item.language.code}'),
@@ -574,6 +584,7 @@ class _PhraseBlockView extends StatefulWidget {
     required this.lineSpacing,
     required this.chantPlace,
     required this.onTap,
+    required this.onTapLine,
   });
 
   final PhraseBlockItem item;
@@ -582,6 +593,10 @@ class _PhraseBlockView extends StatefulWidget {
   final double lineSpacing;
   final ValueListenable<ChantPlace?>? chantPlace;
   final VoidCallback? onTap;
+
+  /// A unit's pointer tap, with the Pali line under it (`-1`: none); its
+  /// semantic tap stays [onTap].
+  final ValueChanged<int>? onTapLine;
 
   @override
   State<_PhraseBlockView> createState() => _PhraseBlockViewState();
@@ -626,6 +641,40 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
     if (now != _active) setState(() => _active = now);
   }
 
+  /// Around a unit's Pali passage, to find the line a tap is on.
+  final _paliKey = GlobalKey();
+
+  /// The line of the Pali passage under [global]; -1 off the passage (on
+  /// the meaning, or on the block's padding).
+  int _lineAt(Offset global) {
+    RenderParagraph? paragraph;
+    void visit(Element e) {
+      if (paragraph != null) return;
+      final r = e.renderObject;
+      if (r is RenderParagraph) {
+        paragraph = r;
+        return;
+      }
+      e.visitChildren(visit);
+    }
+
+    final context = _paliKey.currentContext;
+    if (context == null) return -1;
+    (context as Element).visitChildren(visit);
+    final box = paragraph;
+    if (box == null || !box.hasSize || !box.attached) return -1;
+    final local = box.globalToLocal(global);
+    if (!(Offset.zero & box.size).contains(local)) return -1;
+    final at = box.getPositionForOffset(local).offset;
+    final ranges = _passageRanges(widget.item, ReadingLanguage.pali);
+    var line = -1;
+    for (var i = 0; i < ranges.length; i++) {
+      final range = ranges[i];
+      if (range != null && range.$1 <= at) line = i;
+    }
+    return line;
+  }
+
   @override
   Widget build(BuildContext context) {
     final item = widget.item;
@@ -667,11 +716,14 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
         }
       }
       if (spans.isEmpty) return null;
-      return Text.rich(
+      final text = Text.rich(
         TextSpan(style: style, children: spans),
         key: ValueKey('passage-${item.verseId}-${l.name}'),
         softWrap: true,
       );
+      return item.keepLines && l == ReadingLanguage.pali
+          ? KeyedSubtree(key: _paliKey, child: text)
+          : text;
     }
 
     final passages = [
@@ -723,7 +775,23 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
         ],
       );
     }
-    if (widget.onTap != null) {
+    if (widget.onTapLine != null) {
+      // A pointer tap knows its line; the semantic tap is the block's.
+      block = Semantics(
+        onTap: widget.onTap,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          excludeFromSemantics: true,
+          onTapUp: (d) => widget.onTapLine!(_lineAt(d.globalPosition)),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: NamoSizes.touchTarget,
+            ),
+            child: block,
+          ),
+        ),
+      );
+    } else if (widget.onTap != null) {
       block = GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.onTap,
