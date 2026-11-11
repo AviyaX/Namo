@@ -212,4 +212,38 @@ void main() {
     expect(top, isNotNull);
     expect((top! - area.top - area.height / 3).abs(), lessThan(24));
   });
+
+  testWidgets('following the Samantha Pattana Vandana jumps in one frame', (
+    t,
+  ) async {
+    final lib = await realLibrary(t);
+    final recording = ContentAudioCatalogue(lib).recordingFor(spVandanaId)!;
+    final units = lib.reading(spVandanaId)!.sections.single.verses;
+    final part = units.indexWhere((v) => v.id == 'u-part-2');
+    final line = recording.lineTimes[part][5]!;
+    final player = FakeChantPlayer(
+      length: recording.blockTimes.whereType<BlockTime>().last.end +
+          const Duration(seconds: 2),
+    );
+    t.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    await openReal(t, Routes.reader(spVandanaId), player: player);
+    await t.tap(find.byKey(const ValueKey('chant-play')));
+    await t.pump();
+    final state = t.state<ScrollableState>(find.byType(Scrollable).first);
+    expect(state.position.pixels, 0);
+    player.advance(line + const Duration(milliseconds: 300));
+    await t.pump();
+    expect(state.position.pixels, greaterThan(0), reason: 'moved in that frame');
+    // No glide: the marked line is at the one-third line within a few
+    // frames, with no time passing.
+    await t.pump();
+    await t.pump();
+    expect(markedIn(t, passage('u-part-2', 'pali')), [5]);
+    final area = t.getRect(find.byType(CustomScrollView));
+    final top = markTop(t, find.byType(CustomScrollView));
+    expect(top, isNotNull);
+    expect((top! - area.top - area.height / 3).abs(), lessThan(24));
+  });
 }

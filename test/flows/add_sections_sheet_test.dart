@@ -1,3 +1,4 @@
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter_test/flutter_test.dart';
@@ -168,6 +169,56 @@ void main() {
     await t.tap(find.byKey(const ValueKey('flow-start')));
     await t.pumpAndSettle();
     expect(location(c), '/read/flow-1?from=editor');
+  });
+
+  testWidgets('Samantha Pattana: both readings are one row each under the '
+      'topic\'s title, and both can be added', (t) async {
+    final lib = await realLibrary(t);
+    final sp = lib.category(samanthaCategoryId)!;
+    final c = await openFlows(
+      t,
+      _editor,
+      {'flow-1': []},
+      library: Library(categories: [sp]),
+    );
+    await _openSheet(t);
+    // The topic's title heads the list (the Vandana's Roman title is the
+    // same words, on its row below).
+    final title = t.getTopLeft(_inSheet(find.text(sp.title)).first).dy;
+    var above = title;
+    for (final id in [spIntroductionId, spVandanaId]) {
+      final reading = lib.reading(id)!;
+      final row = _tick(id, reading.sections.single.id);
+      expect(row, findsOneWidget, reason: id);
+      expect(
+        find.descendant(of: row, matching: find.text(reading.title)),
+        findsOneWidget,
+        reason: id,
+      );
+      expect(t.getTopLeft(row).dy, greaterThan(above), reason: id);
+      above = t.getTopLeft(row).dy;
+    }
+    final vandana = lib.reading(spVandanaId)!;
+    expect(
+      find.descendant(
+        of: _tick(spVandanaId, 'p'),
+        matching: find.text(vandana.titleRoman!),
+      ),
+      findsOneWidget,
+    );
+
+    await t.tap(_tick(spIntroductionId, 'p'));
+    await t.pumpAndSettle();
+    await t.tap(_tick(spVandanaId, 'p'));
+    await t.pumpAndSettle();
+    expect(savedFlow(c, 'flow-1')!.sections, [
+      ref(spIntroductionId, 'p'),
+      ref(spVandanaId, 'p'),
+    ]);
+    expect(
+      _inSheet(find.text('Every section is already in this flow.')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('with the bundled content the rows are built only as they '

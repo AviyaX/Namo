@@ -315,6 +315,52 @@ void main() {
     }
   }
 
+  // Samantha Pattana: the Library with the topic open, and both readings in
+  // the reader, at the narrowest and the wide size, at device text 1.0 and
+  // 2.0, with Pali only, Pali and Sinhala, and English only.
+  const spSelections = [
+    LanguageSelection([ReadingLanguage.pali]),
+    LanguageSelection([ReadingLanguage.pali, ReadingLanguage.sinhala]),
+    LanguageSelection([ReadingLanguage.english]),
+  ];
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final deviceTextScale in [1.0, 2.0]) {
+      final where =
+          '${size.width.round()}x${size.height.round()}, device text $deviceTextScale';
+      testWidgets('Library (Samantha Pattana open) does not overflow: $where', (
+        t,
+      ) async {
+        await openReal(
+          t,
+          Routes.category(samanthaCategoryId),
+          size: size,
+          deviceTextScale: deviceTextScale,
+        );
+        for (final id in [spIntroductionId, spVandanaId]) {
+          expect(find.byKey(ValueKey('reading-row-$id')), findsOneWidget);
+        }
+        await scrollThrough(t);
+      });
+      for (final id in [spIntroductionId, spVandanaId]) {
+        for (final selection in spSelections) {
+          testWidgets(
+            '$id does not overflow: $where, ${_name(selection)}',
+            (t) async {
+              await openReal(
+                t,
+                Routes.reader(id),
+                size: size,
+                deviceTextScale: deviceTextScale,
+                settings: AppSettings(languages: selection),
+              );
+              await scrollThrough(t);
+            },
+          );
+        }
+      }
+    }
+  }
+
   // Pirith: the Library with the topic open, and a pirith in the reader
   // silent, chanting with a phrase highlighted, and with the pill showing.
   final pirithScreens = <(String, String, Future<void> Function(WidgetTester, Size, double, bool)?)>[

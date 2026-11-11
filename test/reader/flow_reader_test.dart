@@ -18,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../quality/quality_support.dart';
+import '../support/passages.dart';
 import '../support/test_content.dart';
 
 const _names = {'flow-1': 'Flow one', 'flow-2': 'Flow two'};
@@ -175,6 +176,103 @@ void main() {
         find.text('Chanted by Ven. Nauyane Ariyadhamma Thero'),
         findsNothing,
       );
+    });
+  }
+
+  for (final sinhala in [false, true]) {
+    testWidgets('a flow of both Samantha Pattana readings, '
+        '${sinhala ? 'Pali and Sinhala' : 'Pali only'}: the Introduction\'s '
+        'paragraphs show, a unit keeps its lines'
+        '${sinhala ? ' with its meaning under it' : ''}; no recording', (
+      t,
+    ) async {
+      final lib = await realLibrary(t);
+      final intro = lib.reading(spIntroductionId)!;
+      final vandana = lib.reading(spVandanaId)!;
+      await _open(
+        t,
+        Routes.reader('flow-1'),
+        {
+          'flow-1': [_ref(intro.id, 'p'), _ref(vandana.id, 'p')],
+        },
+        library: lib,
+        settings: AppSettings(
+          languages: LanguageSelection([
+            ReadingLanguage.pali,
+            if (sinhala) ReadingLanguage.sinhala,
+          ]),
+        ),
+      );
+      expect(_heading('${intro.id}~p'), findsOneWidget);
+      // In a flow a verse's id is `<reading id>~<verse id>`.
+      for (final v in intro.sections.single.verses) {
+        final paragraph = find.byKey(ValueKey('verse-${intro.id}~${v.id}-si'));
+        await t.scrollUntilVisible(
+          paragraph,
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(
+          find.descendant(of: paragraph, matching: find.text(v.sinhala!)),
+          findsOneWidget,
+          reason: v.id,
+        );
+      }
+      expect(find.textContaining('not yet available'), findsNothing);
+
+      // The second unit's Pali, line by line, as in its own reader.
+      final unit = vandana.sections.single.verses[1];
+      final unitId = '${vandana.id}~${unit.id}';
+      final block = find.byKey(ValueKey('block-$unitId'));
+      await t.scrollUntilVisible(
+        block,
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await t.pump();
+      expect(
+        passageText(t, passage(unitId, 'pali')),
+        unit.phrases.map((p) => p.pali).join('\n'),
+      );
+      // A unit with a meaning: under its lines, in the same block, only
+      // with Sinhala on.
+      final part = vandana.sections.single.verses.firstWhere(
+        (v) => v.id == 'u-part-1',
+      );
+      final partId = '${vandana.id}~${part.id}';
+      final partBlock = find.byKey(ValueKey('block-$partId'));
+      await t.scrollUntilVisible(
+        partBlock,
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await t.pump();
+      final pali = passage(partId, 'pali');
+      final meaning = passage(partId, 'sinhala');
+      expect(pali, findsOneWidget);
+      if (sinhala) {
+        expect(
+          find.descendant(of: partBlock, matching: meaning),
+          findsOneWidget,
+        );
+        expect(
+          t.getRect(meaning).top,
+          greaterThanOrEqualTo(t.getRect(pali).bottom),
+        );
+      } else {
+        expect(meaning, findsNothing);
+      }
+
+      expect(find.byKey(const ValueKey('chant-play')), findsNothing);
+      expect(find.byKey(const ValueKey('follow-chanting')), findsNothing);
+      expect(find.byType(AudioControls), findsNothing);
+      expect(
+        find.text('Chanted by Ven. Kiriwaththuduwe Ariyadassana Thero'),
+        findsNothing,
+      );
+      expect(find.byKey(const ValueKey('block-active')), findsNothing);
+      expect(markCount(t), 0);
+      expect(t.takeException(), isNull);
     });
   }
 

@@ -99,6 +99,80 @@ void main() {
     );
   });
 
+  testWidgets('Sources credits Samantha Pattana, naming its Sinhala title '
+      'from the content, and never says permission', (t) async {
+    final library = await t.runAsync(
+      () => AssetContentRepository(rootBundle).load(),
+    );
+    final category = library!.category('cat-samantha-patthana')!;
+    expect(category.subtitle, library.reading('sp-vandana')!.title);
+    await openSources(t);
+    final name = text('Samantha Pattana Dharma Wandanawa');
+    expect(name, findsOneWidget);
+    final entry =
+        'Text: ${category.subtitle}, published by tipitaka.lk; converted to '
+        "Unicode by tool; the Introduction as supplied by the app's owner. "
+        'Chanting: Ven. Kiriwaththuduwe Ariyadassana Thero, from the channel '
+        'Samata Dharmaya. No English meaning is included. Namo is not '
+        'connected with tipitaka.lk or the channel.';
+    expect(text(entry), findsOneWidget);
+    // A credit card of its own, after the Pirith credit and before Pictures.
+    final card = find.ancestor(of: name, matching: find.byType(SurfaceCard));
+    expect(find.descendant(of: card, matching: text(entry)), findsOneWidget);
+    expect(
+      t.getTopLeft(name).dy,
+      greaterThan(t.getTopLeft(text('pitaka.lk/pirith (pathnirvana)')).dy),
+    );
+    expect(
+      t.getTopLeft(name).dy,
+      lessThan(t.getTopLeft(find.text('Pictures')).dy),
+    );
+    // No address under it, and the earlier sentence is as it was.
+    expect(
+      find.descendant(of: card, matching: find.byType(SelectableText)),
+      findsNothing,
+    );
+    expect(
+      text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining(
+        RegExp('permission', caseSensitive: false),
+        findRichText: true,
+      ),
+      findsNothing,
+    );
+    // The content's placeholder page locator never shows.
+    expect(
+      find.textContaining('not yet known', findRichText: true),
+      findsNothing,
+    );
+  });
+
+  testWidgets('Sources credits the Samantha Pattana card picture under '
+      'Pictures', (t) async {
+    await openSources(t);
+    final name = text('Samantha Pattana card picture');
+    expect(name, findsOneWidget);
+    expect(
+      text(
+        'Shown on the Samantha Pattana card. Made for this app by its owner '
+        'with an AI image tool; a generated picture, not a photograph of a '
+        'real place.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      t.getTopLeft(name).dy,
+      greaterThan(t.getTopLeft(text('Pirith card picture')).dy),
+    );
+    expect(
+      t.getTopLeft(name).dy,
+      lessThan(t.getTopLeft(find.text('Corrections')).dy),
+    );
+  });
+
   testWidgets(
     'Sources shows the Pictures heading with the "Home card picture" credit and no address under it',
     (t) async {
@@ -122,9 +196,12 @@ void main() {
       expect(note.top, greaterThan(name));
       expect(note.bottom, lessThan(corrections));
       // Nothing between the picture credits and the next heading but their
-      // padding: the Pirith picture credit is the last one.
+      // padding: the Samantha Pattana picture credit is the last one.
       final last = t.getRect(
-        find.textContaining('Shown on the Pirith card', findRichText: true),
+        find.textContaining(
+          'Shown on the Samantha Pattana card',
+          findRichText: true,
+        ),
       );
       expect(last.top, greaterThan(note.bottom));
       expect(corrections - last.bottom, lessThan(48));
@@ -183,6 +260,18 @@ void main() {
     );
     // Buddha Wandanawa keeps one row per verse, by verse id.
     expect(keyed('check-s'), 4);
+    // Pirith still has none.
+    final library = await t.runAsync(
+      () => AssetContentRepository(rootBundle).load(),
+    );
+    final pirith = library!.category('cat-pirith')!.readings;
+    expect(pirith, isNotEmpty);
+    for (final r in pirith) {
+      expect(find.byKey(ValueKey('check-reading-${r.id}')), findsNothing);
+      for (final v in r.sections.expand((s) => s.verses)) {
+        expect(find.byKey(ValueKey('check-${v.id}')), findsNothing);
+      }
+    }
   });
 
   testWidgets('Font licences opens the licence page', (t) async {
@@ -249,8 +338,8 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 5 text sources + 3 pictures + 16 corrections + 6 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(30));
+    // 6 text sources + 4 pictures + 16 corrections + 6 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(32));
   });
 
   for (final dark in [false, true]) {

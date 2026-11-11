@@ -200,6 +200,65 @@ void main() {
     }
   }
 
+  // Samantha Pattana: the same guidelines on its screens, in both themes.
+  for (final dark in [false, true]) {
+    final theme = dark ? 'dark' : 'light';
+    testWidgets('Library with Samantha Pattana open ($theme) meets the '
+        'guidelines', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(
+        t,
+        Routes.category(samanthaCategoryId),
+        size: const Size(390, 1800),
+        dark: dark,
+      );
+      for (final id in [spIntroductionId, spVandanaId]) {
+        expect(find.byKey(ValueKey('reading-row-$id')), findsOneWidget);
+      }
+      await expectGuidelines(t);
+      handle.dispose();
+    });
+    testWidgets('the Vandana in the reader, silent ($theme), meets the '
+        'guidelines', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(t, Routes.reader(spVandanaId), dark: dark);
+      expect(find.byKey(const ValueKey('chant-play')), findsOneWidget);
+      await expectGuidelines(t);
+      handle.dispose();
+    });
+    testWidgets('the Vandana chanting with a line marked ($theme) meets the '
+        'guidelines', (t) async {
+      final handle = t.ensureSemantics();
+      await openChanting(t, dark: dark, id: spVandanaId);
+      await expectGuidelines(t);
+      handle.dispose();
+    });
+    testWidgets('the Vandana with Follow the chanting showing ($theme) meets '
+        'the guidelines', (t) async {
+      final handle = t.ensureSemantics();
+      await openChanting(t, dark: dark, pausedFollowing: true, id: spVandanaId);
+      await expectGuidelines(t);
+      final pill = find.byKey(const ValueKey('follow-chanting'));
+      expect(t.getSize(pill).height, greaterThanOrEqualTo(48));
+      expect(t.getSize(pill).width, greaterThanOrEqualTo(48));
+      handle.dispose();
+    });
+    testWidgets('a unit of the Vandana that is tappable once chanting starts '
+        'is at least 48 high ($theme)', (t) async {
+      await openChanting(t, dark: dark, id: spVandanaId);
+      final blocks = find.byWidgetPredicate(
+        (w) => w.key is ValueKey<String> &&
+            (w.key! as ValueKey<String>).value.startsWith('block-u-'),
+      );
+      expect(blocks, findsWidgets);
+      for (final e in blocks.evaluate()) {
+        expect(t.getSize(find.byElementPredicate((x) => x == e)).height,
+            greaterThanOrEqualTo(48),
+            reason: '${e.widget.key}');
+      }
+    });
+  }
+
   // Pirith: the same guidelines on its screens, in both themes.
   for (final dark in [false, true]) {
     final theme = dark ? 'dark' : 'light';

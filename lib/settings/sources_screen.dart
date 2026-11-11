@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../content/content_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -67,7 +69,24 @@ const _pictureCredits = [
     'Shown on the Pirith card. Made for this app by its owner with an AI '
         'image tool; a generated picture, not a photograph of a real place.',
   ),
+  _Credit(
+    'Samantha Pattana card picture',
+    'Shown on the Samantha Pattana card. Made for this app by its owner with '
+        'an AI image tool; a generated picture, not a photograph of a real '
+        'place.',
+  ),
 ];
+
+/// The Samantha Pattana credit. [title] is the book's Sinhala title, taken
+/// from the loaded content.
+_Credit _samanthaCredit(String title) => _Credit(
+  'Samantha Pattana Dharma Wandanawa',
+  'Text: $title, published by tipitaka.lk; converted to Unicode by tool; '
+      "the Introduction as supplied by the app's owner. Chanting: Ven. "
+      'Kiriwaththuduwe Ariyadassana Thero, from the channel Samata Dharmaya. '
+      'No English meaning is included. Namo is not connected with '
+      'tipitaka.lk or the channel.',
+);
 
 /// A correction as the content file records it, with every section it was
 /// made in.
@@ -190,6 +209,7 @@ class SourcesScreen extends StatelessWidget {
           style: NamoType.body(p.text),
         ),
         for (final credit in _credits) _CreditBlock(credit),
+        const _SamanthaCreditBlock(),
         const _SectionLabel('Pictures'),
         for (final credit in _pictureCredits) _CreditBlock(credit),
         LibraryGate(
@@ -221,6 +241,20 @@ class SourcesScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+/// The Samantha Pattana credit, once the content (which holds its Sinhala
+/// title) has loaded; nothing before that, or without the topic.
+class _SamanthaCreditBlock extends ConsumerWidget {
+  const _SamanthaCreditBlock();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final library = ref.watch(libraryProvider).value;
+    final title = library?.category('cat-samantha-patthana')?.subtitle;
+    if (title == null) return const SizedBox.shrink();
+    return _CreditBlock(_samanthaCredit(title));
   }
 }
 
