@@ -6,6 +6,7 @@ import '../content/content_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/empty_state.dart';
 import '../design/widgets/list_row.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/sheet_frame.dart';
@@ -13,16 +14,16 @@ import 'flow_name_sheet.dart' show FlowSheetScaffold, showFlowSheet;
 import 'flow_reading.dart' show flowSectionId;
 import 'flows.dart';
 
-/// Every section of the library, each with a tick that says whether it is in
-/// flow [flowId]; a tick adds the section to the end of the flow, and taking
-/// it off removes it.
+/// The sections of the library that are not yet in flow [flowId]. Tapping one
+/// adds it to the end of the flow and takes it off this list; a section is
+/// taken out of a flow in the editor.
 Future<void> showAddSectionsSheet(
   BuildContext context, {
   required String flowId,
 }) => showFlowSheet<void>(context, (_) => _AddSectionsSheet(flowId: flowId));
 
 /// One line of the sheet: a category's title, a reading's title, or a
-/// section that can be ticked.
+/// section that can be added.
 sealed class _Line {
   const _Line();
 }
@@ -51,31 +52,50 @@ class _SectionLine extends _Line {
   final String? subtitle;
 }
 
-/// The lines for [library], in library order. A reading with one section is
-/// one line under the reading's title (and its Roman title); a reading with
-/// several has its title over them when its category has other readings.
-List<_Line> _lines(Library library) => [
-  for (final c in library.categories) ...[
-    _GroupLabel(c.title),
-    for (final r in c.readings)
-      if (r.sections.length == 1)
-        _SectionLine(
-          ref: FlowRef(readingId: r.id, sectionId: r.sections.single.id),
-          number: c.numberOf(r.id),
-          title: r.title,
-          subtitle: r.titleRoman,
-        )
-      else ...[
-        if (c.readings.length > 1) _ReadingLabel(r.title),
+/// The lines for [library] without the sections in [taken], in library
+/// order. A reading with one section is one line under the reading's title
+/// (and its Roman title); a reading with several has its title over them when
+/// its category has other readings. A category or reading with nothing left
+/// to add is left out.
+List<_Line> _lines(Library library, Set<FlowRef> taken) {
+  final lines = <_Line>[];
+  for (final c in library.categories) {
+    final inCategory = <_Line>[];
+    for (final r in c.readings) {
+      if (r.sections.length == 1) {
+        final ref = FlowRef(readingId: r.id, sectionId: r.sections.single.id);
+        if (!taken.contains(ref)) {
+          inCategory.add(
+            _SectionLine(
+              ref: ref,
+              number: c.numberOf(r.id),
+              title: r.title,
+              subtitle: r.titleRoman,
+            ),
+          );
+        }
+        continue;
+      }
+      final left = [
         for (final s in r.sections)
-          _SectionLine(
-            ref: FlowRef(readingId: r.id, sectionId: s.id),
-            number: s.number,
-            title: s.heading,
-          ),
-      ],
-  ],
-];
+          if (!taken.contains(FlowRef(readingId: r.id, sectionId: s.id)))
+            _SectionLine(
+              ref: FlowRef(readingId: r.id, sectionId: s.id),
+              number: s.number,
+              title: s.heading,
+            ),
+      ];
+      if (left.isEmpty) continue;
+      if (c.readings.length > 1) inCategory.add(_ReadingLabel(r.title));
+      inCategory.addAll(left);
+    }
+    if (inCategory.isEmpty) continue;
+    lines
+      ..add(_GroupLabel(c.title))
+      ..addAll(inCategory);
+  }
+  return lines;
+}
 
 class _AddSectionsSheet extends ConsumerWidget {
   const _AddSectionsSheet({required this.flowId});
@@ -86,8 +106,24 @@ class _AddSectionsSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final library = ref.watch(libraryProvider).value;
     final flow = ref.watch(flowsProvider).flow(flowId);
-    final lines = library == null ? const <_Line>[] : _lines(library);
+    final lines = library == null
+        ? const <_Line>[]
+        : _lines(library, {...?flow?.sections});
     final p = NamoPalette.of(context);
+    if (library != null && lines.isEmpty) {
+      return const FlowSheetScaffold(
+        frame: SheetFrame(
+          title: 'Add sections',
+          children: [
+            EmptyState(
+              key: ValueKey('add-none-left'),
+              icon: Symbols.playlist_add_check_rounded,
+              title: 'Every section is already in this flow.',
+            ),
+          ],
+        ),
+      );
+    }
     return FlowSheetScaffold(
       frame: SheetFrame.builder(
         title: 'Add sections',
@@ -114,41 +150,28 @@ class _AddSectionsSheet extends ConsumerWidget {
               child: Text(title, style: NamoType.readingTitle(p.text)),
             ),
           ),
-          final _SectionLine line => _tickRow(context, ref, flow, line),
+          final _SectionLine line => _addRow(context, ref, line),
         },
       ),
     );
   }
 
-  Widget _tickRow(
-    BuildContext context,
-    WidgetRef ref,
-    Flow? flow,
-    _SectionLine line,
-  ) {
+  Widget _addRow(BuildContext context, WidgetRef ref, _SectionLine line) {
     final p = NamoPalette.of(context);
-    final ticked = flow?.sections.contains(line.ref) ?? false;
-    final flows = ref.read(flowsProvider.notifier);
     return ListRow(
       key: ValueKey('add-tick-${flowSectionId(line.ref)}'),
       leading: Icon(
-        ticked
-            ? Symbols.check_box_rounded
-            : Symbols.check_box_outline_blank_rounded,
+        Symbols.add_rounded,
         size: NamoSizes.icon,
         weight: 300,
-        fill: ticked ? 1 : 0,
-        color: ticked ? p.sage : p.textSecondary,
+        color: p.textSecondary,
       ),
       number: line.number,
       title: line.title,
       titleFamily: NamoFonts.sinhala,
       subtitle: line.subtitle,
       subtitleFamily: NamoFonts.romanPali,
-      checked: ticked,
-      onTap: () => ticked
-          ? flows.remove(flowId, line.ref)
-          : flows.add(flowId, line.ref),
+      onTap: () => ref.read(flowsProvider.notifier).add(flowId, line.ref),
     );
   }
 }

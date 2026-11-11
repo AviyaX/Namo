@@ -1,5 +1,3 @@
-import 'dart:ui' as ui;
-
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter_test/flutter_test.dart';
@@ -19,9 +17,6 @@ Future<void> _openSheet(WidgetTester t) async {
   await t.tap(find.byKey(const ValueKey('flow-add')));
   await t.pumpAndSettle();
 }
-
-ui.CheckedState _checked(WidgetTester t, Finder row) =>
-    t.getSemantics(row).getSemanticsData().flagsCollection.isChecked;
 
 void main() {
   setUpAll(loadBundledFonts);
@@ -75,23 +70,35 @@ void main() {
     expect(_inSheet(find.text('heading 3')), findsOneWidget); // r1's s03 only
   });
 
-  testWidgets('the sections in the flow are ticked, and say so to screen '
-      'readers', (t) async {
-    final h = t.ensureSemantics();
+  testWidgets('the sections already in the flow are not offered; a reading '
+      'with nothing left is left out', (t) async {
     await openFlows(t, _editor, {
       'flow-1': [ref('r1', 's02'), ref('r3', 'p')],
     });
     await _openSheet(t);
-    expect(_checked(t, _tick('r1', 's02')), ui.CheckedState.isTrue);
-    expect(_checked(t, _tick('r3', 'p')), ui.CheckedState.isTrue);
-    expect(_checked(t, _tick('r1', 's01')), ui.CheckedState.isFalse);
-    expect(_checked(t, _tick('r2', 's02')), ui.CheckedState.isFalse);
-    h.dispose();
+    expect(_tick('r1', 's02'), findsNothing);
+    expect(_tick('r3', 'p'), findsNothing);
+    expect(_tick('r1', 's01'), findsOneWidget);
+    expect(_tick('r2', 's02'), findsOneWidget);
+    // Reading 3 was one row; taken, its title is gone from the sheet too.
+    expect(_inSheet(find.text('reading 3')), findsNothing);
+    expect(_inSheet(find.text('category 2')), findsOneWidget);
   });
 
-  testWidgets('ticking adds the section at the end; unticking removes it; '
-      'the editor behind keeps count', (t) async {
-    final h = t.ensureSemantics();
+  testWidgets('a category whose sections are all in the flow is left out', (
+    t,
+  ) async {
+    await openFlows(t, _editor, {
+      'flow-1': [ref('r1', 's01'), ref('r1', 's02'), ref('r1', 's03')],
+    });
+    await _openSheet(t);
+    expect(_inSheet(find.text('category 1')), findsNothing);
+    expect(_inSheet(find.text('category 2')), findsOneWidget);
+    expect(_tick('r2', 's01'), findsOneWidget);
+  });
+
+  testWidgets('tapping a section adds it at the end and takes it off the '
+      'list; the editor behind keeps count', (t) async {
     final c = await openFlows(t, _editor, {
       'flow-1': [ref('r1', 's02'), ref('r1', 's01')],
     });
@@ -100,29 +107,14 @@ void main() {
 
     await t.tap(_tick('r2', 's01'));
     await t.pumpAndSettle();
-    expect(savedFlow(c, 'flow-1')!.sections, [
-      ref('r1', 's02'),
-      ref('r1', 's01'),
-      ref('r2', 's01'),
-    ]);
-    expect(_checked(t, _tick('r2', 's01')), ui.CheckedState.isTrue);
+    final made = [ref('r1', 's02'), ref('r1', 's01'), ref('r2', 's01')];
+    expect(savedFlow(c, 'flow-1')!.sections, made);
+    expect(heldFlow(c, 'flow-1')!.sections, made);
+    expect(_tick('r2', 's01'), findsNothing);
+    expect(_tick('r2', 's02'), findsOneWidget);
     expect(find.text('3 sections'), findsOneWidget);
 
-    await t.tap(_tick('r1', 's02'));
-    await t.pumpAndSettle();
-    expect(savedFlow(c, 'flow-1')!.sections, [
-      ref('r1', 's01'),
-      ref('r2', 's01'),
-    ]);
-    expect(heldFlow(c, 'flow-1')!.sections, [
-      ref('r1', 's01'),
-      ref('r2', 's01'),
-    ]);
-    expect(_checked(t, _tick('r1', 's02')), ui.CheckedState.isFalse);
-    expect(find.text('2 sections'), findsOneWidget);
-    h.dispose();
-
-    // Closed, the editor shows the new order.
+    // Closed, the editor shows the section at the end.
     await t.tapAt(const Offset(195, 20));
     await t.pumpAndSettle();
     expect(find.byType(BottomSheet), findsNothing);
@@ -130,7 +122,37 @@ void main() {
       t.getTopLeft(find.byKey(const ValueKey('flow-row-r1~s01'))).dy,
       lessThan(t.getTopLeft(find.byKey(const ValueKey('flow-row-r2~s01'))).dy),
     );
-    expect(find.byKey(const ValueKey('flow-row-r1~s02')), findsNothing);
+  });
+
+  testWidgets('a section removed in the editor is offered again', (t) async {
+    await openFlows(t, _editor, {
+      'flow-1': [ref('r1', 's02'), ref('r1', 's01')],
+    });
+    await t.tap(find.byKey(const ValueKey('flow-remove-r1~s02')));
+    await t.pumpAndSettle();
+    await _openSheet(t);
+    expect(_tick('r1', 's02'), findsOneWidget);
+    expect(_tick('r1', 's01'), findsNothing);
+  });
+
+  testWidgets('with every section in the flow the sheet says so', (t) async {
+    await openFlows(t, _editor, {
+      'flow-1': [
+        ref('r1', 's01'),
+        ref('r1', 's02'),
+        ref('r1', 's03'),
+        ref('r2', 's01'),
+        ref('r2', 's02'),
+        ref('r3', 'p'),
+      ],
+    });
+    await _openSheet(t);
+    expect(
+      _inSheet(find.text('Every section is already in this flow.')),
+      findsOneWidget,
+    );
+    expect(_inSheet(find.text('category 1')), findsNothing);
+    expect(t.takeException(), isNull);
   });
 
   testWidgets('an empty flow gets its first section from the sheet, and can '
