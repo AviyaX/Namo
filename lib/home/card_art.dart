@@ -12,6 +12,7 @@ import '../design/tokens.dart';
 /// in docs/pictures.md and on the Sources page).
 const Map<String, String> cardPictures = {
   'cat-namaskaraya': 'assets/pictures/buddha_wandanawa.jpg',
+  'cat-pirith': 'assets/pictures/pirith.jpg',
 };
 
 /// Category id -> the wide (3 : 1) picture used for the Home banner on wide
@@ -35,6 +36,18 @@ int sectionCount(Category c) =>
     c.readings.fold(0, (sum, r) => sum + r.sections.length);
 
 String sectionCountLabel(int n) => n == 1 ? '1 section' : '$n sections';
+
+String pirithCountLabel(int n) => '$n pirith';
+
+/// True for a topic whose readings are all phrased pirith: it is counted and
+/// listed by reading, not by section.
+bool isPirithTopic(Category c) =>
+    c.readings.isNotEmpty && c.readings.every((r) => r.isPhrased);
+
+/// The count shown for [c]: its pirith, or its sections.
+String topicCountLabel(Category c) => isPirithTopic(c)
+    ? pirithCountLabel(c.readings.length)
+    : sectionCountLabel(sectionCount(c));
 
 /// Width of the bundled pictures; decoding never goes wider.
 const int _maxDecodeWidth = 1600;

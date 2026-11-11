@@ -44,6 +44,7 @@ Library _numbered(int n) =>
 List<String> _ids(List<GathaPick> p) => [for (final g in p) g.verse.id];
 
 void main() {
+  phrasedPickTests();
   group('greetingFor', () {
     String at(int h, int m) => greetingFor(DateTime(2026, 3, 4, h, m));
     test('by time of day', () {
@@ -163,5 +164,20 @@ void main() {
       ]);
       expect(identical(r.first.$2, verse.sinhala), isTrue);
     });
+  });
+}
+
+void phrasedPickTests() {
+  testWidgets('phrased pirith verses are never picked', (t) async {
+    final real = await realLibrary(t);
+    final first = Library(categories: [real.categories.first]);
+    final picks = eligibleGathas(real);
+    expect(picks, isNotEmpty);
+    expect(picks.length, eligibleGathas(first).length);
+    final namaskaraya = real.category('cat-namaskaraya')!;
+    for (final p in picks) {
+      expect(namaskaraya.readings.contains(p.reading), isTrue);
+      expect(p.verse.isPhrased, isFalse);
+    }
   });
 }

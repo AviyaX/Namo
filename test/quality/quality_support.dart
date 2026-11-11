@@ -4,6 +4,7 @@ import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -13,10 +14,13 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_chant_player.dart';
+import '../support/passages.dart';
 import '../support/pump_app.dart';
 
 const realReadingId = 'namaskaraya';
 const realCategoryId = 'cat-namaskaraya';
+const pirithCategoryId = 'cat-pirith';
+const mangalaReadingId = 'pirith-08-mahamangala';
 
 /// The bundled families, loaded from assets/fonts so the tests measure text
 /// with the real glyphs and not the test font.
@@ -43,6 +47,13 @@ Future<Library> realLibrary(WidgetTester t) async {
   return _library ??= (await t.runAsync(
     () => AssetContentRepository(rootBundle).load(),
   ))!;
+}
+
+/// The bundled content with only Buddha Wandanawa, for tests that are about
+/// one topic (the bundled Library now has Pirith as a second topic).
+Future<Library> buddhaOnlyLibrary(WidgetTester t) async {
+  final lib = await realLibrary(t);
+  return Library(categories: [lib.category(realCategoryId)!]);
 }
 
 /// Four categories, Latin placeholder text, one of them with two readings and
@@ -93,8 +104,9 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// left null, the theme is whatever [settings] holds (the app's default is
 /// Dark) and the device is light. [withSaved] fills Saved with bookmarks and
 /// a favourite.
-/// [library] replaces the bundled content. [audio] puts the placeholder
-/// recording on every reading; [audioFails] makes the player fail to load it.
+/// [library] replaces the bundled content. [player] is the player the reader
+/// gets (by default a fake, which fails to load when [audioFails]). [audio]
+/// puts the placeholder recording on every reading.
 /// [storeExtras] are extra saved values (a remembered reading place, say).
 /// [overrides] are added to the app's provider overrides (a fixed clock, say).
 Future<void> openReal(
@@ -108,8 +120,10 @@ Future<void> openReal(
   Library? library,
   bool audio = false,
   bool audioFails = false,
+  ChantPlayer? player,
   List<Override> overrides = const [],
   Map<String, String> storeExtras = const {},
+  bool settle = true,
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -146,7 +160,7 @@ Future<void> openReal(
       ),
     );
   }
-  final player = FakeChantPlayer(failOnLoad: audioFails);
+  final chantPlayer = player ?? FakeChantPlayer(failOnLoad: audioFails);
   await pumpApp(
     t,
     overrides: [
@@ -156,14 +170,15 @@ Future<void> openReal(
       ),
       keyValueStoreProvider.overrideWithValue(store),
       if (audio) audioCatalogueProvider.overrideWithValue(PlaceholderCatalogue()),
-      if (audio)
-        chantPlayerProvider.overrideWith((ref) {
-          ref.onDispose(player.dispose);
-          return player;
-        }),
+      // Never a real player: nothing makes a sound in a test.
+      chantPlayerProvider.overrideWith((ref) {
+        ref.onDispose(chantPlayer.dispose);
+        return chantPlayer;
+      }),
     ],
     location: location,
     size: size,
+    settle: settle,
   );
 }
 
@@ -187,5 +202,53 @@ Future<void> scrollThrough(WidgetTester t) async {
     position.jumpTo(offset);
     await t.pump();
     expect(t.takeException(), isNull, reason: 'at offset $offset');
+  }
+}
+
+/// A pirith in the reader with the chanting playing (fake player, no sound)
+/// and a phrase highlighted. With [pausedFollowing] a hand has then moved the
+/// text, so the `Follow the chanting` pill shows.
+Future<void> openChanting(
+  WidgetTester t, {
+  Size size = const Size(390, 844),
+  double deviceTextScale = 1.0,
+  bool? dark,
+  bool pausedFollowing = false,
+  String id = mangalaReadingId,
+}) async {
+  final lib = await realLibrary(t);
+  final recording = ContentAudioCatalogue(lib).recordingFor(id)!;
+  final times = recording.blockTimes.whereType<BlockTime>().toList();
+  final player = FakeChantPlayer(
+    length: times.last.end + const Duration(seconds: 2),
+  );
+  await openReal(
+    t,
+    Routes.reader(id),
+    size: size,
+    deviceTextScale: deviceTextScale,
+    dark: dark,
+    player: player,
+  );
+  await t.tap(find.byKey(const ValueKey('chant-play')));
+  await t.pump();
+  final middle = times[3];
+  player.advance(
+    middle.start + (middle.end - middle.start) ~/ 2 - player.state.position,
+  );
+  for (var i = 0; i < 12; i++) {
+    await t.pump(const Duration(milliseconds: 100));
+  }
+  expect(markCount(t), greaterThan(0));
+  if (pausedFollowing) {
+    // Start near the top of the text: in a short window the floating bar
+    // covers the middle of it.
+    final text = t.getRect(find.byType(CustomScrollView));
+    await t.dragFrom(
+      Offset(text.center.dx, text.top + 40),
+      const Offset(0, 60),
+    );
+    await t.pump();
+    expect(find.byKey(const ValueKey('follow-chanting')), findsOneWidget);
   }
 }

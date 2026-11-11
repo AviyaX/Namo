@@ -82,7 +82,12 @@ void main() {
       final lib = await realLibrary(t);
       final reading = lib.reading(realReadingId)!;
       expect(reading.sections.length, 19);
-      await openReal(t, Routes.library, size: const Size(390, 4000));
+      await openReal(
+        t,
+        Routes.library,
+        size: const Size(390, 4000),
+        library: await buddhaOnlyLibrary(t),
+      );
       await t.tap(find.text(lib.category(realCategoryId)!.title));
       await t.pumpAndSettle();
       for (final s in reading.sections) {
@@ -274,7 +279,10 @@ void main() {
     // The family is itself the bundled Sinhala one; the fallback is the other
     // bundled family, so no font is fetched.
     expect(heading.style!.fontFamilyFallback, row.style!.fontFamilyFallback);
-    expect(heading.style!.fontFamilyFallback, [NamoFonts.serif]);
+    expect(heading.style!.fontFamilyFallback, [
+      NamoFonts.serif,
+      NamoFonts.romanPali,
+    ]);
   });
 
   testWidgets('a single reading shows no reading heading', (t) async {

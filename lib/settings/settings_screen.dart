@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../audio/audio_catalogue.dart';
-import '../content/content_repository.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/list_row.dart';
@@ -25,14 +23,6 @@ class SettingsScreen extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
     final controller = ref.read(settingsProvider.notifier);
     final p = NamoPalette.of(context);
-    // The same lookup the reader uses: does any reading have a recording?
-    final library = ref.watch(libraryProvider).value;
-    final catalogue = ref.watch(audioCatalogueProvider);
-    final anyRecording =
-        library != null &&
-        library.categories.any(
-          (c) => c.readings.any((r) => catalogue.recordingFor(r.id) != null),
-        );
     return NamoPage(
       columnKey: const ValueKey('settings-column'),
       children: [
@@ -112,20 +102,19 @@ class SettingsScreen extends ConsumerWidget {
                   value: settings.autoScrollWithAudio,
                   onChanged: controller.setAutoScrollWithAudio,
                 ),
-                if (!anyRecording)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      NamoSpace.lg,
-                      NamoSpace.xs,
-                      NamoSpace.lg,
-                      0,
-                    ),
-                    child: Text(
-                      'No recordings are included yet.',
-                      softWrap: true,
-                      style: NamoType.caption(p.textSecondary),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    NamoSpace.lg,
+                    NamoSpace.xs,
+                    NamoSpace.lg,
+                    0,
                   ),
+                  child: Text(
+                    'Pirith follow the chanting by themselves.',
+                    softWrap: true,
+                    style: NamoType.caption(p.textSecondary),
+                  ),
+                ),
               ],
             ),
           ],

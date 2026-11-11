@@ -158,8 +158,8 @@ void main() {
 
     testWidgets('each tab keeps its scroll position and open card when away',
         (t) async {
-      await openReal(t, Routes.library);
-      final lib = await realLibrary(t);
+      final lib = await buddhaOnlyLibrary(t);
+      await openReal(t, Routes.library, library: lib);
       final category = lib.categories.first;
       await t.tap(find.text(category.title));
       await t.pumpAndSettle();

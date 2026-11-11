@@ -314,4 +314,56 @@ void main() {
       }
     }
   }
+
+  // Pirith: the Library with the topic open, and a pirith in the reader
+  // silent, chanting with a phrase highlighted, and with the pill showing.
+  final pirithScreens = <(String, String, Future<void> Function(WidgetTester, Size, double, bool)?)>[
+    ('Library (Pirith open)', Routes.category(pirithCategoryId), null),
+    ('Pirith (silent)', Routes.reader(mangalaReadingId), null),
+    (
+      'Pirith (chanting, phrase highlighted)',
+      '',
+      (t, size, scale, dark) =>
+          openChanting(t, size: size, deviceTextScale: scale, dark: dark),
+    ),
+    (
+      'Pirith (Follow the chanting showing)',
+      '',
+      (t, size, scale, dark) => openChanting(
+        t,
+        size: size,
+        deviceTextScale: scale,
+        dark: dark,
+        pausedFollowing: true,
+      ),
+    ),
+  ];
+  for (final size in matrixSizes) {
+    for (final textScale in [1.0, 1.5]) {
+      for (final dark in [false, true]) {
+        for (final (name, location, open) in pirithScreens) {
+          testWidgets(
+            'matrix: $name, ${size.width.round()}x${size.height.round()}, '
+            'text ${textScale}x, ${dark ? 'dark' : 'light'}',
+            (t) async {
+              if (open != null) {
+                await open(t, size, textScale, dark);
+              } else {
+                await openReal(
+                  t,
+                  location,
+                  size: size,
+                  deviceTextScale: textScale,
+                  dark: dark,
+                );
+              }
+              expect(t.takeException(), isNull);
+              await scrollThrough(t);
+              expect(t.takeException(), isNull);
+            },
+          );
+        }
+      }
+    }
+  }
 }

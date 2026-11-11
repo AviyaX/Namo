@@ -33,8 +33,8 @@ void main() {
 
   testWidgets('one character keeps the topic list; two matching characters '
       'show the results instead', (t) async {
-    final lib = await realLibrary(t);
-    await openReal(t, Routes.library);
+    final lib = await buddhaOnlyLibrary(t);
+    await openReal(t, Routes.library, library: lib);
     final topic = lib.category(realCategoryId)!;
     expect(find.text(topic.title), findsOneWidget);
     final heading = topic.readings.first.sections[2].heading;
@@ -137,8 +137,8 @@ void main() {
   testWidgets('clearing brings back the topic list with the same topics open', (
     t,
   ) async {
-    final lib = await realLibrary(t);
-    await openReal(t, Routes.library, size: const Size(390, 4000));
+    final lib = await buddhaOnlyLibrary(t);
+    await openReal(t, Routes.library, size: const Size(390, 4000), library: lib);
     final topic = lib.category(realCategoryId)!;
     await t.tap(find.text(topic.title));
     await t.pumpAndSettle();
@@ -191,26 +191,29 @@ void main() {
   testWidgets('header caption for the bundled content, and no chips', (
     t,
   ) async {
-    await openReal(t, Routes.library);
-    expect(find.text('1 collection · 19 sections'), findsOneWidget);
+    await openReal(t, Routes.library, library: await buddhaOnlyLibrary(t));
+    expect(find.text('1 collection'), findsOneWidget);
     expect(find.byKey(_chips), findsNothing);
+  });
+
+  testWidgets('header caption for the real library is just the count', (
+    t,
+  ) async {
+    await openReal(t, Routes.library);
+    expect(find.text('2 collections'), findsOneWidget);
   });
 
   testWidgets('several collections: caption, chips, and a chip filters', (
     t,
   ) async {
     final lib = severalCategories();
-    final sections = lib.categories.fold<int>(
-      0,
-      (n, c) => n + c.readings.fold<int>(0, (m, r) => m + r.sections.length),
-    );
     await openReal(
       t,
       Routes.library,
       library: lib,
       size: const Size(390, 2000),
     );
-    expect(find.text('4 collections · $sections sections'), findsOneWidget);
+    expect(find.text('4 collections'), findsOneWidget);
     expect(find.byKey(_chips), findsOneWidget);
     expect(find.text('Subtitle 1'), findsOneWidget);
     expect(find.text('Subtitle 3'), findsOneWidget);

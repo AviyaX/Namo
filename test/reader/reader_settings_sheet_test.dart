@@ -1,8 +1,10 @@
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/design/theme.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/sheet_frame.dart';
 import 'package:buddhist_gatha/reader/auto_scroll.dart';
+import 'package:buddhist_gatha/reader/reader_settings_sheet.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
@@ -137,5 +139,27 @@ void main() {
       expect(theme.thumbColor, p.sage, reason: key);
       expect(theme.inactiveTrackColor, p.border, reason: key);
     }
+  });
+
+  testWidgets('without the layout choice (a pirith) the rest stays', (t) async {
+    await t.pumpWidget(
+      ProviderScope(
+        overrides: [
+          keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+        ],
+        child: MaterialApp(
+          theme: namoTheme(Brightness.light),
+          home: ReaderSettingsSheet(
+            onBackToBeginning: () {},
+            showLayout: false,
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Languages'), findsOneWidget);
+    expect(find.text('When two languages show'), findsNothing);
+    expect(find.text('Text size'), findsOneWidget);
+    expect(find.text('Scroll speed'), findsOneWidget);
+    expect(find.text('Back to the beginning'), findsOneWidget);
   });
 }

@@ -98,7 +98,15 @@ class SavedScreen extends ConsumerWidget {
                       categoryId: library.categoryOf(reading.id)?.id ?? '',
                     ),
                     title: reading.title,
-                    subtitle: library.categoryOf(reading.id)?.subtitle,
+                    titleFamily: reading.isPhrased
+                        ? NamoFonts.sinhala
+                        : NamoFonts.english,
+                    subtitle: reading.isPhrased
+                        ? reading.titleRoman
+                        : library.categoryOf(reading.id)?.subtitle,
+                    subtitleFamily: reading.isPhrased
+                        ? NamoFonts.romanPali
+                        : null,
                     onTap: () => context.go(
                       Routes.reader(reading.id, from: ReaderFrom.saved),
                     ),

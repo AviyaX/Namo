@@ -180,7 +180,7 @@ class _CollectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final count = sectionCountLabel(sectionCount(category));
+    final count = topicCountLabel(category);
     const onPicture = NamoPalette.onPicture;
     return SizedBox(
       width: _collectionWidth,

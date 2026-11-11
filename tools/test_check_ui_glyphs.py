@@ -73,6 +73,54 @@ class Cmap(unittest.TestCase):
         self.assertEqual(tool.missing_characters("Go to Home", self.label), [])
 
 
+class PirithNames(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.sinhala = tool.font_codepoints(FONTS / tool.LABEL_FONT)
+        cls.roman = tool.font_codepoints(FONTS / tool.ROMAN_FONT)
+
+    def test_all_39_names_are_covered(self):
+        import json
+
+        data = json.loads((ROOT / tool.PIRITH).read_text(encoding="utf-8"))
+        readings = [r for c in data["categories"] for r in c["readings"]]
+        self.assertEqual(len(readings), 39)
+        self.assertEqual(tool.pirith_missing(ROOT, self.sinhala, self.roman), [])
+
+    def test_a_missing_glyph_is_named_with_pirith_and_character(self):
+        import json
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = pathlib.Path(d)
+            (root / "assets" / "content").mkdir(parents=True)
+            (root / tool.PIRITH).write_text(
+                json.dumps({"categories": [{"readings": [
+                    {"id": "pirith-x", "title": "මහා", "title_roman": "Maṭa中"},
+                ]}]}),
+                encoding="utf-8",
+            )
+            bad = tool.pirith_missing(root, self.sinhala, self.roman)
+        self.assertIn(("pirith-x", "title_roman", "中"), bad)
+        self.assertTrue(all(b[0] == "pirith-x" for b in bad))
+
+    def test_a_missing_pirith_file_is_an_error(self):
+        import contextlib
+        import io
+        import tempfile
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(FileNotFoundError):
+                tool.pirith_missing(pathlib.Path(d), self.sinhala, self.roman)
+        out = io.StringIO()
+        with mock.patch.object(tool, "PIRITH", "assets/content/no-such.json"):
+            with contextlib.redirect_stdout(out):
+                code = tool.main(["check_ui_glyphs.py", str(ROOT)])
+        self.assertEqual(code, 1)
+        self.assertIn("no-such.json is missing", out.getvalue())
+
+
 class RealProject(unittest.TestCase):
     def test_the_project_run_exits_zero(self):
         run = subprocess.run(

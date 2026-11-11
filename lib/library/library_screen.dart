@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../audio/audio_controls.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -85,6 +86,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     if (!asked) _handled = null;
     final open = ref.watch(openCategoriesProvider);
     final selection = ref.watch(settingsProvider.select((s) => s.languages));
+    final index = ref.watch(searchIndexProvider);
     return NamoPage(
       children: [
         LibraryGate(
@@ -103,7 +105,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             }
             final categories = library.categories;
             final n = categories.length;
-            final sections = categories.fold(0, (a, c) => a + sectionCount(c));
             // A request from the address shows everything: the search and the
             // chip are emptied right after this frame.
             final query = asked ? '' : _query.text;
@@ -117,9 +118,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               children: [
                 PageHeader(
                   title: 'Library',
-                  caption:
-                      '$n ${n == 1 ? 'collection' : 'collections'}'
-                      ' · ${sectionCountLabel(sections)}',
+                  caption: '$n ${n == 1 ? 'collection' : 'collections'}',
                 ),
                 const SizedBox(height: NamoSpace.lg),
                 SearchField(
@@ -131,7 +130,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 const SizedBox(height: NamoSpace.lg),
                 if (searching)
                   _Results(
-                    hits: searchLibrary(library, query, selection),
+                    hits: index?.search(query, selection) ?? const [],
                     query: query.trim(),
                   )
                 else ...[
@@ -189,9 +188,13 @@ class _Results extends StatelessWidget {
       children: [
         for (final h in hits)
           ListRow(
-            number: h.section.number,
-            title: h.section.heading,
+            number: h.reading.isPhrased
+                ? h.category.numberOf(h.reading.id)
+                : h.section.number,
+            title: h.reading.isPhrased ? h.reading.title : h.section.heading,
             titleFamily: NamoFonts.sinhala,
+            subtitle: h.reading.isPhrased ? h.reading.titleRoman : null,
+            subtitleFamily: NamoFonts.romanPali,
             // Spoken as it is drawn: the language is named when it is not
             // one of the chosen ones.
             detailLabel: h.line == null || h.lineLanguageChosen
@@ -199,7 +202,9 @@ class _Results extends StatelessWidget {
                 : '${h.lineLanguage!.label}, ${h.line}',
             detail: h.line == null ? null : _HitLine(hit: h),
             onTap: () => context.go(
-              Routes.reader(h.reading.id, sectionId: h.section.id),
+              h.reading.isPhrased
+                  ? Routes.reader(h.reading.id)
+                  : Routes.reader(h.reading.id, sectionId: h.section.id),
             ),
             trailing: Icon(
               Symbols.chevron_right_rounded,
@@ -265,13 +270,14 @@ class _CategoryEntry extends ConsumerWidget {
         ? Duration.zero
         : NamoMotion.quick;
     final severalReadings = category.readings.length > 1;
+    final pirith = isPirithTopic(category);
     return Column(
       children: [
         ListRow(
           leading: TopicThumbnail(categoryId: category.id),
           title: category.title,
           subtitle: category.subtitle,
-          caption: sectionCountLabel(sectionCount(category)),
+          caption: topicCountLabel(category),
           expanded: open,
           onTap: () =>
               ref.read(openCategoriesProvider.notifier).toggle(category.id),
@@ -301,6 +307,25 @@ class _CategoryEntry extends ConsumerWidget {
                   key: ValueKey('open-${category.id}'),
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    if (pirith)
+                      for (final r in category.readings)
+                        ListRow(
+                          key: ValueKey('pirith-row-${r.id}'),
+                          number: category.numberOf(r.id),
+                          title: r.title,
+                          titleFamily: NamoFonts.sinhala,
+                          subtitle: r.titleRoman,
+                          subtitleFamily: NamoFonts.romanPali,
+                          caption: formatTime(r.audio?.duration),
+                          onTap: () => context.go(Routes.reader(r.id)),
+                          trailing: Icon(
+                            Symbols.chevron_right_rounded,
+                            size: NamoSizes.iconSmall,
+                            weight: 300,
+                            color: p.textSecondary,
+                          ),
+                        )
+                    else
                     for (final r in category.readings) ...[
                       if (severalReadings)
                         Padding(

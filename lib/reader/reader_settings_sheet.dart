@@ -13,6 +13,7 @@ import '../settings/choosers.dart';
 Future<void> showReaderSettingsSheet(
   BuildContext context, {
   required VoidCallback onBackToBeginning,
+  bool showLayout = true,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
@@ -28,13 +29,23 @@ Future<void> showReaderSettingsSheet(
     curve: NamoMotion.curve,
     reverseCurve: NamoMotion.curve,
   ),
-  builder: (_) => ReaderSettingsSheet(onBackToBeginning: onBackToBeginning),
+  builder: (_) => ReaderSettingsSheet(
+    onBackToBeginning: onBackToBeginning,
+    showLayout: showLayout,
+  ),
 );
 
 /// Languages, layout, text size, line spacing and scroll speed. Each change
 /// applies to the reader at once.
 class ReaderSettingsSheet extends ConsumerWidget {
-  const ReaderSettingsSheet({super.key, required this.onBackToBeginning});
+  const ReaderSettingsSheet({
+    super.key,
+    required this.onBackToBeginning,
+    this.showLayout = true,
+  });
+
+  /// False in a pirith, which always shows flowing passages.
+  final bool showLayout;
 
   /// Called after the sheet closes for 'Back to the beginning'.
   final VoidCallback onBackToBeginning;
@@ -70,9 +81,11 @@ class ReaderSettingsSheet extends ConsumerWidget {
                   const SettingLabel('Languages'),
                   const LanguageChooser(),
                   gap,
-                  const SettingLabel('When two languages show'),
-                  const LayoutChooser(),
-                  gap,
+                  if (showLayout) ...[
+                    const SettingLabel('When two languages show'),
+                    const LayoutChooser(),
+                    gap,
+                  ],
                   SliderSetting.textSize(
                     sliderKey: const ValueKey('reader-text-size'),
                     value: settings.fontScale,

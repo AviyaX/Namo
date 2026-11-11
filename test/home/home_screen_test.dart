@@ -553,7 +553,11 @@ void main() {
 
   group('collections', () {
     testWidgets('one topic: no Collections', (t) async {
-      await openReal(t, Routes.home);
+      await openReal(
+        t,
+        Routes.home,
+        library: await buddhaOnlyLibrary(t),
+      );
       expect(find.text('Collections'), findsNothing);
     });
 

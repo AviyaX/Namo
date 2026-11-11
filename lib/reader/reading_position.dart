@@ -103,7 +103,7 @@ double offsetForPosition({
         );
   final firstOfVerse = verseId == null
       ? -1
-      : items.indexWhere((i) => i is VerseTextItem && i.verseId == verseId);
+      : items.indexWhere((i) => i is! HeadingItem && i.verseId == verseId);
   final heading = items.indexWhere(
     (i) => i is HeadingItem && i.sectionId == position.sectionId,
   );

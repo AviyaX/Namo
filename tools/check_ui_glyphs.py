@@ -6,8 +6,12 @@ Labels are set in NotoSansSinhala, which falls back to Lora for a character it
 does not have. The fallback is bundled, so nothing is fetched, but the
 character is then drawn in a different face. This lists those characters.
 
+Also checks every pirith `title` against NotoSansSinhala and `title_roman`
+against NotoSerif.
+
 Exit code: 0 whatever is listed; 1 only when a listed character is in neither
-bundled font (it would be drawn as a box, or fetched from the network).
+bundled font (it would be drawn as a box, or fetched from the network), or a
+pirith name has a glyph missing (named by reading and character).
 Standard library only.
 """
 import pathlib
@@ -17,6 +21,8 @@ import sys
 
 LABEL_FONT = "NotoSansSinhala.ttf"
 FALLBACK_FONT = "Lora.ttf"
+ROMAN_FONT = "NotoSerif.ttf"
+PIRITH = "assets/content/pirith.json"
 
 # Files whose strings are data for code and never drawn as interface text.
 NOT_DRAWN = {
@@ -196,6 +202,26 @@ def missing_characters(text, points):
     return seen
 
 
+def pirith_missing(root, sinhala_points, roman_points):
+    """(reading id, field, character) for each pirith name with a missing glyph.
+
+    `title` is drawn in NotoSansSinhala and `title_roman` in NotoSerif.
+    """
+    import json
+
+    path = root / PIRITH
+    if not path.exists():
+        raise FileNotFoundError(f"{PIRITH} is missing; the pirith names cannot be checked")
+    data = json.loads(path.read_text(encoding="utf-8"))
+    bad = []
+    for category in data["categories"]:
+        for reading in category["readings"]:
+            for field, points in (("title", sinhala_points), ("title_roman", roman_points)):
+                for ch in missing_characters(reading.get(field, ""), points):
+                    bad.append((reading["id"], field, ch))
+    return bad
+
+
 def main(argv):
     root = pathlib.Path(argv[1] if len(argv) > 1 else ".").resolve()
     fonts = root / "assets" / "fonts"
@@ -211,7 +237,18 @@ def main(argv):
             for ch in missing_characters(text, label):
                 target = in_fallback_only if ord(ch) in fallback else nowhere
                 target.setdefault(ch, []).append((rel, line, text))
+    try:
+        pirith_bad = pirith_missing(root, label, font_codepoints(fonts / ROMAN_FONT))
+    except FileNotFoundError as error:
+        print(f"error: {error}")
+        return 1
+    if pirith_bad:
+        print("pirith names with a character missing from the font they are drawn in:")
+        for reading_id, field, ch in pirith_bad:
+            print(f"  {reading_id} {field}: U+{ord(ch):04X} {ch!r}")
     if not in_fallback_only and not nowhere:
+        if pirith_bad:
+            return 1
         print("all interface characters are in NotoSansSinhala")
         return 0
     if in_fallback_only:
@@ -226,7 +263,7 @@ def main(argv):
             rel, line, text = where[0]
             print(f"  U+{ord(ch):04X} {ch!r}  {rel}:{line}  {text!r}")
         return 1
-    return 0
+    return 1 if pirith_bad else 0
 
 
 if __name__ == "__main__":

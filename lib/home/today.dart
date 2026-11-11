@@ -27,6 +27,7 @@ const _maxChars = 320;
 int _length(String? s) => s?.runes.length ?? 0;
 
 bool _eligible(Verse v) {
+  if (v.isPhrased) return false;
   if (v.check != CheckStatus.checkedAgainstSource) return false;
   final pali = v.paliSi;
   if (pali == null || pali.split('\n').length > _maxLines) return false;

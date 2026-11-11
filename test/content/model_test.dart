@@ -4,10 +4,13 @@ import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../quality/quality_support.dart' show realCategoryId;
 import '../support/test_content.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  pirithModelTests();
 
   late Reading reading;
   late List<Verse> verses;
@@ -17,7 +20,7 @@ void main() {
 
   setUpAll(() async {
     final lib = await AssetContentRepository(rootBundle).load();
-    reading = lib.categories.single.readings.single;
+    reading = lib.category(realCategoryId)!.readings.single;
     verses = [for (final s in reading.sections) ...s.verses];
   });
 
@@ -130,5 +133,99 @@ void main() {
     final s3 = r.sections[2];
     expect(s3.coverOf(ReadingLanguage.english), LanguageCover.part);
     expect(s3.verses.first.englishKind, EnglishKind.explanation);
+  });
+}
+
+void pirithModelTests() {
+  group('phrases and recordings', () {
+    test('Verse.fromJson with and without phrases', () {
+      final plain = Verse.fromJson({'id': 'v', 'pali_si': 'A1'});
+      expect(plain.phrases, isEmpty);
+      expect(plain.isPhrased, isFalse);
+      final v = Verse.fromJson({
+        'id': 'b1',
+        'phrases': [
+          {'pali': 'A1', 'sinhala': 'B1', 'english': 'C1'},
+        ],
+      });
+      expect(v.isPhrased, isTrue);
+      expect(v.paliSi, isNull);
+      expect(v.text(ReadingLanguage.pali), isNull);
+      expect(v.phrases.single.text(ReadingLanguage.pali), 'A1');
+      expect(v.phrases.single.text(ReadingLanguage.sinhala), 'B1');
+      expect(v.phrases.single.text(ReadingLanguage.english), 'C1');
+    });
+
+    Map<String, dynamic> reading({Object? audio}) => {
+      'id': 'r',
+      'title': 'T',
+      'title_roman': 'Ti',
+      'audio': ?audio,
+      'sections': [
+        {
+          'id': 'p',
+          'number': 1,
+          'heading': 'H',
+          'verses': [
+            {
+              'id': 'b1',
+              'phrases': [
+                {'pali': 'A1', 'sinhala': 'B1', 'english': 'C1'},
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    test('Reading.fromJson without audio', () {
+      final r = Reading.fromJson(reading());
+      expect(r.audio, isNull);
+      expect(r.titleRoman, 'Ti');
+      expect(r.isPhrased, isTrue);
+      expect(
+        r.sections.single.coverOf(ReadingLanguage.english),
+        LanguageCover.all,
+      );
+    });
+
+    test('Reading.fromJson with audio', () {
+      final r = Reading.fromJson(
+        reading(
+          audio: {
+            'asset': 'a.m4a',
+            'label': 'L',
+            'duration_ms': 1500,
+            'block_times': [
+              [0.25, 1.5],
+              null,
+            ],
+          },
+        ),
+      );
+      final a = r.audio!;
+      expect(a.asset, 'a.m4a');
+      expect(a.label, 'L');
+      expect(a.duration, const Duration(milliseconds: 1500));
+      expect(a.blockTimes, [
+        const BlockTime(
+          Duration(milliseconds: 250),
+          Duration(milliseconds: 1500),
+        ),
+        null,
+      ]);
+    });
+
+    test('a plain reading is not phrased', () {
+      final r = Reading(
+        id: 'r',
+        title: 't',
+        sections: [
+          Section(id: 's', number: 1, heading: 'h', verses: [Verse(id: 'v')]),
+        ],
+      );
+      expect(r.isPhrased, isFalse);
+      expect(const Reading(id: 'r', title: 't', sections: []).isPhrased, isFalse);
+    });
   });
 }
