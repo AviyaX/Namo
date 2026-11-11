@@ -11,13 +11,13 @@ import 'package:flutter_test/flutter_test.dart';
 import '../design/palette_test.dart' show contrast;
 import '../quality/quality_support.dart';
 import '../support/fake_chant_player.dart';
+import '../support/passages.dart';
 
 const _alavakaId = 'pirith-25-alavaka-suttam';
 
 final _play = find.byKey(const ValueKey('chant-play'));
 final _scrollButton = find.byKey(const ValueKey('reader-autoscroll'));
 final _blockActive = find.byKey(const ValueKey('block-active'));
-final _phraseActive = find.byKey(const ValueKey('phrase-active'));
 final _followButton = find.byKey(const ValueKey('follow-chanting'));
 
 /// Counts the seeks it is asked for.
@@ -43,12 +43,9 @@ class _Chant {
   List<Verse> get blocks => reading.sections.first.verses;
 
   Finder block(int i) => find.byKey(ValueKey('block-${blocks[i].id}'));
-  Finder phrase(int b, int p) => find
-      .descendant(
-        of: find.byKey(ValueKey('phrase-${blocks[b].id}-$p')),
-        matching: find.byType(Text),
-      )
-      .first;
+  /// The block's first passage, to tap.
+  Finder text(int b) =>
+      find.descendant(of: block(b), matching: passages).first;
 
   BlockTime time(int i) => recording.blockTimes[i]!;
   Duration get end => recording.blockTimes.whereType<BlockTime>().last.end;
@@ -109,10 +106,10 @@ double _scrollOffset(WidgetTester t) =>
 
 Rect _text(WidgetTester t) => t.getRect(find.byType(CustomScrollView));
 
-/// How far the phrase's top is from one third down the text area.
-double _offThird(WidgetTester t, Finder phrase) {
+/// How far the top of the line the phrase starts on is from one third down the text area.
+double _offThird(WidgetTester t, double top) {
   final area = _text(t);
-  return (t.getTopLeft(phrase).dy - area.top - area.height / 3).abs();
+  return (top - area.top - area.height / 3).abs();
 }
 
 Future<void> _settleMotion(WidgetTester t) async {
@@ -128,7 +125,7 @@ void main() {
       'nothing', (t) async {
     final c = await _open(t, play: false);
     expect(_blockActive, findsNothing);
-    expect(_phraseActive, findsNothing);
+    expect(markCount(t), 0);
     expect(
       find.descendant(
         of: c.block(0),
@@ -137,7 +134,7 @@ void main() {
       findsNothing,
       reason: 'no tap behaviour before the chanting has been started',
     );
-    await t.tap(c.phrase(0, 0));
+    await t.tap(c.text(0));
     await t.pump();
     expect(c.player.loaded, isEmpty);
     expect(c.player.state.status, ChantStatus.idle);
@@ -151,11 +148,8 @@ void main() {
     await c.advanceTo(t, c.middleOf(3));
     await _settleMotion(t);
     expect(_activeBlock(t, c), 3);
-    expect(
-      find.descendant(of: c.block(3), matching: _phraseActive),
-      findsOneWidget,
-    );
-    expect(_phraseActive, findsOneWidget);
+    expect(markCount(t, c.block(3)), greaterThan(0));
+    expect(markCount(t), markCount(t, c.block(3)));
 
     var last = 3;
     var position = c.player.state.position;
@@ -166,11 +160,8 @@ void main() {
       if (_blockActive.evaluate().isEmpty) continue; // between blocks' times
       final b = _activeBlock(t, c);
       expect(b, greaterThanOrEqualTo(last), reason: 'at $position');
-      expect(
-        find.descendant(of: c.block(b), matching: _phraseActive),
-        findsOneWidget,
-        reason: 'at $position',
-      );
+      expect(markCount(t, c.block(b)), greaterThan(0), reason: 'at $position');
+      expect(markCount(t), markCount(t, c.block(b)), reason: 'at $position');
       last = b;
     }
     expect(last, c.blocks.length - 1);
@@ -179,7 +170,7 @@ void main() {
     await t.pump();
     expect(c.player.state.status, ChantStatus.completed);
     expect(_blockActive, findsNothing);
-    expect(_phraseActive, findsNothing);
+    expect(markCount(t), 0);
   });
 
   testWidgets('the page follows: the active phrase sits a third of the way '
@@ -189,31 +180,13 @@ void main() {
     await _settleMotion(t);
     final active = _activeBlock(t, c);
     expect(active, 10);
-    final row = find.descendant(
-      of: c.block(10),
-      matching: find.byWidgetPredicate(
-        (w) => w.key is ValueKey<String> &&
-            (w.key! as ValueKey<String>).value.startsWith(
-              'phrase-${c.blocks[10].id}-',
-            ),
-      ),
-    );
-    final activeRow = find.ancestor(
-      of: _phraseActive,
-      matching: find.byWidgetPredicate(
-        (w) => w.key is ValueKey<String> &&
-            (w.key! as ValueKey<String>).value.startsWith('phrase-') &&
-            w.key != const ValueKey('phrase-active'),
-      ),
-    );
-    expect(row, findsWidgets);
-    expect(_offThird(t, activeRow.first), lessThan(24));
+    expect(_offThird(t, markTop(t, c.block(10))!), lessThan(24));
 
     // And on, into a block far from the first.
     await c.advanceTo(t, c.middleOf(25));
     await _settleMotion(t);
     expect(_activeBlock(t, c), 25);
-    expect(_offThird(t, activeRow.first), lessThan(24));
+    expect(_offThird(t, markTop(t, c.block(25))!), lessThan(24));
   });
 
   testWidgets('a hand on the text pauses following until it is asked for', (
@@ -241,15 +214,7 @@ void main() {
     await _settleMotion(t);
     expect(_followButton, findsNothing);
     expect(_activeBlock(t, c), 14);
-    final activeRow = find.ancestor(
-      of: _phraseActive,
-      matching: find.byWidgetPredicate(
-        (w) => w.key is ValueKey<String> &&
-            (w.key! as ValueKey<String>).value.startsWith('phrase-') &&
-            w.key != const ValueKey('phrase-active'),
-      ),
-    );
-    expect(_offThird(t, activeRow.first), lessThan(24));
+    expect(_offThird(t, markTop(t, c.block(14))!), lessThan(24));
 
     // It follows again from now on.
     await c.advanceTo(t, c.middleOf(18));
@@ -278,7 +243,7 @@ void main() {
     final c = await _open(t, size: const Size(390, 2400));
     await c.advanceTo(t, c.middleOf(1));
     await _settleMotion(t);
-    await t.tap(c.phrase(3, 0));
+    await t.tap(c.text(3));
     await t.pump();
     await _settleMotion(t);
     expect(c.player.seeks, [c.time(3).start]);
@@ -294,7 +259,7 @@ void main() {
     await t.tap(_play);
     await t.pump();
     expect(c.player.state.status, ChantStatus.paused);
-    await t.tap(c.phrase(2, 0));
+    await t.tap(c.text(2));
     await t.pump();
     expect(c.player.seeks, [c.time(2).start]);
     expect(c.player.state.status, ChantStatus.paused,
@@ -308,12 +273,12 @@ void main() {
     await t.tap(_play);
     await t.pump();
     expect(c.player.state.status, ChantStatus.paused);
-    await t.tap(c.phrase(0, 0));
+    await t.tap(c.text(0));
     await t.pump();
     expect(c.player.state.status, ChantStatus.paused);
     expect(c.player.state.position, c.time(0).start);
     expect(_activeBlock(t, c), 0, reason: 'the place is kept');
-    await t.tap(c.phrase(2, 0));
+    await t.tap(c.text(2));
     await t.pump();
     expect(c.player.seeks, [c.time(0).start, c.time(2).start]);
     expect(c.player.state.status, ChantStatus.paused);
@@ -353,8 +318,8 @@ void main() {
     }
 
     await toEnd();
-    expect(c.phrase(lastIndex, 0), findsOneWidget);
-    await t.tap(c.phrase(lastIndex, 0));
+    expect(c.text(lastIndex), findsOneWidget);
+    await t.tap(c.text(lastIndex));
     await t.pump();
     expect(c.player.seeks, isEmpty);
     expect(find.descendant(of: c.block(lastIndex), matching: _blockActive),
@@ -382,7 +347,7 @@ void main() {
     await t.pump(const Duration(seconds: 1));
     expect(_scrollOffset(t), greaterThan(0));
     expect(_blockActive, findsNothing);
-    expect(_phraseActive, findsNothing);
+    expect(markCount(t), 0);
     expect(c.player.loaded, isEmpty);
   });
 
@@ -439,9 +404,19 @@ void main() {
         final shown = Color.alphaBlend(tint, p.background);
         expect(contrast(p.text, shown), greaterThanOrEqualTo(4.5));
         expect(contrast(p.textSecondary, shown), greaterThanOrEqualTo(4.5));
-        final bar = t.widget<ColoredBox>(_phraseActive);
-        expect(bar.color, p.sage);
-        expect(contrast(bar.color, shown), greaterThanOrEqualTo(3.0));
+        final marked = Color.alphaBlend(p.sageMark, shown);
+        expect(contrast(p.text, marked), greaterThanOrEqualTo(4.5));
+        expect(contrast(p.sage, shown), greaterThanOrEqualTo(3.0));
+        final spans = [
+          for (final e in passages.evaluate())
+            ...phraseSpans(t, find.byElementPredicate((x) => x == e)),
+        ].where(isMarked);
+        expect(spans, isNotEmpty);
+        for (final s in spans) {
+          expect(s.style!.backgroundColor, p.sageMark);
+          expect(s.style!.decorationColor, p.sage);
+          expect(s.style!.color, p.text);
+        }
       });
     }
   });

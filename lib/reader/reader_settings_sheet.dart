@@ -44,7 +44,7 @@ class ReaderSettingsSheet extends ConsumerWidget {
     this.showLayout = true,
   });
 
-  /// False in a pirith, which is always phrase by phrase.
+  /// False in a pirith, which always shows flowing passages.
   final bool showLayout;
 
   /// Called after the sheet closes for 'Back to the beginning'.

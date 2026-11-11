@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_chant_player.dart';
+import '../support/passages.dart';
 import '../support/pump_app.dart';
 
 const realReadingId = 'namaskaraya';
@@ -238,7 +239,7 @@ Future<void> openChanting(
   for (var i = 0; i < 12; i++) {
     await t.pump(const Duration(milliseconds: 100));
   }
-  expect(find.byKey(const ValueKey('phrase-active')), findsOneWidget);
+  expect(markCount(t), greaterThan(0));
   if (pausedFollowing) {
     // Start near the top of the text: in a short window the floating bar
     // covers the middle of it.

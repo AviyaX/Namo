@@ -223,7 +223,7 @@ void main() {
       String? atTop;
       for (final v in readings[0].sections[0].verses) {
         final f = find.byKey(ValueKey('block-${v.id}'));
-        if (f.evaluate().isNotEmpty && t.getTopLeft(f).dy <= bodyTop + 0.5) {
+        if (f.evaluate().isNotEmpty && t.getTopLeft(f).dy <= bodyTop + 0.01) {
           atTop = v.id;
         }
       }

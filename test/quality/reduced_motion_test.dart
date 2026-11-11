@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_chant_player.dart';
+import '../support/passages.dart';
 import 'quality_support.dart';
 
 /// With animations off, one pump after each action is enough to reach the end
@@ -91,9 +92,9 @@ void main() {
     await t.pump();
     await t.pump();
     final area = t.getRect(find.byType(CustomScrollView));
-    // The bar spans the phrase, so its top is the phrase's top.
-    final row = find.byKey(const ValueKey('phrase-active'));
-    expect(row, findsOneWidget);
-    expect((t.getTopLeft(row).dy - area.top - area.height / 3).abs(), lessThan(24));
+    // The line the marked phrase starts on is at the one-third line.
+    final top = markTop(t, find.byType(CustomScrollView));
+    expect(top, isNotNull);
+    expect((top! - area.top - area.height / 3).abs(), lessThan(24));
   });
 }

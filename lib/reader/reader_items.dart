@@ -114,7 +114,7 @@ List<ReaderItem> buildReaderItems(
   final items = <ReaderItem>[];
 
   if (reading.isPhrased) {
-    // A pirith: always phrase by phrase, whatever the layout setting.
+    // A pirith: always flowing passages of phrases, whatever the layout setting.
     var block = 0;
     for (final s in reading.sections) {
       items.add(

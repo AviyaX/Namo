@@ -6,9 +6,9 @@ import 'package:flutter/rendering.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/chant_timing.dart' show ChantPlace;
-import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../settings/reading_language.dart';
 import '../design/widgets/buttons.dart';
 import 'reader_items.dart';
 
@@ -93,8 +93,10 @@ class ReaderBodyState extends State<ReaderBody> {
     return box.localToGlobal(Offset.zero, ancestor: content).dy;
   }
 
-  /// The top of phrase [phrase] of block [block] (both zero-based) in scroll
-  /// coordinates; null before layout, and while the block is not built.
+  /// The top of the line phrase [phrase] of block [block] (both zero-based)
+  /// starts on, in the block's first shown passage, in scroll coordinates;
+  /// the top of the block when the phrase has no text there. Null before
+  /// layout, and while the block is not built.
   double? offsetOfPhrase(int block, int phrase) {
     final index = widget.items.indexWhere(
       (i) => i is PhraseBlockItem && i.index == block,
@@ -102,21 +104,64 @@ class ReaderBodyState extends State<ReaderBody> {
     if (index < 0 || index >= _itemKeys.length) return null;
     final context = _itemKeys[index].currentContext;
     if (context == null) return null;
-    final key = ValueKey(
-      'phrase-${(widget.items[index] as PhraseBlockItem).verseId}-$phrase',
-    );
-    RenderObject? found;
+    final item = widget.items[index] as PhraseBlockItem;
+    final blockTop = _topOf(context.findRenderObject());
+    final language = _firstShownLanguage(item);
+    if (language == null || phrase < 0 || phrase >= item.phrases.length) {
+      return blockTop;
+    }
+    final ranges = _passageRanges(item, language);
+    final range = ranges[phrase];
+    if (range == null) return blockTop;
+    final key = ValueKey('passage-${item.verseId}-${language.name}');
+    RenderParagraph? paragraph;
     void visit(Element e) {
-      if (found != null) return;
-      if (e.widget.key == key) {
-        found = e.renderObject;
+      if (paragraph != null) return;
+      final r = e.renderObject;
+      if (r is RenderParagraph) {
+        paragraph = r;
         return;
       }
       e.visitChildren(visit);
     }
 
-    (context as Element).visitChildren(visit);
-    return _topOf(found);
+    void find(Element e) {
+      if (paragraph != null) return;
+      if (e.widget.key == key) {
+        visit(e);
+        return;
+      }
+      e.visitChildren(find);
+    }
+
+    (context as Element).visitChildren(find);
+    final box = paragraph;
+    if (box == null || !box.hasSize || !box.attached) return blockTop;
+    final top = _topOf(box);
+    if (top == null) return blockTop;
+    // The phrase's own range: its first box is on the line it starts on.
+    final boxes = box.getBoxesForSelection(
+      TextSelection(baseOffset: range.$1, extentOffset: range.$2),
+    );
+    if (boxes.isEmpty) return top;
+    // The line's box top relative to the first line's, so the first line
+    // is at the passage's own top whatever its leading.
+    final first = box.getBoxesForSelection(
+      TextSelection(
+        baseOffset: 0,
+        extentOffset: ranges.whereType<(int, int)>().first.$2,
+      ),
+    );
+    final lineOne = first.isEmpty ? 0.0 : first.first.top;
+    return top + boxes.first.top - lineOne;
+  }
+
+  /// The first of the block's chosen languages in which any phrase has text.
+  static ReadingLanguage? _firstShownLanguage(PhraseBlockItem item) {
+    for (final l in item.languages) {
+      if (item.phrases.any((p) => p.text(l).isNotEmpty)) return l;
+    }
+    return null;
   }
 
   /// Where each item of [ReaderBody.items] sits, in scroll offsets: an item
@@ -493,10 +538,29 @@ class _VerseView extends StatelessWidget {
 @visibleForTesting
 final Map<String, int> blockBuildCounts = {};
 
-/// One block of a pirith: each phrase with its meaning under it (narrow) or
-/// beside it (wide, two languages), a small gap between phrases. While it is
-/// the block being chanted it has a quiet background, and the phrase being
-/// chanted a bar at its leading edge.
+/// For each phrase of [item], where its text starts and ends (end
+/// exclusive) in the passage in [language], which is the phrase texts joined
+/// by single spaces; null for a phrase with no text in [language].
+List<(int, int)?> _passageRanges(PhraseBlockItem item, ReadingLanguage language) {
+  final out = <(int, int)?>[];
+  var at = 0;
+  for (final phrase in item.phrases) {
+    final t = phrase.text(language);
+    if (t.isEmpty) {
+      out.add(null);
+      continue;
+    }
+    out.add((at, at + t.length));
+    at += t.length + 1;
+  }
+  return out;
+}
+
+/// One block of a pirith: for each chosen language one flowing passage, the
+/// phrases of the block in order, one under the other (narrow) or side by
+/// side (wide, two languages). While it is the block being chanted it has a
+/// quiet background, and the phrase being chanted is marked in every
+/// passage: a sage background and an underline, which change no metrics.
 ///
 /// It listens to the place itself and rebuilds only when its own part of the
 /// place changes: the blocks a place change leaves and enters.
@@ -570,81 +634,61 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
     }());
     final p = NamoPalette.of(context);
     final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
-    Widget text(Phrase phrase, int which) {
+    Widget? passage(int which) {
       final l = item.languages[which];
-      return Text(
-        phrase.text(l),
-        softWrap: true,
-        style: readingStyle(
-          l,
-          fontScale: widget.fontScale,
-          lineSpacing: widget.lineSpacing,
-          color: which == 0 ? p.text : p.textSecondary,
-        ),
+      final style = readingStyle(
+        l,
+        fontScale: widget.fontScale,
+        lineSpacing: widget.lineSpacing,
+        color: which == 0 ? p.text : p.textSecondary,
       );
-    }
-
-    Widget row(Phrase phrase, int i) {
-      // A language the phrase has no text in is left out.
-      final shown = [
-        for (var w = 0; w < item.languages.length; w++)
-          if (phrase.text(item.languages[w]).isNotEmpty) w,
-      ];
-      final Widget content;
-      if (wide && shown.length == 2) {
-        content = Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: text(phrase, shown[0])),
-            const SizedBox(width: NamoSpace.xl),
-            Expanded(child: text(phrase, shown[1])),
-          ],
-        );
-      } else {
-        content = Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var k = 0; k < shown.length; k++) ...[
-              if (k > 0) const SizedBox(height: NamoSpace.xs),
-              text(phrase, shown[k]),
-            ],
-          ],
-        );
+      // The marked secondary text takes the full text colour, which keeps
+      // it readable on the mark.
+      final marked = TextStyle(
+        color: p.text,
+        backgroundColor: p.sageMark,
+        decoration: TextDecoration.underline,
+        decorationColor: p.sage,
+      );
+      final spans = <InlineSpan>[];
+      for (var i = 0; i < item.phrases.length; i++) {
+        final t = item.phrases[i].text(l);
+        if (t.isEmpty) continue;
+        if (spans.isNotEmpty) spans.add(const TextSpan(text: ' '));
+        spans.add(TextSpan(text: t, style: _active == i ? marked : null));
       }
-      return Padding(
-        key: ValueKey('phrase-${item.verseId}-$i'),
-        padding: EdgeInsets.only(top: i == 0 ? 0 : NamoSpace.md),
-        child: _active == i
-            ? Stack(
-                fit: StackFit.passthrough,
-                clipBehavior: Clip.none,
-                children: [
-                  content,
-                  // Shape as well as colour: a bar in the margin beside it.
-                  Positioned(
-                    left: -(NamoSpace.sm - 1),
-                    top: 0,
-                    bottom: 0,
-                    width: 3,
-                    child: ExcludeSemantics(
-                      child: ColoredBox(
-                        key: const ValueKey('phrase-active'),
-                        color: p.sage,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : content,
+      if (spans.isEmpty) return null;
+      return Text.rich(
+        TextSpan(style: style, children: spans),
+        key: ValueKey('passage-${item.verseId}-${l.name}'),
+        softWrap: true,
       );
     }
 
-    Widget block = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (var i = 0; i < item.phrases.length; i++) row(item.phrases[i], i),
-      ],
-    );
+    final passages = [
+      for (var w = 0; w < item.languages.length; w++) passage(w),
+    ].whereType<Widget>().toList();
+    Widget block;
+    if (wide && passages.length == 2) {
+      block = Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: passages[0]),
+          const SizedBox(width: NamoSpace.xl),
+          Expanded(child: passages[1]),
+        ],
+      );
+    } else {
+      block = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var k = 0; k < passages.length; k++) ...[
+            if (k > 0) const SizedBox(height: NamoSpace.sm),
+            passages[k],
+          ],
+        ],
+      );
+    }
     if (_active != null) {
       block = Stack(
         fit: StackFit.passthrough,

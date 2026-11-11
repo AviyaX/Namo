@@ -122,6 +122,9 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   Color get hovered => text.withValues(alpha: 0.04);
   Color get sageTint => sage.withValues(alpha: 0.14);
 
+  /// The background of the phrase being chanted, over [sageTint].
+  Color get sageMark => sage.withValues(alpha: 0.30);
+
   /// The only shadow in the app.
   List<BoxShadow> get floatShadow =>
       [BoxShadow(color: shadow, blurRadius: 24, offset: const Offset(0, 8))];
