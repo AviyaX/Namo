@@ -94,11 +94,12 @@ void main() {
       expect(_location(t), startsWith(Routes.reader(spVandanaId)));
     });
 
-    testWidgets('the Introduction shows "Introduction" and its heading', (
-      t,
-    ) async {
+    testWidgets('the Introduction shows "Introduction" and, as its heading '
+        'is the same, the topic name', (t) async {
       final lib = await realLibrary(t);
       final intro = lib.reading(spIntroductionId)!;
+      final sp = lib.category(samanthaCategoryId)!;
+      final topic = sp.shortTitle ?? sp.title;
       await openReal(
         t,
         Routes.home,
@@ -125,10 +126,15 @@ void main() {
       expect(card, findsOneWidget);
       expect(intro.title, 'Introduction');
       expect(intro.sections.single.heading, 'Introduction');
-      // The title, then the heading.
+      // The title once, then the topic name in place of the same heading.
       expect(
         find.descendant(of: card, matching: find.text('Introduction')),
-        findsNWidgets(2),
+        findsOneWidget,
+      );
+      expect(topic, isNot('Introduction'));
+      expect(
+        find.descendant(of: card, matching: find.text(topic)),
+        findsOneWidget,
       );
     });
   });

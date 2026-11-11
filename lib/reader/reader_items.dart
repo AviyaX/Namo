@@ -88,7 +88,8 @@ class PhraseBlockItem extends ReaderItem {
 /// The block for phrased verse [v] of section [s]. A unit kept line by line
 /// shows the chosen languages its lines have text in (its Pali in place of
 /// English it lacks, when Pali is not also chosen), then its meaning when
-/// Sinhala is chosen and it has one.
+/// Sinhala is chosen and it has one. Under Sinhala alone a unit with no
+/// meaning shows its Pali lines.
 PhraseBlockItem _block(
   Section s,
   Verse v,
@@ -120,16 +121,16 @@ PhraseBlockItem _block(
       lines.add(l);
     }
   }
+  final shows = meaning != null && languages.contains(ReadingLanguage.sinhala);
+  // A block never shows nothing: with Sinhala alone and no meaning, the Pali
+  // lines show.
+  if (lines.isEmpty && !shows) lines.add(ReadingLanguage.pali);
   return PhraseBlockItem(
     sectionId: s.id,
     verseId: v.id,
     index: index,
     phrases: v.phrases,
-    languages: [
-      ...lines,
-      if (meaning != null && languages.contains(ReadingLanguage.sinhala))
-        ReadingLanguage.sinhala,
-    ],
+    languages: [...lines, if (shows) ReadingLanguage.sinhala],
     keepLines: true,
     meaning: meaning,
   );

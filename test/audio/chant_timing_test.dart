@@ -137,6 +137,21 @@ void main() {
       );
       expect(p, const ChantPlace(2, 0));
     });
+
+    test('an empty entry uses the length estimate', () {
+      ChantPlace? empty(num x) => placeAt(
+        s(x),
+        [bt(0, 10)],
+        [
+          [1, 1],
+        ],
+        lineTimes: const [<Duration?>[]],
+      );
+      // Two lines of equal length over 0..10 s: the second from 5 s.
+      expect(empty(1), const ChantPlace(0, 0));
+      expect(empty(4.9), const ChantPlace(0, 0));
+      expect(empty(5.1), const ChantPlace(0, 1));
+    });
   });
 
   group('real Samantha Pattana line times', () {

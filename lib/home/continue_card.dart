@@ -46,14 +46,20 @@ class ContinueCard extends ConsumerWidget {
     // A pirith has no section headings worth showing; its Roman name goes
     // second instead. A flow, even of pirith only, shows its section.
     final phrased = !isFlowId(reading.id) && reading.isPhrased;
-    final heading = phrased
+    final category = library.categoryOf(reading.id);
+    final section = phrased
         ? reading.titleRoman
         : reading.sections
               .where((s) => s.id == progress.position.sectionId)
               .firstOrNull
               ?.heading;
+    // A heading the same as the title (an Introduction) gives the topic's
+    // name instead.
+    final heading = section == reading.title && category != null
+        ? category.shortTitle ?? category.title
+        : section;
     final percent = (progress.progress * 100).round();
-    final categoryId = library.categoryOf(reading.id)?.id ?? '';
+    final categoryId = category?.id ?? '';
     final p = NamoPalette.of(context);
     return SurfaceCard(
       onTap: () => context.go(Routes.reader(reading.id, from: ReaderFrom.home)),

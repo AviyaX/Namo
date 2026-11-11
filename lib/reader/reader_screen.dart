@@ -728,17 +728,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       .firstOrNull;
 
   /// Whether [reading]'s bar goes between readings: a pirith, or a reading
-  /// of a topic that lists its readings; never a flow.
-  static bool _goesByReading(Reading reading, Category? category) =>
-      !isFlowId(reading.id) &&
-      (reading.isPhrased || (category != null && listsReadings(category)));
+  /// of a topic that lists its readings ([lists]); never a flow.
+  static bool _goesByReading(Reading reading, bool lists) =>
+      !isFlowId(reading.id) && (reading.isPhrased || lists);
 
   /// Replaces this reader with the reading [step] places away in its
   /// category (a pirith's previous or next); the place left is saved first.
   /// Null at either end, and for a reading whose bar does not go between
-  /// readings (a flow never does).
+  /// readings (a flow never does), as [_byReading] says for this build.
   VoidCallback? _neighbour(Category? category, Reading reading, int step) {
-    if (!_goesByReading(reading, category)) return null;
+    if (!_byReading) return null;
     if (category == null) return null;
     final to = category.numberOf(reading.id) - 1 + step;
     if (to < 0 || to >= category.readings.length) return null;
@@ -826,14 +825,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             settings.layout,
           );
           final category = flow ? null : _categoryOf(library, reading);
-          _byReading = _goesByReading(reading, category);
+          final lists = category != null && listsReadings(category);
+          _byReading = _goesByReading(reading, lists);
           // Pirith say so; another topic's readings are just readings.
-          final unit =
-              category != null &&
-                  listsReadings(category) &&
-                  !isPirithTopic(category)
-              ? 'reading'
-              : 'pirith';
+          final unit = lists && !isPirithTopic(category) ? 'reading' : 'pirith';
           _lazy = items.any((i) => i is PhraseBlockItem);
           final favourite = saved.isFavourite(reading.id);
           final previousReading = _neighbour(category, reading, -1);

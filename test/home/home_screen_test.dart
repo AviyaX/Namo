@@ -694,7 +694,18 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(find.bySemanticsLabel(RegExp('2 readings')), findsWidgets);
+      final sp = lib.category(samanthaCategoryId)!;
+      expect(
+        find.descendant(
+          of: card,
+          matching: find.bySemanticsLabel(
+            '${sp.title}, ${sp.subtitle}, 2 readings',
+            skipOffstage: false,
+          ),
+          skipOffstage: false,
+        ),
+        findsOneWidget,
+      );
       handle.dispose();
     });
 

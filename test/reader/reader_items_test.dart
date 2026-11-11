@@ -370,11 +370,27 @@ void main() {
       ]);
     });
 
-    test('Sinhala shows the meaning, and nothing for a unit without one', () {
+    test('Sinhala shows the meaning, and the Pali lines for a unit without '
+        'one', () {
       expect(blocks([_sinhala]).map((x) => x.languages), [
         [_sinhala],
-        <ReadingLanguage>[],
+        [_pali],
       ]);
+    });
+
+    test('no chosen languages leave a block with no passage', () {
+      for (final chosen in [
+        [_pali],
+        [_sinhala],
+        [_english],
+        [_pali, _sinhala],
+        [_sinhala, _english],
+        [_english, _pali],
+      ]) {
+        for (final b in blocks(chosen)) {
+          expect(b.languages, isNotEmpty, reason: '${b.verseId} $chosen');
+        }
+      }
     });
 
     test('English alone shows the Pali lines in its place', () {

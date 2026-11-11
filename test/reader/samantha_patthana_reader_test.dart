@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/home/card_art.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
@@ -160,14 +161,37 @@ void main() {
         Routes.reader(spVandanaId),
         settings: _only([_english, _sinhala]),
       );
+      final reading = (await realLibrary(t)).reading(spVandanaId)!;
+      final homage = reading.sections.single.verses.first;
+      expect(homage.id, 'u-homage');
       final pali = passage('u-homage', 'pali');
       final meaning = passage('u-homage', 'sinhala');
       expect(pali, findsOneWidget);
+      expect(
+        passageText(t, pali),
+        homage.phrases.map((p) => p.pali).join('\n'),
+      );
       expect(meaning, findsOneWidget);
       expect(
         t.getRect(meaning).top,
         greaterThanOrEqualTo(t.getRect(pali).bottom),
       );
+    });
+
+    testWidgets('with Sinhala alone the meaning is drawn in the primary text '
+        'colour', (t) async {
+      await openReal(
+        t,
+        Routes.reader(spVandanaId),
+        settings: _only([_sinhala]),
+      );
+      final meaning = passage('u-homage', 'sinhala');
+      expect(passage('u-homage', 'pali'), findsNothing);
+      final palette = NamoPalette.of(t.element(meaning));
+      final colour =
+          (t.widget<Text>(meaning).textSpan! as TextSpan).style?.color;
+      expect(colour, palette.text);
+      expect(colour, isNot(palette.textSecondary));
     });
 
     testWidgets('the opening verses never have a meaning', (t) async {
@@ -178,6 +202,27 @@ void main() {
       );
       expect(passage('u-verses', 'pali'), findsOneWidget);
       expect(passage('u-verses', 'sinhala'), findsNothing);
+    });
+
+    testWidgets('with Sinhala alone the opening verses show their Pali '
+        'lines', (t) async {
+      await openReal(
+        t,
+        Routes.reader(spVandanaId),
+        settings: _only([_sinhala]),
+      );
+      final reading = (await realLibrary(t)).reading(spVandanaId)!;
+      final verses = reading.sections.single.verses.firstWhere(
+        (v) => v.id == 'u-verses',
+      );
+      expect(verses.sinhala, isNull);
+      expect(
+        passageText(t, passage('u-verses', 'pali')),
+        verses.phrases.map((p) => p.pali).join('\n'),
+      );
+      expect(passage('u-verses', 'sinhala'), findsNothing);
+      expect(passage('u-homage', 'pali'), findsNothing);
+      expect(passage('u-homage', 'sinhala'), findsOneWidget);
     });
 
     testWidgets('a favourite survives a reopen', (t) async {

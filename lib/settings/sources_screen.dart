@@ -77,6 +77,9 @@ const _pictureCredits = [
   ),
 ];
 
+/// The id of the Samantha Pattana topic in the content.
+const _samanthaCategoryId = 'cat-samantha-patthana';
+
 /// The Samantha Pattana credit. [title] is the book's Sinhala title, taken
 /// from the loaded content.
 _Credit _samanthaCredit(String title) => _Credit(
@@ -252,7 +255,7 @@ class _SamanthaCreditBlock extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final library = ref.watch(libraryProvider).value;
-    final title = library?.category('cat-samantha-patthana')?.subtitle;
+    final title = library?.category(_samanthaCategoryId)?.subtitle;
     if (title == null) return const SizedBox.shrink();
     return _CreditBlock(_samanthaCredit(title));
   }

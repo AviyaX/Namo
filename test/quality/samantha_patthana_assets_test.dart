@@ -30,12 +30,28 @@ const _known = <String, Set<String>>{
     'verses',
   },
   'source': {'name', 'locator', 'collected', 'translator'},
-  'correction': {'field', 'from', 'to', 'reason'},
+  'correction': {'field', 'from', 'to', 'reason', 'count'},
   'verse': {'id', 'check', 'keep_lines', 'always_shown', 'phrases', 'sinhala'},
   'phrase': {'pali', 'sinhala', 'english'},
 };
 
+/// The keys of [map] that are not known at [level].
+Set<String> _unknown(String level, Map<String, dynamic> map) =>
+    map.keys.toSet().difference(_known[level]!);
+
 void main() {
+  test('a correction as the tool writes it holds only the known keys', () {
+    // Made-up letters, the shape the tool writes for one correction row.
+    const correction = <String, dynamic>{
+      'field': 'text',
+      'from': 'abq',
+      'to': 'abz',
+      'reason': 'xyz',
+      'count': 2,
+    };
+    expect(_unknown('correction', correction), isEmpty);
+  });
+
   // Only the names in the bundle's manifest are read here, never the bytes of
   // the recording.
   Future<List<String>> manifest() async =>
@@ -72,11 +88,7 @@ void main() {
     void keys(String level, Object? o) {
       final map = o! as Map<String, dynamic>;
       seen.add(level);
-      expect(
-        _known[level]!.containsAll(map.keys),
-        isTrue,
-        reason: '$level has ${map.keys.toSet().difference(_known[level]!)}',
-      );
+      expect(_unknown(level, map), isEmpty, reason: '$level has unknown keys');
     }
 
     keys('root', json);

@@ -300,4 +300,43 @@ void main() {
     expect(_isActive(c, 'u-part-1'), isTrue);
     expect(markCount(t), 0);
   });
+
+  group('with Sinhala alone the opening verses, which have no meaning, show '
+      'their Pali lines', () {
+    testWidgets('the active block holds the lines and the line is marked', (
+      t,
+    ) async {
+      final c = await _open(t, settings: _only([ReadingLanguage.sinhala]));
+      await c.advanceTo(t, c.middleOfLine('u-verses', 1));
+      await _settleMotion(t);
+      expect(_isActive(c, 'u-verses'), isTrue);
+      final pali = passage('u-verses', 'pali');
+      expect(
+        find.descendant(of: c.block('u-verses'), matching: pali),
+        findsOneWidget,
+      );
+      expect(
+        passageText(t, pali),
+        c.units[c.indexOf('u-verses')].phrases.map((p) => p.pali).join('\n'),
+      );
+      final box = t.getRect(
+        find.descendant(of: c.block('u-verses'), matching: _blockActive),
+      );
+      final lines = t.getRect(pali);
+      expect(box.contains(lines.topLeft), isTrue);
+      expect(box.contains(lines.bottomRight - const Offset(1, 1)), isTrue);
+      expect(markedIn(t, pali), [1]);
+    });
+
+    testWidgets('a tap on a line seeks to that line', (t) async {
+      final c = await _open(t, settings: _only([ReadingLanguage.sinhala]));
+      await c.advanceTo(t, c.middleOfLine('u-verses', 0));
+      await _settleMotion(t);
+      await t.tapAt(_lineCentre(t, c, 'u-verses', 2));
+      await t.pump();
+      await _settleMotion(t);
+      expect(c.player.seeks, [c.lineTime('u-verses', 2)]);
+      expect(markedIn(t, passage('u-verses', 'pali')), [2]);
+    });
+  });
 }

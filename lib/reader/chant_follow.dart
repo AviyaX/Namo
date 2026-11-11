@@ -63,7 +63,8 @@ class ChantFollow extends ChangeNotifier {
     final shown =
         _started &&
         (s.status == ChantStatus.playing || s.status == ChantStatus.paused);
-    _place.value = shown ? placeAt(s.position, times, paliLengths, lineTimes: lineTimes)
+    _place.value = shown
+        ? placeAt(s.position, times, paliLengths, lineTimes: lineTimes)
         : null;
     if (changed) notifyListeners();
   }
