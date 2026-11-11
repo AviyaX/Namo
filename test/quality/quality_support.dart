@@ -4,11 +4,12 @@ import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/flows/flows.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -86,6 +87,40 @@ Library severalCategories() => Library(
       ),
   ],
 );
+
+/// Two flows saved over the bundled content, for [openReal]'s
+/// `storeExtras`: flow-1 "Evening" (the first three sections of Buddha
+/// Wandanawa, then a pirith), flow-2 "Morning" (the same pirith) and
+/// flow-3 "Later" (empty).
+Future<Map<String, String>> realFlowsStore(WidgetTester t) async {
+  final lib = await realLibrary(t);
+  final buddha = lib.reading(realReadingId)!;
+  final pirith = lib.reading(mangalaReadingId)!;
+  final chanted = FlowRef(
+    readingId: pirith.id,
+    sectionId: pirith.sections.single.id,
+  );
+  return {
+    flowsKey: jsonEncode(
+      FlowsState(
+        flows: [
+          Flow(
+            id: 'flow-1',
+            name: 'Evening',
+            sections: [
+              for (final s in buddha.sections.take(3))
+                FlowRef(readingId: buddha.id, sectionId: s.id),
+              chanted,
+            ],
+          ),
+          Flow(id: 'flow-2', name: 'Morning', sections: [chanted]),
+          const Flow(id: 'flow-3', name: 'Later'),
+        ],
+        nextNumber: 4,
+      ).toJson(),
+    ),
+  };
+}
 
 class PlaceholderCatalogue implements AudioCatalogue {
   @override

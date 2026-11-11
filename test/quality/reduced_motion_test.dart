@@ -72,6 +72,119 @@ void main() {
     expect(t.getRect(thumb), t.getRect(seg1));
   });
 
+  group('My flows', () {
+    Future<void> openFlows(WidgetTester t, String location) async {
+      t.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+      await openReal(
+        t,
+        location,
+        size: const Size(390, 2400),
+        storeExtras: await realFlowsStore(t),
+      );
+    }
+
+    /// Taps [key]; two frames (32 ms) after drawing the result nothing is
+    /// moving. The shortest motion of the app is 120 ms. (A text field
+    /// that takes focus keeps a ticker for about 10 ms even with animations
+    /// off, which is less than a frame.)
+    Future<void> tapAndStop(WidgetTester t, String key) async {
+      await t.tap(find.byKey(ValueKey(key)));
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 16));
+      await t.pump(const Duration(milliseconds: 16));
+      expect(t.hasRunningAnimations, isFalse, reason: key);
+    }
+
+    /// Taps [key] and checks the sheet it opens is in its last place after
+    /// two pumps.
+    Future<void> openSheetAtOnce(WidgetTester t, String key) async {
+      await tapAndStop(t, key);
+      final sheet = find.byType(BottomSheet);
+      expect(sheet, findsOneWidget);
+      final top = t.getTopLeft(sheet).dy;
+      await t.pumpAndSettle();
+      expect(t.getTopLeft(sheet).dy, top);
+      // And it closes at once.
+      await t.tapAt(const Offset(195, 20));
+      await t.pump();
+      await t.pump();
+      expect(sheet, findsNothing);
+      expect(t.hasRunningAnimations, isFalse);
+    }
+
+    testWidgets('the New flow sheet opens and closes at once', (t) async {
+      await openFlows(t, Routes.library);
+      await openSheetAtOnce(t, 'new-flow');
+    });
+
+    testWidgets('the editor opens from the Library at once', (t) async {
+      await openFlows(t, Routes.library);
+      await tapAndStop(t, 'flow-edit-flow-1');
+      expect(find.byKey(const ValueKey('screen-flow-editor')), findsOneWidget);
+    });
+
+    testWidgets('the rename and add sheets open and close at once', (t) async {
+      await openFlows(t, Routes.flowEditor('flow-1'));
+      await openSheetAtOnce(t, 'flow-rename');
+      await openSheetAtOnce(t, 'flow-add');
+    });
+
+    testWidgets('a move from the menu, and a removal with its message, show '
+        'at once', (t) async {
+      final first = (await realLibrary(t))
+          .reading(realReadingId)!
+          .sections
+          .first;
+      final id = '$realReadingId~${first.id}';
+      await openFlows(t, Routes.flowEditor('flow-1'));
+      // The menu is in its place at once. (Its anchor keeps asking for
+      // frames while they come quicker than 100 ms apart, with or without
+      // reduced motion, so this is measured by place, not by
+      // hasRunningAnimations.)
+      await t.tap(find.byKey(ValueKey('flow-move-$id')));
+      await t.pump();
+      await t.pump();
+      final item = find.text('Move down');
+      final place = t.getRect(item);
+      await t.pumpAndSettle();
+      expect(t.getRect(item), place);
+      await t.tap(item);
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 16));
+      expect(item, findsNothing);
+      final row = find.byKey(ValueKey('flow-row-$id'));
+      final moved = t.getRect(row);
+      await t.pumpAndSettle();
+      expect(t.getRect(row), moved);
+      await tapAndStop(t, 'flow-remove-$id');
+      expect(find.text('Removed'), findsOneWidget);
+    });
+
+    testWidgets('the delete dialog opens at once', (t) async {
+      await openFlows(t, Routes.flowEditor('flow-1'));
+      await tapAndStop(t, 'flow-delete');
+      expect(find.byKey(const ValueKey('flow-delete-keep')), findsOneWidget);
+      await tapAndStop(t, 'flow-delete-keep');
+      expect(find.byKey(const ValueKey('flow-delete-keep')), findsNothing);
+    });
+
+    testWidgets('Start chanting opens the reader at once', (t) async {
+      await openFlows(t, Routes.flowEditor('flow-1'));
+      await tapAndStop(t, 'flow-start');
+      expect(find.byKey(const ValueKey('reader-top-bar')), findsOneWidget);
+    });
+
+    testWidgets('a flow card on Home opens the reader at once', (t) async {
+      await openFlows(t, Routes.home);
+      await t.ensureVisible(find.byKey(const ValueKey('home-flow-flow-1')));
+      await t.pumpAndSettle();
+      await tapAndStop(t, 'home-flow-flow-1');
+      expect(find.byKey(const ValueKey('reader-top-bar')), findsOneWidget);
+    });
+  });
+
   testWidgets('following the chanting jumps in one frame', (t) async {
     final lib = await realLibrary(t);
     final recording = ContentAudioCatalogue(lib).recordingFor(mangalaReadingId)!;

@@ -157,6 +157,49 @@ void main() {
     });
   });
 
+  // My flows: the same guidelines on its screens and sheets, in both themes,
+  // with two flows saved over the bundled content.
+  Future<void> tapKey(WidgetTester t, String key) async {
+    await t.ensureVisible(find.byKey(ValueKey(key)));
+    await t.pumpAndSettle();
+    await t.tap(find.byKey(ValueKey(key)));
+    await t.pumpAndSettle();
+  }
+
+  // Each with a text that shows the flows were loaded.
+  final flowScreens = <(String, String, Size, String, Future<void> Function(WidgetTester)?)>[
+    ('Library with My flows', Routes.library, const Size(390, 1400), 'Evening', null),
+    ('New flow sheet', Routes.library, const Size(390, 844), 'Start from', (t) => tapKey(t, 'new-flow')),
+    ('Home with Your flows', Routes.home, const Size(390, 1800), 'Your flows', null),
+    ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections', null),
+    ('Flow editor, move menu open', Routes.flowEditor('flow-1'), const Size(390, 1400), 'Move down',
+        (t) async {
+          final first = (await realLibrary(t)).reading(realReadingId)!.sections.first;
+          await tapKey(t, 'flow-move-$realReadingId~${first.id}');
+        }),
+    ('Rename sheet', Routes.flowEditor('flow-1'), const Size(390, 844), 'Rename flow', (t) => tapKey(t, 'flow-rename')),
+    ('Add sections sheet', Routes.flowEditor('flow-1'), const Size(390, 844), 'Add sections', (t) => tapKey(t, 'flow-add')),
+    ('Delete dialog', Routes.flowEditor('flow-1'), const Size(390, 1400), 'Delete "Evening"? This cannot be undone.', (t) => tapKey(t, 'flow-delete')),
+    ('Empty flow editor', Routes.flowEditor('flow-3'), const Size(390, 844), 'This flow has no sections yet.', null),
+  ];
+
+  for (final dark in [false, true]) {
+    for (final (name, location, size, marker, after) in flowScreens) {
+      testWidgets(
+        '$name (${dark ? 'dark' : 'light'}) meets tap-target, label and contrast guidelines',
+        (t) async {
+          final handle = t.ensureSemantics();
+          final stored = await realFlowsStore(t);
+          await openReal(t, location, size: size, dark: dark, storeExtras: stored);
+          if (after != null) await after(t);
+          expect(find.text(marker), findsWidgets);
+          await expectGuidelines(t);
+          handle.dispose();
+        },
+      );
+    }
+  }
+
   // Pirith: the same guidelines on its screens, in both themes.
   for (final dark in [false, true]) {
     final theme = dark ? 'dark' : 'light';

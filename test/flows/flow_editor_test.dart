@@ -501,6 +501,66 @@ void main() {
       }
     }
 
+    // A name of the longest length, as one unbroken word and as words, in
+    // the header and in the delete dialog on the narrowest phone.
+    for (final long in ['W' * 40, 'Evening chant for the long quiet weekend']) {
+      for (final dark in [false, true]) {
+        testWidgets('a 40-character name does not overflow the '
+            'header or the delete dialog: 320x568, text 2.0x, '
+            '${dark ? 'dark' : 'light'} (${long.contains(' ') ? 'words' : 'one word'})',
+            (t) async {
+          expect(long.length, flowNameMax);
+          await openReal(
+            t,
+            editor,
+            library: flowTestLibrary(),
+            size: const Size(320, 568),
+            deviceTextScale: 2.0,
+            dark: dark,
+            storeExtras: {
+              flowsKey: jsonEncode(
+                FlowsState(
+                  flows: [
+                    Flow(id: 'flow-1', name: long, sections: [_a, _b]),
+                  ],
+                  nextNumber: 2,
+                ).toJson(),
+              ),
+            },
+          );
+          expect(t.takeException(), isNull);
+          expect(find.text(long), findsOneWidget);
+          final rename = t.getSize(find.byKey(const ValueKey('flow-rename')));
+          expect(rename.width, greaterThanOrEqualTo(48));
+          expect(rename.height, greaterThanOrEqualTo(48));
+          await scrollThrough(t);
+
+          final delete = find.byKey(const ValueKey('flow-delete'));
+          await t.scrollUntilVisible(
+            delete,
+            200,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await t.pumpAndSettle();
+          await t.tap(delete);
+          await t.pumpAndSettle();
+          expect(t.takeException(), isNull);
+          expect(
+            find.text('Delete "$long"? This cannot be undone.'),
+            findsOneWidget,
+          );
+          for (final key in ['flow-delete-keep', 'flow-delete-confirm']) {
+            final size = t.getSize(find.byKey(ValueKey(key)));
+            expect(size.width, greaterThanOrEqualTo(48), reason: key);
+            expect(size.height, greaterThanOrEqualTo(48), reason: key);
+          }
+          await t.tap(find.byKey(const ValueKey('flow-delete-keep')));
+          await t.pumpAndSettle();
+          expect(t.takeException(), isNull);
+        });
+      }
+    }
+
     const sizes = [
       Size(320, 568),
       Size(390, 844),
