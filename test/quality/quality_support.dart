@@ -22,6 +22,9 @@ const realReadingId = 'namaskaraya';
 const realCategoryId = 'cat-namaskaraya';
 const pirithCategoryId = 'cat-pirith';
 const mangalaReadingId = 'pirith-08-mahamangala';
+const samanthaCategoryId = 'cat-samantha-patthana';
+const spIntroductionId = 'sp-introduction';
+const spVandanaId = 'sp-vandana';
 
 /// The bundled families, loaded from assets/fonts so the tests measure text
 /// with the real glyphs and not the test font.

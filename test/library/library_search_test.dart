@@ -200,7 +200,7 @@ void main() {
     t,
   ) async {
     await openReal(t, Routes.library);
-    expect(find.text('2 collections'), findsOneWidget);
+    expect(find.text('3 collections'), findsOneWidget);
   });
 
   testWidgets('several collections: caption, chips, and a chip filters', (

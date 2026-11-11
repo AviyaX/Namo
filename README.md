@@ -42,6 +42,18 @@ The Pirith topic (39 readings with recordings) reaches the app only through `too
 - Tests: `python -I -X utf8 tools/test_build_pirith.py`. The glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`) also covers every pirith name.
 - Before publishing, read `docs/release-checklist.md`.
 
+## Samantha Pattana content
+
+The Samantha Pattana Dharma Wandanawa topic (an Introduction and the Vandana, with one recording) reaches the app in three steps, each with a tracked file in `content/extracted/`.
+
+- Extract the text from the converted PDF pages: `python -I -X utf8 tools/build_samantha_patthana.py . --extract <source_folder>` writes `content/extracted/samantha_patthana.json`.
+- Time every Pali line in the recording from its automatic captions (timing data only, never bundled): `python -I -X utf8 tools/time_samantha_patthana.py . <captions.json3>` writes `content/extracted/samantha_patthana_times.json` and `content/samantha_patthana_timing_report.md`.
+- Build: `python -I -X utf8 tools/build_samantha_patthana.py .` writes `assets/content/samantha_patthana.json` from those two files.
+- Check it is up to date (also checks the bundled recording's size and SHA-256 and that no other file is in `assets/audio/samantha_patthana/`): `python -I -X utf8 tools/build_samantha_patthana.py . --check`
+- Import the recording: `python -I -X utf8 tools/build_samantha_patthana.py . --import-audio <audio_dir>`, where `<audio_dir>` holds `hYXyO3o7Iac.m4a`; it refuses a file of the wrong size or checksum and copies it byte for byte into `assets/audio/samantha_patthana/`.
+- The originals (PDF, conversion, recording, captions) are not in git. They live only in the main checkout's `source_material/samantha_patthana/`; the card picture `assets/pictures/samantha_patthana.jpg` is a copy of `design/card_images/stupa_dusk.jpg`.
+- Tests: `python -I -X utf8 tools/test_build_samantha_patthana.py` and `python -I -X utf8 tools/test_time_samantha_patthana.py`. The glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`) also covers this topic's names.
+
 ## Docs
 
 - `docs/superpowers/specs/`: the owner's spec and the design.

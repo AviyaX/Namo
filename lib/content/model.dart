@@ -111,6 +111,8 @@ class Verse {
     this.notes = const [],
     this.corrections = const [],
     this.phrases = const [],
+    this.keepLines = false,
+    this.alwaysShown = false,
   });
 
   factory Verse.fromJson(Map<String, dynamic> json) => Verse(
@@ -130,6 +132,8 @@ class Verse {
       for (final p in (json['phrases'] as List?) ?? const [])
         Phrase.fromJson(p as Map<String, dynamic>),
     ],
+    keepLines: json['keep_lines'] == true,
+    alwaysShown: json['always_shown'] == true,
   );
 
   final String id;
@@ -143,6 +147,12 @@ class Verse {
   /// The phrases of a pirith block; empty for an ordinary verse, whose text
   /// is in the single fields above.
   final List<Phrase> phrases;
+
+  /// True when each line of the text is shown on a line of its own.
+  final bool keepLines;
+
+  /// True when the verse is shown whichever languages are chosen.
+  final bool alwaysShown;
 
   bool get isPhrased => phrases.isNotEmpty;
 
@@ -159,6 +169,8 @@ class Verse {
     notes: notes,
     corrections: corrections,
     phrases: phrases,
+    keepLines: keepLines,
+    alwaysShown: alwaysShown,
   );
 
   /// The text in [l], or null when it is missing or blank. "Pali" is the
@@ -195,6 +207,7 @@ class RecordingInfo {
     required this.label,
     this.sectionCues = const {},
     this.blockTimes = const [],
+    this.lineTimes = const [],
     this.duration,
   });
 
@@ -213,6 +226,13 @@ class RecordingInfo {
                 _seconds(t[1] as num),
               ),
     ],
+    lineTimes: [
+      for (final block in (json['line_times'] as List?) ?? const [])
+        [
+          for (final t in (block as List))
+            t == null ? null : _seconds(t as num),
+        ],
+    ],
   );
 
   final String asset, label;
@@ -220,6 +240,10 @@ class RecordingInfo {
 
   /// One entry per block of the reading; null where the block has no time.
   final List<BlockTime?> blockTimes;
+
+  /// One list per block, one start per line of the block; null where a line
+  /// has no time. Empty when the recording is timed by block only.
+  final List<List<Duration?>> lineTimes;
   final Duration? duration;
 }
 
@@ -319,12 +343,14 @@ class Category {
     required this.title,
     required this.subtitle,
     required this.readings,
+    this.shortTitle,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     id: json['id'] as String,
     title: json['title'] as String,
     subtitle: json['subtitle'] as String,
+    shortTitle: json['short_title'] as String?,
     readings: [
       for (final r in json['readings'] as List)
         Reading.fromJson(r as Map<String, dynamic>),
@@ -334,6 +360,9 @@ class Category {
   final String id;
   final String title;
   final String subtitle;
+
+  /// A shorter name for narrow places such as a chip; null when the title is short enough.
+  final String? shortTitle;
   final List<Reading> readings;
 
   /// The 1-based position of the reading in this category; 0 if absent.

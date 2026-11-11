@@ -216,6 +216,49 @@ void pirithModelTests() {
       ]);
     });
 
+    test('the new verse, category and recording fields parse', () {
+      final v = Verse.fromJson({
+        'id': 'v',
+        'keep_lines': true,
+        'always_shown': true,
+      });
+      expect(v.keepLines, isTrue);
+      expect(v.alwaysShown, isTrue);
+      final plain = Verse.fromJson({'id': 'v'});
+      expect(plain.keepLines, isFalse);
+      expect(plain.alwaysShown, isFalse);
+      final kept = v.withId('w');
+      expect(kept.id, 'w');
+      expect(kept.keepLines, isTrue);
+      expect(kept.alwaysShown, isTrue);
+
+      Category cat(Map<String, dynamic> extra) => Category.fromJson({
+        'id': 'c',
+        'title': 'T',
+        'subtitle': 'S',
+        'readings': [],
+        ...extra,
+      });
+      expect(cat({'short_title': 'Short'}).shortTitle, 'Short');
+      expect(cat({}).shortTitle, isNull);
+
+      final a = RecordingInfo.fromJson({
+        'asset': 'a.m4a',
+        'label': 'L',
+        'line_times': [
+          [0.5, null, 2],
+          [],
+          [null],
+        ],
+      });
+      expect(a.lineTimes, [
+        [const Duration(milliseconds: 500), null, const Duration(seconds: 2)],
+        <Duration?>[],
+        [null],
+      ]);
+      expect(RecordingInfo.fromJson({'asset': 'a', 'label': 'L'}).lineTimes, isEmpty);
+    });
+
     test('a plain reading is not phrased', () {
       final r = Reading(
         id: 'r',

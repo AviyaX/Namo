@@ -9,7 +9,11 @@ import '../quality/quality_support.dart';
 void main() {
   testWidgets('the bundled pirith content', (t) async {
     final lib = await realLibrary(t);
-    expect(lib.categories.map((c) => c.id), [realCategoryId, pirithCategoryId]);
+    expect(lib.categories.map((c) => c.id), [
+      realCategoryId,
+      pirithCategoryId,
+      samanthaCategoryId,
+    ]);
     final pirith = lib.category(pirithCategoryId)!;
     expect(pirith.readings.length, 39);
     final verses = [

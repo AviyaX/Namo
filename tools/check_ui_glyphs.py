@@ -7,7 +7,8 @@ does not have. The fallback is bundled, so nothing is fetched, but the
 character is then drawn in a different face. This lists those characters.
 
 Also checks every pirith `title` against NotoSansSinhala and `title_roman`
-against NotoSerif.
+against NotoSerif, and the same for the Samantha Pattana asset (its category and
+reading `title`, `subtitle` and `short_title` against NotoSansSinhala).
 
 Exit code: 0 whatever is listed; 1 only when a listed character is in neither
 bundled font (it would be drawn as a box, or fetched from the network), or a
@@ -23,6 +24,7 @@ LABEL_FONT = "NotoSansSinhala.ttf"
 FALLBACK_FONT = "Lora.ttf"
 ROMAN_FONT = "NotoSerif.ttf"
 PIRITH = "assets/content/pirith.json"
+SAMANTHA = "assets/content/samantha_patthana.json"
 
 # Files whose strings are data for code and never drawn as interface text.
 NOT_DRAWN = {
@@ -222,6 +224,29 @@ def pirith_missing(root, sinhala_points, roman_points):
     return bad
 
 
+def samantha_missing(root, sinhala_points, roman_points):
+    """(id, field, character) for each Samantha Pattana name with a missing glyph.
+
+    `title`, `subtitle` and `short_title` are drawn in NotoSansSinhala and
+    `title_roman` in NotoSerif; categories and readings are both checked.
+    """
+    import json
+
+    path = root / SAMANTHA
+    if not path.exists():
+        raise FileNotFoundError(f"{SAMANTHA} is missing; the Samantha Pattana names cannot be checked")
+    data = json.loads(path.read_text(encoding="utf-8"))
+    fields = (("title", sinhala_points), ("subtitle", sinhala_points),
+              ("short_title", sinhala_points), ("title_roman", roman_points))
+    bad = []
+    for category in data["categories"]:
+        for item in [category, *category["readings"]]:
+            for field, points in fields:
+                for ch in missing_characters(item.get(field, ""), points):
+                    bad.append((item["id"], field, ch))
+    return bad
+
+
 def main(argv):
     root = pathlib.Path(argv[1] if len(argv) > 1 else ".").resolve()
     fonts = root / "assets" / "fonts"
@@ -238,7 +263,9 @@ def main(argv):
                 target = in_fallback_only if ord(ch) in fallback else nowhere
                 target.setdefault(ch, []).append((rel, line, text))
     try:
-        pirith_bad = pirith_missing(root, label, font_codepoints(fonts / ROMAN_FONT))
+        roman = font_codepoints(fonts / ROMAN_FONT)
+        pirith_bad = pirith_missing(root, label, roman)
+        samantha_bad = samantha_missing(root, label, roman)
     except FileNotFoundError as error:
         print(f"error: {error}")
         return 1
@@ -246,6 +273,11 @@ def main(argv):
         print("pirith names with a character missing from the font they are drawn in:")
         for reading_id, field, ch in pirith_bad:
             print(f"  {reading_id} {field}: U+{ord(ch):04X} {ch!r}")
+    if samantha_bad:
+        print("Samantha Pattana names with a character missing from the font they are drawn in:")
+        for item_id, field, ch in samantha_bad:
+            print(f"  {item_id} {field}: U+{ord(ch):04X} {ch!r}")
+        pirith_bad = pirith_bad + samantha_bad
     if not in_fallback_only and not nowhere:
         if pirith_bad:
             return 1

@@ -13,6 +13,7 @@ class Recording {
     required this.placeholder,
     this.sectionCues = const {},
     this.blockTimes = const [],
+    this.lineTimes = const [],
   });
 
   final String readingId;
@@ -31,6 +32,9 @@ class Recording {
 
   /// When each block of the reading is chanted; null where it has no time.
   final List<BlockTime?> blockTimes;
+
+  /// When each line of each block starts; empty when only blocks are timed.
+  final List<List<Duration?>> lineTimes;
 
   bool get timed => blockTimes.isNotEmpty;
 }
@@ -55,6 +59,7 @@ class ContentAudioCatalogue implements AudioCatalogue {
                 placeholder: false,
                 sectionCues: reading.audio!.sectionCues,
                 blockTimes: reading.audio!.blockTimes,
+                lineTimes: reading.audio!.lineTimes,
               ),
       };
 

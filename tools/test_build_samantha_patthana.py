@@ -149,6 +149,234 @@ class CommittedFileTest(unittest.TestCase):
         self.assertEqual(build.render(self.data), EXTRACTED.read_text(encoding="utf-8"))
 
 
+TIMES = ROOT / "content" / "extracted" / "samantha_patthana_times.json"
+ASSET = ROOT / "assets" / "content" / "samantha_patthana.json"
+PICTURE = ROOT / "assets" / "pictures" / "samantha_patthana.jpg"
+
+
+def fake_extracted(sinhala_in_verses=False):
+    """Made-up extracted data: unit k has k%3+1 Pali lines and 2 meaning lines (none for u-verses)."""
+    units = []
+    for k, unit_id in enumerate(IDS):
+        n = k % 3 + 1
+        units.append({
+            "id": unit_id, "kind": "x",
+            "pali": [{"page": 4, "line": 3 + i, "text": f"P{k}q{i}"} for i in range(n)],
+            "sinhala": [] if unit_id == "u-verses" and not sinhala_in_verses
+            else [{"page": 40, "line": 3 + i, "text": f"S{k}q{i}"} for i in range(2)]})
+    return {"title": "TTL", "introduction": ["I one", "I two", "I three"], "units": units}
+
+
+def fake_times(extracted, duration=2856000):
+    units, at = [], 1000
+    for u in extracted["units"]:
+        lines = []
+        for _ in u["pali"]:
+            lines.append({"start_ms": at, "end_ms": at + 900, "how": "matched"})
+            at += 1000
+        units.append({"id": u["id"], "lines": lines})
+    return {"duration_ms": duration, "units": units}
+
+
+def write_project(root, extracted=None, times=None):
+    extracted = extracted or fake_extracted()
+    times = times or fake_times(extracted)
+    (root / "content" / "extracted").mkdir(parents=True)
+    (root / build.OUTPUT).write_text(json.dumps(extracted), encoding="utf-8")
+    (root / build.TIMES).write_text(json.dumps(times), encoding="utf-8")
+    return extracted, times
+
+
+class BuildFromFakeDataTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self.tmp.name)
+        self.extracted, self.times = write_project(self.root)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_shape(self):
+        data = build.build(self.root)
+        self.assertEqual(data["schema"], 1)
+        (cat,) = data["categories"]
+        self.assertEqual((cat["id"], cat["short_title"], cat["title"], cat["subtitle"]),
+                         ("cat-samantha-patthana", "Samantha Pattana", "Samantha Pattana Dharma Wandanawa", "TTL"))
+        intro, vandana = cat["readings"]
+        self.assertEqual((intro["id"], intro["title"], vandana["id"], vandana["title"], vandana["title_roman"]),
+                         ("sp-introduction", "Introduction", "sp-vandana", "TTL", "Samantha Pattana Dharma Wandanawa"))
+        (section,) = intro["sections"]
+        self.assertEqual(section["id"], "p")
+        self.assertEqual(section["verses"], [
+            {"id": f"intro-{n}", "sinhala": t, "always_shown": True, "check": "needs checking"}
+            for n, t in enumerate(["I one", "I two", "I three"], 1)])
+        (section,) = vandana["sections"]
+        verses = section["verses"]
+        self.assertEqual([v["id"] for v in verses], IDS)
+        self.assertTrue(all(v["keep_lines"] and v["check"] == "needs checking" for v in verses))
+        self.assertEqual(verses[3]["phrases"], [{"pali": "P3q0", "sinhala": "", "english": ""}])
+        self.assertEqual(verses[1]["phrases"][1]["pali"], "P1q1")
+        self.assertEqual(verses[3]["sinhala"], "S3q0\nS3q1")
+        self.assertNotIn("sinhala", verses[1])
+
+    def test_audio_times(self):
+        audio = build.build(self.root)["categories"][0]["readings"][1]["audio"]
+        self.assertEqual(audio["asset"], "assets/audio/samantha_patthana/hYXyO3o7Iac.m4a")
+        self.assertEqual(audio["label"], "Chanted by Ven. Kiriwaththuduwe Ariyadassana Thero")
+        self.assertEqual((audio["duration_ms"], audio["bytes"], audio["sha256"]),
+                         (2856000, build.RECORDING_BYTES, build.RECORDING_SHA256))
+        bt, lt = audio["block_times"], audio["line_times"]
+        self.assertEqual(len(bt), 28)
+        self.assertEqual(bt[0], [1, 2])  # one line at 1 s; the next unit starts at 2 s
+        self.assertEqual(bt[1], [2, 4])
+        last = self.times["units"][-1]["lines"][-1]["end_ms"] / 1000
+        self.assertEqual(bt[-1][1], last)
+        self.assertTrue(all(bt[i][1] == bt[i + 1][0] for i in range(27)))
+        self.assertEqual([len(x) for x in lt], [len(u["lines"]) for u in self.times["units"]])
+        self.assertEqual(lt[1], [2, 3])
+
+    def test_untimed_units_get_null_lines_but_keep_the_block_time(self):
+        audio = build.build(self.root, untimed=("u-homage", "u-list"))["categories"][0]["readings"][1]["audio"]
+        self.assertEqual(audio["line_times"][0], [None])
+        self.assertEqual(audio["line_times"][2], [None] * 3)
+        self.assertEqual(audio["line_times"][1], [2, 3])
+        self.assertEqual(audio["block_times"][0], [1, 2])
+        self.assertEqual(audio["block_times"][2], [4, 7])
+        self.assertTrue(all(isinstance(t, (int, float)) for b in audio["block_times"] for t in b))
+
+    def test_default_untimed_unit_is_the_homage(self):
+        self.assertEqual(build.UNTIMED_UNITS, ("u-homage",))
+        audio = build.build(self.root)["categories"][0]["readings"][1]["audio"]
+        self.assertTrue(all(t is None for t in audio["line_times"][0]))
+        self.assertTrue(all(t is not None for lt in audio["line_times"][1:] for t in lt))
+
+    def test_times_with_different_counts_raise(self):
+        self.times["units"][4]["lines"].pop()
+        (self.root / build.TIMES).write_text(json.dumps(self.times), encoding="utf-8")
+        with self.assertRaises(build.BuildError):
+            build.build(self.root)
+
+    def test_times_with_different_units_raise(self):
+        self.times["units"][4]["id"] = "other"
+        (self.root / build.TIMES).write_text(json.dumps(self.times), encoding="utf-8")
+        with self.assertRaises(build.BuildError):
+            build.build(self.root)
+
+    def test_wrong_duration_raises(self):
+        self.times["duration_ms"] = 5
+        (self.root / build.TIMES).write_text(json.dumps(self.times), encoding="utf-8")
+        with self.assertRaises(build.BuildError):
+            build.build(self.root)
+
+    def test_correction_applies_to_every_line_and_a_wrong_count_raises(self):
+        # "q" occurs once in each of the 28 units' first Pali line and so on; count them from the fixture.
+        total = sum(e["text"].count("q0") for u in self.extracted["units"] for k in ("pali", "sinhala") for e in u[k])
+        rows = [("q0", "Z0", total, "test")]
+        data = build.build(self.root, corrections=rows)
+        verses = data["categories"][0]["readings"][1]["sections"][0]["verses"]
+        self.assertEqual(verses[3]["phrases"][0]["pali"], "P3Z0")
+        self.assertEqual(verses[3]["sinhala"], "S3Z0\nS3q1")
+        self.assertEqual(data["categories"][0]["readings"][1]["sections"][0]["corrections"][0]["count"], total)
+        with self.assertRaises(build.BuildError):
+            build.build(self.root, corrections=[("q0", "Z0", total + 1, "test")])
+
+    def test_no_corrections_by_default(self):
+        self.assertEqual(build.CORRECTIONS, [])
+
+
+class CheckAndImportTest(unittest.TestCase):
+    """Runs with a tiny stand-in recording whose size and checksum replace the constants."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self.tmp.name) / "project"
+        self.root.mkdir()
+        write_project(self.root)
+        self.original = pathlib.Path(self.tmp.name) / "audio"
+        self.original.mkdir()
+        self.bytes = b"fake recording bytes"
+        (self.original / build.RECORDING).write_bytes(self.bytes)
+        import hashlib
+        self.saved = (build.RECORDING_BYTES, build.RECORDING_SHA256)
+        build.RECORDING_BYTES = len(self.bytes)
+        build.RECORDING_SHA256 = hashlib.sha256(self.bytes).hexdigest()
+
+    def tearDown(self):
+        build.RECORDING_BYTES, build.RECORDING_SHA256 = self.saved
+        self.tmp.cleanup()
+
+    def ready(self):
+        build.import_audio(self.root, self.original)
+        (self.root / build.ASSET).parent.mkdir(parents=True)
+        (self.root / build.ASSET).write_bytes(build.render(build.build(self.root)).encode("utf-8"))
+
+    def check(self):
+        return build._check(self.root, build.render(build.build(self.root)))
+
+    def test_up_to_date(self):
+        self.ready()
+        self.assertIsNone(self.check())
+
+    def test_changed_asset_fails(self):
+        self.ready()
+        (self.root / build.ASSET).write_text("{}", encoding="utf-8")
+        self.assertIn("out of date", self.check())
+
+    def test_missing_asset_fails(self):
+        build.import_audio(self.root, self.original)
+        self.assertIn("out of date", self.check())
+
+    def test_recording_of_wrong_size_fails(self):
+        self.ready()
+        (self.root / build.AUDIO_DIR / build.RECORDING).write_bytes(self.bytes + b"x")
+        self.assertIn("differs from the original", self.check())
+
+    def test_recording_of_wrong_checksum_fails(self):
+        self.ready()
+        (self.root / build.AUDIO_DIR / build.RECORDING).write_bytes(b"x" * len(self.bytes))
+        self.assertIn("differs from the original", self.check())
+
+    def test_extra_file_fails(self):
+        self.ready()
+        (self.root / build.AUDIO_DIR / "extra.m4a").write_bytes(b"x")
+        self.assertIn("extra.m4a", self.check())
+
+    def test_import_copies_byte_for_byte(self):
+        build.import_audio(self.root, self.original)
+        self.assertEqual((self.root / build.AUDIO_DIR / build.RECORDING).read_bytes(), self.bytes)
+
+    def test_import_refuses_wrong_size(self):
+        (self.original / build.RECORDING).write_bytes(self.bytes + b"x")
+        with self.assertRaises(build.BuildError):
+            build.import_audio(self.root, self.original)
+        self.assertFalse((self.root / build.AUDIO_DIR / build.RECORDING).exists())
+
+
+class CommittedAssetTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.text = ASSET.read_text(encoding="utf-8")
+        cls.data = json.loads(cls.text)
+
+    def test_counts(self):
+        vandana = self.data["categories"][0]["readings"][1]
+        verses = vandana["sections"][0]["verses"]
+        self.assertEqual(len(verses), 28)
+        self.assertEqual(sum(len(v["phrases"]) for v in verses), 507)
+        self.assertEqual(sum(len(v["sinhala"].split("\n")) for v in verses if "sinhala" in v), 385)
+        self.assertEqual([len(x) for x in vandana["audio"]["line_times"]], [len(v["phrases"]) for v in verses])
+        self.assertEqual(len(vandana["audio"]["block_times"]), 28)
+
+    def test_is_what_the_tool_builds_from_the_tracked_files(self):
+        self.assertEqual(build.render(build.build(ROOT)), self.text)
+
+    def test_recording_is_the_original(self):
+        self.assertIsNone(build._check(ROOT, self.text))
+
+    def test_picture_is_a_byte_copy_of_the_design_image(self):
+        self.assertEqual(PICTURE.read_bytes(), (ROOT / "design" / "card_images" / "stupa_dusk.jpg").read_bytes())
+
+
 SRC = os.environ.get("SAMANTHA_PATTHANA_SRC")
 
 

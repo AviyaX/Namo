@@ -121,6 +121,42 @@ class PirithNames(unittest.TestCase):
         self.assertIn("no-such.json is missing", out.getvalue())
 
 
+class SamanthaNames(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.sinhala = tool.font_codepoints(FONTS / tool.LABEL_FONT)
+        cls.roman = tool.font_codepoints(FONTS / tool.ROMAN_FONT)
+
+    def test_the_bundled_names_are_covered(self):
+        self.assertEqual(tool.samantha_missing(ROOT, self.sinhala, self.roman), [])
+
+    def test_a_missing_glyph_is_named_in_category_and_reading(self):
+        import json
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = pathlib.Path(d)
+            (root / "assets" / "content").mkdir(parents=True)
+            (root / tool.SAMANTHA).write_text(
+                json.dumps({"categories": [{
+                    "id": "cat-x", "title": "T", "subtitle": "මහා", "short_title": "S中",
+                    "readings": [{"id": "r-x", "title": "T", "title_roman": "Maṭa中"}],
+                }]}),
+                encoding="utf-8",
+            )
+            bad = tool.samantha_missing(root, self.sinhala, self.roman)
+        self.assertIn(("cat-x", "short_title", "中"), bad)
+        self.assertIn(("r-x", "title_roman", "中"), bad)
+        self.assertEqual({b[0] for b in bad}, {"cat-x", "r-x"})
+
+    def test_a_missing_file_is_an_error(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(FileNotFoundError):
+                tool.samantha_missing(pathlib.Path(d), self.sinhala, self.roman)
+
+
 class RealProject(unittest.TestCase):
     def test_the_project_run_exits_zero(self):
         run = subprocess.run(

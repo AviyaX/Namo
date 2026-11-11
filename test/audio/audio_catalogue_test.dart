@@ -61,6 +61,50 @@ void main() {
     expect(ContentAudioCatalogue(library).recordingFor('other'), isNull);
   });
 
+  test('line times are passed on; a recording without them has none', () {
+    const library = Library(categories: [
+      Category(id: 'c', title: 'c', subtitle: 's', readings: [
+        Reading(
+          id: 'timed',
+          title: 't',
+          sections: [],
+          audio: RecordingInfo(
+            asset: 'a.m4a',
+            label: 'L',
+            lineTimes: [
+              [Duration(seconds: 1), null],
+            ],
+          ),
+        ),
+        Reading(
+          id: 'plain',
+          title: 't',
+          sections: [],
+          audio: RecordingInfo(asset: 'b.m4a', label: 'L'),
+        ),
+      ]),
+    ]);
+    final catalogue = ContentAudioCatalogue(library);
+    expect(catalogue.recordingFor('timed')!.lineTimes, [
+      [const Duration(seconds: 1), null],
+    ]);
+    expect(catalogue.recordingFor('plain')!.lineTimes, isEmpty);
+  });
+
+  test('the bundled pirith recordings have no line times', () {
+    final json = jsonDecode(File('assets/content/pirith.json').readAsStringSync())
+        as Map<String, dynamic>;
+    final catalogue = ContentAudioCatalogue(Library.fromJson(json));
+    var n = 0;
+    for (final c in Library.fromJson(json).categories) {
+      for (final r in c.readings) {
+        expect(catalogue.recordingFor(r.id)!.lineTimes, isEmpty, reason: r.id);
+        n++;
+      }
+    }
+    expect(n, 39);
+  });
+
   test('the placeholder is chosen only in a debug build with the flag on', () {
     for (final (debug, flag, expected) in [
       (true, true, true),

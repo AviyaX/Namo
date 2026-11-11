@@ -168,6 +168,19 @@ void main() {
 }
 
 void phrasedPickTests() {
+  testWidgets('no verse of Samantha Pattana is picked', (t) async {
+    final real = await realLibrary(t);
+    final samantha = real.category(samanthaCategoryId)!;
+    final own = {
+      for (final r in samantha.readings)
+        for (final s in r.sections) ...s.verses,
+    };
+    expect(own, isNotEmpty);
+    for (final p in eligibleGathas(real)) {
+      expect(own.contains(p.verse), isFalse, reason: p.verse.id);
+    }
+  });
+
   testWidgets('phrased pirith verses are never picked', (t) async {
     final real = await realLibrary(t);
     final first = Library(categories: [real.categories.first]);

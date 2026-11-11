@@ -15,6 +15,7 @@ class AssetContentRepository implements ContentRepository {
     this.paths = const [
       'assets/content/namaskaraya_to_pin_dima.json',
       'assets/content/pirith.json',
+      'assets/content/samantha_patthana.json',
     ],
   });
 

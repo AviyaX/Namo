@@ -35,6 +35,14 @@ void main() {
     expect(lib.categories.map((c) => c.id), ['c-a', 'c-b']);
   });
 
+  test('the default paths name the three bundled files in order', () {
+    expect(AssetContentRepository(_StringBundle('')).paths, [
+      'assets/content/namaskaraya_to_pin_dima.json',
+      'assets/content/pirith.json',
+      'assets/content/samantha_patthana.json',
+    ]);
+  });
+
   test('a second file with another schema number fails the load', () {
     final repo = AssetContentRepository(
       _MapBundle({
@@ -48,9 +56,13 @@ void main() {
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('the bundled content loads: Buddha Wandanawa (1 reading, 19 sections), then Pirith', () async {
+  test('the bundled content loads: Buddha Wandanawa (1 reading, 19 sections), Pirith, then Samantha Pattana', () async {
     final lib = await AssetContentRepository(rootBundle).load();
-    expect(lib.categories.map((c) => c.id), ['cat-namaskaraya', 'cat-pirith']);
+    expect(lib.categories.map((c) => c.id), [
+      'cat-namaskaraya',
+      'cat-pirith',
+      'cat-samantha-patthana',
+    ]);
     final first = lib.categories.first;
     final r = first.readings.single;
     expect(first.title, 'Buddha Wandanawa');

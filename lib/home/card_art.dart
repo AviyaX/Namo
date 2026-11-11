@@ -13,6 +13,7 @@ import '../design/tokens.dart';
 const Map<String, String> cardPictures = {
   'cat-namaskaraya': 'assets/pictures/buddha_wandanawa.jpg',
   'cat-pirith': 'assets/pictures/pirith.jpg',
+  'cat-samantha-patthana': 'assets/pictures/samantha_patthana.jpg',
 };
 
 /// Category id -> the wide (3 : 1) picture used for the Home banner on wide
