@@ -212,6 +212,12 @@ class _FoldedReading {
         for (final s in reading.sections)
           for (final v in s.verses)
             for (final p in v.phrases) (p, _FoldedPhrase(p)),
+      ],
+      meanings = [
+        for (final s in reading.sections)
+          for (final v in s.verses)
+            if (v.isPhrased && v.keepLines && v.sinhala != null)
+              (v.sinhala!, foldForSearch(v.sinhala!)),
       ];
 
   final Reading reading;
@@ -220,6 +226,22 @@ class _FoldedReading {
   final bool phrased;
   final List<_FoldedSection> sections;
   final List<(Phrase, _FoldedPhrase)> phrases;
+
+  /// The Sinhala meaning of each phrased verse that keeps its lines (its
+  /// phrases are Pali lines only): the original text and the folded text.
+  final List<(String, String)> meanings;
+}
+
+/// The line of [text] that holds the folded query [q], trimmed; the first
+/// line when the match runs across a line break.
+String _matchingLine(String text, String q) {
+  final lines = text.split('\n');
+  return lines
+      .firstWhere(
+        (x) => foldForSearch(x).contains(q),
+        orElse: () => lines.first,
+      )
+      .trim();
 }
 
 class _FoldedCategory {
@@ -301,12 +323,14 @@ class SearchIndex {
       for (final (phrase, folded) in r.phrases) {
         if (!folded.of(l).contains(q)) continue;
         language = l;
-        final text = phrase.text(l);
-        final lines = text.split('\n');
-        line = (lines.firstWhere(
-          (x) => foldForSearch(x).contains(q),
-          orElse: () => lines.first,
-        )).trim();
+        line = _matchingLine(phrase.text(l), q);
+        break outer;
+      }
+      if (l != ReadingLanguage.sinhala) continue;
+      for (final (text, folded) in r.meanings) {
+        if (!folded.contains(q)) continue;
+        language = l;
+        line = _matchingLine(text, q);
         break outer;
       }
     }

@@ -243,4 +243,90 @@ void main() {
       expect(checked, greaterThan(0));
     });
   });
+
+  group('searchLibrary, Samantha Pattana', () {
+    const initial = LanguageSelection.initial;
+    List<String> readings(List<SearchHit> h) => [for (final x in h) x.reading.id];
+
+    /// The Vandana's unit at [i] (by line, not typed here).
+    Future<Verse> unit(WidgetTester t, int i) async =>
+        (await realLibrary(t)).reading(spVandanaId)!.sections.single.verses[i];
+
+    testWidgets('a Pali line finds only the Vandana, once, with that line', (
+      t,
+    ) async {
+      final lib = await realLibrary(t);
+      final v = (await unit(t, 3));
+      expect(v.keepLines, isTrue);
+      final line = v.phrases[1].pali.trim();
+      final hits = searchLibrary(lib, line, initial);
+      expect(readings(hits), [spVandanaId]);
+      expect(hits.single.line, line);
+      expect(hits.single.lineLanguage, ReadingLanguage.pali);
+    });
+
+    testWidgets('a meaning line finds only the Vandana, once, with that line', (
+      t,
+    ) async {
+      final lib = await realLibrary(t);
+      final v = await unit(t, 3);
+      final line = v.sinhala!.split('\n')[1].trim();
+      final hits = searchLibrary(lib, line, initial);
+      expect(readings(hits), [spVandanaId]);
+      expect(hits.single.line, line);
+      expect(hits.single.lineLanguage, ReadingLanguage.sinhala);
+      expect(hits.single.lineLanguageChosen, isTrue);
+    });
+
+    testWidgets('with Sinhala not chosen a meaning match names its language', (
+      t,
+    ) async {
+      final lib = await realLibrary(t);
+      final v = await unit(t, 3);
+      final line = v.sinhala!.split('\n')[1].trim();
+      final hit = searchLibrary(lib, line, _english).single;
+      expect(hit.reading.id, spVandanaId);
+      expect(hit.line, line);
+      expect(hit.lineLanguage, ReadingLanguage.sinhala);
+      expect(hit.lineLanguageChosen, isFalse);
+    });
+
+    testWidgets('a word of the Introduction finds it', (t) async {
+      final lib = await realLibrary(t);
+      final text = lib.reading(spIntroductionId)!.sections.single.verses.first
+          .sinhala!;
+      final word = text
+          .split(RegExp(r'\s+'))
+          .firstWhere((w) => w.runes.length >= 5);
+      final hits = searchLibrary(lib, word, initial)
+          .where((h) => h.reading.id == spIntroductionId)
+          .toList();
+      expect(hits, hasLength(1));
+      expect(hits.single.line, contains(word));
+      expect(readings(searchLibrary(lib, 'Introduction', initial)), [
+        spIntroductionId,
+      ]);
+    });
+
+    testWidgets('"Samantha" finds both readings, one hit each', (t) async {
+      final lib = await realLibrary(t);
+      List<String> mine(String q) => [
+        for (final h in searchLibrary(lib, q, initial))
+          if (h.category.id == samanthaCategoryId) h.reading.id,
+      ];
+      for (final q in [
+        'Samantha',
+        'samantha pattana',
+        lib.category(samanthaCategoryId)!.subtitle,
+      ]) {
+        expect(mine(q), [spIntroductionId, spVandanaId], reason: q);
+      }
+      // Any other hit (a pirith of a like name) is in the topics before.
+      final hits = searchLibrary(lib, 'Samantha', initial);
+      expect(readings(hits).sublist(hits.length - 2), [
+        spIntroductionId,
+        spVandanaId,
+      ]);
+    });
+  });
 }

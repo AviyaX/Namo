@@ -255,6 +255,49 @@ void main() {
     expect(find.byKey(const ValueKey('open-c1')), findsOneWidget);
   });
 
+  group('Samantha Pattana hits', () {
+    for (final (i, id) in [spIntroductionId, spVandanaId].indexed) {
+      testWidgets('"Samantha" lists $id with its number, and it opens', (
+        t,
+      ) async {
+        final lib = await realLibrary(t);
+        final r = lib.reading(id)!;
+        await openReal(t, Routes.library, size: const Size(390, 3000));
+        await _type(t, 'Samantha');
+        final all = t
+            .widgetList<ListRow>(
+              find.descendant(
+                of: find.byKey(_results),
+                matching: find.byType(ListRow),
+              ),
+            )
+            .toList();
+        // The topic's two hits come last (a pirith of a like name before).
+        final rows = all.sublist(all.length - 2);
+        expect(rows.map((r) => r.title), [
+          lib.reading(spIntroductionId)!.title,
+          lib.reading(spVandanaId)!.title,
+        ]);
+        expect(rows[i].number, i + 1);
+        expect(rows[i].subtitle, r.titleRoman);
+        await t.tap(
+          find.descendant(
+            of: find.byKey(_results),
+            matching: find.text(r.title),
+          ),
+        );
+        await t.pumpAndSettle();
+        final router = ProviderScope.containerOf(
+          t.element(find.byType(Scaffold).first),
+        ).read(routerProvider);
+        expect(
+          router.routeInformationProvider.value.uri.toString(),
+          startsWith(Routes.reader(id)),
+        );
+      });
+    }
+  });
+
   group('overflow', () {
     final sizes = <(Size, double)>[
       (const Size(320, 800), 2.0),

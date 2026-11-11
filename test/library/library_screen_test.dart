@@ -1,6 +1,7 @@
 import 'dart:ui' show Tristate;
 
 import 'package:buddhist_gatha/app.dart';
+import 'package:buddhist_gatha/audio/audio_controls.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/typography.dart';
@@ -549,6 +550,133 @@ void main() {
           findsOneWidget,
         );
         expect(find.byKey(const ValueKey('flow-open-flow-2')), findsOneWidget);
+      });
+    }
+  });
+
+  group('Samantha Pattana', () {
+    testWidgets('is the third topic, after Pirith, with its picture, names, '
+        'chip and "2 readings"', (t) async {
+      final lib = await realLibrary(t);
+      final sp = lib.category(samanthaCategoryId)!;
+      final pirith = lib.category(pirithCategoryId)!;
+      expect(lib.categories.map((c) => c.id).toList().indexOf(sp.id), 2);
+      await openReal(t, Routes.library, size: const Size(390, 3000));
+      // The chip says the short name, so the full title is the row's only.
+      expect(find.text(sp.title), findsOneWidget);
+      expect(
+        t.getTopLeft(find.text(sp.title)).dy,
+        greaterThan(t.getTopLeft(find.text(pirith.title).last).dy),
+      );
+      final row = find.ancestor(
+        of: find.text(sp.title),
+        matching: find.byType(Pressable),
+      );
+      expect(
+        find.descendant(of: row.first, matching: find.text(sp.subtitle)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: row.first, matching: find.text('2 readings')),
+        findsOneWidget,
+      );
+      final pic = t.widget<Image>(
+        find.descendant(of: row.first, matching: find.byType(Image)),
+      );
+      expect(
+        ((pic.image as ResizeImage).imageProvider as AssetImage).assetName,
+        'assets/pictures/samantha_patthana.jpg',
+      );
+      final chips = find.byKey(const ValueKey('library-chips'));
+      expect(
+        find.descendant(of: chips, matching: find.text('Samantha Pattana')),
+        findsOneWidget,
+      );
+      for (final c in [lib.category(realCategoryId)!, pirith]) {
+        expect(
+          find.descendant(of: chips, matching: find.text(c.title)),
+          findsOneWidget,
+        );
+      }
+    });
+
+    testWidgets('open, it lists one numbered row per reading; only the '
+        'recorded one shows a time', (t) async {
+      final lib = await realLibrary(t);
+      final sp = lib.category(samanthaCategoryId)!;
+      await openReal(
+        t,
+        Routes.category(samanthaCategoryId),
+        size: const Size(390, 3000),
+      );
+      await t.pumpAndSettle();
+      final rows = find.byWidgetPredicate(
+        (w) =>
+            w.key is ValueKey<String> &&
+            (w.key! as ValueKey<String>).value.startsWith('reading-row-'),
+      );
+      expect([
+        for (final e in rows.evaluate())
+          (e.widget.key! as ValueKey<String>).value,
+      ], ['reading-row-$spIntroductionId', 'reading-row-$spVandanaId']);
+      expect(
+        find.byWidgetPredicate(
+          (w) =>
+              w.key is ValueKey<String> &&
+              (w.key! as ValueKey<String>).value.startsWith('pirith-row-'),
+        ),
+        findsNothing,
+      );
+      for (final (i, r) in sp.readings.indexed) {
+        final row = find.byKey(ValueKey('reading-row-${r.id}'));
+        expect(
+          find.descendant(of: row, matching: find.text('${i + 1}')),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(of: row, matching: find.text(r.title)),
+          findsOneWidget,
+        );
+      }
+      final vandana = find.byKey(const ValueKey('reading-row-$spVandanaId'));
+      expect(
+        find.descendant(
+          of: vandana,
+          matching: find.text(lib.reading(spVandanaId)!.titleRoman!),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: vandana, matching: find.text('47:36')),
+        findsOneWidget,
+      );
+      final intro = find.byKey(const ValueKey('reading-row-$spIntroductionId'));
+      expect(
+        find.descendant(of: intro, matching: find.text(formatTime(null))),
+        findsNothing,
+      );
+      expect(
+        find.descendant(
+          of: intro,
+          matching: find.byWidgetPredicate(
+            (w) => w is Text && RegExp(r'\d:\d\d|–').hasMatch(w.data ?? ''),
+          ),
+        ),
+        findsNothing,
+      );
+    });
+
+    for (final id in [spIntroductionId, spVandanaId]) {
+      testWidgets('tapping the $id row opens its reader', (t) async {
+        await openReal(
+          t,
+          Routes.category(samanthaCategoryId),
+          size: const Size(390, 3000),
+        );
+        await t.pumpAndSettle();
+        await t.tap(find.byKey(ValueKey('reading-row-$id')));
+        await t.pumpAndSettle();
+        expect(_location(t), startsWith(Routes.reader(id)));
       });
     }
   });

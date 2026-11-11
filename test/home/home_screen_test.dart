@@ -657,6 +657,47 @@ void main() {
       }
     });
 
+    testWidgets('bundled content: three cards, the third Samantha Pattana '
+        'with its picture and "2 readings"', (t) async {
+      final handle = t.ensureSemantics();
+      final lib = await realLibrary(t);
+      await openReal(t, Routes.home, size: const Size(390, 3000));
+      expect(lib.categories, hasLength(3));
+      expect(find.byType(FeaturedCard), findsOneWidget);
+      for (final c in lib.categories.skip(1)) {
+        expect(
+          find.byKey(ValueKey('collection-${c.id}'), skipOffstage: false),
+          findsOneWidget,
+          reason: c.id,
+        );
+      }
+      final card = find.byKey(
+        const ValueKey('collection-cat-samantha-patthana'),
+        skipOffstage: false,
+      );
+      final pic = t.widget<Image>(
+        find.descendant(
+          of: card,
+          matching: find.byType(Image),
+          skipOffstage: false,
+        ),
+      );
+      expect(
+        ((pic.image as ResizeImage).imageProvider as AssetImage).assetName,
+        'assets/pictures/samantha_patthana.jpg',
+      );
+      expect(
+        find.descendant(
+          of: card,
+          matching: find.text('2 readings'),
+          skipOffstage: false,
+        ),
+        findsOneWidget,
+      );
+      expect(find.bySemanticsLabel(RegExp('2 readings')), findsWidgets);
+      handle.dispose();
+    });
+
     testWidgets('a collection card opens the Library with its topic open', (
       t,
     ) async {

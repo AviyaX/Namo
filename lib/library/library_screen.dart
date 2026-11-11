@@ -172,7 +172,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                       options: [
                         const Segment<String?>(null, 'All'),
                         for (final c in categories)
-                          Segment<String?>(c.id, c.title),
+                          Segment<String?>(c.id, c.shortTitle ?? c.title),
                       ],
                       selected: chip,
                       onSelected: (v) => setState(() => _chip = v),
@@ -221,7 +221,8 @@ class _Results extends StatelessWidget {
       children: [
         for (final h in hits)
           ListRow(
-            number: h.reading.isPhrased
+            // A topic gone through reading by reading numbers its readings.
+            number: h.reading.isPhrased || listsReadings(h.category)
                 ? h.category.numberOf(h.reading.id)
                 : h.section.number,
             title: h.reading.isPhrased ? h.reading.title : h.section.heading,
@@ -306,6 +307,9 @@ class _CategoryEntry extends ConsumerWidget {
         : NamoMotion.quick;
     final severalReadings = category.readings.length > 1;
     final pirith = isPirithTopic(category);
+    // Pirith, and a topic like it of one-section readings, lists a row per
+    // reading; only a pirith row always shows a time.
+    final byReading = pirith || listsReadings(category);
     return Column(
       children: [
         ListRow(
@@ -343,16 +347,20 @@ class _CategoryEntry extends ConsumerWidget {
                   key: ValueKey('open-${category.id}'),
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (pirith)
+                    if (byReading)
                       for (final r in category.readings)
                         ListRow(
-                          key: ValueKey('pirith-row-${r.id}'),
+                          key: ValueKey(
+                            '${pirith ? 'pirith' : 'reading'}-row-${r.id}',
+                          ),
                           number: category.numberOf(r.id),
                           title: r.title,
                           titleFamily: NamoFonts.sinhala,
                           subtitle: r.titleRoman,
                           subtitleFamily: NamoFonts.romanPali,
-                          caption: formatTime(r.audio?.duration),
+                          caption: pirith || r.audio != null
+                              ? formatTime(r.audio?.duration)
+                              : null,
                           onTap: () => context.go(Routes.reader(r.id)),
                           trailing: Icon(
                             Symbols.chevron_right_rounded,
