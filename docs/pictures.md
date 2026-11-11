@@ -8,6 +8,8 @@ Pictures in the app must be free to reuse or made for the app; every picture get
 
 `assets/pictures/home_banner.jpg` — supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded). JPEG, 1280 x 427, 68,138 bytes, SHA-1 `c8f5705c0528d81867d9d4e7ab9e429d75e2d9b6`. Used for the Home banner on wide screens (840 wide and up), for the Buddha Wandanawa topic (`cat-namaskaraya`). A byte-for-byte copy of `design/card_images/home_banner.jpg`.
 
+`assets/pictures/pirith.jpg` — supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded). JPEG, 1600 x 900, 207,521 bytes, SHA-1 `461ee9b62b683276482de9994c4c58d606cc7344`. Used on the Pirith card and Library row (`cat-pirith`). A byte-for-byte copy of `design/card_images/pirith.jpg`, bundled since commit `340b4f3`.
+
 `assets/pictures/samantha_patthana.jpg` — supplied by the owner on 2026-11-10, generated with an AI image tool (the tool was not recorded). JPEG, 1280 x 720, 159,267 bytes, SHA-1 `bcc99eea8c0d821f3af832b4bdf540c42315a9ba`. Used on the Samantha Pattana card and Library row (`cat-samantha-patthana`). A byte-for-byte copy of `design/card_images/stupa_dusk.jpg`.
 
 ## Kept for later, not bundled
@@ -16,7 +18,7 @@ In `design/card_images/` (not listed in `pubspec.yaml`). Same origin as above: s
 
 | File | Pixels | SHA-1 | Meant for |
 |---|---|---|---|
-| `pirith.jpg` | 1600 x 900 | `461ee9b62b683276482de9994c4c58d606cc7344` | the Pirith topic |
+| `pirith.jpg` | 1600 x 900 | `461ee9b62b683276482de9994c4c58d606cc7344` | now bundled as `assets/pictures/pirith.jpg` |
 | `bodhi_tree.jpg` | 1600 x 900 | `b66ad8f7214b7b71488d9b6330ae7f85953a84ee` | the Meditation topic |
 | `stupa_dusk.jpg` | 1280 x 720 | `bcc99eea8c0d821f3af832b4bdf540c42315a9ba` | now bundled as `assets/pictures/samantha_patthana.jpg` |
 

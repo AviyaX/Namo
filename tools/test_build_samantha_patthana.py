@@ -45,7 +45,12 @@ def make_half(pages_dir, first_page, names, lines_per_page=3):
     return starts, page
 
 
-def make_source(root, part_numbers=None, overlap=False, stray=False):
+# A made-up title and title page used in place of the real ones while the small source is extracted.
+FAKE_TITLE = "Qa Qc  Qd"
+FAKE_TITLE_LINES = ["Zz Qa", "Qb Qc", "Qd", "Zy"]
+
+
+def make_source(root, part_numbers=None, overlap=False, stray=False, title_lines=None):
     pages_dir = root / "converted" / "pages"
     pages_dir.mkdir(parents=True)
     names = ["a", "b", "c"] + [f"p{n}" for n in range(1, 25)] + ["z"]
@@ -71,7 +76,9 @@ def make_source(root, part_numbers=None, overlap=False, stray=False):
                 "opening": {key: [{**starts[i], "text": "t"}] for i, key in enumerate(opening_keys)},
                 "parts": parts, "closing": [{**starts[-1], "text": "t"}]}
 
-    structure = {"title_page": {"page": 1, "lines": []}, "introduction": {"pages": [2, 3]},
+    lines = FAKE_TITLE_LINES if title_lines is None else title_lines
+    title_page = {"page": 1, "lines": [{"page": 1, "line": 3 + i, "text": t} for i, t in enumerate(lines)]}
+    structure = {"title_page": title_page, "introduction": {"pages": [2, 3]},
                  "pali": half(p_starts, [4, p_last], ["homage", "three_opening_verses", "list_of_24_paccayas"]),
                  "sinhala_meaning": half(s_starts, [p_last + 1, s_last], ["homage", "list_of_24"])}
     (root / "converted" / "structure.json").write_text(json.dumps(structure), encoding="utf-8")
@@ -84,9 +91,37 @@ class SmallSourceTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = pathlib.Path(self.tmp.name)
+        self.saved_title = build.TITLE
+        build.TITLE = FAKE_TITLE
 
     def tearDown(self):
+        build.TITLE = self.saved_title
         self.tmp.cleanup()
+
+    def test_title_on_the_title_page_passes(self):
+        make_source(self.root)
+        self.assertEqual(build.extract(self.root)["title"], FAKE_TITLE)
+
+    def test_title_not_on_the_title_page_raises(self):
+        for lines in (["Zz Qa", "Qb", "Qd"], ["Qc Qa Qd"], []):
+            with self.subTest(lines=lines):
+                tmp = tempfile.TemporaryDirectory()
+                root = pathlib.Path(tmp.name)
+                make_source(root, title_lines=lines)
+                with self.assertRaises(build.BuildError) as ctx:
+                    build.extract(root)
+                self.assertIn("title", str(ctx.exception))
+                tmp.cleanup()
+
+    def test_missing_ends_before_raises_build_error_naming_it(self):
+        make_source(self.root)
+        path = self.root / "converted" / "structure.json"
+        structure = json.loads(path.read_text(encoding="utf-8"))
+        del structure["pali"]["parts"][5]["ends_before"]
+        path.write_text(json.dumps(structure), encoding="utf-8")
+        with self.assertRaises(build.BuildError) as ctx:
+            build.extract(self.root)
+        self.assertIn("ends_before", str(ctx.exception))
 
     def test_lines_in_order_with_page_numbers_and_blanks_skipped(self):
         make_source(self.root)
@@ -135,9 +170,8 @@ class CommittedFileTest(unittest.TestCase):
         self.assertEqual(sum(SINHALA_COUNTS), 385)
         self.assertEqual([u.get("number") for u in units[3:27]], list(range(1, 25)))
 
-    def test_introduction_and_title(self):
+    def test_introduction(self):
         self.assertEqual([len(p) for p in self.data["introduction"]], [253, 617, 1054])
-        self.assertEqual(self.data["title"], build.TITLE)
 
     def test_no_line_has_outer_whitespace(self):
         for u in self.data["units"]:
@@ -283,6 +317,13 @@ class BuildFromFakeDataTest(unittest.TestCase):
     def test_no_corrections_by_default(self):
         self.assertEqual(build.CORRECTIONS, [])
 
+    def test_line_without_start_raises_build_error_naming_it(self):
+        del self.times["units"][4]["lines"][0]["start_ms"]
+        (self.root / build.TIMES).write_text(json.dumps(self.times), encoding="utf-8")
+        with self.assertRaises(build.BuildError) as ctx:
+            build.build(self.root)
+        self.assertIn("start_ms", str(ctx.exception))
+
 
 class CheckAndImportTest(unittest.TestCase):
     """Runs with a tiny stand-in recording whose size and checksum replace the constants."""
@@ -349,6 +390,13 @@ class CheckAndImportTest(unittest.TestCase):
         (self.original / build.RECORDING).write_bytes(self.bytes + b"x")
         with self.assertRaises(build.BuildError):
             build.import_audio(self.root, self.original)
+        self.assertFalse((self.root / build.AUDIO_DIR / build.RECORDING).exists())
+
+    def test_import_refuses_right_size_wrong_checksum(self):
+        (self.original / build.RECORDING).write_bytes(b"y" * len(self.bytes))
+        with self.assertRaises(build.BuildError) as ctx:
+            build.import_audio(self.root, self.original)
+        self.assertIn("checksum", str(ctx.exception))
         self.assertFalse((self.root / build.AUDIO_DIR / build.RECORDING).exists())
 
 

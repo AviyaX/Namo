@@ -27,7 +27,8 @@ STRUCTURE = pathlib.Path("converted/structure.json")
 PAGES = pathlib.Path("converted/pages")
 INTRODUCTION = pathlib.Path("introduction_owner_supplied.md")
 
-# Sinhala title of the Vandana; structure.json's title_page splits it over several lines, so it is a constant.
+# Sinhala title of the Vandana; structure.json's title_page splits it over several lines among other
+# words, so it is a constant, and extract checks its words stand in that order on the title page.
 TITLE = "සමන්ත පට්ඨාන ධර්ම වන්දනාව"
 
 PARTS = 24
@@ -73,8 +74,26 @@ def _first(block, what: str) -> tuple[int, int]:
     return _pos(block[0], what)
 
 
+def _title(structure: dict) -> None:
+    """Raises unless TITLE's words stand, in order, among the words of the title page's lines."""
+    try:
+        lines = [e["text"] for e in structure["title_page"]["lines"]]
+    except (KeyError, TypeError) as e:
+        raise BuildError(f"structure.json: title_page has no lines ({e!r})")
+    words = iter(" ".join(lines).split())
+    if not TITLE.split() or not all(w in words for w in TITLE.split()):
+        raise BuildError("structure.json: the title is not on the title page")
+
+
 def _starts(half: dict, name: str, opening: list[tuple[str, str]]) -> list[tuple[str, dict, tuple[int, int]]]:
     """Unit (id, fields, start) in order for one half, from the starts in structure.json."""
+    try:
+        return _unit_starts(half, name, opening)
+    except KeyError as e:
+        raise BuildError(f"structure.json: {name} is missing the key {e.args[0]!r}")
+
+
+def _unit_starts(half: dict, name: str, opening: list[tuple[str, str]]) -> list[tuple[str, dict, tuple[int, int]]]:
     units = []
     for unit_id, key in opening:
         kind = {"u-homage": "homage", "u-verses": "verses", "u-list": "list"}[unit_id]
@@ -143,6 +162,7 @@ def extract(src) -> dict:
         pali_pages, sinhala_pages = pali["pages"], sinhala["pages"]
     except (ValueError, KeyError, TypeError) as e:
         raise BuildError(f"structure.json: unreadable ({e!r})")
+    _title(structure)
     pali_units = _starts(pali, "pali", [("u-homage", "homage"), ("u-verses", "three_opening_verses"),
                                          ("u-list", "list_of_24_paccayas")])
     sinhala_units = _starts(sinhala, "sinhala", [("u-homage", "homage"), ("u-list", "list_of_24")])
@@ -200,11 +220,14 @@ def _seconds(ms: int) -> float | int:
 
 def _audio(timed: list[dict], untimed) -> dict:
     block_times, line_times = [], []
-    for i, unit in enumerate(timed):
-        start = unit["lines"][0]["start_ms"]
-        end = timed[i + 1]["lines"][0]["start_ms"] if i + 1 < len(timed) else unit["lines"][-1]["end_ms"]
-        block_times.append([_seconds(start), _seconds(end)])
-        line_times.append([None if unit["id"] in untimed else _seconds(l["start_ms"]) for l in unit["lines"]])
+    try:
+        for i, unit in enumerate(timed):
+            start = unit["lines"][0]["start_ms"]
+            end = timed[i + 1]["lines"][0]["start_ms"] if i + 1 < len(timed) else unit["lines"][-1]["end_ms"]
+            block_times.append([_seconds(start), _seconds(end)])
+            line_times.append([None if unit["id"] in untimed else _seconds(l["start_ms"]) for l in unit["lines"]])
+    except KeyError as e:
+        raise BuildError(f"times file is missing the key {e.args[0]!r}")
     return {"asset": f"{AUDIO_DIR.as_posix()}/{RECORDING}", "label": RECORDING_LABEL,
             "duration_ms": DURATION_MS, "bytes": RECORDING_BYTES, "sha256": RECORDING_SHA256,
             "block_times": block_times, "line_times": line_times}

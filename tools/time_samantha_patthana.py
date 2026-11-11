@@ -132,6 +132,7 @@ def _align(book: str, caps: str) -> list[int]:
             q = j - 1 - plo
             if j >= 1 and 0 <= q <= phi - plo:
                 a, b, c = pm[q], px[q], py[q]
+                # Picks the best predecessor state, ties to Y, M, X (see docstring); inlined here and below for speed.
                 if c >= a and c >= b:
                     best, s = c, 2
                 elif a >= b:
@@ -283,7 +284,7 @@ def _percent(part: int, whole: int) -> str:
 
 
 def report(units: list, timed: list, stats: dict) -> str:
-    rows, flat = [], []
+    flat = []
     for u, t in zip(units, timed):
         for n, (line, tl) in enumerate(zip(u["pali"], t["lines"]), start=1):
             flat.append((u["id"], n, line, tl))
