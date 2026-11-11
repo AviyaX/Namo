@@ -14,3 +14,11 @@
   - [ ] Remove a section, then Undo; add a pirith from Add sections.
   - [ ] Start chanting: the sections are in your order, numbered from 1; Back returns to the editor.
   - [ ] Close the app fully and open it again: the flow, its order and your place in it are still there, and it shows on Home under "Your flows".
+- [ ] Premium Home, owner checks on a phone:
+  - [ ] Look at Home in light and dark on a phone.
+  - [ ] Look at the Home header text over the picture (a soft glow sits behind it) in light and dark.
+  - [ ] Featured card: the small "FEATURED COLLECTION" line is cream, not gold, for readability - confirm.
+  - [ ] Quick Access: four in a row from 390 px wide phones, two rows of two on narrower ones - confirm.
+  - [ ] Look at the joined-palms mark in Quick Access.
+  - [ ] Supply the new Samantha Pattana picture.
+  - [ ] Confirm the picture credit wording.

@@ -3,6 +3,7 @@ import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/choosers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_chant_player.dart';
@@ -25,6 +26,21 @@ void main() {
     await t.pump();
     expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
     expect(find.byKey(const ValueKey('screen-home')), findsNothing);
+  });
+
+  testWidgets('Home: a featured page change leaves nothing running', (t) async {
+    final handle = t.ensureSemantics();
+    await open(t, Routes.home);
+    final node = t.getSemantics(find.bySemanticsLabel('Featured collections'));
+    expect(node.value, 'Page 1 of 3');
+    node.owner!.performAction(node.id, SemanticsAction.increase);
+    await t.pump();
+    expect(
+      t.getSemantics(find.bySemanticsLabel('Featured collections')).value,
+      'Page 2 of 3',
+    );
+    expect(t.hasRunningAnimations, isFalse);
+    handle.dispose();
   });
 
   testWidgets('opening a Library topic', (t) async {

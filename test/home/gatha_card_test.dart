@@ -1,7 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/marks.dart';
 import 'package:buddhist_gatha/design/typography.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
+import 'package:buddhist_gatha/design/widgets/pressable.dart';
 import 'package:buddhist_gatha/design/widgets/surface_card.dart';
 import 'package:buddhist_gatha/home/gatha_card.dart';
 import 'package:buddhist_gatha/home/today.dart';
@@ -253,5 +256,86 @@ void main() {
       );
       expect(t.takeException(), isNull);
     });
+  }
+
+  testWidgets('"Read in context" is at least 48 high and wide', (t) async {
+    await pumpThemed(
+      t,
+      SizedBox(width: 350, child: _card(pick: _pick(), selection: LanguageSelection.initial)),
+    );
+    final pill = find.ancestor(
+      of: find.text('Read in context'),
+      matching: find.byType(Pressable),
+    );
+    expect(pill, findsOneWidget);
+    expect(t.getSize(pill).height, greaterThanOrEqualTo(48));
+    expect(t.getSize(pill).width, greaterThanOrEqualTo(48));
+  });
+
+  // The leaf is gold at the watermark's opacity, drawn twice where its lines
+  // cross (outline and veins), over the card's gradient (surface at the top,
+  // backgroundAlt at the bottom). The verse and the grey text keep 4.5 : 1 on
+  // the strongest such pixel at either end of the gradient. The gold overline
+  // is held to the same on the leaf wherever the leaf reaches it, and on the
+  // plain gradient where it does not.
+  double lum(Color c) {
+    double ch(double v) => v <= 0.03928
+        ? v / 12.92
+        : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
+    return 0.2126 * ch(c.r) + 0.7152 * ch(c.g) + 0.0722 * ch(c.b);
+  }
+
+  double contrast(Color a, Color b) {
+    final x = lum(a), y = lum(b);
+    return (math.max(x, y) + 0.05) / (math.min(x, y) + 0.05);
+  }
+
+  for (final b in Brightness.values) {
+    final p = paletteOf(b);
+    final opacity = const LeafWatermark().opacity;
+    Color leaf(Color ground) {
+      var c = ground;
+      for (var i = 0; i < 2; i++) {
+        c = Color.alphaBlend(p.gold.withValues(alpha: p.gold.a * opacity), c);
+      }
+      return c;
+    }
+
+    test('verse and caption text over the leaf watermark keep 4.5 : 1 ($b)', () {
+      for (final ground in [p.surface, p.backgroundAlt]) {
+        expect(contrast(p.text, leaf(ground)), greaterThanOrEqualTo(4.5));
+        expect(contrast(p.textSecondary, leaf(ground)), greaterThanOrEqualTo(4.5));
+      }
+    });
+
+    for (final (width, textScale) in [(288.0, 2.0), (350.0, 1.0), (350.0, 2.0)]) {
+      testWidgets('the gold overline keeps 4.5 : 1 where the leaf is and is '
+          'clear of it ($b, $width wide, text $textScale)', (t) async {
+        await pumpThemed(
+          t,
+          SizedBox(
+            width: width,
+            child: _card(pick: _pick(), selection: LanguageSelection.initial),
+          ),
+          brightness: b,
+          textScale: textScale,
+        );
+        final card = t.getRect(find.byType(GathaCard));
+        final overline = t.getRect(find.text("TODAY'S GATHA"));
+        // The leaf as painted: 24 x 32 units, fitted and centred in its box.
+        final box = t.getRect(find.byType(LeafWatermark));
+        final scale = math.min(box.width / 24, box.height / 32);
+        final drawn = Rect.fromCenter(
+          center: box.center,
+          width: 24 * scale,
+          height: 32 * scale,
+        );
+        final fraction =
+            ((overline.bottom - card.top) / card.height).clamp(0.0, 1.0);
+        final plain = Color.lerp(p.surface, p.backgroundAlt, fraction)!;
+        final ground = drawn.overlaps(overline) ? leaf(plain) : plain;
+        expect(contrast(p.gold, ground), greaterThanOrEqualTo(4.5));
+      });
+    }
   }
 }

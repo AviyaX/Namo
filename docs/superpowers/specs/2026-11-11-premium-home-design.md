@@ -1,6 +1,6 @@
 # Premium Home and shared look — design
 
-Date: 2026-11-11. Status: awaiting the owner's approval.
+Date: 2026-11-11. Status: approved by the owner on 2026-11-12; built on branch premium-home.
 
 ## Intent
 
@@ -256,3 +256,5 @@ pictures, and how tests are organised.
 - The numbered section strip is replaced by Quick Access.
 - The carousel does not move by itself.
 - Quick Access Sinhala lines use the full stored headings.
+- Built departure: the overline on the featured card is cream, not gold (contrast).
+- Built departure: Quick Access is four across from 390 px, 2 x 2 below (words would break).

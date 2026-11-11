@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
+import 'package:buddhist_gatha/home/featured_carousel.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'quality_support.dart';
@@ -101,6 +103,94 @@ void main() {
         },
       );
     }
+  }
+
+  // Home's controls are all at least 48 px, the carousel can be moved from a
+  // screen reader, and the screen reader meets the blocks top to bottom.
+  for (final size in const [Size(320, 2800), Size(412, 2600)]) {
+    testWidgets('Home controls are 48 px or more, ${size.width.round()} wide', (t) async {
+      await openReal(t, Routes.home, size: size);
+      final keys = [
+        'home-search',
+        'gatha-bookmark',
+        for (final id in ['s01', 's02', 's03', 's04']) 'quick-$id',
+      ];
+      for (final k in keys) {
+        final box = t.getSize(find.byKey(ValueKey(k)));
+        expect(box.width, greaterThanOrEqualTo(48), reason: k);
+        expect(box.height, greaterThanOrEqualTo(48), reason: k);
+      }
+    });
+  }
+
+  testWidgets('Home: the carousel offers increase and decrease to a screen reader', (t) async {
+    final handle = t.ensureSemantics();
+    await openReal(t, Routes.home, size: const Size(390, 2600));
+    SemanticsNode node() =>
+        t.getSemantics(find.bySemanticsLabel('Featured collections'));
+    expect(node().getSemanticsData().hasAction(SemanticsAction.increase), isTrue);
+    expect(node().getSemanticsData().hasAction(SemanticsAction.decrease), isFalse);
+    node().owner!.performAction(node().id, SemanticsAction.increase);
+    await t.pumpAndSettle();
+    expect(node().value, 'Page 2 of 3');
+    expect(node().getSemanticsData().hasAction(SemanticsAction.decrease), isTrue);
+    node().owner!.performAction(node().id, SemanticsAction.decrease);
+    await t.pumpAndSettle();
+    expect(node().value, 'Page 1 of 3');
+    handle.dispose();
+  });
+
+  for (final dark in [false, true]) {
+    testWidgets('Home: screen reader order is the visual order (${dark ? 'dark' : 'light'})', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(t, Routes.home, size: const Size(390, 2600), dark: dark);
+      // What each node says (its label, or its tooltip when it has none), in
+      // traversal order.
+      final spoken = <String>[];
+      void walk(SemanticsNode n) {
+        final data = n.getSemanticsData();
+        spoken.add(data.label.isNotEmpty ? data.label : data.tooltip);
+        for (final c in n.debugListChildrenInOrder(DebugSemanticsDumpOrder.traversalOrder)) {
+          walk(c);
+        }
+      }
+
+      // ignore: deprecated_member_use
+      walk(t.binding.pipelineOwner.semanticsOwner!.rootSemanticsNode!);
+      // Each block, with the words that identify it to a screen reader and
+      // where it is drawn.
+      final blocks = <(String, String, Finder)>[
+        ('search', 'Search the library', find.byKey(const ValueKey('home-search'))),
+        ('featured', 'Featured collections', find.byType(FeaturedCarousel)),
+        ('bookmark', 'Bookmark this section', find.byKey(const ValueKey('gatha-bookmark'))),
+        ('read in context', 'Read in context', find.text('Read in context')),
+        for (final (id, label) in [
+          ('s01', 'Namaskara'),
+          ('s02', 'Tisarana'),
+          ('s03', 'Pancha Sila'),
+          ('s04', 'Buddha Guna'),
+        ])
+          ('quick $id', label, find.byKey(ValueKey('quick-$id'))),
+        ('collections', 'Buddha Wandanawa, ', find.byKey(const ValueKey('collection-$realCategoryId'))),
+      ];
+      var from = 0;
+      Rect? before;
+      for (final (name, words, finder) in blocks) {
+        final index = spoken.indexWhere((w) => w.startsWith(words), from);
+        expect(index, isNonNegative, reason: '$name is read after the one above');
+        from = index + 1;
+        final rect = t.getRect(finder);
+        if (before != null) {
+          expect(
+            rect.top >= before.bottom - 1 || rect.left >= before.right - 1,
+            isTrue,
+            reason: '$name is drawn after the one before it',
+          );
+        }
+        before = rect;
+      }
+      handle.dispose();
+    });
   }
 
   testWidgets('the reader with a recording meets the guidelines', (t) async {

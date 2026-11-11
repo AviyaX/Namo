@@ -97,6 +97,29 @@ void main() {
     }
   }
 
+  // Home on its own at the phone, tall phone and desktop sizes, ordinary and
+  // doubled device text, in both themes.
+  for (final size in const [Size(320, 640), Size(412, 915), Size(1280, 800)]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final dark in [false, true]) {
+        testWidgets(
+          'Home does not overflow: ${size.width.round()}x${size.height.round()}, '
+          'device text $scale, ${dark ? 'dark' : 'light'}',
+          (t) async {
+            await openReal(
+              t,
+              Routes.home,
+              size: size,
+              deviceTextScale: scale,
+              dark: dark,
+            );
+            await scrollThrough(t);
+          },
+        );
+      }
+    }
+  }
+
   // The same sizes for every other screen, at the largest device text size.
   final others = <(String, String, bool)>[
     ('Home', Routes.home, false),
