@@ -23,24 +23,26 @@ Map<String, Color> roles(NamoPalette p) => {
       'shadow': p.shadow,
       'error': p.error,
       'onError': p.onError,
+      'frame': p.frame,
     };
 
 void main() {
   test("dark palette is the owner's values", () {
     final expected = {
-      'background': 0xFF151714,
-      'backgroundAlt': 0xFF1C1F1B,
-      'surface': 0xFF232720,
-      'border': 0xFF34382F,
-      'text': 0xFFEAE6DC,
-      'textSecondary': 0xFFA9A698,
-      'textMuted': 0xFF77776D,
-      'sage': 0xFFA8B99F,
-      'gold': 0xFFC6A879,
+      'background': 0xFF0E1410,
+      'backgroundAlt': 0xFF141C16,
+      'surface': 0xFF1A241C,
+      'border': 0xFF3B4233,
+      'text': 0xFFEFE9DA,
+      'textSecondary': 0xFFB5B3A0,
+      'textMuted': 0xFF7F8273,
+      'sage': 0xFF8FB07F,
+      'gold': 0xFFD2B26C,
       'onSage': 0xFF151714,
       'shadow': 0x4D000000,
       'error': 0xFFE08A7C,
       'onError': 0xFF151714,
+      'frame': 0x8CD2B26C,
     };
     final actual = roles(NamoPalette.dark);
     for (final e in expected.entries) {
@@ -50,19 +52,20 @@ void main() {
 
   test('light palette values', () {
     final expected = {
-      'background': 0xFFF7F4EC,
-      'backgroundAlt': 0xFFEFEBE1,
-      'surface': 0xFFFDFBF6,
-      'border': 0xFFD5CFC0,
-      'text': 0xFF22251F,
-      'textSecondary': 0xFF4F5248,
-      'textMuted': 0xFF72736A,
-      'sage': 0xFF4F6447,
-      'gold': 0xFF7F6130,
+      'background': 0xFFF8F4EA,
+      'backgroundAlt': 0xFFF0EBDD,
+      'surface': 0xFFFFFCF5,
+      'border': 0xFFD9D0BB,
+      'text': 0xFF1F2A20,
+      'textSecondary': 0xFF4C5646,
+      'textMuted': 0xFF72786A,
+      'sage': 0xFF4A6541,
+      'gold': 0xFF84652A,
       'onSage': 0xFFFDFBF6,
       'shadow': 0x1F22251F,
       'error': 0xFF9B3B2F,
       'onError': 0xFFFDFBF6,
+      'frame': 0x738A6A2C,
     };
     final actual = roles(NamoPalette.light);
     for (final e in expected.entries) {
@@ -118,6 +121,7 @@ void main() {
   test('spacing, radius and sizes', () {
     expect(NamoSpace.xxxl, 48);
     expect(NamoRadius.lg, 24);
+    expect(NamoRadius.card, 20);
     expect(NamoSizes.homeColumn, 1040);
     expect(NamoSizes.navBarHeight, 64);
   });

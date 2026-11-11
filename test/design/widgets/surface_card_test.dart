@@ -19,13 +19,22 @@ void main() {
         final p = paletteOf(b);
         await pumpThemed(t, const SurfaceCard(child: Text('Body')), brightness: b);
         final d = _decoration(t);
-        expect(d.color, p.surface);
+        expect(d.color, isNull);
+        final g = d.gradient as LinearGradient;
+        expect(g.colors, [p.surface, p.backgroundAlt]);
+        expect(g.begin, Alignment.topCenter);
+        expect(g.end, Alignment.bottomCenter);
         expect(d.border!.top.color, p.border);
         expect(d.border!.top.width, 1);
         expect(d.boxShadow, isNull);
-        expect(d.borderRadius, BorderRadius.circular(NamoRadius.md));
+        expect(d.borderRadius, BorderRadius.circular(NamoRadius.card));
       });
     }
+
+    testWidgets('framed uses the frame colour for the border', (t) async {
+      await pumpThemed(t, const SurfaceCard(framed: true, child: Text('Body')));
+      expect(_decoration(t).border!.top.color, NamoPalette.dark.frame);
+    });
 
     testWidgets('a leading line is 2 px wide in the given colour', (t) async {
       await pumpThemed(

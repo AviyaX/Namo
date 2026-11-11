@@ -35,6 +35,9 @@ abstract final class NamoRadius {
   static const sm = 12.0;
   static const md = 16.0;
   static const lg = 24.0;
+
+  /// Cards (SurfaceCard).
+  static const card = 20.0;
 }
 
 abstract final class NamoMotion {
@@ -62,6 +65,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     required this.textMuted,
     required this.sage,
     required this.gold,
+    required this.frame,
     required this.onSage,
     required this.shadow,
     required this.error,
@@ -77,21 +81,25 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   final Color textMuted;
   final Color sage;
   final Color gold;
+
+  /// The thin gold line round a featured or gatha card.
+  final Color frame;
   final Color onSage;
   final Color shadow;
   final Color error;
   final Color onError;
 
   static const dark = NamoPalette(
-    background: Color(0xFF151714),
-    backgroundAlt: Color(0xFF1C1F1B),
-    surface: Color(0xFF232720),
-    border: Color(0xFF34382F),
-    text: Color(0xFFEAE6DC),
-    textSecondary: Color(0xFFA9A698),
-    textMuted: Color(0xFF77776D),
-    sage: Color(0xFFA8B99F),
-    gold: Color(0xFFC6A879),
+    background: Color(0xFF0E1410),
+    backgroundAlt: Color(0xFF141C16),
+    surface: Color(0xFF1A241C),
+    border: Color(0xFF3B4233),
+    text: Color(0xFFEFE9DA),
+    textSecondary: Color(0xFFB5B3A0),
+    textMuted: Color(0xFF7F8273),
+    sage: Color(0xFF8FB07F),
+    gold: Color(0xFFD2B26C),
+    frame: Color(0x8CD2B26C),
     onSage: Color(0xFF151714),
     shadow: Color(0x4D000000),
     error: Color(0xFFE08A7C),
@@ -99,15 +107,16 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   );
 
   static const light = NamoPalette(
-    background: Color(0xFFF7F4EC),
-    backgroundAlt: Color(0xFFEFEBE1),
-    surface: Color(0xFFFDFBF6),
-    border: Color(0xFFD5CFC0),
-    text: Color(0xFF22251F),
-    textSecondary: Color(0xFF4F5248),
-    textMuted: Color(0xFF72736A),
-    sage: Color(0xFF4F6447),
-    gold: Color(0xFF7F6130),
+    background: Color(0xFFF8F4EA),
+    backgroundAlt: Color(0xFFF0EBDD),
+    surface: Color(0xFFFFFCF5),
+    border: Color(0xFFD9D0BB),
+    text: Color(0xFF1F2A20),
+    textSecondary: Color(0xFF4C5646),
+    textMuted: Color(0xFF72786A),
+    sage: Color(0xFF4A6541),
+    gold: Color(0xFF84652A),
+    frame: Color(0x738A6A2C),
     onSage: Color(0xFFFDFBF6),
     shadow: Color(0x1F22251F),
     error: Color(0xFF9B3B2F),
@@ -143,6 +152,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     Color? textMuted,
     Color? sage,
     Color? gold,
+    Color? frame,
     Color? onSage,
     Color? shadow,
     Color? error,
@@ -158,6 +168,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
         textMuted: textMuted ?? this.textMuted,
         sage: sage ?? this.sage,
         gold: gold ?? this.gold,
+        frame: frame ?? this.frame,
         onSage: onSage ?? this.onSage,
         shadow: shadow ?? this.shadow,
         error: error ?? this.error,
@@ -178,6 +189,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
       textMuted: mix(textMuted, other.textMuted),
       sage: mix(sage, other.sage),
       gold: mix(gold, other.gold),
+      frame: mix(frame, other.frame),
       onSage: mix(onSage, other.onSage),
       shadow: mix(shadow, other.shadow),
       error: mix(error, other.error),

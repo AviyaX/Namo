@@ -209,12 +209,13 @@ void main() {
     },
   );
 
-  testWidgets('Sources credits the Home banner picture under Pictures', (t) async {
+  testWidgets('Sources credits the Home header and featured pictures under Pictures', (t) async {
     await openSources(t);
-    final name = text('Home banner picture');
+    final name = text('Home header and featured pictures');
     expect(name, findsOneWidget);
+    expect(text('Home banner picture'), findsNothing);
     expect(
-      find.textContaining('the top of Home on wide screens', findRichText: true),
+      find.textContaining('Shown behind the Home header and on the featured card', findRichText: true),
       findsOneWidget,
     );
     final y = t.getTopLeft(find.text('Pictures')).dy;

@@ -59,10 +59,10 @@ const _pictureCredits = [
         'generated picture, not a photograph of a real statue or place.',
   ),
   _Credit(
-    'Home banner picture',
-    'Shown across the top of Home on wide screens. Made for this app by its '
-        'owner with an AI image tool; a generated picture, not a photograph '
-        'of a real place.',
+    'Home header and featured pictures',
+    'Shown behind the Home header and on the featured card. Made for this app '
+        'by its owner with an AI image tool; generated pictures, not '
+        'photographs of a real statue or place.',
   ),
   _Credit(
     'Pirith card picture',

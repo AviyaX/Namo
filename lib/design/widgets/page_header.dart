@@ -44,9 +44,12 @@ class PageHeader extends StatelessWidget {
   }
 }
 
-/// A small label above a block, shown as written.
+/// A small label above a block, shown as written. With [accent] it is gold,
+/// upper-cased for display and widely spaced; screen readers get the text as
+/// written.
 class Overline extends StatelessWidget {
-  const Overline(this.text, {super.key, this.color, this.header = false});
+  const Overline(this.text,
+      {super.key, this.color, this.header = false, this.accent = false});
 
   final String text;
   final Color? color;
@@ -54,12 +57,22 @@ class Overline extends StatelessWidget {
   /// True when this labels a group of rows, so screen readers can jump to it.
   final bool header;
 
+  final bool accent;
+
   @override
   Widget build(BuildContext context) {
-    final label = Text(
-      text,
-      style: NamoType.overline(color ?? NamoPalette.of(context).textSecondary),
-    );
+    final p = NamoPalette.of(context);
+    final style = NamoType.overline(color ?? (accent ? p.gold : p.textSecondary));
+    Widget label = accent
+        ? Semantics(
+            label: text,
+            excludeSemantics: true,
+            child: Text(
+              text.toUpperCase(),
+              style: style.copyWith(letterSpacing: 2.0),
+            ),
+          )
+        : Text(text, style: style);
     return header ? Semantics(header: true, child: label) : label;
   }
 }
