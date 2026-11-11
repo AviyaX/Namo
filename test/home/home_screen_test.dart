@@ -732,7 +732,13 @@ void main() {
 
     testWidgets('with nothing to continue the row comes first, before the '
         'featured card', (t) async {
-      await openReal(t, Routes.home, library: testLibrary(), storeExtras: stored);
+      await openReal(
+        t,
+        Routes.home,
+        library: testLibrary(),
+        storeExtras: stored,
+        overrides: [_clock(DateTime(2026, 3, 4, 8))],
+      );
       expect(find.byType(ContinueCard), findsNothing);
       expect(top(t, row), lessThan(top(t, find.byType(FeaturedCard))));
       expect(top(t, row), greaterThan(top(t, find.text('Good morning'))));

@@ -106,17 +106,41 @@ List<_CorrectionEntry> _collectCorrections(Library library) {
   return entries.values.toList();
 }
 
-/// Every verse marked 'needs checking', with its section number and notes.
-List<(String id, int section, List<String> notes)> _collectChecks(
+/// What still needs checking: a row key, the row's title and its notes. A
+/// reading with one section whose every verse needs checking is one row
+/// under the reading's title; otherwise each such verse is a row of its own
+/// under its section number.
+List<(String key, String title, List<String> notes)> _collectChecks(
   Library library,
-) => [
-  for (final category in library.categories)
-    for (final reading in category.readings)
-      for (final section in reading.sections)
-        for (final verse in section.verses)
-          if (verse.check == CheckStatus.needsChecking)
-            (verse.id, section.number, verse.notes),
-];
+) {
+  final rows = <(String, String, List<String>)>[];
+  for (final category in library.categories) {
+    for (final reading in category.readings) {
+      final whole =
+          reading.sections.length == 1 &&
+          reading.sections.single.verses.isNotEmpty &&
+          reading.sections.single.verses.every(
+            (v) => v.check == CheckStatus.needsChecking,
+          );
+      if (whole) {
+        rows.add(('check-reading-${reading.id}', reading.title, const []));
+        continue;
+      }
+      for (final section in reading.sections) {
+        for (final verse in section.verses) {
+          if (verse.check == CheckStatus.needsChecking) {
+            rows.add((
+              'check-${verse.id}',
+              'Section ${section.number}',
+              verse.notes,
+            ));
+          }
+        }
+      }
+    }
+  }
+  return rows;
+}
 
 class SourcesScreen extends StatelessWidget {
   const SourcesScreen({super.key = const ValueKey('screen-sources')});
@@ -182,12 +206,8 @@ class SourcesScreen extends StatelessWidget {
                 ],
                 if (checks.isNotEmpty) ...[
                   const _SectionLabel('Still to be checked'),
-                  for (final (id, section, notes) in checks)
-                    _CheckRow(
-                      key: ValueKey('check-$id'),
-                      section: section,
-                      notes: notes,
-                    ),
+                  for (final (key, title, notes) in checks)
+                    _CheckRow(key: ValueKey(key), title: title, notes: notes),
                 ],
               ],
             );
@@ -329,9 +349,9 @@ class _CorrectionRow extends StatelessWidget {
 }
 
 class _CheckRow extends StatelessWidget {
-  const _CheckRow({super.key, required this.section, required this.notes});
+  const _CheckRow({super.key, required this.title, required this.notes});
 
-  final int section;
+  final String title;
   final List<String> notes;
 
   @override
@@ -343,7 +363,7 @@ class _CheckRow extends StatelessWidget {
         children: [
           SizedBox(
             width: double.infinity,
-            child: Text('Section $section', style: NamoType.label(p.text)),
+            child: Text(title, style: NamoType.label(p.text)),
           ),
           for (final note in notes)
             Padding(

@@ -160,9 +160,29 @@ void main() {
     expect(find.text('Still to be checked'), findsOneWidget);
     // The bundled file: 15 distinct verse corrections and 1 heading.
     expect(keyed('correction-'), 16);
-    expect(keyed('check-'), 4);
+    // Buddha Wandanawa's 4 verses, and one row each for the two Samantha Pattana readings.
+    expect(keyed('check-'), 6);
+    expect(keyed('check-reading-'), 2);
     expect(find.textContaining('ගච්චාමි'), findsOneWidget);
     expect(find.textContaining('ගච්ඡාමි'), findsOneWidget);
+  });
+
+  testWidgets('a reading that wholly needs checking is one row, not one per verse',
+      (t) async {
+    await openSources(t);
+    expect(find.byKey(const ValueKey('check-reading-sp-introduction')), findsOneWidget);
+    expect(find.byKey(const ValueKey('check-reading-sp-vandana')), findsOneWidget);
+    expect(keyed('check-u-'), 0);
+    expect(keyed('check-intro-'), 0);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('check-reading-sp-introduction')),
+        matching: find.text('Introduction'),
+      ),
+      findsOneWidget,
+    );
+    // Buddha Wandanawa keeps one row per verse, by verse id.
+    expect(keyed('check-s'), 4);
   });
 
   testWidgets('Font licences opens the licence page', (t) async {
@@ -229,8 +249,8 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 5 text sources + 3 pictures + 16 corrections + 4 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(28));
+    // 5 text sources + 3 pictures + 16 corrections + 6 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(30));
   });
 
   for (final dark in [false, true]) {
