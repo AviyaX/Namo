@@ -11,7 +11,6 @@ import 'package:buddhist_gatha/home/continue_card.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/home/gatha_card.dart';
 import 'package:buddhist_gatha/home/home_header.dart';
-import 'package:buddhist_gatha/home/section_strip.dart';
 import 'package:buddhist_gatha/home/today.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -151,6 +150,28 @@ Future<void> _tapVisible(WidgetTester t, Finder f) async {
   await t.pumpAndSettle();
 }
 
+/// [sections] as flow-1, "Flow one", in the stored flows.
+Map<String, String> _flowOne(List<FlowRef> sections) => {
+  flowsKey: jsonEncode(
+    FlowsState(
+      flows: [Flow(id: 'flow-1', name: 'Flow one', sections: sections)],
+      nextNumber: 2,
+    ).toJson(),
+  ),
+};
+
+/// Flow one over [testLibrary]: sections 3 and 2 of r1.
+final _testFlow = _flowOne(const [
+  FlowRef(readingId: 'r1', sectionId: 's03'),
+  FlowRef(readingId: 'r1', sectionId: 's02'),
+]);
+
+const _quickAccess = ValueKey('home-quick-access');
+const _collections = ValueKey('home-collections');
+const _flowsRow = ValueKey('home-flows');
+
+double _top(WidgetTester t, Finder f) => t.getTopLeft(f).dy;
+
 void main() {
   setUpAll(loadBundledFonts);
 
@@ -241,57 +262,64 @@ void main() {
       expect(find.byKey(const ValueKey('screen-library')), findsNothing);
     });
 
-    testWidgets('after reading: the Continue reading card, "Continue" on the '
-        'featured button, and the card reopens at that place', (t) async {
+    testWidgets('after reading a Library reading: no Continue reading card; '
+        '"Continue" on the featured button reopens at that place', (t) async {
       await openReal(t, Routes.home, library: testLibrary());
-      expect(find.text('Continue reading'), findsNothing);
-      expect(find.text('category 1'), findsOneWidget);
+      expect(find.text('category 1'), findsWidgets);
 
       await _remember(t, 'r1', 's02', 0.5);
 
-      final card = find.byType(ContinueCard);
-      expect(card, findsOneWidget);
-      expect(find.text('Continue reading'), findsOneWidget);
-      expect(
-        find.descendant(of: card, matching: find.text('reading 1')),
-        findsOneWidget,
-      );
-      expect(
-        find.descendant(of: card, matching: find.text('heading 2')),
-        findsOneWidget,
-      );
-      expect(
-        find.descendant(of: card, matching: find.text('50%')),
-        findsOneWidget,
-      );
-      final line = t.widget<ProgressLine>(
-        find.descendant(of: card, matching: find.byType(ProgressLine)),
-      );
-      expect(line.value, 0.5);
+      expect(find.byType(ContinueCard), findsNothing);
+      expect(find.text('Continue reading'), findsNothing);
       expect(
         find.descendant(of: _featuredButton, matching: find.text('Continue')),
         findsOneWidget,
       );
-      // Above the featured card.
-      expect(
-        t.getTopLeft(card).dy,
-        lessThan(t.getTopLeft(find.byType(FeaturedCard)).dy),
-      );
-
-      await t.tap(find.descendant(of: card, matching: find.text('reading 1')));
-      await t.pumpAndSettle();
+      await _tapVisible(t, _featuredButton);
       expect(find.byKey(const ValueKey('reader-settings')), findsOneWidget);
       expect(find.byKey(const ValueKey('heading-s02')), findsOneWidget);
+    });
+
+    testWidgets('after reading a flow: the Continue reading card with its '
+        'name, section, percent and line, between the featured card and the '
+        'rest', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        library: testLibrary(),
+        storeExtras: _testFlow,
+      );
+      await _remember(t, 'flow-1', 'r1~s02', 0.5);
+      final card = find.byType(ContinueCard);
+      expect(card, findsOneWidget);
+      expect(find.text('Continue reading'), findsOneWidget);
+      for (final s in ['Flow one', 'heading 2', '50%']) {
+        expect(find.descendant(of: card, matching: find.text(s)),
+            findsOneWidget, reason: s);
+      }
+      final line = t.widget<ProgressLine>(
+        find.descendant(of: card, matching: find.byType(ProgressLine)),
+      );
+      expect(line.value, 0.5);
+      // Below the featured card, above Quick Access.
+      expect(_top(t, card),
+          greaterThan(t.getBottomLeft(find.byType(FeaturedCard)).dy));
+      expect(_top(t, card), lessThan(_top(t, find.byKey(_quickAccess))));
     });
 
     testWidgets('the Continue reading card is one button with today\'s label', (
       t,
     ) async {
       final handle = t.ensureSemantics();
-      await openReal(t, Routes.home, library: testLibrary());
-      await _remember(t, 'r1', 's02', 0.5);
+      await openReal(
+        t,
+        Routes.home,
+        library: testLibrary(),
+        storeExtras: _testFlow,
+      );
+      await _remember(t, 'flow-1', 'r1~s02', 0.5);
       final node = find.bySemanticsLabel(
-        'Continue reading, reading 1, heading 2, 50 percent',
+        'Continue reading, Flow one, heading 2, 50 percent',
       );
       expect(node, findsOneWidget);
       expect(
@@ -299,7 +327,7 @@ void main() {
         isTrue,
       );
       expect(
-        find.bySemanticsLabel(RegExp('^Continue reading, reading 1')),
+        find.bySemanticsLabel(RegExp('^Continue reading, Flow one')),
         findsOneWidget,
       );
       handle.dispose();
@@ -316,26 +344,13 @@ void main() {
       );
     });
 
-    /// [sections] as flow-1, "Flow one", in the stored flows.
-    Map<String, String> flowOne(List<FlowRef> sections) => {
-      flowsKey: jsonEncode(
-        FlowsState(
-          flows: [Flow(id: 'flow-1', name: 'Flow one', sections: sections)],
-          nextNumber: 2,
-        ).toJson(),
-      ),
-    };
-
     testWidgets('a flow last read: the card shows its name and the section, '
         'and opens the flow from Home', (t) async {
       await openReal(
         t,
         Routes.home,
         library: testLibrary(),
-        storeExtras: flowOne(const [
-          FlowRef(readingId: 'r1', sectionId: 's03'),
-          FlowRef(readingId: 'r1', sectionId: 's02'),
-        ]),
+        storeExtras: _testFlow,
       );
       await _remember(t, 'flow-1', 'r1~s02', 0.5);
       final card = find.byType(ContinueCard);
@@ -365,7 +380,7 @@ void main() {
           t,
           Routes.home,
           library: testLibrary(),
-          storeExtras: flowOne(sections),
+          storeExtras: _flowOne(sections),
         );
         await _remember(t, 'flow-1', 'r1~s02', 0.5);
         expect(find.byType(ContinueCard), findsNothing);
@@ -436,11 +451,17 @@ void main() {
       expect(find.text('Heading b01'), findsOneWidget);
     });
 
-    testWidgets('a topic with no readings: "0 sections", no section row, no '
+    testWidgets('a topic with no readings: "0 sections", no Quick Access, no '
         'button, and the card does nothing', (t) async {
       await openReal(t, Routes.home, library: _empty());
-      expect(find.text('0 sections'), findsOneWidget);
-      expect(find.byType(SectionStrip), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(FeaturedCard),
+          matching: find.text('0 sections'),
+        ),
+        findsOneWidget,
+      );
+      expect(find.byKey(_quickAccess, skipOffstage: false), findsNothing);
       expect(_featuredButton, findsNothing);
       await t.tap(find.byType(FeaturedCard), warnIfMissed: false);
       await t.pumpAndSettle();
@@ -578,111 +599,26 @@ void main() {
     });
   });
 
-  group('section row', () {
-    testWidgets('one card per section of the first reading; the third opens '
-        'the reader at the third section', (t) async {
-      await openReal(t, Routes.home);
-      final c = (await realLibrary(t)).categories.first;
-      final reading = c.readings.first;
-      expect(find.text('In ${c.title}'), findsOneWidget);
-      for (final s in reading.sections) {
-        expect(
-          find.byKey(ValueKey('section-card-${s.id}'), skipOffstage: false),
-          findsOneWidget,
-          reason: s.id,
-        );
-      }
-      expect(
-        find.descendant(
-          of: find.byType(SectionStrip),
-          matching: find.byWidgetPredicate(
-            (w) => w.key is ValueKey<String> &&
-                (w.key! as ValueKey<String>).value.startsWith('section-card-'),
-            skipOffstage: false,
-          ),
-          skipOffstage: false,
-        ),
-        findsNWidgets(reading.sections.length),
-      );
-      final third = reading.sections[2];
-      await _tapVisible(t, find.byKey(ValueKey('section-card-${third.id}')));
-      expect(find.byKey(const ValueKey('reader-settings')), findsOneWidget);
-      expect(
-        _location(t),
-        Routes.reader(reading.id, sectionId: third.id, from: ReaderFrom.home),
-      );
-      expect(find.byKey(ValueKey('heading-${third.id}')), findsOneWidget);
-    });
-
-    testWidgets('"See all" opens the Library with the topic open', (t) async {
-      await openReal(t, Routes.home);
-      final c = (await realLibrary(t)).categories.first;
-      await _tapVisible(t, find.text('See all'));
-      expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
-      expect(find.byKey(ValueKey('open-${c.id}')), findsOneWidget);
-    });
-
-    testWidgets('the cards are all as tall as the tallest', (t) async {
-      await openReal(t, Routes.home, deviceTextScale: 1.5);
-      final reading = (await realLibrary(t)).categories.first.readings.first;
-      final heights = {
-        for (final s in reading.sections)
-          t.getSize(find.byKey(ValueKey('section-card-${s.id}'), skipOffstage: false)).height,
-      };
-      expect(heights, hasLength(1));
-    });
-
-    testWidgets('a card that takes keyboard focus is scrolled into view', (
-      t,
-    ) async {
-      await openReal(t, Routes.home);
-      final reading = (await realLibrary(t)).categories.first.readings.first;
-      final last = find.byKey(
-        ValueKey('section-card-${reading.sections.last.id}'),
-        skipOffstage: false,
-      );
-      expect(t.getTopLeft(last).dx, greaterThan(390));
-      final focus = Focus.of(
-        t.element(
-          find.descendant(of: last, matching: find.byType(Focus), skipOffstage: false).last,
-        ),
-      );
-      // Reach it by Tab, as a keyboard user would.
-      final first = find.byKey(ValueKey('section-card-${reading.sections.first.id}'));
-      await t.ensureVisible(first);
-      await t.pumpAndSettle();
-      for (var i = 0; i < 200 && !focus.hasFocus; i++) {
-        FocusManager.instance.primaryFocus?.nextFocus();
-        await t.pumpAndSettle();
-      }
-      expect(focus.hasFocus, isTrue);
-      final rect = t.getRect(last);
-      expect(rect.left, greaterThanOrEqualTo(0));
-      expect(rect.right, lessThanOrEqualTo(390));
-    });
-  });
-
   group('collections', () {
-    testWidgets('one topic: no Collections', (t) async {
-      await openReal(
-        t,
-        Routes.home,
-        library: await buddhaOnlyLibrary(t),
+    testWidgets('one topic: Collections with its one card', (t) async {
+      final lib = await buddhaOnlyLibrary(t);
+      await openReal(t, Routes.home, library: lib);
+      expect(find.text('Collections', skipOffstage: false), findsOneWidget);
+      expect(
+        find.byKey(ValueKey('collection-${lib.categories.single.id}'),
+            skipOffstage: false),
+        findsOneWidget,
       );
-      expect(find.text('Collections'), findsNothing);
     });
 
-    testWidgets('several topics: Collections with a card for each after the '
-        'first; a topic without a picture shows the lotus panel', (t) async {
+    testWidgets('several topics: a card for every topic, the first included; '
+        'a topic without a picture shows the lotus panel', (t) async {
       final lib = severalCategories();
       await openReal(t, Routes.home, library: lib);
-      expect(find.text('Collections'), findsOneWidget);
-      expect(
-        find.byKey(ValueKey('collection-${lib.categories.first.id}'), skipOffstage: false),
-        findsNothing,
-      );
-      for (final c in lib.categories.skip(1)) {
-        final card = find.byKey(ValueKey('collection-${c.id}'), skipOffstage: false);
+      expect(find.text('Collections', skipOffstage: false), findsOneWidget);
+      for (final c in lib.categories) {
+        final card =
+            find.byKey(ValueKey('collection-${c.id}'), skipOffstage: false);
         expect(card, findsOneWidget, reason: c.id);
         expect(
           find.descendant(
@@ -693,10 +629,11 @@ void main() {
           findsOneWidget,
         );
         expect(
-          find.descendant(of: card, matching: find.byType(Image), skipOffstage: false),
+          find.descendant(
+              of: card, matching: find.byType(Image), skipOffstage: false),
           findsNothing,
         );
-        expect(t.getSize(card).width, 200);
+        expect(t.getSize(card).width, 220);
         expect(t.getSize(card).height, greaterThanOrEqualTo(148));
       }
     });
@@ -708,7 +645,7 @@ void main() {
       await openReal(t, Routes.home, size: const Size(390, 3000));
       expect(lib.categories, hasLength(3));
       expect(find.byType(FeaturedCard), findsOneWidget);
-      for (final c in lib.categories.skip(1)) {
+      for (final c in lib.categories) {
         expect(
           find.byKey(ValueKey('collection-${c.id}'), skipOffstage: false),
           findsOneWidget,
@@ -764,18 +701,18 @@ void main() {
   });
 
   group('wide', () {
-    testWidgets('at 1280 x 800 Continue reading and Today\'s gatha share a row', (
-      t,
-    ) async {
+    testWidgets('at 1280 x 800 a flow\'s Continue reading and Today\'s gatha '
+        'share a row', (t) async {
       await openReal(
         t,
         Routes.home,
         size: const Size(1280, 800),
         overrides: [_clock(DateTime(2026, 3, 4, 8))],
+        storeExtras: await realFlowsStore(t),
       );
-      final lib = await realLibrary(t);
-      final reading = lib.categories.first.readings.first;
-      await _remember(t, reading.id, reading.sections[3].id, 0.25);
+      final first =
+          (await realLibrary(t)).reading(realReadingId)!.sections.first;
+      await _remember(t, 'flow-1', '$realReadingId~${first.id}', 0.25);
       final cont = find.byType(ContinueCard);
       final gatha = find.byType(GathaCard);
       expect(t.getTopLeft(cont).dy, t.getTopLeft(gatha).dy);
@@ -787,7 +724,7 @@ void main() {
       );
     });
 
-    testWidgets('with nothing to continue the gatha takes the full width', (
+    testWidgets('with no flow to continue the gatha takes the full width', (
       t,
     ) async {
       await openReal(
@@ -796,6 +733,9 @@ void main() {
         size: const Size(1280, 800),
         overrides: [_clock(DateTime(2026, 3, 4, 8))],
       );
+      final reading = (await realLibrary(t)).reading(realReadingId)!;
+      await _remember(t, reading.id, reading.sections[3].id, 0.25);
+      expect(find.byType(ContinueCard), findsNothing);
       expect(
         t.getSize(find.byType(GathaCard)).width,
         t.getSize(find.byType(FeaturedCard)).width,
@@ -809,92 +749,128 @@ void main() {
   });
 
   group('your flows', () {
-    final stored = {
-      flowsKey: jsonEncode(
-        const FlowsState(
-          flows: [
-            Flow(
-              id: 'flow-1',
-              name: 'Flow one',
-              sections: [FlowRef(readingId: 'r1', sectionId: 's01')],
-            ),
-          ],
-          nextNumber: 2,
-        ).toJson(),
-      ),
-    };
-    final row = find.byKey(const ValueKey('home-flows'));
-    double top(WidgetTester t, Finder f) => t.getTopLeft(f).dy;
+    final row = find.byKey(_flowsRow);
 
-    testWidgets('with nothing to continue the row comes first, before the '
-        'featured card', (t) async {
+    testWidgets('phone: after Quick Access, before Collections', (t) async {
       await openReal(
         t,
         Routes.home,
         library: testLibrary(),
-        storeExtras: stored,
-        overrides: [_clock(DateTime(2026, 3, 4, 8))],
+        storeExtras: _testFlow,
+        size: const Size(390, 3000),
       );
       expect(find.byType(ContinueCard), findsNothing);
-      expect(top(t, row), lessThan(top(t, find.byType(FeaturedCard))));
-      expect(top(t, row), greaterThan(top(t, find.text('Good morning'))));
+      expect(_top(t, row), greaterThan(_top(t, find.byKey(_quickAccess))));
+      expect(_top(t, row), lessThan(_top(t, find.byKey(_collections))));
     });
 
-    testWidgets('after Continue reading, before the featured card', (t) async {
-      await openReal(t, Routes.home, library: testLibrary(), storeExtras: stored);
-      await _remember(t, 'r1', 's02', 0.5);
-      expect(top(t, row), greaterThan(top(t, find.byType(ContinueCard))));
-      expect(top(t, row), lessThan(top(t, find.byType(FeaturedCard))));
-    });
-
-    testWidgets('wide: after the Continue reading and gatha row', (t) async {
+    testWidgets('wide: after the Continue reading and gatha row and Quick '
+        'Access, before Collections', (t) async {
       await openReal(
         t,
         Routes.home,
-        size: const Size(1280, 800),
+        size: const Size(1280, 3000),
         overrides: [_clock(DateTime(2026, 3, 4, 8))],
-        storeExtras: stored,
+        storeExtras: await realFlowsStore(t),
       );
-      final lib = await realLibrary(t);
-      final reading = lib.categories.first.readings.first;
-      await _remember(t, reading.id, reading.sections[3].id, 0.25);
+      final first =
+          (await realLibrary(t)).reading(realReadingId)!.sections.first;
+      await _remember(t, 'flow-1', '$realReadingId~${first.id}', 0.25);
       expect(
-        top(t, row),
+        _top(t, row),
         greaterThan(t.getBottomLeft(find.byType(GathaCard)).dy),
       );
       expect(
-        top(t, row),
+        _top(t, row),
         greaterThan(t.getBottomLeft(find.byType(ContinueCard)).dy),
       );
       expect(
-        top(t, row),
-        lessThan(top(t, find.byType(SectionStrip))),
+        _top(t, row),
+        greaterThan(t.getBottomLeft(find.byKey(_quickAccess)).dy),
       );
-    });
-
-    testWidgets('wide, nothing to continue: after the gatha', (t) async {
-      await openReal(
-        t,
-        Routes.home,
-        size: const Size(1280, 800),
-        overrides: [_clock(DateTime(2026, 3, 4, 8))],
-        storeExtras: stored,
-      );
-      expect(
-        top(t, row),
-        greaterThan(t.getBottomLeft(find.byType(GathaCard)).dy),
-      );
+      expect(_top(t, row), lessThan(_top(t, find.byKey(_collections))));
     });
 
     testWidgets('the row goes when the last flow is deleted', (t) async {
-      await openReal(t, Routes.home, library: testLibrary(), storeExtras: stored);
+      await openReal(
+        t,
+        Routes.home,
+        library: testLibrary(),
+        storeExtras: _testFlow,
+        size: const Size(390, 3000),
+      );
       expect(row, findsOneWidget);
-      final before = top(t, find.byType(FeaturedCard));
+      final before = _top(t, find.byKey(_collections));
       _container(t).read(flowsProvider.notifier).delete('flow-1');
       await t.pumpAndSettle();
       expect(row, findsNothing);
       expect(find.text('Your flows'), findsNothing);
-      expect(top(t, find.byType(FeaturedCard)), lessThan(before));
+      expect(_top(t, find.byKey(_collections)), lessThan(before));
+    });
+  });
+
+  group('order', () {
+    /// Each of [blocks] is on Home once, each above the next.
+    void expectOrder(WidgetTester t, List<Finder> blocks) {
+      for (final b in blocks) {
+        expect(b, findsOneWidget);
+      }
+      for (var i = 1; i < blocks.length; i++) {
+        expect(
+          _top(t, blocks[i - 1]),
+          lessThan(_top(t, blocks[i])),
+          reason: 'block $i',
+        );
+      }
+    }
+
+    testWidgets('phone: header, featured, Continue (a flow), gatha, Quick '
+        'Access, flows, Collections', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        size: const Size(390, 4000),
+        overrides: [_clock(DateTime(2026, 3, 4, 8))],
+        storeExtras: await realFlowsStore(t),
+      );
+      final first =
+          (await realLibrary(t)).reading(realReadingId)!.sections.first;
+      await _remember(t, 'flow-1', '$realReadingId~${first.id}', 0.25);
+      expectOrder(t, [
+        find.byType(HomeHeader),
+        find.byType(FeaturedCard),
+        find.byType(ContinueCard),
+        find.byType(GathaCard),
+        find.byKey(_quickAccess),
+        find.byKey(_flowsRow),
+        find.byKey(_collections),
+      ]);
+    });
+
+    testWidgets('wide: featured; Continue (a flow) beside the gatha; Quick '
+        'Access; flows; Collections', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        size: const Size(1280, 3000),
+        overrides: [_clock(DateTime(2026, 3, 4, 8))],
+        storeExtras: await realFlowsStore(t),
+      );
+      final first =
+          (await realLibrary(t)).reading(realReadingId)!.sections.first;
+      await _remember(t, 'flow-1', '$realReadingId~${first.id}', 0.25);
+      expect(
+        _top(t, find.byType(ContinueCard)),
+        _top(t, find.byType(GathaCard)),
+      );
+      expectOrder(t, [
+        find.byType(HomeHeader),
+        find.byType(FeaturedCard),
+        find.byType(GathaCard),
+        find.byKey(_quickAccess),
+        find.byKey(_flowsRow),
+        find.byKey(_collections),
+      ]);
     });
   });
 
@@ -934,10 +910,13 @@ void main() {
             deviceTextScale: scale,
             settings: AppSettings(themeMode: theme),
             overrides: [_clock(DateTime(2026, 3, 4, 8))],
+            storeExtras: await realFlowsStore(t),
           );
-          final reading = (await realLibrary(t)).categories.first.readings.first;
-          await _remember(t, reading.id, reading.sections[3].id, 0.25);
+          final first =
+              (await realLibrary(t)).reading(realReadingId)!.sections.first;
+          await _remember(t, 'flow-1', '$realReadingId~${first.id}', 0.25);
           expect(find.byType(ContinueCard), findsOneWidget);
+          expect(find.byKey(_quickAccess), findsOneWidget);
           expect(find.byType(GathaCard), findsOneWidget);
           await scrollThrough(t);
           expect(t.takeException(), isNull);

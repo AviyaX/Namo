@@ -89,15 +89,15 @@ void main() {
       expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
     });
 
-    testWidgets('${way.name} Back: opened from Continue reading, back to '
-        'Home', (t) async {
-      final c = await openAt(t, Routes.home);
+    testWidgets('${way.name} Back: opened from Continue reading (a flow), '
+        'back to Home', (t) async {
+      final c = await openAt(t, Routes.home, withFlow: true);
       c
           .read(positionProvider.notifier)
           .save(
             const ReadingPosition(
-              readingId: 'r1',
-              sectionId: 's02',
+              readingId: 'flow-1',
+              sectionId: 'r1~s02',
               fraction: 0,
             ),
             0.5,

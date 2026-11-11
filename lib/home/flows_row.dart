@@ -9,7 +9,7 @@ import '../design/widgets/surface_card.dart';
 import '../flows/flow_reading.dart';
 import '../flows/flows.dart';
 import '../router.dart';
-import 'section_strip.dart';
+import 'card_row.dart';
 
 /// The width of one flow card.
 const _cardWidth = 168.0;

@@ -144,9 +144,8 @@ void main() {
       expect(t.takeException(), isNull);
     });
 
-    testWidgets('Continue reading on Home opens the pirith at that place', (
-      t,
-    ) async {
+    testWidgets('"Continue" on Home\'s featured page opens the pirith at that '
+        'place', (t) async {
       await openReal(t, Routes.reader(mangalaReadingId));
       final c = _scroll(t);
       c.jumpTo(c.position.maxScrollExtent / 2);
@@ -159,7 +158,10 @@ void main() {
 
       await t.pumpWidget(const SizedBox());
       await openReal(t, Routes.home, storeExtras: {positionKey: store});
-      await t.tap(find.byType(ContinueCard));
+      // A pirith read last has no Continue reading card; the carousel opens
+      // on the Pirith page, which continues it.
+      expect(find.byType(ContinueCard), findsNothing);
+      await t.tap(find.widgetWithText(PrimaryButton, 'Continue'));
       await t.pumpAndSettle();
       expect(_location(t), startsWith('/read/$mangalaReadingId'));
       final block = find.byKey(ValueKey('block-$verseId'));

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:buddhist_gatha/audio/audio_controls.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/home/continue_card.dart';
+import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/library/search.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -305,9 +306,8 @@ void main() {
       expect(_location(t), startsWith('/read/$mangalaReadingId'));
     });
 
-    testWidgets('the Continue card shows both names and opens the reader', (
-      t,
-    ) async {
+    testWidgets('a pirith read last: no Continue card; the featured page '
+        'names it and opens the reader', (t) async {
       final lib = await realLibrary(t);
       final r = lib.reading(mangalaReadingId)!;
       await openReal(
@@ -333,16 +333,17 @@ void main() {
         },
       );
       await t.pumpAndSettle();
-      // The featured carousel names the pirith too; this is about the card.
-      final card = find.byType(ContinueCard);
+      // Only a flow gets the Continue reading card; the carousel's Pirith
+      // page names the pirith (in Sinhala letters) and continues it.
+      expect(find.byType(ContinueCard), findsNothing);
+      final card = find.byType(FeaturedCard);
       Finder inCard(Finder f) => find.descendant(of: card, matching: f);
       expect(inCard(find.text(r.title)), findsOneWidget);
-      expect(inCard(find.text(r.titleRoman!)), findsOneWidget);
       expect(
         t.widget<Text>(inCard(find.text(r.title))).style!.fontFamily,
         contains('NotoSansSinhala'),
       );
-      await t.tap(inCard(find.text(r.title)));
+      await t.tap(inCard(find.text('Continue')));
       await t.pumpAndSettle();
       expect(_location(t), startsWith('/read/$mangalaReadingId'));
     });

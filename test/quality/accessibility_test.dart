@@ -23,6 +23,13 @@ Future<void> openSheet(WidgetTester t) async {
   await t.pumpAndSettle();
 }
 
+/// Home scrolls, so it is checked on a tall surface; this makes sure that
+/// surface still holds every block, down to Collections, clear of the bar.
+Future<void> expectWholeHome(WidgetTester t) async {
+  final last = t.getRect(find.byKey(const ValueKey('home-collections')));
+  expect(last.bottom, lessThanOrEqualTo(t.getRect(find.byType(FloatingBar)).top));
+}
+
 void main() {
   // The test font is used here, not the bundled ones: the contrast check
   // reads the most common dark pixel, and the thin strokes of a real font at
@@ -32,7 +39,7 @@ void main() {
   // Each screen, with the surface it is checked on (tall where the page
   // scrolls, so everything is on screen) and what to do once it is open.
   final screens = <(String, String, Size, Future<void> Function(WidgetTester)?, bool)>[
-    ('Home', Routes.home, const Size(390, 1800), null, false),
+    ('Home', Routes.home, const Size(390, 2600), expectWholeHome, false),
     ('Library (closed)', Routes.library, const Size(390, 844), null, false),
     ('Library (open)', Routes.category(realCategoryId), const Size(390, 1800), null, false),
     ('Reader', Routes.reader(realReadingId), const Size(390, 844), null, false),
@@ -79,14 +86,16 @@ void main() {
   }
 
   for (final dark in [false, true]) {
-    for (final size in const [Size(390, 1800), Size(1280, 800)]) {
+    for (final size in const [Size(390, 2600), Size(1280, 800)]) {
       testWidgets(
         'Home with several reading cards (${dark ? 'dark' : 'light'}, ${size.width.round()}x${size.height.round()}) '
         'meets tap-target, label and contrast guidelines',
         (t) async {
           final handle = t.ensureSemantics();
           await openReal(t, Routes.home, size: size, dark: dark, library: severalCategories());
-          expect(find.byKey(const ValueKey('card-art-panel')), findsNWidgets(4));
+          // The featured page and the four Collections cards.
+          expect(find.byKey(const ValueKey('card-art-panel')), findsNWidgets(5));
+          if (size.width < 840) await expectWholeHome(t);
           await expectGuidelines(t);
           handle.dispose();
         },
@@ -174,7 +183,7 @@ void main() {
   final flowScreens = <(String, String, Size, String, Future<void> Function(WidgetTester)?)>[
     ('Library with My flows', Routes.library, const Size(390, 1400), 'Evening', null),
     ('New flow sheet', Routes.library, const Size(390, 844), 'Start from', (t) => tapKey(t, 'new-flow')),
-    ('Home with Your flows', Routes.home, const Size(390, 1800), 'Your flows', null),
+    ('Home with Your flows', Routes.home, const Size(390, 2800), 'Your flows', expectWholeHome),
     ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections', null),
     ('Flow editor, move menu open', Routes.flowEditor('flow-1'), const Size(390, 1400), 'Move down',
         (t) async {
@@ -221,7 +230,7 @@ void main() {
         await openReal(
           t,
           Routes.home,
-          size: const Size(390, 1800),
+          size: const Size(390, 2800),
           dark: dark,
           storeExtras: {
             positionKey: jsonEncode(
@@ -242,6 +251,7 @@ void main() {
           },
         );
         expect(find.text('34% complete'), findsOneWidget);
+        await expectWholeHome(t);
         await expectGuidelines(t);
         handle.dispose();
       });
