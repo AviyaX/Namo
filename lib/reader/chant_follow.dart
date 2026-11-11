@@ -15,10 +15,32 @@ import '../content/model.dart';
 /// This notifies when [started] or [following] changes; the place has its own
 /// listenable so a place change does not wake what only reads the other two.
 class ChantFollow extends ChangeNotifier {
-  ChantFollow({required this.times, required this.paliLengths});
+  ChantFollow({
+    required this.times,
+    required this.paliLengths,
+    this.lineTimes = const [],
+  });
 
   final List<BlockTime?> times;
   final List<List<int>> paliLengths;
+
+  /// Start time of every line, one list per block; empty where a recording
+  /// has none.
+  final List<List<Duration?>> lineTimes;
+
+  /// When line [phrase] of [block] starts; the block's start when that line
+  /// has no time or does not exist; null when the block is untimed too.
+  Duration? lineStart(int block, int phrase) {
+    if (block >= 0 &&
+        block < lineTimes.length &&
+        phrase >= 0 &&
+        phrase < lineTimes[block].length) {
+      final at = lineTimes[block][phrase];
+      if (at != null) return at;
+    }
+    return blockStart(times, block);
+  }
+
   final _place = ValueNotifier<ChantPlace?>(null);
   bool _started = false;
   bool _following = true;
@@ -41,7 +63,8 @@ class ChantFollow extends ChangeNotifier {
     final shown =
         _started &&
         (s.status == ChantStatus.playing || s.status == ChantStatus.paused);
-    _place.value = shown ? placeAt(s.position, times, paliLengths) : null;
+    _place.value = shown ? placeAt(s.position, times, paliLengths, lineTimes: lineTimes)
+        : null;
     if (changed) notifyListeners();
   }
 

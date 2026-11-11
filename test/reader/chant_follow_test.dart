@@ -128,4 +128,40 @@ void main() {
     f.onState(_at(ChantStatus.paused, 0.5));
     expect(f.place.value, isNull, reason: 'not started again yet');
   });
+
+  group('line times', () {
+    ChantFollow withLines() => ChantFollow(
+      times: [BlockTime(_s(0), _s(10)), null],
+      paliLengths: const [
+        [1, 1, 1],
+        [1],
+      ],
+      lineTimes: [
+        [_s(2), null, _s(6)],
+        [_s(12)],
+      ],
+    );
+
+    test('onState places by line times', () {
+      final f = withLines();
+      f.onState(_at(ChantStatus.playing, 1));
+      expect(f.place.value, const ChantPlace(0, -1));
+      f.onState(_at(ChantStatus.playing, 4));
+      expect(f.place.value, const ChantPlace(0, 0));
+      f.onState(_at(ChantStatus.playing, 7));
+      expect(f.place.value, const ChantPlace(0, 2));
+    });
+
+    test('lineStart: timed line, null line, bad index', () {
+      final f = withLines();
+      expect(f.lineStart(0, 2), _s(6));
+      expect(f.lineStart(0, 1), _s(0), reason: 'null line: block start');
+      expect(f.lineStart(0, 9), _s(0));
+      expect(f.lineStart(0, -1), _s(0));
+      expect(f.lineStart(1, 0), _s(12), reason: 'its own time wins');
+      expect(f.lineStart(1, 3), isNull, reason: 'untimed block, bad line');
+      expect(f.lineStart(5, 0), isNull);
+      expect(_follow().lineStart(0, 1), _s(0), reason: 'no line times');
+    });
+  });
 }

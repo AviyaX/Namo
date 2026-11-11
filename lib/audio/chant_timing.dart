@@ -23,17 +23,32 @@ class ChantPlace {
 /// found by how far through the block's time we are, spread over the phrases
 /// by the length of their Pali text. [paliLengths] `[b][p]` is the UTF-16 length
 /// of phrase `p` of block `b`. Null before the first timed block starts.
+///
+/// When [lineTimes] has a non-empty entry for the block, the phrase is the last
+/// line whose time is set and not after [position], or `-1` when none is (the
+/// block is active but no line is marked yet).
 ChantPlace? placeAt(
   Duration position,
   List<BlockTime?> times,
-  List<List<int>> paliLengths,
-) {
+  List<List<int>> paliLengths, {
+  List<List<Duration?>> lineTimes = const [],
+}) {
   int? block;
   for (var i = 0; i < times.length; i++) {
     final t = times[i];
     if (t != null && t.start <= position) block = i;
   }
   if (block == null) return null;
+
+  if (block < lineTimes.length && lineTimes[block].isNotEmpty) {
+    var phrase = -1;
+    final lines = lineTimes[block];
+    for (var p = 0; p < lines.length; p++) {
+      final at = lines[p];
+      if (at != null && at <= position) phrase = p;
+    }
+    return ChantPlace(block, phrase);
+  }
 
   final t = times[block]!;
   final span = (t.end - t.start).inMicroseconds;
