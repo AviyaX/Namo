@@ -207,6 +207,109 @@ void main() {
       expect(heading.notes, isEmpty);
     });
 
+    group('a mixed reading', () {
+      final mixed = Reading(
+        id: 'm',
+        title: 'Mixed',
+        sections: [
+          Section(
+            id: 'o1',
+            number: 1,
+            heading: 'One',
+            verses: [Verse(id: 'o1-1', paliSi: 'p o1', sinhala: 's o1')],
+          ),
+          Section(
+            id: 'ph',
+            number: 2,
+            heading: 'Two',
+            verses: [
+              Verse(id: 'ph-1', phrases: [p('1'), p('2')]),
+              Verse(id: 'ph-2', phrases: [p('3')]),
+            ],
+          ),
+          Section(
+            id: 'o2',
+            number: 3,
+            heading: 'Three',
+            verses: [
+              Verse(id: 'o2-1', paliSi: 'p o2a', sinhala: 's o2a'),
+              Verse(id: 'o2-2', paliSi: 'p o2b', sinhala: 's o2b'),
+            ],
+          ),
+        ],
+      );
+
+      test('verse layout gives each section its own content once, in '
+          'order', () {
+        final items = buildReaderItems(
+          mixed,
+          const LanguageSelection([_pali, _sinhala]),
+          TwoLanguageLayout.verse,
+        );
+        expect(_kinds(items), [
+          'H(o1)',
+          'V(o1-1, pi)',
+          'V(o1-1, si)',
+          'H(ph)',
+          'B(ph-1, 0)',
+          'B(ph-2, 1)',
+          'H(o2)',
+          'V(o2-1, pi)',
+          'V(o2-1, si)',
+          'V(o2-2, pi)',
+          'V(o2-2, si)',
+        ]);
+      });
+
+      test('section layout gives each section its own content once, in '
+          'order', () {
+        final items = buildReaderItems(
+          mixed,
+          const LanguageSelection([_pali, _sinhala]),
+          TwoLanguageLayout.section,
+        );
+        expect(_kinds(items), [
+          'H(o1)',
+          'V(o1-1, pi)',
+          'V(o1-1, si)',
+          'H(ph)',
+          'B(ph-1, 0)',
+          'B(ph-2, 1)',
+          'H(o2)',
+          'V(o2-1, pi)',
+          'V(o2-2, pi)',
+          'V(o2-1, si)',
+          'V(o2-2, si)',
+        ]);
+      });
+
+      test('the phrased section heading has no bookmark and its blocks carry '
+          'the chosen languages', () {
+        for (final layout in TwoLanguageLayout.values) {
+          final items = buildReaderItems(
+            mixed,
+            const LanguageSelection([_pali, _sinhala]),
+            layout,
+          );
+          final headings = items.whereType<HeadingItem>().toList();
+          expect(headings.map((h) => h.canBookmark), [true, false, true]);
+          expect(headings[1].notes, isEmpty);
+          expect(headings[1].romanTitle, isNull);
+          expect(headings[1].credit, isNull);
+          final blocks = items.whereType<PhraseBlockItem>().toList();
+          expect(blocks.map((b) => b.index), [0, 1]);
+          for (var i = 0; i < blocks.length; i++) {
+            expect(blocks[i].sectionId, 'ph');
+            expect(blocks[i].languages, [_pali, _sinhala]);
+            expect(
+              blocks[i].phrases,
+              same(mixed.sections[1].verses[i].phrases),
+            );
+          }
+        }
+      });
+    });
+
     test('an ordinary reading heading can be bookmarked', () {
       final heading =
           _build([_pali], TwoLanguageLayout.verse).first as HeadingItem;

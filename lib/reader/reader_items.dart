@@ -153,7 +153,25 @@ List<ReaderItem> buildReaderItems(
     );
   }
 
+  // A reading of ordinary sections, where a section of phrased verses (a
+  // pirith inside a flow) shows as passages, as in a pirith.
+  var block = 0;
   for (final s in reading.sections) {
+    if (s.verses.isNotEmpty && s.verses.every((v) => v.isPhrased)) {
+      items.add(HeadingItem(s, const [], canBookmark: false));
+      for (final v in s.verses) {
+        items.add(
+          PhraseBlockItem(
+            sectionId: s.id,
+            verseId: v.id,
+            index: block++,
+            phrases: v.phrases,
+            languages: languages,
+          ),
+        );
+      }
+      continue;
+    }
     items.add(HeadingItem(s, _notes(s, languages)));
     if (layout == TwoLanguageLayout.verse) {
       for (final v in s.verses) {

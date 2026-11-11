@@ -146,6 +146,21 @@ class Verse {
 
   bool get isPhrased => phrases.isNotEmpty;
 
+  /// This verse under [id]; every other field is the identical object.
+  Verse withId(String id) => Verse(
+    id: id,
+    paliSi: paliSi,
+    paliRoman: paliRoman,
+    sinhala: sinhala,
+    english: english,
+    englishSource: englishSource,
+    englishKind: englishKind,
+    check: check,
+    notes: notes,
+    corrections: corrections,
+    phrases: phrases,
+  );
+
   /// The text in [l], or null when it is missing or blank. "Pali" is the
   /// Sinhala-letter Pali; Roman Pali is stored but not shown.
   String? text(ReadingLanguage l) => switch (l) {
