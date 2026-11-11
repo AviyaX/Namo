@@ -49,7 +49,10 @@ class GathaCard extends ConsumerWidget {
     final heading = pick.section.heading;
     return SurfaceCard(
       framed: true,
+      // The leaf reaches past the padding; the card's rounded clip, not this
+      // stack, trims it, so it is never cut in a straight line.
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           PositionedDirectional(
             end: -NamoSpace.md,
@@ -123,7 +126,8 @@ class _ReadInContext extends StatelessWidget {
 
   final VoidCallback onPressed;
 
-  static const _shape = BorderRadius.all(Radius.circular(NamoSizes.touchTarget / 2));
+  /// Round ends at any text size.
+  static const _shape = BorderRadius.all(Radius.circular(NamoRadius.pill));
 
   @override
   Widget build(BuildContext context) {

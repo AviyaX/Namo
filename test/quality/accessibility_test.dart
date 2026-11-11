@@ -155,8 +155,7 @@ void main() {
         }
       }
 
-      // ignore: deprecated_member_use
-      walk(t.binding.pipelineOwner.semanticsOwner!.rootSemanticsNode!);
+      walk(t.binding.renderViews.first.owner!.semanticsOwner!.rootSemanticsNode!);
       // Each block, with the words that identify it to a screen reader and
       // where it is drawn.
       final blocks = <(String, String, Finder)>[

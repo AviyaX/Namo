@@ -258,3 +258,6 @@ pictures, and how tests are organised.
 - Quick Access Sinhala lines use the full stored headings.
 - Built departure: the overline on the featured card is cream, not gold (contrast).
 - Built departure: Quick Access is four across from 390 px, 2 x 2 below (words would break).
+- Built departure: the "NN% complete" figure sits on a small dark backdrop so it stays readable over the light hero picture.
+- Built departure: on phones the featured card's words take about 65% of its width (half on wide screens), so a long title word is not broken.
+- Built departure: the header picture is at most 136 px tall (plus the top inset) so it has faded out before the featured card; on wide screens it also fades at both sides of the column.

@@ -25,7 +25,9 @@ class FloatingBar extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: p.surface,
-        borderRadius: BorderRadius.circular(pill ? 999 : NamoRadius.lg),
+        borderRadius: BorderRadius.circular(
+          pill ? NamoRadius.pill : NamoRadius.lg,
+        ),
         border: Border.all(color: p.border),
         boxShadow: p.floatShadow,
       ),

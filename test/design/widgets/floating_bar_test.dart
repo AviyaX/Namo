@@ -23,7 +23,7 @@ void main() {
     testWidgets('pill: true makes it a full pill (radius 999)', (t) async {
       await pumpThemed(t, const FloatingBar(pill: true, child: Text('Bar')));
       final d = t.widget<Container>(find.byType(Container)).decoration! as BoxDecoration;
-      expect(d.borderRadius, BorderRadius.circular(999));
+      expect(d.borderRadius, BorderRadius.circular(NamoRadius.pill));
     });
 
     testWidgets('padding can be changed', (t) async {

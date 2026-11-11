@@ -504,7 +504,8 @@ void main() {
       expect(size.height, math.max(words, 350 * 0.5));
     });
 
-    testWidgets('at 1280 x 800 the featured card uses the hero picture, 3 : 1', (
+    testWidgets('at 1280 x 800 the featured card is 3 : 1 and shows the hero '
+        'picture', (
       t,
     ) async {
       await openReal(t, Routes.home, size: const Size(1280, 800));

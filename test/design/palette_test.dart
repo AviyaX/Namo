@@ -122,6 +122,7 @@ void main() {
     expect(NamoSpace.xxxl, 48);
     expect(NamoRadius.lg, 24);
     expect(NamoRadius.card, 20);
+    expect(NamoRadius.pill, 999);
     expect(NamoSizes.homeColumn, 1040);
     expect(NamoSizes.navBarHeight, 64);
   });

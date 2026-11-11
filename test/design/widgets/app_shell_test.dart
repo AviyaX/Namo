@@ -208,7 +208,7 @@ void main() {
         await openReal(t, Routes.home, dark: dark);
         final active = fillOf(t, 'Home');
         expect(active.color, p.sage);
-        expect(active.borderRadius, BorderRadius.circular(999));
+        expect(active.borderRadius, BorderRadius.circular(NamoRadius.pill));
         expect(labelColor(t, 'Home'), p.onSage);
         expect(
           t.widget<Icon>(find.descendant(of: _nav('Home'), matching: find.byType(Icon))).color,
@@ -226,7 +226,7 @@ void main() {
       final d = t.widget<Container>(
               find.descendant(of: _bar, matching: find.byType(Container)).first)
           .decoration! as BoxDecoration;
-      expect(d.borderRadius, BorderRadius.circular(999));
+      expect(d.borderRadius, BorderRadius.circular(NamoRadius.pill));
     });
 
     testWidgets('in the rail the active tab has the small radius', (t) async {

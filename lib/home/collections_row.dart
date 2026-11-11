@@ -89,7 +89,7 @@ class _CollectionCard extends ConsumerWidget {
     final count = topicCountLabel(category);
     const onPicture = NamoPalette.onPicture;
     return TappableCard(
-      radius: NamoRadius.md,
+      radius: NamoRadius.card,
       onTap: () => context.go(Routes.category(category.id)),
       semanticLabel: [
         category.title,
@@ -98,7 +98,7 @@ class _CollectionCard extends ConsumerWidget {
         if (percent != null) '$percent percent',
       ].join(', '),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(NamoRadius.md),
+        borderRadius: BorderRadius.circular(NamoRadius.card),
         child: Stack(
           fit: StackFit.passthrough,
           children: [

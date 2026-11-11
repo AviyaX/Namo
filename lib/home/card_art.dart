@@ -81,9 +81,11 @@ int pictureDecodeWidth(double shownWidth, double devicePixelRatio) {
   return (steps * 128 * devicePixelRatio).clamp(1, _maxDecodeWidth).round();
 }
 
-/// The proportion of the bundled card pictures (16 : 9); used to work out how
-/// wide a picture must be decoded to cover a box.
-const double _cardPictureAspect = 16 / 9;
+/// The widest proportion of the bundled card and hero pictures (the heroes
+/// are 2 : 1; the card pictures 4 : 3 and 16 : 9); used to work out how wide
+/// a picture must be decoded to cover a box, so that none is decoded too
+/// narrow for a tall box.
+const double _widestPictureAspect = 2;
 
 /// A topic's bundled picture, filling the space it is given: the hero one
 /// when [hero] and the topic has one (by the theme's brightness). A topic with no picture (or a picture
@@ -130,7 +132,7 @@ class TopicPicture extends StatelessWidget {
                 // file: wide enough to cover the box, and no wider.
                 final cover = math.max(
                   box.maxWidth,
-                  box.maxHeight * _cardPictureAspect,
+                  box.maxHeight * _widestPictureAspect,
                 );
                 return Image.asset(
                   asset,
@@ -222,23 +224,31 @@ enum TextSide {
 /// With [TextSide.bottom] the words sit at the bottom, full width; the scrim
 /// runs from nothing at the top to [pictureFadeAtText] where the words start
 /// and [pictureFadeAtBottom] at the bottom edge. With [TextSide.left] the
-/// words take the left half; the scrim runs from nothing at the right edge to
-/// [pictureFadeAtText] at the right of the words and [pictureFadeAtBottom] at
-/// the left edge.
+/// words take the [wordsShare] of the width at the left; the scrim runs from
+/// nothing at the right edge to [pictureFadeAtText] at the right of the words
+/// and [pictureFadeAtBottom] at the left edge.
 class PictureWords extends SingleChildRenderObjectWidget {
   const PictureWords({
     super.key,
     required this.minHeight,
     this.side = TextSide.bottom,
+    this.wordsShare = 0.5,
     required Widget super.child,
-  });
+  }) : assert(wordsShare > 0 && wordsShare <= 1);
 
   final double minHeight;
   final TextSide side;
 
+  /// With [TextSide.left], the part of the width the words are given.
+  final double wordsShare;
+
   @override
   RenderPictureWords createRenderObject(BuildContext context) =>
-      RenderPictureWords(minHeight: minHeight, side: side);
+      RenderPictureWords(
+        minHeight: minHeight,
+        side: side,
+        wordsShare: wordsShare,
+      );
 
   @override
   void updateRenderObject(
@@ -247,15 +257,29 @@ class PictureWords extends SingleChildRenderObjectWidget {
   ) {
     renderObject
       ..minHeight = minHeight
-      ..side = side;
+      ..side = side
+      ..wordsShare = wordsShare;
   }
 }
 
 class RenderPictureWords extends RenderBox
     with RenderObjectWithChildMixin<RenderBox> {
-  RenderPictureWords({required double minHeight, required TextSide side}) {
+  RenderPictureWords({
+    required double minHeight,
+    required TextSide side,
+    double wordsShare = 0.5,
+  }) {
     _minHeight = minHeight;
     _side = side;
+    _wordsShare = wordsShare;
+  }
+
+  late double _wordsShare;
+  double get wordsShare => _wordsShare;
+  set wordsShare(double v) {
+    if (v == _wordsShare) return;
+    _wordsShare = v;
+    markNeedsLayout();
   }
 
   late double _minHeight;
@@ -276,7 +300,7 @@ class RenderPictureWords extends RenderBox
 
   /// The width the words are given out of [width].
   double _wordsWidth(double width) =>
-      _side == TextSide.left ? width / 2 : width;
+      _side == TextSide.left ? width * _wordsShare : width;
 
   @override
   void setupParentData(RenderObject child) {
@@ -286,12 +310,12 @@ class RenderPictureWords extends RenderBox
   @override
   double computeMinIntrinsicWidth(double height) =>
       (child?.getMinIntrinsicWidth(double.infinity) ?? 0) *
-      (_side == TextSide.left ? 2 : 1);
+      (_side == TextSide.left ? 1 / _wordsShare : 1);
 
   @override
   double computeMaxIntrinsicWidth(double height) =>
       (child?.getMaxIntrinsicWidth(double.infinity) ?? 0) *
-      (_side == TextSide.left ? 2 : 1);
+      (_side == TextSide.left ? 1 / _wordsShare : 1);
 
   @override
   double computeMinIntrinsicHeight(double width) => math.max(
@@ -381,7 +405,7 @@ class RenderPictureWords extends RenderBox
             scrim.withValues(alpha: pictureFadeAtText),
             scrim.withValues(alpha: pictureFadeAtBottom),
           ],
-          stops: const [0, 0.5, 1],
+          stops: [0, 1 - _wordsShare, 1],
         );
     }
     context.canvas.drawRect(

@@ -73,7 +73,7 @@ class TappableCard extends StatelessWidget {
     required this.onTap,
     required this.semanticLabel,
     required this.child,
-    this.radius = NamoRadius.md,
+    this.radius = NamoRadius.card,
   });
 
   final VoidCallback onTap;

@@ -224,7 +224,7 @@ class _Destination extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final color = active ? p.onSage : p.textSecondary;
-    final radius = BorderRadius.circular(pill ? 999 : NamoRadius.sm);
+    final radius = BorderRadius.circular(pill ? NamoRadius.pill : NamoRadius.sm);
     return Pressable(
       key: ValueKey('nav-${tab.label.toLowerCase()}'),
       onTap: onTap,

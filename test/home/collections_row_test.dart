@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/progress_line.dart';
 import 'package:buddhist_gatha/home/card_art.dart';
+import 'package:buddhist_gatha/home/card_row.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/router.dart';
@@ -14,6 +16,8 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../quality/quality_support.dart';
 
 const _block = ValueKey('home-collections');
+
+void _nothing() {}
 
 Finder _card(String id) =>
     find.byKey(ValueKey('collection-$id'), skipOffstage: false);
@@ -87,6 +91,25 @@ void main() {
       if (left != null) expect(x, greaterThan(left));
       left = x;
     }
+  });
+
+  testWidgets('each card, its press tint and its picture take the card '
+      'radius', (t) async {
+    await openReal(t, Routes.home, size: const Size(390, 3000));
+    final card = t.widget<TappableCard>(
+      _inCard(realCategoryId, find.byType(TappableCard)),
+    );
+    expect(card.radius, NamoRadius.card);
+    expect(
+      t.widget<ClipRRect>(_inCard(realCategoryId, find.byType(ClipRRect)).first)
+          .borderRadius,
+      BorderRadius.circular(NamoRadius.card),
+    );
+    expect(
+      const TappableCard(onTap: _nothing, semanticLabel: '', child: SizedBox())
+          .radius,
+      NamoRadius.card,
+    );
   });
 
   testWidgets('first launch: no progress on any card', (t) async {

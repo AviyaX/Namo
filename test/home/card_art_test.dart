@@ -80,6 +80,28 @@ void main() {
       });
     }
 
+    testWidgets('a tall box decodes the 2 : 1 hero wide enough to cover it', (
+      t,
+    ) async {
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(
+        MaterialApp(
+          theme: namoTheme(Brightness.dark),
+          home: const Center(
+            child: SizedBox(
+              width: 200,
+              height: 400,
+              child: TopicPicture(categoryId: 'cat-namaskaraya', hero: true),
+            ),
+          ),
+        ),
+      );
+      final image = t.widget<Image>(find.byKey(const ValueKey('card-art-picture')));
+      // Covering 400 tall, the 2 : 1 picture is shown 800 wide.
+      expect((image.image as ResizeImage).width, pictureDecodeWidth(800, 1));
+    });
+
     testWidgets('hero: true on a topic with no hero falls back to its card picture', (t) async {
       await t.pumpWidget(
         MaterialApp(

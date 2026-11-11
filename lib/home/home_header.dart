@@ -50,11 +50,14 @@ class HomeHeader extends StatelessWidget {
                 ),
               ),
             ),
-            NamoIconButton(
-              key: const ValueKey('home-search'),
-              icon: Symbols.search_rounded,
-              tooltip: 'Search the library',
-              onPressed: () => context.go(Routes.librarySearch),
+            // Over the picture's leaves: the glow keeps the icon clear.
+            _Scrim(
+              child: NamoIconButton(
+                key: const ValueKey('home-search'),
+                icon: Symbols.search_rounded,
+                tooltip: 'Search the library',
+                onPressed: () => context.go(Routes.librarySearch),
+              ),
             ),
           ],
         ),
@@ -101,14 +104,24 @@ class _Scrim extends StatelessWidget {
 }
 
 /// The picture behind [HomeHeader]: the theme's header picture, covering
-/// min(width / 3, 240) plus the top inset, pinned to the top right, and
-/// fading into the page background over its lowest 40%. Decoration only;
-/// a picture that does not load leaves it empty.
+/// min(width / 3, [maxHeight]) plus the top inset, pinned to the top right,
+/// and fading into the page background over its lowest 40%. When it spans
+/// only the column (a wide screen) it fades into the page at both sides too,
+/// so it never ends in a hard line. Decoration only; a picture that does not
+/// load leaves it empty.
 class HomeBackdrop extends StatelessWidget {
   const HomeBackdrop({super.key});
 
   /// The proportion of the header pictures (1600 x 533).
   static const _aspect = 3.0;
+
+  /// The tallest the picture gets (less the top inset): it has faded fully
+  /// into the page before the featured card starts, under the header at
+  /// any width.
+  static const maxHeight = 136.0;
+
+  /// The part of the width each side fade takes on a wide screen.
+  static const _sideFade = 0.12;
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +129,14 @@ class HomeBackdrop extends StatelessWidget {
     final dark = Theme.of(context).brightness == Brightness.dark;
     final top = MediaQuery.paddingOf(context).top;
     final ratio = MediaQuery.devicePixelRatioOf(context);
+    final screen = MediaQuery.sizeOf(context).width;
     return ExcludeSemantics(
       child: LayoutBuilder(
         builder: (context, box) {
           final width = box.maxWidth;
-          final height = math.min(width / _aspect, 240.0) + top;
+          final height = math.min(width / _aspect, maxHeight) + top;
+          // Narrower than the screen: it spans the column, not edge to edge.
+          final inColumn = width < screen - 0.5;
           // Decode only as wide as the picture is shown when it covers, in
           // steps of 128 so that a window resized by a pixel keeps it.
           final cover = math.max(width, height * _aspect) * ratio;
@@ -152,6 +168,23 @@ class HomeBackdrop extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (inColumn)
+                  DecoratedBox(
+                    key: const ValueKey('home-backdrop-side-fade'),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        stops: const [0, _sideFade, 1 - _sideFade, 1],
+                        colors: [
+                          p.background,
+                          p.background.withValues(alpha: 0),
+                          p.background.withValues(alpha: 0),
+                          p.background,
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             ),
           );

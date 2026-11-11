@@ -20,6 +20,11 @@ import 'topic_progress.dart';
 /// The widest the "NN% complete" block at the lower right gets.
 const _maxProgressWidth = 240.0;
 
+/// The part of the card's width the words are given: half on a wide screen,
+/// more on a phone so that a long word of a title is not broken.
+const _wordsShareWide = 0.5;
+const _wordsSharePhone = 0.65;
+
 /// One page of the featured carousel: a topic's picture, statue to the
 /// right, with the overline, title, Sinhala title, count and a button on
 /// the left over a scrim; and, when there is a remembered place to go back
@@ -67,8 +72,9 @@ class FeaturedCard extends ConsumerWidget {
         : '${(resume.progress.clamp(0.0, 1.0) * 100).round()}% complete';
     const onPicture = NamoPalette.onPicture;
 
+    final inset = wide ? NamoSpace.xl : NamoSpace.lg;
     final words = Padding(
-      padding: const EdgeInsets.all(NamoSpace.xl),
+      padding: EdgeInsets.all(inset),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,10 +113,18 @@ class FeaturedCard extends ConsumerWidget {
     return LayoutBuilder(
       builder: (context, box) {
         final width = box.maxWidth;
-        final minHeight = wide ? width / 3 : width * 0.5;
+        // In the carousel every page is given the height of the tallest:
+        // the card fills it (the picture covers, the words stay centred).
+        final minHeight = math.max(
+          wide ? width / 3 : width * 0.5,
+          box.maxHeight.isFinite ? box.maxHeight : 0.0,
+        );
+        final share = wide ? _wordsShareWide : _wordsSharePhone;
+        // Right of the words' side; on a phone the words' own padding is the
+        // gap between them.
         final progressWidth = math.min(
           _maxProgressWidth,
-          width / 2 - NamoSpace.xl - NamoSpace.lg,
+          width * (1 - share) - inset - (wide ? NamoSpace.lg : 0),
         );
         return Pressable(
           onTap: open,
@@ -126,33 +140,43 @@ class FeaturedCard extends ConsumerWidget {
           excludeChildSemantics: true,
           child: SizedBox(
             width: width,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(NamoRadius.lg),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: TopicPicture(
-                      categoryId: category.id,
-                      hero: true,
-                      alignment: Alignment.centerRight,
-                    ),
-                  ),
-                  PictureWords(
-                    minHeight: minHeight,
-                    side: TextSide.left,
-                    child: words,
-                  ),
-                  if (resume != null && progressWidth > 0)
-                    Positioned(
-                      right: NamoSpace.xl,
-                      bottom: NamoSpace.xl,
-                      width: progressWidth,
-                      child: _Progress(
-                        label: percent!,
-                        value: resume.progress,
+            // The thin frame line round the card, over the picture.
+            child: DecoratedBox(
+              key: const ValueKey('featured-frame'),
+              position: DecorationPosition.foreground,
+              decoration: BoxDecoration(
+                border: Border.all(color: NamoPalette.of(context).frame),
+                borderRadius: BorderRadius.circular(NamoRadius.lg),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(NamoRadius.lg),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: TopicPicture(
+                        categoryId: category.id,
+                        hero: true,
+                        alignment: Alignment.centerRight,
                       ),
                     ),
-                ],
+                    PictureWords(
+                      minHeight: minHeight,
+                      side: TextSide.left,
+                      wordsShare: share,
+                      child: words,
+                    ),
+                    if (resume != null && progressWidth > 0)
+                      Positioned(
+                        right: inset,
+                        bottom: inset,
+                        width: progressWidth,
+                        child: _Progress(
+                          label: percent!,
+                          value: resume.progress,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

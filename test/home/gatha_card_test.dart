@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/marks.dart';
+import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/typography.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/pressable.dart';
@@ -255,6 +256,52 @@ void main() {
         brightness: b,
       );
       expect(t.takeException(), isNull);
+    });
+  }
+
+  testWidgets('the leaf is not cut in a straight line inside the card: its '
+      'stack does not clip, and the leaf lies inside the card', (t) async {
+    await pumpThemed(
+      t,
+      SizedBox(width: 350, child: _card(pick: _pick(), selection: LanguageSelection.initial)),
+    );
+    final mark = find.byType(LeafWatermark);
+    final stack = t.widget<Stack>(
+      find.ancestor(of: mark, matching: find.byType(Stack)).first,
+    );
+    expect(stack.clipBehavior, Clip.none);
+    final card = t.getRect(find.byType(SurfaceCard));
+    final leaf = t.getRect(mark);
+    expect(leaf.right, lessThanOrEqualTo(card.right));
+    expect(leaf.top, greaterThanOrEqualTo(card.top));
+    expect(leaf.bottom, lessThanOrEqualTo(card.bottom));
+  });
+
+  for (final scale in [1.0, 2.0]) {
+    testWidgets('"Read in context" is a pill at text $scale', (t) async {
+      await pumpThemed(
+        t,
+        SizedBox(width: 350, child: _card(pick: _pick(), selection: LanguageSelection.initial)),
+        textScale: scale,
+      );
+      final pill = find.ancestor(
+        of: find.text('Read in context'),
+        matching: find.byType(Pressable),
+      );
+      expect(
+        t.widget<Pressable>(pill).borderRadius,
+        BorderRadius.circular(NamoRadius.pill),
+      );
+      final outline = t.widget<Container>(
+        find.ancestor(
+          of: find.text('Read in context'),
+          matching: find.byType(Container),
+        ).first,
+      );
+      expect(
+        (outline.decoration! as BoxDecoration).borderRadius,
+        BorderRadius.circular(NamoRadius.pill),
+      );
     });
   }
 

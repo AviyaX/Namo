@@ -38,6 +38,9 @@ abstract final class NamoRadius {
 
   /// Cards (SurfaceCard).
   static const card = 20.0;
+
+  /// Round ends at any height: a pill.
+  static const pill = 999.0;
 }
 
 abstract final class NamoMotion {

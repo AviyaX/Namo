@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:buddhist_gatha/design/tokens.dart';
+import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/progress_line.dart';
 import 'package:buddhist_gatha/home/card_art.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
@@ -133,6 +134,35 @@ Future<double> _leastContrastIn(WidgetTester t, Rect area) async {
     }
   }
   return least;
+}
+
+/// The card as drawn inside its page: the rounded, framed box.
+Finder get _drawnCard => _inCard(find.byKey(const ValueKey('featured-frame')));
+
+/// Every word of every paragraph on the shown card fits the width its
+/// paragraph was given, measured in the style it is drawn in (no word is
+/// broken across lines).
+void _expectNoBrokenWords(WidgetTester t, String where) {
+  final paragraphs = _inCard(find.byType(RichText));
+  expect(paragraphs, findsWidgets);
+  for (final e in paragraphs.evaluate()) {
+    final render = e.renderObject! as RenderParagraph;
+    final span = render.text;
+    for (final word in span.toPlainText().split(RegExp(r'\s+'))) {
+      if (word.isEmpty) continue;
+      final painter = TextPainter(
+        text: TextSpan(text: word, style: span.style),
+        textDirection: TextDirection.ltr,
+        textScaler: render.textScaler,
+      )..layout();
+      expect(
+        painter.width,
+        lessThanOrEqualTo(render.size.width + 0.5),
+        reason: '$where: "$word" is wider than its line',
+      );
+      painter.dispose();
+    }
+  }
 }
 
 void main() {
@@ -471,14 +501,18 @@ void main() {
         );
         expect(words.side, TextSide.left);
         final scrim = t.getRect(_inCard(find.byType(PictureWords)));
+        // On a phone the words are given 65% of the width.
+        expect(words.wordsShare, 0.65);
+        final share = words.wordsShare;
         // The left-side scrim: pictureFadeAtBottom at the left edge, falling
-        // evenly to pictureFadeAtText at the middle and to nothing at the right.
+        // evenly to pictureFadeAtText at the right of the words and to
+        // nothing at the right edge.
         double strengthAt(double x) {
           final f = ((x - scrim.left) / scrim.width).clamp(0.0, 1.0);
-          return f <= 0.5
+          return f <= share
               ? pictureFadeAtBottom +
-                    (pictureFadeAtText - pictureFadeAtBottom) * f / 0.5
-              : pictureFadeAtText * (1 - f) / 0.5;
+                    (pictureFadeAtText - pictureFadeAtBottom) * f / share
+              : pictureFadeAtText * (1 - f) / (1 - share);
         }
 
         final texts = _inCard(find.byType(Text)).evaluate().toList();
@@ -550,6 +584,32 @@ void main() {
         expect(t.takeException(), isNull, reason: 'page $page');
         final card = t.getRect(_card);
         expect(card.height, t.getSize(pager).height, reason: 'page $page');
+        // The "NN% complete" block covers none of the words.
+        final progress = _inCard(
+          find.byKey(const ValueKey('featured-progress')),
+        );
+        if (progress.evaluate().isNotEmpty) {
+          final block = t.getRect(progress);
+          for (final e in _inCard(find.byType(Text)).evaluate()) {
+            final text = find.byElementPredicate((x) => x == e);
+            if (find
+                .descendant(of: progress, matching: text)
+                .evaluate()
+                .isNotEmpty) {
+              continue;
+            }
+            expect(
+              t.getRect(text).overlaps(block),
+              isFalse,
+              reason: 'page $page: "${(e.widget as Text).data}"',
+            );
+          }
+          // Nor the button.
+          final button = _inCard(find.byType(PrimaryButton));
+          if (button.evaluate().isNotEmpty) {
+            expect(t.getRect(button).overlaps(block), isFalse);
+          }
+        }
         for (final e in _inCard(find.byType(Text)).evaluate()) {
           final r = t.getRect(find.byElementPredicate((x) => x == e));
           expect(
@@ -567,6 +627,72 @@ void main() {
       expect(
         t.getRect(find.byKey(const ValueKey('featured-dots'))).top,
         greaterThanOrEqualTo(t.getRect(pager).bottom),
+      );
+    });
+  }
+
+  for (final width in [360.0, 390.0, 412.0]) {
+    testWidgets('${width.round()} px wide: on every page no word of the '
+        'title or the overline is broken across lines', (t) async {
+      await openReal(t, Routes.home, size: Size(width, 844));
+      final topics = (await realLibrary(t)).categories;
+      expect(topics.length, 3);
+      for (var page = 0; page < topics.length; page++) {
+        _controller(t).jumpToPage(page);
+        await t.pumpAndSettle();
+        expect(_shownTopic(t), topics[page].id);
+        expect(_inCard(find.text(topics[page].title)), findsOneWidget);
+        expect(_inCard(find.text('FEATURED COLLECTION')), findsOneWidget);
+        _expectNoBrokenWords(t, 'page $page');
+      }
+    });
+  }
+
+  testWidgets('390 px wide: on every page the drawn card fills its page, '
+      'top to bottom, so the gaps above and below are the spacing tokens', (
+    t,
+  ) async {
+    await openReal(t, Routes.home);
+    final pager = find.descendant(
+      of: _carousel,
+      matching: find.byType(PageView),
+    );
+    for (var page = 0; page < 3; page++) {
+      _controller(t).jumpToPage(page);
+      await t.pumpAndSettle();
+      final drawn = t.getRect(_drawnCard);
+      final shown = t.getRect(pager);
+      expect(drawn.top, closeTo(shown.top, 0.01), reason: 'page $page');
+      expect(drawn.height, closeTo(shown.height, 0.01), reason: 'page $page');
+      // The picture covers the whole card.
+      expect(
+        t.getRect(_inCard(find.byType(TopicPicture))).height,
+        closeTo(shown.height, 0.01),
+        reason: 'page $page',
+      );
+    }
+    // The dots are the normal spacing under the pages.
+    expect(
+      t.getRect(find.byKey(const ValueKey('featured-dots'))).top -
+          t.getRect(pager).bottom,
+      NamoSpace.md,
+    );
+  });
+
+  for (final dark in [false, true]) {
+    testWidgets('${dark ? 'dark' : 'light'} theme: the card has the thin '
+        'frame line round it, over the picture, in the card radius', (t) async {
+      await openReal(t, Routes.home, dark: dark);
+      final p = dark ? NamoPalette.dark : NamoPalette.light;
+      final frame = t.widget<DecoratedBox>(_drawnCard);
+      expect(frame.position, DecorationPosition.foreground);
+      final d = frame.decoration as BoxDecoration;
+      expect(d.border, Border.all(color: p.frame, width: 1));
+      expect(d.borderRadius, BorderRadius.circular(NamoRadius.lg));
+      // It is round the whole card, picture and words.
+      expect(
+        t.getRect(_drawnCard),
+        t.getRect(_inCard(find.byType(TopicPicture))),
       );
     });
   }

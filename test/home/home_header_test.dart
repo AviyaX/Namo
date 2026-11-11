@@ -6,6 +6,7 @@ import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/marks.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/home/card_art.dart';
+import 'package:buddhist_gatha/home/featured_carousel.dart';
 import 'package:buddhist_gatha/home/home_header.dart';
 import 'package:buddhist_gatha/home/today.dart';
 import 'package:buddhist_gatha/reader/screen_awake.dart';
@@ -23,6 +24,8 @@ import '../support/test_content.dart';
 const _tagline = 'Buddhist Prayers · Chanting';
 const _backdrop = ValueKey('home-backdrop');
 const _fade = ValueKey('home-backdrop-fade');
+const _sideFade = ValueKey('home-backdrop-side-fade');
+const _search = ValueKey('home-search');
 
 final _morning = clockProvider.overrideWithValue(
   () => DateTime(2026, 3, 4, 8),
@@ -114,6 +117,7 @@ Color _ground(
   _Picture picture,
   Rect box,
   LinearGradient fade,
+  LinearGradient? sideFade,
   Color background,
   (BoxShadow, Rect) scrim,
   double x,
@@ -122,13 +126,35 @@ Color _ground(
   final (shadow, around) = scrim;
   final cover = _shadowCover(shadow, around, x, y);
   final glow = shadow.color.withValues(alpha: shadow.color.a * cover);
-  return Color.alphaBlend(glow, _picture(picture, box, fade, background, x, y));
+  return Color.alphaBlend(
+    glow,
+    _picture(picture, box, fade, sideFade, background, x, y),
+  );
+}
+
+/// The colour of a gradient of any number of stops at [f] (0 at its begin,
+/// 1 at its end).
+Color _stopsAt(LinearGradient g, double f) {
+  final stops = g.stops!;
+  if (f <= stops.first) return g.colors.first;
+  for (var i = 1; i < stops.length; i++) {
+    if (f <= stops[i]) {
+      final span = stops[i] - stops[i - 1];
+      return Color.lerp(
+        g.colors[i - 1],
+        g.colors[i],
+        span == 0 ? 1 : (f - stops[i - 1]) / span,
+      )!;
+    }
+  }
+  return g.colors.last;
 }
 
 Color _picture(
   _Picture picture,
   Rect box,
   LinearGradient fade,
+  LinearGradient? sideFade,
   Color background,
   double x,
   double y,
@@ -140,18 +166,37 @@ Color _picture(
   );
   final left = box.right - picture.width * scale;
   final pic = picture.at((x - left) / scale, (y - box.top) / scale);
-  final over = _gradientAt(fade, (y - box.top) / box.height);
-  return Color.alphaBlend(over, pic);
+  var shown = Color.alphaBlend(
+    _gradientAt(fade, (y - box.top) / box.height),
+    pic,
+  );
+  if (sideFade != null) {
+    shown = Color.alphaBlend(
+      _stopsAt(sideFade, (x - box.left) / box.width),
+      shown,
+    );
+  }
+  return shown;
 }
 
-/// The lowest contrast between [text]'s colour and anything under its box.
+/// The side fade, when there is one.
+LinearGradient? _sideFadeOf(WidgetTester t) {
+  final f = find.byKey(_sideFade);
+  if (f.evaluate().isEmpty) return null;
+  return (t.widget<DecoratedBox>(f).decoration as BoxDecoration).gradient!
+      as LinearGradient;
+}
+
+/// The lowest contrast between [text]'s colour (or [color]) and anything
+/// under its box.
 double _worstContrast(
   WidgetTester t,
   Finder text,
   _Picture picture,
-  Color background,
-) {
-  final color = t.widget<Text>(text).style!.color!;
+  Color background, {
+  Color? color,
+}) {
+  color ??= t.widget<Text>(text).style!.color!;
   final rect = t.getRect(text);
   final box = t.getRect(find.byKey(_backdrop));
   final fade =
@@ -172,7 +217,7 @@ double _worstContrast(
     for (var x = rect.left + 0.5; x < rect.right; x += 1) {
       final c = _contrast(
         color,
-        _ground(picture, box, fade, background, scrim, x, y),
+        _ground(picture, box, fade, _sideFadeOf(t), background, scrim, x, y),
       );
       if (c < worst) worst = c;
     }
@@ -363,6 +408,23 @@ void main() {
               reason: s,
             );
           }
+          // The search icon, a control, at least 3 : 1 against anything
+          // under its glyph's box.
+          final icon = find.descendant(
+            of: find.byKey(_search),
+            matching: find.byType(Icon),
+          );
+          expect(
+            _worstContrast(
+              t,
+              icon,
+              picture,
+              p.background,
+              color: t.widget<Icon>(icon).color,
+            ),
+            greaterThanOrEqualTo(3.0),
+            reason: 'search icon',
+          );
         });
       }
     }
@@ -378,16 +440,66 @@ void main() {
       expect(box.height, closeTo(390 / 3 + 47, 0.01));
     });
 
-    testWidgets('on a wide screen it spans the Home column, 240 tall', (
-      t,
-    ) async {
+    testWidgets('on a wide screen it spans the Home column, ending above '
+        'the featured card', (t) async {
       await openReal(t, Routes.home, size: const Size(1280, 800));
       final box = t.getRect(find.byKey(_backdrop));
       final column = t.getRect(find.byKey(const ValueKey('home-column')));
       expect(box.top, 0);
       expect(box.left, column.left);
       expect(box.width, column.width);
-      expect(box.height, 240);
+      expect(box.height, HomeBackdrop.maxHeight);
+    });
+
+    // The picture has faded fully into the page before the featured card
+    // starts, so the card never cuts it in a hard line.
+    for (final (size, scale) in <(Size, double)>[
+      (const Size(320, 568), 1.0),
+      (const Size(360, 800), 1.0),
+      (const Size(390, 844), 1.0),
+      (const Size(600, 900), 1.0),
+      (const Size(1280, 800), 1.0),
+      (const Size(1280, 800), 2.0),
+    ]) {
+      testWidgets('${size.width.round()} wide, text $scale: the picture '
+          'ends above the featured card', (t) async {
+        await openReal(
+          t,
+          Routes.home,
+          size: size,
+          deviceTextScale: scale,
+        );
+        final box = t.getRect(find.byKey(_backdrop));
+        final card = t.getRect(find.byType(FeaturedCarousel));
+        expect(box.bottom, lessThanOrEqualTo(card.top + 0.01));
+      });
+    }
+
+    for (final dark in [false, true]) {
+      testWidgets('${dark ? 'dark' : 'light'}: on a wide screen the picture '
+          'fades into the page at both sides of the column too', (t) async {
+        await openReal(t, Routes.home, dark: dark, size: const Size(1280, 800));
+        final p = NamoPalette.of(t.element(find.byKey(_backdrop)));
+        final side = _sideFadeOf(t)!;
+        expect(side.begin, Alignment.centerLeft);
+        expect(side.end, Alignment.centerRight);
+        expect(side.colors.first, p.background);
+        expect(side.colors.last, p.background);
+        expect(side.stops!.first, 0);
+        expect(side.stops!.last, 1);
+        for (final c in side.colors.sublist(1, side.colors.length - 1)) {
+          expect(c.a, 0);
+        }
+        expect(
+          t.getRect(find.byKey(_sideFade)),
+          t.getRect(find.byKey(_backdrop)),
+        );
+      });
+    }
+
+    testWidgets('on a phone, edge to edge, there is no side fade', (t) async {
+      await openReal(t, Routes.home);
+      expect(find.byKey(_sideFade), findsNothing);
     });
 
     testWidgets('it scrolls away with the content', (t) async {
