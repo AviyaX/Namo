@@ -122,20 +122,10 @@ class ReaderBodyState extends State<ReaderBody> {
     if (range == null) return blockTop;
     final key = ValueKey('passage-${item.verseId}-${language.name}');
     RenderParagraph? paragraph;
-    void visit(Element e) {
-      if (paragraph != null) return;
-      final r = e.renderObject;
-      if (r is RenderParagraph) {
-        paragraph = r;
-        return;
-      }
-      e.visitChildren(visit);
-    }
-
     void find(Element e) {
       if (paragraph != null) return;
       if (e.widget.key == key) {
-        visit(e);
+        paragraph = _firstParagraph(e);
         return;
       }
       e.visitChildren(find);
@@ -548,6 +538,24 @@ class _VerseView extends StatelessWidget {
 @visibleForTesting
 final Map<String, int> blockBuildCounts = {};
 
+/// The first [RenderParagraph] at or under [root], depth first; null when
+/// there is none.
+RenderParagraph? _firstParagraph(Element root) {
+  RenderParagraph? found;
+  void visit(Element e) {
+    if (found != null) return;
+    final r = e.renderObject;
+    if (r is RenderParagraph) {
+      found = r;
+      return;
+    }
+    e.visitChildren(visit);
+  }
+
+  visit(root);
+  return found;
+}
+
 /// For each phrase of [item], where its text starts and ends (end
 /// exclusive) in the passage in [language], which is the phrase texts joined
 /// by single spaces (single line breaks in a unit kept line by line); null
@@ -647,21 +655,9 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
   /// The line of the Pali passage under [global]; -1 off the passage (on
   /// the meaning, or on the block's padding).
   int _lineAt(Offset global) {
-    RenderParagraph? paragraph;
-    void visit(Element e) {
-      if (paragraph != null) return;
-      final r = e.renderObject;
-      if (r is RenderParagraph) {
-        paragraph = r;
-        return;
-      }
-      e.visitChildren(visit);
-    }
-
     final context = _paliKey.currentContext;
     if (context == null) return -1;
-    (context as Element).visitChildren(visit);
-    final box = paragraph;
+    final box = _firstParagraph(context as Element);
     if (box == null || !box.hasSize || !box.attached) return -1;
     final local = box.globalToLocal(global);
     if (!(Offset.zero & box.size).contains(local)) return -1;
@@ -784,9 +780,7 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
           excludeFromSemantics: true,
           onTapUp: (d) => widget.onTapLine!(_lineAt(d.globalPosition)),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: NamoSizes.touchTarget,
-            ),
+            constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
             child: block,
           ),
         ),

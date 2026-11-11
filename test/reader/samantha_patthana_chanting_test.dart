@@ -120,7 +120,10 @@ Offset _lineCentre(WidgetTester t, _Chant c, String id, int line) {
   }
   final box = paragraph
       .getBoxesForSelection(
-        TextSelection(baseOffset: start, extentOffset: start + lines[line].length),
+        TextSelection(
+          baseOffset: start,
+          extentOffset: start + lines[line].length,
+        ),
       )
       .first;
   return paragraph.localToGlobal(box.toRect().center);
@@ -197,10 +200,7 @@ void main() {
     final c = await _open(t);
     final homage = c.time('u-homage');
     final span = homage.end - homage.start;
-    for (final at in [
-      homage.start + span ~/ 6,
-      homage.start + span * 2 ~/ 3,
-    ]) {
+    for (final at in [homage.start + span ~/ 6, homage.start + span * 2 ~/ 3]) {
       await c.advanceTo(t, at);
       await _settleMotion(t);
       expect(_isActive(c, 'u-homage'), isTrue, reason: 'at $at');
@@ -253,8 +253,10 @@ void main() {
   });
 
   testWidgets('a tap on the meaning seeks to the unit start', (t) async {
-    final c = await _open(t, settings: _only([ReadingLanguage.pali,
-        ReadingLanguage.sinhala]));
+    final c = await _open(
+      t,
+      settings: _only([ReadingLanguage.pali, ReadingLanguage.sinhala]),
+    );
     await c.advanceTo(t, c.middleOfLine('u-part-1', 1));
     await _settleMotion(t);
     final meaning = passage('u-part-1', 'sinhala');
@@ -263,6 +265,19 @@ void main() {
     await t.tapAt(t.getRect(meaning).topLeft + const Offset(8, 8));
     await t.pump();
     expect(c.player.seeks, [c.time('u-part-1').start]);
+  });
+
+  testWidgets('the semantic tap on a unit seeks to its start', (t) async {
+    final semantics = t.ensureSemantics();
+    final c = await _open(t);
+    await c.advanceTo(t, c.middleOfLine('u-part-1', 3));
+    await _settleMotion(t);
+    final node = t.getSemantics(c.block('u-part-1'));
+    expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
+    node.owner!.performAction(node.id, SemanticsAction.tap);
+    await t.pump();
+    expect(c.player.seeks, [c.time('u-part-1').start]);
+    semantics.dispose();
   });
 
   testWidgets('before play a tap does not seek', (t) async {
