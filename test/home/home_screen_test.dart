@@ -11,6 +11,7 @@ import 'package:buddhist_gatha/home/continue_card.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/home/gatha_card.dart';
 import 'package:buddhist_gatha/home/home_header.dart';
+import 'package:buddhist_gatha/home/quick_access.dart';
 import 'package:buddhist_gatha/home/today.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -160,6 +161,22 @@ Map<String, String> _flowOne(List<FlowRef> sections) => {
   ),
 };
 
+/// [testLibrary] with its topic under Buddha Wandanawa's id, so Home shows
+/// Quick Access for it.
+Library _testLibraryAsBuddha() {
+  final c = testLibrary().categories.single;
+  return Library(
+    categories: [
+      Category(
+        id: quickAccessTopicId,
+        title: c.title,
+        subtitle: c.subtitle,
+        readings: c.readings,
+      ),
+    ],
+  );
+}
+
 /// Flow one over [testLibrary]: sections 3 and 2 of r1.
 final _testFlow = _flowOne(const [
   FlowRef(readingId: 'r1', sectionId: 's03'),
@@ -286,7 +303,7 @@ void main() {
       await openReal(
         t,
         Routes.home,
-        library: testLibrary(),
+        library: _testLibraryAsBuddha(),
         storeExtras: _testFlow,
       );
       await _remember(t, 'flow-1', 'r1~s02', 0.5);
@@ -755,7 +772,7 @@ void main() {
       await openReal(
         t,
         Routes.home,
-        library: testLibrary(),
+        library: _testLibraryAsBuddha(),
         storeExtras: _testFlow,
         size: const Size(390, 3000),
       );

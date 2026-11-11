@@ -38,11 +38,12 @@ Section _section(String id, int number) => Section(
   verses: [Verse(id: '$id-v1', paliSi: 'pali', sinhala: 'sinhala')],
 );
 
-/// One topic whose one reading has s01, s02 and s04 but no s03.
+/// Buddha Wandanawa (by id) whose one reading has s01, s02 and s04 but no
+/// s03.
 Library _withoutS03() => Library(
   categories: [
     Category(
-      id: 'c1',
+      id: quickAccessTopicId,
       title: 'Category 1',
       subtitle: 'Subtitle 1',
       readings: [
@@ -259,23 +260,98 @@ void main() {
     _expectNoBrokenWords(t);
   });
 
-  for (final (width, scale) in [(360.0, 1.0), (390.0, 1.0), (390.0, 1.5)]) {
-    testWidgets('$width px wide at text $scale: no word broken, rows of equal '
-        'height, nothing overflows', (t) async {
+  /// How many cards share a row: four cards over 1, 2 or 4 rows.
+  int columnsOf(WidgetTester t) {
+    final tops = {
+      for (final e in quickAccess) t.getTopLeft(_card(e.sectionId)).dy,
+    };
+    return quickAccess.length ~/ tops.length;
+  }
+
+  // Measured with the bundled fonts: four abreast from a 390 px phone at
+  // text 1.0, two on 320 and 360 px, one at 200% on 320 px.
+  for (final (width, scale, columns) in [
+    (320.0, 1.0, 2),
+    (360.0, 1.0, 2),
+    (390.0, 1.0, 4),
+    (412.0, 1.0, 4),
+    (390.0, 1.5, 2),
+    (320.0, 2.0, 1),
+  ]) {
+    testWidgets('$width px wide at text $scale: $columns per row, no word '
+        'broken, rows of equal height, marks and words centred, nothing '
+        'overflows', (t) async {
       await openReal(
         t,
         Routes.home,
         size: Size(width, 3000),
         deviceTextScale: scale,
       );
+      expect(columnsOf(t), columns);
       final rects = [for (final e in quickAccess) t.getRect(_card(e.sectionId))];
       for (final a in rects) {
         for (final b in rects) {
-          if (a.top == b.top) expect(a.height, b.height);
+          if (a.top == b.top) {
+            expect(a.height, b.height);
+            expect(a.width, closeTo(b.width, 0.01));
+          }
         }
+      }
+      for (final e in quickAccess) {
+        final card = _card(e.sectionId);
+        final centre = t.getCenter(card).dx;
+        expect(
+          t.getCenter(find.descendant(of: card, matching: find.byType(NamoMarkIcon))).dx,
+          closeTo(centre, 0.5),
+        );
+        final label = t.widget<Text>(
+          find.descendant(of: card, matching: find.text(e.label)),
+        );
+        expect(label.textAlign, TextAlign.center);
       }
       _expectNoBrokenWords(t);
       expect(t.takeException(), isNull);
     });
   }
+
+  testWidgets('the topics in another order: Quick Access still opens Buddha '
+      "Wandanawa's sections", (t) async {
+    final lib = await realLibrary(t);
+    final reordered = Library(categories: lib.categories.reversed.toList());
+    expect(reordered.categories.first.id, isNot(quickAccessTopicId));
+    await openReal(t, Routes.home, library: reordered, size: const Size(390, 3000));
+    final reading = lib.category(quickAccessTopicId)!.readings.first;
+    for (final e in quickAccess) {
+      final heading =
+          reading.sections.singleWhere((s) => s.id == e.sectionId).heading;
+      expect(
+        find.descendant(of: _card(e.sectionId), matching: find.text(heading)),
+        findsOneWidget,
+        reason: e.label,
+      );
+    }
+    await _tapVisible(t, _card('s02'));
+    expect(
+      _location(t),
+      Routes.reader(reading.id, sectionId: 's02', from: ReaderFrom.home),
+    );
+  });
+
+  testWidgets('without Buddha Wandanawa: no Quick Access, whatever topic is '
+      'first', (t) async {
+    final lib = await realLibrary(t);
+    await openReal(
+      t,
+      Routes.home,
+      library: Library(
+        categories: [
+          for (final c in lib.categories)
+            if (c.id != quickAccessTopicId) c,
+        ],
+      ),
+      size: const Size(390, 3000),
+    );
+    expect(find.byKey(_block, skipOffstage: false), findsNothing);
+    expect(find.text('Quick Access', skipOffstage: false), findsNothing);
+  });
 }

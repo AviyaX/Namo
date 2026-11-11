@@ -9,6 +9,9 @@ import '../design/widgets/surface_card.dart';
 import '../router.dart';
 import 'card_row.dart';
 
+/// The topic whose first reading Quick Access opens: Buddha Wandanawa.
+const quickAccessTopicId = 'cat-namaskaraya';
+
 /// The Quick Access cards: an English label, the section of the topic's
 /// first reading it opens, and its mark.
 const quickAccess = [
@@ -37,9 +40,14 @@ List<(QuickAccessEntry, Section)> quickAccessCards(Category category) {
 /// margins).
 const _fourColumnsFrom = 328.0;
 
+/// Between cards side by side: narrow when four share the row, so that the
+/// labels fit four abreast on a 390 px phone; else as between rows.
+const _fourColumnGap = 3.0;
 const _gap = NamoSpace.sm;
+double _columnGap(int columns) => columns == 4 ? _fourColumnGap : _gap;
+
 const _padding = EdgeInsets.symmetric(
-  horizontal: NamoSpace.sm,
+  horizontal: NamoSpace.xs,
   vertical: NamoSpace.lg,
 );
 
@@ -48,9 +56,9 @@ const _padding = EdgeInsets.symmetric(
 /// all" that opens the topic in the Library. Builds nothing when no entry's
 /// section is there.
 ///
-/// Four columns when the row is at least 328 wide, else two; fewer when a
-/// word of a label or heading (at the device's text size) would not fit its
-/// card, so no word is ever broken. Each row of cards is as tall as its
+/// The most columns of four, two or one in which every word of a label or
+/// heading (at the device's text size) fits its card, so no word is ever
+/// broken; four only when the row is at least 328 wide. Each row of cards is as tall as its
 /// tallest.
 class QuickAccess extends StatelessWidget {
   const QuickAccess({super.key, required this.category});
@@ -84,7 +92,7 @@ class QuickAccess extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         for (var i = start; i < start + columns; i++) ...[
-                          if (i > start) const SizedBox(width: _gap),
+                          if (i > start) SizedBox(width: _columnGap(columns)),
                           Expanded(
                             child: i < cards.length
                                 ? _QuickCard(
@@ -123,7 +131,11 @@ int _columns(
 ) {
   final scaler = MediaQuery.textScalerOf(context);
   final p = NamoPalette.of(context);
-  final labelStyle = _labelStyle(p), headingStyle = _headingStyle(p);
+  // Measured as the Text widgets will lay them out: over the inherited
+  // style (the theme's letter spacing, say).
+  final base = DefaultTextStyle.of(context).style;
+  final labelStyle = base.merge(_labelStyle(p));
+  final headingStyle = base.merge(_headingStyle(p));
   var widest = 0.0;
   void measure(String text, TextStyle style) {
     for (final word in text.split(RegExp(r'\s+'))) {
@@ -143,12 +155,16 @@ int _columns(
     measure(section.heading, headingStyle);
   }
   bool fits(int n) =>
-      (width - (n - 1) * _gap) / n - _padding.horizontal >= widest.ceil();
+      (width - (n - 1) * _columnGap(n)) / n - _padding.horizontal >=
+      widest.ceil();
   if (width >= _fourColumnsFrom && fits(4)) return 4;
   return fits(2) ? 2 : 1;
 }
 
-TextStyle _labelStyle(NamoPalette p) => NamoType.cardTitle(p.text);
+/// The label without the theme's added letter spacing, so the longest
+/// ("Namaskara") fits four abreast on a 390 px phone.
+TextStyle _labelStyle(NamoPalette p) =>
+    NamoType.label(p.text).copyWith(letterSpacing: 0);
 TextStyle _headingStyle(NamoPalette p) => NamoType.caption(p.textSecondary);
 
 class _QuickCard extends StatelessWidget {

@@ -107,9 +107,10 @@ class _Blocks extends ConsumerWidget {
     // Only with a flow, so Home without flows keeps its gaps as they were.
     final flowsRow = flows.flows.isEmpty ? null : FlowsRow(library: library);
 
-    final quickAccess = first == null || quickAccessCards(first).isEmpty
+    final buddha = library.category(quickAccessTopicId);
+    final quickAccess = buddha == null || quickAccessCards(buddha).isEmpty
         ? null
-        : QuickAccess(category: first);
+        : QuickAccess(category: buddha);
     final collections = library.categories.isEmpty
         ? null
         : CollectionsRow(categories: library.categories);
