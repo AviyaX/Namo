@@ -102,6 +102,7 @@ class _Blocks extends ConsumerWidget {
         : GathaCard(
             pick: pick,
             selection: selection,
+            topicTitle: library.categoryOf(pick.reading.id)?.title ?? '',
             fontScale: fontScale,
             lineSpacing: lineSpacing,
           );

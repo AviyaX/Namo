@@ -501,7 +501,7 @@ void main() {
       final card = find.byType(GathaCard);
       expect(card, findsOneWidget);
       expect(
-        find.descendant(of: card, matching: find.text("Today's gatha")),
+        find.descendant(of: card, matching: find.text("TODAY'S GATHA")),
         findsOneWidget,
       );
       for (final (i, (_, text)) in texts.indexed) {
@@ -518,7 +518,12 @@ void main() {
         findsNothing,
       );
       expect(
-        find.descendant(of: card, matching: find.text(pick.section.heading)),
+        find.descendant(
+          of: card,
+          matching: find.text(
+            '${lib.categoryOf(pick.reading.id)!.title} · ${pick.section.heading}',
+          ),
+        ),
         findsOneWidget,
       );
     });
@@ -569,7 +574,7 @@ void main() {
     testWidgets('absent when no verse can be picked', (t) async {
       await openReal(t, Routes.home, library: testLibrary());
       expect(find.byType(GathaCard), findsNothing);
-      expect(find.text("Today's gatha"), findsNothing);
+      expect(find.text("TODAY'S GATHA"), findsNothing);
     });
   });
 
