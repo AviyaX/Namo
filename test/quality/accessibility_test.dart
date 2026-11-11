@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
+import 'package:buddhist_gatha/reader/position_controller.dart';
+import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
@@ -197,6 +201,50 @@ void main() {
           handle.dispose();
         },
       );
+    }
+  }
+
+  // Home with a remembered place: the featured page shows "NN% complete" on
+  // its own scrim (and, for a topic of several readings, the reading's name).
+  // Buddha Wandanawa is the hero picture page; the pirith adds the caption.
+  // The featured card is one merged semantics node, so the contrast
+  // guideline cannot see the words inside it; their contrast is pinned by
+  // pixel and scrim tests in test/home/featured_carousel_test.dart. This
+  // checks the rest of Home (tap targets, labels, other text) in that state.
+  for (final dark in [false, true]) {
+    final theme = dark ? 'dark' : 'light';
+    for (final readingId in [realReadingId, mangalaReadingId]) {
+      testWidgets('Home resuming $readingId ($theme) meets tap-target, label '
+          'and contrast guidelines', (t) async {
+        final handle = t.ensureSemantics();
+        final reading = (await realLibrary(t)).reading(readingId)!;
+        await openReal(
+          t,
+          Routes.home,
+          size: const Size(390, 1800),
+          dark: dark,
+          storeExtras: {
+            positionKey: jsonEncode(
+              PositionState(
+                byReading: {
+                  readingId: ReadingProgress(
+                    position: ReadingPosition(
+                      readingId: readingId,
+                      sectionId: reading.sections.first.id,
+                      fraction: 0,
+                    ),
+                    progress: 0.34,
+                  ),
+                },
+                lastReadingId: readingId,
+              ).toJson(),
+            ),
+          },
+        );
+        expect(find.text('34% complete'), findsOneWidget);
+        await expectGuidelines(t);
+        handle.dispose();
+      });
     }
   }
 

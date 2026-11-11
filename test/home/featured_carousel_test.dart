@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/progress_line.dart';
@@ -9,7 +11,7 @@ import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -54,7 +56,9 @@ SemanticsNode _node(WidgetTester t) =>
     t.getSemantics(find.bySemanticsLabel('Featured collections'));
 
 PageController _controller(WidgetTester t) => t
-    .widget<PageView>(find.descendant(of: _carousel, matching: find.byType(PageView)))
+    .widget<PageView>(
+      find.descendant(of: _carousel, matching: find.byType(PageView)),
+    )
     .controller!;
 
 /// Swipes the carousel one page to the left.
@@ -67,6 +71,70 @@ Future<void> _swipeNext(WidgetTester t) async {
   await t.pumpAndSettle();
 }
 
+/// Lets the real image decoder finish (it runs outside fake-async time).
+Future<void> _untilDecoded(WidgetTester t) async {
+  for (var i = 0; i < 100; i++) {
+    await t.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 20)),
+    );
+    await t.pump();
+    if (_inCard(find.byKey(const ValueKey('card-art-loading')))
+        .evaluate()
+        .isEmpty) {
+      return;
+    }
+  }
+  fail('the picture did not decode');
+}
+
+/// WCAG relative luminance.
+double _luminance(Color c) {
+  double channel(double v) =>
+      v <= 0.03928 ? v / 12.92 : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
+  return 0.2126 * channel(c.r) + 0.7152 * channel(c.g) + 0.0722 * channel(c.b);
+}
+
+double _contrast(Color a, Color b) {
+  final la = _luminance(a), lb = _luminance(b);
+  return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
+}
+
+/// The screen as drawn, one pixel per logical pixel.
+Future<(ByteData, int)> _screenshot(WidgetTester t) async {
+  final view = t.binding.renderViews.first;
+  final layer = view.debugLayer! as OffsetLayer;
+  return (await t.runAsync(() async {
+    final image = await layer.toImage(
+      view.paintBounds,
+      pixelRatio: 1 / t.view.devicePixelRatio,
+    );
+    final bytes = (await image.toByteData(format: ui.ImageByteFormat.rawRgba))!;
+    final width = image.width;
+    image.dispose();
+    return (bytes, width);
+  }))!;
+}
+
+/// The least contrast of [NamoPalette.onPicture] with any drawn pixel in
+/// [area] (in logical pixels).
+Future<double> _leastContrastIn(WidgetTester t, Rect area) async {
+  final (bytes, width) = await _screenshot(t);
+  var least = double.infinity;
+  for (var y = area.top.ceil(); y < area.bottom.floor(); y++) {
+    for (var x = area.left.ceil(); x < area.right.floor(); x++) {
+      final i = (y * width + x) * 4;
+      final pixel = Color.fromARGB(
+        255,
+        bytes.getUint8(i),
+        bytes.getUint8(i + 1),
+        bytes.getUint8(i + 2),
+      );
+      least = math.min(least, _contrast(NamoPalette.onPicture, pixel));
+    }
+  }
+  return least;
+}
+
 void main() {
   setUpAll(loadBundledFonts);
 
@@ -77,7 +145,10 @@ void main() {
     expect(_shownTopic(t), realCategoryId);
     expect(_inCard(find.text('Begin')), findsOneWidget);
     expect(_inCard(find.text('Continue')), findsNothing);
-    expect(find.descendant(of: _carousel, matching: find.byType(ProgressLine)), findsNothing);
+    expect(
+      find.descendant(of: _carousel, matching: find.byType(ProgressLine)),
+      findsNothing,
+    );
     expect(find.textContaining('% complete'), findsNothing);
     expect(_node(t).value, 'Page 1 of 3');
     // The overline, shown upper-cased.
@@ -148,7 +219,11 @@ void main() {
         positionKey: jsonEncode({
           'byReading': {
             'gone': {
-              'position': {'readingId': 'gone', 'sectionId': 's01', 'fraction': 0},
+              'position': {
+                'readingId': 'gone',
+                'sectionId': 's01',
+                'fraction': 0,
+              },
               'progress': 0.5,
             },
           },
@@ -159,7 +234,10 @@ void main() {
     expect(t.takeException(), isNull);
     expect(_shownTopic(t), realCategoryId);
     expect(_inCard(find.text('Begin')), findsOneWidget);
-    expect(find.descendant(of: _carousel, matching: find.byType(ProgressLine)), findsNothing);
+    expect(
+      find.descendant(of: _carousel, matching: find.byType(ProgressLine)),
+      findsNothing,
+    );
     expect(find.textContaining('% complete'), findsNothing);
   });
 
@@ -172,14 +250,19 @@ void main() {
     final dark = Theme.of(t.element(_carousel)).brightness == Brightness.dark;
     final p = dark ? NamoPalette.dark : NamoPalette.light;
     List<Color?> dotColours() => [
-      for (final e in find
-          .descendant(of: dots, matching: find.byType(DecoratedBox))
-          .evaluate())
+      for (final e
+          in find
+              .descendant(of: dots, matching: find.byType(DecoratedBox))
+              .evaluate())
         ((e.widget as DecoratedBox).decoration as BoxDecoration).color,
     ];
     expect(dotColours(), [p.gold, p.border, p.border]);
-    expect(t.getSize(find.descendant(of: dots, matching: find.byType(DecoratedBox)).first),
-        const Size(6, 6));
+    expect(
+      t.getSize(
+        find.descendant(of: dots, matching: find.byType(DecoratedBox)).first,
+      ),
+      const Size(6, 6),
+    );
 
     await _swipeNext(t);
     expect(_node(t).value, 'Page 2 of 3');
@@ -207,7 +290,10 @@ void main() {
     await openReal(t, Routes.home);
     final node = _node(t);
     expect(node.getSemanticsData().hasAction(SemanticsAction.increase), isTrue);
-    expect(node.getSemanticsData().hasAction(SemanticsAction.decrease), isFalse);
+    expect(
+      node.getSemanticsData().hasAction(SemanticsAction.decrease),
+      isFalse,
+    );
     node.owner!.performAction(node.id, SemanticsAction.increase);
     await t.pump();
     expect(_controller(t).page, 1, reason: 'there in one frame');
@@ -268,11 +354,81 @@ void main() {
     expect(focusedOn(realCategoryId), isTrue);
   });
 
+  testWidgets('wide, 1280 x 800, with a several-reading resume (the extra '
+      'caption): every page stays width / 3, nothing overflows', (t) async {
+    await openReal(
+      t,
+      Routes.home,
+      size: const Size(1280, 800),
+      storeExtras: await _remember(t, mangalaReadingId, 0.5),
+    );
+    expect(t.takeException(), isNull);
+    final reading = (await realLibrary(t)).reading(mangalaReadingId)!;
+    expect(_shownTopic(t), pirithCategoryId);
+    expect(_inCard(find.text(reading.title)), findsOneWidget);
+    expect(_inCard(find.text('50% complete')), findsOneWidget);
+    for (var page = 0; page < 3; page++) {
+      _controller(t).jumpToPage(page);
+      await t.pumpAndSettle();
+      expect(t.takeException(), isNull, reason: 'page $page');
+      final card = t.getRect(_card);
+      expect(card.width / card.height, closeTo(3, 0.01), reason: 'page $page');
+      for (final e in _inCard(find.byType(Text)).evaluate()) {
+        final r = t.getRect(find.byElementPredicate((x) => x == e));
+        expect(
+          r.top >= card.top - 0.5 && r.bottom <= card.bottom + 0.5,
+          isTrue,
+          reason: 'page $page: "${(e.widget as Text).data}" at $r, card $card',
+        );
+      }
+    }
+  });
+
+  for (final dark in [false, true]) {
+    final theme = dark ? 'dark' : 'light';
+    for (final readingId in [realReadingId, mangalaReadingId]) {
+      testWidgets('$theme theme, resuming $readingId: the backdrop of '
+          '"NN% complete", over the decoded picture, gives its text at least '
+          '4.5 : 1', (t) async {
+        await openReal(
+          t,
+          Routes.home,
+          dark: dark,
+          storeExtras: await _remember(t, readingId, 0.34),
+        );
+        await _untilDecoded(t);
+        expect(
+          _inCard(find.byKey(const ValueKey('card-art-picture'))),
+          findsOneWidget,
+        );
+        final percent = _inCard(find.text('34% complete'));
+        expect(t.widget<Text>(percent).style!.color, NamoPalette.onPicture);
+        final backdrop = t.getRect(
+          _inCard(find.byKey(const ValueKey('featured-progress'))),
+        );
+        final text = t.getRect(percent);
+        // The backdrop between its top edge and the words, clear of its
+        // rounded corners: what the text sits on, without the glyphs.
+        final ground = Rect.fromLTRB(
+          backdrop.left + NamoRadius.sm,
+          backdrop.top + 1,
+          backdrop.right - NamoRadius.sm,
+          text.top - 1,
+        );
+        expect(ground.height, greaterThanOrEqualTo(4));
+        expect(await _leastContrastIn(t, ground), greaterThanOrEqualTo(4.5));
+      });
+    }
+  }
+
   testWidgets('one topic: no dots and no paging', (t) async {
     await openReal(t, Routes.home, library: await buddhaOnlyLibrary(t));
     expect(_card, findsOneWidget);
     expect(find.byKey(const ValueKey('featured-dots')), findsNothing);
-    expect(find.descendant(of: _carousel, matching: find.byType(PageView)), findsNothing);
+    expect(
+      find.descendant(of: _carousel, matching: find.byType(PageView)),
+      findsNothing,
+    );
   });
 
   for (final dark in [false, true]) {
@@ -281,7 +437,9 @@ void main() {
     testWidgets('$theme theme: Buddha Wandanawa shows hero_$theme.jpg, statue '
         'to the right', (t) async {
       await openReal(t, Routes.home, dark: dark);
-      final image = t.widget<Image>(_inCard(find.byKey(const ValueKey('card-art-picture'))));
+      final image = t.widget<Image>(
+        _inCard(find.byKey(const ValueKey('card-art-picture'))),
+      );
       expect(
         ((image.image as ResizeImage).imageProvider as AssetImage).assetName,
         'assets/pictures/hero_$theme.jpg',
@@ -289,51 +447,81 @@ void main() {
       expect(image.alignment, Alignment.centerRight);
     });
 
-    testWidgets('$theme theme: every word sits where the scrim is at least '
-        'pictureFadeAtText strong', (t) async {
-      await openReal(
+    for (final readingId in [realReadingId, mangalaReadingId]) {
+      testWidgets('$theme theme, resuming $readingId: every word (the caption '
+          'too) sits where the scrim is at least pictureFadeAtText strong', (
         t,
-        Routes.home,
-        dark: dark,
-        storeExtras: await _remember(t, realReadingId, 0.34),
-      );
-      final words = t.renderObject<RenderPictureWords>(_inCard(find.byType(PictureWords)));
-      expect(words.side, TextSide.left);
-      final scrim = t.getRect(_inCard(find.byType(PictureWords)));
-      // The left-side scrim: pictureFadeAtBottom at the left edge, falling
-      // evenly to pictureFadeAtText at the middle and to nothing at the right.
-      double strengthAt(double x) {
-        final f = ((x - scrim.left) / scrim.width).clamp(0.0, 1.0);
-        return f <= 0.5
-            ? pictureFadeAtBottom + (pictureFadeAtText - pictureFadeAtBottom) * f / 0.5
-            : pictureFadeAtText * (1 - f) / 0.5;
-      }
-
-      final texts = _inCard(find.byType(Text)).evaluate().toList();
-      final percent = _inCard(find.text('34% complete'));
-      expect(percent, findsOneWidget);
-      var checked = 0;
-      for (final e in texts) {
-        final text = find.byElementPredicate((x) => x == e);
-        if (find.descendant(of: _inCard(find.byKey(const ValueKey('featured-progress'))), matching: text).evaluate().isNotEmpty) {
-          continue;
+      ) async {
+        await openReal(
+          t,
+          Routes.home,
+          dark: dark,
+          storeExtras: await _remember(t, readingId, 0.34),
+        );
+        if (readingId == mangalaReadingId) {
+          // The several-reading page names the reading in a caption line.
+          final caption = _inCard(
+            find.text((await realLibrary(t)).reading(readingId)!.title),
+          );
+          expect(caption, findsOneWidget);
+          expect(t.widget<Text>(caption).style!.color, NamoPalette.onPicture);
         }
-        final rect = t.getRect(text);
-        expect(strengthAt(rect.right), greaterThanOrEqualTo(pictureFadeAtText - 1e-9),
-            reason: (e.widget as Text).data);
-        checked++;
-      }
-      expect(checked, greaterThanOrEqualTo(4));
+        final words = t.renderObject<RenderPictureWords>(
+          _inCard(find.byType(PictureWords)),
+        );
+        expect(words.side, TextSide.left);
+        final scrim = t.getRect(_inCard(find.byType(PictureWords)));
+        // The left-side scrim: pictureFadeAtBottom at the left edge, falling
+        // evenly to pictureFadeAtText at the middle and to nothing at the right.
+        double strengthAt(double x) {
+          final f = ((x - scrim.left) / scrim.width).clamp(0.0, 1.0);
+          return f <= 0.5
+              ? pictureFadeAtBottom +
+                    (pictureFadeAtText - pictureFadeAtBottom) * f / 0.5
+              : pictureFadeAtText * (1 - f) / 0.5;
+        }
 
-      // The percent, over the picture's bright side, has a backdrop of its own.
-      final backdrop = t.widget<DecoratedBox>(
-        _inCard(find.byKey(const ValueKey('featured-progress'))),
-      );
-      final colour = (backdrop.decoration as BoxDecoration).color!;
-      expect(colour.toARGB32() & 0x00FFFFFF, NamoPalette.pictureScrim.toARGB32() & 0x00FFFFFF);
-      expect(colour.a, greaterThanOrEqualTo(pictureFadeAtText - 1e-3));
-      expect(t.widget<Text>(percent).style!.color, NamoPalette.onPicture);
-    });
+        final texts = _inCard(find.byType(Text)).evaluate().toList();
+        final percent = _inCard(find.text('34% complete'));
+        expect(percent, findsOneWidget);
+        var checked = 0;
+        for (final e in texts) {
+          final text = find.byElementPredicate((x) => x == e);
+          if (find
+              .descendant(
+                of: _inCard(find.byKey(const ValueKey('featured-progress'))),
+                matching: text,
+              )
+              .evaluate()
+              .isNotEmpty) {
+            continue;
+          }
+          final rect = t.getRect(text);
+          expect(
+            strengthAt(rect.right),
+            greaterThanOrEqualTo(pictureFadeAtText - 1e-9),
+            reason: (e.widget as Text).data,
+          );
+          checked++;
+        }
+        expect(
+          checked,
+          greaterThanOrEqualTo(readingId == mangalaReadingId ? 5 : 4),
+        );
+
+        // The percent, over the picture's bright side, has a backdrop of its own.
+        final backdrop = t.widget<DecoratedBox>(
+          _inCard(find.byKey(const ValueKey('featured-progress'))),
+        );
+        final colour = (backdrop.decoration as BoxDecoration).color!;
+        expect(
+          colour.toARGB32() & 0x00FFFFFF,
+          NamoPalette.pictureScrim.toARGB32() & 0x00FFFFFF,
+        );
+        expect(colour.a, greaterThanOrEqualTo(pictureFadeAtText - 1e-3));
+        expect(t.widget<Text>(percent).style!.color, NamoPalette.onPicture);
+      });
+    }
 
     testWidgets('$theme theme: 320 x 640 at 200% text, every page whole: no '
         'overflow, every word inside its card', (t) async {
@@ -348,7 +536,10 @@ void main() {
         storeExtras: store,
       );
       expect(t.takeException(), isNull);
-      final pager = find.descendant(of: _carousel, matching: find.byType(PageView));
+      final pager = find.descendant(
+        of: _carousel,
+        matching: find.byType(PageView),
+      );
       _controller(t).jumpToPage(0);
       await t.pumpAndSettle();
       for (var page = 0; page < 3; page++) {
@@ -367,7 +558,8 @@ void main() {
                 r.top >= card.top - 0.5 &&
                 r.bottom <= card.bottom + 0.5,
             isTrue,
-            reason: 'page $page: "${(e.widget as Text).data}" at $r, card $card',
+            reason:
+                'page $page: "${(e.widget as Text).data}" at $r, card $card',
           );
         }
       }
