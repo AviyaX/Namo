@@ -143,10 +143,14 @@ void main() {
 
   test('every registered picture is a bundled asset listed in pubspec.yaml', () async {
     expect(cardPictures['cat-namaskaraya'], 'assets/pictures/buddha_wandanawa.jpg');
-    expect(widePictures['cat-namaskaraya'], 'assets/pictures/home_banner.jpg');
+    expect(heroPictures['cat-namaskaraya']?.dark, 'assets/pictures/hero_dark.jpg');
+    expect(heroPictures['cat-namaskaraya']?.light, 'assets/pictures/hero_light.jpg');
     expect(featuredOverlines['cat-namaskaraya'], 'Buddha Vandana');
     final pubspec = File('pubspec.yaml').readAsStringSync();
-    for (final path in [...cardPictures.values, ...widePictures.values]) {
+    for (final path in [
+      ...cardPictures.values,
+      for (final p in heroPictures.values) ...[p.dark, p.light],
+    ]) {
       expect(pubspec, contains('- $path'));
       final data = await rootBundle.load(path);
       expect(data.lengthInBytes, greaterThan(0), reason: path);
@@ -170,7 +174,7 @@ void main() {
     );
     expect(
       find.bySemanticsLabel(
-        RegExp('buddha_wandanawa|home_banner|jpg|picture', caseSensitive: false),
+        RegExp('buddha_wandanawa|hero_dark|hero_light|jpg|picture', caseSensitive: false),
       ),
       findsNothing,
     );

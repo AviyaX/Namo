@@ -100,7 +100,7 @@ class FeaturedCard extends ConsumerWidget {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: TopicPicture(categoryId: category.id, wide: wide),
+                    child: TopicPicture(categoryId: category.id, hero: wide),
                   ),
                   PictureWords(
                     minHeight: minHeight,

@@ -16,11 +16,21 @@ const Map<String, String> cardPictures = {
   'cat-samantha-patthana': 'assets/pictures/samantha_patthana.jpg',
 };
 
-/// Category id -> the wide (3 : 1) picture used for the Home banner on wide
-/// screens. Registered, listed and credited like [cardPictures].
-const Map<String, String> widePictures = {
-  'cat-namaskaraya': 'assets/pictures/home_banner.jpg',
+/// Category id -> the hero picture of its featured card, one per theme.
+/// Registered, listed and credited like [cardPictures].
+const Map<String, ({String dark, String light})> heroPictures = {
+  'cat-namaskaraya': (
+    dark: 'assets/pictures/hero_dark.jpg',
+    light: 'assets/pictures/hero_light.jpg',
+  ),
 };
+
+/// The picture behind the Home header, one per theme. Registered, listed and
+/// credited like [cardPictures].
+const ({String dark, String light}) headerPictures = (
+  dark: 'assets/pictures/header_dark.jpg',
+  light: 'assets/pictures/header_light.jpg',
+);
 
 /// Category id -> the small label above the title on the featured card.
 const Map<String, String> featuredOverlines = {
@@ -80,36 +90,42 @@ int pictureDecodeWidth(double shownWidth, double devicePixelRatio) {
 /// wide a picture must be decoded to cover a box.
 const double _cardPictureAspect = 16 / 9;
 
-/// A topic's bundled picture, filling the space it is given: the wide one
-/// when [wide] and the topic has one. A topic with no picture (or a picture
+/// A topic's bundled picture, filling the space it is given: the hero one
+/// when [hero] and the topic has one (by the theme's brightness). A topic with no picture (or a picture
 /// that does not load) gets the drawn lotus panel. The picture is
 /// decoration, so it is left out of the semantics tree.
 class TopicPicture extends StatelessWidget {
   const TopicPicture({
     super.key,
     required this.categoryId,
-    this.wide = false,
+    this.hero = false,
     this.fit = BoxFit.cover,
     this.alignment = Alignment.center,
     this.pictures,
   });
 
   final String categoryId;
-  final bool wide;
+  final bool hero;
   final BoxFit fit;
   final Alignment alignment;
 
-  /// Replaces [cardPictures] and [widePictures]; for tests.
+  /// Replaces [cardPictures] and [heroPictures]; for tests.
   final Map<String, String>? pictures;
 
-  String? get _asset {
+  String? _asset(BuildContext context) {
     if (pictures != null) return pictures![categoryId];
-    return (wide ? widePictures[categoryId] : null) ?? cardPictures[categoryId];
+    final heroPair = hero ? heroPictures[categoryId] : null;
+    if (heroPair != null) {
+      return Theme.of(context).brightness == Brightness.dark
+          ? heroPair.dark
+          : heroPair.light;
+    }
+    return cardPictures[categoryId];
   }
 
   @override
   Widget build(BuildContext context) {
-    final asset = _asset;
+    final asset = _asset(context);
     return ExcludeSemantics(
       child: asset == null
           ? const _LotusPanel()

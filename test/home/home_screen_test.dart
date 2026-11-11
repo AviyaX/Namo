@@ -430,7 +430,7 @@ void main() {
       expect(size.height, 350);
     });
 
-    testWidgets('at 1280 x 800 the featured card uses the wide banner, 3 : 1', (
+    testWidgets('at 1280 x 800 the featured card uses the hero picture, 3 : 1', (
       t,
     ) async {
       await openReal(t, Routes.home, size: const Size(1280, 800));
@@ -440,9 +440,12 @@ void main() {
           matching: find.byKey(const ValueKey('card-art-picture')),
         ),
       );
+      final dark =
+          Theme.of(t.element(find.byType(FeaturedCard))).brightness ==
+          Brightness.dark;
       expect(
         ((image.image as ResizeImage).imageProvider as AssetImage).assetName,
-        'assets/pictures/home_banner.jpg',
+        dark ? 'assets/pictures/hero_dark.jpg' : 'assets/pictures/hero_light.jpg',
       );
       final size = t.getSize(find.byType(FeaturedCard));
       expect(size.width / size.height, closeTo(3, 0.01));

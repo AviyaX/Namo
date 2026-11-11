@@ -102,7 +102,10 @@ flutter:
     - assets/branding/
     - assets/content/
     - assets/pictures/buddha_wandanawa.jpg
-    - assets/pictures/home_banner.jpg
+    - assets/pictures/hero_dark.jpg
+    - assets/pictures/hero_light.jpg
+    - assets/pictures/header_dark.jpg
+    - assets/pictures/header_light.jpg
     - assets/pictures/pirith.jpg
     - assets/audio/pirith/
     - assets/pictures/samantha_patthana.jpg
