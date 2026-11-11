@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
@@ -187,6 +188,52 @@ void main() {
       await _go(t, 'Settings');
       expect(_screen('Settings'), findsOneWidget);
       expect(find.byKey(const ValueKey('screen-sources')), findsNothing);
+    });
+  });
+
+  group('active tab pill', () {
+    BoxDecoration fillOf(WidgetTester t, String l) => t
+        .widget<AnimatedContainer>(find.descendant(
+            of: _nav(l), matching: find.byType(AnimatedContainer)).first)
+        .decoration! as BoxDecoration;
+    Color labelColor(WidgetTester t, String l) => t
+        .widget<Text>(find.descendant(of: _nav(l), matching: find.text(l)))
+        .style!
+        .color!;
+
+    for (final dark in [false, true]) {
+      testWidgets('sage fill, onSage icon and label; inactive unfilled (${dark ? 'dark' : 'light'})',
+          (t) async {
+        final p = dark ? NamoPalette.dark : NamoPalette.light;
+        await openReal(t, Routes.home, dark: dark);
+        final active = fillOf(t, 'Home');
+        expect(active.color, p.sage);
+        expect(active.borderRadius, BorderRadius.circular(999));
+        expect(labelColor(t, 'Home'), p.onSage);
+        expect(
+          t.widget<Icon>(find.descendant(of: _nav('Home'), matching: find.byType(Icon))).color,
+          p.onSage,
+        );
+        for (final l in _labels.skip(1)) {
+          expect(fillOf(t, l).color!.a, 0, reason: l);
+          expect(labelColor(t, l), p.textSecondary, reason: l);
+        }
+      });
+    }
+
+    testWidgets('the bar is a full pill', (t) async {
+      await openReal(t, Routes.home, dark: false);
+      final d = t.widget<Container>(
+              find.descendant(of: _bar, matching: find.byType(Container)).first)
+          .decoration! as BoxDecoration;
+      expect(d.borderRadius, BorderRadius.circular(999));
+    });
+
+    testWidgets('in the rail the active tab has the small radius', (t) async {
+      await openReal(t, Routes.home, size: const Size(1280, 800), dark: false);
+      final d = fillOf(t, 'Home');
+      expect(d.color, NamoPalette.light.sage);
+      expect(d.borderRadius, BorderRadius.circular(NamoRadius.sm));
     });
   });
 

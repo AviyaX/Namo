@@ -133,6 +133,7 @@ class _Bar extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: NamoSizes.navBarHeight),
         child: FloatingBar(
+          pill: true,
           padding: const EdgeInsets.all(_barPadding),
           child: IntrinsicHeight(
             child: Row(
@@ -143,6 +144,7 @@ class _Bar extends StatelessWidget {
                     child: _Destination(
                       tab: _tabs[i],
                       active: i == current,
+                      pill: true,
                       scaler: scaler,
                       onTap: () => onSelect(i),
                     ),
@@ -205,20 +207,24 @@ class _Destination extends StatelessWidget {
   const _Destination({
     required this.tab,
     required this.active,
+    this.pill = false,
     required this.scaler,
     required this.onTap,
   });
 
   final _Tab tab;
   final bool active;
+
+  /// Fully rounded (in the bottom bar) rather than the rail's small radius.
+  final bool pill;
   final TextScaler scaler;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    final color = active ? p.sage : p.textSecondary;
-    const radius = BorderRadius.all(Radius.circular(NamoRadius.sm));
+    final color = active ? p.onSage : p.textSecondary;
+    final radius = BorderRadius.circular(pill ? 999 : NamoRadius.sm);
     return Pressable(
       key: ValueKey('nav-${tab.label.toLowerCase()}'),
       onTap: onTap,
@@ -233,7 +239,7 @@ class _Destination extends StatelessWidget {
           curve: NamoMotion.curve,
           padding: const EdgeInsets.all(_pillPadding),
           decoration: BoxDecoration(
-            color: active ? p.sageTint : p.sageTint.withAlpha(0),
+            color: active ? p.sage : p.sage.withAlpha(0),
             borderRadius: radius,
           ),
           child: Column(
