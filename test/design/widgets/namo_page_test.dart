@@ -86,6 +86,68 @@ void main() {
       expect(t.getBottomLeft(find.byKey(last)).dy, lessThanOrEqualTo(844 - 100));
     });
 
+    group('backdrop', () {
+      const backdrop = ValueKey('backdrop');
+      Widget page({double maxWidth = 680, ScrollController? controller}) =>
+          NamoPage(
+            columnKey: _column,
+            maxWidth: maxWidth,
+            controller: controller,
+            backdrop: Container(key: backdrop, height: 150, color: Colors.red),
+            children: [
+              const SizedBox(height: 2000, child: Text('content')),
+            ],
+          );
+
+      testWidgets('on a phone: from the top of the screen, edge to edge, '
+          'behind the content', (t) async {
+        await pumpThemed(
+          t,
+          SizedBox(width: 390, height: 844, child: page()),
+          padding: const EdgeInsets.only(top: 40),
+        );
+        expect(t.getRect(find.byKey(backdrop)), const Rect.fromLTWH(0, 0, 390, 150));
+        // The column still starts below the inset.
+        expect(t.getTopLeft(find.byKey(_column)).dy, 64);
+        // Painted first: the content is on top.
+        final stack = t.widget<Stack>(
+          find.ancestor(of: find.byKey(backdrop), matching: find.byType(Stack)).first,
+        );
+        expect(
+          find.descendant(
+            of: find.byWidget(stack.children.first),
+            matching: find.byKey(backdrop),
+          ),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets("on a wide screen: the column's width", (t) async {
+        await pumpThemed(
+          t,
+          SizedBox(width: 1280, height: 800, child: page(maxWidth: 1040)),
+          size: const Size(1280, 800),
+        );
+        final column = t.getRect(find.byKey(_column));
+        final box = t.getRect(find.byKey(backdrop));
+        expect(box.left, column.left);
+        expect(box.width, column.width);
+        expect(box.top, 0);
+      });
+
+      testWidgets('scrolls away with the content', (t) async {
+        final controller = ScrollController();
+        addTearDown(controller.dispose);
+        await pumpThemed(
+          t,
+          SizedBox(width: 390, height: 844, child: page(controller: controller)),
+        );
+        controller.jumpTo(120);
+        await t.pump();
+        expect(t.getRect(find.byKey(backdrop)).top, -120);
+      });
+    });
+
     testWidgets('has no app bar and uses the controller', (t) async {
       final controller = ScrollController();
       addTearDown(controller.dispose);

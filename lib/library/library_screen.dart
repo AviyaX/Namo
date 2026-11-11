@@ -27,16 +27,19 @@ import 'search.dart';
 /// same page. Search results take the place of both.
 ///
 /// [openCategory] or [openReading] (from the address) opens that category
-/// once; an id that matches nothing is ignored.
+/// once; an id that matches nothing is ignored. [focusSearch] (from the
+/// address) puts the focus in the search box once.
 class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({
     super.key = const ValueKey('screen-library'),
     this.openCategory,
     this.openReading,
+    this.focusSearch = false,
   });
 
   final String? openCategory;
   final String? openReading;
+  final bool focusSearch;
 
   @override
   ConsumerState<LibraryScreen> createState() => _LibraryScreenState();
@@ -48,6 +51,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   String? _handled;
 
   final _query = TextEditingController();
+  final _searchFocus = FocusNode();
 
   /// The topic chosen with the chips; null is "All". Not stored.
   String? _chip;
@@ -57,9 +61,32 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   final _headers = <String, GlobalKey>{};
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.focusSearch) _focusSearchSoon();
+  }
+
+  @override
+  void didUpdateWidget(LibraryScreen old) {
+    super.didUpdateWidget(old);
+    if (widget.focusSearch && !old.focusSearch) _focusSearchSoon();
+  }
+
+  @override
   void dispose() {
     _query.dispose();
+    _searchFocus.dispose();
     super.dispose();
+  }
+
+  /// After this frame, puts the focus in the search box and clears the
+  /// request from the address, so that asking again is a new request.
+  void _focusSearchSoon() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _searchFocus.requestFocus();
+      context.replace(Routes.library);
+    });
   }
 
   /// The category the address asks for, if it names one that exists.
@@ -154,6 +181,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 SearchField(
                   key: const ValueKey('library-search'),
                   controller: _query,
+                  focusNode: _searchFocus,
                   label: 'Search the library',
                   onChanged: (_) => setState(() {}),
                 ),

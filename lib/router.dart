@@ -20,6 +20,9 @@ abstract final class Routes {
   static const settings = '/settings';
   static const sources = '/settings/sources';
 
+  /// The Library with its search box focused.
+  static const librarySearch = '/library?focus=search';
+
   /// The Library with this category's sections showing.
   static String category(String id) =>
       '/library?open=${Uri.encodeQueryComponent(id)}';
@@ -82,6 +85,7 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               builder: (context, state) => LibraryScreen(
                 openCategory: state.uri.queryParameters['open'],
                 openReading: state.uri.queryParameters['reading'],
+                focusSearch: state.uri.queryParameters['focus'] == 'search',
               ),
               routes: [
                 // Saved links from before the in-place list.

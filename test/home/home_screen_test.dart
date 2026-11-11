@@ -8,6 +8,7 @@ import 'package:buddhist_gatha/flows/flows.dart';
 import 'package:buddhist_gatha/home/continue_card.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/home/gatha_card.dart';
+import 'package:buddhist_gatha/home/home_header.dart';
 import 'package:buddhist_gatha/home/section_strip.dart';
 import 'package:buddhist_gatha/home/today.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
@@ -163,6 +164,20 @@ void main() {
       expect(find.text('Good morning'), findsOneWidget);
       // No settings button on Home.
       expect(find.byTooltip('Settings'), findsNothing);
+    });
+
+    testWidgets('the header heads the column, the picture behind it', (
+      t,
+    ) async {
+      await openReal(t, Routes.home);
+      final column = t.getRect(find.byKey(const ValueKey('home-column')));
+      final header = t.getRect(find.byType(HomeHeader));
+      expect(header.top, column.top);
+      expect(header.width, column.width);
+      final backdrop = t.getRect(find.byKey(const ValueKey('home-backdrop')));
+      expect(backdrop.top, 0);
+      expect(backdrop.bottom, greaterThan(header.top));
+      expect(find.byKey(const ValueKey('home-search')), findsOneWidget);
     });
 
     testWidgets('"Good evening" at 21:00', (t) async {

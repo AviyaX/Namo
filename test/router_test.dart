@@ -2,6 +2,7 @@ import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/widgets/empty_state.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/design/widgets/not_found.dart';
+import 'package:buddhist_gatha/library/library_screen.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +18,28 @@ final _loaded = [
 void main() {
   test('the flow editor\'s address', () {
     expect(Routes.flowEditor('flow-3'), '/library/flow/flow-3');
+  });
+
+  test("the Library's search address", () {
+    expect(Routes.librarySearch, '/library?focus=search');
+  });
+
+  testWidgets('focus=search asks the Library to focus its search; other '
+      'addresses do not', (t) async {
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: Routes.librarySearch,
+      settle: false,
+    );
+    expect(t.widget<LibraryScreen>(find.byType(LibraryScreen)).focusSearch, isTrue);
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: '/library?focus=other',
+      settle: false,
+    );
+    expect(t.widget<LibraryScreen>(find.byType(LibraryScreen)).focusSearch, isFalse);
   });
 
   testWidgets('four tabs switch screens', (t) async {

@@ -28,6 +28,26 @@ GoRouter _router(WidgetTester t) =>
     ProviderScope.containerOf(t.element(find.byKey(_search)))
         .read(routerProvider);
 
+bool _focused(WidgetTester t) => t
+    .widget<EditableText>(
+      find.descendant(of: find.byKey(_search), matching: find.byType(EditableText)),
+    )
+    .focusNode
+    .hasFocus;
+
+String _location(GoRouter router) =>
+    router.routeInformationProvider.value.uri.toString();
+
+Future<void> _tapTab(WidgetTester t, String label) async {
+  await t.tap(
+    find.descendant(
+      of: find.byKey(ValueKey('nav-${label.toLowerCase()}')),
+      matching: find.text(label),
+    ),
+  );
+  await t.pumpAndSettle();
+}
+
 void main() {
   setUpAll(loadBundledFonts);
 
@@ -296,6 +316,79 @@ void main() {
         );
       });
     }
+  });
+
+  group('focus from Home', () {
+    testWidgets("Home's search button lands on the search address and the "
+        'search box has focus', (t) async {
+      await openReal(t, Routes.home);
+      final router = ProviderScope.containerOf(
+        t.element(find.byType(Scaffold).first),
+      ).read(routerProvider);
+      final seen = <String>[];
+      void record() => seen.add(_location(router));
+      router.routeInformationProvider.addListener(record);
+      addTearDown(() => router.routeInformationProvider.removeListener(record));
+      await t.tap(find.byKey(const ValueKey('home-search')));
+      await t.pumpAndSettle();
+      expect(Routes.librarySearch, '/library?focus=search');
+      expect(seen.first, Routes.librarySearch);
+      expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+      expect(_focused(t), isTrue);
+      // The request is cleared from the address once handled.
+      expect(_location(router), Routes.library);
+    });
+
+    testWidgets('the search address opened directly focuses the box', (
+      t,
+    ) async {
+      await openReal(t, Routes.librarySearch);
+      expect(_focused(t), isTrue);
+      expect(_location(_router(t)), Routes.library);
+    });
+
+    testWidgets('the plain Library address does not focus the box', (t) async {
+      await openReal(t, Routes.library);
+      expect(_focused(t), isFalse);
+      await _tapTab(t, 'Home');
+      await _tapTab(t, 'Library');
+      expect(_focused(t), isFalse);
+    });
+
+    testWidgets('asking again from Home focuses the box again', (t) async {
+      await openReal(t, Routes.home);
+      await t.tap(find.byKey(const ValueKey('home-search')));
+      await t.pumpAndSettle();
+      expect(_focused(t), isTrue);
+      FocusManager.instance.primaryFocus?.unfocus();
+      await t.pumpAndSettle();
+      expect(_focused(t), isFalse);
+      await _tapTab(t, 'Home');
+      await t.tap(find.byKey(const ValueKey('home-search')));
+      await t.pumpAndSettle();
+      expect(_focused(t), isTrue);
+    });
+
+    testWidgets('pressing the Library tab again still resets it to the plain '
+        'Library', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        library: severalCategories(),
+        size: const Size(390, 2000),
+      );
+      await t.tap(find.byKey(const ValueKey('home-search')));
+      await t.pumpAndSettle();
+      FocusManager.instance.primaryFocus?.unfocus();
+      _router(t).go(Routes.category('c1'));
+      await t.pumpAndSettle();
+      expect(find.byKey(const ValueKey('open-c1')), findsOneWidget);
+      await _tapTab(t, 'Library');
+      expect(_location(_router(t)), Routes.library);
+      expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+      expect(_focused(t), isFalse);
+      expect(t.takeException(), isNull);
+    });
   });
 
   group('overflow', () {

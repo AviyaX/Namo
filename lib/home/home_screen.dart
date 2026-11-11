@@ -16,6 +16,7 @@ import 'continue_card.dart';
 import 'featured_card.dart';
 import 'flows_row.dart';
 import 'gatha_card.dart';
+import 'home_header.dart';
 import 'section_strip.dart';
 import 'today.dart';
 
@@ -53,20 +54,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final p = NamoPalette.of(context);
     final width = MediaQuery.sizeOf(context).width;
     final wide = width >= NamoSizes.wideBreakpoint;
     final now = ref.watch(clockProvider)();
     return NamoPage(
       columnKey: const ValueKey('home-column'),
       maxWidth: wide ? NamoSizes.homeColumn : NamoSizes.readingColumn,
+      backdrop: const HomeBackdrop(),
       children: [
-        Semantics(
-          header: true,
-          child: Text('Namo', style: NamoType.wordmark(p.text)),
-        ),
-        const SizedBox(height: NamoSpace.xs),
-        Text(greetingFor(now), style: NamoType.body(p.textSecondary)),
+        HomeHeader(now: now),
         LibraryGate(
           builder: (context, library) =>
               _Blocks(library: library, now: now, wide: wide),
