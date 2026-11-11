@@ -1,0 +1,4 @@
+assets/content/*.json text eol=lf
+content/extracted/*.json text eol=lf
+tools/test_data/*.json text eol=lf
+content/pirith_names.md text eol=lf

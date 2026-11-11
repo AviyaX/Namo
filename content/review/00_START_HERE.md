@@ -11,6 +11,7 @@ Everything in this folder was taken by machine from the sources you gave me. **N
 | `03_namo_lk_all_pages.md` | Every text article on namo.lk (32 articles) | large | Low. Plain copy |
 
 The same content is also stored in `content/extracted/` as `.json` files. Those are for the app to load later; the `.md` files here are the ones to read.
+The app's content file, built from those `.json` files by `tools/build_content.py`, is `assets/content/namaskaraya_to_pin_dima.json`.
 
 ## The most important finding
 
