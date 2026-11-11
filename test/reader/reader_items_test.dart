@@ -377,10 +377,17 @@ void main() {
       ]);
     });
 
-    test('English shows nothing, as in a pirith without English', () {
+    test('English alone shows the Pali lines in its place', () {
       expect(blocks([_english]).map((x) => x.languages), [
-        <ReadingLanguage>[],
-        <ReadingLanguage>[],
+        [_pali],
+        [_pali],
+      ]);
+    });
+
+    test('English with Pali shows the Pali lines once', () {
+      expect(blocks([_english, _pali]).map((x) => x.languages), [
+        [_pali],
+        [_pali],
       ]);
     });
 
@@ -397,11 +404,16 @@ void main() {
       }
     });
 
-    test('English with Sinhala shows the meaning only', () {
-      expect(blocks([_english, _sinhala]).map((x) => x.languages), [
-        [_sinhala],
-        <ReadingLanguage>[],
-      ]);
+    test('English with Sinhala shows the Pali lines, then the meaning', () {
+      for (final chosen in [
+        [_english, _sinhala],
+        [_sinhala, _english],
+      ]) {
+        expect(blocks(chosen).map((x) => x.languages), [
+          [_pali, _sinhala],
+          [_pali],
+        ]);
+      }
     });
 
     test('the heading is a pirith heading', () {

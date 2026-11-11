@@ -135,18 +135,39 @@ void main() {
       );
     });
 
-    testWidgets('with English only nothing shows for a unit, as in a pirith '
-        'without English', (t) async {
+    testWidgets('with English only the Pali of u-homage shows', (t) async {
       await openReal(
         t,
         Routes.reader(spVandanaId),
         settings: _only([_english]),
       );
-      expect(find.byKey(const ValueKey('block-u-homage')), findsOneWidget);
-      expect(passage('u-homage', 'pali'), findsNothing);
+      final reading = (await realLibrary(t)).reading(spVandanaId)!;
+      final homage = reading.sections.single.verses.first;
+      expect(homage.id, 'u-homage');
+      expect(
+        passageText(t, passage('u-homage', 'pali')),
+        homage.phrases.map((p) => p.pali).join('\n'),
+      );
       expect(passage('u-homage', 'english'), findsNothing);
       expect(passage('u-homage', 'sinhala'), findsNothing);
       expect(find.textContaining('not yet available'), findsNothing);
+    });
+
+    testWidgets('with English and Sinhala the Pali lines show, then the '
+        'meaning', (t) async {
+      await openReal(
+        t,
+        Routes.reader(spVandanaId),
+        settings: _only([_english, _sinhala]),
+      );
+      final pali = passage('u-homage', 'pali');
+      final meaning = passage('u-homage', 'sinhala');
+      expect(pali, findsOneWidget);
+      expect(meaning, findsOneWidget);
+      expect(
+        t.getRect(meaning).top,
+        greaterThanOrEqualTo(t.getRect(pali).bottom),
+      );
     });
 
     testWidgets('the opening verses never have a meaning', (t) async {
