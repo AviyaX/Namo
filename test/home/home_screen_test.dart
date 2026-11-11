@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/design/widgets/progress_line.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
+import 'package:buddhist_gatha/home/card_art.dart';
 import 'package:buddhist_gatha/home/continue_card.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/home/gatha_card.dart';
@@ -380,12 +382,12 @@ void main() {
   });
 
   group('featured card', () {
-    testWidgets('bundled content: "Buddha Vandana", the title, the subtitle '
-        'and "19 sections"', (t) async {
+    testWidgets('bundled content: "FEATURED COLLECTION", the title, the '
+        'subtitle and "19 sections"', (t) async {
       await openReal(t, Routes.home);
       final c = (await realLibrary(t)).categories.first;
       final card = find.byType(FeaturedCard);
-      for (final s in ['Buddha Vandana', 'Buddha Wandanawa', c.subtitle, '19 sections']) {
+      for (final s in ['FEATURED COLLECTION', 'Buddha Wandanawa', c.subtitle, '19 sections']) {
         expect(find.descendant(of: card, matching: find.text(s)), findsOneWidget,
             reason: s);
       }
@@ -403,8 +405,17 @@ void main() {
       );
     });
 
-    testWidgets('a topic without an overline shows none', (t) async {
+    testWidgets('every topic has the same overline, "FEATURED COLLECTION"', (
+      t,
+    ) async {
       await openReal(t, Routes.home, library: _oneSection());
+      expect(
+        find.descendant(
+          of: find.byType(FeaturedCard),
+          matching: find.text('FEATURED COLLECTION'),
+        ),
+        findsOneWidget,
+      );
       expect(find.text('Buddha Vandana'), findsNothing);
     });
 
@@ -425,24 +436,34 @@ void main() {
       expect(find.text('Heading b01'), findsOneWidget);
     });
 
-    testWidgets('a topic with no readings: "0 sections", no section row, a '
-        'disabled button', (t) async {
+    testWidgets('a topic with no readings: "0 sections", no section row, no '
+        'button, and the card does nothing', (t) async {
       await openReal(t, Routes.home, library: _empty());
       expect(find.text('0 sections'), findsOneWidget);
       expect(find.byType(SectionStrip), findsNothing);
-      expect(t.widget<PrimaryButton>(_featuredButton).onPressed, isNull);
+      expect(_featuredButton, findsNothing);
       await t.tap(find.byType(FeaturedCard), warnIfMissed: false);
       await t.pumpAndSettle();
       expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
       expect(find.byKey(const ValueKey('reader-settings')), findsNothing);
     });
 
-    testWidgets('on a phone the card is the column width and min(width, 420) '
-        'tall', (t) async {
+    testWidgets('on a phone the card is the column width and as tall as its '
+        'words, at least half its width', (t) async {
       await openReal(t, Routes.home, library: _oneSection());
       final size = t.getSize(find.byType(FeaturedCard));
       expect(size.width, 390 - 40);
-      expect(size.height, 350);
+      final words = t
+          .renderObject<RenderPictureWords>(
+            find.descendant(
+              of: find.byType(FeaturedCard),
+              matching: find.byType(PictureWords),
+            ),
+          )
+          .child!
+          .size
+          .height;
+      expect(size.height, math.max(words, 350 * 0.5));
     });
 
     testWidgets('at 1280 x 800 the featured card uses the hero picture, 3 : 1', (

@@ -32,11 +32,6 @@ const ({String dark, String light}) headerPictures = (
   light: 'assets/pictures/header_light.jpg',
 );
 
-/// Category id -> the small label above the title on the featured card.
-const Map<String, String> featuredOverlines = {
-  'cat-namaskaraya': 'Buddha Vandana',
-};
-
 /// The least strength of [NamoPalette.pictureScrim] behind the first line of
 /// text on a picture, and at the picture's bottom edge.
 const pictureFadeAtText = 0.70;

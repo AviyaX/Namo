@@ -13,7 +13,7 @@ import '../router.dart';
 import '../settings/settings.dart';
 import 'card_art.dart';
 import 'continue_card.dart';
-import 'featured_card.dart';
+import 'featured_carousel.dart';
 import 'flows_row.dart';
 import 'gatha_card.dart';
 import 'home_header.dart';
@@ -105,7 +105,7 @@ class _Blocks extends ConsumerWidget {
             fontScale: fontScale,
             lineSpacing: lineSpacing,
           );
-    final featured = first == null ? null : FeaturedCard(category: first);
+    final featured = first == null ? null : FeaturedCarousel(library: library);
     // Only with a flow, so Home without flows keeps its gaps as they were.
     final flowsRow = flows.flows.isEmpty ? null : FlowsRow(library: library);
 

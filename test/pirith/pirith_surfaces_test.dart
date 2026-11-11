@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/audio/audio_controls.dart';
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/home/continue_card.dart';
 import 'package:buddhist_gatha/library/search.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -332,13 +333,16 @@ void main() {
         },
       );
       await t.pumpAndSettle();
-      expect(find.text(r.title), findsOneWidget);
-      expect(find.text(r.titleRoman!), findsOneWidget);
+      // The featured carousel names the pirith too; this is about the card.
+      final card = find.byType(ContinueCard);
+      Finder inCard(Finder f) => find.descendant(of: card, matching: f);
+      expect(inCard(find.text(r.title)), findsOneWidget);
+      expect(inCard(find.text(r.titleRoman!)), findsOneWidget);
       expect(
-        t.widget<Text>(find.text(r.title)).style!.fontFamily,
+        t.widget<Text>(inCard(find.text(r.title))).style!.fontFamily,
         contains('NotoSansSinhala'),
       );
-      await t.tap(find.text(r.title));
+      await t.tap(inCard(find.text(r.title)));
       await t.pumpAndSettle();
       expect(_location(t), startsWith('/read/$mangalaReadingId'));
     });

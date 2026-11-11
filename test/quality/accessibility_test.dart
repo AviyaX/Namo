@@ -28,7 +28,7 @@ void main() {
   // Each screen, with the surface it is checked on (tall where the page
   // scrolls, so everything is on screen) and what to do once it is open.
   final screens = <(String, String, Size, Future<void> Function(WidgetTester)?, bool)>[
-    ('Home', Routes.home, const Size(390, 844), null, false),
+    ('Home', Routes.home, const Size(390, 1800), null, false),
     ('Library (closed)', Routes.library, const Size(390, 844), null, false),
     ('Library (open)', Routes.category(realCategoryId), const Size(390, 1800), null, false),
     ('Reader', Routes.reader(realReadingId), const Size(390, 844), null, false),

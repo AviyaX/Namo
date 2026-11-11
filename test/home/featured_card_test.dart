@@ -92,7 +92,7 @@ void main() {
       await openReal(t, Routes.home, settings: AppSettings(themeMode: theme));
       final c = (await realLibrary(t)).categories.first;
       final card = find.byType(FeaturedCard);
-      for (final s in ['Buddha Vandana', c.title, c.subtitle, '19 sections']) {
+      for (final s in ['FEATURED COLLECTION', c.title, c.subtitle, '19 sections']) {
         final text = t.widget<Text>(
           find.descendant(of: card, matching: find.text(s)),
         );
@@ -102,11 +102,13 @@ void main() {
   }
 
   testWidgets('the card is one button for screen readers, labelled '
-      '"<title>, <subtitle>, <count>"', (t) async {
+      '"<title>, <subtitle>, <count>, <button>"', (t) async {
     final handle = t.ensureSemantics();
     await openReal(t, Routes.home);
     final c = (await realLibrary(t)).categories.first;
-    final node = find.bySemanticsLabel('${c.title}, ${c.subtitle}, 19 sections');
+    final node = find.bySemanticsLabel(
+      '${c.title}, ${c.subtitle}, 19 sections, Begin',
+    );
     expect(node, findsOneWidget);
     expect(
       t.getSemantics(node).getSemanticsData().flagsCollection.isButton,
@@ -118,8 +120,8 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('on a phone the card shows assets/pictures/buddha_wandanawa.jpg, '
-      'decoded no wider than needed', (t) async {
+  testWidgets('on a phone the card shows the hero picture of the theme, '
+      'statue to the right, decoded no wider than needed', (t) async {
     await openReal(t, Routes.home);
     await _untilDecoded(t);
     final picture = find.descendant(
@@ -133,11 +135,14 @@ void main() {
     );
     final image = t.widget<Image>(picture);
     expect(image.fit, BoxFit.cover);
-    expect(image.alignment, Alignment.center);
+    expect(image.alignment, Alignment.centerRight);
     expect((image.image as ResizeImage).width, lessThanOrEqualTo(1600));
+    final dark =
+        Theme.of(t.element(find.byType(FeaturedCard))).brightness ==
+        Brightness.dark;
     expect(
       ((image.image as ResizeImage).imageProvider as AssetImage).assetName,
-      'assets/pictures/buddha_wandanawa.jpg',
+      dark ? 'assets/pictures/hero_dark.jpg' : 'assets/pictures/hero_light.jpg',
     );
   });
 
@@ -145,7 +150,6 @@ void main() {
     expect(cardPictures['cat-namaskaraya'], 'assets/pictures/buddha_wandanawa.jpg');
     expect(heroPictures['cat-namaskaraya']?.dark, 'assets/pictures/hero_dark.jpg');
     expect(heroPictures['cat-namaskaraya']?.light, 'assets/pictures/hero_light.jpg');
-    expect(featuredOverlines['cat-namaskaraya'], 'Buddha Vandana');
     final pubspec = File('pubspec.yaml').readAsStringSync();
     for (final path in [
       ...cardPictures.values,
@@ -164,7 +168,10 @@ void main() {
     await _untilDecoded(t);
     final c = (await realLibrary(t)).categories.first;
     expect(c.id, 'cat-namaskaraya');
-    expect(find.bySemanticsLabel('${c.title}, ${c.subtitle}, 19 sections'), findsOneWidget);
+    expect(
+      find.bySemanticsLabel('${c.title}, ${c.subtitle}, 19 sections, Begin'),
+      findsOneWidget,
+    );
     expect(
       find.descendant(
         of: find.byType(TopicPicture).first,
