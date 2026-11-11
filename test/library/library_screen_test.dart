@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../flows/flow_test_support.dart' as flows;
 import '../quality/quality_support.dart';
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
@@ -150,11 +151,12 @@ void main() {
 
   testWidgets('Enter on the focused card toggles it', (t) async {
     await pumpApp(t, overrides: fake, location: Routes.library);
-    // The search box comes first in the focus order, then the topic row.
-    await t.sendKeyEvent(LogicalKeyboardKey.tab);
-    await t.pump();
-    await t.sendKeyEvent(LogicalKeyboardKey.tab);
-    await t.pump();
+    // The search box comes first in the focus order, then My flows' "New
+    // flow", then the topic row.
+    for (var i = 0; i < 3; i++) {
+      await t.sendKeyEvent(LogicalKeyboardKey.tab);
+      await t.pump();
+    }
     await t.sendKeyEvent(LogicalKeyboardKey.enter);
     await t.pumpAndSettle();
     expect(find.text('heading 1'), findsOneWidget);
@@ -512,5 +514,42 @@ void main() {
       expect(_location(t), '/library');
       expect(find.text('heading 1'), findsOneWidget);
     });
+  });
+
+  group('My flows', () {
+    testWidgets('shows above the topics', (t) async {
+      await pumpApp(t, overrides: fake, location: Routes.library);
+      final part = find.byKey(const ValueKey('my-flows'));
+      expect(part, findsOneWidget);
+      expect(
+        t.getBottomLeft(part).dy,
+        lessThanOrEqualTo(t.getTopLeft(find.text('category 1')).dy),
+      );
+    });
+
+    for (final (address, category, heading) in [
+      (Routes.category('c2'), 'c2', 'heading 2.1'),
+      (Routes.contents('r3'), 'c2', 'heading 3'),
+      (Routes.contents('r1'), 'c1', 'heading 1'),
+    ]) {
+      testWidgets('$address opens its topic with flows listed above', (
+        t,
+      ) async {
+        final c = await flows.openFlows(t, address, {
+          'flow-1': [flows.ref('r1', 's01')],
+          'flow-2': [],
+        });
+        expect(flows.location(c), Routes.library);
+        expect(find.byKey(ValueKey('open-$category')), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byKey(ValueKey('open-$category')),
+            matching: find.text(heading),
+          ),
+          findsOneWidget,
+        );
+        expect(find.byKey(const ValueKey('flow-open-flow-2')), findsOneWidget);
+      });
+    }
   });
 }

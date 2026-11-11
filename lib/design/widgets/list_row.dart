@@ -22,6 +22,7 @@ class ListRow extends StatelessWidget {
     this.action,
     this.expanded,
     this.checked,
+    this.inMutuallyExclusiveGroup,
     this.detail,
     this.detailLabel,
   });
@@ -44,6 +45,10 @@ class ListRow extends StatelessWidget {
   /// For a row that is ticked on or off (a section in a flow, say): whether
   /// it is ticked now. Left null for an ordinary row.
   final bool? checked;
+
+  /// True for a [checked] row that is one choice of several, where choosing
+  /// it switches the others off.
+  final bool? inMutuallyExclusiveGroup;
 
   /// Shown under the title, subtitle and caption (a search hit's verse line,
   /// say). [detailLabel] is its text for screen readers.
@@ -71,6 +76,7 @@ class ListRow extends StatelessWidget {
       onTap: onTap,
       expanded: expanded,
       checked: checked,
+      inMutuallyExclusiveGroup: inMutuallyExclusiveGroup,
       excludeChildSemantics: true,
       semanticLabel: [
         if (number != null) '$number',

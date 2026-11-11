@@ -14,6 +14,7 @@ import '../design/widgets/namo_page.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/search_field.dart';
 import '../design/widgets/segmented_selector.dart';
+import '../flows/my_flows_part.dart';
 import '../home/card_art.dart';
 import '../router.dart';
 import '../settings/settings.dart';
@@ -21,8 +22,9 @@ import 'library_gate.dart';
 import 'open_categories.dart';
 import 'search.dart';
 
-/// The topics as rows, with a search box; a tap on a topic opens the
-/// numbered sections of its readings underneath, on the same page.
+/// The person's flows, then the topics as rows, with a search box; a tap on
+/// a topic opens the numbered sections of its readings underneath, on the
+/// same page. Search results take the place of both.
 ///
 /// [openCategory] or [openReading] (from the address) opens that category
 /// once; an id that matches nothing is ignored.
@@ -134,6 +136,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     query: query.trim(),
                   )
                 else ...[
+                  MyFlowsPart(library: library),
+                  const SizedBox(height: NamoSpace.xl),
                   if (n >= 2) ...[
                     ChoiceChips<String?>(
                       key: const ValueKey('library-chips'),

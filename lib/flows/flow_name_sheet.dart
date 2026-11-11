@@ -70,9 +70,13 @@ class FlowNameField extends StatefulWidget {
     required this.controller,
     this.autofocus = false,
     this.onSubmitted,
+    this.hint,
   });
 
   final TextEditingController controller;
+
+  /// Shown in the empty box (an example name).
+  final String? hint;
   final bool autofocus;
   final ValueChanged<String>? onSubmitted;
 
@@ -125,6 +129,8 @@ class _FlowNameFieldState extends State<FlowNameField> {
       decoration: InputDecoration(
         labelText: 'Name',
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: widget.hint,
+        hintStyle: NamoType.body(p.textSecondary),
         labelStyle: NamoType.label(p.textSecondary),
         floatingLabelStyle: NamoType.label(
           _focus.hasFocus ? p.sage : p.textSecondary,
