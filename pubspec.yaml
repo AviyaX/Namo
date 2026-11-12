@@ -39,6 +39,7 @@ dependencies:
   just_audio: ^0.10.6
   material_symbols_icons: ^4.2960.0
   wakelock_plus: ^1.8.2
+  archive: ^4.6.0
 
 dev_dependencies:
   flutter_test:
@@ -101,6 +102,8 @@ flutter:
     - assets/fonts/OFL-Lora.txt
     - assets/branding/
     - assets/content/
+    - assets/tipitaka/
+    - assets/tipitaka/text/
     - assets/pictures/buddha_wandanawa.jpg
     - assets/pictures/hero_dark.jpg
     - assets/pictures/hero_light.jpg
