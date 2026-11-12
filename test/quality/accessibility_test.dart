@@ -7,6 +7,7 @@ import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/router.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -452,4 +453,102 @@ void main() {
       }
     });
   }
+
+  // The Tripitaka (the made-up fixture): the same guidelines on its first
+  // page, a list page, the reader in each view and the footnotes sheet, in
+  // both themes; and the names a screen reader hears for its tab, path,
+  // rows, language switch and footnote marks.
+  Future<void> openFootnotes(WidgetTester t) async {
+    await t.tap(find.bySemanticsLabel('Footnote 1').first);
+    await t.pumpAndSettle();
+    expect(find.text('Footnotes'), findsOneWidget);
+  }
+
+  final tipitakaScreens = <(String, String, Map<String, String>, Future<void> Function(WidgetTester)?)>[
+    ('Tripitaka first page', Routes.tipitaka, const {}, null),
+    ('Tripitaka list', Routes.tipitakaNode('vp-2'), const {}, null),
+    for (final view in TipitakaView.values)
+      (
+        'Tripitaka reader (${view.name})',
+        Routes.tipitakaReader('vp-1-1'),
+        {tipitakaViewKey: jsonEncode(view.name)},
+        null,
+      ),
+    ('Tripitaka footnotes sheet', Routes.tipitakaReader('vp-1-1'), const {}, openFootnotes),
+  ];
+  for (final dark in [false, true]) {
+    final theme = dark ? 'dark' : 'light';
+    for (final (name, location, extras, after) in tipitakaScreens) {
+      testWidgets('$name ($theme) meets tap-target, label and contrast '
+          'guidelines', (t) async {
+        final handle = t.ensureSemantics();
+        await openReal(t, location, size: const Size(390, 1400), dark: dark, storeExtras: extras);
+        if (after != null) await after(t);
+        await expectGuidelines(t);
+        handle.dispose();
+      });
+    }
+  }
+
+  group('Tripitaka names for a screen reader', () {
+    testWidgets('the tab', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(t, Routes.tipitaka);
+      final tab = find.byKey(const ValueKey('nav-tripitaka'));
+      expect(t.getSemantics(tab).label, startsWith('Tripitaka'));
+      expect(t.getSize(tab).height, greaterThanOrEqualTo(48));
+      handle.dispose();
+    });
+
+    testWidgets('the pitaka cards', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(t, Routes.tipitaka, size: const Size(390, 1400));
+      expect(find.bySemanticsLabel(RegExp(r'^S vp, Vinaya Pitaka, \d+ texts?$')), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets('the path, the rows and their parts', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(t, Routes.tipitakaNode('vp-2'), size: const Size(390, 1400));
+      expect(find.bySemanticsLabel('Path'), findsOneWidget);
+      for (final part in ['Tripitaka', 'S vp']) {
+        final node = t.getSemantics(find.descendant(
+          of: find.byKey(const ValueKey('tipitaka-breadcrumb')),
+          matching: find.bySemanticsLabel(part),
+        ));
+        expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue, reason: part);
+        expect(node.rect.height, greaterThanOrEqualTo(48), reason: part);
+      }
+      expect(find.bySemanticsLabel('S two, Opening text'), findsOneWidget);
+      for (final row in ['S two one', 'S two two', 'S ten']) {
+        final node = t.getSemantics(find.bySemanticsLabel(row));
+        expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue, reason: row);
+        expect(node.rect.height, greaterThanOrEqualTo(48), reason: row);
+      }
+      handle.dispose();
+    });
+
+    testWidgets('the language switch and the footnote marks', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(
+        t,
+        Routes.tipitakaReader('vp-1-1'),
+        size: const Size(390, 1400),
+        storeExtras: {tipitakaViewKey: jsonEncode('both')},
+      );
+      expect(find.bySemanticsLabel(RegExp('^Language')), findsWidgets);
+      for (final label in ['Both', 'පාලි', 'සිංහල']) {
+        expect(find.bySemanticsLabel(RegExp(label)), findsWidgets, reason: label);
+      }
+      final marks = find.bySemanticsLabel('Footnote 1');
+      // The Pali and the Sinhala text both have the mark.
+      expect(marks, findsNWidgets(2));
+      for (final m in marks.evaluate()) {
+        final data = t.getSemantics(find.byElementPredicate((e) => e == m)).getSemanticsData();
+        expect(data.hasAction(SemanticsAction.tap), isTrue);
+        expect(data.flagsCollection.isLink, isTrue);
+      }
+      handle.dispose();
+    });
+  });
 }

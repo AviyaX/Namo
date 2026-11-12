@@ -7,6 +7,7 @@ import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -432,6 +433,72 @@ void main() {
             },
           );
         }
+      }
+    }
+  }
+
+  // The Tripitaka (the made-up fixture): its first page, a list page, the
+  // first page with search results, and the reader in each of its three
+  // views, at the narrowest and the wide size, ordinary and doubled device
+  // text, in both themes.
+  final tipitakaScreens = <(String, String, Map<String, String>)>[
+    ('Tripitaka first page', Routes.tipitaka, const {}),
+    ('Tripitaka list', Routes.tipitakaNode('vp-2'), const {}),
+    for (final view in TipitakaView.values)
+      (
+        'Tripitaka reader (${view.name})',
+        Routes.tipitakaReader('vp-1-1'),
+        {tipitakaViewKey: jsonEncode(view.name)},
+      ),
+  ];
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final dark in [false, true]) {
+        final where = '${size.width.round()}x${size.height.round()}, '
+            'device text $scale, ${dark ? 'dark' : 'light'}';
+        for (final (name, location, extras) in tipitakaScreens) {
+          testWidgets('$name does not overflow: $where', (t) async {
+            await openReal(
+              t,
+              location,
+              size: size,
+              deviceTextScale: scale,
+              dark: dark,
+              storeExtras: extras,
+            );
+            expect(t.takeException(), isNull);
+            await scrollThrough(t);
+          });
+        }
+        testWidgets('Tripitaka footnotes sheet does not overflow: $where',
+            (t) async {
+          await openReal(
+            t,
+            Routes.tipitakaReader('vp-1-1'),
+            size: size,
+            deviceTextScale: scale,
+            dark: dark,
+          );
+          final mark = find.byKey(const ValueKey('tipitaka-footnote-mark-1'));
+          final text = find
+              .descendant(
+                of: find.byType(CustomScrollView),
+                matching: find.byType(Scrollable),
+              )
+              .first;
+          // Built lazily: drag down to it, then bring it to the top, clear
+          // of the bar.
+          for (var i = 0; i < 40 && mark.evaluate().isEmpty; i++) {
+            await t.drag(text, const Offset(0, -100));
+            await t.pump();
+          }
+          await t.ensureVisible(mark.first);
+          await t.pumpAndSettle();
+          await t.tap(mark.first);
+          await t.pumpAndSettle();
+          expect(find.text('Footnotes'), findsOneWidget);
+          expect(t.takeException(), isNull);
+        });
       }
     }
   }

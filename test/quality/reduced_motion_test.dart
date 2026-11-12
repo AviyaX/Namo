@@ -262,4 +262,48 @@ void main() {
     expect(top, isNotNull);
     expect((top! - area.top - area.height / 3).abs(), lessThan(24));
   });
+
+  group('Tripitaka', () {
+    /// Taps [finder]; two frames later nothing is moving.
+    Future<void> tapAndStop(WidgetTester t, Finder finder) async {
+      await t.tap(finder);
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 16));
+      await t.pump(const Duration(milliseconds: 16));
+      expect(t.hasRunningAnimations, isFalse);
+    }
+
+    testWidgets('switching to the Tripitaka tab', (t) async {
+      await open(t, Routes.home);
+      await tapAndStop(t, find.byKey(const ValueKey('nav-tripitaka')));
+      expect(find.byKey(const ValueKey('screen-tripitaka')), findsOneWidget);
+      expect(find.byKey(const ValueKey('screen-home')), findsNothing);
+    });
+
+    testWidgets('a pitaka card, a row and the reader open at once', (t) async {
+      await open(t, Routes.tipitaka);
+      await tapAndStop(t, find.byKey(const ValueKey('tipitaka-pitaka-vp')));
+      expect(find.byKey(const ValueKey('tipitaka-row-vp-1')), findsOneWidget);
+      await tapAndStop(t, find.byKey(const ValueKey('tipitaka-row-vp-1')));
+      await tapAndStop(t, find.byKey(const ValueKey('tipitaka-row-vp-1-1')));
+      expect(find.byKey(const ValueKey('tipitaka-reader-top-bar')), findsOneWidget);
+    });
+
+    testWidgets('the language switch and the footnotes sheet act at once',
+        (t) async {
+      await open(t, Routes.tipitakaReader('vp-1-1'));
+      await tapAndStop(t, find.text('Both'));
+      final selector = find.byKey(const ValueKey('selector-thumb'));
+      final place = t.getRect(selector);
+      await t.pumpAndSettle();
+      expect(t.getRect(selector), place);
+      await tapAndStop(
+          t, find.byKey(const ValueKey('tipitaka-footnote-mark-1')).first);
+      final sheet = find.byType(BottomSheet);
+      expect(sheet, findsOneWidget);
+      final top = t.getTopLeft(sheet).dy;
+      await t.pumpAndSettle();
+      expect(t.getTopLeft(sheet).dy, top);
+    });
+  });
 }
