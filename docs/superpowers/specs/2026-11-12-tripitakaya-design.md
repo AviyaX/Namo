@@ -1,6 +1,6 @@
 # Tripitakaya — design
 
-Date: 2026-11-12. Status: waiting for the owner's approval.
+Date: 2026-11-12. Status: approved by the owner on 2026-11-12 ("build").
 
 ## Intent
 
@@ -88,7 +88,7 @@ allows redistribution.
 |---|---|
 | `text/<name>.json.gz` | each source file `public/static/text/<name>.json` whose name starts `vp-`, `dn-`, `mn-`, `sn-`, `an-`, `kn-` or `ap-` (190 files, 15,156 pages, about 170 MB unpacked, about 15.5 MB packed, measured 2026-11-12); gzip of the source bytes, nothing else |
 | `tree.json.gz` | the source's `public/static/data/tree.json`, unchanged, gzipped |
-| `manifest.json` | source repository, commit id and date, and for every file its name and the SHA-256 of its unpacked bytes |
+| `manifest.json` | source repository, commit id and date, for every file its name and the SHA-256 of its unpacked bytes, the number of readings, and the keys of the parents that hold text of their own |
 | `LICENSE.md` | the source's licence file, copied |
 
 Unpacking any shipped file gives the source's bytes exactly; the check
@@ -114,8 +114,9 @@ tool proves it against the manifest.
 the start of the next node in the same file (or the file's end; the exact
 rule is under "Answers to a builder's questions"). A leaf opens as a reading of its own text. A node with children
 lists its children; if its own text holds more than headings (true of 53
-nodes), the list starts with a row that opens that text, so nothing is
-unreachable.
+nodes), the list starts with a row that opens that text. Title lines
+that belong to no reading of their own are shown at the top of the
+reading that follows them, so nothing is unreachable.
 
 **Sync tool** (`tools/sync_tipitaka.py`, run as
 `python -I -X utf8 tools/sync_tipitaka.py . …`):
@@ -250,16 +251,28 @@ to path.nirvana@gmail.com. `docs/` gets a short note on how to re-sync.
   manual method". A script run by hand before each release meets it; no
   scheduled job is added. The release checklist gets the step "run the
   sync, then the check".
-- **Reading spans, exactly.** Take the in-scope nodes of one file and
-  sort them by start position (page, then entry), ties in tree order. A
-  node's own text is the entries from its start up to the next node's
-  start in that list, or to the file's end. A node that shares its start
-  with the next one has no text of its own (one such pair exists). A
-  parent's children may sit in other files (559 do); that changes
-  nothing, because spans are worked out per file. No file has text before
-  its first node. Because the tree already carries the right start for
-  the heading-at-end books, they need no special handling; the check
-  tool's "every entry in exactly one reading" covers them.
+- **Reading spans, exactly** (measured on the real data, 2026-11-12).
+  Flatten a file's entries in page order. Take the in-scope nodes of the
+  file and sort them by start position (page, then entry), ties in tree
+  order; in every file this is also tree order. A node's own span is the
+  entries from its start up to the next node's start, or to the file's
+  end. A node is a **reading** if it is a leaf, or if its own span holds
+  a `paragraph`, `gatha` or `unindented` entry with text (53 parents;
+  the sync tool lists them in the manifest so the app need not open
+  books to know). That gives 8,408 readings. What a reading shows runs
+  from the end of the previous reading's own span in the file (or the
+  file's start) to the end of its own span. So the title lines of the
+  parents above it (1,101 `heading` and `centered` entries in all) and
+  the few title entries that 54 files carry before their first node
+  appear at the top of the reading that follows them, and every entry
+  of every file is shown in exactly one reading. No file ends with a
+  node that is not a reading. A parent's children may sit in other
+  files (559 do); spans are worked out per file, so that changes
+  nothing. The heading-at-end books need no special handling.
+- **Pairing.** Pali and Sinhala entries pair by index on every page
+  except in the seven Pali-only `ap-pat*` files, whose Sinhala lists are
+  empty. A page whose two lists differ in length is treated as having no
+  Sinhala.
 - **Footnotes** belong to a page and a language. A mark in an entry
   points into that page's list for that language (`shared/footnote.ts`
   in the source shows the matching). Two readings that share a page each
