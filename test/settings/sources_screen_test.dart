@@ -352,7 +352,7 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 6 text sources + 4 pictures + 16 corrections + 6 checks.
+    // 6 text sources + the Tripitaka + 4 pictures + 16 corrections + 6 checks.
     expect(find.byType(SurfaceCard), findsNWidgets(33));
   });
 

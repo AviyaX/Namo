@@ -7,6 +7,7 @@ import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/pump_app.dart';
@@ -35,6 +36,7 @@ Future<TipitakaApp> openTipitakaApp(
   Size size = const Size(400, 900),
   AssetBytes? load,
   InMemoryKeyValueStore? store,
+  List<Override> overrides = const [],
 }) async {
   await t.pumpWidget(const SizedBox());
   final kv = store ?? InMemoryKeyValueStore();
@@ -42,6 +44,7 @@ Future<TipitakaApp> openTipitakaApp(
     t,
     size: size,
     overrides: [
+      ...overrides,
       contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
       keyValueStoreProvider.overrideWithValue(kv),
       tipitakaRepositoryProvider.overrideWithValue(

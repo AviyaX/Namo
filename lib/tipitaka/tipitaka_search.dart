@@ -245,7 +245,12 @@ class TipitakaSearchIndex {
   static int _min(int a, int b) => a < b ? a : b;
 }
 
-final tipitakaSearchProvider = FutureProvider<TipitakaSearchIndex>((ref) async {
-  final tree = await ref.watch(tipitakaTreeProvider.future);
-  return TipitakaSearchIndex(tree);
-});
+/// Not retried on its own (like the tree it is built from): a failure shows
+/// the load message, whose Try again builds it afresh.
+final tipitakaSearchProvider = FutureProvider<TipitakaSearchIndex>(
+  (ref) async {
+    final tree = await ref.watch(tipitakaTreeProvider.future);
+    return TipitakaSearchIndex(tree);
+  },
+  retry: (_, _) => null,
+);

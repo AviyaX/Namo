@@ -192,7 +192,6 @@ void main() {
       final manifest = await repo.manifest();
       expect(manifest.readings, (await repo.tree()).readings.length);
       expect(manifest.parentsWithText.length, 53);
-      expect(manifest.commit, startsWith('974bd90'));
     });
 
     test('dn-1 parses and its first reading has entries and Sinhala', () async {

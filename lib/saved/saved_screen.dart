@@ -39,6 +39,11 @@ class SavedScreen extends ConsumerWidget {
         for (final key in tipitakaKeys)
           if (tree.isReading(key)) ?tree.node(key),
     ];
+    // Until the tree has loaded, any stored key counts; once it has, only
+    // keys that are still readings do (stale keys alone leave Saved empty).
+    final hasTipitaka = tree == null
+        ? tipitakaKeys.isNotEmpty
+        : tipitaka.isNotEmpty;
     return NamoPage(
       columnKey: const ValueKey('saved-column'),
       children: [
@@ -59,7 +64,7 @@ class SavedScreen extends ConsumerWidget {
               for (final id in saved.favourites.toList().reversed)
                 ?library.reading(id),
             ];
-            if (bookmarks.isEmpty && favourites.isEmpty && tipitakaKeys.isEmpty) {
+            if (bookmarks.isEmpty && favourites.isEmpty && !hasTipitaka) {
               return EmptyState(
                 icon: Symbols.bookmark_rounded,
                 title: 'Nothing saved yet',

@@ -5,7 +5,10 @@ import 'package:buddhist_gatha/design/widgets/progress_line.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:buddhist_gatha/tipitaka/tipitaka_reader_screen.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_search.dart';
 import 'package:buddhist_gatha/tipitaka/tipitaka_state.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_tree.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,6 +21,17 @@ final _crumbs = find.byKey(const ValueKey('tipitaka-breadcrumb'));
 final _count = RegExp(r'^\d+ texts?$');
 
 double _top(WidgetTester t, Finder f) => t.getTopLeft(f).dy;
+
+/// Scrolls the page to its end in viewport steps; nothing may throw.
+Future<void> scrollToEnd(WidgetTester t) async {
+  final position = t.state<ScrollableState>(find.byType(Scrollable).first).position;
+  while (position.pixels < position.maxScrollExtent) {
+    position.jumpTo((position.pixels + position.viewportDimension)
+        .clamp(0.0, position.maxScrollExtent));
+    await t.pump();
+    expect(t.takeException(), isNull, reason: 'at ${position.pixels}');
+  }
+}
 
 void main() {
   testWidgets('rows are in numeric order', (t) async {
@@ -198,6 +212,13 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  late AssetBytes shipped;
+  late TipitakaTree shippedTree;
+  setUpAll(() async {
+    shipped = await shippedTreeAssets();
+    shippedTree = await TipitakaRepository(load: shipped).tree();
+  });
+
   for (final (size, scale) in const [(Size(320, 568), 2.0), (Size(1280, 800), 1.5)]) {
     testWidgets('${size.width.round()} px at ${scale}x text: first page, a '
         'list and results draw without overflow', (t) async {
@@ -211,6 +232,21 @@ void main() {
       app.go(Routes.tipitakaNode('vp-2'));
       await t.pumpAndSettle();
       expect(t.takeException(), isNull);
+
+      // Results, over the shipped tree (the made-up names have no letters
+      // a search can match): the plain a-z key of a name read from it.
+      await openTipitakaApp(t, Routes.tipitaka, size: size, load: shipped);
+      await t.enterText(
+        find.descendant(
+          of: find.byKey(const ValueKey('tipitaka-search')),
+          matching: find.byType(TextField),
+        ),
+        latinKey(shippedTree.node('dn-1')!.pali),
+      );
+      await t.pumpAndSettle();
+      expect(find.byKey(const ValueKey('tipitaka-result-dn-1')), findsOneWidget);
+      expect(t.takeException(), isNull);
+      await scrollToEnd(t);
     });
   }
 }

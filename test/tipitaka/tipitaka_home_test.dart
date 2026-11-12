@@ -180,6 +180,26 @@ void main() {
     expect(field.controller!.text, isEmpty);
   });
 
+  testWidgets('a search index that fails shows the message, not a spinner, '
+      'and Try again builds it afresh', (t) async {
+    var broken = true;
+    await openTipitakaApp(t, Routes.tipitaka, overrides: [
+      tipitakaSearchProvider.overrideWith((ref) async {
+        final tree = await ref.watch(tipitakaTreeProvider.future);
+        if (broken) throw StateError('index failed');
+        return TipitakaSearchIndex(tree);
+      }),
+    ]);
+    await _type(t, 'qqqq');
+    expect(find.text('The Tripitaka could not be opened.'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    broken = false;
+    await t.tap(find.text('Try again'));
+    await t.pumpAndSettle();
+    expect(find.text('The Tripitaka could not be opened.'), findsNothing);
+    expect(find.text('No names match'), findsOneWidget);
+  });
+
   testWidgets('load failure shows the message and Try again reloads',
       (t) async {
     var broken = true;

@@ -103,6 +103,18 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
+  testWidgets('only stale Tripitaka bookmarks: the empty state once the tree '
+      'has loaded', (t) async {
+    final store = InMemoryKeyValueStore()
+      // An unknown key and a parent without text: neither is a reading.
+      ..save(tipitakaSavedKey, '["no-such-key","vp-1"]');
+    await openTipitakaApp(t, Routes.saved, store: store);
+    await t.pumpAndSettle();
+    expect(find.text('Nothing saved yet'), findsOneWidget);
+    expect(group, findsNothing);
+    expect(find.text('No bookmarks yet.'), findsNothing);
+  });
+
   testWidgets('empty state only when all three are empty', (t) async {
     final app = await openTipitakaApp(t, Routes.saved);
     await t.pumpAndSettle();

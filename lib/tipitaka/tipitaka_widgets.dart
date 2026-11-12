@@ -78,6 +78,7 @@ class TipitakaLoadError extends ConsumerWidget {
     onAction: () {
       ref.invalidate(tipitakaManifestProvider);
       ref.invalidate(tipitakaTreeProvider);
+      ref.invalidate(tipitakaSearchProvider);
     },
   );
 }
@@ -322,8 +323,13 @@ class TipitakaResults extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final index = ref.watch(tipitakaSearchProvider).value;
-    if (index == null) return const TipitakaLoading();
+    final search = ref.watch(tipitakaSearchProvider);
+    final index = search.value;
+    if (index == null) {
+      return search.hasError && !search.isLoading
+          ? const TipitakaLoadError()
+          : const TipitakaLoading();
+    }
     final hits = index.find(query);
     if (hits.isEmpty) {
       return const EmptyState(
