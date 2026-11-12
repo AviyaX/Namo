@@ -22,3 +22,8 @@
   - [ ] Look at the joined-palms mark in Quick Access.
   - [ ] Supply the new Samantha Pattana picture.
   - [ ] Confirm the picture credit wording.
+- [ ] Tripitaka (text from tipitaka.lk):
+  - [ ] Before each release run `python -I -X utf8 tools/sync_tipitaka.py . --fetch`, then `python -I -X utf8 tools/sync_tipitaka.py . --check`.
+  - [ ] Run `python -I -X utf8 tools/check_tipitaka_glyphs.py .`; a `substituted` line for U+05F4 is expected.
+  - [ ] Owner checks on a phone and in a web browser: open each pitaka; read one sutta in each view (Pali, Sinhala, both); open a footnote; search in Sinhala and in English letters; a bookmark shows in Saved; close the app and open it again and the place is kept.
+  - [ ] Confirm the Tripitaka wording on the Sources page.

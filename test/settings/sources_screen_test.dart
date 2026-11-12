@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/widgets/surface_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
+import '../tipitaka/tipitaka_support.dart';
 
-Future<void> openSources(WidgetTester t) async {
+Future<void> openSources(WidgetTester t, {AssetBytes? load}) async {
   // The bundled file is read by real I/O, which fake-async time cannot
   // advance; read it first and hand the app the finished library.
   final library = await t.runAsync(
@@ -22,11 +26,20 @@ Future<void> openSources(WidgetTester t) async {
         FakeContentRepository(library: library),
       ),
       keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+      tipitakaRepositoryProvider.overrideWithValue(
+        TipitakaRepository(
+          load: load ?? fakeAssets(tinyTipitaka()),
+          inBackground: false,
+        ),
+      ),
     ],
     location: Routes.sources,
-    size: const Size(390, 8000),
+    size: const Size(390, 9000),
   );
 }
+
+/// The Tripitaka card (the tab bar has a "Tripitaka" label too).
+Finder get tripitakaCard => find.byKey(const ValueKey('sources-tripitaka'));
 
 Finder text(String s) => find.text(s, findRichText: true);
 
@@ -340,7 +353,7 @@ void main() {
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
     // 6 text sources + 4 pictures + 16 corrections + 6 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(32));
+    expect(find.byType(SurfaceCard), findsNWidgets(33));
   });
 
   for (final dark in [false, true]) {
@@ -365,4 +378,74 @@ void main() {
       });
     }
   }
+
+  testWidgets(
+    'Sources shows the Tripitaka entry with the five sentences and the '
+    "manifest's date",
+    (t) async {
+      await openSources(t);
+      await t.pumpAndSettle();
+      final card = tripitakaCard;
+      expect(card, findsOneWidget);
+      for (final sentence in [
+        'The Tripitaka text is the Buddha Jayanti Tripitaka Pali text and its '
+            'Sinhala translation as published by tipitaka.lk '
+            '(github.com/pathnirvana/tipitaka.lk).',
+        'Licence: Creative Commons Attribution-NoDerivatives 4.0 '
+            'International. The text is included unchanged.',
+        'Version of 2026-01-02.',
+        'Namo is not connected to tipitaka.lk.',
+        'If you find an error in the text, please report it to '
+            'path.nirvana@gmail.com so it can be corrected at the source.',
+      ]) {
+        expect(
+          find.descendant(of: card, matching: find.textContaining(
+            sentence,
+            findRichText: true,
+          )),
+          findsOneWidget,
+          reason: sentence,
+        );
+      }
+    },
+  );
+
+  testWidgets('Sources entry does not say "used with permission"', (t) async {
+    await openSources(t);
+    await t.pumpAndSettle();
+    expect(tripitakaCard, findsOneWidget);
+    expect(
+      find.descendant(
+        of: tripitakaCard,
+        matching: find.textContaining('permission', findRichText: true),
+      ),
+      findsNothing,
+    );
+  });
+
+  testWidgets('Sources leaves out the version sentence while it loads', (
+    t,
+  ) async {
+    final gate = Completer<void>();
+    final inner = fakeAssets(tinyTipitaka());
+    await openSources(
+      t,
+      load: (path) async {
+        await gate.future;
+        return inner(path);
+      },
+    );
+    expect(tripitakaCard, findsOneWidget);
+    expect(find.textContaining('Version of'), findsNothing);
+    expect(
+      find.descendant(
+        of: tripitakaCard,
+        matching: find.textContaining('Namo is not connected to tipitaka.lk.'),
+      ),
+      findsOneWidget,
+    );
+    gate.complete();
+    await t.pumpAndSettle();
+    expect(find.textContaining('Version of 2026-01-02.'), findsOneWidget);
+  });
 }

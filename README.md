@@ -54,6 +54,17 @@ The Samantha Pattana Dharma Wandanawa topic (an Introduction and the Vandana, wi
 - The originals (PDF, conversion, recording, captions) are not in git. They live only in the main checkout's `source_material/samantha_patthana/`; the card picture `assets/pictures/samantha_patthana.jpg` is a copy of `design/card_images/stupa_dusk.jpg`.
 - Tests: `python -I -X utf8 tools/test_build_samantha_patthana.py` and `python -I -X utf8 tools/test_time_samantha_patthana.py`. The glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`) also covers this topic's names.
 
+## Tripitaka
+
+- Where it comes from: the Buddha Jayanti Tripitaka Pali text and its Sinhala translation, as published by tipitaka.lk (github.com/pathnirvana/tipitaka.lk).
+- Licence: Creative Commons Attribution-NoDerivatives 4.0 International, so the text is included unchanged.
+- Namo is not connected to tipitaka.lk; errors in the text are reported to path.nirvana@gmail.com so they can be corrected at the source.
+- Update from the source: `python -I -X utf8 tools/sync_tipitaka.py . --fetch`. Verify that the bundled text matches it: `python -I -X utf8 tools/sync_tipitaka.py . --check`.
+- Glyph report: `python -I -X utf8 tools/check_tipitaka_glyphs.py .`
+- Tool tests: `python -I -X utf8 tools/test_sync_tipitaka.py` and `python -I -X utf8 tools/test_check_tipitaka_glyphs.py`.
+- The text is never edited here. Joining Pali letters happens only while drawing.
+- The only display change besides joining: U+05F4 (used in an-4 as a closing quote; no font draws it) is shown as a plain quote mark. The stored text is unchanged, and the slip has been reported to tipitaka.lk.
+
 ## Docs
 
 - `docs/superpowers/specs/`: the owner's spec and the design.

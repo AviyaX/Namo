@@ -197,6 +197,7 @@ state.
   default (`shared/beautify.ts`: rakaransaya, yansaya and its common
   conjuncts). This happens only while drawing; the stored text is not
   touched.
+- The only other display change: U+05F4 (used in an-4 as a closing quote; no font draws it) is shown as a plain quote mark. The stored text is unchanged, and the slip has been reported to tipitaka.lk.
 - Where the source has no Sinhala for an entry (1,660 of the 15,156
   pages have none, nearly all in the Patthana), the සිංහල view shows the
   Pali entry with a quiet note that the source has no Sinhala here.

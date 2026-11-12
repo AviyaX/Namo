@@ -14,6 +14,10 @@ import '../design/widgets/page_header.dart';
 import '../home/card_art.dart';
 import '../library/library_gate.dart';
 import '../router.dart';
+import '../tipitaka/pali_display.dart';
+import '../tipitaka/tipitaka_repository.dart';
+import '../tipitaka/tipitaka_state.dart';
+import '../tipitaka/tipitaka_tree.dart';
 import 'saved.dart';
 
 class SavedScreen extends ConsumerWidget {
@@ -24,6 +28,17 @@ class SavedScreen extends ConsumerWidget {
     final saved = ref.watch(savedProvider);
     final controller = ref.read(savedProvider.notifier);
     final p = NamoPalette.of(context);
+    final tipitakaKeys = ref.watch(tipitakaSavedProvider);
+    // The tree is asked for only when something is bookmarked, and nothing
+    // is drawn for it (no spinner) while it loads or if it fails.
+    final tree = tipitakaKeys.isEmpty
+        ? null
+        : ref.watch(tipitakaTreeProvider).value;
+    final tipitaka = <TipitakaNode>[
+      if (tree != null)
+        for (final key in tipitakaKeys)
+          if (tree.isReading(key)) ?tree.node(key),
+    ];
     return NamoPage(
       columnKey: const ValueKey('saved-column'),
       children: [
@@ -44,7 +59,7 @@ class SavedScreen extends ConsumerWidget {
               for (final id in saved.favourites.toList().reversed)
                 ?library.reading(id),
             ];
-            if (bookmarks.isEmpty && favourites.isEmpty) {
+            if (bookmarks.isEmpty && favourites.isEmpty && tipitakaKeys.isEmpty) {
               return EmptyState(
                 icon: Symbols.bookmark_rounded,
                 title: 'Nothing saved yet',
@@ -117,6 +132,40 @@ class SavedScreen extends ConsumerWidget {
                       onPressed: () => controller.toggleFavourite(reading.id),
                     ),
                   ),
+                if (tipitaka.isNotEmpty) ...[
+                  const SizedBox(height: NamoSpace.xxl),
+                  Padding(
+                    key: const ValueKey('saved-tipitaka-group'),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: NamoSpace.lg,
+                    ),
+                    child: Overline('Tripitaka', header: true),
+                  ),
+                  const SizedBox(height: NamoSpace.sm),
+                  for (final node in tipitaka)
+                    ListRow(
+                      title: tipitakaForDisplay(node.sinhala),
+                      titleFamily: NamoFonts.sinhala,
+                      subtitle: tipitakaForDisplay(
+                        [
+                          for (final a in tree!.ancestors(node.key)) a.sinhala,
+                        ].join(' › '),
+                      ),
+                      subtitleFamily: NamoFonts.sinhala,
+                      onTap: () => context.go(
+                        Routes.tipitakaReader(node.key, fromSaved: true),
+                      ),
+                      action: NamoIconButton(
+                        icon: Symbols.close_rounded,
+                        tooltip:
+                            'Remove bookmark: ${tipitakaForDisplay(node.sinhala)}',
+                        color: p.textSecondary,
+                        onPressed: () => ref
+                            .read(tipitakaSavedProvider.notifier)
+                            .toggle(node.key),
+                      ),
+                    ),
+                ],
               ],
             );
           },

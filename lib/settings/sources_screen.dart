@@ -14,6 +14,7 @@ import '../design/widgets/page_header.dart';
 import '../design/widgets/surface_card.dart';
 import '../library/library_gate.dart';
 import '../router.dart';
+import '../tipitaka/tipitaka_repository.dart';
 
 /// One credited source. An address is shown as text to copy, never opened.
 class _Credit {
@@ -213,6 +214,7 @@ class SourcesScreen extends StatelessWidget {
         ),
         for (final credit in _credits) _CreditBlock(credit),
         const _SamanthaCreditBlock(),
+        const _TipitakaCreditBlock(),
         const _SectionLabel('Pictures'),
         for (final credit in _pictureCredits) _CreditBlock(credit),
         LibraryGate(
@@ -261,6 +263,46 @@ class _SamanthaCreditBlock extends ConsumerWidget {
   }
 }
 
+/// The Tripitaka credit. The version sentence waits for the manifest (and is
+/// left out if it cannot be read).
+class _TipitakaCreditBlock extends ConsumerWidget {
+  const _TipitakaCreditBlock();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = NamoPalette.of(context);
+    final date = ref.watch(tipitakaManifestProvider).value?.commitDate;
+    final sentences = [
+      'The Tripitaka text is the Buddha Jayanti Tripitaka Pali text and its '
+          'Sinhala translation as published by tipitaka.lk '
+          '(github.com/pathnirvana/tipitaka.lk).',
+      'Licence: Creative Commons Attribution-NoDerivatives 4.0 '
+          'International. The text is included unchanged.',
+      ?(date == null ? null : 'Version of $date.'),
+      'Namo is not connected to tipitaka.lk.',
+      'If you find an error in the text, please report it to '
+          'path.nirvana@gmail.com so it can be corrected at the source.',
+    ];
+    return _SourceCard(
+      key: const ValueKey('sources-tripitaka'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Text('Tripitaka', style: NamoType.cardTitle(p.text)),
+          ),
+          for (final sentence in sentences)
+            Padding(
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
+              child: Text(sentence, style: NamoType.body(p.textSecondary)),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 /// A heading over a run of cards.
 class _SectionLabel extends StatelessWidget {
   const _SectionLabel(this.text);
@@ -283,7 +325,7 @@ class _SectionLabel extends StatelessWidget {
 
 /// A card in a run of cards, 16 below the one before.
 class _SourceCard extends StatelessWidget {
-  const _SourceCard({required this.child});
+  const _SourceCard({super.key, required this.child});
 
   final Widget child;
 
