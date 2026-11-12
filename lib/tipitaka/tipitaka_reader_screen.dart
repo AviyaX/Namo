@@ -17,7 +17,7 @@ import '../reader/reader_settings_sheet.dart';
 import '../router.dart';
 import '../settings/settings.dart';
 import 'tipitaka_book.dart';
-import 'tipitaka_entry_view.dart';
+import 'tipitaka_reader_rows.dart';
 import 'tipitaka_repository.dart';
 import 'tipitaka_state.dart';
 import 'tipitaka_tree.dart';

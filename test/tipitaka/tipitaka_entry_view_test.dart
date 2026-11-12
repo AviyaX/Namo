@@ -227,6 +227,26 @@ void main() {
     );
   });
 
+  testWidgets('the mark is an inline link button named Footnote <ref>',
+      (t) async {
+    await _pump(t, [
+      TipitakaEntryView(
+        entry: _entry(EntryType.unindented, 'word{2} more'),
+        pali: true,
+        footnotes: const ['2. second note'],
+      ),
+    ]);
+    expect(
+      t.getSemantics(find.bySemanticsLabel('Footnote 2')),
+      isSemantics(
+        label: 'Footnote 2',
+        isLink: true,
+        isButton: true,
+        hasTapAction: true,
+      ),
+    );
+  });
+
   testWidgets('the mark answers a tap a little way off it (44 px target)',
       (t) async {
     await _pump(t, [

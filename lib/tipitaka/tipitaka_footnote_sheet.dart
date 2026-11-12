@@ -4,8 +4,8 @@ import 'package:flutter/scheduler.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/sheet_frame.dart';
-import 'tipitaka_entry_view.dart';
 import 'tipitaka_markup.dart';
+import 'tipitaka_text_spans.dart';
 
 /// Opens a page's footnotes in one language over the reader. [focus], when
 /// given, is the index of the footnote to scroll to and mark.

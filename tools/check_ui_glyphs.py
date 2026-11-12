@@ -30,6 +30,14 @@ SAMANTHA = "assets/content/samantha_patthana.json"
 NOT_DRAWN = {
     # The table that folds Pali diacritics to plain letters for searching.
     "lib/library/search.dart",
+    # The same for Tripitaka name search keys (Latin letters with marks).
+    "lib/tipitaka/tipitaka_search.dart",
+    # The source's line-break marker U+21B4, read by the markup parser and
+    # never drawn (it becomes a line break).
+    "lib/tipitaka/tipitaka_markup.dart",
+    # The draw-time substitution table: U+05F4 is what is replaced, never
+    # what is drawn (check_tipitaka_glyphs.py checks the shipped text).
+    "lib/tipitaka/pali_display.dart",
 }
 
 
