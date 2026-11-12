@@ -48,6 +48,17 @@ void main() {
       );
     });
 
+    test('remember after the container is gone does nothing', () {
+      final store = InMemoryKeyValueStore();
+      final c = ProviderContainer(
+        overrides: [keyValueStoreProvider.overrideWithValue(store)],
+      );
+      final n = c.read(tipitakaPlacesProvider.notifier);
+      c.dispose();
+      n.remember('a', entry: 1, fraction: 0.5);
+      expect(store.read(tipitakaPlacesKey), isNull);
+    });
+
     test('the 201st place drops the oldest', () {
       final store = InMemoryKeyValueStore();
       final c = _on(store);

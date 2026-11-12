@@ -177,12 +177,19 @@ final tipitakaRepositoryProvider = Provider<TipitakaRepository>(
   (ref) => TipitakaRepository(),
 );
 
+// A shipped file that fails to load will fail again: no automatic retry, so
+// the message shows once. The repository forgets a failed load, so a reading
+// opened again (or a provider invalidated) tries afresh.
+Duration? _noRetry(int _, Object _) => null;
+
 final tipitakaTreeProvider = FutureProvider<TipitakaTree>(
   (ref) => ref.watch(tipitakaRepositoryProvider).tree(),
+  retry: _noRetry,
 );
 
 final tipitakaManifestProvider = FutureProvider<TipitakaManifest>(
   (ref) => ref.watch(tipitakaRepositoryProvider).manifest(),
+  retry: _noRetry,
 );
 
 /// Null when the key is unknown or not a reading. Disposed when no longer
@@ -195,4 +202,4 @@ final tipitakaReadingProvider = FutureProvider.autoDispose
       if (node == null || !tree.isReading(key)) return null;
       final book = await repository.book(node.file);
       return readingOf(tree, book, key);
-    });
+    }, retry: _noRetry);

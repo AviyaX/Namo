@@ -141,6 +141,8 @@ void main() {
       'lib/reader/reader_screen.dart':
           'the position-save debounce (400 ms) and the longest wait while '
               'moving (2500 ms); neither is drawn',
+      'lib/tipitaka/tipitaka_reader_screen.dart':
+          'the place-save throttle (400 ms) while scrolling; not drawn',
     };
     final found = _hits(
       (s) => _outsideTokens(s) && !allowed.containsKey(s.path),

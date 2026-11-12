@@ -14,6 +14,7 @@ Future<void> showReaderSettingsSheet(
   BuildContext context, {
   required VoidCallback onBackToBeginning,
   bool showLayout = true,
+  bool textOnly = false,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
@@ -32,6 +33,7 @@ Future<void> showReaderSettingsSheet(
   builder: (_) => ReaderSettingsSheet(
     onBackToBeginning: onBackToBeginning,
     showLayout: showLayout,
+    textOnly: textOnly,
   ),
 );
 
@@ -42,10 +44,16 @@ class ReaderSettingsSheet extends ConsumerWidget {
     super.key,
     required this.onBackToBeginning,
     this.showLayout = true,
+    this.textOnly = false,
   });
 
   /// False in a pirith, which always shows flowing passages.
   final bool showLayout;
+
+  /// True for a reader with its own language switch and no auto-scroll (the
+  /// Tripitaka): only text size, line spacing, theme and 'Back to the
+  /// beginning'.
+  final bool textOnly;
 
   /// Called after the sheet closes for 'Back to the beginning'.
   final VoidCallback onBackToBeginning;
@@ -78,10 +86,12 @@ class ReaderSettingsSheet extends ConsumerWidget {
               child: SheetFrame(
                 title: 'Reading settings',
                 children: [
-                  const SettingLabel('Languages'),
-                  const LanguageChooser(),
-                  gap,
-                  if (showLayout) ...[
+                  if (!textOnly) ...[
+                    const SettingLabel('Languages'),
+                    const LanguageChooser(),
+                    gap,
+                  ],
+                  if (showLayout && !textOnly) ...[
                     const SettingLabel('When two languages show'),
                     const LayoutChooser(),
                     gap,
@@ -98,12 +108,17 @@ class ReaderSettingsSheet extends ConsumerWidget {
                     onChanged: controller.setLineSpacing,
                   ),
                   gap,
-                  const SettingLabel('Scroll speed'),
-                  ScrollSpeedControl(
-                    sliderKey: const ValueKey('reader-scroll-speed'),
-                    value: settings.scrollSpeed,
-                    onChanged: controller.setScrollSpeed,
-                  ),
+                  if (textOnly) ...[
+                    const SettingLabel('Theme'),
+                    const ThemeChooser(),
+                  ] else ...[
+                    const SettingLabel('Scroll speed'),
+                    ScrollSpeedControl(
+                      sliderKey: const ValueKey('reader-scroll-speed'),
+                      value: settings.scrollSpeed,
+                      onChanged: controller.setScrollSpeed,
+                    ),
+                  ],
                   gap,
                   Align(
                     alignment: AlignmentDirectional.centerStart,

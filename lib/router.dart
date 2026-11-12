@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +13,7 @@ import 'reader/reader_screen.dart';
 import 'saved/saved_screen.dart';
 import 'settings/settings_screen.dart';
 import 'settings/sources_screen.dart';
+import 'tipitaka/tipitaka_reader_screen.dart';
 
 abstract final class Routes {
   static const home = '/';
@@ -50,6 +52,16 @@ abstract final class Routes {
 
   /// The editor of one flow.
   static String flowEditor(String flowId) => '/library/flow/$flowId';
+
+  /// The Tripitaka tab's first page.
+  static const tipitaka = '/tipitaka';
+
+  /// The list of a Tripitaka node's children.
+  static String tipitakaNode(String key) => '/tipitaka/n/$key';
+
+  /// The Tripitaka reader; Back goes to Saved when [fromSaved].
+  static String tipitakaReader(String key, {bool fromSaved = false}) =>
+      fromSaved ? '/tipitaka/read/$key?from=saved' : '/tipitaka/read/$key';
 }
 
 /// The pages that open the reader and want Back to return to them. The
@@ -153,6 +165,22 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               ReaderFrom.values.asNameMap()[state.uri.queryParameters['from']],
         ),
       ),
+    ),
+    GoRoute(
+      path: '/tipitaka/read/:key',
+      pageBuilder: (context, state) {
+        final key = state.pathParameters['key']!;
+        return namoPage(
+          key: state.pageKey,
+          context: context,
+          child: TipitakaReaderScreen(
+            // A new reading starts afresh (its own place, its own scroll).
+            key: ValueKey('tipitaka-reader-$key'),
+            readingKey: key,
+            fromSaved: state.uri.queryParameters['from'] == 'saved',
+          ),
+        );
+      },
     ),
   ],
 );

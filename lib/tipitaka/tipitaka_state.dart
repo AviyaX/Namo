@@ -42,7 +42,8 @@ class TipitakaPlace {
   /// Index within the reading of the entry at the top.
   final int entry;
 
-  /// 0..1, how far down that entry.
+  /// 0..1, how far through the reading; the reader stores
+  /// (entry + 1) / number of entries.
   final double fraction;
 
   /// A counter (highest existing + 1), not a clock.
@@ -124,8 +125,10 @@ class TipitakaPlacesController extends Notifier<TipitakaPlaces> {
 
   /// [entry]: index within the reading of the entry at the top; [fraction]
   /// 0..1. Gives the place the highest order; drops the oldest beyond
-  /// [TipitakaPlaces.keep].
+  /// [TipitakaPlaces.keep]. Does nothing once the provider is gone (a page
+  /// saving its place as the whole app closes).
   void remember(String key, {required int entry, required double fraction}) {
+    if (!ref.mounted) return;
     final top = state.recent.isEmpty ? 0 : state.recent.first.order;
     final place = TipitakaPlace(
       key: key,
