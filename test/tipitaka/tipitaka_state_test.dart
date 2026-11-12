@@ -125,6 +125,19 @@ void main() {
       });
     }
 
+    test('a non-finite number drops that item and nothing throws', () async {
+      final store = InMemoryKeyValueStore();
+      await store.write(
+        tipitakaPlacesKey,
+        '[{"key":"x","entry":1e999,"fraction":0.5,"order":2},'
+        '{"key":"a","entry":1,"fraction":0.5,"order":1}]',
+      );
+      expect(
+        _on(store).read(tipitakaPlacesProvider).recent.map((p) => p.key),
+        ['a'],
+      );
+    });
+
     test('one bad item is dropped alone', () async {
       final store = InMemoryKeyValueStore();
       await store.write(
@@ -200,7 +213,7 @@ void main() {
     const damaged = {
       'not JSON': '{{',
       'JSON of the wrong shape': '[1,2]',
-      'items with wrong types': '"unknown-view"',
+      'an unknown view name': '"unknown-view"',
       'a number': '5',
     };
     for (final e in damaged.entries) {

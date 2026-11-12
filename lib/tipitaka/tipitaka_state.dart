@@ -64,6 +64,7 @@ class TipitakaPlace {
     if (key is! String || entry is! num || fraction is! num || order is! num) {
       return null;
     }
+    if (!entry.isFinite || !fraction.isFinite || !order.isFinite) return null;
     return TipitakaPlace(
       key: key,
       entry: entry.toInt() < 0 ? 0 : entry.toInt(),
@@ -235,7 +236,7 @@ void pruneTipitakaState(WidgetRef ref, TipitakaTree tree) => _prune(
   tree,
 );
 
-/// The same, for a [ProviderContainer].
+/// The same, for callers without a WidgetRef (a [ProviderContainer]).
 void pruneTipitakaStateIn(ProviderContainer container, TipitakaTree tree) =>
     _prune(
       container.read(tipitakaPlacesProvider.notifier),
