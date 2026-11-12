@@ -90,6 +90,23 @@ class GlyphReport(unittest.TestCase):
         r = run(self.root)
         self.assertEqual((r.returncode, r.stdout.strip()), (0, "OK"), r.stdout)
 
+    def test_display_substituted_reported_on_own_line_and_exit_zero(self):
+        make_project(self.root, {"k": ["abc", "def", 1, [0, 0], "root", "a-1"]},
+                     {"a-1": [page("x״y״"), page("״")]})
+        r = run(self.root)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(r.stdout.strip(), "substituted U+05F4 -> U+0022 count=3")
+
+    def test_substituted_with_other_missing_still_fails(self):
+        make_project(self.root, {"k": ["abc", "def", 1, [0, 0], "root", "a-1"]},
+                     {"a-1": [page("״" + BOX)]})
+        r = run(self.root)
+        self.assertEqual(r.returncode, 1, r.stdout)
+        lines = r.stdout.strip().splitlines()
+        self.assertEqual(len(lines), 2, r.stdout)
+        self.assertTrue(lines[0].startswith("U+10FFFD "), lines[0])
+        self.assertEqual(lines[1], "substituted U+05F4 -> U+0022 count=1")
+
     def test_assets_untouched(self):
         make_project(self.root, {"k": ["abc", BOX, 1, [0, 0], "root", "a-1"]}, {"a-1": [page(BOX)]})
         before = digest(self.root)
