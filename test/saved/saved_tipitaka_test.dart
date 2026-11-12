@@ -131,4 +131,45 @@ void main() {
     expect(find.byType(EmptyState), findsNothing);
     expect(group, findsNothing);
   });
+
+  testWidgets('a reading with no Sinhala name shows its Pali name, path and '
+      'remove tooltip', (t) async {
+    final assets = tinyTipitaka();
+    final tree = assets[tinyTreePath]! as Map<String, Object>;
+    final node = List<Object>.of(tree['vp-2-2']! as List<Object>);
+    node[1] = ''; // no Sinhala name
+    tree['vp-2-2'] = node;
+    final nameless = List<Object>.of(tree['vp-2']! as List<Object>);
+    nameless[1] = ''; // an ancestor with none either
+    tree['vp-2'] = nameless;
+    final store = InMemoryKeyValueStore()
+      ..save(tipitakaSavedKey, '["vp-2-2"]');
+    await openTipitakaApp(
+      t,
+      Routes.saved,
+      load: fakeAssets(assets),
+      store: store,
+    );
+    await t.pumpAndSettle();
+    expect(find.text('P two two'), findsOneWidget);
+    expect(find.text('S vp › P two'), findsOneWidget);
+    expect(find.byTooltip('Remove bookmark: P two two'), findsOneWidget);
+  });
+
+  testWidgets('a tree that fails to load counts as no Tripitaka rows: the '
+      'empty state shows', (t) async {
+    final store = InMemoryKeyValueStore()
+      ..save(tipitakaSavedKey, '["vp-1-1"]');
+    final inner = fakeAssets(tinyTipitaka());
+    await openTipitakaApp(
+      t,
+      Routes.saved,
+      load: (path) =>
+          path == tinyTreePath ? throw StateError('broken') : inner(path),
+      store: store,
+    );
+    await t.pumpAndSettle();
+    expect(find.text('Nothing saved yet'), findsOneWidget);
+    expect(group, findsNothing);
+  });
 }

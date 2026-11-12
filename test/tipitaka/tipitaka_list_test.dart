@@ -249,4 +249,22 @@ void main() {
       await scrollToEnd(t);
     });
   }
+
+  testWidgets('a row with no Sinhala name shows the Pali name once, as the '
+      'title', (t) async {
+    final assets = tinyTipitaka();
+    final tree = assets[tinyTreePath]! as Map<String, Object>;
+    final node = List<Object>.of(tree['vp-2-2']! as List<Object>);
+    node[1] = '';
+    tree['vp-2-2'] = node;
+    await openTipitakaApp(
+      t,
+      Routes.tipitakaNode('vp-2'),
+      load: fakeAssets(assets),
+    );
+    expect(
+      find.descendant(of: _row('vp-2-2'), matching: find.text('P two two')),
+      findsOneWidget,
+    );
+  });
 }

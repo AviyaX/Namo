@@ -7,10 +7,15 @@ import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_search.dart';
 import 'package:buddhist_gatha/tipitaka/tipitaka_state.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_tree.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../tipitaka/tipitaka_app_support.dart';
 import 'quality_support.dart';
 
 const _sizes = [Size(320, 568), Size(390, 844), Size(1280, 800)];
@@ -30,6 +35,13 @@ List<LanguageSelection> _selections() {
 
 void main() {
   setUpAll(loadBundledFonts);
+
+  late AssetBytes shipped;
+  late TipitakaTree shippedTree;
+  setUpAll(() async {
+    shipped = await shippedTreeAssets();
+    shippedTree = await TipitakaRepository(load: shipped).tree();
+  });
 
   // The reader, at every size, text size, device text size, language choice
   // and (for two languages) layout. The layout only matters for two
@@ -437,12 +449,22 @@ void main() {
     }
   }
 
-  // The Tripitaka (the made-up fixture): its first page, a list page, the
-  // first page with search results, and the reader in each of its three
+  // The Tripitaka (the made-up fixture): its first page, the first page with
+  // a remembered place (the Continue card), a list page, the first page with
+  // search results (a query typed in), and the reader in each of its three
   // views, at the narrowest and the wide size, ordinary and doubled device
   // text, in both themes.
   final tipitakaScreens = <(String, String, Map<String, String>)>[
     ('Tripitaka first page', Routes.tipitaka, const {}),
+    (
+      'Tripitaka first page with Continue card',
+      Routes.tipitaka,
+      {
+        tipitakaPlacesKey: jsonEncode([
+          {'key': 'vp-1-1', 'entry': 1, 'fraction': 0.5, 'order': 1},
+        ]),
+      },
+    ),
     ('Tripitaka list', Routes.tipitakaNode('vp-2'), const {}),
     for (final view in TipitakaView.values)
       (
@@ -467,9 +489,39 @@ void main() {
               storeExtras: extras,
             );
             expect(t.takeException(), isNull);
+            if (name.contains('Continue')) {
+              expect(find.byType(TipitakaContinueCard), findsOneWidget);
+            }
             await scrollThrough(t);
           });
         }
+        testWidgets('Tripitaka first page with search results does not '
+            'overflow: $where', (t) async {
+          // Over the shipped tree: the made-up names have no letters a
+          // search can match.
+          await openReal(
+            t,
+            Routes.tipitaka,
+            size: size,
+            deviceTextScale: scale,
+            dark: dark,
+            tipitaka: shipped,
+          );
+          await t.enterText(
+            find.descendant(
+              of: find.byKey(const ValueKey('tipitaka-search')),
+              matching: find.byType(TextField),
+            ),
+            latinKey(shippedTree.node('dn-1')!.pali),
+          );
+          await t.pumpAndSettle();
+          expect(
+            find.byKey(const ValueKey('tipitaka-result-dn-1')),
+            findsOneWidget,
+          );
+          expect(t.takeException(), isNull);
+          await scrollThrough(t);
+        });
         testWidgets('Tripitaka footnotes sheet does not overflow: $where',
             (t) async {
           await openReal(

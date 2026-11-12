@@ -34,6 +34,16 @@ void main() {
   });
 
   group('TipitakaRepository', () {
+    testWidgets('paintFirst waits for the frame end (or gives up) and still '
+        'loads', (t) async {
+      final repo = TipitakaRepository(
+        load: fakeAssets(tinyTipitaka()),
+        paintFirst: true,
+      );
+      final tree = await t.runAsync(repo.tree);
+      expect(tree!.node('vp-1-1'), isNotNull);
+    });
+
     test('loads manifest, tree and books from gzip assets', () async {
       final repo = TipitakaRepository(load: fakeAssets(tinyTipitaka()));
       final manifest = await repo.manifest();

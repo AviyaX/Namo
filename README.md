@@ -59,6 +59,10 @@ The Samantha Pattana Dharma Wandanawa topic (an Introduction and the Vandana, wi
 - Where it comes from: the Buddha Jayanti Tripitaka Pali text and its Sinhala translation, as published by tipitaka.lk (github.com/pathnirvana/tipitaka.lk).
 - Licence: Creative Commons Attribution-NoDerivatives 4.0 International, so the text is included unchanged.
 - Namo is not connected to tipitaka.lk; errors in the text are reported to path.nirvana@gmail.com so they can be corrected at the source.
+- One-time setup of the source clone (needs the network; `source_material/` is never committed):
+  `git clone --filter=blob:none --sparse https://github.com/pathnirvana/tipitaka.lk.git source_material/tipitaka_lk/repo` then
+  `git -C source_material/tipitaka_lk/repo sparse-checkout set public/static/text public/static/data shared e2e/legacy/goldens`.
+  `--fetch` only pulls in an existing clone; with none it prints these commands and stops.
 - Update from the source: `python -I -X utf8 tools/sync_tipitaka.py . --fetch`. Verify that the bundled text matches it: `python -I -X utf8 tools/sync_tipitaka.py . --check`.
 - Glyph report: `python -I -X utf8 tools/check_tipitaka_glyphs.py .`
 - Tool tests: `python -I -X utf8 tools/test_sync_tipitaka.py` and `python -I -X utf8 tools/test_check_tipitaka_glyphs.py`.

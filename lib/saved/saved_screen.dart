@@ -14,7 +14,7 @@ import '../design/widgets/page_header.dart';
 import '../home/card_art.dart';
 import '../library/library_gate.dart';
 import '../router.dart';
-import '../tipitaka/pali_display.dart';
+import '../tipitaka/tipitaka_labels.dart';
 import '../tipitaka/tipitaka_repository.dart';
 import '../tipitaka/tipitaka_state.dart';
 import '../tipitaka/tipitaka_tree.dart';
@@ -34,6 +34,9 @@ class SavedScreen extends ConsumerWidget {
     final tree = tipitakaKeys.isEmpty
         ? null
         : ref.watch(tipitakaTreeProvider).value;
+    // A tree that failed to load counts as no Tripitaka rows.
+    final treeFailed =
+        tipitakaKeys.isNotEmpty && ref.watch(tipitakaTreeProvider).hasError;
     final tipitaka = <TipitakaNode>[
       if (tree != null)
         for (final key in tipitakaKeys)
@@ -41,7 +44,9 @@ class SavedScreen extends ConsumerWidget {
     ];
     // Until the tree has loaded, any stored key counts; once it has, only
     // keys that are still readings do (stale keys alone leave Saved empty).
-    final hasTipitaka = tree == null
+    final hasTipitaka = treeFailed
+        ? false
+        : tree == null
         ? tipitakaKeys.isNotEmpty
         : tipitaka.isNotEmpty;
     return NamoPage(
@@ -149,13 +154,9 @@ class SavedScreen extends ConsumerWidget {
                   const SizedBox(height: NamoSpace.sm),
                   for (final node in tipitaka)
                     ListRow(
-                      title: tipitakaForDisplay(node.sinhala),
+                      title: tipitakaName(node),
                       titleFamily: NamoFonts.sinhala,
-                      subtitle: tipitakaForDisplay(
-                        [
-                          for (final a in tree!.ancestors(node.key)) a.sinhala,
-                        ].join(' › '),
-                      ),
+                      subtitle: tipitakaPath(tree!, node.key),
                       subtitleFamily: NamoFonts.sinhala,
                       onTap: () => context.go(
                         Routes.tipitakaReader(node.key, fromSaved: true),
@@ -163,7 +164,7 @@ class SavedScreen extends ConsumerWidget {
                       action: NamoIconButton(
                         icon: Symbols.close_rounded,
                         tooltip:
-                            'Remove bookmark: ${tipitakaForDisplay(node.sinhala)}',
+                            'Remove bookmark: ${tipitakaName(node)}',
                         color: p.textSecondary,
                         onPressed: () => ref
                             .read(tipitakaSavedProvider.notifier)

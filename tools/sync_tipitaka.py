@@ -341,6 +341,12 @@ def main(argv=None):
     source = args.from_clone
     if args.fetch:
         source = args.clone or str(project / DEFAULT_CLONE)
+        if not pathlib.Path(source).is_dir():
+            print(f"No clone of the source at {source}.")
+            print("Make it once (this downloads from the network), then run --fetch again:")
+            print(f"  git clone --filter=blob:none --sparse {SOURCE_URL}.git {source}")
+            print(f"  git -C {source} sparse-checkout set public/static/text public/static/data shared e2e/legacy/goldens")
+            return 1
         subprocess.run(["git", "-C", source, "pull", "--ff-only"], check=True)
     if source:
         pack(project, source)

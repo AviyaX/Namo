@@ -9,6 +9,7 @@ import '../router.dart';
 import 'tipitaka_book.dart';
 import 'tipitaka_entry_view.dart';
 import 'tipitaka_state.dart';
+import 'tipitaka_labels.dart';
 import 'tipitaka_tree.dart';
 
 /// Draws the rows of a reading for one view: row i is entry i, with the
@@ -140,9 +141,7 @@ class TipitakaNeighbours extends StatelessWidget {
     Widget side(String? key, String label, {required bool end}) {
       if (key == null) return const SizedBox.shrink();
       final node = tree.node(key);
-      final name = node == null
-          ? ''
-          : (node.sinhala.trim().isEmpty ? node.pali : node.sinhala);
+      final name = node == null ? '' : tipitakaName(node);
       return _NeighbourButton(
         label: label,
         name: name,

@@ -20,6 +20,7 @@ import 'tipitaka_book.dart';
 import 'tipitaka_reader_rows.dart';
 import 'tipitaka_repository.dart';
 import 'tipitaka_state.dart';
+import 'tipitaka_labels.dart';
 import 'tipitaka_tree.dart';
 
 /// One Tripitaka reading in Pali, Sinhala or both, opened at the entry the
@@ -190,9 +191,7 @@ class _TipitakaReaderScreenState extends ConsumerState<TipitakaReaderScreen> {
     final tree = ref.watch(tipitakaTreeProvider).value;
     final loaded = ref.watch(tipitakaReadingProvider(key));
     final node = tree?.node(key);
-    final title = node == null
-        ? ''
-        : (node.sinhala.trim().isEmpty ? node.pali : node.sinhala);
+    final title = node == null ? '' : tipitakaName(node);
 
     final Widget page;
     if (loaded.hasError && !loaded.isLoading) {

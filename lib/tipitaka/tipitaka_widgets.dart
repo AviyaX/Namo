@@ -17,27 +17,11 @@ import '../design/widgets/pressable.dart';
 import '../design/widgets/progress_line.dart';
 import '../design/widgets/surface_card.dart';
 import '../router.dart';
-import 'pali_display.dart';
 import 'tipitaka_labels.dart';
 import 'tipitaka_repository.dart';
 import 'tipitaka_search.dart';
 import 'tipitaka_state.dart';
 import 'tipitaka_tree.dart';
-
-/// The node's Sinhala name as drawn (its Pali name when the source gives no
-/// Sinhala one).
-String tipitakaName(TipitakaNode node) =>
-    tipitakaForDisplay(node.sinhala.trim().isEmpty ? node.pali : node.sinhala);
-
-/// The Pali name as drawn.
-String tipitakaPaliName(TipitakaNode node) =>
-    paliForDisplay(tipitakaForDisplay(node.pali));
-
-/// The Sinhala names of the node's ancestors, root first.
-String tipitakaPath(TipitakaTree tree, String key) => tree
-    .ancestors(key)
-    .map(tipitakaName)
-    .join(tipitakaPathSeparator);
 
 /// Where a tap on the node goes: its list when it has children, else the
 /// reader.
@@ -283,7 +267,9 @@ class TipitakaNodeRow extends ConsumerWidget {
     return ListRow(
       title: name,
       titleFamily: NamoFonts.sinhala,
-      subtitle: own ? null : tipitakaPaliName(node),
+      subtitle: own || tipitakaPaliName(node) == name
+          ? null
+          : tipitakaPaliName(node),
       caption: shownCaption,
       semanticLabel: [
         name,

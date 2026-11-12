@@ -143,6 +143,9 @@ void main() {
               'moving (2500 ms); neither is drawn',
       'lib/tipitaka/tipitaka_reader_screen.dart':
           'the place-save throttle (400 ms) while scrolling; not drawn',
+      'lib/tipitaka/tipitaka_repository.dart':
+          'gives up waiting (250 ms) for the end of a frame that never comes '
+              '(a hidden tab) before unpacking a book; not drawn',
     };
     final found = _hits(
       (s) => _outsideTokens(s) && !allowed.containsKey(s.path),

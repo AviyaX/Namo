@@ -261,5 +261,21 @@ class Fixtures(Base):
         self.assertIn(commit, readme)
 
 
+class FetchWithoutClone(Base):
+    def test_absent_clone_prints_the_clone_commands_and_fails(self):
+        missing = self.base / "no-clone-here"
+        code, out = run([str(self.project), "--fetch", "--clone", str(missing)])
+        self.assertEqual(code, 1)
+        self.assertIn("git clone --filter=blob:none --sparse", out)
+        self.assertIn("sparse-checkout set public/static/text public/static/data shared e2e/legacy/goldens", out)
+        self.assertFalse(missing.exists())
+        self.assertFalse(self.assets.exists())
+
+    def test_default_clone_location_is_used_when_no_clone_given(self):
+        code, out = run([str(self.project), "--fetch"])
+        self.assertEqual(code, 1)
+        self.assertIn(str(self.project / "source_material" / "tipitaka_lk" / "repo"), out)
+
+
 if __name__ == "__main__":
     unittest.main()

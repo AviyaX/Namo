@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -86,12 +87,19 @@ class TipitakaRepository {
     AssetBytes? load,
     int keepBooks = 4,
     this._inBackground = true,
-  }) : _load = load ?? _rootBundleBytes,
+    bool? paintFirst,
+  }) : _paintFirst = paintFirst ?? kIsWeb,
+       _load = load ?? _rootBundleBytes,
        _keepBooks = keepBooks < 1 ? 1 : keepBooks;
 
   final AssetBytes _load;
   final int _keepBooks;
   final bool _inBackground;
+
+  /// On web `compute` runs on the same thread, so the end of the current
+  /// frame is awaited first and the progress mark paints before the unpack
+  /// and parse. [paintFirst] defaults to [kIsWeb].
+  final bool _paintFirst;
 
   Future<TipitakaManifest>? _manifest;
   Future<TipitakaTree>? _tree;
@@ -99,8 +107,24 @@ class TipitakaRepository {
   /// Most recently used last (a map literal keeps insertion order).
   final _books = <String, Future<TipitakaBook>>{};
 
-  Future<R> _run<Q, R>(R Function(Q) work, Q input) =>
-      _inBackground ? compute(work, input) : Future.sync(() => work(input));
+  Future<R> _run<Q, R>(R Function(Q) work, Q input) async {
+    if (!_inBackground) return work(input);
+    if (_paintFirst) await _endOfFrame();
+    return compute(work, input);
+  }
+
+  /// Waits for the current frame to finish drawing. Gives up after a moment
+  /// (a hidden tab or a test that never pumps draws no frames).
+  static Future<void> _endOfFrame() async {
+    try {
+      await SchedulerBinding.instance.endOfFrame.timeout(
+        const Duration(milliseconds: 250),
+        onTimeout: () {},
+      );
+    } catch (_) {
+      // No binding: nothing to wait for.
+    }
+  }
 
   Future<TipitakaManifest> manifest() {
     final kept = _manifest;
