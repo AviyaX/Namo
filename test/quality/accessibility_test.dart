@@ -201,9 +201,9 @@ void main() {
   });
 
   group('bottom bar and navigation rail', () {
-    const tabs = ['Home', 'Library', 'Saved', 'Settings'];
+    const tabs = ['Home', 'Library', 'Tripitaka', 'Saved', 'Settings'];
 
-    testWidgets('the bottom bar has the four tabs, each labelled and 48 high', (t) async {
+    testWidgets('the bottom bar has the five tabs, each labelled and 48 high', (t) async {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.home);
       for (final tab in tabs) {
@@ -225,7 +225,7 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('the rail has the four tabs, each labelled and at least 48 x 48', (t) async {
+    testWidgets('the rail has the five tabs, each labelled and at least 48 x 48', (t) async {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.home, size: const Size(1280, 800));
       expect(find.byKey(const ValueKey('nav-rail')), findsOneWidget);

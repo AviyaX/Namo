@@ -6,11 +6,12 @@ import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../../quality/quality_support.dart';
 
-const _labels = ['Home', 'Library', 'Saved', 'Settings'];
+const _labels = ['Home', 'Library', 'Tripitaka', 'Saved', 'Settings'];
 
 Finder _nav(String label) => find.byKey(ValueKey('nav-${label.toLowerCase()}'));
 Finder _screen(String label) =>
@@ -63,6 +64,12 @@ double _contentBottom(WidgetTester t, Finder scrollable) {
   return bottom;
 }
 
+String _location(WidgetTester t) => GoRouter.of(t.element(_nav('Home')))
+    .routeInformationProvider
+    .value
+    .uri
+    .toString();
+
 Future<void> _go(WidgetTester t, String label) async {
   await t.tap(_nav(label));
   await t.pumpAndSettle();
@@ -72,8 +79,13 @@ Future<void> _go(WidgetTester t, String label) async {
 // read once, outside the fake clock). Mixing in pumpApp's own content load
 // leaves a cached asset future from a finished test that never completes.
 void main() {
+  // The bar's spacing depends on how wide the labels really are, so every
+  // test measures them in the bundled fonts, not the test font.
+  setUpAll(loadBundledFonts);
+
   group('phone: floating bar', () {
-    testWidgets('four destinations in order, each 48 x 48, the bar 16 from the sides',
+    testWidgets('bar shows five tabs in order Home, Library, Tripitaka, Saved, '
+        'Settings, each 48 x 48, the bar 16 from the sides',
         (t) async {
       await openReal(t, Routes.home);
       final xs = <double>[];
@@ -139,10 +151,11 @@ void main() {
       const icons = [
         Symbols.home_rounded,
         Symbols.menu_book_rounded,
+        Symbols.auto_stories_rounded,
         Symbols.bookmark_rounded,
         Symbols.settings_rounded,
       ];
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < _labels.length; i++) {
         expect(
           find.descendant(of: _nav(_labels[i]), matching: find.byIcon(icons[i])),
           findsOneWidget,
@@ -155,6 +168,27 @@ void main() {
       await _go(t, 'Library');
       expect(_screen('Library'), findsOneWidget);
       expect(_screen('Home'), findsNothing);
+    });
+
+    testWidgets('tapping Tripitaka opens /tipitaka', (t) async {
+      await openReal(t, Routes.home);
+      await _go(t, 'Tripitaka');
+      expect(_screen('Tripitaka'), findsOneWidget);
+      expect(_screen('Home'), findsNothing);
+      expect(_location(t), Routes.tipitaka);
+    });
+
+    testWidgets('Saved and Settings tabs still open their pages', (t) async {
+      await openReal(t, Routes.home);
+      await _go(t, 'Tripitaka');
+      await _go(t, 'Saved');
+      expect(_screen('Saved'), findsOneWidget);
+      expect(_location(t), Routes.saved);
+      await _go(t, 'Settings');
+      expect(_screen('Settings'), findsOneWidget);
+      expect(_location(t), Routes.settings);
+      await _go(t, 'Library');
+      expect(_screen('Library'), findsOneWidget);
     });
 
     testWidgets('each tab keeps its scroll position and open card when away',
@@ -238,12 +272,35 @@ void main() {
   });
 
   group('wide: side rail', () {
+    testWidgets('rail has five entries at 1280 px', (t) async {
+      await openReal(t, Routes.home, size: const Size(1280, 800));
+      final rail = find.byKey(const ValueKey('nav-rail'));
+      for (final l in _labels) {
+        expect(find.descendant(of: rail, matching: _nav(l)), findsOneWidget,
+            reason: l);
+      }
+      expect(
+        find.descendant(
+          of: rail,
+          matching: find.byWidgetPredicate(
+            (w) => w.key is ValueKey<String> &&
+                (w.key! as ValueKey<String>).value.startsWith('nav-') &&
+                (w.key! as ValueKey<String>).value != 'nav-rail',
+          ),
+        ),
+        findsNWidgets(5),
+      );
+      await _go(t, 'Tripitaka');
+      expect(_screen('Tripitaka'), findsOneWidget);
+    });
+
     for (final size in const [Size(840, 600), Size(1280, 800), Size(844, 390)]) {
       testWidgets('at ${size.width.round()} x ${size.height.round()} the '
           'destinations stand in a rail at the left', (t) async {
         await openReal(t, Routes.home, size: size);
         final rects = [for (final l in _labels) t.getRect(_nav(l))];
-        for (var i = 0; i < 4; i++) {
+        expect(rects, hasLength(5));
+        for (var i = 0; i < _labels.length; i++) {
           expect(rects[i].left, rects[0].left, reason: _labels[i]);
           expect(rects[i].right, lessThanOrEqualTo(88), reason: _labels[i]);
           expect(rects[i].width, greaterThanOrEqualTo(48), reason: _labels[i]);
@@ -360,6 +417,37 @@ void main() {
           expect(rect.bottom, lessThanOrEqualTo(dest.bottom), reason: l);
           expect(dest.top, greaterThanOrEqualTo(bar.top), reason: l);
           expect(dest.bottom, lessThanOrEqualTo(bar.bottom), reason: l);
+        }
+      });
+    }
+
+    for (final width in const [320.0, 360.0]) {
+      testWidgets('at ${width.round()} px and text scale 2.0 each label paints '
+          'on one line, unclipped', (t) async {
+        await openReal(t, Routes.home,
+            size: Size(width, 640), deviceTextScale: 2);
+        expect(t.takeException(), isNull);
+        for (final l in _labels) {
+          final label = find.descendant(of: _nav(l), matching: find.text(l));
+          final paragraph = t.renderObject<RenderParagraph>(label);
+          // The label's own width on one line, at the scale it is drawn.
+          final intrinsic = TextPainter(
+            text: TextSpan(text: l, style: paragraph.text.style),
+            textDirection: TextDirection.ltr,
+            textScaler: paragraph.textScaler,
+            maxLines: 1,
+          )..layout();
+          final painted = t.getSize(label);
+          expect(painted.width, greaterThanOrEqualTo(intrinsic.width - 0.01),
+              reason: '$l is narrower than its one-line width');
+          expect(painted.height, lessThan(intrinsic.height * 1.5),
+              reason: '$l takes more than one line');
+          expect(paragraph.didExceedMaxLines, isFalse, reason: l);
+          final dest = t.getRect(_nav(l));
+          final rect = t.getRect(label);
+          expect(rect.left, greaterThanOrEqualTo(dest.left), reason: l);
+          expect(rect.right, lessThanOrEqualTo(dest.right), reason: l);
+          intrinsic.dispose();
         }
       });
     }

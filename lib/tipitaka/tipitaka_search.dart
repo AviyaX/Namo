@@ -175,6 +175,13 @@ String foldLatinQuery(String query) {
 
 final _sinhalaLetter = RegExp(r'[අ-ෆ]');
 
+/// What a typed [query] folds to for matching: Sinhala-letter queries as
+/// names are folded, others as Latin letters. Empty when there is nothing to
+/// match.
+String foldTipitakaQuery(String query) => _sinhalaLetter.hasMatch(query)
+    ? foldName(query)
+    : foldLatinQuery(query);
+
 class _Entry {
   _Entry(this.node, this.pali, this.sinhala, this.latin);
   final TipitakaNode node;
@@ -212,7 +219,7 @@ class TipitakaSearchIndex {
   List<TipitakaNode> find(String query, {int limit = 50}) {
     if (limit <= 0) return const [];
     final sinhala = _sinhalaLetter.hasMatch(query);
-    final q = sinhala ? foldName(query) : foldLatinQuery(query);
+    final q = foldTipitakaQuery(query);
     if (q.isEmpty) return const [];
     final buckets = [
       <TipitakaNode>[],

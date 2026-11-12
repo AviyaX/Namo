@@ -13,6 +13,8 @@ import 'reader/reader_screen.dart';
 import 'saved/saved_screen.dart';
 import 'settings/settings_screen.dart';
 import 'settings/sources_screen.dart';
+import 'tipitaka/tipitaka_home_screen.dart';
+import 'tipitaka/tipitaka_list_screen.dart';
 import 'tipitaka/tipitaka_reader_screen.dart';
 
 abstract final class Routes {
@@ -118,6 +120,27 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                     context: context,
                     child: FlowEditorScreen(
                       flowId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.tipitaka,
+              builder: (context, state) => const TipitakaHomeScreen(),
+              routes: [
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'n/:key',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: TipitakaListScreen(
+                      nodeKey: state.pathParameters['key']!,
                     ),
                   ),
                 ),
