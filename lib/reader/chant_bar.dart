@@ -171,7 +171,7 @@ class ChantSpeedButton extends StatelessWidget {
             speedLabel(speed),
             maxLines: 1,
             softWrap: false,
-            style: NamoType.label(onPressed == null ? p.textMuted : p.text),
+            style: NamoType.label(onPressed == null ? p.textSecondary : p.text),
           ),
         ),
       ),
