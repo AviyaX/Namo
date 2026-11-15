@@ -1,6 +1,6 @@
 # Hosted recordings — design
 
-Date: 2026-11-15. Status: draft, awaiting the owner's approval.
+Date: 2026-11-15. Status: draft, reviewed by a builder check; parked by the owner on 2026-11-15 ("implement that later"). Not yet approved.
 
 ## Intent
 
@@ -127,6 +127,13 @@ unless the person changes the setting. That default is the designer's call.
   `Content-Type: audio/mp4`.
 - CORS policy on the bucket: `GET` and `HEAD` from any origin (`*`). The
   content is public; this only lets the web app's own origin play it.
+- Until the custom domain is live, a development build can point at the
+  bucket's `r2.dev` address with `--dart-define=NAMO_AUDIO_BASE_URL=`, and
+  `--verify` / `--verify-full` take `--base-url` for the same reason.
+  Switching `r2.dev` on makes the bucket public just as the custom domain
+  does. A bucket that holds only some of the recordings is a designed
+  state: a missing one shows "This recording is not on the server yet.",
+  so the pirith files can go up before the Samantha Pattana one.
 - Tool `tools/sync_hosted_audio.py <root>`:
   - `--check` (offline): every recording named in `assets/content/*.json`
     exists under `hosted/` with the listed `bytes` and `sha256`; nothing
@@ -178,31 +185,40 @@ the whole picture as a stream, plus:
 - `removeAll()`: delete every downloaded file, cancel every transfer, and
   set the automatic download setting to **Off** (otherwise they would come
   straight back).
-- Reacts to the setting (below): Wi-Fi only → the package's global
-  `requireWiFi(forAllTasks)`; any connection → `forNoTasks`; off → cancel
-  the automatic queue, enqueue nothing by itself.
+- Reacts to the setting (below). Automatic tasks carry the task's own
+  `requiresWiFi` flag: true under Wi-Fi only, false under any connection.
+  A change of setting cancels the automatic queue and enqueues it again
+  with the new flag. Off cancels the automatic queue and enqueues nothing
+  by itself. The package's global Wi-Fi rule stays at its default
+  (`asSetByTask`), so an explicit download can always go ahead on the
+  current connection. The app never reads the network state itself: it
+  does not know whether the phone is on Wi-Fi, only what the setting says
+  and whether bytes are moving.
 
 Implementation on phones: `background_downloader`, one task per missing
 recording in library order (so the 46 MB Samantha Pattana file comes
-last), group `recordings`, base directory *application support*,
-directory `recordings/<topic folder>`, file name as in `path`,
-`allowPause: true` (resumes across Android's 9-minute work cycles),
-`retries: 3`, `updates: statusAndProgress`, the reading id in `metaData`.
-Configuration: exclude the files from iCloud backup; fail a download that
-would leave under 100 MB free. The downloader is reached through a thin
-interface of the few calls used, so the store's logic is tested with a
-fake and the plugin is touched only in that one adapter. On web the store
-is a trivial one: every recording is "available at its URL".
+last). Automatic tasks are in group `auto`, explicit ones in group
+`manual`, so Off cancels only the automatic queue. Each task: base
+directory *application support*, directory `recordings/<topic folder>`,
+file name as in `path`, `allowPause: true` (resumes across Android's
+9-minute work cycles), `retries: 3`, `updates: statusAndProgress`, the
+reading id in `metaData`. Configuration: exclude the files from iCloud
+backup; fail a download that would leave under 100 MB free. The downloader
+is reached through a thin interface of the few calls used, so the store's
+logic is tested with a fake and the plugin is touched only in that one
+adapter. On web the store is a trivial one: every recording is "available
+at its URL".
 
 **Start-up and reconciliation.** When the library has loaded, the store
 starts the downloader, then for each recording: file present with the
 listed size and recorded as verified → *downloaded*; an active task →
 *downloading* or *waiting*; otherwise, if the setting is not Off, enqueue
-it. The set of verified reading ids is kept in the app's key-value store
-(key `namo.recordings.verified.v1`); a right-sized file that is not in it
-is hashed again before it counts. A person who swipes the app away on iOS
-cancels its background transfers; the next launch re-enqueues what is
-missing.
+it. The set of verified files, keyed by `path` and `sha256`, is kept in
+the app's key-value store (key `namo.recordings.verified.v1`); a
+right-sized file that is not in it is hashed again before it counts, and a
+file whose `sha256` in the content has changed is fetched afresh. A person
+who swipes the app away on iOS cancels its background transfers; the next
+launch re-enqueues what is missing.
 
 **Verification.** On a task's *complete*: size must equal `bytes`, then
 SHA-256 (the `crypto` package, off the main thread) must equal `sha256`.
@@ -222,16 +238,16 @@ reader's audio path changes.
 ### Reader (bottom bar, a reading with a recording)
 
 - *Downloaded*, or on web: exactly today.
-- *Downloading* / *waiting*: where the time or the position slider sits, a
-  line "Downloading recording… 42%" (waiting shows "Waiting for Wi-Fi…"
-  under the Wi-Fi-only setting, otherwise "Waiting…"); the play button
-  shows its spinner and does nothing.
-- *Not downloaded* (setting Off, or held back by the Wi-Fi rule on mobile
-  data): a line "Recording not downloaded · 1.0 MB" with a **Download**
-  button. Pressing the play button does the same as Download and then
-  plays when the file arrives (the existing "play was wanted" logic). Sizes
-  come from `bytes`: one decimal under 10 MB ("1.0 MB"), whole above
-  ("46 MB").
+- *Downloading* (bytes moving): where the time or the position slider
+  sits, a line "Downloading recording… 42%"; the play button shows its
+  spinner and does nothing.
+- *Waiting* (queued, nothing moving yet, whether for its turn or for
+  Wi-Fi) or *not downloaded* (setting Off): a line "Waiting to download ·
+  1.0 MB" or "Recording not downloaded · 1.0 MB" with a **Download**
+  button. The button, and the play button, start an explicit download on
+  the current connection and then play when the file arrives (the existing
+  "play was wanted" logic). Sizes come from `bytes`: one decimal under
+  10 MB ("1.0 MB"), whole above ("46 MB").
 - *Failed*: the reason line and a **Try again** button.
 - The reader itself, auto-scroll, previous/next and the text are untouched.
 
@@ -317,8 +333,13 @@ Android arm64 package about 148 → about 50 MB; universal APK 184 → about
 
 ## Open with the owner
 
+- When the bucket may go public: now (the same 40 files are already in
+  the public GitHub repository) or only once the recording permissions
+  are confirmed; and whether the 39 pirith files may go up before the
+  Samantha Pattana one. Until the bucket is reachable, no phone build of
+  this branch can play a recording; the web build streams from the same
+  address.
 - The host name `audio.intendable.us` and the bucket name `namo-audio`.
 - Creating the bucket, custom domain and CORS policy in the Cloudflare
   dashboard, and running the upload; the app build does not depend on it,
   but playback on phones does.
-- Whether `hosted/` stays tracked in git (designer's call: yes).
