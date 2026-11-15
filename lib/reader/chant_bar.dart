@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../audio/audio_controls.dart' show formatTime;
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/pressable.dart';
+import '../settings/settings.dart';
 
 /// The words shown in place of the slider when the recording cannot be
 /// opened.
@@ -63,17 +65,21 @@ class _ChantSliderState extends State<ChantSlider> {
             child: Semantics(
               label: 'Chanting position',
               child: Slider(
-              value: value,
-              min: 0,
-              max: max,
-              semanticFormatterCallback: (_) => words,
-              onChanged: enabled ? (v) => setState(() => _dragging = v) : null,
-              onChangeEnd: enabled
-                  ? (v) {
-                      setState(() => _dragging = null);
-                      widget.onSeek!(Duration(microseconds: (v * 1000).round()));
-                    }
-                  : null,
+                value: value,
+                min: 0,
+                max: max,
+                semanticFormatterCallback: (_) => words,
+                onChanged: enabled
+                    ? (v) => setState(() => _dragging = v)
+                    : null,
+                onChangeEnd: enabled
+                    ? (v) {
+                        setState(() => _dragging = null);
+                        widget.onSeek!(
+                          Duration(microseconds: (v * 1000).round()),
+                        );
+                      }
+                    : null,
               ),
             ),
           ),
@@ -83,9 +89,21 @@ class _ChantSliderState extends State<ChantSlider> {
           child: ExcludeSemantics(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // Each time shrinks to its half rather than overflow at the
+              // largest text sizes.
               children: [
-                Text(formatTime(shown), style: style),
-                Text(formatTime(total), style: style),
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(formatTime(shown), style: style),
+                  ),
+                ),
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(formatTime(total), style: style),
+                  ),
+                ),
               ],
             ),
           ),
@@ -112,8 +130,49 @@ class ChantFailed extends StatelessWidget {
         liveRegion: true,
         container: true,
         label: chantFailedMessage,
-        child: ExcludeSemantics(
-          child: Text(chantFailedMessage, style: style),
+        child: ExcludeSemantics(child: Text(chantFailedMessage, style: style)),
+      ),
+    );
+  }
+}
+
+/// A chanting speed as written on the button: '0.75×', '1×', '1.25×'.
+String speedLabel(double speed) {
+  final digits = speed.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0+$'), '');
+  return '$digits×';
+}
+
+/// The chanting speed, written on a button that steps to the next speed.
+class ChantSpeedButton extends StatelessWidget {
+  const ChantSpeedButton({
+    super.key = const ValueKey('chant-speed'),
+    required this.speed,
+    required this.onPressed,
+  });
+
+  final double speed;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    // Pressable is the root so the key finds its one semantics node; it
+    // keeps the 48 x 48 minimum itself.
+    return Pressable(
+      onTap: onPressed,
+      semanticLabel: 'Chanting speed ${speedLabel(speed)}',
+      hint: 'Tap for ${speedLabel(AppSettings.nextChantSpeed(speed))}',
+      excludeChildSemantics: true,
+      child: Center(
+        widthFactor: 1,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: NamoSpace.sm),
+          child: Text(
+            speedLabel(speed),
+            maxLines: 1,
+            softWrap: false,
+            style: NamoType.label(onPressed == null ? p.textMuted : p.text),
+          ),
         ),
       ),
     );

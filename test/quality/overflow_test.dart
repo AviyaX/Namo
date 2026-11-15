@@ -110,6 +110,17 @@ void main() {
     }
   }
 
+  for (final size in _sizes) {
+    testWidgets('pirith reader does not overflow: ${size.width.round()}x${size.height.round()}, device text 2.0', (t) async {
+      await openReal(t, Routes.reader(mangalaReadingId), size: size, deviceTextScale: 2.0,
+          settings: const AppSettings(fontScale: 1.6));
+      expect(t.takeException(), isNull);
+      expect(find.text('Scroll'), findsOneWidget);
+      expect(find.text('Chant'), findsOneWidget);
+      await scrollThrough(t);
+    });
+  }
+
   // Home on its own at the phone, tall phone and desktop sizes, ordinary and
   // doubled device text, in both themes.
   for (final size in const [Size(320, 640), Size(412, 915), Size(1280, 800)]) {
