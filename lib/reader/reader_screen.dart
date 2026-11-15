@@ -896,7 +896,11 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                         onSettings: () => showReaderSettingsSheet(
                           context,
                           onBackToBeginning: _backToBeginning,
-                          showLayout: !ignoresLayout(reading),
+                          layoutChooser: reading.isPhrased
+                              ? LayoutChooserKind.pirith
+                              : ignoresLayout(reading)
+                              ? LayoutChooserKind.hidden
+                              : LayoutChooserKind.full,
                         ),
                       ),
                       ValueListenableBuilder<double>(

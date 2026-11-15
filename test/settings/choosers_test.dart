@@ -88,6 +88,62 @@ void main() {
           NamoPalette.of(t.element(find.byType(LayoutChooser))).textSecondary);
     });
 
+    testWidgets('three segments; side by side stores for Pali and Sinhala', (t) async {
+      final (c, _) = await _pump(t, const LayoutChooser());
+      for (final l in ['Section by section', 'Verse by verse', 'Side by side']) {
+        expect(_tapLabel(l), findsOneWidget, reason: l);
+      }
+      await t.tap(_tapLabel('Side by side'));
+      await t.pump();
+      expect(c.read(settingsProvider).layout, TwoLanguageLayout.sideBySide);
+    });
+
+    testWidgets('side by side is refused with the message for Pali and English', (t) async {
+      final (c, _) = await _pump(t, const Column(children: [LanguageChooser(), LayoutChooser()]));
+      await t.tap(_tapLabel('Sinhala'));
+      await t.pump();
+      await t.tap(_tapLabel('English'));
+      await t.pump();
+      await t.tap(_tapLabel('Side by side'));
+      await t.pump();
+      expect(find.text('Side by side needs Pali and Sinhala.'), findsOneWidget);
+      expect(c.read(settingsProvider).layout, TwoLanguageLayout.verse);
+    });
+
+    testWidgets('the chooser shows the effective layout when the pair changes', (t) async {
+      final (c, _) = await _pump(t, const Column(children: [LanguageChooser(), LayoutChooser()]));
+      c.read(settingsProvider.notifier).setLayout(TwoLanguageLayout.sideBySide);
+      await t.pump();
+      await t.tap(_tapLabel('Sinhala'));
+      await t.pump();
+      await t.tap(_tapLabel('English'));
+      await t.pump();
+      expect(c.read(settingsProvider).layout, TwoLanguageLayout.sideBySide);
+      // The thumb sits on Verse by verse: segment index 1 of the layout selector.
+      final thumb = t.getRect(find.byKey(const ValueKey('selector-thumb')).last);
+      final verse = t.getRect(_tapLabel('Verse by verse'));
+      expect(thumb.left, lessThanOrEqualTo(verse.left));
+      expect(thumb.right, greaterThanOrEqualTo(verse.right));
+    });
+
+    testWidgets('the pirith chooser has Meaning below and Side by side', (t) async {
+      final (c, _) = await _pump(t, const LayoutChooser(pirith: true));
+      expect(_tapLabel('Meaning below'), findsOneWidget);
+      expect(_tapLabel('Side by side'), findsOneWidget);
+      expect(_tapLabel('Verse by verse'), findsNothing);
+      await t.tap(_tapLabel('Side by side'));
+      await t.pump();
+      expect(c.read(settingsProvider).layout, TwoLanguageLayout.sideBySide);
+      await t.tap(_tapLabel('Meaning below'));
+      await t.pump();
+      expect(c.read(settingsProvider).layout, TwoLanguageLayout.verse);
+      c.read(settingsProvider.notifier).setLayout(TwoLanguageLayout.section);
+      await t.pump();
+      await t.tap(_tapLabel('Meaning below'));
+      await t.pump();
+      expect(c.read(settingsProvider).layout, TwoLanguageLayout.section, reason: 'left alone');
+    });
+
     testWidgets('with two languages a tap stores the layout', (t) async {
       final (c, _) = await _pump(t, const LayoutChooser());
       await t.tap(_tapLabel('Section by section'));

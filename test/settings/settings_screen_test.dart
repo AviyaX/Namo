@@ -86,7 +86,7 @@ void main() {
 
     await t.tap(row('Pali'));
     await t.pump();
-    for (final l in ['Section by section', 'Verse by verse']) {
+    for (final l in ['Section by section', 'Verse by verse', 'Side by side']) {
       final node = t.getSemantics(row(l));
       expect(node.hint, 'Needs two languages');
     }

@@ -54,14 +54,30 @@ class LanguageChooser extends ConsumerWidget {
 }
 
 /// How two languages are ordered; only usable with two languages chosen.
+/// [pirith] shows the two choices a pirith has: 'Meaning below' (the flowing
+/// default) and 'Side by side'.
 class LayoutChooser extends ConsumerWidget {
-  const LayoutChooser({super.key});
+  const LayoutChooser({super.key, this.pirith = false});
+
+  final bool pirith;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final enabled = settings.languages.languages.length == 2;
     final p = NamoPalette.of(context);
+    final effective = settings.effectiveLayout;
+    final segments = pirith
+        ? const [
+            Segment(TwoLanguageLayout.verse, 'Meaning below'),
+            Segment(TwoLanguageLayout.sideBySide, 'Side by side'),
+          ]
+        : [for (final l in TwoLanguageLayout.values) Segment(l, l.label)];
+    final selected = pirith
+        ? (effective == TwoLanguageLayout.sideBySide
+              ? TwoLanguageLayout.sideBySide
+              : TwoLanguageLayout.verse)
+        : effective;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -71,11 +87,26 @@ class LayoutChooser extends ConsumerWidget {
             semanticLabel: 'Layout',
             enabled: enabled,
             disabledHint: 'Needs two languages',
-            segments: [
-              for (final l in TwoLanguageLayout.values) Segment(l, l.label),
-            ],
-            selected: {settings.layout},
-            onPressed: (l) => ref.read(settingsProvider.notifier).setLayout(l),
+            segments: segments,
+            selected: {selected},
+            onPressed: (l) {
+              final controller = ref.read(settingsProvider.notifier);
+              if (pirith &&
+                  l == TwoLanguageLayout.verse &&
+                  settings.layout != TwoLanguageLayout.sideBySide) {
+                return;
+              }
+              final outcome = controller.setLayout(l);
+              if (outcome == LayoutOutcome.refusedPair) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(
+                      content: Text('Side by side needs Pali and Sinhala.'),
+                    ),
+                  );
+              }
+            },
           ),
         ),
         if (!enabled)

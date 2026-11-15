@@ -100,19 +100,22 @@ void main() {
       );
     });
 
-    testWidgets('the settings sheet has no layout choice in a pirith but '
-        'does in Buddha Wandanawa', (t) async {
+    testWidgets('the settings sheet offers Meaning below / Side by side in a '
+        'pirith and the full choice in Buddha Wandanawa', (t) async {
       await openReal(t, Routes.reader(mangalaReadingId));
       await t.tap(find.byKey(const ValueKey('reader-settings')));
       await t.pumpAndSettle();
       expect(find.text('Languages'), findsOneWidget);
-      expect(find.text('When two languages show'), findsNothing);
+      expect(find.text('Meaning below'), findsOneWidget);
+      expect(find.text('Side by side'), findsOneWidget);
+      expect(find.text('Verse by verse'), findsNothing);
 
       await t.pumpWidget(const SizedBox());
       await openReal(t, Routes.reader(realReadingId));
       await t.tap(find.byKey(const ValueKey('reader-settings')));
       await t.pumpAndSettle();
-      expect(find.text('When two languages show'), findsOneWidget);
+      expect(find.text('Verse by verse'), findsOneWidget);
+      expect(find.text('Side by side'), findsOneWidget);
     });
   });
 

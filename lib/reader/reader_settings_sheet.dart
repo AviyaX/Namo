@@ -9,11 +9,14 @@ import '../settings/settings.dart';
 import '../settings/setting_controls.dart';
 import '../settings/choosers.dart';
 
+/// Which layout choice the reader settings sheet offers.
+enum LayoutChooserKind { hidden, full, pirith }
+
 /// Opens the reader settings over the reader.
 Future<void> showReaderSettingsSheet(
   BuildContext context, {
   required VoidCallback onBackToBeginning,
-  bool showLayout = true,
+  LayoutChooserKind layoutChooser = LayoutChooserKind.full,
   bool textOnly = false,
 }) => showModalBottomSheet<void>(
   context: context,
@@ -32,7 +35,7 @@ Future<void> showReaderSettingsSheet(
   ),
   builder: (_) => ReaderSettingsSheet(
     onBackToBeginning: onBackToBeginning,
-    showLayout: showLayout,
+    layoutChooser: layoutChooser,
     textOnly: textOnly,
   ),
 );
@@ -43,12 +46,13 @@ class ReaderSettingsSheet extends ConsumerWidget {
   const ReaderSettingsSheet({
     super.key,
     required this.onBackToBeginning,
-    this.showLayout = true,
+    this.layoutChooser = LayoutChooserKind.full,
     this.textOnly = false,
   });
 
-  /// False in a pirith, which always shows flowing passages.
-  final bool showLayout;
+  /// Which layout choice to show: none (an introduction), the full three, or
+  /// the pirith's two.
+  final LayoutChooserKind layoutChooser;
 
   /// True for a reader with its own language switch and no auto-scroll (the
   /// Tripitaka): only text size, line spacing, theme and 'Back to the
@@ -91,9 +95,9 @@ class ReaderSettingsSheet extends ConsumerWidget {
                     const LanguageChooser(),
                     gap,
                   ],
-                  if (showLayout && !textOnly) ...[
+                  if (layoutChooser != LayoutChooserKind.hidden && !textOnly) ...[
                     const SettingLabel('When two languages show'),
-                    const LayoutChooser(),
+                    LayoutChooser(pirith: layoutChooser == LayoutChooserKind.pirith),
                     gap,
                   ],
                   SliderSetting.textSize(

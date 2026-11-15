@@ -27,3 +27,8 @@
   - [ ] Run `python -I -X utf8 tools/check_tipitaka_glyphs.py .`; a `substituted` line for U+05F4 is expected.
   - [ ] Owner checks on a phone and in a web browser: open each pitaka; read one sutta in each view (Pali, Sinhala, both); open a footnote; search in Sinhala and in English letters; a bookmark shows in Saved; close the app and open it again and the place is kept.
   - [ ] Confirm the Tripitaka wording on the Sources page.
+- [ ] Reader improvements, owner checks on a phone:
+  - [ ] Open a pirith: press Scroll with no sound, then Chant; the captions "Scroll" and "Chant" read right.
+  - [ ] Change the speed while chanting (1× → 1.25× → 1.5× → 0.75×); the highlight stays in step.
+  - [ ] Choose Side by side (Settings, or the reader's sheet; in a pirith the sheet says "Meaning below" / "Side by side") and read a gatha and a pirith at your usual text size.
+  - [ ] With Pali and English chosen, Side by side is refused with "Side by side needs Pali and Sinhala."
