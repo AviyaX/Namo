@@ -22,6 +22,8 @@ VerseTextItem v(String verseId, ReadingLanguage language) => VerseTextItem(
   secondary: language != ReadingLanguage.pali,
 );
 
+VersePairItem pr(String verseId) => VersePairItem(sectionId: verseId.split('-').first, verseId: verseId, pali: 'p', sinhala: 's');
+
 const pi = ReadingLanguage.pali, si = ReadingLanguage.sinhala;
 
 ({double top, double height}) e(double top, double height) =>
@@ -569,5 +571,20 @@ void main() {
         90,
       );
     });
+  });
+
+  test('a saved place in either language restores to the verse pair', () {
+    final items = [h('s01'), pr('s01-v1'), pr('s01-v2')];
+    final extents = [e(0, 40), e(40, 100), e(140, 100)];
+    for (final language in [pi, si]) {
+      final offset = offsetForPosition(
+        position: ReadingPosition(readingId: 'r1', sectionId: 's01', verseId: 's01-v2', language: language, fraction: 0.5),
+        items: items, extents: extents, maxScrollExtent: 1000);
+      expect(offset, 190, reason: language.code);
+    }
+  });
+  test('capturing on a pair records the verse and no language', () {
+    final p = capturePosition(readingId: 'r1', items: [h('s01'), pr('s01-v1')], extents: [e(0, 40), e(40, 100)], scrollOffset: 60)!;
+    expect((p.verseId, p.language), ('s01-v1', null));
   });
 }

@@ -242,7 +242,11 @@ class ReaderBodyState extends State<ReaderBody> {
       VerseTextItem() => switch (before) {
         VerseTextItem(:final verseId) when verseId == item.verseId =>
           NamoSpace.md,
-        VerseTextItem() => NamoSpace.xl,
+        VerseTextItem() || VersePairItem() => NamoSpace.xl,
+        _ => NamoSpace.lg,
+      },
+      VersePairItem() => switch (before) {
+        VersePairItem() || VerseTextItem() => NamoSpace.xl,
         _ => NamoSpace.lg,
       },
       PhraseBlockItem() =>
@@ -275,6 +279,13 @@ class ReaderBodyState extends State<ReaderBody> {
         onTapLine: widget.onTapLine == null || !item.keepLines
             ? null
             : (line) => widget.onTapLine!(item.index, line),
+      ),
+      VersePairItem() => _VersePairView(
+        key: ValueKey('pair-${item.verseId}'),
+        item: item,
+        gap: gap,
+        fontScale: widget.fontScale,
+        lineSpacing: widget.lineSpacing,
       ),
       VerseTextItem() => _VerseView(
         key: ValueKey('verse-${item.verseId}-${item.language.code}'),
@@ -528,6 +539,62 @@ class _VerseView extends StatelessWidget {
           lineSpacing: lineSpacing,
           color: item.secondary ? p.textSecondary : p.text,
         ),
+      ),
+    );
+  }
+}
+
+/// A verse in two columns: Pali, then Sinhala in the quiet colour.
+class _VersePairView extends StatelessWidget {
+  const _VersePairView({
+    super.key,
+    required this.item,
+    required this.gap,
+    required this.fontScale,
+    required this.lineSpacing,
+  });
+
+  final VersePairItem item;
+  final double gap;
+  final double fontScale;
+  final double lineSpacing;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return Padding(
+      padding: EdgeInsets.only(top: gap),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              item.pali,
+              key: ValueKey('pair-${item.verseId}-pi'),
+              softWrap: true,
+              style: readingStyle(
+                ReadingLanguage.pali,
+                fontScale: fontScale,
+                lineSpacing: lineSpacing,
+                color: p.text,
+              ),
+            ),
+          ),
+          const SizedBox(width: NamoSpace.lg),
+          Expanded(
+            child: Text(
+              item.sinhala,
+              key: ValueKey('pair-${item.verseId}-si'),
+              softWrap: true,
+              style: readingStyle(
+                ReadingLanguage.sinhala,
+                fontScale: fontScale,
+                lineSpacing: lineSpacing,
+                color: p.textSecondary,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

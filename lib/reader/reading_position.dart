@@ -97,9 +97,10 @@ double offsetForPosition({
       ? -1
       : items.indexWhere(
           (i) =>
-              i is VerseTextItem &&
-              i.verseId == verseId &&
-              i.language == position.language,
+              (i is VerseTextItem &&
+                  i.verseId == verseId &&
+                  i.language == position.language) ||
+              (i is VersePairItem && i.verseId == verseId),
         );
   final firstOfVerse = verseId == null
       ? -1

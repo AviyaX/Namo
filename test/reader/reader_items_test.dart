@@ -20,6 +20,7 @@ List<String> _kinds(List<ReaderItem> items) => [
       HeadingItem() => 'H(${i.sectionId})',
       VerseTextItem() => 'V(${i.verseId}, ${i.language.code})',
       PhraseBlockItem() => 'B(${i.verseId}, ${i.index})',
+      VersePairItem() => 'P(${i.verseId})',
     },
 ];
 
@@ -141,7 +142,8 @@ void main() {
   });
 
   test('the second language is marked secondary', () {
-    for (final layout in TwoLanguageLayout.values) {
+    // Side by side has pairs, not single texts here; it is tested below.
+    for (final layout in TwoLanguageLayout.values.where((l) => l != TwoLanguageLayout.sideBySide)) {
       final verses = _build(
         [_pali, _sinhala],
         layout,
@@ -515,5 +517,48 @@ void main() {
         }
       });
     }
+  });
+
+  test('side by side pairs Pali and Sinhala per verse, whichever was chosen first', () {
+    const want = ['H(s01)', 'P(s01-v1)', 'P(s01-v2)', 'H(s02)', 'P(s02-v1)', 'H(s03)', 'P(s03-v1)', 'P(s03-v2)'];
+    expect(_kinds(_build([_pali, _sinhala], TwoLanguageLayout.sideBySide)), want);
+    expect(_kinds(_build([_sinhala, _pali], TwoLanguageLayout.sideBySide)), want);
+    final pair = _build([_pali, _sinhala], TwoLanguageLayout.sideBySide)[1] as VersePairItem;
+    expect((pair.pali, pair.sinhala), ('pali 1', 'sinhala 1'));
+  });
+
+  test('side by side with another pair is verse by verse', () {
+    expect(_kinds(_build([_pali, _english], TwoLanguageLayout.sideBySide)),
+        _kinds(_build([_pali, _english], TwoLanguageLayout.verse)));
+    expect(_kinds(_build([_sinhala], TwoLanguageLayout.sideBySide)),
+        _kinds(_build([_sinhala], TwoLanguageLayout.verse)));
+  });
+
+  test('a verse with one of the two texts is a single under side by side', () {
+    const reading = Reading(id: 'r', title: 't', sections: [
+      Section(id: 's', number: 1, heading: 'h', verses: [
+        Verse(id: 's-v1', paliSi: 'p1', sinhala: 's1'),
+        Verse(id: 's-v2', paliSi: 'p2'),
+        Verse(id: 's-v3', sinhala: 's3'),
+      ]),
+    ]);
+    final items = buildReaderItems(reading, const LanguageSelection([_pali, _sinhala]), TwoLanguageLayout.sideBySide);
+    expect(_kinds(items), ['H(s)', 'P(s-v1)', 'V(s-v2, pi)', 'V(s-v3, si)']);
+    expect((items[2] as VerseTextItem).secondary, isFalse);
+    expect((items[3] as VerseTextItem).secondary, isTrue);
+  });
+
+  test('pirith blocks carry the side-by-side flag only under that layout with Pali and Sinhala', () {
+    final phrased = Reading(id: 'x', title: 'x', sections: [
+      Section(id: 'x-s', number: 1, heading: 'x', verses: [
+        Verse(id: 'x-0', phrases: [Phrase(pali: 'pa', sinhala: 'sa', english: 'ea')]),
+      ]),
+    ]);
+    PhraseBlockItem block(List<ReadingLanguage> l, TwoLanguageLayout layout) =>
+        buildReaderItems(phrased, LanguageSelection(l), layout).whereType<PhraseBlockItem>().single;
+    expect(block([_pali, _sinhala], TwoLanguageLayout.sideBySide).sideBySide, isTrue);
+    expect(block([_sinhala, _pali], TwoLanguageLayout.sideBySide).sideBySide, isTrue);
+    expect(block([_pali, _sinhala], TwoLanguageLayout.verse).sideBySide, isFalse);
+    expect(block([_pali, _english], TwoLanguageLayout.sideBySide).sideBySide, isFalse);
   });
 }
