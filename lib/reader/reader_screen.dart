@@ -217,6 +217,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _updateAwake();
     _player = player;
     _playerReading = readingId;
+    if (player != null) {
+      unawaited(player.setSpeed(ref.read(settingsProvider).chantSpeed));
+    }
     _timed = recording != null && recording.timed ? recording : null;
     _chantLoaded = false;
     _chant.value = const ChantState();
@@ -363,6 +366,15 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       if (_chantLoaded) unawaited(_player?.pause());
       _autoScroll.play();
     }
+  }
+
+  /// Moves the chanting to the next speed; the settings listener in
+  /// [build] hands it to the player.
+  void _cycleChantSpeed() {
+    final current = ref.read(settingsProvider).chantSpeed;
+    ref
+        .read(settingsProvider.notifier)
+        .setChantSpeed(AppSettings.nextChantSpeed(current));
   }
 
   /// Plays, pauses or resumes the chanting. The recording is asked for the
@@ -799,6 +811,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         _keepPlace();
       }
       _autoScroll.speed = next.scrollSpeed;
+      if (previous.chantSpeed != next.chantSpeed) {
+        unawaited(_player?.setSpeed(next.chantSpeed));
+      }
     });
     final settings = ref.watch(settingsProvider);
     final saved = ref.watch(savedProvider);
@@ -970,6 +985,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                   chantState: recording != null && recording.timed
                       ? _chant.value
                       : null,
+                  chantSpeed: settings.chantSpeed,
+                  onChantSpeed: _cycleChantSpeed,
                   onChantPlay: _chantPlayOrPause,
                   onChantRestart: _chantRestart,
                   onChantSeek: (to) => unawaited(_player?.seek(to)),
