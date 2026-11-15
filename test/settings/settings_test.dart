@@ -150,4 +150,27 @@ void main() {
             'chantSpeed'],
         1.25);
   });
+
+  test('side by side is refused for a pair that is not Pali and Sinhala', () {
+    final store = InMemoryKeyValueStore();
+    final c = containerOn(store);
+    final n = c.read(settingsProvider.notifier);
+    expect(n.setLayout(TwoLanguageLayout.sideBySide), LayoutOutcome.changed);
+    expect(c.read(settingsProvider).layout, TwoLanguageLayout.sideBySide);
+    n.toggleLanguage(ReadingLanguage.sinhala); // now Pali alone
+    n.toggleLanguage(ReadingLanguage.english); // Pali + English
+    expect(c.read(settingsProvider).layout, TwoLanguageLayout.sideBySide,
+        reason: 'kept');
+    expect(c.read(settingsProvider).effectiveLayout, TwoLanguageLayout.verse);
+    expect(n.setLayout(TwoLanguageLayout.verse), LayoutOutcome.changed);
+    expect(n.setLayout(TwoLanguageLayout.sideBySide), LayoutOutcome.refusedPair);
+    expect(c.read(settingsProvider).layout, TwoLanguageLayout.verse);
+  });
+
+  test('effectiveLayout is the saved layout for Pali and Sinhala', () {
+    const s = AppSettings(layout: TwoLanguageLayout.sideBySide);
+    expect(s.effectiveLayout, TwoLanguageLayout.sideBySide);
+    expect(AppSettings.fromJson({'layout': 'sideBySide'}).layout,
+        TwoLanguageLayout.sideBySide);
+  });
 }

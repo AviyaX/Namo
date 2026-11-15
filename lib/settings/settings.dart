@@ -8,6 +8,8 @@ import 'reading_language.dart';
 
 const settingsKey = 'namo.settings.v1';
 
+enum LayoutOutcome { changed, refusedPair }
+
 class AppSettings {
   const AppSettings({
     this.languages = LanguageSelection.initial,
@@ -53,6 +55,13 @@ class AppSettings {
   final bool autoScrollWithAudio;
   final double chantSpeed;
   final ThemeMode themeMode;
+
+  /// The layout to draw: side by side only holds for Pali and Sinhala, so
+  /// for any other pair the saved choice is kept but verse by verse is shown.
+  TwoLanguageLayout get effectiveLayout =>
+      layout == TwoLanguageLayout.sideBySide && !languages.isPaliAndSinhala
+          ? TwoLanguageLayout.verse
+          : layout;
 
   AppSettings copyWith({
     LanguageSelection? languages,
@@ -141,7 +150,14 @@ class SettingsController extends Notifier<AppSettings> {
     return outcome;
   }
 
-  void setLayout(TwoLanguageLayout v) => _set(state.copyWith(layout: v));
+  LayoutOutcome setLayout(TwoLanguageLayout v) {
+    if (v == TwoLanguageLayout.sideBySide &&
+        !state.languages.isPaliAndSinhala) {
+      return LayoutOutcome.refusedPair;
+    }
+    _set(state.copyWith(layout: v));
+    return LayoutOutcome.changed;
+  }
 
   void setFontScale(double v) => _set(state.copyWith(
       fontScale: v.clamp(
