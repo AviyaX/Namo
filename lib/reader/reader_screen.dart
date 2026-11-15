@@ -837,7 +837,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           final items = buildReaderItems(
             reading,
             settings.languages,
-            settings.layout,
+            settings.effectiveLayout,
           );
           final category = flow ? null : _categoryOf(library, reading);
           final lists = category != null && listsReadings(category);

@@ -240,6 +240,23 @@ void main() {
     expect(_followButton, findsNothing, reason: 'following is on');
   });
 
+  testWidgets('side by side: a tap on the fifth line of part 2 still seeks to that line', (
+    t,
+  ) async {
+    final c = await _open(
+      t,
+      settings: const AppSettings(layout: TwoLanguageLayout.sideBySide),
+    );
+    await c.advanceTo(t, c.middleOfLine('u-part-2', 1));
+    await _settleMotion(t);
+    await t.tapAt(_lineCentre(t, c, 'u-part-2', 4));
+    await t.pump();
+    await _settleMotion(t);
+    expect(c.player.seeks, [c.lineTime('u-part-2', 4)]);
+    expect(markedIn(t, passage('u-part-2', 'pali')), [4]);
+    expect(_followButton, findsNothing, reason: 'following is on');
+  });
+
   testWidgets('a tap on the homage seeks to its start', (t) async {
     final c = await _open(t);
     await c.advanceTo(t, c.middleOfLine('u-list', 3));

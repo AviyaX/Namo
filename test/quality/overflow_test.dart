@@ -111,14 +111,18 @@ void main() {
   }
 
   for (final size in _sizes) {
-    testWidgets('pirith reader does not overflow: ${size.width.round()}x${size.height.round()}, device text 2.0', (t) async {
-      await openReal(t, Routes.reader(mangalaReadingId), size: size, deviceTextScale: 2.0,
-          settings: const AppSettings(fontScale: 1.6));
-      expect(t.takeException(), isNull);
-      expect(find.text('Scroll'), findsOneWidget);
-      expect(find.text('Chant'), findsOneWidget);
-      await scrollThrough(t);
-    });
+    for (final side in [false, true]) {
+      testWidgets('pirith reader does not overflow: ${size.width.round()}x${size.height.round()}, device text 2.0${side ? ', side by side' : ''}', (t) async {
+        await openReal(t, Routes.reader(mangalaReadingId), size: size, deviceTextScale: 2.0,
+            settings: AppSettings(
+                fontScale: 1.6,
+                layout: side ? TwoLanguageLayout.sideBySide : TwoLanguageLayout.verse));
+        expect(t.takeException(), isNull);
+        expect(find.text('Scroll'), findsOneWidget);
+        expect(find.text('Chant'), findsOneWidget);
+        await scrollThrough(t);
+      });
+    }
   }
 
   // Home on its own at the phone, tall phone and desktop sizes, ordinary and

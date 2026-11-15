@@ -794,7 +794,8 @@ class _PhraseBlockViewState extends State<_PhraseBlockView> {
     ].whereType<Widget>().toList();
     Widget block;
     // A unit's meaning is always under its lines.
-    if (wide && passages.length == 2 && !item.keepLines) {
+    if (((wide && !item.keepLines) || item.sideBySide) &&
+        passages.length == 2) {
       block = Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
