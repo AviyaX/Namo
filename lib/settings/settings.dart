@@ -16,6 +16,7 @@ class AppSettings {
     this.lineSpacing = 1.6,
     this.scrollSpeed = 22.0,
     this.autoScrollWithAudio = false,
+    this.chantSpeed = 1.0,
     this.themeMode = ThemeMode.dark,
   });
 
@@ -23,12 +24,34 @@ class AppSettings {
   static const lineSpacingRange = (min: 1.3, max: 2.2);
   static const scrollSpeedRange = (min: 6.0, max: 60.0);
 
+  /// The playback rates a chant can be set to; 1 is the recording's own.
+  static const chantSpeeds = [0.75, 1.0, 1.25, 1.5];
+
+  /// The allowed speed nearest [v] (a tie goes to the lower); 1 for anything
+  /// that is not a finite number.
+  static double snapChantSpeed(Object? v) {
+    if (v is! num || !v.isFinite) return 1.0;
+    var best = chantSpeeds.first;
+    for (final s in chantSpeeds) {
+      if ((s - v).abs() < (best - v).abs()) best = s;
+    }
+    return best;
+  }
+
+  /// The speed after [v] (snapped first), wrapping from the fastest to the
+  /// slowest.
+  static double nextChantSpeed(double v) {
+    final i = chantSpeeds.indexOf(snapChantSpeed(v));
+    return chantSpeeds[(i + 1) % chantSpeeds.length];
+  }
+
   final LanguageSelection languages;
   final TwoLanguageLayout layout;
   final double fontScale;
   final double lineSpacing;
   final double scrollSpeed;
   final bool autoScrollWithAudio;
+  final double chantSpeed;
   final ThemeMode themeMode;
 
   AppSettings copyWith({
@@ -38,6 +61,7 @@ class AppSettings {
     double? lineSpacing,
     double? scrollSpeed,
     bool? autoScrollWithAudio,
+    double? chantSpeed,
     ThemeMode? themeMode,
   }) =>
       AppSettings(
@@ -47,6 +71,7 @@ class AppSettings {
         lineSpacing: lineSpacing ?? this.lineSpacing,
         scrollSpeed: scrollSpeed ?? this.scrollSpeed,
         autoScrollWithAudio: autoScrollWithAudio ?? this.autoScrollWithAudio,
+        chantSpeed: chantSpeed ?? this.chantSpeed,
         themeMode: themeMode ?? this.themeMode,
       );
 
@@ -57,6 +82,7 @@ class AppSettings {
         'lineSpacing': lineSpacing,
         'scrollSpeed': scrollSpeed,
         'autoScrollWithAudio': autoScrollWithAudio,
+        'chantSpeed': chantSpeed,
         'themeMode': themeMode.name,
       };
 
@@ -81,6 +107,7 @@ class AppSettings {
       lineSpacing: number('lineSpacing', d.lineSpacing, lineSpacingRange),
       scrollSpeed: number('scrollSpeed', d.scrollSpeed, scrollSpeedRange),
       autoScrollWithAudio: auto is bool ? auto : d.autoScrollWithAudio,
+      chantSpeed: snapChantSpeed(json['chantSpeed']),
       themeMode:
           ThemeMode.values.asNameMap()[json['themeMode']] ?? d.themeMode,
     );
@@ -130,6 +157,9 @@ class SettingsController extends Notifier<AppSettings> {
 
   void setAutoScrollWithAudio(bool v) =>
       _set(state.copyWith(autoScrollWithAudio: v));
+
+  void setChantSpeed(double v) =>
+      _set(state.copyWith(chantSpeed: AppSettings.snapChantSpeed(v)));
 
   void setThemeMode(ThemeMode v) => _set(state.copyWith(themeMode: v));
 }

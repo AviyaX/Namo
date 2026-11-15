@@ -45,6 +45,9 @@ abstract interface class ChantPlayer {
   /// From the start, playing.
   Future<void> restart();
   Future<void> seek(Duration to);
+
+  /// Playback rate; 1 is the recording's own. Kept across loads; never throws.
+  Future<void> setSpeed(double speed);
   Future<void> dispose();
 }
 
@@ -71,6 +74,9 @@ class JustAudioChantPlayer implements ChantPlayer {
 
   /// Counts loads, so a load that was overtaken can tell.
   int _loadGen = 0;
+
+  /// Applied again after every load, which resets the player's own rate.
+  double _speed = 1;
   ChantState _state = const ChantState();
 
   @override
@@ -130,6 +136,12 @@ class JustAudioChantPlayer implements ChantPlayer {
       if (gen == _loadGen) _failed = true;
     }
     if (gen != _loadGen) return;
+    if (!_failed) {
+      try {
+        await _player.setSpeed(_speed);
+      } catch (_) {}
+      if (gen != _loadGen) return;
+    }
     _loading = false;
     _publish();
   }
@@ -164,6 +176,14 @@ class JustAudioChantPlayer implements ChantPlayer {
       await _player.pause();
     }
     await _player.seek(to);
+  }
+
+  @override
+  Future<void> setSpeed(double speed) async {
+    _speed = speed;
+    try {
+      await _player.setSpeed(speed);
+    } catch (_) {}
   }
 
   @override

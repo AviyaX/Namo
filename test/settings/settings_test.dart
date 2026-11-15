@@ -23,6 +23,7 @@ void main() {
     expect(s.fontScale, 1.0);
     expect(s.lineSpacing, 1.6);
     expect(s.scrollSpeed, 22.0);
+    expect(s.chantSpeed, 1.0);
     expect(s.autoScrollWithAudio, isFalse);
     expect(s.themeMode, ThemeMode.dark);
   });
@@ -37,6 +38,7 @@ void main() {
     n.setFontScale(1.3);
     n.setLineSpacing(2.0);
     n.setScrollSpeed(40);
+    n.setChantSpeed(1.25);
     n.setAutoScrollWithAudio(true);
     n.setThemeMode(ThemeMode.dark);
 
@@ -47,6 +49,7 @@ void main() {
     expect(s.fontScale, 1.3);
     expect(s.lineSpacing, 2.0);
     expect(s.scrollSpeed, 40);
+    expect(s.chantSpeed, 1.25);
     expect(s.autoScrollWithAudio, isTrue);
     expect(s.themeMode, ThemeMode.dark);
     expect(jsonDecode(store.read('namo.settings.v1')!)['languages'],
@@ -113,5 +116,38 @@ void main() {
     final store = InMemoryKeyValueStore()
       ..write('namo.settings.v1', '"nonsense"');
     expect(containerOn(store).read(settingsProvider).themeMode, ThemeMode.dark);
+  });
+
+  test('chant speed snaps to the nearest allowed value', () {
+    expect(AppSettings.snapChantSpeed(1.1), 1.0);
+    expect(AppSettings.snapChantSpeed(1.2), 1.25);
+    expect(AppSettings.snapChantSpeed(3), 1.5);
+    expect(AppSettings.snapChantSpeed(0.1), 0.75);
+    expect(AppSettings.snapChantSpeed(0.875), 0.75); // a tie goes down
+    expect(AppSettings.snapChantSpeed('fast'), 1.0);
+    expect(AppSettings.snapChantSpeed(null), 1.0);
+    expect(AppSettings.snapChantSpeed(double.nan), 1.0);
+  });
+
+  test('the next chant speed cycles 1, 1.25, 1.5, 0.75, 1', () {
+    var s = 1.0;
+    final seen = <double>[];
+    for (var i = 0; i < 5; i++) {
+      s = AppSettings.nextChantSpeed(s);
+      seen.add(s);
+    }
+    expect(seen, [1.25, 1.5, 0.75, 1.0, 1.25]);
+    expect(AppSettings.nextChantSpeed(1.1), 1.25); // snapped first
+  });
+
+  test('a damaged saved chant speed falls back alone', () {
+    final s = AppSettings.fromJson({'chantSpeed': 'x', 'fontScale': 1.2});
+    expect(s.chantSpeed, 1.0);
+    expect(s.fontScale, 1.2);
+    expect(AppSettings.fromJson({'chantSpeed': 1.5}).chantSpeed, 1.5);
+    expect(
+        jsonDecode(jsonEncode(const AppSettings(chantSpeed: 1.25).toJson()))[
+            'chantSpeed'],
+        1.25);
   });
 }

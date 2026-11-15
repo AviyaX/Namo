@@ -26,6 +26,10 @@ class FakeChantPlayer implements ChantPlayer {
   ChantState _state = const ChantState();
   bool disposed = false;
 
+  /// The rate last set, and every rate set, in order.
+  double speed = 1.0;
+  final speeds = <double>[];
+
   @override
   ChantState get state => _state;
 
@@ -102,6 +106,12 @@ class FakeChantPlayer implements ChantPlayer {
         ? ChantStatus.paused
         : _state.status;
     _set(ChantState(status: status, position: to, duration: length));
+  }
+
+  @override
+  Future<void> setSpeed(double speed) async {
+    this.speed = speed;
+    speeds.add(speed);
   }
 
   @override
