@@ -123,7 +123,14 @@ PhraseBlockItem _block(
       verseId: v.id,
       index: index,
       phrases: v.phrases,
-      languages: languages,
+      // Side by side draws the first language on the left: Pali, whichever
+      // was chosen first.
+      languages: sideBySide
+          ? [
+              ...languages.where((l) => l != ReadingLanguage.sinhala),
+              ...languages.where((l) => l == ReadingLanguage.sinhala),
+            ]
+          : languages,
       sideBySide: sideBySide,
     );
   }

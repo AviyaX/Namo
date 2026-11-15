@@ -158,20 +158,27 @@ class ChantSpeedButton extends StatelessWidget {
     final p = NamoPalette.of(context);
     // Pressable is the root so the key finds its one semantics node; it
     // keeps the 48 x 48 minimum itself.
+    // A minimum width that fits '0.75×', so the slider does not change
+    // length as the speed cycles.
     return Pressable(
       onTap: onPressed,
       semanticLabel: 'Chanting speed ${speedLabel(speed)}',
       hint: 'Tap for ${speedLabel(AppSettings.nextChantSpeed(speed))}',
       excludeChildSemantics: true,
-      child: Center(
-        widthFactor: 1,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: NamoSpace.sm),
-          child: Text(
-            speedLabel(speed),
-            maxLines: 1,
-            softWrap: false,
-            style: NamoType.label(onPressed == null ? p.textSecondary : p.text),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: 64, minHeight: 48),
+        child: Center(
+          widthFactor: 1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: NamoSpace.sm),
+            child: Text(
+              speedLabel(speed),
+              maxLines: 1,
+              softWrap: false,
+              style: NamoType.label(
+                onPressed == null ? p.textSecondary : p.text,
+              ),
+            ),
           ),
         ),
       ),

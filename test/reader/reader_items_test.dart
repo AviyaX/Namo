@@ -561,4 +561,17 @@ void main() {
     expect(block([_pali, _sinhala], TwoLanguageLayout.verse).sideBySide, isFalse);
     expect(block([_pali, _english], TwoLanguageLayout.sideBySide).sideBySide, isFalse);
   });
+
+  test('pirith side by side puts Pali first whichever was chosen first', () {
+    final phrased = Reading(id: 'x', title: 'x', sections: [
+      Section(id: 'x-s', number: 1, heading: 'x', verses: [
+        Verse(id: 'x-0', phrases: [Phrase(pali: 'pa', sinhala: 'sa', english: 'ea')]),
+      ]),
+    ]);
+    PhraseBlockItem block(List<ReadingLanguage> l, TwoLanguageLayout layout) =>
+        buildReaderItems(phrased, LanguageSelection(l), layout).whereType<PhraseBlockItem>().single;
+    expect(block([_sinhala, _pali], TwoLanguageLayout.sideBySide).languages, [_pali, _sinhala]);
+    expect(block([_pali, _sinhala], TwoLanguageLayout.sideBySide).languages, [_pali, _sinhala]);
+    expect(block([_sinhala, _pali], TwoLanguageLayout.verse).languages, [_sinhala, _pali]);
+  });
 }

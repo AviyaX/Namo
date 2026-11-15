@@ -106,11 +106,17 @@ class ReaderBottomBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          NamoIconButton(
-            key: const ValueKey('reader-prev'),
-            tooltip: previousTooltip,
-            icon: Symbols.skip_previous_rounded,
-            onPressed: onPrevious,
+          // Centred on the round buttons, which are taller.
+          SizedBox(
+            height: _playSize,
+            child: Center(
+              child: NamoIconButton(
+                key: const ValueKey('reader-prev'),
+                tooltip: previousTooltip,
+                icon: Symbols.skip_previous_rounded,
+                onPressed: onPrevious,
+              ),
+            ),
           ),
           Flexible(
             child: _LabelledRound(
@@ -153,11 +159,16 @@ class ReaderBottomBar extends StatelessWidget {
               button: _ChantPlayButton(state: state, onPressed: onChantPlay),
             ),
           ),
-          NamoIconButton(
-            key: const ValueKey('reader-next'),
-            tooltip: nextTooltip,
-            icon: Symbols.skip_next_rounded,
-            onPressed: onNext,
+          SizedBox(
+            height: _playSize,
+            child: Center(
+              child: NamoIconButton(
+                key: const ValueKey('reader-next'),
+                tooltip: nextTooltip,
+                icon: Symbols.skip_next_rounded,
+                onPressed: onNext,
+              ),
+            ),
           ),
         ],
       ),

@@ -400,6 +400,30 @@ void main() {
     );
   }
 
+  testWidgets('side by side with Sinhala chosen first: Pali is still on the '
+      'left', (t) async {
+    await _pump(
+      t,
+      _reading(),
+      [_sinhala, _pali],
+      width: 320,
+      dark: false,
+      scale: 1,
+      layout: TwoLanguageLayout.sideBySide,
+    );
+    final pali = _text('pali 0.0');
+    final sinhala = _text('sinhala 0.0');
+    final pr = t.getRect(pali);
+    final sr = t.getRect(sinhala);
+    expect(pr.left, lessThan(sr.left));
+    expect(pr.top, closeTo(sr.top, 0.5));
+    Color? colour(Finder f) =>
+        (t.widget<Text>(f).textSpan! as TextSpan).style!.color;
+    final p = NamoPalette.of(t.element(pali));
+    expect(colour(pali), p.text);
+    expect(colour(sinhala), p.textSecondary);
+  });
+
   testWidgets('side by side: the chanted phrase is marked in both passages', (
     t,
   ) async {

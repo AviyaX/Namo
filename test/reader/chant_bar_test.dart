@@ -7,6 +7,8 @@ import 'package:buddhist_gatha/reader/reader_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../quality/quality_support.dart';
+
 Widget _app(Widget bar, {Brightness brightness = Brightness.light}) =>
     MaterialApp(
       theme: namoTheme(brightness),
@@ -32,6 +34,8 @@ ReaderBottomBar _bar(
     );
 
 void main() {
+  setUpAll(loadBundledFonts);
+
   testWidgets('without a chant state the bar is the plain one', (t) async {
     await t.pumpWidget(_app(_bar(null)));
     expect(find.byKey(const ValueKey('reader-play')), findsOneWidget);
@@ -59,6 +63,21 @@ void main() {
     expect(t.getSize(find.byKey(const ValueKey('chant-play'))), const Size(56, 56));
     final scroll = find.descendant(of: find.byKey(const ValueKey('reader-autoscroll')), matching: find.byType(DecoratedBox)).first;
     expect(t.getSize(scroll), const Size(56, 56));
+  });
+
+  testWidgets('previous and next are centred on the round buttons', (t) async {
+    await t.pumpWidget(_app(_bar(const ChantState())));
+    double y(String k) => t.getCenter(find.byKey(ValueKey(k))).dy;
+    expect(y('reader-prev'), closeTo(y('chant-play'), 0.5));
+    expect(y('reader-next'), closeTo(y('chant-play'), 0.5));
+  });
+
+  testWidgets('the speed button keeps its width as the speed changes', (t) async {
+    double width() => t.getSize(find.byKey(const ValueKey('chant-speed'))).width;
+    await t.pumpWidget(_app(_bar(const ChantState(), chantSpeed: 1.0)));
+    final one = width();
+    await t.pumpWidget(_app(_bar(const ChantState(), chantSpeed: 0.75)));
+    expect(width(), one);
   });
 
   testWidgets('the Scroll button fills while auto-scroll runs', (t) async {

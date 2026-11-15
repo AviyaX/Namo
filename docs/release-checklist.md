@@ -32,3 +32,4 @@
   - [ ] Change the speed while chanting (1× → 1.25× → 1.5× → 0.75×); the highlight stays in step.
   - [ ] Choose Side by side (Settings, or the reader's sheet; in a pirith the sheet says "Meaning below" / "Side by side") and read a gatha and a pirith at your usual text size.
   - [ ] With Pali and English chosen, Side by side is refused with "Side by side needs Pali and Sinhala."
+  - [ ] Choose Sinhala first, then Pali, and Side by side: Pali is still on the left in a gatha and in a pirith.
