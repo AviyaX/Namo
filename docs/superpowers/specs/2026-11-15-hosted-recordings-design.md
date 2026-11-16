@@ -248,9 +248,12 @@ reader's audio path changes.
 - *Waiting* (queued, nothing moving yet, whether for its turn or for
   Wi-Fi) or *not downloaded* (setting Off): a line "Waiting to download ·
   1.0 MB" or "Recording not downloaded · 1.0 MB" with a **Download**
-  button. The button, and the play button, start an explicit download on
-  the current connection and then play when the file arrives (the existing
-  "play was wanted" logic). Sizes come from `bytes`: one decimal under
+  button. The **Download** button starts an explicit download on the
+  current connection and nothing more. The play button starts the same
+  download and then plays when the file arrives (the existing "play was
+  wanted" logic). Ruled 2026-11-16: a recording starting to play by itself
+  minutes after a tap is not what Download promises. Sizes come from
+  `bytes`: one decimal under
   10 MB ("1.0 MB"), whole above ("46 MB").
 - *Failed*: the reason line and a **Try again** button.
 - The reader itself, auto-scroll, previous/next and the text are untouched.

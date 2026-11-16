@@ -181,12 +181,13 @@ class RecordingRow extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: NamoSpace.sm),
+          // Quiet while downloading: every percentage is not news.
           child: Semantics(
-            liveRegion: true,
+            liveRegion: status.availability != Availability.downloading,
+            container: true,
             child: Text(
               recordingLine(status),
               style: NamoType.caption(p.textSecondary),
-              softWrap: true,
             ),
           ),
         ),

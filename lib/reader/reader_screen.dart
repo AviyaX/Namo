@@ -214,11 +214,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// one) and watches it. Called on every build; does nothing new unless
   /// the reading or the player changed.
   void _bindAudio(Reading reading, Recording? recording, ChantPlayer? player) {
-    final store = ref.read(recordingStoreProvider);
+    // Only a reading with a recording watches the store.
+    final store = recording == null ? null : ref.read(recordingStoreProvider);
     if (!identical(store, _store)) {
       _store?.snapshot.removeListener(_onRecordings);
       _store = store;
-      store.snapshot.addListener(_onRecordings);
+      store?.snapshot.addListener(_onRecordings);
     }
     final readingId = recording?.readingId;
     if (identical(player, _player) && readingId == _playerReading) return;
@@ -265,7 +266,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   void _onRecordings() {
     final recording = _timed, store = _store;
     if (!mounted || recording == null || store == null) return;
-    if (!_chantWanted || _chantLoaded) return;
+    if (!_chantWanted ||
+        (_chantLoaded && _chant.value.status != ChantStatus.failed)) {
+      return;
+    }
     final status = store.snapshot.value.of(recording.readingId);
     if (status?.availability != Availability.downloaded) return;
     unawaited(_chantPlayOrPause());
@@ -887,7 +891,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           final recording = flow
               ? null
               : ref.watch(audioCatalogueProvider).recordingFor(reading.id);
-          final store = ref.watch(recordingStoreProvider);
+          final store = recording == null
+              ? null
+              : ref.watch(recordingStoreProvider);
           _bindAudio(
             reading,
             recording,
@@ -1005,7 +1011,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                 listenable: Listenable.merge([
                   _autoScroll,
                   _chant,
-                  store.snapshot,
+                  ?store?.snapshot,
                 ]),
                 builder: (context, _) => ReaderBottomBar(
                   previousTooltip: _byReading
@@ -1037,7 +1043,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                   onChantSeek: (to) => unawaited(_player?.seek(to)),
                   recording: recording == null
                       ? null
-                      : store.snapshot.value.of(recording.readingId),
+                      : store?.snapshot.value.of(recording.readingId),
                   onDownload: recording == null
                       ? null
                       : () => unawaited(

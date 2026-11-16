@@ -99,6 +99,21 @@ void main() {
     expect(player.loaded, isEmpty);
   });
 
+  testWidgets('Download alone never plays when the file arrives', (t) async {
+    final store = FakeRecordingStore()
+      ..set(mangalaReadingId, _status(Availability.waiting));
+    final player = await _open(t, store);
+
+    await t.tap(_download);
+    await t.pump();
+    expect(store.downloads, [(await _recording(t)).path]);
+
+    store.set(mangalaReadingId, _status(Availability.downloaded));
+    await t.pump();
+    await t.pump();
+    expect(player.loaded, isEmpty);
+  });
+
   testWidgets('play on a waiting recording downloads it and plays when it '
       'arrives', (t) async {
     final store = FakeRecordingStore()
