@@ -153,6 +153,24 @@ void main() {
     expect(store.removeAllCalls, 1);
   });
 
+  testWidgets('with nothing downloaded yet Remove offers to stop the queue', (
+    t,
+  ) async {
+    final (store, _) = await _pump(t, initial: snapshot(waiting: 40));
+    await t.tap(find.byKey(_remove));
+    await t.pumpAndSettle();
+    expect(
+      find.text('Stop the queued downloads? Nothing has been downloaded yet.'),
+      findsOneWidget,
+    );
+    final confirm = find.byKey(const ValueKey('recordings-remove-confirm'));
+    expect(find.descendant(of: confirm, matching: find.text('Stop')),
+        findsOneWidget);
+    await t.tap(confirm);
+    await t.pumpAndSettle();
+    expect(store.removeAllCalls, 1);
+  });
+
   testWidgets('on the web the group has only the sentence', (t) async {
     await _pump(t, web: true, initial: snapshot(waiting: 40));
     expect(

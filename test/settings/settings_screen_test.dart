@@ -219,7 +219,7 @@ void main() {
     expect(lines('Reading'), findsNWidgets(2));
   });
 
-  testWidgets('Settings shows its six groups in order', (t) async {
+  testWidgets('Settings shows its seven groups in order', (t) async {
     await openSettings(t, size: const Size(390, 2400));
     expect(find.byType(SettingsGroup), findsNWidgets(7));
     var last = -1.0;

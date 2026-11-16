@@ -127,12 +127,15 @@ class RecordingsGroup extends ConsumerWidget {
     RecordingsSnapshot s,
   ) async {
     final p = NamoPalette.of(context);
+    final nothingYet = s.downloaded == 0;
     final sure = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         content: Text(
-          'Remove ${formatSize(s.bytesDownloaded)} of recordings from this '
-          'device? They can be downloaded again.',
+          nothingYet
+              ? 'Stop the queued downloads? Nothing has been downloaded yet.'
+              : 'Remove ${formatSize(s.bytesDownloaded)} of recordings from '
+                    'this device? They can be downloaded again.',
           style: NamoType.body(p.text),
         ),
         actions: [
@@ -143,7 +146,7 @@ class RecordingsGroup extends ConsumerWidget {
           ),
           PrimaryButton(
             key: const ValueKey('recordings-remove-confirm'),
-            label: 'Remove',
+            label: nothingYet ? 'Stop' : 'Remove',
             onPressed: () => Navigator.of(context).pop(true),
           ),
         ],

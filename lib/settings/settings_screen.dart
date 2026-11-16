@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -143,7 +144,9 @@ class SettingsScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
               child: Text(
-                'Free. No ads. Texts work offline; recordings are downloaded once.',
+                kIsWeb
+                    ? 'Free. No ads. Texts work offline.'
+                    : 'Free. No ads. Texts work offline; recordings are downloaded once.',
                 softWrap: true,
                 style: NamoType.body(p.textSecondary),
               ),
