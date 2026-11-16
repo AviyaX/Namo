@@ -163,7 +163,7 @@ void main() {
       id: 'x',
       title: 'Title',
       titleRoman: 'Roman',
-      audio: const RecordingInfo(asset: 'a.m4a', label: 'Credit line'),
+      audio: const RecordingInfo(path: 'a.m4a', label: 'Credit line'),
       sections: [
         Section(
           id: 'x-s',
@@ -327,7 +327,7 @@ void main() {
       id: 'k',
       title: 'Units',
       titleRoman: 'Roman units',
-      audio: const RecordingInfo(asset: 'a.m4a', label: 'Credit line'),
+      audio: const RecordingInfo(path: 'a.m4a', label: 'Credit line'),
       sections: [
         Section(
           id: 'k-s',

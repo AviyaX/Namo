@@ -47,8 +47,8 @@ app.*.map.json
 # Widget Preview related
 .widget_preview/
 
-# Downloaded originals of the pirith recordings (copies live in assets/audio/pirith/)
+# Downloaded originals of the pirith recordings (copies that ship live in hosted/audio/pirith/)
 source_material/pitaka_lk_pirith/audio/
 
-# The owner's Samantha Pattana source folder (PDF, conversion, original recording; the recording that ships is in assets/audio/samantha_patthana/)
+# The owner's Samantha Pattana source folder (PDF, conversion, original recording; the recording that ships is in hosted/audio/samantha_patthana/)
 source_material/samantha_patthana/

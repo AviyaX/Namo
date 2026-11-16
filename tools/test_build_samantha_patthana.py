@@ -255,7 +255,8 @@ class BuildFromFakeDataTest(unittest.TestCase):
 
     def test_audio_times(self):
         audio = build.build(self.root)["categories"][0]["readings"][1]["audio"]
-        self.assertEqual(audio["asset"], "assets/audio/samantha_patthana/hYXyO3o7Iac.m4a")
+        self.assertEqual(audio["path"], "audio/samantha_patthana/hYXyO3o7Iac.m4a")
+        self.assertNotIn("asset", audio)
         self.assertEqual(audio["label"], "Chanted by Ven. Kiriwaththuduwe Ariyadassana Thero")
         self.assertEqual((audio["duration_ms"], audio["bytes"], audio["sha256"]),
                          (2856000, build.RECORDING_BYTES, build.RECORDING_SHA256))

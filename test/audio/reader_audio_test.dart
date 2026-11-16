@@ -25,7 +25,7 @@ class _One implements AudioCatalogue {
   @override
   Recording? recordingFor(String readingId) => Recording(
         readingId: readingId,
-        asset: 'assets/audio/test.mp3',
+        path: 'assets/audio/test.mp3',
         label: placeholder ? _placeholderLabel : 'A test recording',
         placeholder: placeholder,
       );
@@ -121,7 +121,7 @@ void main() {
     final player = FakeChantPlayer();
     await open(t, player: player);
     expect(find.byType(AudioControls), findsOneWidget);
-    expect(player.loaded.single.asset, 'assets/audio/test.mp3');
+    expect(player.loaded.single.path, 'assets/audio/test.mp3');
     expect(audioLabel(t), 'Play recording');
     expect(find.text('0:00 / 0:20'), findsOneWidget);
     expect(find.text('A test recording'), findsNothing);

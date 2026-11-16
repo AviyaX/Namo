@@ -129,7 +129,7 @@ class JustAudioChantPlayer implements ChantPlayer {
     _loading = true;
     _publish();
     try {
-      await _player.setAsset(r.asset);
+      await _player.setAsset(r.path);
     } catch (_) {
       // An overtaken load is interrupted by the newer one; that is not a
       // failure of the newer one.

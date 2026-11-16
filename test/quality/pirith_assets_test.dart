@@ -6,32 +6,32 @@ import 'quality_support.dart';
 void main() {
   // Only the names in the bundle's manifest are read here, never the bytes of
   // a recording.
-  Future<Set<String>> bundled() async {
-    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-    return manifest
-        .listAssets()
-        .where((a) => a.startsWith('assets/audio/pirith/'))
-        .toSet();
-  }
+  Future<List<String>> bundled() async =>
+      (await AssetManifest.loadFromAssetBundle(rootBundle)).listAssets();
 
-  testWidgets('every pirith reading names a recording in the bundle', (t) async {
-    final lib = await realLibrary(t);
-    final names = await bundled();
-    final readings = lib.category(pirithCategoryId)!.readings;
-    expect(readings, hasLength(39));
-    for (final r in readings) {
-      expect(r.audio, isNotNull, reason: r.id);
-      expect(names, contains(r.audio!.asset), reason: r.id);
-    }
+  testWidgets('nothing under assets/audio/ is bundled', (t) async {
+    final names = (await t.runAsync(bundled))!;
+    expect(names.where((a) => a.startsWith('assets/audio/')), isEmpty);
   });
 
-  testWidgets('the bundle has exactly 39 files under assets/audio/pirith/', (t) async {
-    final names = await bundled();
-    expect(names, hasLength(39));
+  testWidgets('the development tone is still bundled', (t) async {
+    final names = (await t.runAsync(bundled))!;
+    expect(names, contains('assets/audio_dev/placeholder_tone_not_a_chant.wav'));
+  });
+
+  testWidgets('every pirith recording names a hosted file with its size and checksum', (t) async {
     final lib = await realLibrary(t);
-    final used = {
-      for (final r in lib.category(pirithCategoryId)!.readings) r.audio!.asset,
-    };
-    expect(names, used, reason: 'no recording is unused or shared');
+    final readings = lib.category(pirithCategoryId)!.readings;
+    expect(readings, hasLength(39));
+    final hex = RegExp(r'^[0-9a-f]{64}$');
+    for (final r in readings) {
+      final a = r.audio;
+      expect(a, isNotNull, reason: r.id);
+      expect(a!.path, startsWith('audio/pirith/'), reason: r.id);
+      expect(a.path, endsWith('.m4a'), reason: r.id);
+      expect(a.bytes, greaterThan(0), reason: r.id);
+      expect(hex.hasMatch(a.sha256), isTrue, reason: r.id);
+    }
+    expect({for (final r in readings) r.audio!.path}, hasLength(39));
   });
 }

@@ -11,7 +11,7 @@
      "title": "මහා මඞ්ගල සුත්තං",
      "title_roman": "Maha Mangala Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/08-mahamangala.m4a",
+      "path": "audio/pirith/08-mahamangala.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 346000,
       "bytes": 1046598,
@@ -971,7 +971,7 @@
      "title": "රතන සුත්තං",
      "title_roman": "Rathana Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/09-rathana.m4a",
+      "path": "audio/pirith/09-rathana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 621000,
       "bytes": 1874163,
@@ -2796,7 +2796,7 @@
      "title": "කරණීය මෙත්ත සුත්තං",
      "title_roman": "Karaniyameththa Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/10-karaniya.m4a",
+      "path": "audio/pirith/10-karaniya.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 242000,
       "bytes": 731185,
@@ -3554,7 +3554,7 @@
      "title": "සරණාගමනං",
      "title_roman": "Saranagamanaya",
      "audio": {
-      "asset": "assets/audio/pirith/02-saranagamanam.m4a",
+      "path": "audio/pirith/02-saranagamanam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 101000,
       "bytes": 306807,
@@ -3789,7 +3789,7 @@
      "title": "දස සික්ඛාපදානි",
      "title_roman": "Dasa Sikkhapada",
      "audio": {
-      "asset": "assets/audio/pirith/03-dasasikkhapadani.m4a",
+      "path": "audio/pirith/03-dasasikkhapadani.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 108000,
       "bytes": 327245,
@@ -4040,7 +4040,7 @@
      "title": "සාමණේර පඤ්හො",
      "title_roman": "Samanera Prashnaya",
      "audio": {
-      "asset": "assets/audio/pirith/04-samanera-panha.m4a",
+      "path": "audio/pirith/04-samanera-panha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 113000,
       "bytes": 339366,
@@ -4311,7 +4311,7 @@
      "title": "ද්වත්තිංසාකාරො",
      "title_roman": "Dvaththinsakaraya",
      "audio": {
-      "asset": "assets/audio/pirith/05-dvattimsakaraya.m4a",
+      "path": "audio/pirith/05-dvattimsakaraya.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 69000,
       "bytes": 209211,
@@ -4589,7 +4589,7 @@
      "title": "පච්චවෙක්ඛණා",
      "title_roman": "Pachchavekkhana",
      "audio": {
-      "asset": "assets/audio/pirith/06-paccavekkhana.m4a",
+      "path": "audio/pirith/06-paccavekkhana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 204000,
       "bytes": 614582,
@@ -4978,7 +4978,7 @@
      "title": "දසධම්ම සුත්තං",
      "title_roman": "Dasadhamma Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/07-dasadhamma.m4a",
+      "path": "audio/pirith/07-dasadhamma.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 324000,
       "bytes": 980754,
@@ -5791,7 +5791,7 @@
      "title": "ඛන්ධ පරිත්තං",
      "title_roman": "Khandha Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/11-khandha-parittam.m4a",
+      "path": "audio/pirith/11-khandha-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 410000,
       "bytes": 1241819,
@@ -6725,7 +6725,7 @@
      "title": "මෙත්තානිසංස සුත්තං",
      "title_roman": "Meththanisansa Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/12-mettanisamsa.m4a",
+      "path": "audio/pirith/12-mettanisamsa.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 213000,
       "bytes": 641828,
@@ -7227,7 +7227,7 @@
      "title": "මිත්තානිසංස සුත්තං",
      "title_roman": "Miththanisansa Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/13-mittanisamsa.m4a",
+      "path": "audio/pirith/13-mittanisamsa.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 207000,
       "bytes": 624736,
@@ -7855,7 +7855,7 @@
      "title": "මොර පරිත්තං",
      "title_roman": "Mora Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/14-mora-parittam.m4a",
+      "path": "audio/pirith/14-mora-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 145000,
       "bytes": 440429,
@@ -8350,7 +8350,7 @@
      "title": "චන්ද පරිත්තං",
      "title_roman": "Chanda Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/15-canda-parittam.m4a",
+      "path": "audio/pirith/15-canda-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 206000,
       "bytes": 621150,
@@ -8918,7 +8918,7 @@
      "title": "සූරිය පරිත්තං",
      "title_roman": "Suriya Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/16-suriya-parittam.m4a",
+      "path": "audio/pirith/16-suriya-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 220000,
       "bytes": 665895,
@@ -9568,7 +9568,7 @@
      "title": "ධජග්ග පරිත්තං",
      "title_roman": "Dhajagga Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/17-dhajagga-parittam.m4a",
+      "path": "audio/pirith/17-dhajagga-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 673000,
       "bytes": 2039940,
@@ -11239,7 +11239,7 @@
      "title": "මහා කස්සප බොජ්ඣංග සුත්තං",
      "title_roman": "Maha Kassapa Bojjhanga Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/18-kassapa-bojjhanga.m4a",
+      "path": "audio/pirith/18-kassapa-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 425000,
       "bytes": 1288655,
@@ -12289,7 +12289,7 @@
      "title": "මහා මොග්ගල්ලාන බොජ්ඣංග සුත්තං",
      "title_roman": "Maha Moggallana Bojjhanga Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/19-moggallana-bojjhanga.m4a",
+      "path": "audio/pirith/19-moggallana-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 423000,
       "bytes": 1282265,
@@ -13339,7 +13339,7 @@
      "title": "මහා චුන්ද බොජ්ඣංග සුත්තං",
      "title_roman": "Maha Chunda Bojjhanga Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/20-chunda-bojjhanga.m4a",
+      "path": "audio/pirith/20-chunda-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 413000,
       "bytes": 1244288,
@@ -14277,7 +14277,7 @@
      "title": "ගිරිමානන්ද සුත්තං",
      "title_roman": "Girimananda Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/21-girimananda-suttam.m4a",
+      "path": "audio/pirith/21-girimananda-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 1451000,
       "bytes": 4385718,
@@ -18091,7 +18091,7 @@
      "title": "ඉසිගිලි සුත්තං",
      "title_roman": "Isigili Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/22-isigili-suttam.m4a",
+      "path": "audio/pirith/22-isigili-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 983000,
       "bytes": 2976828,
@@ -19698,7 +19698,7 @@
      "title": "ධම්මචක්කප්පවත්තන සුත්තං",
      "title_roman": "Dhammachakkappavaththana Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/23-dhammacakkappavattana.m4a",
+      "path": "audio/pirith/23-dhammacakkappavattana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 1468000,
       "bytes": 4432617,
@@ -23113,7 +23113,7 @@
      "title": "මහාසමය සුත්තං",
      "title_roman": "Maha Samaya Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/24-mahasamaya-suttam.m4a",
+      "path": "audio/pirith/24-mahasamaya-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 1817000,
       "bytes": 5484930,
@@ -29180,7 +29180,7 @@
      "title": "ආළවක සුත්තං",
      "title_roman": "Alavaka Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/25-alavaka-suttam.m4a",
+      "path": "audio/pirith/25-alavaka-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 580000,
       "bytes": 1762032,
@@ -30153,7 +30153,7 @@
      "title": "කසිභාරද්වාජ සුත්තං",
      "title_roman": "Kasibharadvaja Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/26-kasibharadvaja-suttam.m4a",
+      "path": "audio/pirith/26-kasibharadvaja-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 709000,
       "bytes": 2153756,
@@ -30867,7 +30867,7 @@
      "title": "පරාභව සුත්තං",
      "title_roman": "Parabhava Suthraya",
      "audio": {
-      "asset": "assets/audio/pirith/27-parabhava-suttam.m4a",
+      "path": "audio/pirith/27-parabhava-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 600000,
       "bytes": 1816778,
@@ -31878,7 +31878,7 @@
      "title": "අංගුලිමාල පරිත්තං",
      "title_roman": "Angulimala Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/50-angulimala.m4a",
+      "path": "audio/pirith/50-angulimala.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 123000,
       "bytes": 379792,
@@ -32198,7 +32198,7 @@
      "title": "අටවිසි පරිත්තං",
      "title_roman": "Atavisi Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/51-atavisi.m4a",
+      "path": "audio/pirith/51-atavisi.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 128000,
       "bytes": 396279,
@@ -32549,7 +32549,7 @@
      "title": "වට්ටක පරිත්තං",
      "title_roman": "Vattaka Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/52-wattaka.m4a",
+      "path": "audio/pirith/52-wattaka.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 121000,
       "bytes": 368927,
@@ -32816,7 +32816,7 @@
      "title": "ජය මංගල අට්ඨ ගාථා",
      "title_roman": "Jaya Mangala Gatha",
      "audio": {
-      "asset": "assets/audio/pirith/53-jaya-mangala-attha-gatha.m4a",
+      "path": "audio/pirith/53-jaya-mangala-attha-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 286000,
       "bytes": 863296,
@@ -33152,7 +33152,7 @@
      "title": "නරසීහ ගාථා",
      "title_roman": "Narasiha Gatha",
      "audio": {
-      "asset": "assets/audio/pirith/54-narasiha-gatha.m4a",
+      "path": "audio/pirith/54-narasiha-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 201000,
       "bytes": 623035,
@@ -33471,7 +33471,7 @@
      "title": "මහා ජයමංගල ගාථා",
      "title_roman": "Maha Jaya Mangala Gatha",
      "audio": {
-      "asset": "assets/audio/pirith/55-maha-jaya-mangala-gatha.m4a",
+      "path": "audio/pirith/55-maha-jaya-mangala-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 334000,
       "bytes": 1028953,
@@ -34310,7 +34310,7 @@
      "title": "ජය පරිත්තං",
      "title_roman": "Jaya Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/56-jaya-parittam.m4a",
+      "path": "audio/pirith/56-jaya-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 202000,
       "bytes": 623757,
@@ -34746,7 +34746,7 @@
      "title": "ජ්වර පරිත්තං",
      "title_roman": "Jvara Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/57-jvara-parittam.m4a",
+      "path": "audio/pirith/57-jvara-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 952000,
       "bytes": 2888982,
@@ -35865,7 +35865,7 @@
      "title": "අන්තරාය නිවාරණ පරිත්තං",
      "title_roman": "Antharaya Nivarana Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/58-antharaya-nivarana-parittam.m4a",
+      "path": "audio/pirith/58-antharaya-nivarana-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 53000,
       "bytes": 171439,
@@ -36028,7 +36028,7 @@
      "title": "ජිනපඤ්ජර පරිත්තං",
      "title_roman": "Jinapanjara Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/59-jinapanjara-parittam.m4a",
+      "path": "audio/pirith/59-jinapanjara-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 370000,
       "bytes": 1122645,
@@ -36739,7 +36739,7 @@
      "title": "දස දිසා පරිත්තං",
      "title_roman": "Dasa Disa Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/60-dasa-disa-parittam.m4a",
+      "path": "audio/pirith/60-dasa-disa-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 90000,
       "bytes": 281293,
@@ -36912,7 +36912,7 @@
      "title": "බොජ්ඣංග පරිත්තං",
      "title_roman": "Bojjhanga Piritha",
      "audio": {
-      "asset": "assets/audio/pirith/61-bojjhanga-parittam.m4a",
+      "path": "audio/pirith/61-bojjhanga-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 198000,
       "bytes": 601766,
@@ -37322,7 +37322,7 @@
      "title": "සමන්ත පට්ඨානය",
      "title_roman": "Samantha Patthanaya",
      "audio": {
-      "asset": "assets/audio/pirith/62-samantha-pattana.m4a",
+      "path": "audio/pirith/62-samantha-pattana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
       "duration_ms": 2448000,
       "bytes": 7420182,

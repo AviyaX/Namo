@@ -131,7 +131,7 @@ class PlaceholderCatalogue implements AudioCatalogue {
   @override
   Recording? recordingFor(String readingId) => Recording(
     readingId: readingId,
-    asset: placeholderToneAsset,
+    path: placeholderToneAsset,
     label: placeholderToneLabel,
     placeholder: true,
   );

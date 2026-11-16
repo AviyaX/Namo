@@ -48,9 +48,9 @@ def tree(items, audios):
         json.dumps(data, ensure_ascii=False), encoding="utf-8")
     names = {i["id"].split("-", 1)[0]: "Name " + i["id"].split("-", 1)[0] for i in items if i["blocks"]}
     (root / "content" / "pirith_names_en.json").write_text(json.dumps(names), encoding="utf-8")
-    (root / "assets" / "audio" / "pirith").mkdir(parents=True)
+    (root / "hosted" / "audio" / "pirith").mkdir(parents=True)
     for name, content in audios.items():
-        (root / "assets" / "audio" / "pirith" / f"{name}.m4a").write_bytes(content)
+        (root / "hosted" / "audio" / "pirith" / f"{name}.m4a").write_bytes(content)
     return tmp, root
 
 
@@ -99,6 +99,8 @@ class SmallBuildTest(unittest.TestCase):
         self.assertEqual(audio["block_times"], [[1.5, 3.0], None, None])
         self.assertEqual(len(audio["block_times"]), len(r["sections"][0]["verses"]))
         self.assertEqual(audio["duration_ms"], 101000)
+        self.assertEqual(audio["path"], "audio/pirith/05-a.m4a")
+        self.assertNotIn("asset", audio)
         self.assertEqual(audio["bytes"], 6)
         self.assertEqual(audio["sha256"], hashlib.sha256(b"abcdef").hexdigest())
         self.assertEqual(audio["label"], "Chanted by Ven. Test Thero")
@@ -137,7 +139,7 @@ class SmallBuildTest(unittest.TestCase):
         ok = run_cli(self.root, "--check")
         self.assertEqual(ok.returncode, 0, ok.stderr)
         self.assertIn("pirith content is up to date", ok.stdout)
-        path = self.root / "assets" / "audio" / "pirith" / "05-a.m4a"
+        path = self.root / "hosted" / "audio" / "pirith" / "05-a.m4a"
         path.write_bytes(b"abcdeg")
         bad = run_cli(self.root, "--check")
         self.assertNotEqual(bad.returncode, 0)
@@ -198,7 +200,8 @@ class RealDataTest(unittest.TestCase):
     def test_recordings_are_the_originals(self):
         for r in self.readings:
             a = r["audio"]
-            data = (ROOT / a["asset"]).read_bytes()
+            self.assertTrue(a["path"].startswith("audio/pirith/"))
+            data = (ROOT / "hosted" / a["path"]).read_bytes()
             self.assertEqual((len(data), hashlib.sha256(data).hexdigest()), (a["bytes"], a["sha256"]))
             self.assertEqual(len(a["block_times"]), len(r["sections"][0]["verses"]))
 

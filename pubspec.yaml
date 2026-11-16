@@ -110,9 +110,7 @@ flutter:
     - assets/pictures/header_dark.jpg
     - assets/pictures/header_light.jpg
     - assets/pictures/pirith.jpg
-    - assets/audio/pirith/
     - assets/pictures/samantha_patthana.jpg
-    - assets/audio/samantha_patthana/
     - assets/audio_dev/placeholder_tone_not_a_chant.wav
 
   fonts:

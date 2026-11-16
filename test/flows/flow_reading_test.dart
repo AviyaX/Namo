@@ -31,7 +31,7 @@ Library _library() => Library(
         Reading(
           id: 'r1',
           title: 'Reading one',
-          audio: const RecordingInfo(asset: 'r1.m4a', label: 'credit r1'),
+          audio: const RecordingInfo(path: 'r1.m4a', label: 'credit r1'),
           sections: [
             Section(
               id: 'a',
@@ -81,7 +81,7 @@ Library _library() => Library(
           id: 'r2',
           title: 'Reading two',
           titleRoman: 'Roman two',
-          audio: const RecordingInfo(asset: 'r2.m4a', label: 'credit r2'),
+          audio: const RecordingInfo(path: 'r2.m4a', label: 'credit r2'),
           sections: [
             Section(
               id: 'p',

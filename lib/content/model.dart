@@ -203,7 +203,9 @@ Duration _seconds(num s) => Duration(microseconds: (s * 1000000).round());
 
 class RecordingInfo {
   const RecordingInfo({
-    required this.asset,
+    required this.path,
+    this.bytes = 0,
+    this.sha256 = '',
     required this.label,
     this.sectionCues = const {},
     this.blockTimes = const [],
@@ -212,7 +214,9 @@ class RecordingInfo {
   });
 
   factory RecordingInfo.fromJson(Map<String, dynamic> json) => RecordingInfo(
-    asset: json['asset'] as String,
+    path: json['path'] as String,
+    bytes: (json['bytes'] as num?)?.toInt() ?? 0,
+    sha256: json['sha256'] as String? ?? '',
     label: json['label'] as String? ?? '',
     duration: json['duration_ms'] == null
         ? null
@@ -235,7 +239,15 @@ class RecordingInfo {
     ],
   );
 
-  final String asset, label;
+  /// Where the recording lives on the host, e.g. `audio/pirith/08-x.m4a`.
+  final String path;
+
+  /// Size in bytes; 0 when the content does not say.
+  final int bytes;
+
+  /// Lower-case hex SHA-256; empty when the content does not say.
+  final String sha256;
+  final String label;
   final Map<String, Duration> sectionCues;
 
   /// One entry per block of the reading; null where the block has no time.

@@ -16,7 +16,7 @@ class _Real implements AudioCatalogue {
   @override
   Recording? recordingFor(String readingId) => const Recording(
         readingId: 'r1',
-        asset: 'assets/audio/r1.mp3',
+        path: 'assets/audio/r1.mp3',
         label: 'Recording of r1',
         placeholder: false,
       );
@@ -45,7 +45,7 @@ void main() {
           title: 't',
           sections: [],
           audio: RecordingInfo(
-            asset: 'assets/audio/r1.mp3',
+            path: 'assets/audio/r1.mp3',
             label: 'Chanted by someone',
             sectionCues: {'s01': Duration(seconds: 5)},
           ),
@@ -54,7 +54,7 @@ void main() {
     ]);
     final r = ContentAudioCatalogue(library).recordingFor('r1')!;
     expect(r.readingId, 'r1');
-    expect(r.asset, 'assets/audio/r1.mp3');
+    expect(r.path, 'assets/audio/r1.mp3');
     expect(r.label, 'Chanted by someone');
     expect(r.placeholder, isFalse);
     expect(r.sectionCues, {'s01': const Duration(seconds: 5)});
@@ -69,7 +69,7 @@ void main() {
           title: 't',
           sections: [],
           audio: RecordingInfo(
-            asset: 'a.m4a',
+            path: 'a.m4a',
             label: 'L',
             lineTimes: [
               [Duration(seconds: 1), null],
@@ -80,7 +80,7 @@ void main() {
           id: 'plain',
           title: 't',
           sections: [],
-          audio: RecordingInfo(asset: 'b.m4a', label: 'L'),
+          audio: RecordingInfo(path: 'b.m4a', label: 'L'),
         ),
       ]),
     ]);
@@ -125,7 +125,7 @@ void main() {
     final r = DevPlaceholderCatalogue(_Empty()).recordingFor('r1')!;
     expect(r.placeholder, isTrue);
     expect(r.label, 'Development placeholder tone (not a chant)');
-    expect(r.asset, 'assets/audio_dev/placeholder_tone_not_a_chant.wav');
+    expect(r.path, 'assets/audio_dev/placeholder_tone_not_a_chant.wav');
   });
 
   test('a real recording is never replaced by the placeholder', () {
@@ -136,7 +136,7 @@ void main() {
     );
     final r = c.recordingFor('r1')!;
     expect(r.placeholder, isFalse);
-    expect(r.asset, 'assets/audio/r1.mp3');
+    expect(r.path, 'assets/audio/r1.mp3');
   });
 
   test('the fake library used by reader tests has no recording', () {

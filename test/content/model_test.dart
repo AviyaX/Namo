@@ -193,7 +193,9 @@ void pirithModelTests() {
       final r = Reading.fromJson(
         reading(
           audio: {
-            'asset': 'a.m4a',
+            'path': 'a.m4a',
+            'bytes': 6,
+            'sha256': 'abc',
             'label': 'L',
             'duration_ms': 1500,
             'block_times': [
@@ -204,7 +206,9 @@ void pirithModelTests() {
         ),
       );
       final a = r.audio!;
-      expect(a.asset, 'a.m4a');
+      expect(a.path, 'a.m4a');
+      expect(a.bytes, 6);
+      expect(a.sha256, 'abc');
       expect(a.label, 'L');
       expect(a.duration, const Duration(milliseconds: 1500));
       expect(a.blockTimes, [
@@ -214,6 +218,12 @@ void pirithModelTests() {
         ),
         null,
       ]);
+    });
+
+    test('a recording without bytes or sha256 reads 0 and empty', () {
+      final a = RecordingInfo.fromJson({'path': 'a.m4a', 'label': 'L'});
+      expect(a.bytes, 0);
+      expect(a.sha256, '');
     });
 
     test('the new verse, category and recording fields parse', () {
@@ -243,7 +253,7 @@ void pirithModelTests() {
       expect(cat({}).shortTitle, isNull);
 
       final a = RecordingInfo.fromJson({
-        'asset': 'a.m4a',
+        'path': 'a.m4a',
         'label': 'L',
         'line_times': [
           [0.5, null, 2],
@@ -256,7 +266,7 @@ void pirithModelTests() {
         <Duration?>[],
         [null],
       ]);
-      expect(RecordingInfo.fromJson({'asset': 'a', 'label': 'L'}).lineTimes, isEmpty);
+      expect(RecordingInfo.fromJson({'path': 'a', 'label': 'L'}).lineTimes, isEmpty);
     });
 
     test('a plain reading is not phrased', () {

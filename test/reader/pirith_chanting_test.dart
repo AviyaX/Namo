@@ -111,7 +111,7 @@ void main() {
 
     await t.tap(_play);
     await t.pump();
-    expect(player.loaded.map((r) => r.asset), [recording.asset]);
+    expect(player.loaded.map((r) => r.path), [recording.path]);
     expect(player.state.status, ChantStatus.playing);
     expect(_chantTip(t), 'Pause chanting');
 

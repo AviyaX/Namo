@@ -17,7 +17,7 @@ class _One implements AudioCatalogue {
   @override
   Recording? recordingFor(String readingId) => Recording(
     readingId: readingId,
-    asset: 'assets/audio/test.mp3',
+    path: 'assets/audio/test.mp3',
     label: 'A test recording',
     placeholder: false,
   );

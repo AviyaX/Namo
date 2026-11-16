@@ -2,7 +2,7 @@
 
 Reads content/extracted/pitaka_lk_pirith.json (as data only), writes
 assets/content/pirith.json and content/pirith_names.md, and checks that every
-recording under assets/audio/pirith/ is the downloaded original.
+recording under hosted/audio/pirith/ is the downloaded original.
 
   python -I -X utf8 tools/build_pirith.py <project_root>
   python -I -X utf8 tools/build_pirith.py <project_root> --check
@@ -19,7 +19,7 @@ import sys
 SOURCE = pathlib.Path("content/extracted/pitaka_lk_pirith.json")
 OUTPUT = pathlib.Path("assets/content/pirith.json")
 NAMES = pathlib.Path("content/pirith_names.md")
-AUDIO_DIR = pathlib.Path("assets/audio/pirith")
+AUDIO_DIR = pathlib.Path("hosted/audio/pirith")
 
 
 class BuildError(Exception):
@@ -89,7 +89,7 @@ def _reading(root: pathlib.Path, src: dict, item: dict, collected: str, roman: s
         "id": f"pirith-{item['id']}",
         "title": item["title_si"],
         "title_roman": roman,
-        "audio": {"asset": f"assets/audio/pirith/{item['id']}.m4a",
+        "audio": {"path": f"audio/pirith/{item['id']}.m4a",
                   "label": f"Chanted by Ven. {chanter}",
                   "duration_ms": _duration_ms(item["duration"]),
                   "bytes": size, "sha256": sha, "block_times": _times(item["blocks"])},
@@ -166,7 +166,7 @@ def _check(root: pathlib.Path, data: dict, rendered: bytes, names: bytes) -> str
         stored = []
     for r in stored + readings:
         a = r["audio"]
-        path = root / a["asset"]
+        path = root / "hosted" / a["path"]
         sha, size = _sha_and_size(path)
         if (sha, size) != (a["sha256"], a["bytes"]):
             return f"{path.name} differs from the original"
@@ -174,7 +174,7 @@ def _check(root: pathlib.Path, data: dict, rendered: bytes, names: bytes) -> str
         path = root / rel
         if not path.exists() or path.read_bytes() != want:
             return f"{rel.as_posix()} is out of date"
-    wanted = {pathlib.Path(r["audio"]["asset"]).name for r in readings}
+    wanted = {pathlib.Path(r["audio"]["path"]).name for r in readings}
     extra = sorted(p.name for p in (root / AUDIO_DIR).glob("*") if p.name not in wanted)
     if extra:
         return f"unexpected file in {AUDIO_DIR.as_posix()}: {extra[0]}"
