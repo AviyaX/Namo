@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:buddhist_gatha/settings/auto_download.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -172,5 +173,21 @@ void main() {
     expect(s.effectiveLayout, TwoLanguageLayout.sideBySide);
     expect(AppSettings.fromJson({'layout': 'sideBySide'}).layout,
         TwoLanguageLayout.sideBySide);
+  });
+
+  test('auto download defaults to Wi-Fi only', () {
+    expect(const AppSettings().autoDownload, AutoDownload.wifiOnly);
+  });
+  test('auto download is saved by name and read back', () {
+    final store = InMemoryKeyValueStore();
+    final c = containerOn(store);
+    c.read(settingsProvider.notifier).setAutoDownload(AutoDownload.off);
+    expect((jsonDecode(store.read(settingsKey)!) as Map)['autoDownload'], 'off');
+    expect(containerOn(store).read(settingsProvider).autoDownload, AutoDownload.off);
+  });
+  test('an unknown auto download value falls back alone', () {
+    final s = AppSettings.fromJson({'autoDownload': 'sometimes', 'fontScale': 1.2});
+    expect(s.autoDownload, AutoDownload.wifiOnly);
+    expect(s.fontScale, 1.2);
   });
 }

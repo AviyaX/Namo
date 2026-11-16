@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../storage/key_value_store.dart';
+import 'auto_download.dart';
 import 'reading_language.dart';
 
 const settingsKey = 'namo.settings.v1';
@@ -19,6 +20,7 @@ class AppSettings {
     this.scrollSpeed = 22.0,
     this.autoScrollWithAudio = false,
     this.chantSpeed = 1.0,
+    this.autoDownload = AutoDownload.wifiOnly,
     this.themeMode = ThemeMode.dark,
   });
 
@@ -54,6 +56,7 @@ class AppSettings {
   final double scrollSpeed;
   final bool autoScrollWithAudio;
   final double chantSpeed;
+  final AutoDownload autoDownload;
   final ThemeMode themeMode;
 
   /// The layout to draw: side by side only holds for Pali and Sinhala, so
@@ -71,6 +74,7 @@ class AppSettings {
     double? scrollSpeed,
     bool? autoScrollWithAudio,
     double? chantSpeed,
+    AutoDownload? autoDownload,
     ThemeMode? themeMode,
   }) =>
       AppSettings(
@@ -81,6 +85,7 @@ class AppSettings {
         scrollSpeed: scrollSpeed ?? this.scrollSpeed,
         autoScrollWithAudio: autoScrollWithAudio ?? this.autoScrollWithAudio,
         chantSpeed: chantSpeed ?? this.chantSpeed,
+        autoDownload: autoDownload ?? this.autoDownload,
         themeMode: themeMode ?? this.themeMode,
       );
 
@@ -92,6 +97,7 @@ class AppSettings {
         'scrollSpeed': scrollSpeed,
         'autoScrollWithAudio': autoScrollWithAudio,
         'chantSpeed': chantSpeed,
+        'autoDownload': autoDownload.name,
         'themeMode': themeMode.name,
       };
 
@@ -117,6 +123,8 @@ class AppSettings {
       scrollSpeed: number('scrollSpeed', d.scrollSpeed, scrollSpeedRange),
       autoScrollWithAudio: auto is bool ? auto : d.autoScrollWithAudio,
       chantSpeed: snapChantSpeed(json['chantSpeed']),
+      autoDownload: AutoDownload.values.asNameMap()[json['autoDownload']] ??
+          d.autoDownload,
       themeMode:
           ThemeMode.values.asNameMap()[json['themeMode']] ?? d.themeMode,
     );
@@ -176,6 +184,9 @@ class SettingsController extends Notifier<AppSettings> {
 
   void setChantSpeed(double v) =>
       _set(state.copyWith(chantSpeed: AppSettings.snapChantSpeed(v)));
+
+  void setAutoDownload(AutoDownload v) =>
+      _set(state.copyWith(autoDownload: v));
 
   void setThemeMode(ThemeMode v) => _set(state.copyWith(themeMode: v));
 }
