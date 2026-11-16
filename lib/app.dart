@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'audio/recording_store_provider.dart';
 import 'design/theme.dart';
 import 'design/tokens.dart';
 import 'router.dart';
@@ -12,6 +13,8 @@ class NamoApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Watched so the recording store starts with the app.
+    ref.watch(recordingStoreProvider);
     return MaterialApp.router(
       title: 'Namo',
       theme: namoTheme(Brightness.light),

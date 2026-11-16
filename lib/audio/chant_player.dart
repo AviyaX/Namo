@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 
 import 'audio_catalogue.dart';
+import 'recording_location.dart';
+import 'recording_store_provider.dart';
 
 enum ChantStatus { idle, loading, ready, playing, paused, completed, failed }
 
@@ -51,10 +53,13 @@ abstract interface class ChantPlayer {
   Future<void> dispose();
 }
 
+/// Where a recording can be opened now; null when it cannot.
+typedef Locate = RecordingLocation? Function(Recording r);
+
 /// [ChantPlayer] on `just_audio`; the only file that imports it. Needs the
 /// platform's audio, so it is not covered by automated tests.
 class JustAudioChantPlayer implements ChantPlayer {
-  JustAudioChantPlayer() {
+  JustAudioChantPlayer({required this._locate}) {
     _subscriptions = [
       _player.playerStateStream.listen((_) => _publish()),
       _player.positionStream.listen((_) => _publish()),
@@ -62,6 +67,7 @@ class JustAudioChantPlayer implements ChantPlayer {
     ];
   }
 
+  final Locate _locate;
   final _player = AudioPlayer();
   final _controller = StreamController<ChantState>.broadcast();
   late final List<StreamSubscription<Object?>> _subscriptions;
@@ -129,7 +135,16 @@ class JustAudioChantPlayer implements ChantPlayer {
     _loading = true;
     _publish();
     try {
-      await _player.setAsset(r.path);
+      switch (_locate(r)) {
+        case AssetLocation(:final asset):
+          await _player.setAsset(asset);
+        case FileLocation(:final path):
+          await _player.setFilePath(path);
+        case UrlLocation(:final url):
+          await _player.setUrl(url.toString());
+        case null:
+          _failed = true;
+      }
     } catch (_) {
       // An overtaken load is interrupted by the newer one; that is not a
       // failure of the newer one.
@@ -198,7 +213,9 @@ class JustAudioChantPlayer implements ChantPlayer {
 
 /// One player for the reader that is open; disposed when it is left.
 final chantPlayerProvider = Provider.autoDispose<ChantPlayer>((ref) {
-  final player = JustAudioChantPlayer();
+  final player = JustAudioChantPlayer(
+    locate: (r) => ref.read(recordingStoreProvider).locationFor(r),
+  );
   ref.onDispose(player.dispose);
   return player;
 });

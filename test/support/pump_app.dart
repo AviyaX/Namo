@@ -1,4 +1,6 @@
 import 'package:buddhist_gatha/app.dart';
+import 'package:buddhist_gatha/audio/recording_store.dart';
+import 'package:buddhist_gatha/audio/recording_store_provider.dart';
 import 'package:buddhist_gatha/reader/screen_awake.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'fake_recording_store.dart';
 import 'fake_screen_awake.dart';
 
 /// Starts the app. The screen is never really kept on in tests: pass a
@@ -16,6 +19,7 @@ Future<void> pumpApp(
   String? location,
   Size size = const Size(390, 844),
   ScreenAwake? screenAwake,
+  RecordingStore? recordingStore,
   bool settle = true,
 }) async {
   t.view.physicalSize = size;
@@ -26,6 +30,9 @@ Future<void> pumpApp(
       overrides: [
         ...overrides,
         screenAwakeProvider.overrideWithValue(screenAwake ?? FakeScreenAwake()),
+        recordingStoreProvider.overrideWithValue(
+          recordingStore ?? FakeRecordingStore(),
+        ),
         if (location != null)
           routerProvider.overrideWith(
             (ref) => buildRouter(initialLocation: location),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
+import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
@@ -163,6 +164,7 @@ Future<void> openReal(
   bool audio = false,
   bool audioFails = false,
   ChantPlayer? player,
+  RecordingStore? recordingStore,
   List<Override> overrides = const [],
   Map<String, String> storeExtras = const {},
   bool settle = true,
@@ -227,6 +229,7 @@ Future<void> openReal(
     ],
     location: location,
     size: size,
+    recordingStore: recordingStore,
     settle: settle,
   );
 }

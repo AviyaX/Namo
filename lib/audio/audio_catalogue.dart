@@ -72,6 +72,9 @@ class ContentAudioCatalogue implements AudioCatalogue {
 
   final Map<String, Recording> _byReading;
 
+  /// Every reading's recording, in library order.
+  List<Recording> get recordings => _byReading.values.toList();
+
   @override
   Recording? recordingFor(String readingId) => _byReading[readingId];
 }
