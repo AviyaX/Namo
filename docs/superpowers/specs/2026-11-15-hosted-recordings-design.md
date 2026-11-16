@@ -322,8 +322,15 @@ Between Audio and Auto-scroll, icon `download_rounded`:
 
 ### Size, for the record
 
-Android arm64 package about 148 → about 50 MB; universal APK 184 → about
-86 MB; web deployment 98 MB smaller. Measured after the build.
+Measured on 2026-11-16 (release build, `--split-per-abi`, decimal MB):
+
+- Android arm64 package: 53,957,724 bytes (54.0 MB); armeabi-v7a 51,540,920
+  bytes (51.5 MB); x86_64 55,449,184 bytes (55.4 MB).
+- Web output (`build/web`): 76,208,090 bytes (76.2 MB), with no
+  `assets/audio/` folder; the placeholder tone is the only audio left in it.
+
+The previous figures (148 MB arm64, 184 MB universal) were measured before
+the recordings moved out of the bundle.
 
 ## Left to the builder
 

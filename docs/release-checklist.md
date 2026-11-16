@@ -33,3 +33,15 @@
   - [ ] Choose Side by side (Settings, or the reader's sheet; in a pirith the sheet says "Meaning below" / "Side by side") and read a gatha and a pirith at your usual text size.
   - [ ] With Pali and English chosen, Side by side is refused with "Side by side needs Pali and Sinhala."
   - [ ] Choose Sinhala first, then Pali, and Side by side: Pali is still on the left in a gatha and in a pirith.
+- [ ] Hosted recordings (Cloudflare R2), owner steps:
+  - [ ] Create the bucket `namo-audio` and the custom domain `audio.intendable.us` on the account that holds the zone.
+  - [ ] Set the CORS policy from `hosted/README.md`.
+  - [ ] Keep the bucket private (no public access, no r2.dev) until the pirith and Samantha Pattana recording permissions are confirmed; a public bucket is publication.
+  - [ ] Run `npx wrangler login` once, then `python -I -X utf8 tools/sync_hosted_audio.py . --upload` and `python -I -X utf8 tools/sync_hosted_audio.py . --verify-full`.
+  - [ ] On a phone over Wi-Fi: fresh install; Settings → Recordings shows progress and ends at "All 40 recordings downloaded".
+  - [ ] Turn Wi-Fi off half way and on again; the download resumes.
+  - [ ] Airplane mode: a text opens; an undownloaded recording shows "Recording not downloaded · … MB" with Download; a downloaded one plays.
+  - [ ] Set "Any connection" on mobile data and watch one download.
+  - [ ] "Remove downloaded recordings" empties the device and sets Off.
+  - [ ] Web: play streams from the host.
+  - [ ] iOS: build and run once (never built here).
