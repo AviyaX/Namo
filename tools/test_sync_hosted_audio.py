@@ -107,8 +107,11 @@ class PlanUploadTest(Base):
         with mock.patch.object(sync.shutil, "which", return_value="/bin/npx"):
             sync.upload(self.root, run=lambda argv, **kw: calls.append((argv, kw)))
         self.assertEqual(len(calls), 1)
-        self.assertTrue(calls[0][0][0].endswith(("npx", "npx.cmd")))
-        self.assertTrue(calls[0][1].get("check"))
+        argv, kwargs = calls[0]
+        self.assertTrue(argv[0].endswith(("npx", "npx.cmd")))
+        self.assertEqual(argv[1:], sync.plan(self.root)[0][1:])
+        self.assertTrue(kwargs.get("check"))
+        self.assertEqual(kwargs.get("cwd"), self.root)
 
     def test_upload_without_npx(self):
         with mock.patch.object(sync.shutil, "which", return_value=None):
@@ -151,6 +154,92 @@ class VerifyTest(Base):
         other = hashlib.sha256(b"abcdeX").hexdigest()
         self.assertEqual(sync.verify_full(self.root, "https://example.test", bad),
                          [f"{URL}: checksum {other}, expected {SHA}"])
+
+
+class VerifyRobustnessTest(Base):
+    def setUp(self):
+        super().setUp()
+        p = self.root / "assets" / "content" / "x.json"
+        data = json.loads(p.read_text(encoding="utf-8"))
+        data["categories"][0]["readings"].append(
+            {"id": "r3", "audio": {"path": "audio/t/b.m4a", "bytes": 6, "sha256": SHA}})
+        p.write_text(json.dumps(data), encoding="utf-8")
+        self.urls = ["https://example.test/audio/t/a.m4a", "https://example.test/audio/t/b.m4a"]
+
+    def _failing_then_ok(self, error, ok_response):
+        seen = []
+
+        def opener(req):
+            seen.append(req)
+            if len(seen) == 1:
+                raise error
+            return ok_response
+
+        return opener, seen
+
+    def test_verify_goes_on_after_http_error_and_os_error(self):
+        err = urllib.error.HTTPError(self.urls[0], 403, "Forbidden", {}, None)
+        opener, seen = self._failing_then_ok(
+            err, FakeResponse({"Content-Length": "6", "Content-Type": "audio/mp4"}))
+        self.assertEqual(sync.verify(self.root, "https://example.test", opener),
+                         [f"{self.urls[0]}: HTTP 403"])
+        self.assertEqual(len(seen), 2)
+        opener, seen = self._failing_then_ok(
+            OSError("boom"), FakeResponse({"Content-Length": "6", "Content-Type": "audio/mp4"}))
+        self.assertEqual(sync.verify(self.root, "https://example.test", opener),
+                         [f"{self.urls[0]}: boom"])
+        self.assertEqual(len(seen), 2)
+
+    def test_verify_full_goes_on_after_errors(self):
+        err = urllib.error.HTTPError(self.urls[0], 500, "Err", {}, None)
+        opener, seen = self._failing_then_ok(err, FakeResponse(body=BODY))
+        self.assertEqual(sync.verify_full(self.root, "https://example.test", opener),
+                         [f"{self.urls[0]}: HTTP 500"])
+        self.assertEqual(len(seen), 2)
+        opener, seen = self._failing_then_ok(OSError("boom"), FakeResponse(body=BODY))
+        self.assertEqual(sync.verify_full(self.root, "https://example.test", opener),
+                         [f"{self.urls[0]}: boom"])
+        self.assertEqual(len(seen), 2)
+
+    def _run_full(self, opener):
+        made = []
+        real = tempfile.mkdtemp
+
+        def spy(*a, **k):
+            made.append(pathlib.Path(real(*a, **k)))
+            return str(made[-1])
+
+        with mock.patch.object(sync.tempfile, "mkdtemp", spy):
+            try:
+                result = sync.verify_full(self.root, "https://example.test", opener)
+            except Exception:
+                result = None
+        self.assertEqual(len(made), 1)
+        self.assertFalse(made[0].exists())
+        return result
+
+    def test_verify_full_request_and_cleanup(self):
+        seen = []
+
+        def opener(req):
+            seen.append(req)
+            return FakeResponse(body=BODY)
+
+        self.assertEqual(self._run_full(opener), [])
+        self.assertEqual({r.method for r in seen}, {"GET"})
+        self.assertEqual({r.get_header("User-agent") for r in seen}, {"namo-app-build/1.0"})
+
+    def test_verify_full_cleans_up_after_failure(self):
+        def opener(req):
+            raise OSError("down")
+
+        self.assertEqual(len(self._run_full(opener)), 2)
+
+    def test_verify_full_cleans_up_after_unexpected_exception(self):
+        def opener(req):
+            raise RuntimeError("bug")
+
+        self.assertIsNone(self._run_full(opener))
 
 
 class CliTest(Base):

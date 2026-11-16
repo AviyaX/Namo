@@ -91,6 +91,6 @@ The recordings are not in the app. They are uploaded to the owner's Cloudflare R
 - Tests: `flutter test`.
 - Content check: `python -I -X utf8 tools/build_content.py . --check` (without `--check` it rebuilds the content file). Its tests: `python -I -X utf8 tools/test_build_content.py`.
 - Hosted audio check: `python -I -X utf8 tools/sync_hosted_audio.py . --check`. Its tests: `python -I -X utf8 tools/test_sync_hosted_audio.py`.
-- Web build: `flutter build web --no-web-resources-cdn`. This bundles the drawing engine (CanvasKit) with the app, so nothing is fetched from the internet.
+- Web build: `flutter build web --no-web-resources-cdn`. This bundles the drawing engine (CanvasKit) with the app, so the engine itself is never fetched from the internet; only the recordings are.
 
 The Dart package and folder are still named `buddhist_gatha`.
