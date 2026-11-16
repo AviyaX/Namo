@@ -106,6 +106,9 @@ abstract interface class Downloader {
 
   Future<void> cancelGroup(String group);
 
+  /// Cancels one task by its id; nothing happens when no such task is active.
+  Future<void> cancel(String id);
+
   /// Every task of [autoGroup] and [manualGroup] still known to the platform.
   Future<List<DownloadRequest>> active();
 

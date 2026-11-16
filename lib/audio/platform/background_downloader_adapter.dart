@@ -75,6 +75,11 @@ class BackgroundDownloaderAdapter implements Downloader {
   }
 
   @override
+  Future<void> cancel(String id) async {
+    await FileDownloader().cancelTaskWithId(id);
+  }
+
+  @override
   Future<List<DownloadRequest>> active() async {
     final tasks = [
       ...await FileDownloader().allTasks(group: autoGroup),

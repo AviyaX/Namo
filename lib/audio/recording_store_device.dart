@@ -192,39 +192,35 @@ class DeviceRecordingStore implements RecordingStore {
   Future<void> download(Recording r) => _inTurn(() async {
     final e = _byPath[r.path];
     if (e == null || _base == null) return;
-    if (e.availability == Availability.downloaded) return;
-    if (e.group == manualGroup) return;
-    if (e.group == autoGroup) {
-      // The downloader cancels only whole groups: cancel the automatic one
-      // and put the others back in it as they were.
-      final auto = _entries.where((o) => o.group == autoGroup).toList();
-      for (final o in auto) {
-        o.cancelledByStore = true;
-      }
-      await _cancel(autoGroup);
-      for (final o in auto) {
-        if (o != e) await _enqueue(o, autoGroup, o.requiresWiFi);
-      }
-    }
-    await _enqueue(e, manualGroup, false);
+    await _fetchNow(e);
     _emit();
   });
 
   @override
   Future<void> downloadAll() => _inTurn(() async {
     if (_base == null) return;
-    for (final e in _entries.where((e) => e.group == autoGroup)) {
-      e.cancelledByStore = true;
-      e.group = null;
-    }
-    await _cancel(autoGroup);
     for (final e in _entries) {
-      if (e.availability != Availability.downloaded && e.group != manualGroup) {
-        await _enqueue(e, manualGroup, false);
-      }
+      await _fetchNow(e);
     }
     _emit();
   });
+
+  /// Moves [e] to the manual queue, on any connection. A download already
+  /// moving, or already asked for, is left alone.
+  Future<void> _fetchNow(_Entry e) async {
+    if (e.availability == Availability.downloaded ||
+        e.availability == Availability.downloading) {
+      return;
+    }
+    if (e.group == manualGroup) return;
+    if (e.group == autoGroup) {
+      e.cancelledByStore = true;
+      try {
+        await _downloader.cancel(e.recording.path);
+      } catch (_) {}
+    }
+    await _enqueue(e, manualGroup, false);
+  }
 
   @override
   Future<void> removeAll() => _inTurn(() async {

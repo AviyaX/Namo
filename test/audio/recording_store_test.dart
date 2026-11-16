@@ -265,21 +265,63 @@ void main() {
     await s.start();
     await s.download(a);
     await settle();
-    // The downloader cancels only whole groups: the store cancels the
-    // automatic group and puts the others back in it unchanged.
-    expect(fake.cancelledGroups, [autoGroup]);
+    expect(fake.cancelledGroups, isEmpty);
+    expect(fake.cancelledIds, [a.path]);
     expect(
       fake.live,
       unorderedEquals([
-        request(a, manualGroup, false),
         request(b, autoGroup, true),
+        request(a, manualGroup, false),
       ]),
     );
     expect(availabilityOf(s, a), Availability.waiting);
     expect(availabilityOf(s, b), Availability.waiting);
 
     await s.download(a);
-    expect(fake.enqueued, hasLength(4)); // already in manual: nothing more
+    await settle();
+    expect(fake.enqueued, hasLength(3)); // already in manual: nothing more
+    expect(fake.cancelledIds, [a.path]);
+  });
+
+  test(
+    'download(r) on a recording already downloading leaves it alone',
+    () async {
+      final s = store();
+      await s.start();
+      fake.emit(DownloadStatusEvent(a.path, DownloadStatus.running));
+      fake.emit(DownloadProgressEvent(a.path, 0.9));
+      await settle();
+      await s.download(a);
+      await settle();
+      expect(fake.cancelledIds, isEmpty);
+      expect(fake.cancelledGroups, isEmpty);
+      expect(fake.enqueued, hasLength(2));
+      expect(availabilityOf(s, a), Availability.downloading);
+      expect(statusOf(s, a).progress, 0.9);
+    },
+  );
+
+  test('downloadAll moves waiting automatic tasks to manual and leaves a '
+      'running one alone', () async {
+    final s = store();
+    await s.start();
+    fake.emit(DownloadStatusEvent(a.path, DownloadStatus.running));
+    fake.emit(DownloadProgressEvent(a.path, 0.5));
+    await settle();
+    await s.downloadAll();
+    await settle();
+    expect(fake.cancelledGroups, isEmpty);
+    expect(fake.cancelledIds, [b.path]);
+    expect(
+      fake.live,
+      unorderedEquals([
+        request(a, autoGroup, true),
+        request(b, manualGroup, false),
+      ]),
+    );
+    expect(availabilityOf(s, a), Availability.downloading);
+    expect(statusOf(s, a).progress, 0.5);
+    expect(availabilityOf(s, b), Availability.waiting);
   });
 
   test('downloadAll enqueues every missing recording in manual', () async {

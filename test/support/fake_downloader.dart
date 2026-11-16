@@ -17,6 +17,9 @@ class FakeDownloader implements Downloader {
   /// Every group passed to [cancelGroup], in order.
   final cancelledGroups = <String>[];
 
+  /// Every id passed to [cancel], in order.
+  final cancelledIds = <String>[];
+
   /// Tasks the platform already knew before this run; returned by [active].
   List<DownloadRequest> preExisting = [];
 
@@ -43,6 +46,16 @@ class FakeDownloader implements Downloader {
     cancelledGroups.add(group);
     final gone = _live.where((r) => r.group == group).toList();
     _live.removeWhere((r) => r.group == group);
+    for (final r in gone) {
+      emit(DownloadStatusEvent(r.id, DownloadStatus.canceled));
+    }
+  }
+
+  @override
+  Future<void> cancel(String id) async {
+    cancelledIds.add(id);
+    final gone = _live.where((r) => r.id == id).toList();
+    _live.removeWhere((r) => r.id == id);
     for (final r in gone) {
       emit(DownloadStatusEvent(r.id, DownloadStatus.canceled));
     }
