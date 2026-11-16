@@ -1,6 +1,10 @@
 # Hosted recordings — design
 
-Date: 2026-11-15. Status: draft, reviewed by a builder check; parked by the owner on 2026-11-15 ("implement that later"). Not yet approved.
+Date: 2026-11-15. Status: reviewed by a builder check; parked on 2026-11-15; the owner
+said to build it on 2026-11-16 ("Implement that reducing app size thing").
+The items under "Open with the owner" are settled by the designer's defaults
+until the owner says otherwise; none of them blocks the build. Plan:
+`docs/superpowers/plans/2026-11-16-hosted-recordings.md`.
 
 ## Intent
 
@@ -332,6 +336,12 @@ Android arm64 package about 148 → about 50 MB; universal APK 184 → about
   missing `npx`.
 
 ## Open with the owner
+
+Defaults taken on 2026-11-16 so the build could start: the names below are
+used as proposed (`audioBaseUrl` and the sync tool's constants are the only
+places to change them); the bucket stays private until the owner confirms
+the recording permissions; creating the bucket and uploading are the owner's
+steps in the release checklist.
 
 - When the bucket may go public: now (the same 40 files are already in
   the public GitHub repository) or only once the recording permissions
