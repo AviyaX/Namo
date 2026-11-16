@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/segmented_selector.dart';
+import 'auto_download.dart';
 import 'reading_language.dart';
 import 'settings.dart';
 
@@ -150,6 +151,25 @@ class ThemeChooser extends ConsumerWidget {
         ],
         selected: {mode},
         onPressed: ref.read(settingsProvider.notifier).setThemeMode,
+      ),
+    );
+  }
+}
+
+/// When recordings download by themselves: on Wi-Fi, on any connection, never.
+class AutoDownloadChooser extends ConsumerWidget {
+  const AutoDownloadChooser({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(settingsProvider.select((s) => s.autoDownload));
+    return Padding(
+      padding: _chooserPadding,
+      child: SegmentedSelector<AutoDownload>(
+        semanticLabel: 'Download automatically',
+        segments: [for (final a in AutoDownload.values) Segment(a, a.label)],
+        selected: {value},
+        onPressed: ref.read(settingsProvider.notifier).setAutoDownload,
       ),
     );
   }

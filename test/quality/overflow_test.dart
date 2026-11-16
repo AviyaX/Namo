@@ -154,6 +154,36 @@ void main() {
     await scrollThrough(t);
   });
 
+  // Settings with the Recordings group at its fullest: progress, failures and
+  // both buttons, at the narrowest width and largest device text.
+  testWidgets('Settings while recordings download does not overflow', (t) async {
+    final store = FakeRecordingStore();
+    final statuses = <String, RecordingStatus>{};
+    for (var i = 0; i < 40; i++) {
+      final (availability, progress) = i < 12
+          ? (Availability.downloaded, 1.0)
+          : i == 12
+          ? (Availability.downloading, 0.42)
+          : i < 16
+          ? (Availability.failed, 0.0)
+          : (Availability.waiting, 0.0);
+      statuses['r$i'] = RecordingStatus(
+        availability: availability,
+        progress: progress,
+        bytes: 2563097,
+      );
+    }
+    store.snapshot.value = RecordingsSnapshot(statuses);
+    await openReal(
+      t,
+      Routes.settings,
+      size: const Size(320, 568),
+      deviceTextScale: 2.0,
+      recordingStore: store,
+    );
+    await scrollThrough(t);
+  });
+
   // Home on its own at the phone, tall phone and desktop sizes, ordinary and
   // doubled device text, in both themes.
   for (final size in const [Size(320, 640), Size(412, 915), Size(1280, 800)]) {

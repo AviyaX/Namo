@@ -192,6 +192,7 @@ void main() {
     'Reading',
     'Languages',
     'Audio',
+    'Recordings',
     'Auto-scroll',
     'About Namo',
   ];
@@ -220,7 +221,7 @@ void main() {
 
   testWidgets('Settings shows its six groups in order', (t) async {
     await openSettings(t, size: const Size(390, 2400));
-    expect(find.byType(SettingsGroup), findsNWidgets(6));
+    expect(find.byType(SettingsGroup), findsNWidgets(7));
     var last = -1.0;
     for (final label in groupLabels) {
       final y = t.getTopLeft(find.text(label)).dy;
@@ -264,7 +265,7 @@ void main() {
       findsOneWidget,
     );
     expect(
-      inGroup('About Namo', find.text('Free. No ads. Works offline.')),
+      inGroup('About Namo', find.text('Free. No ads. Texts work offline; recordings are downloaded once.')),
       findsOneWidget,
     );
     expect(inGroup('About Namo', find.text('Sources')), findsOneWidget);
@@ -345,7 +346,7 @@ void main() {
           t.platformDispatcher.clearPlatformBrightnessTestValue();
         });
         await openSettings(t, size: Size(w, 800));
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 7; i++) {
           await t.drag(find.byType(Scrollable).first, const Offset(0, -400));
           await t.pump();
         }

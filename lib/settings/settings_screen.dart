@@ -12,6 +12,7 @@ import '../design/widgets/page_header.dart';
 import '../design/widgets/pressable.dart';
 import '../router.dart';
 import 'choosers.dart';
+import 'recordings_group.dart';
 import 'setting_controls.dart';
 import 'settings.dart';
 
@@ -120,6 +121,8 @@ class SettingsScreen extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: NamoSpace.lg),
+        const RecordingsGroup(),
+        const SizedBox(height: NamoSpace.lg),
         SettingsGroup(
           icon: Symbols.swipe_vertical_rounded,
           label: 'Auto-scroll',
@@ -140,7 +143,7 @@ class SettingsScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
               child: Text(
-                'Free. No ads. Works offline.',
+                'Free. No ads. Texts work offline; recordings are downloaded once.',
                 softWrap: true,
                 style: NamoType.body(p.textSecondary),
               ),

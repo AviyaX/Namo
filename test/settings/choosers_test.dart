@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/design/theme.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
+import 'package:buddhist_gatha/settings/auto_download.dart';
 import 'package:buddhist_gatha/settings/choosers.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
@@ -186,6 +187,17 @@ void main() {
       ];
       expect(xs[0], lessThan(xs[1]));
       expect(xs[1], lessThan(xs[2]));
+    });
+  });
+
+  group('AutoDownloadChooser', () {
+    testWidgets('choosing a label stores it', (t) async {
+      final (c, store) = await _pump(t, const AutoDownloadChooser());
+      expect(c.read(settingsProvider).autoDownload, AutoDownload.wifiOnly);
+      await t.tap(_tapLabel('Off'));
+      await t.pump();
+      expect(c.read(settingsProvider).autoDownload, AutoDownload.off);
+      expect(store.read(settingsKey), contains('"autoDownload":"off"'));
     });
   });
 }

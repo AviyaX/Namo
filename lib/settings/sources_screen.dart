@@ -212,6 +212,12 @@ class SourcesScreen extends StatelessWidget {
           textAlign: TextAlign.center,
           style: NamoType.body(p.text),
         ),
+        const SizedBox(height: NamoSpace.sm),
+        Text(
+          "The recordings are fetched from the app's own storage (audio.intendable.us), not from the sources' sites.",
+          textAlign: TextAlign.center,
+          style: NamoType.body(p.text),
+        ),
         for (final credit in _credits) _CreditBlock(credit),
         const _SamanthaCreditBlock(),
         const _TipitakaCreditBlock(),

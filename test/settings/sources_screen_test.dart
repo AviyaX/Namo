@@ -65,6 +65,12 @@ void main() {
         text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
         findsOneWidget,
       );
+      expect(
+        text(
+          "The recordings are fetched from the app's own storage (audio.intendable.us), not from the sources' sites.",
+        ),
+        findsOneWidget,
+      );
       expect(find.textContaining('namo.lk', findRichText: true), findsWidgets);
       expect(find.textContaining('paritha.org'), findsWidgets);
       expect(find.textContaining('Mahamevnawa'), findsWidgets);
