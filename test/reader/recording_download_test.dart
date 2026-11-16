@@ -40,8 +40,9 @@ Future<FakeChantPlayer> _open(
   WidgetTester t,
   FakeRecordingStore store, {
   String id = mangalaReadingId,
+  FakeChantPlayer? player,
 }) async {
-  final player = FakeChantPlayer();
+  player ??= FakeChantPlayer();
   await openReal(
     t,
     Routes.reader(id),
@@ -174,6 +175,56 @@ void main() {
     await t.tap(_download);
     await t.pump();
     expect(store.downloads, [(await _recording(t)).path]);
+  });
+
+  testWidgets('a recording whose load failed plays when it arrives after '
+      'Play', (t) async {
+    final store = FakeRecordingStore()
+      ..set(mangalaReadingId, _status(Availability.downloaded));
+    final player = await _open(
+      t,
+      store,
+      player: FakeChantPlayer(failOnLoad: true),
+    );
+    await t.tap(_play);
+    await t.pump();
+    expect(player.state.status, ChantStatus.failed);
+
+    // The file went missing; Play asks for it again.
+    store.set(mangalaReadingId, _status(Availability.waiting));
+    await t.pump();
+    await t.tap(_play);
+    await t.pump();
+    expect(store.downloads, hasLength(1));
+
+    player.failOnLoad = false;
+    store.set(mangalaReadingId, _status(Availability.downloaded));
+    await t.pump();
+    await t.pump();
+    expect(player.loaded, hasLength(2));
+    expect(player.state.status, ChantStatus.playing);
+  });
+
+  testWidgets('a failed load is not retried by every change in the store', (
+    t,
+  ) async {
+    final store = FakeRecordingStore()
+      ..set(mangalaReadingId, _status(Availability.downloaded));
+    final player = await _open(
+      t,
+      store,
+      player: FakeChantPlayer(failOnLoad: true),
+    );
+    await t.tap(_play);
+    await t.pump();
+    expect(player.loaded, hasLength(1));
+
+    // Another recording downloading in the background.
+    store.set('another-reading', _status(Availability.downloading));
+    await t.pump();
+    store.set('another-reading', _status(Availability.downloaded));
+    await t.pump();
+    expect(player.loaded, hasLength(1));
   });
 
   testWidgets('leaving the reader before the file arrives plays nothing', (

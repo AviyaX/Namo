@@ -105,6 +105,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// this reader. A load that finishes while it is false does not play.
   bool _chantWanted = false;
 
+  /// Play asked for a recording not on the device yet: it plays on arrival.
+  bool _chantAwaitsFile = false;
+
   /// The recordings, listened to so a chant asked for before its file
   /// arrived plays when it does.
   RecordingStore? _store;
@@ -235,6 +238,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     }
     _timed = recording != null && recording.timed ? recording : null;
     _chantLoaded = false;
+    _chantAwaitsFile = false;
     _chant.value = const ChantState();
     _setFollow(
       _timed == null
@@ -267,11 +271,13 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     final recording = _timed, store = _store;
     if (!mounted || recording == null || store == null) return;
     if (!_chantWanted ||
+        !_chantAwaitsFile ||
         (_chantLoaded && _chant.value.status != ChantStatus.failed)) {
       return;
     }
     final status = store.snapshot.value.of(recording.readingId);
     if (status?.availability != Availability.downloaded) return;
+    _chantAwaitsFile = false;
     unawaited(_chantPlayOrPause());
   }
 
@@ -422,6 +428,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         Availability.downloaded;
     if (availability != Availability.downloaded) {
       _chantWanted = true;
+      _chantAwaitsFile = true;
       _autoScroll.pause();
       if (availability != Availability.downloading) {
         unawaited(store.download(recording));
