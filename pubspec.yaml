@@ -40,6 +40,8 @@ dependencies:
   material_symbols_icons: ^4.2960.0
   wakelock_plus: ^1.8.2
   archive: ^4.6.0
+  background_downloader: ^9.6.6
+  crypto: ^3.0.8
 
 dev_dependencies:
   flutter_test:
