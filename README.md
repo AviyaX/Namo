@@ -1,7 +1,7 @@
 # Namo
 
-Namo is a free, offline Buddhist prayer book for Android, iOS and the web, built from one Flutter code base.
-It has no ads, no payments, no analytics and makes no network requests.
+Namo is a free Buddhist prayer book for Android, iOS and the web, built from one Flutter code base; the texts work offline.
+It has no ads, no payments and no analytics; its only network use is fetching the chant recordings, once each, from the app's own host.
 
 ## What is in it
 
@@ -36,9 +36,9 @@ The English for sections 1–6 is prose from a narrow-column PDF, so the build r
 The Pirith topic (39 readings with recordings) reaches the app only through `tools/build_pirith.py`, which reads `content/extracted/pitaka_lk_pirith.json` and writes `assets/content/pirith.json` and `content/pirith_names.md`.
 
 - Rebuild: `python -I -X utf8 tools/build_pirith.py .`
-- Check it is up to date (also checks each bundled recording is the downloaded original): `python -I -X utf8 tools/build_pirith.py . --check`
-- Import the recordings: `python -I -X utf8 tools/build_pirith.py . --import-audio <audio_dir>`, where `<audio_dir>` is the folder of downloaded originals; it copies them into `assets/audio/pirith/`.
-- The downloaded originals are not in git. They live only in the main checkout's `source_material/pitaka_lk_pirith/audio`; the 39 recordings that ship are the ones in `assets/audio/pirith/`.
+- Check it is up to date (also checks each recording under `hosted/audio/pirith/` is the downloaded original): `python -I -X utf8 tools/build_pirith.py . --check`
+- Import the recordings: `python -I -X utf8 tools/build_pirith.py . --import-audio <audio_dir>`, where `<audio_dir>` is the folder of downloaded originals; it copies them into `hosted/audio/pirith/`.
+- The downloaded originals are not in git. They live only in the main checkout's `source_material/pitaka_lk_pirith/audio`; the 39 recordings that ship are the ones in `hosted/audio/pirith/`.
 - Tests: `python -I -X utf8 tools/test_build_pirith.py`. The glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`) also covers every pirith name.
 - Before publishing, read `docs/release-checklist.md`.
 
@@ -49,8 +49,8 @@ The Samantha Pattana Dharma Wandanawa topic (an Introduction and the Vandana, wi
 - Extract the text from the converted PDF pages: `python -I -X utf8 tools/build_samantha_patthana.py . --extract <source_folder>` writes `content/extracted/samantha_patthana.json`.
 - Time every Pali line in the recording from its automatic captions (timing data only, never bundled): `python -I -X utf8 tools/time_samantha_patthana.py . <captions.json3>` writes `content/extracted/samantha_patthana_times.json` and `content/samantha_patthana_timing_report.md`.
 - Build: `python -I -X utf8 tools/build_samantha_patthana.py .` writes `assets/content/samantha_patthana.json` from those two files.
-- Check it is up to date (also checks the bundled recording's size and SHA-256 and that no other file is in `assets/audio/samantha_patthana/`): `python -I -X utf8 tools/build_samantha_patthana.py . --check`
-- Import the recording: `python -I -X utf8 tools/build_samantha_patthana.py . --import-audio <audio_dir>`, where `<audio_dir>` holds `hYXyO3o7Iac.m4a`; it refuses a file of the wrong size or checksum and copies it byte for byte into `assets/audio/samantha_patthana/`.
+- Check it is up to date (also checks the bundled recording's size and SHA-256 and that no other file is in `hosted/audio/samantha_patthana/`): `python -I -X utf8 tools/build_samantha_patthana.py . --check`
+- Import the recording: `python -I -X utf8 tools/build_samantha_patthana.py . --import-audio <audio_dir>`, where `<audio_dir>` holds `hYXyO3o7Iac.m4a`; it refuses a file of the wrong size or checksum and copies it byte for byte into `hosted/audio/samantha_patthana/`.
 - The originals (PDF, conversion, recording, captions) are not in git. They live only in the main checkout's `source_material/samantha_patthana/`; the card picture `assets/pictures/samantha_patthana.jpg` is a copy of `design/card_images/stupa_dusk.jpg`.
 - Tests: `python -I -X utf8 tools/test_build_samantha_patthana.py` and `python -I -X utf8 tools/test_time_samantha_patthana.py`. The glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`) also covers this topic's names.
 
@@ -76,10 +76,21 @@ The Samantha Pattana Dharma Wandanawa topic (an Introduction and the Vandana, wi
 - `docs/release-checklist.md`: what must be true before the app is published.
 - `docs/pictures.md`: where each picture comes from and its licence.
 
+## Hosting the recordings
+
+The recordings are not in the app. They are uploaded to the owner's Cloudflare R2 bucket, and the app fetches each one once, the first time it is needed. The folder `hosted/` mirrors the bucket; see `hosted/README.md`.
+
+- Check, offline: `python -I -X utf8 tools/sync_hosted_audio.py . --check`
+- Print the upload commands: `python -I -X utf8 tools/sync_hosted_audio.py . --plan`
+- Upload (after `npx wrangler login`): `python -I -X utf8 tools/sync_hosted_audio.py . --upload`
+- Verify headers: `python -I -X utf8 tools/sync_hosted_audio.py . --verify [--base-url URL]`
+- Verify by download and checksum: `python -I -X utf8 tools/sync_hosted_audio.py . --verify-full [--base-url URL]`
+
 ## Commands
 
 - Tests: `flutter test`.
 - Content check: `python -I -X utf8 tools/build_content.py . --check` (without `--check` it rebuilds the content file). Its tests: `python -I -X utf8 tools/test_build_content.py`.
+- Hosted audio check: `python -I -X utf8 tools/sync_hosted_audio.py . --check`. Its tests: `python -I -X utf8 tools/test_sync_hosted_audio.py`.
 - Web build: `flutter build web --no-web-resources-cdn`. This bundles the drawing engine (CanvasKit) with the app, so nothing is fetched from the internet.
 
 The Dart package and folder are still named `buddhist_gatha`.
