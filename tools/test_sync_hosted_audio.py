@@ -123,11 +123,14 @@ class VerifyTest(Base):
     def test_verify_head_ok(self):
         seen = []
 
-        def opener(req):
+        def opener(req, timeout=None):
             seen.append(req)
+            timeouts.append(timeout)
             return FakeResponse({"Content-Length": "6", "Content-Type": "audio/mp4"})
 
+        timeouts = []
         self.assertEqual(sync.verify(self.root, "https://example.test", opener), [])
+        self.assertEqual(timeouts, [60])
         req = seen[0]
         self.assertIsInstance(req, urllib.request.Request)
         self.assertEqual(req.method, "HEAD")
@@ -135,22 +138,22 @@ class VerifyTest(Base):
         self.assertEqual(req.get_header("User-agent"), "namo-app-build/1.0")
 
     def test_verify_reports_length_type_and_status(self):
-        def opener(req):
+        def opener(req, timeout=None):
             return FakeResponse({"Content-Length": "5", "Content-Type": "text/html"})
 
         self.assertEqual(sync.verify(self.root, "https://example.test/", opener), [
             f"{URL}: Content-Length 5, expected 6",
             f"{URL}: Content-Type text/html, expected audio/mp4"])
 
-        def bad(req):
+        def bad(req, timeout=None):
             return FakeResponse({}, status=404)
 
         self.assertEqual(sync.verify(self.root, "https://example.test", bad), [f"{URL}: HTTP 404"])
 
     def test_verify_full_hashes_the_download(self):
-        good = lambda req: FakeResponse(body=BODY)
+        good = lambda req, timeout=None: FakeResponse(body=BODY)
         self.assertEqual(sync.verify_full(self.root, "https://example.test", good), [])
-        bad = lambda req: FakeResponse(body=b"abcdeX")
+        bad = lambda req, timeout=None: FakeResponse(body=b"abcdeX")
         other = hashlib.sha256(b"abcdeX").hexdigest()
         self.assertEqual(sync.verify_full(self.root, "https://example.test", bad),
                          [f"{URL}: checksum {other}, expected {SHA}"])
@@ -169,7 +172,7 @@ class VerifyRobustnessTest(Base):
     def _failing_then_ok(self, error, ok_response):
         seen = []
 
-        def opener(req):
+        def opener(req, timeout=None):
             seen.append(req)
             if len(seen) == 1:
                 raise error
@@ -221,7 +224,7 @@ class VerifyRobustnessTest(Base):
     def test_verify_full_request_and_cleanup(self):
         seen = []
 
-        def opener(req):
+        def opener(req, timeout=None):
             seen.append(req)
             return FakeResponse(body=BODY)
 
@@ -230,13 +233,13 @@ class VerifyRobustnessTest(Base):
         self.assertEqual({r.get_header("User-agent") for r in seen}, {"namo-app-build/1.0"})
 
     def test_verify_full_cleans_up_after_failure(self):
-        def opener(req):
+        def opener(req, timeout=None):
             raise OSError("down")
 
         self.assertEqual(len(self._run_full(opener)), 2)
 
     def test_verify_full_cleans_up_after_unexpected_exception(self):
-        def opener(req):
+        def opener(req, timeout=None):
             raise RuntimeError("bug")
 
         self.assertIsNone(self._run_full(opener))

@@ -123,7 +123,7 @@ def verify(root: pathlib.Path, base_url: str, opener=urllib.request.urlopen) -> 
     for item in recordings(root):
         url = _url(base_url, item)
         try:
-            with opener(_request(url, "HEAD")) as response:
+            with opener(_request(url, "HEAD"), timeout=60) as response:
                 status, headers = response.status, response.headers
         except urllib.error.HTTPError as e:
             problems.append(f"{url}: HTTP {e.code}")
@@ -152,7 +152,7 @@ def verify_full(root: pathlib.Path, base_url: str, opener=urllib.request.urlopen
             target = work / f"{n}.m4a"
             digest = hashlib.sha256()
             try:
-                with opener(_request(url, "GET")) as response, target.open("wb") as out:
+                with opener(_request(url, "GET"), timeout=60) as response, target.open("wb") as out:
                     status = response.status
                     if 200 <= status < 300:
                         while True:
