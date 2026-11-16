@@ -1,4 +1,5 @@
 import 'package:buddhist_gatha/audio/chant_player.dart';
+import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/design/theme.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/reader/auto_scroll.dart';
@@ -260,5 +261,59 @@ void main() {
       onSeek: null,
     );
     expect(s.key, const ValueKey('chant-slider'));
+  });
+
+  test('recordingLine says where the recording is', () {
+    const bytes = 1046598;
+    expect(
+      recordingLine(
+        const RecordingStatus(availability: Availability.waiting, bytes: bytes),
+      ),
+      'Waiting to download · 1.0 MB',
+    );
+    expect(
+      recordingLine(
+        const RecordingStatus(
+          availability: Availability.notDownloaded,
+          bytes: bytes,
+        ),
+      ),
+      'Recording not downloaded · 1.0 MB',
+    );
+    expect(
+      recordingLine(
+        const RecordingStatus(
+          availability: Availability.downloading,
+          progress: 0.426,
+          bytes: bytes,
+        ),
+      ),
+      'Downloading recording… 42%',
+    );
+    expect(
+      recordingLine(
+        const RecordingStatus(
+          availability: Availability.failed,
+          reason: notOnServerMessage,
+          bytes: bytes,
+        ),
+      ),
+      notOnServerMessage,
+    );
+    expect(
+      recordingLine(
+        const RecordingStatus(availability: Availability.failed, bytes: bytes),
+      ),
+      connectionMessage,
+    );
+    expect(
+      recordingLine(
+        const RecordingStatus(
+          availability: Availability.downloaded,
+          bytes: bytes,
+        ),
+      ),
+      '',
+    );
   });
 }

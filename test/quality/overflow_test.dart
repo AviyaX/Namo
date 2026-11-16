@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -15,6 +16,7 @@ import 'package:buddhist_gatha/tipitaka/tipitaka_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../support/fake_recording_store.dart';
 import '../tipitaka/tipitaka_app_support.dart';
 import 'quality_support.dart';
 
@@ -124,6 +126,33 @@ void main() {
       });
     }
   }
+
+  // The longest recording line, with Try again beside it, in the narrowest
+  // bar.
+  testWidgets('the pirith reader with a failed recording does not overflow', (
+    t,
+  ) async {
+    final store = FakeRecordingStore()
+      ..set(
+        mangalaReadingId,
+        const RecordingStatus(
+          availability: Availability.failed,
+          reason: damagedMessage,
+          bytes: 1046598,
+        ),
+      );
+    await openReal(
+      t,
+      Routes.reader(mangalaReadingId),
+      size: const Size(320, 568),
+      deviceTextScale: 2.0,
+      settings: const AppSettings(fontScale: 1.6),
+      recordingStore: store,
+    );
+    expect(t.takeException(), isNull);
+    expect(find.byKey(const ValueKey('recording-row')), findsOneWidget);
+    await scrollThrough(t);
+  });
 
   // Home on its own at the phone, tall phone and desktop sizes, ordinary and
   // doubled device text, in both themes.

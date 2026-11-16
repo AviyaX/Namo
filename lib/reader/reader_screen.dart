@@ -10,6 +10,8 @@ import '../audio/audio_catalogue.dart';
 import '../audio/audio_controls.dart';
 import '../audio/chant_timing.dart';
 import '../audio/chant_player.dart';
+import '../audio/recording_store.dart';
+import '../audio/recording_store_provider.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -102,6 +104,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// by auto-scroll starting, the app going to the background and leaving
   /// this reader. A load that finishes while it is false does not play.
   bool _chantWanted = false;
+
+  /// The recordings, listened to so a chant asked for before its file
+  /// arrived plays when it does.
+  RecordingStore? _store;
 
   /// Whether this reader has asked the player for its recording.
   bool _startedChant = false;
@@ -208,6 +214,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// one) and watches it. Called on every build; does nothing new unless
   /// the reading or the player changed.
   void _bindAudio(Reading reading, Recording? recording, ChantPlayer? player) {
+    final store = ref.read(recordingStoreProvider);
+    if (!identical(store, _store)) {
+      _store?.snapshot.removeListener(_onRecordings);
+      _store = store;
+      store.snapshot.addListener(_onRecordings);
+    }
     final readingId = recording?.readingId;
     if (identical(player, _player) && readingId == _playerReading) return;
     final old = _player;
@@ -247,6 +259,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       _audioSub = player.states.listen(_onAudio);
       player.load(recording);
     });
+  }
+
+  /// A recording arrived: the chant asked for before it did plays now.
+  void _onRecordings() {
+    final recording = _timed, store = _store;
+    if (!mounted || recording == null || store == null) return;
+    if (!_chantWanted || _chantLoaded) return;
+    final status = store.snapshot.value.of(recording.readingId);
+    if (status?.availability != Availability.downloaded) return;
+    unawaited(_chantPlayOrPause());
   }
 
   /// The one link between audio and auto-scroll: audio starting starts the
@@ -378,7 +400,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   /// Plays, pauses or resumes the chanting. The recording is asked for the
-  /// first time it is played (and again after a failure).
+  /// first time it is played (and again after a failure). One not on the
+  /// device yet is downloaded first and played when it arrives.
   Future<void> _chantPlayOrPause() async {
     final player = _player, recording = _timed;
     if (player == null || recording == null) return;
@@ -387,6 +410,18 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (status == ChantStatus.playing) {
       _chantWanted = false;
       await player.pause();
+      return;
+    }
+    final store = ref.read(recordingStoreProvider);
+    final availability =
+        store.snapshot.value.of(recording.readingId)?.availability ??
+        Availability.downloaded;
+    if (availability != Availability.downloaded) {
+      _chantWanted = true;
+      _autoScroll.pause();
+      if (availability != Availability.downloading) {
+        unawaited(store.download(recording));
+      }
       return;
     }
     _chantWanted = true;
@@ -437,6 +472,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     // place is noted now and handed over once this frame is done.
     _saveLater();
     _audioSub?.cancel();
+    _store?.snapshot.removeListener(_onRecordings);
     // Quiet before the player is let go.
     _chantWanted = false;
     // Only a reader that started the chanting and still owns the player
@@ -851,6 +887,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           final recording = flow
               ? null
               : ref.watch(audioCatalogueProvider).recordingFor(reading.id);
+          final store = ref.watch(recordingStoreProvider);
           _bindAudio(
             reading,
             recording,
@@ -965,7 +1002,11 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                 ],
               ),
               bottomNavigationBar: ListenableBuilder(
-                listenable: Listenable.merge([_autoScroll, _chant]),
+                listenable: Listenable.merge([
+                  _autoScroll,
+                  _chant,
+                  store.snapshot,
+                ]),
                 builder: (context, _) => ReaderBottomBar(
                   previousTooltip: _byReading
                       ? 'Previous $unit'
@@ -994,6 +1035,14 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                   onChantPlay: _chantPlayOrPause,
                   onChantRestart: _chantRestart,
                   onChantSeek: (to) => unawaited(_player?.seek(to)),
+                  recording: recording == null
+                      ? null
+                      : store.snapshot.value.of(recording.readingId),
+                  onDownload: recording == null
+                      ? null
+                      : () => unawaited(
+                          ref.read(recordingStoreProvider).download(recording),
+                        ),
                 ),
               ),
             ),

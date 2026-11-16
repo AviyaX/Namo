@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/chant_player.dart';
+import '../audio/recording_store.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/buttons.dart';
@@ -36,7 +37,16 @@ class ReaderBottomBar extends StatelessWidget {
     this.onChantSeek,
     this.chantSpeed = 1.0,
     this.onChantSpeed,
+    this.recording,
+    this.onDownload,
   });
+
+  /// Where the chanting's recording is; null when the store knows nothing
+  /// of it. Until it is downloaded, its row takes the slider's place.
+  final RecordingStatus? recording;
+
+  /// Asks for the recording now.
+  final VoidCallback? onDownload;
 
   /// Where the chanting of a timed recording is; null for a reading
   /// without one, whose bar is then unchanged. When set, the bar shows the
@@ -85,6 +95,9 @@ class ReaderBottomBar extends StatelessWidget {
         state.status != ChantStatus.loading &&
         state.status != ChantStatus.failed;
     final running = autoScroll == AutoScrollStatus.running;
+    final status = recording;
+    final missing =
+        status != null && status.availability != Availability.downloaded;
     return [
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,10 +106,12 @@ class ReaderBottomBar extends StatelessWidget {
             key: const ValueKey('chant-restart'),
             tooltip: 'Restart chanting',
             icon: Symbols.replay_rounded,
-            onPressed: loaded ? onChantRestart : null,
+            onPressed: loaded && !missing ? onChantRestart : null,
           ),
           Expanded(
-            child: _ChantPosition(state: state, onSeek: onChantSeek),
+            child: missing
+                ? RecordingRow(status: status, onDownload: onDownload)
+                : _ChantPosition(state: state, onSeek: onChantSeek),
           ),
           ChantSpeedButton(speed: chantSpeed, onPressed: onChantSpeed),
         ],
@@ -156,7 +171,13 @@ class ReaderBottomBar extends StatelessWidget {
           Flexible(
             child: _LabelledRound(
               label: 'Chant',
-              button: _ChantPlayButton(state: state, onPressed: onChantPlay),
+              button: _ChantPlayButton(
+                state: state,
+                onPressed: onChantPlay,
+                busy:
+                    missing &&
+                    status.availability == Availability.downloading,
+              ),
             ),
           ),
           SizedBox(
@@ -327,18 +348,25 @@ class _ChantPosition extends StatelessWidget {
 }
 
 /// The round sage chanting button: play or pause, a spinner while the
-/// recording is loading.
+/// recording is loading or [busy] downloading.
 class _ChantPlayButton extends StatelessWidget {
-  const _ChantPlayButton({required this.state, required this.onPressed});
+  const _ChantPlayButton({
+    required this.state,
+    required this.onPressed,
+    this.busy = false,
+  });
 
   final ChantState state;
   final VoidCallback? onPressed;
+
+  /// The recording is downloading: a spinner that does nothing.
+  final bool busy;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final playing = state.status == ChantStatus.playing;
-    final loading = state.status == ChantStatus.loading;
+    final loading = busy || state.status == ChantStatus.loading;
     return Tooltip(
       key: const ValueKey('chant-play'),
       message: playing ? 'Pause chanting' : 'Play chanting',

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../audio/audio_controls.dart' show formatTime;
+import '../audio/recording_store.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/buttons.dart';
 import '../design/widgets/pressable.dart';
 import '../settings/settings.dart';
 
@@ -132,6 +134,69 @@ class ChantFailed extends StatelessWidget {
         label: chantFailedMessage,
         child: ExcludeSemantics(child: Text(chantFailedMessage, style: style)),
       ),
+    );
+  }
+}
+
+/// Where a recording that is not on the device yet is, in words: the
+/// percentage while it downloads, its size while it waits, the reason when
+/// it failed. Empty once it is downloaded.
+String recordingLine(RecordingStatus s) => switch (s.availability) {
+  Availability.downloading =>
+    'Downloading recording… ${(s.progress * 100).floor()}%',
+  Availability.waiting => 'Waiting to download · ${formatSize(s.bytes)}',
+  Availability.notDownloaded =>
+    'Recording not downloaded · ${formatSize(s.bytes)}',
+  Availability.failed => s.reason ?? connectionMessage,
+  Availability.downloaded => '',
+};
+
+/// [recordingLine] where the slider would be, with Download (or Try again
+/// after a failure) under it; no button while it downloads. The line is
+/// announced as it changes. Stacked, not side by side: the slot is too
+/// narrow for both at the largest text sizes.
+class RecordingRow extends StatelessWidget {
+  const RecordingRow({
+    super.key = const ValueKey('recording-row'),
+    required this.status,
+    required this.onDownload,
+  });
+
+  final RecordingStatus status;
+
+  /// Asks for the recording now.
+  final VoidCallback? onDownload;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    final button = switch (status.availability) {
+      Availability.waiting || Availability.notDownloaded => 'Download',
+      Availability.failed => 'Try again',
+      Availability.downloading || Availability.downloaded => null,
+    };
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: NamoSpace.sm),
+          child: Semantics(
+            liveRegion: true,
+            child: Text(
+              recordingLine(status),
+              style: NamoType.caption(p.textSecondary),
+              softWrap: true,
+            ),
+          ),
+        ),
+        if (button != null)
+          TextAction(
+            key: const ValueKey('recording-download'),
+            label: button,
+            onPressed: onDownload,
+          ),
+      ],
     );
   }
 }
