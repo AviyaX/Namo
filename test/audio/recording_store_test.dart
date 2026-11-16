@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/downloader.dart';
 import 'package:buddhist_gatha/audio/platform/io_recording_files.dart';
+import 'package:buddhist_gatha/audio/recording_files.dart';
 import 'package:buddhist_gatha/audio/recording_location.dart';
 import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/audio/recording_store_device.dart';
@@ -35,6 +37,26 @@ final b = Recording(
 
 Uri _url(Recording r) => Uri.parse('https://host.test/${r.path}');
 
+/// Real files whose hashing waits for [gate] while one is set.
+class _GatedFiles implements RecordingFiles {
+  final _io = IoRecordingFiles();
+  Completer<void>? gate;
+  var hashing = 0;
+
+  @override
+  Future<int?> sizeOf(String path) => _io.sizeOf(path);
+
+  @override
+  Future<String> sha256Of(String path) async {
+    hashing++;
+    await gate?.future;
+    return _io.sha256Of(path);
+  }
+
+  @override
+  Future<void> delete(String path) => _io.delete(path);
+}
+
 void main() {
   late Directory dir;
   late FakeDownloader fake;
@@ -57,11 +79,14 @@ void main() {
     dir.deleteSync(recursive: true);
   });
 
-  DeviceRecordingStore store({AutoDownload auto = AutoDownload.wifiOnly}) {
+  DeviceRecordingStore store({
+    AutoDownload auto = AutoDownload.wifiOnly,
+    RecordingFiles? files,
+  }) {
     final s = DeviceRecordingStore(
       recordings: [a, b],
       downloader: fake,
-      files: IoRecordingFiles(),
+      files: files ?? IoRecordingFiles(),
       store: kv,
       autoDownload: auto,
       turnOffAutoDownload: () => turnedOff++,
@@ -389,6 +414,44 @@ void main() {
     expect(availabilityOf(s, b), Availability.notDownloaded);
     expect(s.locationFor(a), isNull);
     expect(fake.enqueued, isEmpty);
+  });
+
+  test('a download that cannot start because the downloader is missing '
+      'fails with its message', () async {
+    fake.failToStart = true;
+    final s = store();
+    await s.start();
+    await s.download(a);
+    expect(availabilityOf(s, a), Availability.failed);
+    expect(statusOf(s, a).reason, unavailableMessage);
+    expect(availabilityOf(s, b), Availability.notDownloaded);
+
+    await s.downloadAll();
+    expect(availabilityOf(s, b), Availability.failed);
+    expect(statusOf(s, b).reason, unavailableMessage);
+    expect(fake.enqueued, isEmpty);
+  });
+
+  test('a recording being checked is not queued again when the setting '
+      'changes', () async {
+    final files = _GatedFiles();
+    final s = store(files: files);
+    await s.start();
+    files.gate = Completer<void>();
+    write(a, 'abcdef');
+    fake.finish(a.path);
+    await until(() => files.hashing > 0);
+
+    s.setAutoDownload(AutoDownload.any);
+    await settle();
+    await s.download(a);
+    await s.downloadAll();
+    await settle();
+    files.gate!.complete();
+    await until(() => availabilityOf(s, a) == Availability.downloaded);
+
+    expect(fake.enqueued.where((r) => r.id == a.path), hasLength(1));
+    expect(availabilityOf(s, a), Availability.downloaded);
   });
 
   test('an event for an unknown id is ignored', () async {

@@ -97,6 +97,7 @@ const damagedMessage =
 const notOnServerMessage = 'This recording is not on the server yet.';
 const connectionMessage =
     'Could not download the recording. Check your connection.';
+const unavailableMessage = 'Downloads are not available on this device.';
 
 /// Decimal megabytes: one decimal under 10 MB ("1.0 MB"), whole from 10 MB.
 String formatSize(int bytes) {

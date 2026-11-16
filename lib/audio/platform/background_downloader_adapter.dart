@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:background_downloader/background_downloader.dart';
 
+import '../audio_host.dart';
 import '../downloader.dart';
 
 /// [Downloader] on the background_downloader plugin. The only file that
@@ -52,10 +53,11 @@ class BackgroundDownloaderAdapter implements Downloader {
 
   @override
   Future<void> enqueue(DownloadRequest request) async {
-    await FileDownloader().enqueue(
+    final queued = await FileDownloader().enqueue(
       DownloadTask(
         taskId: request.id,
         url: request.url.toString(),
+        headers: const {'User-Agent': audioUserAgent},
         directory: request.directory,
         filename: request.filename,
         baseDirectory: BaseDirectory.applicationSupport,
@@ -67,6 +69,7 @@ class BackgroundDownloaderAdapter implements Downloader {
         metaData: request.id,
       ),
     );
+    if (!queued) throw StateError('the downloader refused ${request.id}');
   }
 
   @override

@@ -3,6 +3,9 @@ import 'audio_catalogue.dart';
 /// The host the recordings are downloaded from.
 const defaultAudioBaseUrl = 'https://audio.intendable.us';
 
+/// Sent with every request the app makes; no device or person detail.
+const audioUserAgent = 'namo-app/1.0';
+
 const _defined = String.fromEnvironment('NAMO_AUDIO_BASE_URL');
 
 /// From --dart-define=NAMO_AUDIO_BASE_URL, else the default; never ends in '/'.

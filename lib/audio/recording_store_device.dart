@@ -31,6 +31,9 @@ class _Entry {
   /// The store cancelled its task itself: the next `canceled` is not news.
   bool cancelledByStore = false;
 
+  /// Its download finished and the file is being checked: not to be queued.
+  bool verifying = false;
+
   RecordingStatus get status => RecordingStatus(
     availability: availability,
     progress: availability == Availability.downloading ? progress : 0,
@@ -72,6 +75,9 @@ class DeviceRecordingStore implements RecordingStore {
   /// The downloader's base directory; null until it has started.
   String? _base;
   bool _started = false;
+
+  /// The downloader could not start: nothing can be downloaded.
+  bool _unavailable = false;
   bool _ready = false;
   bool _disposed = false;
   final _early = <DownloadEvent>[];
@@ -101,6 +107,7 @@ class DeviceRecordingStore implements RecordingStore {
     try {
       _base = await _downloader.start();
     } catch (_) {
+      _unavailable = true;
       return;
     }
     _events = _downloader.events.listen(_onEvent);
@@ -178,7 +185,9 @@ class DeviceRecordingStore implements RecordingStore {
         await _cancel(autoGroup);
         if (_autoDownload != AutoDownload.off) {
           for (final e in _entries) {
-            if (e.availability != Availability.downloaded && e.group == null) {
+            if (e.availability != Availability.downloaded &&
+                e.group == null &&
+                !e.verifying) {
               await _enqueue(e, autoGroup, _wifiOnly);
             }
           }
@@ -191,13 +200,16 @@ class DeviceRecordingStore implements RecordingStore {
   @override
   Future<void> download(Recording r) => _inTurn(() async {
     final e = _byPath[r.path];
-    if (e == null || _base == null) return;
+    if (e == null) return;
+    if (_unavailable) return _showUnavailable([e]);
+    if (_base == null) return;
     await _fetchNow(e);
     _emit();
   });
 
   @override
   Future<void> downloadAll() => _inTurn(() async {
+    if (_unavailable) return _showUnavailable(_entries);
     if (_base == null) return;
     for (final e in _entries) {
       await _fetchNow(e);
@@ -205,11 +217,21 @@ class DeviceRecordingStore implements RecordingStore {
     _emit();
   });
 
+  /// Marks [entries] failed: without a downloader nothing can be fetched.
+  void _showUnavailable(Iterable<_Entry> entries) {
+    for (final e in entries) {
+      if (e.availability == Availability.downloaded) continue;
+      e.show(Availability.failed, reason: unavailableMessage);
+    }
+    _emit();
+  }
+
   /// Moves [e] to the manual queue, on any connection. A download already
-  /// moving, or already asked for, is left alone.
+  /// moving, or already asked for, or being checked, is left alone.
   Future<void> _fetchNow(_Entry e) async {
     if (e.availability == Availability.downloaded ||
-        e.availability == Availability.downloading) {
+        e.availability == Availability.downloading ||
+        e.verifying) {
       return;
     }
     if (e.group == manualGroup) return;
@@ -302,7 +324,12 @@ class DeviceRecordingStore implements RecordingStore {
           case DownloadStatus.complete:
             final group = e.group!;
             e.group = null;
-            await _verifyDownload(e, group, e.requiresWiFi);
+            e.verifying = true;
+            try {
+              await _verifyDownload(e, group, e.requiresWiFi);
+            } finally {
+              e.verifying = false;
+            }
           case DownloadStatus.notFound:
             e.group = null;
             e.show(Availability.failed, reason: notOnServerMessage);
@@ -387,7 +414,9 @@ class DeviceRecordingStore implements RecordingStore {
   }
 
   Future<void> _inTurn(Future<void> Function() work) {
-    final next = _turn.then((_) => work()).onError((_, _) {});
+    final next = _turn.then((_) => work()).onError((error, _) {
+      if (kDebugMode) debugPrint('RecordingStore: $error');
+    });
     _turn = next;
     return next;
   }
