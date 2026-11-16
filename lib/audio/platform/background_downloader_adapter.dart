@@ -16,14 +16,20 @@ class BackgroundDownloaderAdapter implements Downloader {
   @override
   Future<String> start() async {
     final downloader = FileDownloader();
-    await downloader.configure(
-      globalConfig: [(Config.checkAvailableSpace, 100)],
-      iOSConfig: [(Config.excludeFromCloudBackup, true)],
-    );
     await _subscription?.cancel();
     _subscription = downloader.updates.listen(_onUpdate);
-    await downloader.start();
-    return Task.baseDirectoryPath(BaseDirectory.applicationSupport);
+    try {
+      await downloader.configure(
+        globalConfig: [(Config.checkAvailableSpace, 100)],
+        iOSConfig: [(Config.excludeFromCloudBackup, true)],
+      );
+      await downloader.start();
+      return await Task.baseDirectoryPath(BaseDirectory.applicationSupport);
+    } catch (_) {
+      await _subscription?.cancel();
+      _subscription = null;
+      rethrow;
+    }
   }
 
   void _onUpdate(TaskUpdate update) {
@@ -32,7 +38,7 @@ class BackgroundDownloaderAdapter implements Downloader {
         _events.add(
           DownloadStatusEvent(
             update.task.taskId,
-            DownloadStatus.values.byName(update.status.name),
+            _statusOf(update.status),
           ),
         );
       case TaskProgressUpdate():
@@ -88,3 +94,14 @@ class BackgroundDownloaderAdapter implements Downloader {
     ];
   }
 }
+
+DownloadStatus _statusOf(TaskStatus status) => switch (status) {
+  TaskStatus.enqueued => DownloadStatus.enqueued,
+  TaskStatus.running => DownloadStatus.running,
+  TaskStatus.complete => DownloadStatus.complete,
+  TaskStatus.notFound => DownloadStatus.notFound,
+  TaskStatus.failed => DownloadStatus.failed,
+  TaskStatus.canceled => DownloadStatus.canceled,
+  TaskStatus.waitingToRetry => DownloadStatus.waitingToRetry,
+  TaskStatus.paused => DownloadStatus.paused,
+};
