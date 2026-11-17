@@ -3,7 +3,6 @@
 // them. tools/sync_books.py --check makes the same checks from the Python side.
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:crypto/crypto.dart';
