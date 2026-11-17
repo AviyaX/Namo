@@ -147,6 +147,16 @@ one long chapter (loses the way the printed book is organised).
     element inside the main text fails the fetch loudly; the builder adds a
     kind only after seeing the structure in the survey (below) and records
     the tag, an example page and the mapping in the tool's `KINDS` table.
+  - Survey result (2026-11-17, 2,845 pages): three more kinds were needed and
+    are part of the design — `footnotes` (`ol.footnotes`, 157 pages; drawn
+    numbered at the foot of the page), `table` (10 pages; header flag and
+    rows of cell text), `image` (9 pages; `src` and `alt`, bundled under
+    `assets/books/pictures/` only when the nine together are under 1.5 MB,
+    else shown as a caption naming the picture). `list` carries a `marker`
+    (`number`, `bullet`, or `none` for `ol.enum`, whose "(1)" labels are in
+    the text). A gatha inside a list item keeps its lines; a list nested in
+    an item adds its items as lines of that item. No text is added, removed
+    or changed by any of these.
 - `assets/books/covers/<slug>.png`: the Board's cover as served, re-encoded
   only if larger than 400 px wide (then scaled to 400 wide); never cropped
   or recoloured.

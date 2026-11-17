@@ -19,7 +19,7 @@
 - Network: User-Agent `namo-app-build/1.0`, 200 ms between requests, timeout 60 s, three retries with growing waits. Never the owner's or the account's names in any request.
 - Routes: `Routes.book(id) = '/library/book/<id>'`, `Routes.bookContents(id, n) = '/library/book/<id>/contents/<n>'` (children of the Library branch, `namoPage`), `Routes.bookReader(id, n) = '/library/book/<id>/read/<n>'` (a top-level route after the shell, like `/tipitaka/read/:key`). Navigation by `context.go`; each full-screen or branch-child screen wraps itself in `PopScope(canPop: false, ...)` and goes to its parent on Back.
 - Keys: `books-shelf`, `book-<slug>` (shelf card), `book-continue`, `book-row-<n>`, `book-row-own-<n>`, `book-hit-<slug>` (search), `book-prev`, `book-next`, `book-reader-top-bar`, `sources-books`. Store key `namo.books.places.v1`.
-- Copy, verbatim: shelf heading "පොත්" with sub-line "රේරුකානේ චන්දවිමල හිමියන්ගේ පොත්"; search group heading "Books"; buttons "Start reading" / "Continue reading"; contents heading "Contents"; tooltips "Back", "Previous page", "Next page", "Reading settings"; credit lines "Text: pitaka.lk" and "Published by the Sri Chandawimala Dhamma Treatises Preservation Board"; errors "The books could not be opened." and "The book could not be opened." with action "Try again". No middle dots or other characters outside the bundled fonts (`tools/check_ui_glyphs.py` must stay at exit 0).
+- Copy, verbatim: shelf heading "පොත්" with sub-line "රේරුකානේ චන්දවිමල හිමියන්ගේ පොත්"; search group heading "Books"; buttons "Start reading" / "Continue reading"; contents heading "Contents"; tooltips "Back", "Previous page", "Next page", "Reading settings"; credit lines "Text: pitaka.lk" and "Published by the Sri Chandawimala Dhamma Treatises Preservation Board"; errors "The books could not be opened." and "The book could not be opened." with action "Try again"; an image block without a bundled picture reads "Picture on pitaka.lk" or "Picture: <alt>". No middle dots or other characters outside the bundled fonts (`tools/check_ui_glyphs.py` must stay at exit 0).
 - Design rules (`test/quality/design_rules_test.dart`): no raw colour outside `lib/design/tokens.dart`; `textMuted` only under `lib/design/`; no `Card(`, `ListTile(`, `ElevatedButton`…; sizes via `NamoType` (no `size:` in `namoText(` calls, no `fontSize:` below 12); every `Duration(milliseconds:` outside tokens is allow-listed with a reason. `readingStyle(ReadingLanguage.sinhala, fontScale: settings.fontScale, lineSpacing: settings.lineSpacing, color: p.text)` for prose.
 - Tests: `pumpApp`/`openReal` keep working for every existing test; `openReal` gains `AssetBytes? books` and serves a tiny fixture by default so no quality test reads the 23-book bundle. Every task ends with `/c/Users/Dell/develop/flutter/bin/flutter analyze` clean and the task's named suites green; the full `flutter test` runs in Tasks 5 and 6. One flutter or git command at a time; never `git add -A`; commits by name with trailer `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`.
 - Android, iOS and web from one code base; nothing per platform changes for assets. The size is measured in Task 6 (arm64 split APK before: 53,975,660 bytes at 000f892).
@@ -55,7 +55,7 @@
   PUBLISHER = {"si": "ශ්‍රී චන්දවිමල ධර්මපුස්තක සංරක්ෂණ මණ්ඩලය", "en": "Sri Chandawimala Dhamma Treatises Preservation Board"}
   COVERS: dict[str, tuple[str, str]]    # slug -> (official title as the Board's /api/books lists it, cover URL); filled in Task 2
   BLOCK_TAGS = {"p": "para", "h2": "heading", "h3": "heading", "h4": "heading", "ol": "list", "ul": "list"}
-  INLINE_TAGS = {"b", "strong", "i", "em", "u", "span", "a", "sup", "sub", "br"}   # flattened to their text; <br> is a line break
+  INLINE_TAGS = {"b", "strong", "i", "em", "u", "span", "a", "sup", "sub", "br", "suli"}   # flattened to their text; <br> is a line break; "suli" is a typo in pohoya-dinaya/21-1.html
   SKIP_TAGS_IN_MAIN = {"nav", "dialog", "button", "script", "svg", "style"}        # plus div.page-title
   class SyncError(Exception): ...
 
@@ -74,7 +74,7 @@
   def fetch_covers(project, opener=...) -> list[str]   # Task 2 fills COVERS; writes covers/<slug>.png after checking the PNG header; returns problems
   def main(argv=None) -> int
   ```
-  Block shapes: `{"kind": "heading"|"subhead"|"para", "text": str}`, `{"kind": "gatha", "lines": [str, ...]}`, `{"kind": "list", "ordered": bool, "start": int, "items": [str, ...]}`. `p.subhead` → `subhead`; `div.gatha` → `gatha` (one line per child `<p>`, a `<br>` inside a `<p>` also splits; empty lines dropped); other `div` classes → `SyncError`. In a `para`, runs of whitespace collapse to one space and the text is stripped; a `<br>` becomes `\n`. A `<li>` holding a block element raises `SyncError`. An `<ol start="k">` keeps `k`, else `start` is 1. The page's own `div.page-title` is skipped (the TOC title is the page title); a page with no `main.page.prose` raises `SyncError`. The front matter is page 1 with `key: "front"`, `level: 1`, `url: <index url>`, only when its body has at least one block.
+  Block shapes: `{"kind": "heading"|"subhead"|"para", "text": str}`, `{"kind": "gatha", "lines": [str, ...]}`, `{"kind": "list", "marker": "number"|"bullet"|"none", "start": int, "items": [str, ...]}` (`<ol>` → `number`, `<ul>` → `bullet`, `ol.enum` → `none` because the source's own "(1)" labels are in the item text; an `<li>` holding a `div.gatha` keeps the gatha's lines joined by `\n`; a list nested inside an item adds the nested items as further lines of that item, joined by `\n`, without markers — no text added or removed), `{"kind": "footnotes", "items": [str, ...]}` (`ol.footnotes`, drawn numbered from 1 at the foot of the page), `{"kind": "table", "header": bool, "rows": [[str, ...], ...]}` (`<table>`; `header` when the first row is `<th>` cells; a cell holding a block element raises `SyncError`), `{"kind": "image", "src": "<absolute URL>", "alt": str}` (`<img>`; Task 2 decides whether the picture is bundled and then adds `"asset": "assets/books/pictures/<slug>-<basename>"`). `p.subhead` → `subhead`; `div.gatha` → `gatha` (one line per child `<p>`, a `<br>` inside a `<p>` also splits; empty lines dropped); other `div` classes → `SyncError`. In a `para`, runs of whitespace collapse to one space and the text is stripped; a `<br>` becomes `\n`. A `<li>` holding a block element raises `SyncError`. An `<ol start="k">` keeps `k`, else `start` is 1. The page's own `div.page-title` is skipped (the TOC title is the page title); a page with no `main.page.prose` raises `SyncError`. The front matter is page 1 with `key: "front"`, `level: 1`, `url: <index url>`, only when its body has at least one block.
 
 - [ ] **Step 1: Save the fixtures**
 
@@ -85,7 +85,7 @@ Copy real pages from the cache into `tools/test_data/pitaka_lk_books/`: `flat/` 
 `tools/test_sync_books.py` (docstring and file-path import as `tools/test_sync_tipitaka.py`; `FIX = ROOT / "tools" / "test_data" / "pitaka_lk_books"`; no network — every `opener` is a fake that raises if called):
 - `test_parse_index_flat`: 101 TOC rows, all level 1, keys `"1"`…`"101"`, titles non-empty, `front["title"]` is the summary text, `front["blocks"]` non-empty.
 - `test_parse_index_nested_levels`: the nested index's rows carry the `data-level` values in document order; a row's `key` is its href without `.html`.
-- `test_parse_page_kinds`: the fixture pages give exactly the expected block kinds in order (list them per fixture file); a `gatha` has its lines; a `list` has `ordered`, `start` and `items`; no item text starts with a number followed by `.` that the source does not contain.
+- `test_parse_page_kinds`: the fixture pages give exactly the expected block kinds in order (list them per fixture file); a `gatha` has its lines; a `list` has `marker`, `start` and `items` (an `ol.enum` fixture gives `none`); a `footnotes` block has its items; a `table` has `header` and `rows`; an `image` has an absolute `src` and `alt`; no item text starts with a number followed by `.` that the source does not contain.
 - `test_parse_page_keeps_text`: for one paragraph, the block text equals the fixture's text with whitespace collapsed (compare against a literal taken from the fixture file).
 - `test_parse_page_rejects_unknown`: a page with `<table>` inside `<main>` raises `SyncError` naming the tag; a page without `main.page.prose` raises.
 - `test_build_book_reading_order`: `n` is 1..N, page 1 is `front`, the TOC pages follow in order with their levels; a parent with no text has `blocks == []`; `url` is `BASE_URL + slug + "/" + href`.
@@ -137,12 +137,13 @@ Fetch `https://rerukanemahanahimi.lk/api/books` once (with `fetch_text`) into `s
 `test/quality/books_assets_test.dart` (reads files from disk like `tipitaka_real_content_test.dart`; `timeout: Timeout(Duration(minutes: 5))`):
 - `'the index lists the 23 books in order with matching files'`: `index.json` has `schema == 1`, 23 entries whose `id`s equal the slug list; every `file` exists with the listed `bytes` and the listed `sha256` (`package:crypto`); every `cover` exists and starts with the PNG signature.
 - `'every page has a title and text or children, levels never jump'`: decode every book with `gunzipIfNeeded`; `n` is 1..N; page 1 is `front`; each level is 1 or at most one deeper than the previous page's; a page without blocks has at least one child; no text contains `<`, `&nbsp;` or ` `.
-- `'nothing else is bundled under assets/books/'`: `AssetManifest.loadFromAssetBundle(rootBundle)` names under `assets/books/` are exactly `index.json`, the 23 `.json.gz` and the 23 covers (`t.runAsync`).
+- `'nothing else is bundled under assets/books/'`: `AssetManifest.loadFromAssetBundle(rootBundle)` names under `assets/books/` are exactly `index.json`, the 23 `.json.gz`, the 23 covers and the pictures named by the books' image blocks (`t.runAsync`).
 
 - [ ] **Step 3: Build the bundle**
 
 Run: `python -I -X utf8 tools/sync_books.py . --fetch` (uses the cache; fetches only what is missing) → writes `assets/books/`.
 Run: `python -I -X utf8 tools/sync_books.py . --covers` → 23 PNGs (a cover wider than 400 px is scaled to 400 wide with `PIL` only if available; otherwise kept as served — report which).
+Run: `python -I -X utf8 tools/sync_books.py . --pictures` (new mode): fetch every `image` block's `src` into `source_material/pitaka_lk_books/_pictures/` (cache, polite), print each file's bytes and pixel size and the total; when the total as served is under 1.5 MB, write them to `assets/books/pictures/<slug>-<basename>` (scaled to at most 800 px wide only if wider, PIL only if available) and set each block's `asset` (re-running `--fetch` keeps the assets by matching `src`); otherwise bundle none and leave `asset` out. Report the decision and the figures. Add `- assets/books/pictures/` to `pubspec.yaml` when bundled. `--check` also requires every `asset` named by an image block to exist and nothing else under `pictures/`.
 Run: `python -I -X utf8 tools/sync_books.py . --check` → `OK`.
 Add to `pubspec.yaml` assets: `- assets/books/` and `- assets/books/covers/`.
 Extend `tools/check_tipitaka_glyphs.py`: a generator `book_texts(root)` chained into `texts()`; a test in `tools/test_check_tipitaka_glyphs.py` that a made-up book file with a character no font has is reported with its file label. Run: `python -I -X utf8 tools/check_tipitaka_glyphs.py .` → `OK` (or only `substituted` lines; a missing character is a stop-and-report).
@@ -179,7 +180,11 @@ git commit -m "Books: the 23 books, their covers and the asset checks"
   class BookSubhead extends BookBlock { final String text; }
   class BookPara extends BookBlock { final String text; }
   class BookGatha extends BookBlock { final List<String> lines; }
-  class BookList extends BookBlock { final bool ordered; final int start; final List<String> items; }
+  enum ListMarker { number, bullet, none }
+  class BookList extends BookBlock { final ListMarker marker; final int start; final List<String> items; }
+  class BookFootnotes extends BookBlock { final List<String> items; }
+  class BookTable extends BookBlock { final bool header; final List<List<String>> rows; }
+  class BookImage extends BookBlock { final String src; final String alt; final String? asset; }
   class BookPage { const BookPage({required this.n, required this.key, required this.level, required this.title, required this.url, required this.blocks}); bool get hasText => blocks.isNotEmpty; }
   class Book {
     const Book({required this.id, required this.title, this.subtitle, required this.pages});
@@ -216,8 +221,8 @@ git commit -m "Books: the 23 books, their covers and the asset checks"
 
   // test/books/books_support.dart
   const tinyBookFlatId = 'tiny-flat';             // 3 pages: front, "1", "2" — all with text
-  const tinyBookNestedId = 'tiny-nested';         // front; "1" (level 1, text, children "1-1" text with a gatha and an h2, "1-2" text with an ordered list);
-                                                  // "2" (level 1, NO text, children "2-1" text, "2-1-1" level 3 text with a subhead and an unordered list)
+  const tinyBookNestedId = 'tiny-nested';         // front; "1" (level 1, text, children "1-1" text with a gatha and an h2, "1-2" text with a number list, a none-marker list and a footnotes block);
+                                                  // "2" (level 1, NO text, children "2-1" text, "2-1-1" level 3 text with a subhead, a bullet list, a two-row table with a header and an image block without an asset)
   Map<String, Object> tinyBooks();                // {'assets/books/index.json': {...}, 'assets/books/tiny-flat.json.gz': {...}, 'assets/books/tiny-nested.json.gz': {...}}  (covers point at 'assets/branding/namo_icon_square.png')
   ```
   `openReal(..., AssetBytes? books)` adds `booksRepositoryProvider.overrideWithValue(BooksRepository(load: books ?? fakeAssets(tinyBooks()), inBackground: false))`. All text in the fixture is made-up ASCII, not Dhamma text.
@@ -351,7 +356,10 @@ git commit -m "Books: shelf, book page, contents list and search"
   //   bottomNavigationBar: SafeArea(Padding(all lg, FloatingBar(child: Row[NamoIconButton(key: 'book-prev', Symbols.chevron_left_rounded, 'Previous page', onPressed: prev == null ? null : go), Expanded(Center(Text('$i / $total', NamoType.caption(p.textSecondary)))), NamoIconButton(key: 'book-next', Symbols.chevron_right_rounded, 'Next page', ...)]))))
   // Blocks: BookPara → Text(text, prose) where prose = readingStyle(ReadingLanguage.sinhala, fontScale:, lineSpacing:, color: p.text);
   //   BookHeading → Text(text, prose.copyWith(fontSize: prose.fontSize! * 1.25, fontWeight: FontWeight.w600)); BookSubhead → prose.copyWith(fontWeight: FontWeight.w600);
-  //   BookGatha → Padding(start: NamoSpace.xl, Column[for line: Text(line, prose)]); BookList → Column[for (i, item): Row(crossAxisAlignment: start, [SizedBox(width: NamoSpace.xxl, child: Text(ordered ? '${start + i}.' : '•', prose)), Expanded(Text(item, prose))])]
+  //   BookGatha → Padding(start: NamoSpace.xl, Column[for line: Text(line, prose)]); BookList → Column[for (i, item): Row(crossAxisAlignment: start, [if (marker != ListMarker.none) SizedBox(width: NamoSpace.xxl, child: Text(marker == ListMarker.number ? '${start + i}.' : '•', prose)), Expanded(Text(item, prose))])];
+  //   BookFootnotes → Column[SizedBox(height: 1, child: ColoredBox(color: p.border)), SizedBox(sm), for (i, item): Row(crossAxisAlignment: start, [SizedBox(width: NamoSpace.xl, child: Text('${i + 1}', NamoType.caption(p.textSecondary))), Expanded(Text(item, NamoType.caption(p.textSecondary)))])];
+  //   BookTable → SingleChildScrollView(scrollDirection: Axis.horizontal, child: Table(border: TableBorder.all(color: p.border), defaultColumnWidth: const IntrinsicColumnWidth(), children: [for row: TableRow(children: [for cell: Padding(all: NamoSpace.sm, Text(cell, header && first row ? prose.copyWith(fontWeight: FontWeight.w600) : prose))])]));
+  //   BookImage → asset != null ? Semantics(image: true, label: alt, child: ClipRRect(NamoRadius.sm, Image.asset(asset, fit: BoxFit.contain, width: double.infinity))) : Text(alt.isEmpty ? 'Picture on pitaka.lk' : 'Picture: $alt', NamoType.caption(p.textSecondary))
   // Place: const _saveDelay = Duration(milliseconds: 400) (allow-listed); on ScrollNotification → debounce → _places.remember(id, n:, offset: _scroll.offset);
   //   after the first frame: remember(id, n:, offset: 0) unless the saved place is this n, in which case jumpTo(offset.clamp(0, maxScrollExtent)); dispose hands the last place over post-frame.
   // Non-reading n: post-frame context.go(Routes.bookReader(id, book.firstReadingFrom(n)!)) or, when the book has no reading page, Routes.book(id). Unknown id → NotFoundScreen; loading → BookLoading; error → BookLoadError.
@@ -362,7 +370,7 @@ git commit -m "Books: shelf, book page, contents list and search"
 - [ ] **Step 1: Write the failing tests**
 
 `test/books/book_reader_screen_test.dart` (`openReal(t, Routes.bookReader(tinyBookNestedId, n), ...)`):
-- `'renders every block kind in order'` (page "2-1-1": subhead, para, unordered list with bullets; page "1-1": gatha lines and the h2 heading; page "1-2": ordered list shows `1.`, `2.` as separate texts while the item texts contain no numbers).
+- `'renders every block kind in order'` (page "2-1-1": subhead, para, bullet list with `•` leads, a table with every cell's text, an image block without an asset shown as 'Picture: <alt>'; page "1-1": gatha lines and the h2 heading; page "1-2": number list shows `1.`, `2.` as separate texts while the item texts contain no numbers, a none-marker list shows no lead, then the footnotes with drawn `1`, `2`).
 - `'the counter and the buttons step through reading pages only'` (from "1-2": Next goes to "2-1", not "2"; `'<i> / <total>'` counts reading pages; at the last reading page Next is disabled; at the first, Previous is disabled).
 - `'a non-reading n redirects to the next reading page'` (open n of "2" → location `/library/book/tiny-nested/read/<n of 2-1>`).
 - `'an n past the end goes to the book page'`.
@@ -406,7 +414,7 @@ git commit -m "Books: the reader"
 - [ ] **Step 1: Write the failing tests**
 
 - `test/settings/sources_screen_test.dart`: `'credits the books and the Board'` (key `sources-books`, the four sentences, the amended "not made by" sentence).
-- `test/quality/overflow_test.dart`: a `booksScreens` list in the Tripitaka block's style — `('Books shelf', Routes.library, {})`, `('Book page', Routes.book(tinyBookNestedId), {})`, `('Book page with a place', Routes.book(tinyBookNestedId), {bookPlacesKey: '{"tiny-nested": {"n": 3, "offset": 0}}'})`, `('Book contents', Routes.bookContents(tinyBookNestedId, <n of "1">), {})`, `('Book reader (gatha)', Routes.bookReader(tinyBookNestedId, <n of "1-1">), {})`, `('Book reader (list)', Routes.bookReader(tinyBookNestedId, <n of "2-1-1">), {})` at 320×568 and 1280×800, text 1.0 and 2.0, light and dark; the fixture's nested book gets one title of 60 Sinhala-length ASCII characters so the two-line ellipsis is exercised.
+- `test/quality/overflow_test.dart`: a `booksScreens` list in the Tripitaka block's style — `('Books shelf', Routes.library, {})`, `('Book page', Routes.book(tinyBookNestedId), {})`, `('Book page with a place', Routes.book(tinyBookNestedId), {bookPlacesKey: '{"tiny-nested": {"n": 3, "offset": 0}}'})`, `('Book contents', Routes.bookContents(tinyBookNestedId, <n of "1">), {})`, `('Book reader (gatha)', Routes.bookReader(tinyBookNestedId, <n of "1-1">), {})`, `('Book reader (list, table, picture)', Routes.bookReader(tinyBookNestedId, <n of "2-1-1">), {})`, `('Book reader (footnotes)', Routes.bookReader(tinyBookNestedId, <n of "1-2">), {})` at 320×568 and 1280×800, text 1.0 and 2.0, light and dark; the fixture's nested book gets one title of 60 Sinhala-length ASCII characters so the two-line ellipsis is exercised.
 - `test/quality/accessibility_test.dart`: the same six screens in the Tripitaka block's style (`Size(390, 1400)`, light and dark).
 
 - [ ] **Step 2: Run them to see them fail**
