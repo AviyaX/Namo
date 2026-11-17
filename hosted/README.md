@@ -16,10 +16,11 @@ Commands (from the project root; the tool reads the size and SHA-256 of each rec
 - `python -I -X utf8 tools/sync_hosted_audio.py . --verify-full`: downloads each recording and checks its SHA-256.
 - Add `--base-url <url>` to `--verify` or `--verify-full` to test an `r2.dev` address while the custom domain is not live.
 
-CORS policy to set on the bucket (the web build needs it):
+CORS policy to set on the bucket (the web build needs it); save it as a file and run
+`npx wrangler r2 bucket cors set namo-audio --file <file>`:
 
 ```json
-[{"AllowedOrigins": ["*"], "AllowedMethods": ["GET", "HEAD"], "AllowedHeaders": ["Range"], "MaxAgeSeconds": 86400}]
+{"rules": [{"allowed": {"origins": ["*"], "methods": ["GET", "HEAD"], "headers": ["Range"]}, "maxAgeSeconds": 86400}]}
 ```
 
 Licences: the pirith recordings are CC BY-ND 4.0, from pitaka.lk. The Samantha Pattana recording is from Samata Dharmaya; permission is pending. The bucket stays private until the owner confirms the permissions.
