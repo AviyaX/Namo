@@ -136,7 +136,7 @@ Fetch `https://rerukanemahanahimi.lk/api/books` once (with `fetch_text`) into `s
 
 `test/quality/books_assets_test.dart` (reads files from disk like `tipitaka_real_content_test.dart`; `timeout: Timeout(Duration(minutes: 5))`):
 - `'the index lists the 23 books in order with matching files'`: `index.json` has `schema == 1`, 23 entries whose `id`s equal the slug list; every `file` exists with the listed `bytes` and the listed `sha256` (`package:crypto`); every `cover` exists and starts with the PNG signature.
-- `'every page has a title and text or children, levels never jump'`: decode every book with `gunzipIfNeeded`; `n` is 1..N; page 1 is `front`; each level is 1 or at most one deeper than the previous page's; a page without blocks has at least one child; no text contains `<`, `&nbsp;` or ` `.
+- `'every page has a title and text or children, levels never jump'`: decode every book with `gunzipIfNeeded`; `n` is 1..N; page 1 is `front`; each level is 1 or at most one deeper than the previous page's; a page without blocks has at least one child; no text contains `<` or a literal `&nbsp;` entity (the source's real no-break spaces, U+00A0, are text and stay).
 - `'nothing else is bundled under assets/books/'`: `AssetManifest.loadFromAssetBundle(rootBundle)` names under `assets/books/` are exactly `index.json`, the 23 `.json.gz`, the 23 covers and the pictures named by the books' image blocks (`t.runAsync`).
 
 - [ ] **Step 3: Build the bundle**
