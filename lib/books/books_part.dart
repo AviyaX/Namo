@@ -11,9 +11,9 @@ import 'book_model.dart';
 import 'book_widgets.dart';
 import 'books_repository.dart';
 
-/// The Library's shelf of books: a heading, then the covers in a grid, each
-/// opening its book's page, and the space below it. Nothing shows while the
-/// index loads, or when there are no books.
+/// The Library's shelf of books: a heading, then the covers in one sideways
+/// row, each opening its book's page, and the space below it. Nothing shows
+/// while the index loads, or when there are no books.
 class BooksPart extends ConsumerWidget {
   const BooksPart({super.key = const ValueKey('books-shelf')});
 

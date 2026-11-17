@@ -25,9 +25,10 @@ The Sources page in the app credits each of these:
 - Shanthi Vihara, Nottingham, "Evening Puja and Chanting" booklet (supplied by the owner): the Pali, Roman Pali and English of sections 1, 8, 21 and 23–33, verses 2–5 of sections 5–7, three English lines in 19 and 22, and the Roman Pali of the other sections.
 - The "Vandana" booklet of Mahamevnawa Bhavana Asapuwa, Markham, Ontario: part of the English.
 - "Daily Buddha Vandana", prepared by Cynthia Gunawardana, Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane: the rest of the English.
+- pitaka.lk (pathnirvana): the Unicode text of the 23 books of Ven. Rerukane Chandawimala Maha Nahimi. The books and their covers are published by the Sri Chandawimala Dhamma Treatises Preservation Board, Pokunuwita (rerukanemahanahimi.lk).
 - The Home card picture: made for this app by its owner with an AI image tool (a generated picture, not a photograph). Every picture is recorded in `docs/pictures.md`.
 
-Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.
+Namo is not made by, or connected with, namo.lk, pitaka.lk, Shanthi Vihara or the Sri Chandawimala Dhamma Treatises Preservation Board.
 
 The verse text reaches the app only through `tools/build_content.py`, which reads `content/extracted/*.json` and writes `assets/content/namaskaraya_to_pin_dima.json`.
 The English for sections 2–7 is prose from a narrow-column PDF, so the build re-sets it as sentences (line breaks and joining spaces only; it fails if any other character would change). The Nottingham booklet's English on its printed pages 17–34 is re-set the same way where a line breaks mid-sentence. English that is verse keeps the translator's line breaks.
@@ -70,12 +71,24 @@ The Samantha Pattana Dharma Wandanawa topic (an Introduction and the Vandana, wi
 - The text is never edited here. Joining Pali letters happens only while drawing.
 - The only display change besides joining: U+05F4 (used in an-4 as a closing quote; no font draws it) is shown as a plain quote mark. The stored text is unchanged, and the slip has been reported to tipitaka.lk.
 
+## Books
+
+- Where it comes from: the 23 books of Ven. Rerukane Chandawimala Maha Nahimi as Unicode text published by pitaka.lk (pathnirvana), with the publisher's covers from rerukanemahanahimi.lk. The books and their covers are published by the Sri Chandawimala Dhamma Treatises Preservation Board, Pokunuwita.
+- Licence: none is stated by pitaka.lk or the Board, so the terms are kept: the text is included unchanged, the Sources page credits both, Namo is not connected with either, and errors are to be reported to the publisher or to pitaka.lk. Do not publish the app or push the repository to a public place until permission is confirmed (see `docs/release-checklist.md`).
+- The cache: `--fetch` keeps every downloaded page in `source_material/pitaka_lk_books/<book>/` (never committed) and downloads only what is missing (User-Agent `namo-app-build/1.0`, a pause between requests). Delete a book's folder to fetch it again.
+- Update from the source: `python -I -X utf8 tools/sync_books.py . --fetch` writes `assets/books/<book>.json.gz` and `assets/books/index.json`, then runs the check. `--survey` (no network) counts every tag and class in the cached pages. Verify that the bundled books match the cache: `python -I -X utf8 tools/sync_books.py . --check`.
+- Covers and pictures: `python -I -X utf8 tools/sync_books.py . --covers` downloads the covers into `assets/books/covers/`; `--pictures` downloads the pictures inside the books and bundles them into `assets/books/pictures/` when they are small enough. Pillow (PIL) is needed only when a cover is a JPEG or wider than 400 px, or a picture is wider than 800 px; otherwise the files are copied as served.
+- Glyph checks: `python -I -X utf8 tools/check_ui_glyphs.py .` and `python -I -X utf8 tools/check_tipitaka_glyphs.py .`.
+- Tool tests: `python -I -X utf8 tools/test_sync_books.py`.
+- The text is never edited here. No-break spaces in the source are kept as text. The one deliberate omission is the footnote back-link arrow at the end of each footnote.
+- Size: the books gzipped are 3,342,287 bytes (22,262,879 unpacked); the whole `assets/books/` folder is 5,525,562 bytes, of which the pictures are 744,808. The arm64 split APK went from 53,975,660 bytes to 59,570,823 bytes (5,595,163 more).
+
 ## Docs
 
 - `docs/superpowers/specs/`: the owner's spec and the design.
 - `docs/superpowers/plans/`: the plan for the first release.
 - `docs/release-checklist.md`: what must be true before the app is published.
-- `docs/pictures.md`: where each picture comes from and its licence.
+- `docs/pictures.md`: where each picture comes from and its licence, including the book covers and the pictures inside the books.
 
 ## Hosting the recordings
 
@@ -92,6 +105,7 @@ The recordings are not in the app. They are uploaded to the owner's Cloudflare R
 - Tests: `flutter test`.
 - Content check: `python -I -X utf8 tools/build_content.py . --check` (without `--check` it rebuilds the content file). Its tests: `python -I -X utf8 tools/test_build_content.py`.
 - Nottingham booklet extractor (only if the booklet PDF changes): `python -I -X utf8 tools/extract_nottingham_booklet.py source_material/evening_puja_nottingham/evening_puja_and_chanting.pdf content/extracted/nottingham_booklet.json content/review/05_evening_puja_nottingham.md`. Its tests: `python -I -X utf8 tools/test_extract_nottingham_booklet.py`.
+- Books check: `python -I -X utf8 tools/sync_books.py . --check`. Its tests: `python -I -X utf8 tools/test_sync_books.py`.
 - Hosted audio check: `python -I -X utf8 tools/sync_hosted_audio.py . --check`. Its tests: `python -I -X utf8 tools/test_sync_hosted_audio.py`.
 - Web build: `flutter build web --no-web-resources-cdn`. This bundles the drawing engine (CanvasKit) with the app, so the engine itself is never fetched from the internet; only the recordings are.
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:buddhist_gatha/audio/recording_store.dart';
+import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -16,6 +17,7 @@ import 'package:buddhist_gatha/tipitaka/tipitaka_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../books/books_support.dart';
 import '../support/fake_recording_store.dart';
 import '../tipitaka/tipitaka_app_support.dart';
 import 'quality_support.dart';
@@ -625,6 +627,56 @@ void main() {
           expect(find.text('Footnotes'), findsOneWidget);
           expect(t.takeException(), isNull);
         });
+      }
+    }
+  }
+
+  // The books (the made-up fixture; the nested book's page "1-1" has a
+  // 60-character title, so the two-line ellipsis is exercised): the shelf on
+  // the Library, a book's page without and with a remembered place, a
+  // contents list, and the reader on a verse page, a list, table and picture
+  // page, and a footnotes page. Page numbers: "1" is 2, "1-1" is 3, "1-2" is
+  // 4, "2-1-1" is 7.
+  final booksScreens = <(String, String, Map<String, String>)>[
+    ('Books shelf', Routes.library, const {}),
+    ('Book page', Routes.book(tinyBookNestedId), const {}),
+    (
+      'Book page with a place',
+      Routes.book(tinyBookNestedId),
+      {
+        bookPlacesKey: jsonEncode({
+          tinyBookNestedId: {'n': 3, 'offset': 0},
+        }),
+      },
+    ),
+    ('Book contents', Routes.bookContents(tinyBookNestedId, 2), const {}),
+    ('Book reader (gatha)', Routes.bookReader(tinyBookNestedId, 3), const {}),
+    (
+      'Book reader (list, table, picture)',
+      Routes.bookReader(tinyBookNestedId, 7),
+      const {},
+    ),
+    ('Book reader (footnotes)', Routes.bookReader(tinyBookNestedId, 4), const {}),
+  ];
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final dark in [false, true]) {
+        final where = '${size.width.round()}x${size.height.round()}, '
+            'device text $scale, ${dark ? 'dark' : 'light'}';
+        for (final (name, location, extras) in booksScreens) {
+          testWidgets('$name does not overflow: $where', (t) async {
+            await openReal(
+              t,
+              location,
+              size: size,
+              deviceTextScale: scale,
+              dark: dark,
+              storeExtras: extras,
+            );
+            expect(t.takeException(), isNull);
+            await scrollThrough(t);
+          });
+        }
       }
     }
   }

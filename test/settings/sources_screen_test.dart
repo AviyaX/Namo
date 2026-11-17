@@ -46,6 +46,11 @@ Future<void> openSources(
 /// The Tripitaka card (the tab bar has a "Tripitaka" label too).
 Finder get tripitakaCard => find.byKey(const ValueKey('sources-tripitaka'));
 
+/// The sentence at the top of the page about who the app is not made by.
+const notMadeBy =
+    'Namo is not made by, or connected with, namo.lk, pitaka.lk, Shanthi '
+    'Vihara or the Sri Chandawimala Dhamma Treatises Preservation Board.';
+
 Finder text(String s) => find.text(s, findRichText: true);
 
 int keyed(String prefix) => find
@@ -97,7 +102,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        text('Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.'),
+        text(notMadeBy),
         findsOneWidget,
       );
       expect(
@@ -188,7 +193,7 @@ void main() {
       findsNothing,
     );
     expect(
-      text('Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.'),
+      text(notMadeBy),
       findsOneWidget,
     );
     expect(
@@ -400,8 +405,9 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 7 text sources + the Tripitaka + 4 pictures + 16 corrections + 23 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(51));
+    // 7 text sources + the Tripitaka + the Books + 4 pictures + 16 corrections
+    // + 23 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(52));
   });
 
   for (final dark in [false, true]) {
@@ -457,6 +463,39 @@ void main() {
       }
     },
   );
+
+  testWidgets('credits the books and the Board', (t) async {
+    await openSources(t);
+    await t.pumpAndSettle();
+    final card = find.byKey(const ValueKey('sources-books'));
+    expect(card, findsOneWidget);
+    for (final sentence in [
+      'The books of Ven. Rerukane Chandawimala Maha Nahimi are the Unicode '
+          'text published by pitaka.lk (pathnirvana) and are included '
+          'unchanged.',
+      'The books and their covers are published by the Sri Chandawimala '
+          'Dhamma Treatises Preservation Board, Pokunuwita '
+          '(rerukanemahanahimi.lk).',
+      'Namo is not connected with pitaka.lk or the Board.',
+      'If you find an error in a book, please report it to the publisher or '
+          'to pitaka.lk so it can be corrected at the source.',
+    ]) {
+      expect(
+        find.descendant(
+          of: card,
+          matching: find.textContaining(sentence, findRichText: true),
+        ),
+        findsOneWidget,
+        reason: sentence,
+      );
+    }
+    expect(text(notMadeBy), findsOneWidget);
+    // It follows the Tripitaka card.
+    expect(
+      t.getTopLeft(card).dy,
+      greaterThan(t.getTopLeft(tripitakaCard).dy),
+    );
+  });
 
   testWidgets('Sources entry does not say "used with permission"', (t) async {
     await openSources(t);

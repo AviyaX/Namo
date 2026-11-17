@@ -93,6 +93,19 @@ void main() {
     expect(book.parentOf(99), isNull);
   });
 
+  test('readingPagesUnder counts the pages with text at any depth below', () {
+    final book = _nested();
+    int n(String key) => book.pages.firstWhere((p) => p.key == key).n;
+
+    // "1": 1-1 and 1-2. "2" has no text of its own: 2-1 and 2-1-1.
+    expect(book.readingPagesUnder(n('1')), 2);
+    expect(book.readingPagesUnder(n('2')), 2);
+    expect(book.readingPagesUnder(n('2-1')), 1);
+    expect(book.readingPagesUnder(n('2-1-1')), 0);
+    expect(book.readingPagesUnder(n('front')), 0);
+    expect(book.readingPagesUnder(99), 0);
+  });
+
   test('reading navigation skips pages without text', () {
     final book = _nested();
     int n(String key) => book.pages.firstWhere((p) => p.key == key).n;

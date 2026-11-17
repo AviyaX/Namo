@@ -61,12 +61,12 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.descendant(of: _row(5), matching: find.text('1')),
+      find.descendant(of: _row(5), matching: find.text('2')),
       findsOneWidget,
     );
     // Screen readers hear the count; a row without children is its title.
     expect(find.bySemanticsLabel('Part one, 2 texts'), findsOneWidget);
-    expect(find.bySemanticsLabel('Part two, 1 text'), findsOneWidget);
+    expect(find.bySemanticsLabel('Part two, 2 texts'), findsOneWidget);
     expect(find.bySemanticsLabel('About this book'), findsOneWidget);
     expect(find.text('Text: pitaka.lk'), findsOneWidget);
     expect(

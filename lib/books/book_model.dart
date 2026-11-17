@@ -303,6 +303,18 @@ class Book {
     return children;
   }
 
+  /// How many pages with text lie below [n], at any depth.
+  int readingPagesUnder(int n) {
+    final parent = page(n);
+    if (parent == null) return 0;
+    var count = 0;
+    for (final p in pages.skip(n)) {
+      if (p.level <= parent.level) break;
+      if (p.hasText) count++;
+    }
+    return count;
+  }
+
   /// The nearest earlier page one level up; null at level 1.
   BookPage? parentOf(int n) {
     final child = page(n);

@@ -229,8 +229,8 @@ class SourcesScreen extends StatelessWidget {
         ),
         const SizedBox(height: NamoSpace.sm),
         Text(
-          'Namo is not made by, or connected with, namo.lk, pitaka.lk or '
-          'Shanthi Vihara.',
+          'Namo is not made by, or connected with, namo.lk, pitaka.lk, Shanthi '
+          'Vihara or the Sri Chandawimala Dhamma Treatises Preservation Board.',
           textAlign: TextAlign.center,
           style: NamoType.body(p.text),
         ),
@@ -243,6 +243,7 @@ class SourcesScreen extends StatelessWidget {
         for (final credit in _credits) _CreditBlock(credit),
         const _SamanthaCreditBlock(),
         const _TipitakaCreditBlock(),
+        const _BooksCreditBlock(),
         const _SectionLabel('Pictures'),
         for (final credit in _pictureCredits) _CreditBlock(credit),
         LibraryGate(
@@ -321,6 +322,43 @@ class _TipitakaCreditBlock extends ConsumerWidget {
             child: Text('Tripitaka', style: NamoType.cardTitle(p.text)),
           ),
           for (final sentence in sentences)
+            Padding(
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
+              child: Text(sentence, style: NamoType.body(p.textSecondary)),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The credit for the books of Ven. Rerukane Chandawimala Maha Nahimi.
+class _BooksCreditBlock extends StatelessWidget {
+  const _BooksCreditBlock();
+
+  static const _sentences = [
+    'The books of Ven. Rerukane Chandawimala Maha Nahimi are the Unicode text '
+        'published by pitaka.lk (pathnirvana) and are included unchanged.',
+    'The books and their covers are published by the Sri Chandawimala Dhamma '
+        'Treatises Preservation Board, Pokunuwita (rerukanemahanahimi.lk).',
+    'Namo is not connected with pitaka.lk or the Board.',
+    'If you find an error in a book, please report it to the publisher or to '
+        'pitaka.lk so it can be corrected at the source.',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return _SourceCard(
+      key: const ValueKey('sources-books'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Text('Books', style: NamoType.cardTitle(p.text)),
+          ),
+          for (final sentence in _sentences)
             Padding(
               padding: const EdgeInsets.only(top: NamoSpace.xs),
               child: Text(sentence, style: NamoType.body(p.textSecondary)),

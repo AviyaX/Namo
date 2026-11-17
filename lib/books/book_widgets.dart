@@ -12,6 +12,7 @@ import '../design/typography.dart';
 import '../design/widgets/empty_state.dart';
 import '../design/widgets/list_row.dart';
 import '../router.dart';
+import '../tipitaka/tipitaka_labels.dart';
 import 'book_model.dart';
 
 /// A quiet progress mark while a book loads (the Library's own).
@@ -107,8 +108,6 @@ Widget bookChevron(BuildContext context) => Icon(
   color: NamoPalette.of(context).textSecondary,
 );
 
-String _countLabel(int count) => count == 1 ? '1 text' : '$count texts';
-
 /// A page of [book] as a row. A page with children shows how many and opens
 /// their list; a page without opens the reader. [own] is a parent's own
 /// text, at the top of its list: it opens the reader at the page.
@@ -128,23 +127,22 @@ class BookPageRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = NamoPalette.of(context);
     final n = page.n;
-    final children = own ? const <BookPage>[] : book.childrenOf(n);
+    final hasChildren = !own && book.childrenOf(n).isNotEmpty;
+    final texts = hasChildren ? book.readingPagesUnder(n) : 0;
     final chevron = bookChevron(context);
     return ListRow(
       key: ValueKey(own ? 'book-row-own-$n' : 'book-row-$n'),
       title: page.title,
       titleFamily: NamoFonts.sinhala,
       // The count is spoken as the Tripitaka's rows speak theirs.
-      semanticLabel: children.isEmpty
-          ? null
-          : '${page.title}, ${_countLabel(children.length)}',
-      trailing: children.isEmpty
+      semanticLabel: hasChildren ? '${page.title}, ${textsLabel(texts)}' : null,
+      trailing: !hasChildren
           ? chevron
           : Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '${children.length}',
+                  '$texts',
                   style: NamoType.caption(p.textSecondary),
                 ),
                 const SizedBox(width: NamoSpace.xs),
@@ -152,7 +150,7 @@ class BookPageRow extends ConsumerWidget {
               ],
             ),
       onTap: () {
-        if (own || children.isEmpty) {
+        if (!hasChildren) {
           final target = book.firstReadingFrom(n);
           if (target != null) context.go(Routes.bookReader(book.id, target));
         } else {
