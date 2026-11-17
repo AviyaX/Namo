@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:buddhist_gatha/content/model.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:buddhist_gatha/design/marks.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/typography.dart';
@@ -41,6 +42,7 @@ Widget _card({
   String topicTitle = 'Topic 1',
 }) =>
     ProviderScope(
+      overrides: [tipsAllowedProvider.overrideWithValue(false)],
       child: GathaCard(
         pick: pick,
         selection: selection,

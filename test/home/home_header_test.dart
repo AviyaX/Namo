@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:buddhist_gatha/app.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/marks.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
@@ -521,6 +522,7 @@ void main() {
       await t.pumpWidget(
         ProviderScope(
           overrides: [
+            tipsAllowedProvider.overrideWithValue(false),
             contentRepositoryProvider.overrideWithValue(
               FakeContentRepository(),
             ),

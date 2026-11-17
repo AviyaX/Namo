@@ -1,6 +1,7 @@
 import 'dart:ui' show Tristate;
 
 import 'package:buddhist_gatha/app.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:buddhist_gatha/audio/audio_controls.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
@@ -438,6 +439,7 @@ void main() {
         await t.pumpWidget(
           ProviderScope(
             overrides: [
+              tipsAllowedProvider.overrideWithValue(false),
               ...fake,
               routerProvider.overrideWith(
                 (ref) => buildRouter(initialLocation: Routes.category('c1')),
@@ -496,6 +498,7 @@ void main() {
       await t.pumpWidget(
         ProviderScope(
           overrides: [
+            tipsAllowedProvider.overrideWithValue(false),
             ...fake,
             routerProvider.overrideWith((ref) {
               final r = buildRouter(initialLocation: Routes.category('c1'));
