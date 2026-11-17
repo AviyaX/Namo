@@ -33,6 +33,10 @@ class ProgrammePlayer {
   /// True while this player's own load of a leg is under way.
   bool _loading = false;
 
+  /// Whether the leg being loaded plays once it is; a pause while it loads
+  /// clears it.
+  bool _playOnLoad = false;
+
   /// Counts playLeg, bind and dispose, so an overtaken playLeg can tell.
   int _gen = 0;
   ChantState _state = const ChantState();
@@ -143,8 +147,9 @@ class ProgrammePlayer {
         status != ChantStatus.idle &&
         status != ChantStatus.loading &&
         status != ChantStatus.failed;
-    // The newest call owns the flag; an overtaken one leaves it alone.
+    // The newest call owns the flags; an overtaken one leaves them alone.
     _loading = !loaded;
+    _playOnLoad = play;
     if (!loaded) {
       _leg = leg;
       await _inner.load(target.recording);
@@ -156,7 +161,7 @@ class ProgrammePlayer {
       await _inner.seek(at);
       if (gen != _gen) return;
     }
-    if (play) {
+    if (_playOnLoad) {
       await _inner.play();
     } else if (loaded) {
       await _inner.pause();
@@ -184,7 +189,10 @@ class ProgrammePlayer {
     }
     final k = _leg;
     if (k == null) return playLeg(0);
-    if (_loading) return;
+    if (_loading) {
+      _playOnLoad = true;
+      return;
+    }
     if (_state.status == ChantStatus.failed) return playLeg(k);
     // Play after the end starts the whole programme again.
     if (!p.single && _state.status == ChantStatus.completed) return playLeg(0);
@@ -196,6 +204,7 @@ class ProgrammePlayer {
       _armed = false;
       return;
     }
+    _playOnLoad = false;
     await _inner.pause();
   }
 

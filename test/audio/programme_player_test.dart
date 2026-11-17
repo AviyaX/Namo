@@ -141,6 +141,26 @@ void main() {
     expect(r.player.state, st(ChantStatus.playing, Duration.zero, s(30)));
   });
 
+  for (final legs in [1, 2]) {
+    test('pause while a leg loads keeps it from playing ($legs legs)', () async {
+      final r = _Rig();
+      final gate = r.inner.gate = Completer<void>();
+      r.player.bind(programme([a, b].take(legs).toList()));
+      unawaited(r.player.play());
+      await settle();
+      await r.player.pause();
+      r.inner.gate = null;
+      gate.complete();
+      await settle();
+      expect(r.inner.loaded, [a]);
+      expect(r.inner.state.status, ChantStatus.ready);
+      expect(r.player.state.status, ChantStatus.ready);
+      await r.player.play();
+      await settle();
+      expect(r.player.state.status, ChantStatus.playing);
+    });
+  }
+
   test(
     'restart while the first leg loads leaves play and the next leg working',
     () async {
