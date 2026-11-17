@@ -287,4 +287,44 @@ void main() {
     expect(_chantStatus(t), ChantStatus.playing);
     expect(player.state.status, ChantStatus.playing);
   });
+
+  testWidgets('Back on Home with a tip up dismisses it and stays', (t) async {
+    await openReal(t, Routes.home, library: await realLibrary(t), tips: true);
+    _expectBubble(Tip.recordings);
+    await t.binding.handlePopRoute();
+    await t.pumpAndSettle();
+    expect(_bubble, findsNothing);
+    expect(
+      _container(t).read(tipsProvider).seen,
+      contains(Tip.recordings),
+    );
+    expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+  });
+
+  testWidgets('Back on Library with My flows up dismisses it and stays', (
+    t,
+  ) async {
+    await openReal(t, Routes.library, library: await realLibrary(t), tips: true);
+    _expectBubble(Tip.myFlows);
+    await t.binding.handlePopRoute();
+    await t.pumpAndSettle();
+    expect(_bubble, findsNothing);
+    expect(_container(t).read(tipsProvider).seen, contains(Tip.myFlows));
+    expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+  });
+
+  testWidgets(
+    'the Recordings tip points at the Settings rail destination on a wide screen',
+    (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        library: await realLibrary(t),
+        tips: true,
+        size: const Size(1280, 800),
+      );
+      _expectBubble(Tip.recordings);
+      _expectInCutout(t, find.byKey(const ValueKey('nav-settings')));
+    },
+  );
 }

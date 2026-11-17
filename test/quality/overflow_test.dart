@@ -127,6 +127,67 @@ void main() {
     }
   }
 
+  // A first-run tip up over each screen it points on: the bubble fits, and
+  // is inside the view, at the narrowest width and the largest device text.
+  for (final size in _sizes) {
+    final where = '${size.width.round()}x${size.height.round()}, device text 2.0';
+    final bubble = find.byKey(const ValueKey('tip-bubble'));
+    void expectInView(WidgetTester t) {
+      expect(t.takeException(), isNull);
+      expect(bubble, findsOneWidget);
+      final view = Offset.zero & size;
+      final rect = t.getRect(bubble);
+      expect(view.expandToInclude(rect), view, reason: '$rect leaves $view');
+    }
+
+    testWidgets('Home with the Recordings tip does not overflow: $where', (
+      t,
+    ) async {
+      await openReal(t, Routes.home,
+          size: size, deviceTextScale: 2.0, tips: true);
+      expectInView(t);
+    });
+
+    testWidgets('Library with the My flows tip does not overflow: $where', (
+      t,
+    ) async {
+      await openReal(t, Routes.library,
+          size: size, deviceTextScale: 2.0, tips: true);
+      // The tip waits for its card to be wholly on screen; on a small screen
+      // at large text that is a scroll away.
+      for (var i = 0; i < 10 && bubble.evaluate().isEmpty; i++) {
+        await t.drag(find.byKey(const ValueKey('screen-library')),
+            const Offset(0, -200));
+        await t.pumpAndSettle();
+      }
+      expectInView(t);
+    });
+
+    testWidgets(
+      'the gatha reader with the Languages and layout tip does not overflow: $where',
+      (t) async {
+        await openReal(t, Routes.reader(realReadingId),
+            size: size, deviceTextScale: 2.0, tips: true);
+        expectInView(t);
+      },
+    );
+
+    testWidgets(
+      'the pirith reader with the Scroll and Chant tip does not overflow: $where',
+      (t) async {
+        await openReal(t, Routes.reader(mangalaReadingId),
+            size: size,
+            deviceTextScale: 2.0,
+            tips: true,
+            recordingStore: FakeRecordingStore());
+        expect(bubble, findsOneWidget);
+        await t.tap(find.byKey(const ValueKey('tip-got-it')));
+        await t.pumpAndSettle();
+        expectInView(t);
+      },
+    );
+  }
+
   // The longest recording line, with Try again beside it, in the narrowest
   // bar.
   testWidgets('the pirith reader with a failed recording does not overflow', (

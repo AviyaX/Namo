@@ -12,6 +12,7 @@ import '../design/widgets/namo_switch.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/pressable.dart';
 import '../router.dart';
+import '../tips/tips.dart';
 import 'choosers.dart';
 import 'recordings_group.dart';
 import 'setting_controls.dart';
@@ -161,6 +162,18 @@ class SettingsScreen extends ConsumerWidget {
                 fill: 0,
                 color: p.textSecondary,
               ),
+            ),
+            ListRow(
+              key: const ValueKey('tips-reset'),
+              title: 'Show the tips again',
+              onTap: () {
+                ref.read(tipsProvider.notifier).resetAll();
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(content: Text('The tips will show again.')),
+                  );
+              },
             ),
           ],
         ),

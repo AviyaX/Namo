@@ -7,6 +7,7 @@ import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/settings/setting_controls.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -269,6 +270,31 @@ void main() {
       findsOneWidget,
     );
     expect(inGroup('About Namo', find.text('Sources')), findsOneWidget);
+    expect(
+      inGroup('About Namo', find.text('Show the tips again')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('Show the tips again forgets the seen tips and says so', (t) async {
+    final store = InMemoryKeyValueStore();
+    await store.write(
+      tipsKey,
+      '{"seen":["myFlows","readerSettings","recordings","scrollChant"]}',
+    );
+    await pumpApp(
+      t,
+      overrides: [
+        contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
+        keyValueStoreProvider.overrideWithValue(store),
+      ],
+      location: '/settings',
+      size: const Size(390, 2400),
+    );
+    await t.tap(find.byKey(const ValueKey('tips-reset')));
+    await t.pump();
+    expect(store.read(tipsKey), '{"seen":[]}');
+    expect(find.text('The tips will show again.'), findsOneWidget);
   });
 
   testWidgets('Settings uses no SwitchListTile, Card or AppBar', (t) async {

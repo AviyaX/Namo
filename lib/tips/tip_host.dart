@@ -321,6 +321,8 @@ class _TipLayerState extends State<_TipLayer> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: widget.onDismiss,
+              // The scrim's own Semantics below is the one labelled tap.
+              excludeFromSemantics: true,
               // The bubble's text has no Material page under it.
               child: Material(
                 type: MaterialType.transparency,

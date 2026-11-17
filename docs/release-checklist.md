@@ -48,3 +48,4 @@
   - [ ] "Remove downloaded recordings" empties the device and sets Off.
   - [ ] Web: play streams from the host.
   - [ ] iOS: build and run once (never built here).
+- [ ] First-run tips: on a fresh install the four tips appear in turn (Home → the Settings tab; Library → My flows; a gatha reader → the settings button; a pirith, once its recording has arrived → Scroll and Chant); each goes with one tap or Back; Settings → About Namo → "Show the tips again" brings them back; on the web the Recordings tip does not appear.
