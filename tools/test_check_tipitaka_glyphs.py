@@ -107,6 +107,24 @@ class GlyphReport(unittest.TestCase):
         self.assertTrue(lines[0].startswith("U+10FFFD "), lines[0])
         self.assertEqual(lines[1], "substituted U+05F4 -> U+0022 count=1")
 
+    def test_rerukane_book_with_a_missing_character_is_reported_with_its_file(self):
+        make_project(self.root, {"k": ["abc", "def", 1, [0, 0], "root", "a-1"]}, {"a-1": [page()]})
+        write_gz(self.root / "assets" / "books" / "demo.json.gz", {
+            "id": "demo", "title": "ok", "subtitle": None,
+            "pages": [{"n": 1, "title": "t", "blocks": [
+                {"kind": "para", "text": "fine"},
+                {"kind": "gatha", "lines": ["a" + BOX]},
+                {"kind": "list", "items": ["x", "y"]},
+                {"kind": "table", "rows": [["c", "d"]]}]}]})
+        (self.root / "assets" / "books" / "index.json").write_text(
+            json.dumps({"books": [{"id": "demo", "title": "ok", "subtitle": "fine"}]}), encoding="utf-8")
+        r = run(self.root)
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
+        lines = r.stdout.strip().splitlines()
+        self.assertEqual(len(lines), 1, r.stdout)
+        self.assertTrue(lines[0].startswith("U+10FFFD "), lines[0])
+        self.assertTrue(lines[0].endswith("first=books/demo.json.gz"), lines[0])
+
     def test_assets_untouched(self):
         make_project(self.root, {"k": ["abc", BOX, 1, [0, 0], "root", "a-1"]}, {"a-1": [page(BOX)]})
         before = digest(self.root)

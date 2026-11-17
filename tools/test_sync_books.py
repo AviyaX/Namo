@@ -527,6 +527,18 @@ class CheckTest(unittest.TestCase):
             (out / "covers" / (self.first + ".png")).write_bytes(b"GIF89a")
         self.assert_named(self.problems(after=not_png), "covers/%s.png" % self.first, "PNG")
 
+    def test_check_corrupt_gz_is_a_problem_line(self):
+        def corrupt(out):
+            good = (out / (self.first + ".json.gz")).read_bytes()
+            (out / (self.first + ".json.gz")).write_bytes(good[:20] + bytes(40) + good[60:])
+        problems = self.problems(after=corrupt)
+        self.assert_named(problems, self.first + ".json.gz", "cannot be unpacked")
+
+    def test_check_image_assets(self):
+        def with_image(book):
+            book["pages"][2]["blocks"][4]["asset"] = "assets/books/pictures/a-x.png"
+        self.assert_named(self.problems(with_image), "a-x.png", "missing")
+
     def test_check_unreadable_index(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assert_named(tool.check(pathlib.Path(tmp)), "index.json", "cannot be read")

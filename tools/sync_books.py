@@ -1,7 +1,7 @@
 """Turn the pitaka.lk pages of Ven. Rerukane Chandawimala's books into the app's book files, and check them.
 
 Usage (from anywhere; <project> is the project folder):
-  python -I -X utf8 tools/sync_books.py <project> [--fetch] [--survey] [--check] [--covers]
+  python -I -X utf8 tools/sync_books.py <project> [--fetch] [--survey] [--check] [--covers] [--pictures]
 
   --fetch    For each of the 23 books, read the index page and every page its
              contents link to from <project>/source_material/pitaka_lk_books/
@@ -14,7 +14,16 @@ Usage (from anywhere; <project> is the project folder):
              tag<TAB>class<TAB>count<TAB>first page, most frequent first.
   --check    No network. Prints OK and exits 0, or one line per problem and
              exits 1.
-  --covers   Download the covers listed in COVERS to assets/books/covers/.
+  --covers   Download the covers listed in COVERS to assets/books/covers/ (a cover
+             wider than COVER_MAX_WIDTH is scaled down, and a JPEG is turned into a
+             PNG, if PIL is installed).
+  --pictures Download every image block's src into <project>/source_material/
+             pitaka_lk_books/_pictures/ and print each file's bytes and pixel size
+             and the total. When the total as served is under PICTURES_LIMIT, copy
+             them to assets/books/pictures/<slug>-<name> (scaled to at most
+             PICTURE_MAX_WIDTH wide if PIL is installed) and set each block's
+             "asset" (re-running --fetch keeps the assets by matching src);
+             otherwise bundle none.
 
 The text is never altered: tags are dropped, runs of HTML white space become
 one space, and that is all, with one deliberate omission: the website's
@@ -33,6 +42,7 @@ import re
 import time
 import urllib.parse
 import urllib.request
+import zlib
 
 SLUGS = [
     "bauddhayage-athpotha",
@@ -65,8 +75,101 @@ PAUSE_SECONDS = 0.2
 SCHEMA = 1
 AUTHOR = {"si": "රේරුකානේ චන්දවිමල මහා නාහිමි", "en": "Ven. Rerukane Chandawimala Maha Nahimi"}
 PUBLISHER = {"si": "ශ්‍රී චන්දවිමල ධර්මපුස්තක සංරක්ෂණ මණ්ඩලය", "en": "Sri Chandawimala Dhamma Treatises Preservation Board"}
-# slug -> (official title as the Board's /api/books lists it, cover URL); filled in Task 2.
-COVERS: dict[str, tuple[str, str]] = {}
+# slug -> (official title as the Board's /api/books lists it (title_si), cover URL)
+COVERS: dict[str, tuple[str, str]] = {
+    "bauddhayage-athpotha": (
+        "බෞද්ධ‍යාගේ අත්පොත",
+        "https://rerukanemahanahimi.lk/uploads/covers/cover_1778524650.png",
+    ),
+    "dharma-winishchaya": (
+        "ධර්ම විනිශ්චය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book11-dharma-winishchaya.png",
+    ),
+    "paramitha-prakaranaya": (
+        "පාරමිතා ප්‍රකරණය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book12-paramitha-prakaranaya.png",
+    ),
+    "suvisi-gunaya": (
+        "සූවිසි මහ ගුණය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book18-suvisi-maha-gunaya.jpg",
+    ),
+    "abhidharmaye-mulika-karunu": (
+        "අභිධර්මයේ මූලික කරුණු",
+        "https://rerukanemahanahimi.lk/uploads/covers/cover_1778516443.png",
+    ),
+    "abhidharma-margaya": (
+        "අභිධර්ම මාර්ගය",
+        "https://rerukanemahanahimi.lk/uploads/covers/cover_1778521367.png",
+    ),
+    "chathurarya-sathya": (
+        "චතුරාර්ය සත්‍යය",
+        "https://rerukanemahanahimi.lk/uploads/covers/cover_1778524474.png",
+    ),
+    "punyopadeshaya": (
+        "පු‍ණ්‍යෝපදේශය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book09-punyopadeshaya.png",
+    ),
+    "shasanavatharanaya": (
+        "ශාසනාවතරණය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book28-sasanavatharanaya.png",
+    ),
+    "bodhi-pakshika-dharma": (
+        "බෝධිපාක්ෂික ධර්ම විස්තරය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book13-bodhipakshika-dharma-vistharaya.png",
+    ),
+    "patichcha-samuppada-vivaranaya": (
+        "ප‍ටිච්ච සමුප්පාද විවරනය",
+        "https://rerukanemahanahimi.lk/uploads/covers/cover_1778524122.png",
+    ),
+    "upasampada-sheelaya": (
+        "උපසම්පදා ශීලය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book27-upasampada-sheelaya.png",
+    ),
+    "ubhaya-prathimokshaya": (
+        "උභය ප්‍රාතිමෝක්ෂය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book25-ubaya-pratimokshaya.png",
+    ),
+    "wanchaka-dharma": (
+        "වඤචක ධර්ම හා චිත්තෝපක්ලේශ ධර්ම",
+        "https://rerukanemahanahimi.lk/uploads/covers/book20-vanchaka-dharma.png",
+    ),
+    "vidarshana-bhavana-kramaya": (
+        "විදර්ශනා භාවනා ක්‍රමය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book24-vidarshana-bhavana-kramaya.png",
+    ),
+    "keles-1500": (
+        "කෙලෙස් එක්දහස් පන්සියය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book19-keles-eka-dahas-pansiyaya.png",
+    ),
+    "pohoya-dinaya": (
+        "පොහොය දිනය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book16-pohoya-dinaya.png",
+    ),
+    "bodhi-poojawa": (
+        "බෝධි පූජාව",
+        "https://rerukanemahanahimi.lk/uploads/covers/book15-bodhi-pujava.png",
+    ),
+    "chaththalisakara-vipassana": (
+        "චත්තාළීසාකාර මහා විපස්සනා භාවනාව",
+        "https://rerukanemahanahimi.lk/uploads/covers/book23-chaththaleesakara-vipassana.png",
+    ),
+    "vinaya-karma": (
+        "විනයකර්ම පොත",
+        "https://rerukanemahanahimi.lk/uploads/covers/book26-vinayakarma-potha.png",
+    ),
+    "sathipttana-bhavana-kramaya": (
+        "සතිපට්ඨාන භාවනා ක්‍රමය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book22-satipatthana-bhavana-kramaya.png",
+    ),
+    "nirvana-vinishchaya": (
+        "නිර්වාන විනිශ්චය",
+        "https://rerukanemahanahimi.lk/uploads/covers/book10-nirvana-vinishchaya.png",
+    ),
+    "pattana-pakarana-sannaya": (
+        "පට්ඨාන මහා පකරණ සන්නය",
+        "https://rerukanemahanahimi.lk/uploads/covers/cover_1778523520.jpg",
+    ),
+}
 
 BLOCK_TAGS = {"p": "para", "h2": "heading", "h3": "heading", "h4": "heading", "ol": "list", "ul": "list"}
 INLINE_TAGS = {"b", "strong", "i", "em", "u", "span", "a", "sup", "sub", "br", "suli"}   # flattened to their text; <br> is a line break; "suli" is a typo in pohoya-dinaya/21-1.html
@@ -79,6 +182,12 @@ VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
 NAME_RE = re.compile(r"^[0-9A-Za-z][0-9A-Za-z-]*$")
 SPACE_RE = re.compile(r"[ \t\n\r\f]+")       # HTML white space; no-break and zero-width characters are text
 MARKUP_RE = re.compile(r"<|&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z]+);")
+PICTURES_LIMIT = 1_500_000
+PICTURE_MAX_WIDTH = 800
+COVER_MAX_WIDTH = 400
+PICTURE_DIR = "assets/books/pictures/"
+PICTURE_NAME_RE = re.compile(r"^[0-9A-Za-z][0-9A-Za-z._-]*$")
+JPEG_HEADER = bytes([0xFF, 0xD8, 0xFF])
 PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 BREAK = "\x00"                               # stands for <br> until the text is cleaned
 BACK_LINK = "\u2191"                          # the website's "back to the text" arrow at the end of a footnote
@@ -446,8 +555,8 @@ def _blocks(root, where):
             blocks.append(_table(el, where))
         elif el.tag == "img":
             blocks.append(_image(el))
-        elif el.tag == "p" and not el.cls and _paragraph_images(el, where):
-            blocks += _paragraph_images(el, where)
+        elif el.tag == "p" and not el.cls and (images := _paragraph_images(el, where)):
+            blocks += images
             kind = None
         elif el.tag == "p" and el.cls == "subhead":
             kind = "subhead"
@@ -494,13 +603,14 @@ def _plain_text(el):
     return SPACE_RE.sub(" ", "".join(out)).strip(" ")
 
 
-def parse_index(text, url=None):
-    """url: the index page's address, against which front-matter images are resolved."""
+def parse_index(text, url=None, where="index"):
+    """url: the index page's address, against which front-matter images are resolved;
+    where: the book, e.g. "<slug>/index.html", named in every error."""
     root = _tree(text)
     head = root.find("div", "book-head")
     h1 = head.find("h1") if head else None
     if h1 is None or not _plain_text(h1):
-        raise SyncError("index: no book title (div.book-head h1)")
+        raise SyncError("%s: no book title (div.book-head h1)" % where)
     lead = head.find("p", "lead")
     subtitle = (_plain_text(lead) or None) if lead else None
 
@@ -509,14 +619,14 @@ def parse_index(text, url=None):
     if details is not None:
         summary = details.find("summary")
         body = details.find("div", "front-body")
-        blocks = _blocks(body, "index front matter") if body is not None else []
-        _resolve_images(blocks, url, "index front matter")
+        blocks = _blocks(body, where + " front matter") if body is not None else []
+        _resolve_images(blocks, url, where + " front matter")
         if blocks:
             front = {"title": _plain_text(summary) if summary else "", "blocks": blocks}
 
     nav = root.find("nav", "toc")
     if nav is None:
-        raise SyncError("index: no contents (nav.toc)")
+        raise SyncError("%s: no contents (nav.toc)" % where)
     toc = []
     for row in nav.iter():
         if row.tag != "div" or not row.has_class("toc-row"):
@@ -524,11 +634,11 @@ def parse_index(text, url=None):
         link = row.find("a")
         href = link.attrs.get("href", "") if link else ""
         if not href.endswith(".html") or not NAME_RE.match(href[:-5]):
-            raise SyncError('index: contents row with link "%s"' % href)
+            raise SyncError('%s: contents row with link "%s"' % (where, href))
         try:
             level = int(row.attrs.get("data-level", ""))
         except ValueError:
-            raise SyncError("index: contents row %s without a data-level" % href)
+            raise SyncError("%s: contents row %s without a data-level" % (where, href))
         toc.append({"key": href[:-5], "href": href, "level": level, "title": _plain_text(link)})
     return {"title": _plain_text(h1), "subtitle": subtitle, "front": front, "toc": toc}
 
@@ -719,7 +829,30 @@ def _page_problems(name, pages):
     return problems
 
 
-def _book_problems(out, entry, with_covers):
+def _image_blocks(book):
+    for page in book.get("pages") or []:
+        for block in page.get("blocks") or []:
+            if isinstance(block, dict) and block.get("kind") == "image":
+                yield block
+
+
+def _asset_problems(out, name, book, used):
+    problems = []
+    for block in _image_blocks(book):
+        asset = block.get("asset")
+        if asset is None:
+            continue
+        if (not isinstance(asset, str) or not asset.startswith(PICTURE_DIR)
+                or not PICTURE_NAME_RE.match(asset[len(PICTURE_DIR):])):
+            problems.append("%s: image asset %r is not under %s" % (name, asset, PICTURE_DIR))
+        elif not (out / asset[len("assets/books/"):]).is_file():
+            problems.append("%s: image asset %s is missing" % (name, asset))
+        else:
+            used.add(asset[len("assets/books/"):])
+    return problems
+
+
+def _book_problems(out, entry, with_covers, used):
     slug = entry.get("id")
     name = "%s.json.gz" % slug
     problems = []
@@ -743,7 +876,7 @@ def _book_problems(out, entry, with_covers):
         problems.append("%s: sha256 differs from index.json" % name)
     try:
         book = json.loads(gzip.decompress(gz).decode("utf8"))
-    except (OSError, EOFError, ValueError) as exc:
+    except (OSError, EOFError, ValueError, zlib.error) as exc:
         return problems + ["%s: cannot be unpacked (%s)" % (name, exc)]
     pages = book.get("pages") if isinstance(book, dict) else None
     if not isinstance(pages, list) or not pages or not all(isinstance(p, dict) for p in pages):
@@ -752,6 +885,7 @@ def _book_problems(out, entry, with_covers):
         if book.get(field) != entry.get(field):
             problems.append("%s: %s differs from index.json" % (name, field))
     problems += _page_problems(name, pages)
+    problems += _asset_problems(out, name, book, used)
     chapters = sum(1 for p in pages if p.get("level") == 1 and p.get("key") != "front")
     reading = sum(1 for p in pages if p.get("blocks"))
     if chapters != entry.get("chapters"):
@@ -778,19 +912,66 @@ def check(project):
     expected = {"index.json"} | {"%s.json.gz" % i for i in ids}
     if with_covers:
         expected |= {"covers/%s.png" % i for i in ids}
+    used = set()
+    for entry in entries:
+        try:
+            problems += _book_problems(out, entry, with_covers, used)
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            problems.append("%s.json.gz: cannot be checked (%s)" % (entry.get("id"), exc))
+    expected |= used
     for path in sorted(out.rglob("*")):
         rel = path.relative_to(out).as_posix()
         if path.is_file() and rel not in expected:
             problems.append("%s: unexpected file under assets/books/" % rel)
-    for entry in entries:
-        try:
-            problems += _book_problems(out, entry, with_covers)
-        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
-            problems.append("%s.json.gz: cannot be checked (%s)" % (entry.get("id"), exc))
     return problems
 
 
-# ---------------------------------------------------------------- covers
+# ---------------------------------------------------------------- covers and pictures
+
+
+def _pil():
+    try:
+        from PIL import Image
+        return Image
+    except ImportError:
+        return None
+
+
+def _pixel_size(data):
+    Image = _pil()
+    if Image is None:
+        return None
+    import io
+    with Image.open(io.BytesIO(data)) as im:
+        return im.size
+
+
+def _scaled(data, max_width):
+    """data scaled down to max_width (same format) when wider and PIL is there; else as it is."""
+    Image = _pil()
+    if Image is None:
+        return data
+    import io
+    with Image.open(io.BytesIO(data)) as im:
+        if im.width <= max_width:
+            return data
+        fmt = im.format
+        small = im.resize((max_width, round(im.height * max_width / im.width)), Image.LANCZOS)
+        out = io.BytesIO()
+        small.save(out, format=fmt, **({"optimize": True} if fmt == "PNG" else {"quality": 88}))
+        return out.getvalue()
+
+
+def _jpeg_as_png(data):
+    """A JPEG's pixels as PNG bytes (PIL needed); None for anything else."""
+    Image = _pil()
+    if Image is None or not data.startswith(JPEG_HEADER):
+        return None
+    import io
+    out = io.BytesIO()
+    with Image.open(io.BytesIO(data)) as im:
+        im.convert("RGB").save(out, format="PNG", optimize=True)
+    return out.getvalue()
 
 
 def fetch_covers(project, opener=urllib.request.urlopen):
@@ -806,12 +987,80 @@ def fetch_covers(project, opener=urllib.request.urlopen):
             problems.append("%s: %s" % (slug, exc))
             continue
         if not data.startswith(PNG_HEADER):
+            data = _jpeg_as_png(data)       # the Board serves two covers as JPEG; the app's cover path is .png
+        if data is None:
             problems.append("%s: %s is not a PNG" % (slug, COVERS[slug][1]))
             continue
         covers.mkdir(parents=True, exist_ok=True)
-        (covers / (slug + ".png")).write_bytes(data)
+        (covers / (slug + ".png")).write_bytes(_scaled(data, COVER_MAX_WIDTH))
         time.sleep(PAUSE_SECONDS)
     return problems
+
+
+def _read_books(project):
+    out = assets_dir(project)
+    return [json.loads(gzip.decompress((out / (slug + ".json.gz")).read_bytes()).decode("utf8")) for slug in SLUGS]
+
+
+def _picture_name(slug, src):
+    base = urllib.parse.unquote(pathlib.PurePosixPath(urllib.parse.urlparse(src).path).name)
+    name = "%s-%s" % (slug, base)
+    if not PICTURE_NAME_RE.match(name):
+        raise SyncError("%s: %s: not a picture name this tool keeps" % (slug, src))
+    return name
+
+
+def fetch_pictures(project, opener=urllib.request.urlopen, report=print):
+    """See --pictures. Returns the problems; report gets one line per file and the total."""
+    cache = cache_dir(project) / "_pictures"
+    out = assets_dir(project)
+    books = _read_books(project)
+    served, problems = {}, []
+    for book in books:
+        for block in _image_blocks(book):
+            name = _picture_name(book["id"], block["src"])
+            if name in served:
+                continue
+            path = cache / name
+            try:
+                if path.is_file():
+                    data = path.read_bytes()
+                else:
+                    data = _fetch(block["src"], opener)
+                    cache.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(data)
+                    time.sleep(PAUSE_SECONDS)
+            except SyncError as exc:
+                problems.append(str(exc))
+                continue
+            served[name] = data
+            size = _pixel_size(data)
+            report("%s\t%d bytes\t%s" % (name, len(data), "%dx%d" % size if size else "size unknown"))
+    total = sum(len(d) for d in served.values())
+    report("total\t%d bytes in %d files" % (total, len(served)))
+    if problems or total >= PICTURES_LIMIT:
+        why = "some pictures failed" if problems else "%d bytes is not under %d" % (total, PICTURES_LIMIT)
+        report("not bundled: " + why)
+        return problems
+    pics = out / "pictures"
+    pics.mkdir(parents=True, exist_ok=True)
+    for name, data in served.items():
+        (pics / name).write_bytes(_scaled(data, PICTURE_MAX_WIDTH))
+    for book in books:
+        for block in _image_blocks(book):
+            block["asset"] = PICTURE_DIR + _picture_name(book["id"], block["src"])
+    index = json.loads((out / "index.json").read_text(encoding="utf8"))
+    write_bundle(project, books, index["source"]["fetched"])
+    report("bundled %d pictures" % len(served))
+    return problems
+
+
+def _kept_assets(project):
+    """src -> asset of the image blocks in the bundle now on disk ({} if there is none)."""
+    try:
+        return {b["src"]: b["asset"] for book in _read_books(project) for b in _image_blocks(book) if b.get("asset")}
+    except (OSError, ValueError, KeyError, EOFError, zlib.error):
+        return {}
 
 
 # ---------------------------------------------------------------- main
@@ -821,10 +1070,16 @@ def fetch_all(project, opener=urllib.request.urlopen):
     cache = cache_dir(project)
     fetched = datetime.date.today().isoformat()
     books = []
+    keep = _kept_assets(project)
     for slug in SLUGS:
-        index = parse_index(cached_page(cache, slug, "index.html", opener), BASE_URL + slug + "/index.html")
+        index = parse_index(cached_page(cache, slug, "index.html", opener), BASE_URL + slug + "/index.html",
+                            slug + "/index.html")
         pages = {row["href"]: cached_page(cache, slug, row["href"], opener) for row in index["toc"]}
         books.append(build_book(slug, index, pages, fetched))
+    for book in books:
+        for block in _image_blocks(book):
+            if block["src"] in keep:
+                block["asset"] = keep[block["src"]]
     return write_bundle(project, books, fetched)
 
 
@@ -835,9 +1090,10 @@ def main(argv=None):
     ap.add_argument("--survey", action="store_true")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--covers", action="store_true")
+    ap.add_argument("--pictures", action="store_true")
     args = ap.parse_args(argv)
-    if not (args.fetch or args.survey or args.check or args.covers):
-        ap.error("give at least one of --fetch, --survey, --check, --covers")
+    if not (args.fetch or args.survey or args.check or args.covers or args.pictures):
+        ap.error("give at least one of --fetch, --survey, --check, --covers, --pictures")
     project = pathlib.Path(args.project)
     code = 0
     if args.fetch:
@@ -849,6 +1105,15 @@ def main(argv=None):
         print("wrote %d books to %s" % (len(index["books"]), assets_dir(project)))
     if args.covers:
         problems = fetch_covers(project)
+        for line in problems:
+            print(line)
+        code = 1 if problems else code
+    if args.pictures:
+        try:
+            problems = fetch_pictures(project)
+        except (SyncError, OSError, ValueError) as exc:
+            print(exc)
+            return 1
         for line in problems:
             print(line)
         code = 1 if problems else code
