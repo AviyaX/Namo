@@ -119,6 +119,38 @@ def _split_notes(spans: list[dict]) -> list[list[dict]]:
     return [spans]
 
 
+def _is_english_title(ln: dict) -> bool:
+    """An unrecognised Calibri line (13 to 19 pt, below the 26 pt closing flourish) that is italic, or regular but larger than the 12 pt English."""
+    return (ln["kind"] == "other" and ln["font"] in ("Calibri", "Calibri-Italic", "Calibri-BoldItalic")
+            and (ln["font"] != "Calibri" or ln["size"] > 12) and 13 <= ln["size"] < 20)
+
+
+def _promote_titles(lines: list[dict]) -> list[dict]:
+    """Layout rule: a Pali line followed by such an English title line (and no Roman line before the
+    next Pali line) is a heading; the English line becomes its heading_en."""
+    out: list[dict] = []
+    i = 0
+    while i < len(lines):
+        ln = lines[i]
+        j = i + 1
+        while j < len(lines) and lines[j]["kind"] == "break":
+            j += 1
+        if (ln["kind"] == "pali_si" or (ln["kind"] == "heading" and "heading_en" not in ln)) \
+                and j < len(lines) and _is_english_title(lines[j]):
+            k = j + 1
+            while k < len(lines) and lines[k]["kind"] not in ("pali_si", "roman"):
+                k += 1
+            if k >= len(lines) or lines[k]["kind"] != "roman":
+                ln["kind"] = "heading"
+                ln["heading_en"] = lines[j]["text"]
+                out.append(ln)
+                i = j + 1
+                continue
+        out.append(ln)
+        i += 1
+    return out
+
+
 def build_lines(rows: list[dict], problems: list, pdf_page: int = 0) -> list[dict]:
     """Turn a page's raw rows into classified lines (digit marks dropped, titles attached)."""
     out: list[dict] = []
@@ -169,6 +201,7 @@ def build_lines(rows: list[dict], problems: list, pdf_page: int = 0) -> list[dic
                 continue
         merged.append(ln)
         i += 1
+    merged = _promote_titles(merged)
     for n, ln in enumerate(merged):
         for p in ln.pop("_problems"):
             problems.append({"pdf_page": pdf_page, "line": n, "problem": p})

@@ -16,23 +16,7 @@
   ],
   "note": "Converted from FM Bindumathi with tools/fm_to_unicode.py; nothing corrected"
  },
- "conversion_problems": [
-  {
-   "pdf_page": 14,
-   "line": 35,
-   "problem": "unmapped character U+005E '^'"
-  },
-  {
-   "pdf_page": 14,
-   "line": 35,
-   "problem": "unmapped character U+0026 '&'"
-  },
-  {
-   "pdf_page": 18,
-   "line": 1,
-   "problem": "unmapped character U+02C9 'ˉ'"
-  }
- ],
+ "conversion_problems": [],
  "pages": [
   {
    "pdf_page": 1,
@@ -2622,16 +2606,11 @@
      "text": ""
     },
     {
-     "kind": "pali_si",
+     "kind": "heading",
      "font": "FMBindumathix",
      "size": 19.0,
-     "text": "ත්‍රිවිධ චෛත්‍ය වන්දනාව"
-    },
-    {
-     "kind": "other",
-     "font": "Calibri-BoldItalic",
-     "size": 14.0,
-     "text": "Homage to the three main objects of veneration"
+     "text": "ත්‍රිවිධ චෛත්‍ය වන්දනාව",
+     "heading_en": "Homage to the three main objects of veneration"
     },
     {
      "kind": "break",
@@ -2775,10 +2754,8 @@
     },
     {
      "index": 1,
-     "heading": null,
-     "pali_si": [
-      "ත්‍රිවිධ චෛත්‍ය වන්දනාව"
-     ],
+     "heading": "ත්‍රිවිධ චෛත්‍ය වන්දනාව",
+     "pali_si": [],
      "roman": [],
      "english": [],
      "notes": []
@@ -3501,13 +3478,8 @@
      "kind": "heading",
      "font": "FMBindumathix",
      "size": 20.0,
-     "text": "තෙරුවන් සමා කර ගැනීම"
-    },
-    {
-     "kind": "other",
-     "font": "Calibri",
-     "size": 15.0,
-     "text": "Requesting forgiveness from the triple gem"
+     "text": "තෙරුවන් සමා කර ගැනීම",
+     "heading_en": "Requesting forgiveness from the triple gem"
     },
     {
      "kind": "break",
@@ -3660,16 +3632,11 @@
      "text": ""
     },
     {
-     "kind": "pali_si",
+     "kind": "heading",
      "font": "FMBindumathix",
      "size": 18.0,
-     "text": "මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම"
-    },
-    {
-     "kind": "other",
-     "font": "Calibri-BoldItalic",
-     "size": 15.0,
-     "text": "Sharing merits with departed relatives."
+     "text": "මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම",
+     "heading_en": "Sharing merits with departed relatives."
     },
     {
      "kind": "break",
@@ -3681,7 +3648,7 @@
      "kind": "pali_si",
      "font": "FMBindumathix",
      "size": 18.0,
-     "text": "ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ ⟦^⟧තුන් වරක්⟦&⟧"
+     "text": "ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ (තුන් වරක්)"
     },
     {
      "kind": "roman",
@@ -3778,10 +3745,8 @@
     },
     {
      "index": 5,
-     "heading": null,
-     "pali_si": [
-      "මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම"
-     ],
+     "heading": "මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම",
+     "pali_si": [],
      "roman": [],
      "english": [],
      "notes": []
@@ -3790,7 +3755,7 @@
      "index": 6,
      "heading": null,
      "pali_si": [
-      "ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ ⟦^⟧තුන් වරක්⟦&⟧"
+      "ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ (තුන් වරක්)"
      ],
      "roman": [
       "Idan mē ñātīnan hotu - sukitā hontu ñātayo"
@@ -4775,7 +4740,7 @@
      "kind": "pali_si",
      "font": "FMBindumathix",
      "size": 19.0,
-     "text": "සබ්බාකාරේන බුජ්⟦ˉ⟧ත්වා - ඒකෝ සබ්බඤ්ඤුතං ගතෝ"
+     "text": "සබ්බාකාරේන බුජ්ඣිත්වා - ඒකෝ සබ්බඤ්ඤුතං ගතෝ"
     },
     {
      "kind": "roman",
@@ -4970,7 +4935,7 @@
      "heading": null,
      "pali_si": [
       "සබ්බකාල ගතේ ධම්මේ - සබ්බේ සම්මා සයං මුනී",
-      "සබ්බාකාරේන බුජ්⟦ˉ⟧ත්වා - ඒකෝ සබ්බඤ්ඤුතං ගතෝ"
+      "සබ්බාකාරේන බුජ්ඣිත්වා - ඒකෝ සබ්බඤ්ඤුතං ගතෝ"
      ],
      "roman": [
       "Sabbakāla gathē dhammē - sabbē sammā sayan muni",

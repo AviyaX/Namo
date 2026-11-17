@@ -80,6 +80,22 @@ class Lines(unittest.TestCase):
         self.assertEqual(got[0]["heading_en"], "BOWING TO THE TRIPLE GEM")
 
 
+class TitleRule(unittest.TestCase):
+    def _page(self, *rows):
+        return ex.build_lines([{"y": 100.0 + 30 * i, "spans": sp} for i, sp in enumerate(rows)], [])
+
+    def test_pali_line_before_english_title_is_a_heading(self):
+        got = self._page([span(FM, 19, "iqÆ")], [span("Calibri-BoldItalic", 15, "Sharing merits.")],
+                         [span(FM, 19, "idOq")], [span("Calibri-Bold", 18, "Idan me")])
+        self.assertEqual([g["kind"] for g in got], ["heading", "pali_si", "roman"])
+        self.assertEqual(got[0]["heading_en"], "Sharing merits.")
+
+    def test_title_rule_leaves_a_pali_roman_pair_alone(self):
+        got = self._page([span(FM, 19, "idOq")], [span("Calibri-Bold", 18, "Idan me")],
+                         [span("Calibri", 12, "Homage")])
+        self.assertEqual([g["kind"] for g in got], ["pali_si", "roman", "english"])
+
+
 class Units(unittest.TestCase):
     def test_units_split_at_each_pali_run(self):
         lines = [line("pali_si", "a"), line("pali_si", "b"), line("roman", "r"), line("english", "e"),
@@ -106,7 +122,7 @@ class RealPdf(unittest.TestCase):
     @unittest.skipUnless(os.path.exists(PDF), "booklet PDF not present")
     def test_real_pdf_page_3(self):
         data = ex.extract(PDF)
-        self.assertEqual([p for p in data["conversion_problems"] if p["pdf_page"] == 3], [])
+        self.assertEqual(data["conversion_problems"], [])
         units = data["pages"][2]["units"]
         self.assertTrue(any(u["pali_si"] == ["බුද්ධං නමාමි"] and u["roman"] == ["Buddhan namāmi"]
                             and u["english"] == ["Homage to the Buddha"] and u["notes"] == ["(Bow)"]

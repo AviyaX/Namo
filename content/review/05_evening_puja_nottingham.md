@@ -448,8 +448,7 @@ Units:
 | roman | Gacchanti sabbe maraṇaṃ ahañ ca |
 | english | All beings, including myself must die. |
 | break |  |
-| pali_si | ත්‍රිවිධ චෛත්‍ය වන්දනාව |
-| other | Homage to the three main objects of veneration |
+| heading | ත්‍රිවිධ චෛත්‍ය වන්දනාව  _[Homage to the three main objects of veneration]_ |
 | break |  |
 | pali_si | වන්දාමි චේතියං සබ්බං - සබ්බ ඨානේසු පතිට්ඨිතං |
 | pali_si | සාරීරික ධාතු මහා බෝධිං - බුද්ධ රූපං සකලං සදා |
@@ -473,7 +472,7 @@ Units:
 Units:
 
 - unit 0: Pali 4, Roman 4, English 4, notes 0
-- unit 1: Pali 1, Roman 0, English 0, notes 0
+- unit 1: heading: ත්‍රිවිධ චෛත්‍ය වන්දනාව, Pali 0, Roman 0, English 0, notes 0
 - unit 2: Pali 2, Roman 2, English 2, notes 0
 - unit 3: heading: බෝධි වන්දනය, Pali 0, Roman 0, English 0, notes 0
 - unit 4: Pali 2, Roman 2, English 2, notes 0
@@ -594,8 +593,7 @@ Units:
 | roman | Anukampan upādāya - patiganhātu muttaman. |
 | english | Out of great compassion, would you accept it, The Noble one. |
 | break |  |
-| heading | තෙරුවන් සමා කර ගැනීම |
-| other | Requesting forgiveness from the triple gem |
+| heading | තෙරුවන් සමා කර ගැනීම  _[Requesting forgiveness from the triple gem]_ |
 | break |  |
 | pali_si | කායේන වාචා චිත්තේන - පමාදේන මයා කතං |
 | pali_si | අච්චයං ඛම මේ භන්තේ - භූරිපඤ්ඤ තථාගත |
@@ -621,10 +619,9 @@ Units:
 | roman | Accayan khama mē sangha - supatipanna anuttara. |
 | english | any wrong-doing, Forgive me Sangha, endowed with good conduct and noble |
 | break |  |
-| pali_si | මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම |
-| other | Sharing merits with departed relatives. |
+| heading | මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම  _[Sharing merits with departed relatives.]_ |
 | break |  |
-| pali_si | ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ ⟦^⟧තුන් වරක්⟦&⟧ |
+| pali_si | ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ (තුන් වරක්) |
 | roman | Idan mē ñātīnan hotu - sukitā hontu ñātayo |
 | note | (Three times) |
 | english | Let this merit accrue to my departed relatives and may they be happy. |
@@ -636,7 +633,7 @@ Units:
 - unit 2: Pali 2, Roman 2, English 2, notes 0
 - unit 3: Pali 2, Roman 2, English 2, notes 0
 - unit 4: Pali 2, Roman 2, English 2, notes 0
-- unit 5: Pali 1, Roman 0, English 0, notes 0
+- unit 5: heading: මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම, Pali 0, Roman 0, English 0, notes 0
 - unit 6: Pali 1, Roman 1, English 1, notes 1
 
 ---
@@ -803,7 +800,7 @@ Units:
 | kind | text |
 |---|---|
 | pali_si | සබ්බකාල ගතේ ධම්මේ - සබ්බේ සම්මා සයං මුනී |
-| pali_si | සබ්බාකාරේන බුජ්⟦ˉ⟧ත්වා - ඒකෝ සබ්බඤ්ඤුතං ගතෝ |
+| pali_si | සබ්බාකාරේන බුජ්ඣිත්වා - ඒකෝ සබ්බඤ්ඤුතං ගතෝ |
 | roman | Sabbakāla gathē dhammē - sabbē sammā sayan muni |
 | english | The Buddha has perfectly realised all phenomena related to all three times. |
 | roman | sabbākārēna bujjhitvā - eko sabbaññutan gatho |
@@ -1611,8 +1608,4 @@ Units:
 
 ## Conversion problems
 
-| PDF page | line | problem |
-|---|---|---|
-| 14 | 35 | unmapped character U+005E '^' |
-| 14 | 35 | unmapped character U+0026 '&' |
-| 18 | 1 | unmapped character U+02C9 'ˉ' |
+_None._
