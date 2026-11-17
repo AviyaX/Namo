@@ -16,6 +16,7 @@ import re
 import shutil
 import tempfile
 import unittest
+import urllib.error
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 _SPEC = importlib.util.spec_from_file_location("sync_books", ROOT / "tools" / "sync_books.py")
@@ -396,6 +397,20 @@ class CachedPageTest(unittest.TestCase):
             self.assertEqual(calls[0].get_header("User-agent"), tool.USER_AGENT)
             self.assertEqual((cache / "s" / "2.html").read_text(encoding="utf8"), "<p>බුද්ධ</p>")
 
+    def test_a_client_error_is_not_asked_again(self):
+        calls = []
+
+        def opener(request, timeout=None):
+            calls.append(request)
+            raise urllib.error.HTTPError(request.full_url, 404, "Not Found", {}, None)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(tool.SyncError) as cm:
+                tool.cached_page(pathlib.Path(tmp), "s", "9.html", opener=opener)
+        self.assertEqual(len(calls), 1)
+        self.assertIn("404", str(cm.exception))
+        self.assertIn(tool.BASE_URL + "s/9.html", str(cm.exception))
+
     def test_cached_page_refuses_odd_names(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(tool.SyncError):
@@ -501,6 +516,21 @@ class CheckTest(unittest.TestCase):
             block["ordered"] = block.pop("marker") == "number"
         self.assert_named(self.problems(old_list), gz, "marker")
 
+        def own_number(book):
+            book["pages"][2]["blocks"][2]["items"] = ["1. i", "(2) j", "3) k"]
+        problems = self.problems(own_number)
+        self.assertEqual(len([p for p in problems if "its own number" in p]), 3, problems)
+
+        def own_number_bulleted(book):
+            book["pages"][2]["blocks"][2].update(marker="bullet", start=4, items=["4.x"])
+        self.assert_named(self.problems(own_number_bulleted), gz, "its own number")
+
+        def other_numbers(book):
+            # Not the item's own number, or a list that draws no marker: the source's text.
+            book["pages"][2]["blocks"][2]["items"] = ["2. i", "1.5 j", "12. k"]
+            book["pages"][2]["blocks"].append({"kind": "list", "marker": "none", "start": 1, "items": ["1. x"]})
+        self.assertEqual(self.problems(other_numbers), [])
+
         def level_jump(book):
             book["pages"][2]["level"] = 3
         self.assert_named(self.problems(level_jump), gz, "level")
@@ -542,6 +572,98 @@ class CheckTest(unittest.TestCase):
     def test_check_unreadable_index(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assert_named(tool.check(pathlib.Path(tmp)), "index.json", "cannot be read")
+
+
+class VerifyCacheTest(unittest.TestCase):
+    """--verify-cache on a bundle built from the fixture pages and a cache of the same pages."""
+
+    def project(self, tmp, mutate=None):
+        project = pathlib.Path(tmp)
+        cache = tool.cache_dir(project)
+        shutil.copytree(FIX / "nested", cache / NESTED_SLUG)
+        books = [nested_book()]
+        # Footnotes with back-links, <suli>, a list from 34, a table with <p>s in its cells.
+        for slug, key in [("abhidharmaye-mulika-karunu", "12"), ("pohoya-dinaya", "21-1"),
+                          ("punyopadeshaya", "39-23")]:
+            (cache / slug).mkdir(parents=True)
+            text = read(FIX / slug / (key + ".html"))
+            (cache / slug / (key + ".html")).write_text(text, encoding="utf8")
+            url = tool.BASE_URL + slug + "/" + key + ".html"
+            books.append({"id": slug, "title": slug, "subtitle": None,
+                          "source": {"url": url, "fetched": FETCHED},
+                          "pages": [{"n": 1, "key": key, "level": 1, "title": key, "url": url,
+                                     "blocks": tool.parse_page(text, slug + "/" + key + ".html")}]})
+        if mutate:
+            mutate(books)
+        tool.write_bundle(project, books, FETCHED)
+        return project
+
+    def run_verify(self, project):
+        lines = []
+        pages, differing = tool.verify_cache(project, report=lines.append)
+        return pages, differing, lines
+
+    def test_the_fixture_bundle_matches_its_cache(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pages, differing, lines = self.run_verify(self.project(tmp))
+        self.assertEqual((pages, differing), (9, 0))
+        self.assertEqual(lines, ["verify-cache: 9 pages, 0 differing"])
+
+    def test_a_planted_difference_is_reported(self):
+        def plant(books):
+            page = next(p for p in books[0]["pages"] if p["key"] == "6-12")
+            block = next(b for b in page["blocks"] if b["kind"] == "para")
+            block["text"] = block["text"][:5] + "x" + block["text"][5:]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            project = self.project(tmp, plant)
+            pages, differing, lines = self.run_verify(project)
+            self.assertEqual((pages, differing), (9, 1))
+            self.assertEqual(len(lines), 2, lines)
+            self.assertTrue(lines[0].startswith(NESTED_SLUG + "/6-12.html: page 5 differs at character "), lines)
+            self.assertEqual(lines[1], "verify-cache: 9 pages, 1 differing")
+
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(tool.main([str(project), "--verify-cache"]), 1)
+            self.assertIn("6-12.html", out.getvalue())
+
+    def test_a_footnote_back_link_left_in_is_a_difference(self):
+        # The collector leaves the back-link out, so a bundle that kept it would differ.
+        def keep_arrow(books):
+            notes = next(b for b in books[1]["pages"][0]["blocks"] if b["kind"] == "footnotes")
+            notes["items"][0] += " " + tool.BACK_LINK
+
+        with tempfile.TemporaryDirectory() as tmp:
+            _, differing, lines = self.run_verify(self.project(tmp, keep_arrow))
+        self.assertEqual(differing, 1)
+        self.assertTrue(lines[0].startswith("abhidharmaye-mulika-karunu/12.html: "), lines)
+
+    def test_a_missing_page_or_main_is_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = self.project(tmp)
+            cache = tool.cache_dir(project)
+            (cache / NESTED_SLUG / "8-1-1.html").unlink()
+            (cache / "pohoya-dinaya" / "21-1.html").write_text("<p>no main</p>", encoding="utf8")
+            _, differing, lines = self.run_verify(project)
+            self.assertEqual(differing, 2)
+            self.assert_line(lines, NESTED_SLUG + "/8-1-1.html: cannot be compared")
+            self.assert_line(lines, "pohoya-dinaya/21-1.html: no main.page.prose")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(tool.main([str(project), "--verify-cache"]), 1)
+
+    def assert_line(self, lines, start):
+        self.assertTrue([line for line in lines if line.startswith(start)], lines)
+
+    def test_the_collector_stops_at_main_with_an_inner_tag_open(self):
+        page = ('<main class="page prose"><div class="page-title">T</div><p>a <b>b</p>'
+                '<nav>n</nav><p>c<br>d<a href="#footnote-ref-1">x</a></p></div></main><p>after</p>')
+        self.assertEqual(tool._cache_chars(page, front=False), "abcd")
+        front = ('<details class="front-matter"><summary>S</summary><div class="front-body">'
+                 '<p>a<p>b</div><p>c</details><p>after</p>')
+        self.assertEqual(tool._cache_chars(front, front=True), "ab")
+        self.assertIsNone(tool._cache_chars("<p>x</p>", front=False))
 
 
 class SurveyTest(unittest.TestCase):

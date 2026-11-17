@@ -1,7 +1,8 @@
 """Turn the pitaka.lk pages of Ven. Rerukane Chandawimala's books into the app's book files, and check them.
 
 Usage (from anywhere; <project> is the project folder):
-  python -I -X utf8 tools/sync_books.py <project> [--fetch] [--survey] [--check] [--covers] [--pictures]
+  python -I -X utf8 tools/sync_books.py <project> [--fetch] [--survey] [--check] [--verify-cache]
+                                                   [--covers] [--pictures]
 
   --fetch    For each of the 23 books, read the index page and every page its
              contents link to from <project>/source_material/pitaka_lk_books/
@@ -14,6 +15,15 @@ Usage (from anywhere; <project> is the project folder):
              tag<TAB>class<TAB>count<TAB>first page, most frequent first.
   --check    No network. Prints OK and exits 0, or one line per problem and
              exits 1.
+  --verify-cache
+             No network. For every page in assets/books/, compares the
+             characters of its blocks with the text of the cached page's
+             main.page.prose (div.front-body for the front matter), all white
+             space removed, leaving out nav, dialog, button, script, svg,
+             style, div.page-title and the footnote back-links. The cached
+             pages are read by a collector of its own, not by the parser that
+             made the books. Prints one line per page that differs and a
+             summary; exits 1 if any page differs or cannot be read.
   --covers   Download the covers listed in COVERS to assets/books/covers/ (a cover
              wider than COVER_MAX_WIDTH is scaled down, and a JPEG is turned into a
              PNG, if PIL is installed).
@@ -40,6 +50,7 @@ import json
 import pathlib
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import zlib
@@ -176,7 +187,6 @@ INLINE_TAGS = {"b", "strong", "i", "em", "u", "span", "a", "sup", "sub", "br", "
 SKIP_TAGS_IN_MAIN = {"nav", "dialog", "button", "script", "svg", "style"}        # plus div.page-title
 
 TEXT_KINDS = ("heading", "subhead", "para")
-KINDS = TEXT_KINDS + ("gatha", "list", "footnotes", "table", "image")
 MARKERS = ("number", "bullet", "none")
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 NAME_RE = re.compile(r"^[0-9A-Za-z][0-9A-Za-z-]*$")
@@ -227,6 +237,8 @@ def _fetch(url, opener):
             with opener(_request(url), timeout=60) as response:
                 return response.read()
         except OSError as exc:
+            if isinstance(exc, urllib.error.HTTPError) and 400 <= exc.code < 500:
+                raise SyncError("%s: %s" % (url, exc))      # the page is not there; asking again will not help
             last = exc
             if attempt < 3:
                 time.sleep(2 * (attempt + 1))
@@ -770,7 +782,7 @@ def _block_problems(where, block):
         problems = []
         if block.get("marker") not in MARKERS or not isinstance(block.get("start"), int):
             problems.append("%s: list without a known marker and a start" % where)
-        return problems + _strings_problems(where, "list", block.get("items"))
+        return problems + _strings_problems(where, "list", block.get("items")) + _own_number_problems(where, block)
     if kind == "footnotes":
         return _strings_problems(where, "footnotes", block.get("items"))
     if kind == "table":
@@ -795,6 +807,20 @@ def _block_problems(where, block):
             problems.append("%s: markup left in the text: %r" % (where, alt[:60]))
         return problems
     return ["%s: unknown block kind %r" % (where, kind)]
+
+
+def _own_number_problems(where, block):
+    """A list the reader numbers or bullets itself must not start an item with the number
+    it will be drawn with ("3." or "(3)" for the third item of a list from 1): the source
+    does not have it, so the parser must not have made it."""
+    start, items = block.get("start"), block.get("items")
+    if block.get("marker") not in ("number", "bullet") or not isinstance(start, int) or not isinstance(items, list):
+        return []
+    problems = []
+    for i, item in enumerate(items):
+        if isinstance(item, str) and re.match(r"\(?%d[.)]" % (start + i), item):
+            problems.append("%s: list item %d starts with its own number: %r" % (where, start + i, item[:60]))
+    return problems
 
 
 def _page_problems(name, pages):
@@ -924,6 +950,135 @@ def check(project):
         if path.is_file() and rel not in expected:
             problems.append("%s: unexpected file under assets/books/" % rel)
     return problems
+
+
+# ---------------------------------------------------------------- verify the cache
+
+VERIFY_SKIP = {"nav", "dialog", "button", "script", "svg", "style"}
+VERIFY_VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+VERIFY_SPACE = re.compile(r"[ \t\n\r\f]+")
+
+
+class _TextCollector(html.parser.HTMLParser):
+    """The text inside the first element that `is_root(tag, classes)` accepts, leaving out the
+    subtrees --verify-cache leaves out. Written apart from _TreeBuilder on purpose, so the
+    check does not share the parser's mistakes.
+
+    Inside the root, an end tag closes the latest open element of that name (an end tag with
+    no open element of its name is ignored), and void tags such as <br> and <img> never open
+    one. The root ends at its own end tag, or at the first `stop` end tag (</main> or
+    </details>) even if an inner element is still open then."""
+
+    def __init__(self, is_root, stop):
+        super().__init__(convert_charrefs=True)
+        self.is_root = is_root
+        self.stop = stop
+        self.open = None          # None before the root, then [(tag, skipped)], the root first
+        self.done = False
+        self.skipping = 0
+        self.out = []
+
+    def handle_starttag(self, tag, attrs):
+        if self.done:
+            return
+        attrs = dict(attrs)
+        classes = (attrs.get("class") or "").split()
+        if self.open is None:
+            if self.is_root(tag, classes):
+                self.open = [(tag, False)]
+            return
+        if tag in VERIFY_VOID:
+            return
+        skipped = (tag in VERIFY_SKIP or (tag == "div" and "page-title" in classes)
+                   or (tag == "a" and (attrs.get("href") or "").startswith("#footnote-ref")))
+        self.open.append((tag, skipped))
+        self.skipping += skipped
+
+    def handle_startendtag(self, tag, attrs):
+        pass          # <br/>, <img/>: no text of their own
+
+    def handle_endtag(self, tag):
+        if self.done or self.open is None:
+            return
+        if tag in self.stop:
+            self.done = True
+            return
+        for i in range(len(self.open) - 1, -1, -1):
+            if self.open[i][0] == tag:
+                self.skipping -= sum(skipped for _, skipped in self.open[i:])
+                del self.open[i:]
+                self.done = not self.open
+                return
+
+    def handle_data(self, data):
+        if self.open and not self.done and not self.skipping:
+            self.out.append(data)
+
+
+def _cache_chars(text, front):
+    """The cached page's text with white space removed; None when it has no root."""
+    if front:
+        collector = _TextCollector(lambda tag, cls: tag == "div" and "front-body" in cls, {"details"})
+    else:
+        collector = _TextCollector(lambda tag, cls: tag == "main" and {"page", "prose"} <= set(cls), {"main"})
+    collector.feed(text)
+    collector.close()
+    if collector.open is None:
+        return None
+    return VERIFY_SPACE.sub("", "".join(collector.out))
+
+
+def _block_chars(blocks):
+    out = []
+    for block in blocks:
+        kind = block["kind"]
+        if kind in TEXT_KINDS:
+            out.append(block["text"])
+        elif kind == "gatha":
+            out += block["lines"]
+        elif kind in ("list", "footnotes"):
+            out += block["items"]
+        elif kind == "table":
+            out += [cell for row in block["rows"] for cell in row]
+        elif kind != "image":
+            raise ValueError("unknown block kind %r" % kind)
+    return VERIFY_SPACE.sub("", "".join(out))
+
+
+def verify_cache(project, report=print):
+    """See --verify-cache. Reads only the cache and assets/books/. Returns (pages, differing);
+    report gets one line per differing page, then the summary."""
+    cache, out = cache_dir(project), assets_dir(project)
+    index = json.loads((out / "index.json").read_text(encoding="utf8"))
+    pages = differing = 0
+    for entry in index["books"]:
+        slug = entry["id"]
+        book = json.loads(gzip.decompress((out / (slug + ".json.gz")).read_bytes()).decode("utf8"))
+        for page in book["pages"]:
+            pages += 1
+            front = page["key"] == "front"
+            name = "index.html" if front else page["key"] + ".html"
+            where = "%s/%s" % (slug, name)
+            try:
+                if not NAME_RE.match(slug) or not NAME_RE.match(name[:-5]):
+                    raise ValueError("not a page name this tool reads")
+                want = _cache_chars((cache / slug / name).read_text(encoding="utf8"), front)
+                got = _block_chars(page["blocks"])
+            except (OSError, UnicodeDecodeError, ValueError, KeyError, TypeError) as exc:
+                differing += 1
+                report("%s: cannot be compared (%s)" % (where, exc))
+                continue
+            if want is None:
+                differing += 1
+                report("%s: no %s in the cached page" % (where, "div.front-body" if front else "main.page.prose"))
+            elif got != want:
+                differing += 1
+                at = next((i for i, (a, b) in enumerate(zip(got, want)) if a != b), min(len(got), len(want)))
+                report("%s: page %d differs at character %d (book %d, cache %d): book %r, cache %r"
+                       % (where, page["n"], at, len(got), len(want), got[max(0, at - 10):at + 20],
+                          want[max(0, at - 10):at + 20]))
+    report("verify-cache: %d pages, %d differing" % (pages, differing))
+    return pages, differing
 
 
 # ---------------------------------------------------------------- covers and pictures
@@ -1089,11 +1244,12 @@ def main(argv=None):
     ap.add_argument("--fetch", action="store_true")
     ap.add_argument("--survey", action="store_true")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--verify-cache", action="store_true")
     ap.add_argument("--covers", action="store_true")
     ap.add_argument("--pictures", action="store_true")
     args = ap.parse_args(argv)
-    if not (args.fetch or args.survey or args.check or args.covers or args.pictures):
-        ap.error("give at least one of --fetch, --survey, --check, --covers, --pictures")
+    if not (args.fetch or args.survey or args.check or args.verify_cache or args.covers or args.pictures):
+        ap.error("give at least one of --fetch, --survey, --check, --covers, --pictures, --verify-cache")
     project = pathlib.Path(args.project)
     code = 0
     if args.fetch:
@@ -1121,6 +1277,13 @@ def main(argv=None):
         rows = sorted(survey(cache_dir(project)).items(), key=lambda kv: (-kv[1][0], kv[0]))
         for (tag, cls), (count, first) in rows:
             print("%s\t%s\t%d\t%s" % (tag, cls, count, first))
+    if args.verify_cache:
+        try:
+            _, differing = verify_cache(project)
+        except (OSError, ValueError, KeyError, TypeError, EOFError, zlib.error) as exc:
+            print("verify-cache: the bundle cannot be read (%s)" % exc)
+            return 1
+        code = 1 if differing else code
     if args.check or args.fetch:
         problems = check(project)
         for line in problems:
