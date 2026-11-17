@@ -117,6 +117,45 @@ void main() {
     expect(v.englishSource, isNull);
   });
 
+  test('a verse reads its own source and sinhala_source', () {
+    const rec = {
+      'name': 'N',
+      'locator': 'L',
+      'collected': 'C',
+      'translator': 'T',
+    };
+    final v = Verse.fromJson({
+      'id': 'x',
+      'source': rec,
+      'sinhala_source': {...rec, 'name': 'M'},
+    });
+    expect(v.source!.name, 'N');
+    expect(v.sinhalaSource!.name, 'M');
+    final bare = Verse.fromJson({'id': 'y'});
+    expect(bare.source, isNull);
+    expect(bare.sinhalaSource, isNull);
+    final section = Section.fromJson({
+      'id': 's',
+      'number': 1,
+      'heading': 'H',
+      'source': {...rec, 'name': 'S'},
+    });
+    expect(v.sourceOr(section).name, 'N');
+    expect(bare.sourceOr(section).name, 'S');
+  });
+
+  test('a section reads its notes', () {
+    final s = Section.fromJson({
+      'id': 's',
+      'number': 1,
+      'heading': 'H',
+      'notes': ['a'],
+    });
+    expect(s.notes, ['a']);
+    final none = Section.fromJson({'id': 's', 'number': 1, 'heading': 'H'});
+    expect(none.notes, isEmpty);
+  });
+
   test('reading languages parse from their codes', () {
     expect(ReadingLanguage.fromCode('si'), ReadingLanguage.sinhala);
     expect(ReadingLanguage.fromCode('en'), ReadingLanguage.english);

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/surface_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -13,12 +14,16 @@ import '../support/pump_app.dart';
 import '../support/test_content.dart';
 import '../tipitaka/tipitaka_support.dart';
 
-Future<void> openSources(WidgetTester t, {AssetBytes? load}) async {
+Future<void> openSources(
+  WidgetTester t, {
+  AssetBytes? load,
+  Library? content,
+}) async {
   // The bundled file is read by real I/O, which fake-async time cannot
   // advance; read it first and hand the app the finished library.
-  final library = await t.runAsync(
-    () => AssetContentRepository(rootBundle).load(),
-  );
+  final library =
+      content ??
+      await t.runAsync(() => AssetContentRepository(rootBundle).load());
   await pumpApp(
     t,
     overrides: [
@@ -50,6 +55,36 @@ int keyed(String prefix) => find
     )
     .evaluate()
     .length;
+
+Library _checkLibrary({required List<String> verseNotes}) => Library.fromJson({
+  'categories': [
+    {
+      'id': 'c1',
+      'title': 'C',
+      'subtitle': 'c',
+      'readings': [
+        {
+          'id': 'r1',
+          'title': 'R',
+          'sections': [
+            {
+              'id': 's01',
+              'number': 1,
+              'heading': 'H',
+              'check': 'needs checking',
+              'notes': ['check this section'],
+              'verses': [
+                {'id': 's01-v1', 'check': 'needs checking', 'notes': verseNotes},
+                {'id': 's01-v2', 'check': 'needs checking', 'notes': <String>[]},
+              ],
+            },
+            {'id': 's02', 'number': 2, 'heading': 'H2', 'verses': <Object>[]},
+          ],
+        },
+      ],
+    },
+  ],
+});
 
 void main() {
   testWidgets(
@@ -453,5 +488,22 @@ void main() {
     gate.complete();
     await t.pumpAndSettle();
     expect(find.textContaining('Version of 2026-01-02.'), findsOneWidget);
+  });
+
+  testWidgets('a section that needs checking with notes gets one row; its '
+      'verses without notes get none', (t) async {
+    await openSources(t, content: _checkLibrary(verseNotes: const []));
+    expect(keyed('check-section-s01'), 1);
+    expect(find.byKey(const ValueKey('check-s01-v1')), findsNothing);
+    expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
+  });
+
+  testWidgets('a verse with notes still gets its row under a section row',
+      (t) async {
+    await openSources(t, content: _checkLibrary(verseNotes: const ['n']));
+    final section = t.getTopLeft(find.byKey(const ValueKey('check-section-s01')));
+    final verse = t.getTopLeft(find.byKey(const ValueKey('check-s01-v1')));
+    expect(section.dy, lessThan(verse.dy));
+    expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
   });
 }

@@ -106,6 +106,8 @@ class Verse {
     this.sinhala,
     this.english,
     this.englishSource,
+    this.source,
+    this.sinhalaSource,
     this.englishKind,
     this.check = CheckStatus.unchecked,
     this.notes = const [],
@@ -124,6 +126,12 @@ class Verse {
     englishSource: json['english_source'] == null
         ? null
         : SourceRecord.fromJson(json['english_source'] as Map<String, dynamic>),
+    source: json['source'] == null
+        ? null
+        : SourceRecord.fromJson(json['source'] as Map<String, dynamic>),
+    sinhalaSource: json['sinhala_source'] == null
+        ? null
+        : SourceRecord.fromJson(json['sinhala_source'] as Map<String, dynamic>),
     englishKind: EnglishKind.parse(json['english_kind']),
     check: CheckStatus.parse(json['check']),
     notes: [for (final n in (json['notes'] as List?) ?? const []) n as String],
@@ -139,6 +147,12 @@ class Verse {
   final String id;
   final String? paliSi, paliRoman, sinhala, english;
   final SourceRecord? englishSource;
+
+  /// Where this verse's Pali comes from when it differs from its section.
+  final SourceRecord? source;
+
+  /// Where the Sinhala meaning comes from when it differs from the Pali.
+  final SourceRecord? sinhalaSource;
   final EnglishKind? englishKind;
   final CheckStatus check;
   final List<String> notes;
@@ -156,6 +170,9 @@ class Verse {
 
   bool get isPhrased => phrases.isNotEmpty;
 
+  /// This verse's own source, else its [section]'s.
+  SourceRecord sourceOr(Section section) => source ?? section.source;
+
   /// This verse under [id]; every other field is the identical object.
   Verse withId(String id) => Verse(
     id: id,
@@ -164,6 +181,8 @@ class Verse {
     sinhala: sinhala,
     english: english,
     englishSource: englishSource,
+    source: source,
+    sinhalaSource: sinhalaSource,
     englishKind: englishKind,
     check: check,
     notes: notes,
@@ -271,6 +290,7 @@ class Section {
       translator: '',
     ),
     this.check = CheckStatus.unchecked,
+    this.notes = const [],
     this.corrections = const [],
     this.verses = const [],
   });
@@ -288,6 +308,7 @@ class Section {
           )
         : SourceRecord.fromJson(json['source'] as Map<String, dynamic>),
     check: CheckStatus.parse(json['check']),
+    notes: [for (final n in (json['notes'] as List?) ?? const []) n as String],
     corrections: _corrections(json['corrections']),
     verses: [
       for (final v in (json['verses'] as List?) ?? const [])
@@ -300,6 +321,9 @@ class Section {
   final String heading;
   final SourceRecord source;
   final CheckStatus check;
+
+  /// What still needs checking in this section, noted once for all its verses.
+  final List<String> notes;
   final List<Correction> corrections;
   final List<Verse> verses;
 

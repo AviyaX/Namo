@@ -150,8 +150,17 @@ List<(String key, String title, List<String> notes)> _collectChecks(
         continue;
       }
       for (final section in reading.sections) {
+        if (section.check == CheckStatus.needsChecking &&
+            section.notes.isNotEmpty) {
+          rows.add((
+            'check-section-${section.id}',
+            'Section ${section.number}',
+            section.notes,
+          ));
+        }
         for (final verse in section.verses) {
-          if (verse.check == CheckStatus.needsChecking) {
+          if (verse.check == CheckStatus.needsChecking &&
+              verse.notes.isNotEmpty) {
             rows.add((
               'check-${verse.id}',
               'Section ${section.number}',
