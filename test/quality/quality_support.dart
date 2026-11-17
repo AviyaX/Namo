@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/audio/recording_store.dart';
+import 'package:buddhist_gatha/books/books_repository.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../books/books_support.dart';
 import '../support/fake_chant_player.dart';
 import '../support/passages.dart';
 import '../support/pump_app.dart';
@@ -151,7 +153,8 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// [storeExtras] are extra saved values (a remembered reading place, say).
 /// [overrides] are added to the app's provider overrides (a fixed clock, say).
 /// [tipitaka] serves the Tripitaka's files (by default the made-up
-/// [tinyTipitaka], parsed on the test's own clock).
+/// [tinyTipitaka], parsed on the test's own clock). [books] serves the
+/// books' files (by default the made-up [tinyBooks], likewise).
 Future<void> openReal(
   WidgetTester t,
   String location, {
@@ -169,6 +172,7 @@ Future<void> openReal(
   Map<String, String> storeExtras = const {},
   bool settle = true,
   AssetBytes? tipitaka,
+  AssetBytes? books,
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -217,6 +221,12 @@ Future<void> openReal(
       tipitakaRepositoryProvider.overrideWithValue(
         TipitakaRepository(
           load: tipitaka ?? fakeAssets(tinyTipitaka()),
+          inBackground: false,
+        ),
+      ),
+      booksRepositoryProvider.overrideWithValue(
+        BooksRepository(
+          load: books ?? fakeAssets(tinyBooks()),
           inBackground: false,
         ),
       ),
