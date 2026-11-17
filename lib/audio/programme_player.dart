@@ -137,13 +137,16 @@ class ProgrammePlayer {
     _awaiting = null;
     _armed = false;
     final status = _inner.state.status;
+    // A load still under way is not loaded: an overtaking call loads again.
     final loaded =
         _leg == leg &&
         status != ChantStatus.idle &&
+        status != ChantStatus.loading &&
         status != ChantStatus.failed;
+    // The newest call owns the flag; an overtaken one leaves it alone.
+    _loading = !loaded;
     if (!loaded) {
       _leg = leg;
-      _loading = true;
       await _inner.load(target.recording);
       if (gen != _gen) return;
       _loading = false;
@@ -196,11 +199,14 @@ class ProgrammePlayer {
     await _inner.pause();
   }
 
+  /// A leg of this player's is loaded and none is awaited.
+  bool get _ready => _leg != null && _awaiting == null;
+
   /// From the start, playing.
   Future<void> restart() async {
     final p = _programme;
     if (p == null) return;
-    if (p.single) return _inner.restart();
+    if (p.single && _ready) return _inner.restart();
     await playLeg(0);
   }
 
@@ -208,7 +214,7 @@ class ProgrammePlayer {
   Future<void> seek(Duration to) async {
     final p = _programme;
     if (p == null) return;
-    if (p.single) return _inner.seek(to);
+    if (p.single && _ready) return _inner.seek(to);
     final k = p.legAt(to);
     final at = to - p.legs[k].start;
     if (_awaiting == null && _leg == k) return _inner.seek(at);

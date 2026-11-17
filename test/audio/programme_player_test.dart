@@ -141,6 +141,60 @@ void main() {
     expect(r.player.state, st(ChantStatus.playing, Duration.zero, s(30)));
   });
 
+  test(
+    'restart while the first leg loads leaves play and the next leg working',
+    () async {
+      final r = _Rig();
+      final gate = r.inner.gate = Completer<void>();
+      r.player.bind(programme([a, b]));
+      unawaited(r.player.play());
+      await settle();
+      unawaited(r.player.restart());
+      await settle();
+      r.inner.gate = null;
+      gate.complete();
+      await settle();
+      expect(r.player.state, st(ChantStatus.playing, Duration.zero, s(30)));
+      await r.player.pause();
+      await settle();
+      expect(r.player.state.status, ChantStatus.paused);
+      await r.player.play();
+      await settle();
+      expect(r.player.state.status, ChantStatus.playing);
+      r.inner.advance(s(10));
+      await settle();
+      expect(r.inner.loaded.last, b);
+      expect(r.player.leg, 1);
+      expect(r.player.state, st(ChantStatus.playing, s(10), s(30)));
+    },
+  );
+
+  test('a one-leg programme waits for its file on seek and restart', () async {
+    final r = _Rig(missing: {a});
+    r.player.bind(programme([a]));
+    await r.player.play();
+    await settle();
+    expect(r.player.awaiting, (leg: 0, at: Duration.zero));
+    expect(r.awaited, [0]);
+    await r.player.seek(s(4));
+    await settle();
+    expect(r.player.awaiting, (leg: 0, at: s(4)));
+    expect(r.player.armed, isTrue);
+    expect(r.player.state, st(ChantStatus.paused, s(4), s(10)));
+    await r.player.restart();
+    await settle();
+    expect(r.player.awaiting, (leg: 0, at: Duration.zero));
+    expect(r.player.armed, isTrue);
+    expect(r.player.state, st(ChantStatus.paused, Duration.zero, s(10)));
+    expect(r.inner.seeks, isEmpty);
+    expect(r.inner.loaded, isEmpty);
+    r.missing.clear();
+    await r.player.arrived();
+    await settle();
+    expect(r.inner.loaded, [a]);
+    expect(r.player.state, st(ChantStatus.playing, Duration.zero, s(10)));
+  });
+
   test('leg 1 completing loads and plays leg 2 when available', () async {
     final r = _Rig();
     r.player.bind(programme([a, b]));
