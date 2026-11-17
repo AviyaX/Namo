@@ -246,6 +246,22 @@ class BuildContentTest(unittest.TestCase):
             else:
                 self.assertIsNone(v["pali_roman"], v["id"])
 
+    def test_page_break_continues_the_unit(self):
+        # A unit with no Pali (the Roman and English running on after a page break) continues the
+        # unit before it, so it adds no stanza break the Pali does not have.
+        extras = {f"{s}-v{k}" for s in EXTENDED_SECTIONS for k in range(2, 6)}
+        checked = 0
+        for s in self.sections:
+            for v in s["verses"]:
+                if s["id"] in NEW_SECTIONS or v["id"] in extras:
+                    checked += 1
+                    breaks = v["pali_si"].count("\n\n")
+                    for field in ("english", "pali_roman"):
+                        self.assertLessEqual((v[field] or "").count("\n\n"), breaks, f"{v['id']} {field}")
+        self.assertEqual(checked, 86)
+        for verse_id in ("s33-v7", "s33-v8"):
+            self.assertNotIn("\n\n", self.by_id[verse_id]["english"], verse_id)
+
     def test_roman_follows_the_pali_layout(self):
         def stanzas(text):
             return [stanza.split("\n") for stanza in text.split("\n\n")]

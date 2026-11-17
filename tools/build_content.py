@@ -70,7 +70,8 @@ ORDER: list[tuple[str, object]] = [
 # nottingham_booklet.json (listed page by page in content/review/05_evening_puja_nottingham.md).
 # A verse is a list of units: its Pali is the units' Pali, its Roman their Roman and its English
 # their English (lines joined by "\n" within a unit, units by "\n\n"; a unit with none adds nothing,
-# so a verse whose Pali ends one page and whose Roman starts the next is one verse).
+# so a verse whose Pali ends one page and whose Roman starts the next is one verse; a unit with no
+# Pali continues the unit before it and adds no break, see _unit_lines).
 # Two heading units are joined by HEADING_JOINER.
 NOTTINGHAM_SECTIONS: dict[str, dict] = {
     "bowing": {"heading": (3, 0), "pages": "3",
@@ -555,8 +556,10 @@ def _three_times(lines: list[str], strip_instruction: bool, where: str) -> list[
 
 
 def _unit_lines(pages: dict, refs: list[tuple[int, int]]) -> dict[str, list[list[str]]]:
-    """The Pali, Roman and English lines of the units `refs`, one list per unit that has the field."""
-    parts: dict[str, list[list[str]]] = {"pali_si": [], "roman": [], "english": []}
+    """The Pali, Roman and English lines of the units `refs`, one list per unit that has the field.
+    A unit with no Pali after the first (the Roman and English running on after a page break)
+    continues the unit before it: its lines are added to that unit's Roman and English."""
+    merged: list[dict[str, list[str]]] = []
     for page, index in refs:
         unit = _nottingham_unit(pages, page, index)
         if unit["heading"] is not None:
@@ -565,10 +568,14 @@ def _unit_lines(pages: dict, refs: list[tuple[int, int]]) -> dict[str, list[list
         if THREE_TIMES_NOTE in unit["notes"]:
             where = f"Nottingham booklet printed page {page} unit {index}"
             pali, roman = _three_times(pali, True, where), _three_times(roman, False, where)
-        for field, lines in (("pali_si", pali), ("roman", roman), ("english", unit["english"])):
-            if lines:
-                parts[field].append([line.strip(" ") for line in lines])
-    return parts
+        lines = {"pali_si": list(pali), "roman": list(roman), "english": list(unit["english"])}
+        if not pali and merged:
+            merged[-1]["roman"] += lines["roman"]
+            merged[-1]["english"] += lines["english"]
+        else:
+            merged.append(lines)
+    return {field: [[line.strip(" ") for line in unit[field]] for unit in merged if unit[field]]
+            for field in ("pali_si", "roman", "english")}
 
 
 def _unit_texts(pages: dict, refs: list[tuple[int, int]]) -> dict:
