@@ -119,6 +119,12 @@ NOTTINGHAM_VERSES_INTO: dict[str, list[list[tuple[int, int]]]] = {
 }
 EXTENDED_PAGES = {"s05": "5–6", "s06": "6–7", "s07": "7–8"}
 
+# The owner's clearing table: the booklet sections read against the printed booklet and found right.
+# A key of NOTTINGHAM_SECTIONS or of NOTTINGHAM_VERSES_INTO ("s05", "s06", "s07"). A section listed
+# here loses its note and its booklet verses are "checked against source" (a verse note of NEEDS
+# still keeps its section "needs checking"). To clear a section, add its key and rebuild.
+NOTTINGHAM_CHECKED: frozenset[str] = frozenset()
+
 # Existing verses the booklet also prints: the units whose Roman fills pali_roman. Their Pali is
 # compared with the app's (see PALI_VARIANTS).
 NOTTINGHAM_ROMAN: dict[str, list[tuple[int, int]]] = {
@@ -650,13 +656,13 @@ def _mirror_lines(units: list[list[str]], app_pali: str, covered: int) -> str | 
     return "\n".join(out)
 
 
-def _nottingham_verse(pages: dict, refs: list[tuple[int, int]]) -> dict:
+def _nottingham_verse(pages: dict, refs: list[tuple[int, int]], checked: bool) -> dict:
     texts = _unit_texts(pages, refs)
     if texts["pali_si"] is None:
         raise BuildError(f"Nottingham booklet units {refs}: no Pali")
     verse = _verse(None, texts["pali_si"], None)
     verse["pali_roman"] = texts["roman"]
-    verse["check"] = NEEDS_CHECKING
+    verse["check"] = CHECKED if checked else NEEDS_CHECKING
     if texts["english"] is not None:
         verse["english"] = texts["english"]
         verse["english_source"] = _nottingham_source(str(refs[0][0]))
@@ -677,14 +683,18 @@ def _nottingham_heading(pages: dict, ref) -> str:
 
 def _nottingham_sections(nott: dict) -> dict[str, dict]:
     pages = _nottingham_pages(nott)
+    unknown = NOTTINGHAM_CHECKED - set(NOTTINGHAM_SECTIONS) - set(NOTTINGHAM_VERSES_INTO)
+    if unknown:
+        raise BuildError(f"NOTTINGHAM_CHECKED names sections the booklet does not add: {sorted(unknown)}")
     sections = {}
     for key, spec in NOTTINGHAM_SECTIONS.items():
+        checked = key in NOTTINGHAM_CHECKED
         sections[key] = {
             "heading": _nottingham_heading(pages, spec["heading"]),
             "source": _nottingham_source(spec["pages"]),
-            "notes": [NEW_SECTION_NOTE.format(pages=_printed(spec["pages"]))],
+            "notes": [] if checked else [NEW_SECTION_NOTE.format(pages=_printed(spec["pages"]))],
             "corrections": [], "origin": "nottingham",
-            "verses": [_nottingham_verse(pages, refs) for refs in spec["verses"]]}
+            "verses": [_nottingham_verse(pages, refs, checked) for refs in spec["verses"]]}
     return sections
 
 
@@ -750,12 +760,14 @@ def _apply_nottingham(sections_by_key: dict, nott: dict) -> None:
         section = _section_of(sections_by_key, section_id)
         if section["origin"] != "namo" or len(section["verses"]) != 1:
             raise BuildError(f"{section_id}: expected one namo.lk verse before the booklet's")
+        checked = section_id in NOTTINGHAM_CHECKED
         for refs in verses:
-            verse = _nottingham_verse(pages, refs)
+            verse = _nottingham_verse(pages, refs, checked)
             verse["id"] = f"{section_id}-v{len(section['verses']) + 1}"
             verse["source"] = _nottingham_source(str(refs[0][0]))
             section["verses"].append(verse)
-        section["notes"] = [EXTENDED_SECTION_NOTE.format(pages=_printed(EXTENDED_PAGES[section_id]))]
+        section["notes"] = [] if checked else [
+            EXTENDED_SECTION_NOTE.format(pages=_printed(EXTENDED_PAGES[section_id]))]
     verses = {v["id"]: v for s in sections_by_key.values() for v in s["verses"]}
     unknown = {row[0] for row in PALI_VARIANTS} - set(NOTTINGHAM_ROMAN)
     if unknown:

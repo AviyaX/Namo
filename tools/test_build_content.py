@@ -224,6 +224,35 @@ class BuildContentTest(unittest.TestCase):
                 self.assertEqual(s["notes"], [], s["id"])
         self.assertEqual(sum(1 for s in self.sections if s["notes"]), 17)
 
+    def test_owner_clears_a_section(self):
+        self.assertEqual(build_content.NOTTINGHAM_CHECKED, frozenset())
+        saved = build_content.NOTTINGHAM_CHECKED
+        build_content.NOTTINGHAM_CHECKED = frozenset({"metta", "s05"})
+        try:
+            cleared = build_content.build(ROOT)
+        finally:
+            build_content.NOTTINGHAM_CHECKED = saved
+        sections = {s["id"]: s for s in cleared["categories"][0]["readings"][0]["sections"]}
+        for section_id in ("s33", "s05"):
+            s = sections[section_id]
+            self.assertEqual((s["check"], s["notes"]), ("checked against source", []), section_id)
+            for v in s["verses"]:
+                self.assertEqual((v["check"], v["notes"]), ("checked against source", []), v["id"])
+        # Everything else is the build without the table.
+        expected = copy.deepcopy(self.data)
+        for s in expected["categories"][0]["readings"][0]["sections"]:
+            if s["id"] in ("s33", "s05"):
+                s.update({"check": "checked against source", "notes": []})
+                for v in s["verses"]:
+                    v["check"] = "checked against source"
+        self.assertEqual(cleared, expected)
+        build_content.NOTTINGHAM_CHECKED = frozenset({"no_such_section"})
+        try:
+            with self.assertRaises(build_content.BuildError):
+                build_content.build(ROOT)
+        finally:
+            build_content.NOTTINGHAM_CHECKED = saved
+
     def test_roman_filled_where_listed(self):
         wording = {row[0] for row in build_content.PALI_VARIANTS if row[1] == "wording"}
         self.assertIn("s20-v3", wording)
