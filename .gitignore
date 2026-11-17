@@ -52,3 +52,6 @@ source_material/pitaka_lk_pirith/audio/
 
 # The owner's Samantha Pattana source folder (PDF, conversion, original recording; the recording that ships is in hosted/audio/samantha_patthana/)
 source_material/samantha_patthana/
+
+# pitaka.lk book pages cached by tools/sync_books.py --fetch (the parsed books ship in assets/books/)
+source_material/pitaka_lk_books/

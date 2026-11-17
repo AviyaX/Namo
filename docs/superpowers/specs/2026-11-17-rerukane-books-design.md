@@ -233,7 +233,7 @@ Usage: `python -I -X utf8 tools/sync_books.py <root> [--fetch | --survey | --che
     the book page (chevron and drill down, or open the reader). Keys
     `book-row-<n>`.
   - **Book reader** (`book_reader_screen.dart`, route
-    `/library/book/:id/:n`, full-screen like the reader; `n` must be a
+    `/library/book/:id/read/:n`, full-screen like the reader; `n` must be a
     reading page, otherwise it redirects to the next reading page): top bar
     with Back, the book title (one line) and the page's title under it;
     body: the page title in `NamoType.sectionTitleSinhala`, `heading`
