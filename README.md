@@ -14,6 +14,7 @@ The first reading is **Buddha Wandanawa** (බුද්ධ වන්දනාව
 ### My flows
 
 A flow is your own chanting order: sections chosen from the readings, in the order you chant them, under a name you give it. You make and edit flows under "My flows" in the Library; they also show on Home under "Your flows", and open in the reader like any reading.
+A flow chants its recorded sections in order and passes over the rest (a section with no recording is only read); each flow's row says how many sections have a recording.
 A flow keeps only which sections it holds (a reading id and a section id for each), never the text, so the readings themselves never change. Flows are saved on the device only, under the key `namo.flows.v1`, next to the settings, bookmarks and reading places.
 
 ## Sources

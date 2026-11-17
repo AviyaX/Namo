@@ -127,6 +127,47 @@ void main() {
     }
   }
 
+  // A flow with a recorded section: its reader with the chant bar idle, and
+  // its editor with the marks, in both themes and at both text sizes.
+  for (final size in [const Size(320, 568), const Size(1280, 800)]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final dark in [false, true]) {
+        final where =
+            '${size.width.round()}x${size.height.round()}, device text $scale, '
+            '${dark ? 'dark' : 'light'}';
+        testWidgets('the flow reader with the chant bar does not overflow: '
+            '$where', (t) async {
+          await openReal(
+            t,
+            Routes.reader('flow-1'),
+            size: size,
+            deviceTextScale: scale,
+            dark: dark,
+            storeExtras: await realFlowsStore(t),
+          );
+          expect(t.takeException(), isNull);
+          await scrollThrough(t);
+        });
+        testWidgets('the flow editor with marks does not overflow: $where', (
+          t,
+        ) async {
+          await openReal(
+            t,
+            Routes.flowEditor('flow-1'),
+            size: size,
+            deviceTextScale: scale,
+            dark: dark,
+            storeExtras: await realFlowsStore(t),
+          );
+          expect(t.takeException(), isNull);
+          // The page scrolls, so every row, the marked one too, passes through.
+          await scrollThrough(t);
+          expect(t.takeException(), isNull);
+        });
+      }
+    }
+  }
+
   // The longest recording line, with Try again beside it, in the narrowest
   // bar.
   testWidgets('the pirith reader with a failed recording does not overflow', (

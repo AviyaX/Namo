@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../audio/audio_catalogue.dart';
+import '../audio/chant_programme.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -27,6 +29,7 @@ class MyFlowsPart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = NamoPalette.of(context);
     final flows = ref.watch(flowsProvider).flows;
+    final catalogue = ref.watch(audioCatalogueProvider);
     final newFlow = QuietButton(
       key: const ValueKey('new-flow'),
       label: 'New flow',
@@ -64,7 +67,13 @@ class MyFlowsPart extends ConsumerWidget {
               key: ValueKey('flow-open-${flow.id}'),
               leading: const _FlowMark(),
               title: flow.name,
-              caption: sectionCount(liveRefs(flow, library).length),
+              caption: flowCaption(
+                sections: liveRefs(flow, library).length,
+                recorded: recordedSectionCount(
+                  flowReading(flow, library),
+                  catalogue,
+                ),
+              ),
               speakCaption: true,
               onTap: () => context.go(Routes.reader(flow.id)),
               action: NamoIconButton(

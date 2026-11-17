@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../audio/audio_catalogue.dart';
+import '../audio/chant_programme.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -19,6 +21,7 @@ import 'add_sections_sheet.dart';
 import 'flow_name_sheet.dart';
 import 'flow_reading.dart';
 import 'flows.dart';
+import 'recording_mark.dart';
 
 const _moveUp = CustomSemanticsAction(label: 'Move up');
 const _moveDown = CustomSemanticsAction(label: 'Move down');
@@ -131,6 +134,7 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
   Widget _page(BuildContext context, Flow flow, Library library) {
     final p = NamoPalette.of(context);
     final live = liveRefs(flow, library);
+    final catalogue = ref.watch(audioCatalogueProvider);
     // The frame of a NamoPage, as slivers, so a dragged row scrolls the page.
     final width = MediaQuery.sizeOf(context).width;
     final inset = MediaQuery.paddingOf(context);
@@ -151,7 +155,14 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
             ),
             sliver: SliverMainAxisGroup(
               slivers: [
-                SliverToBoxAdapter(child: _header(context, flow, live)),
+                SliverToBoxAdapter(
+                  child: _header(
+                    context,
+                    flow,
+                    live,
+                    recordedSectionCount(flowReading(flow, library), catalogue),
+                  ),
+                ),
                 if (live.isEmpty)
                   const SliverToBoxAdapter(
                     child: EmptyState(
@@ -177,6 +188,7 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
                       index: i,
                       count: live.length,
                       title: _titleOf(library, live[i]),
+                      recorded: _isRecorded(library, catalogue, live[i]),
                       onMove: (to) => _move(flow, live, i, to),
                       onRemove: () => _remove(flow, live[i]),
                     ),
@@ -197,7 +209,23 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
     return reading.sections.firstWhere((s) => s.id == section.sectionId).heading;
   }
 
-  Widget _header(BuildContext context, Flow flow, List<FlowRef> live) => Column(
+  /// Whether the section has a recording that chants.
+  static bool _isRecorded(
+    Library library,
+    AudioCatalogue catalogue,
+    FlowRef section,
+  ) {
+    final reading = library.reading(section.readingId)!;
+    final s = reading.sections.firstWhere((s) => s.id == section.sectionId);
+    return sectionIsRecorded(s, catalogue.recordingFor(reading.id));
+  }
+
+  Widget _header(
+    BuildContext context,
+    Flow flow,
+    List<FlowRef> live,
+    int recorded,
+  ) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       Align(
@@ -211,7 +239,7 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
       const SizedBox(height: NamoSpace.sm),
       PageHeader(
         title: flow.name,
-        caption: sectionCount(live.length),
+        caption: flowCaption(sections: live.length, recorded: recorded),
         trailing: NamoIconButton(
           key: const ValueKey('flow-rename'),
           icon: Symbols.edit_rounded,
@@ -273,6 +301,7 @@ class _FlowRow extends StatelessWidget {
     required this.index,
     required this.count,
     required this.title,
+    required this.recorded,
     required this.onMove,
     required this.onRemove,
   });
@@ -281,6 +310,9 @@ class _FlowRow extends StatelessWidget {
   final String id;
   final int index, count;
   final String title;
+
+  /// Whether the section has a recording, shown as a mark after the title.
+  final bool recorded;
 
   /// Moves this section to the place [index] ± 1.
   final ValueChanged<int> onMove;
@@ -296,7 +328,7 @@ class _FlowRow extends StatelessWidget {
         Expanded(
           child: Semantics(
             container: true,
-            label: '${index + 1}, $title',
+            label: '${index + 1}, $title${recorded ? ', has a recording' : ''}',
             customSemanticsActions: {_moveUp: ?up, _moveDown: ?down},
             child: ExcludeSemantics(
               child: Padding(
@@ -328,6 +360,15 @@ class _FlowRow extends StatelessWidget {
                         ).copyWith(fontSize: 18),
                       ),
                     ),
+                    if (recorded)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          start: NamoSpace.sm,
+                        ),
+                        child: RecordingMark(
+                          key: ValueKey('flow-recorded-$id'),
+                        ),
+                      ),
                   ],
                 ),
               ),

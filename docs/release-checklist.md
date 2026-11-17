@@ -17,6 +17,9 @@
   - [ ] Remove a section, then Undo; add a pirith from Add sections.
   - [ ] Start chanting: the sections are in your order, numbered from 1; Back returns to the editor.
   - [ ] Close the app fully and open it again: the flow, its order and your place in it are still there, and it shows on Home under "Your flows".
+  - [ ] Owner, on a phone: chant a flow of two pirith, in order, as one recording after the other.
+  - [ ] Owner, on a phone: with one of the two pirith not downloaded, the chant waits, and goes on when it arrives.
+  - [ ] Owner, on a phone: a flow of Buddha Wandanawa sections plus a pirith shows "Chant plays 1 of 4 sections" before Play.
 - [ ] Premium Home, owner checks on a phone:
   - [ ] Look at Home in light and dark on a phone.
   - [ ] Look at the Home header text over the picture (a soft glow sits behind it) in light and dark.
