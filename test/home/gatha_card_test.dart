@@ -11,6 +11,7 @@ import 'package:buddhist_gatha/home/gatha_card.dart';
 import 'package:buddhist_gatha/home/today.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,6 +42,7 @@ Widget _card({
   String topicTitle = 'Topic 1',
 }) =>
     ProviderScope(
+      overrides: [tipsAllowedProvider.overrideWithValue(false)],
       child: GathaCard(
         pick: pick,
         selection: selection,

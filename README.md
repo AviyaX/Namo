@@ -10,6 +10,7 @@ The first reading is **Buddha Wandanawa** (බුද්ධ වන්දනාව
 - Home shows one picture card for each category. A card for a category with one reading opens the reader straight away; otherwise it opens the Library with that category open.
 - The Library lists the categories. Tapping one opens its numbered sections in place, on the same page.
 - The reader remembers where you were, can scroll by itself, and keeps the screen on while it scrolls or a recording plays.
+- First-run tips point once at My flows, the reading settings and the Scroll and Chant buttons, and say that recordings download by themselves; Settings can show them again.
 
 ### My flows
 

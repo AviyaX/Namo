@@ -3,6 +3,7 @@ import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/audio/recording_store_provider.dart';
 import 'package:buddhist_gatha/reader/screen_awake.dart';
 import 'package:buddhist_gatha/router.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
@@ -21,6 +22,7 @@ Future<void> pumpApp(
   ScreenAwake? screenAwake,
   RecordingStore? recordingStore,
   bool settle = true,
+  bool tips = false,
 }) async {
   t.view.physicalSize = size;
   t.view.devicePixelRatio = 1;
@@ -30,6 +32,7 @@ Future<void> pumpApp(
       overrides: [
         ...overrides,
         screenAwakeProvider.overrideWithValue(screenAwake ?? FakeScreenAwake()),
+        tipsAllowedProvider.overrideWithValue(tips),
         recordingStoreProvider.overrideWithValue(
           recordingStore ?? FakeRecordingStore(),
         ),

@@ -106,6 +106,19 @@ void main() {
     }
   }
 
+  for (final dark in [false, true]) {
+    testWidgets(
+      'Home with the Recordings tip up (${dark ? 'dark' : 'light'}) meets tap-target, label and contrast guidelines',
+      (t) async {
+        final handle = t.ensureSemantics();
+        await openReal(t, Routes.home, dark: dark, tips: true);
+        expect(find.byKey(const ValueKey('tip-bubble')), findsOneWidget);
+        await expectGuidelines(t);
+        handle.dispose();
+      },
+    );
+  }
+
   // Home's controls are all at least 48 px, the carousel can be moved from a
   // screen reader, and the screen reader meets the blocks top to bottom.
   for (final size in const [Size(320, 2800), Size(412, 2600)]) {

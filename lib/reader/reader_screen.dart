@@ -26,6 +26,9 @@ import '../library/library_gate.dart';
 import '../router.dart';
 import '../saved/saved.dart';
 import '../settings/settings.dart';
+import '../tips/tip_anchor.dart';
+import '../tips/tip_host.dart';
+import '../tips/tips.dart';
 import 'auto_scroll.dart';
 import 'chant_follow.dart';
 import 'position_controller.dart';
@@ -847,6 +850,20 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     };
   }
 
+  /// No tip over the page while it chants or scrolls by itself (a paused or
+  /// finished Scroll is not running); Scroll and Chant only once the
+  /// recording is on the device.
+  bool _canShowTip(Tip tip) {
+    if (_chant.value.status == ChantStatus.playing) return false;
+    if (_autoScroll.status == AutoScrollStatus.running) return false;
+    if (tip != Tip.scrollChant) return true;
+    final recording = _timed, store = _store;
+    if (recording == null || store == null) return true;
+    return (store.snapshot.value.of(recording.readingId)?.availability ??
+            Availability.downloaded) ==
+        Availability.downloaded;
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(settingsProvider, (previous, next) {
@@ -921,141 +938,161 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           // (Android's button or gesture) would otherwise leave the app.
           return PopScope(
             canPop: false,
+            // Every PopScope of the route hears Back, this one first (the
+            // tip's is made later): while a tip shows, Back only takes the
+            // tip away. The tip's layer must stay inside the TipHost below.
             onPopInvokedWithResult: (didPop, _) {
-              if (!didPop) _back();
+              if (!didPop && ref.read(tipsProvider).active == null) _back();
             },
-            child: Scaffold(
-              backgroundColor: p.background,
-              // The text runs under the floating control bar, which hands
-              // its whole height to the body in MediaQuery.padding.bottom.
-              extendBody: true,
-              body: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _TopBar(
-                        title: reading.title,
-                        favourite: favourite,
-                        onBack: _back,
-                        onFavourite: flow
-                            ? null
-                            : () => ref
-                                  .read(savedProvider.notifier)
-                                  .toggleFavourite(reading.id),
-                        onSettings: () => showReaderSettingsSheet(
-                          context,
-                          onBackToBeginning: _backToBeginning,
-                          layoutChooser: reading.isPhrased
-                              ? LayoutChooserKind.pirith
-                              : ignoresLayout(reading)
-                              ? LayoutChooserKind.hidden
-                              : LayoutChooserKind.full,
+            child: TipHost(
+              tipsFor: () => [
+                Tip.readerSettings,
+                if (recording != null && recording.timed) Tip.scrollChant,
+              ],
+              canShow: _canShowTip,
+              reevaluateOn: [
+                _chant,
+                _autoScroll,
+                if (store != null) store.snapshot,
+              ],
+              child: Scaffold(
+                backgroundColor: p.background,
+                // The text runs under the floating control bar, which hands
+                // its whole height to the body in MediaQuery.padding.bottom.
+                extendBody: true,
+                body: Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _TopBar(
+                          title: reading.title,
+                          favourite: favourite,
+                          onBack: _back,
+                          onFavourite: flow
+                              ? null
+                              : () => ref
+                                    .read(savedProvider.notifier)
+                                    .toggleFavourite(reading.id),
+                          onSettings: () => showReaderSettingsSheet(
+                            context,
+                            onBackToBeginning: _backToBeginning,
+                            layoutChooser: reading.isPhrased
+                                ? LayoutChooserKind.pirith
+                                : ignoresLayout(reading)
+                                ? LayoutChooserKind.hidden
+                                : LayoutChooserKind.full,
+                          ),
                         ),
-                      ),
-                      ValueListenableBuilder<double>(
-                        valueListenable: _progress,
-                        builder: (context, progress, _) =>
-                            ProgressLine(value: progress),
-                      ),
-                      Expanded(
-                        child: SafeArea(
-                          top: false,
-                          bottom: false,
-                          // A touch or a mouse wheel on the text pauses
-                          // auto-scroll at once.
-                          child: empty
-                              ? const EmptyState(
-                                  icon: Symbols.playlist_add_rounded,
-                                  title: 'This flow has no sections yet.',
-                                )
-                              : Listener(
-                                  onPointerDown: (_) => _onHand(),
-                                  onPointerSignal: (_) => _onHand(),
-                                  child: ReaderBody(
-                                    key: _body,
-                                    items: items,
-                                    controller: _scroll,
-                                    fontScale: settings.fontScale,
-                                    lineSpacing: settings.lineSpacing,
-                                    bookmarkedSections: _bookmarkedSections(
-                                      reading,
-                                      saved,
+                        ValueListenableBuilder<double>(
+                          valueListenable: _progress,
+                          builder: (context, progress, _) =>
+                              ProgressLine(value: progress),
+                        ),
+                        Expanded(
+                          child: SafeArea(
+                            top: false,
+                            bottom: false,
+                            // A touch or a mouse wheel on the text pauses
+                            // auto-scroll at once.
+                            child: empty
+                                ? const EmptyState(
+                                    icon: Symbols.playlist_add_rounded,
+                                    title: 'This flow has no sections yet.',
+                                  )
+                                : Listener(
+                                    onPointerDown: (_) => _onHand(),
+                                    onPointerSignal: (_) => _onHand(),
+                                    child: ReaderBody(
+                                      key: _body,
+                                      items: items,
+                                      controller: _scroll,
+                                      fontScale: settings.fontScale,
+                                      lineSpacing: settings.lineSpacing,
+                                      bookmarkedSections: _bookmarkedSections(
+                                        reading,
+                                        saved,
+                                      ),
+                                      onToggleBookmark: (sectionId) {
+                                        // A flow's section is bookmarked as the
+                                        // original it shows.
+                                        final original = flow
+                                            ? refOfFlowSection(sectionId)
+                                            : null;
+                                        ref
+                                            .read(savedProvider.notifier)
+                                            .toggleBookmark(
+                                              original?.readingId ?? reading.id,
+                                              original?.sectionId ?? sectionId,
+                                            );
+                                      },
+                                      chantPlace: _follow?.place,
+                                      // No tap, and no tap semantics, until the
+                                      // chanting has been started.
+                                      onTapBlock: _follow?.started ?? false
+                                          ? _tapBlock
+                                          : null,
+                                      onTapLine: _follow?.started ?? false
+                                          ? _tapLine
+                                          : null,
                                     ),
-                                    onToggleBookmark: (sectionId) {
-                                      // A flow's section is bookmarked as the
-                                      // original it shows.
-                                      final original = flow
-                                          ? refOfFlowSection(sectionId)
-                                          : null;
-                                      ref
-                                          .read(savedProvider.notifier)
-                                          .toggleBookmark(
-                                            original?.readingId ?? reading.id,
-                                            original?.sectionId ?? sectionId,
-                                          );
-                                    },
-                                    chantPlace: _follow?.place,
-                                    // No tap, and no tap semantics, until the
-                                    // chanting has been started.
-                                    onTapBlock: _follow?.started ?? false
-                                        ? _tapBlock
-                                        : null,
-                                    onTapLine: _follow?.started ?? false
-                                        ? _tapLine
-                                        : null,
                                   ),
-                                ),
+                          ),
                         ),
+                      ],
+                    ),
+                    if (_follow case final follow?)
+                      _FollowButton(
+                        follow: follow,
+                        onPressed: _resumeFollowing,
                       ),
-                    ],
+                  ],
+                ),
+                bottomNavigationBar: ListenableBuilder(
+                  listenable: Listenable.merge([
+                    _autoScroll,
+                    _chant,
+                    ?store?.snapshot,
+                  ]),
+                  builder: (context, _) => ReaderBottomBar(
+                    previousTooltip: _byReading
+                        ? 'Previous $unit'
+                        : 'Previous section',
+                    nextTooltip: _byReading ? 'Next $unit' : 'Next section',
+                    onPrevious: _byReading
+                        ? previousReading
+                        : _previousHeading == null || empty
+                        ? null
+                        : () => _toHeading(_previousHeading!),
+                    onNext: _byReading
+                        ? nextReading
+                        : _nextHeading == null || empty
+                        ? null
+                        : () => _toHeading(_nextHeading!),
+                    onPlay: empty ? null : _playOrPause,
+                    autoScroll: _autoScroll.status,
+                    audio: recording == null || recording.timed
+                        ? null
+                        : AudioControls(recording: recording),
+                    chantState: recording != null && recording.timed
+                        ? _chant.value
+                        : null,
+                    chantSpeed: settings.chantSpeed,
+                    onChantSpeed: _cycleChantSpeed,
+                    onChantPlay: _chantPlayOrPause,
+                    onChantRestart: _chantRestart,
+                    onChantSeek: (to) => unawaited(_player?.seek(to)),
+                    recording: recording == null
+                        ? null
+                        : store?.snapshot.value.of(recording.readingId),
+                    onDownload: recording == null
+                        ? null
+                        : () => unawaited(
+                            ref
+                                .read(recordingStoreProvider)
+                                .download(recording),
+                          ),
                   ),
-                  if (_follow case final follow?)
-                    _FollowButton(follow: follow, onPressed: _resumeFollowing),
-                ],
-              ),
-              bottomNavigationBar: ListenableBuilder(
-                listenable: Listenable.merge([
-                  _autoScroll,
-                  _chant,
-                  ?store?.snapshot,
-                ]),
-                builder: (context, _) => ReaderBottomBar(
-                  previousTooltip: _byReading
-                      ? 'Previous $unit'
-                      : 'Previous section',
-                  nextTooltip: _byReading ? 'Next $unit' : 'Next section',
-                  onPrevious: _byReading
-                      ? previousReading
-                      : _previousHeading == null || empty
-                      ? null
-                      : () => _toHeading(_previousHeading!),
-                  onNext: _byReading
-                      ? nextReading
-                      : _nextHeading == null || empty
-                      ? null
-                      : () => _toHeading(_nextHeading!),
-                  onPlay: empty ? null : _playOrPause,
-                  autoScroll: _autoScroll.status,
-                  audio: recording == null || recording.timed
-                      ? null
-                      : AudioControls(recording: recording),
-                  chantState: recording != null && recording.timed
-                      ? _chant.value
-                      : null,
-                  chantSpeed: settings.chantSpeed,
-                  onChantSpeed: _cycleChantSpeed,
-                  onChantPlay: _chantPlayOrPause,
-                  onChantRestart: _chantRestart,
-                  onChantSeek: (to) => unawaited(_player?.seek(to)),
-                  recording: recording == null
-                      ? null
-                      : store?.snapshot.value.of(recording.readingId),
-                  onDownload: recording == null
-                      ? null
-                      : () => unawaited(
-                          ref.read(recordingStoreProvider).download(recording),
-                        ),
                 ),
               ),
             ),
@@ -1126,11 +1163,14 @@ class _TopBar extends StatelessWidget {
                   color: favourite ? p.gold : p.text,
                   onPressed: onFavourite,
                 ),
-              NamoIconButton(
-                key: const ValueKey('reader-settings'),
-                icon: Symbols.tune_rounded,
-                tooltip: 'Reading settings',
-                onPressed: onSettings,
+              TipAnchor(
+                tip: Tip.readerSettings,
+                child: NamoIconButton(
+                  key: const ValueKey('reader-settings'),
+                  icon: Symbols.tune_rounded,
+                  tooltip: 'Reading settings',
+                  onPressed: onSettings,
+                ),
               ),
             ],
           ),

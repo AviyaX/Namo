@@ -13,12 +13,30 @@ import 'quality_support.dart';
 /// With animations off, one pump after each action is enough to reach the end
 /// state.
 void main() {
-  Future<void> open(WidgetTester t, String location, {Library? library}) async {
+  Future<void> open(
+    WidgetTester t,
+    String location, {
+    Library? library,
+    bool tips = false,
+  }) async {
     t.platformDispatcher.accessibilityFeaturesTestValue =
         const FakeAccessibilityFeatures(disableAnimations: true);
     addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
-    await openReal(t, location, size: const Size(390, 2400), library: library);
+    await openReal(
+      t,
+      location,
+      size: const Size(390, 2400),
+      library: library,
+      tips: tips,
+    );
   }
+
+  testWidgets('a tip appears at once and leaves nothing running', (t) async {
+    await open(t, Routes.home, tips: true);
+    await t.pump();
+    expect(find.byKey(const ValueKey('tip-bubble')), findsOneWidget);
+    expect(t.hasRunningAnimations, isFalse);
+  });
 
   testWidgets('switching tab', (t) async {
     await open(t, Routes.home);

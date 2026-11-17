@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../tips/tip_anchor.dart';
+import '../../tips/tip_host.dart';
+import '../../tips/tips.dart';
 import '../tokens.dart';
 import '../typography.dart';
 import 'floating_bar.dart';
@@ -68,27 +71,44 @@ class AppShell extends ConsumerWidget {
       if (again) ref.read(tabPressedAgainProvider.notifier).press(index);
     }
 
+    // Every tab stays built behind the one showing, so only the showing
+    // tab's tip is asked for.
+    List<Tip> tipsFor() => switch (shell.currentIndex) {
+      TabIndex.home => [Tip.recordings],
+      TabIndex.library => [Tip.myFlows],
+      _ => const [],
+    };
+
     final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
     if (wide) {
       return Scaffold(
-        body: Row(
-          children: [
-            // Clear of a display cut-out or a rounded edge on the left.
-            SafeArea(
-              right: false,
-              child: _Rail(current: shell.currentIndex, onSelect: select),
-            ),
-            Expanded(child: shell),
-          ],
+        body: TipHost(
+          tipsFor: tipsFor,
+          child: Row(
+            children: [
+              // Clear of a display cut-out or a rounded edge on the left.
+              SafeArea(
+                right: false,
+                child: _Rail(current: shell.currentIndex, onSelect: select),
+              ),
+              Expanded(child: shell),
+            ],
+          ),
         ),
       );
     }
     // extendBody: the pages run under the bar and see its whole height in
     // MediaQuery.padding.bottom, so they can scroll their ends clear of it.
-    return Scaffold(
-      extendBody: true,
-      body: shell,
-      bottomNavigationBar: _Bar(current: shell.currentIndex, onSelect: select),
+    return TipHost(
+      tipsFor: tipsFor,
+      child: Scaffold(
+        extendBody: true,
+        body: shell,
+        bottomNavigationBar: _Bar(
+          current: shell.currentIndex,
+          onSelect: select,
+        ),
+      ),
     );
   }
 }
@@ -199,13 +219,16 @@ class _Bar extends StatelessWidget {
               children: [
                 for (var i = 0; i < _tabs.length; i++)
                   Expanded(
-                    child: _Destination(
-                      tab: _tabs[i],
-                      active: i == current,
-                      pill: true,
-                      pillPadding: spacing.pill,
-                      scaler: scaler,
-                      onTap: () => onSelect(i),
+                    child: _anchored(
+                      i,
+                      _Destination(
+                        tab: _tabs[i],
+                        active: i == current,
+                        pill: true,
+                        pillPadding: spacing.pill,
+                        scaler: scaler,
+                        onTap: () => onSelect(i),
+                      ),
                     ),
                   ),
               ],
@@ -246,11 +269,14 @@ class _Rail extends StatelessWidget {
           children: [
             for (var i = 0; i < _tabs.length; i++) ...[
               if (i > 0) const SizedBox(height: NamoSpace.sm),
-              _Destination(
-                tab: _tabs[i],
-                active: i == current,
-                scaler: scaler,
-                onTap: () => onSelect(i),
+              _anchored(
+                i,
+                _Destination(
+                  tab: _tabs[i],
+                  active: i == current,
+                  scaler: scaler,
+                  onTap: () => onSelect(i),
+                ),
               ),
             ],
           ],
@@ -259,6 +285,12 @@ class _Rail extends StatelessWidget {
     );
   }
 }
+
+/// The Settings tab is where the Recordings tip points: the downloads'
+/// progress shows there.
+Widget _anchored(int index, Widget destination) => index == TabIndex.settings
+    ? TipAnchor(tip: Tip.recordings, child: destination)
+    : destination;
 
 /// One tab: icon over label. The active one has a filled icon and a sage
 /// pill behind it.

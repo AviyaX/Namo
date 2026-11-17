@@ -169,6 +169,7 @@ Future<void> openReal(
   Map<String, String> storeExtras = const {},
   bool settle = true,
   AssetBytes? tipitaka,
+  bool tips = false,
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -231,6 +232,7 @@ Future<void> openReal(
     size: size,
     recordingStore: recordingStore,
     settle: settle,
+    tips: tips,
   );
 }
 
