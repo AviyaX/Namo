@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:buddhist_gatha/books/book_screen.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
@@ -145,6 +148,44 @@ void main() {
       expect(t.getSize(_card(id)).width, greaterThanOrEqualTo(48));
     }
     expect(t.takeException(), isNull);
+  });
+
+  testWidgets('the shelf is as tall while the books load as after', (
+    t,
+  ) async {
+    for (final scale in [1.0, 2.0]) {
+      await t.pumpWidget(const SizedBox());
+      final gate = Completer<void>();
+      final served = fakeAssets(tinyBooks());
+      Future<Uint8List> load(String path) async {
+        await gate.future;
+        return served(path);
+      }
+
+      await openReal(
+        t,
+        Routes.library,
+        size: _tall,
+        deviceTextScale: scale,
+        books: load,
+        settle: false,
+      );
+      await t.pump();
+      final placeholder = find.byKey(const ValueKey('books-shelf-loading'));
+      expect(placeholder, findsOneWidget);
+      expect(_card(tinyBookFlatId), findsNothing);
+      final loading = t.getSize(_shelf).height;
+      expect(loading, greaterThan(0));
+      final below = t.getRect(_shelf).bottom;
+
+      gate.complete();
+      await t.pumpAndSettle();
+      expect(placeholder, findsNothing);
+      expect(_card(tinyBookFlatId), findsOneWidget);
+      expect(t.getSize(_shelf).height, loading, reason: '$scale');
+      expect(t.getRect(_shelf).bottom, below, reason: '$scale');
+      expect(t.takeException(), isNull);
+    }
   });
 
   testWidgets('no books, no shelf', (t) async {

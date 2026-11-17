@@ -111,7 +111,7 @@ Widget bookChevron(BuildContext context) => Icon(
 /// A page of [book] as a row. A page with children shows how many and opens
 /// their list; a page without opens the reader. [own] is a parent's own
 /// text, at the top of its list: it opens the reader at the page.
-class BookPageRow extends ConsumerWidget {
+class BookPageRow extends StatelessWidget {
   const BookPageRow({
     super.key,
     required this.book,
@@ -124,7 +124,7 @@ class BookPageRow extends ConsumerWidget {
   final bool own;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final n = page.n;
     final hasChildren = !own && book.childrenOf(n).isNotEmpty;

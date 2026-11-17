@@ -9,6 +9,7 @@ import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,6 +46,7 @@ Future<void> _open(
   WidgetTester t,
   String location, {
   Size size = _tall,
+  double deviceTextScale = 1.0,
   AppSettings settings = const AppSettings(),
   Map<String, String> storeExtras = const {},
   Map<String, Object>? books,
@@ -54,6 +56,7 @@ Future<void> _open(
     t,
     location,
     size: size,
+    deviceTextScale: deviceTextScale,
     settings: settings,
     storeExtras: storeExtras,
     books: books == null ? null : fakeAssets(books),
@@ -77,6 +80,14 @@ Map<String, Object> _longBooks() => _changed((pages) {
     blocks.add({'kind': 'para', 'text': 'Long paragraph $i.'});
   }
 });
+
+/// How many lines [text] is drawn on, near enough: its height over the
+/// height of its first line.
+double _lines(WidgetTester t, String text) {
+  final paragraph = t.renderObject<RenderParagraph>(find.text(text));
+  return paragraph.size.height /
+      paragraph.getFullHeightForCaret(const TextPosition(offset: 0));
+}
 
 /// Each of [texts] sits below the one before it.
 void _inOrder(WidgetTester t, List<String> texts) {
@@ -276,7 +287,7 @@ void main() {
       books: _longBooks(),
     );
     expect(jsonDecode(_storedPlaces(t)!), {
-      tinyBookNestedId: {'n': 6, 'offset': 0},
+      tinyBookNestedId: {'n': 6, 'key': '2-1', 'offset': 0},
     });
     await t.drag(find.text('Two one text.'), const Offset(0, -300));
     await t.pumpAndSettle();
@@ -285,7 +296,7 @@ void main() {
     expect(offset, greaterThan(0));
     final saved = _storedPlaces(t)!;
     expect(jsonDecode(saved), {
-      tinyBookNestedId: {'n': 6, 'offset': offset},
+      tinyBookNestedId: {'n': 6, 'key': '2-1', 'offset': offset},
     });
 
     await _open(
@@ -307,8 +318,161 @@ void main() {
     );
     expect(_position(t).pixels, 0);
     expect(jsonDecode(_storedPlaces(t)!), {
-      tinyBookNestedId: {'n': 7, 'offset': 0},
+      tinyBookNestedId: {'n': 7, 'key': '2-1-1', 'offset': 0},
     });
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('a saved place is found by its key when the numbers moved', (
+    t,
+  ) async {
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 6),
+      size: _small,
+      books: _longBooks(),
+    );
+    await t.drag(find.text('Two one text.'), const Offset(0, -300));
+    await t.pumpAndSettle();
+    await t.pump(const Duration(milliseconds: 500));
+    final offset = _position(t).pixels;
+    expect(offset, greaterThan(0));
+    // As if the book had been fetched again with a page more in front: the
+    // saved n is now another page, the key still this one.
+    final moved = jsonEncode({
+      tinyBookNestedId: {'n': 3, 'key': '2-1', 'offset': offset},
+    });
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 6),
+      size: _small,
+      books: _longBooks(),
+      storeExtras: {bookPlacesKey: moved},
+    );
+    expect(_position(t).pixels, offset);
+    // Page 3 is not the place, so it opens at its top and becomes the place.
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 3),
+      size: _small,
+      books: _longBooks(),
+      storeExtras: {bookPlacesKey: moved},
+    );
+    expect(_position(t).pixels, 0);
+    expect(jsonDecode(_storedPlaces(t)!), {
+      tinyBookNestedId: {'n': 3, 'key': '1-1', 'offset': 0},
+    });
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('numbers past 9 stay on one line beside their items', (
+    t,
+  ) async {
+    for (final (scale, font) in [(1.0, 1.0), (2.0, 1.6)]) {
+      await _open(
+        t,
+        Routes.bookReader(tinyBookNestedId, 8),
+        size: const Size(320, 4000),
+        deviceTextScale: scale,
+        settings: AppSettings(fontScale: font),
+        books: tinyBooksWithLongBlocks(),
+      );
+      expect(find.text(tinyLongBlocksTitle), findsOneWidget);
+      final why = 'device $scale, Settings $font';
+      for (var i = 1; i <= 12; i++) {
+        for (final (label, item) in [('$i.', 'Item $i'), ('$i', 'Note $i')]) {
+          expect(_lines(t, label), lessThan(1.5), reason: '$label, $why');
+          // Drawn whole: its box is as wide as the label on one line.
+          final paragraph = t.renderObject<RenderParagraph>(find.text(label));
+          expect(
+            paragraph.getMaxIntrinsicWidth(double.infinity),
+            lessThanOrEqualTo(paragraph.size.width),
+            reason: '$label, $why',
+          );
+          expect(
+            t.getRect(find.text(label)).right,
+            lessThanOrEqualTo(t.getRect(find.text(item)).left),
+            reason: '$label, $why',
+          );
+          expect(
+            _top(t, find.text(label)),
+            _top(t, find.text(item)),
+            reason: '$label, $why',
+          );
+        }
+      }
+      // Every item starts at the same place, the lead as wide as "12.".
+      for (var i = 2; i <= 12; i++) {
+        expect(
+          t.getTopLeft(find.text('Item $i')).dx,
+          t.getTopLeft(find.text('Item 1')).dx,
+        );
+      }
+      expect(t.takeException(), isNull, reason: why);
+    }
+  });
+
+  testWidgets('a table with a long cell fits the column and wraps it', (
+    t,
+  ) async {
+    for (final scale in [1.0, 2.0]) {
+      await _open(
+        t,
+        Routes.bookReader(tinyBookNestedId, 8),
+        size: const Size(320, 4000),
+        deviceTextScale: scale,
+        books: tinyBooksWithLongBlocks(),
+      );
+      // The title fills the column of text: the table keeps within it.
+      final column = t.getRect(find.text(tinyLongBlocksTitle));
+      final table = t.getRect(find.byType(Table));
+      expect(table.left, greaterThanOrEqualTo(column.left - 0.5));
+      expect(table.right, lessThanOrEqualTo(column.right + 0.5));
+      expect(_lines(t, tinyLongCell), greaterThan(1.5), reason: '$scale');
+      expect(_lines(t, 'Short'), lessThan(1.5), reason: '$scale');
+      expect(t.takeException(), isNull);
+    }
+  });
+
+  testWidgets('a grid of short cells keeps them whole and scrolls sideways', (
+    t,
+  ) async {
+    const cells = ['Ka', 'Kaa', 'Ki', 'Kii', 'Ku', 'Kuu', 'Ke', 'Kee', 'Ko'];
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 7),
+      size: const Size(320, 2000),
+      deviceTextScale: 2.0,
+      books: _changed((pages) {
+        final blocks = pages[6]['blocks'] as List;
+        final table = blocks.firstWhere((b) => (b as Map)['kind'] == 'table');
+        (table as Map)['rows'] = [cells, cells.reversed.toList()];
+      }),
+    );
+    final column = t.getRect(find.text('Two one one'));
+    expect(t.getSize(find.byType(Table)).width, greaterThan(column.width));
+    for (final cell in cells) {
+      for (final e in find.text(cell).evaluate()) {
+        final paragraph = e.renderObject! as RenderParagraph;
+        expect(
+          paragraph.size.height /
+              paragraph.getFullHeightForCaret(const TextPosition(offset: 0)),
+          lessThan(1.5),
+          reason: cell,
+        );
+      }
+    }
+    // It is the sideways scroll that holds it.
+    expect(
+      find.ancestor(
+        of: find.byType(Table),
+        matching: find.byWidgetPredicate(
+          (w) =>
+              w is SingleChildScrollView && w.scrollDirection == Axis.horizontal,
+        ),
+      ),
+      findsOneWidget,
+    );
     expect(t.takeException(), isNull);
   });
 
@@ -348,7 +512,7 @@ void main() {
     await t.pump(const Duration(milliseconds: 500));
     expect(_location(t), '/library/book/tiny-nested/read/7');
     expect(jsonDecode(_storedPlaces(t)!), {
-      tinyBookNestedId: {'n': 7, 'offset': 0},
+      tinyBookNestedId: {'n': 7, 'key': '2-1-1', 'offset': 0},
     });
     expect(t.takeException(), isNull);
   });

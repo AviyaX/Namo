@@ -104,8 +104,11 @@ class _BookScreenState extends ConsumerState<BookScreen> {
     final p = NamoPalette.of(context);
     final caption = NamoType.caption(p.textSecondary);
     final place = ref.watch(bookPlacesProvider.select((s) => s.of(book.id)));
-    final placed = place != null && book.page(place.n)?.hasText == true;
-    final target = placed ? place.n : book.firstReadingFrom(1);
+    // The saved page is found by its key first: a re-fetched book can have
+    // numbered its pages differently.
+    final saved = place?.pageIn(book);
+    final placed = saved != null && book.page(saved)?.hasText == true;
+    final target = placed ? saved : book.firstReadingFrom(1);
     final chapters = summary.chapters;
     return [
       ..._head(context, summary),

@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:buddhist_gatha/books/book_model.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'books_support.dart';
 
 ProviderContainer _on(KeyValueStore store) {
   final c = ProviderContainer(
@@ -42,6 +45,39 @@ void main() {
     gone.dispose();
     notifier.remember('c', n: 2, offset: 1);
     expect(_on(store).read(bookPlacesProvider).of('c'), isNull);
+  });
+
+  test('the page key is saved beside n, and read with or without it', () {
+    final store = InMemoryKeyValueStore();
+    final c = _on(store);
+    final places = c.read(bookPlacesProvider.notifier);
+    places.remember('a', n: 3, key: '1-1', offset: 5);
+    places.remember('b', n: 2, offset: 1);
+    expect(jsonDecode(store.read(bookPlacesKey)!), {
+      'a': {'n': 3, 'key': '1-1', 'offset': 5.0},
+      'b': {'n': 2, 'offset': 1.0},
+    });
+    final again = _on(store).read(bookPlacesProvider);
+    expect(again.of('a')!.key, '1-1');
+    expect(again.of('b')!.key, isNull);
+
+    // An entry saved before the key was kept, and a key that is not text.
+    final old = BookPlaces.fromJson({
+      'old': {'n': 4, 'offset': 2},
+      'odd': {'n': 4, 'key': 7, 'offset': 2},
+    });
+    expect(old.of('old')!.n, 4);
+    expect(old.of('old')!.key, isNull);
+    expect(old.of('odd')!.key, isNull);
+    expect(old.of('old')!.toJson(), {'n': 4, 'offset': 2.0});
+  });
+
+  test('a place is the page with its key, else its n', () {
+    final book = Book.parse(tinyBookNested());
+    // Key "1-2" is page 4; the saved n 3 is another page now.
+    expect(const BookPlace(n: 3, key: '1-2', offset: 0).pageIn(book), 4);
+    expect(const BookPlace(n: 3, offset: 0).pageIn(book), 3);
+    expect(const BookPlace(n: 3, key: 'gone', offset: 0).pageIn(book), 3);
   });
 
   test('damaged entries are dropped alone', () {

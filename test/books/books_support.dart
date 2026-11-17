@@ -131,6 +131,54 @@ Map<String, Object?> _summary(
   'cover_source': 'https://example.invalid/cover.png',
 };
 
+/// A 140-character made-up sentence: a table cell that must wrap.
+const tinyLongCell =
+    'A made-up table cell with one long sentence in it, long enough that it '
+    'has to wrap over more than one line in the reading column at any size';
+
+/// The title of the extra page [tinyBooksWithLongBlocks] adds.
+const tinyLongBlocksTitle = 'Long lists';
+
+/// [tinyBooks] with one more page at the end of the nested book: "3" (n 8),
+/// a list numbered 1 to 12 ("Item 1" ...), twelve footnotes ("Note 1" ...)
+/// and a two-column table whose second cell is [tinyLongCell].
+Map<String, Object> tinyBooksWithLongBlocks() {
+  final all = tinyBooks();
+  final nested = tinyBookNested();
+  nested['pages'] = [
+    ...nested['pages']! as List,
+    _page(8, '3', 1, tinyLongBlocksTitle, [
+      {
+        'kind': 'list',
+        'marker': 'number',
+        'start': 1,
+        'items': [for (var i = 1; i <= 12; i++) 'Item $i'],
+      },
+      {
+        'kind': 'footnotes',
+        'items': [for (var i = 1; i <= 12; i++) 'Note $i'],
+      },
+      {
+        'kind': 'table',
+        'header': false,
+        'rows': [
+          ['Short', tinyLongCell],
+        ],
+      },
+    ]),
+  ];
+  all[tinyBookFile(tinyBookNestedId)] = nested;
+  final index = Map<String, Object?>.of(
+    all[tinyBooksIndexPath]! as Map<String, Object?>,
+  );
+  index['books'] = [
+    _summary(tinyBookFlatId, 'Flat book', null, 2, 3),
+    _summary(tinyBookNestedId, 'Nested book', 'A made-up subtitle', 3, 7),
+  ];
+  all[tinyBooksIndexPath] = index;
+  return all;
+}
+
 /// An index with no books: a Library without a shelf.
 Map<String, Object> noBooks() => {
   tinyBooksIndexPath: {

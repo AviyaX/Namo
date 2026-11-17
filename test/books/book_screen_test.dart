@@ -115,6 +115,26 @@ void main() {
     expect(_location(t), '/library/book/tiny-nested/read/3');
   });
 
+  testWidgets('Continue reading finds the saved page by its key', (t) async {
+    // n 3 is "1-1"; the key names "1-2", page 4, as after a re-fetch that
+    // numbered the pages differently.
+    await openReal(
+      t,
+      Routes.book(tinyBookNestedId),
+      size: _tall,
+      storeExtras: {
+        bookPlacesKey: '{"tiny-nested": {"n": 3, "key": "1-2", "offset": 0}}',
+      },
+    );
+    expect(
+      find.descendant(of: _continue, matching: find.text('Continue reading')),
+      findsOneWidget,
+    );
+    await t.tap(_continue);
+    await t.pumpAndSettle();
+    expect(_location(t), '/library/book/tiny-nested/read/4');
+  });
+
   testWidgets('a saved place past the end reads as Start reading', (t) async {
     await openReal(
       t,

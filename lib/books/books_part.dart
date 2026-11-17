@@ -12,8 +12,10 @@ import 'book_widgets.dart';
 import 'books_repository.dart';
 
 /// The Library's shelf of books: a heading, then the covers in one sideways
-/// row, each opening its book's page, and the space below it. Nothing shows
-/// while the index loads, or when there are no books.
+/// row, each opening its book's page, and the space below it. While the
+/// index loads the heading shows over an empty row as tall as the covers',
+/// so the topics below do not move when they arrive. Nothing shows when
+/// there are no books.
 class BooksPart extends ConsumerWidget {
   const BooksPart({super.key = const ValueKey('books-shelf')});
 
@@ -22,7 +24,7 @@ class BooksPart extends ConsumerWidget {
     final p = NamoPalette.of(context);
     final index = ref.watch(booksIndexProvider);
     final books = index.value?.books;
-    if (books == null && !index.hasError) return const SizedBox.shrink();
+    final loading = books == null && !index.hasError;
     if (books != null && books.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,13 +36,20 @@ class BooksPart extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
           child: Text(
-            books == null
+            books == null && !loading
                 ? 'The books could not be opened.'
                 : 'රේරුකානේ චන්දවිමල හිමියන්ගේ පොත්',
             // The caption's family is the Sinhala one.
             style: NamoType.caption(p.textSecondary),
           ),
         ),
+        if (loading) ...[
+          const SizedBox(height: NamoSpace.sm),
+          SizedBox(
+            key: const ValueKey('books-shelf-loading'),
+            height: _cardHeight(context),
+          ),
+        ],
         if (books != null) ...[
           const SizedBox(height: NamoSpace.sm),
           SizedBox(
