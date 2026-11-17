@@ -331,6 +331,28 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('a page left while still moving does not take the place back', (
+    t,
+  ) async {
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 6),
+      size: _small,
+      books: _longBooks(),
+    );
+    await t.fling(find.text('Two one text.'), const Offset(0, -300), 3000);
+    await t.pump();
+    expect(_position(t).isScrollingNotifier.value, isTrue);
+    await t.tap(_next);
+    await t.pumpAndSettle();
+    await t.pump(const Duration(milliseconds: 500));
+    expect(_location(t), '/library/book/tiny-nested/read/7');
+    expect(jsonDecode(_storedPlaces(t)!), {
+      tinyBookNestedId: {'n': 7, 'offset': 0},
+    });
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('Back goes to the parent contents list', (t) async {
     await _open(t, Routes.bookReader(tinyBookNestedId, 7));
     await t.tap(find.byTooltip('Back'));

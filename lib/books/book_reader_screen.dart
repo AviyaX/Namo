@@ -58,6 +58,11 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   bool _dirty = false;
   Timer? _saveTimer;
 
+  /// Set once this page has been left. It may stay on screen for its exit
+  /// transition, still moving, but its place is no longer the person's: the
+  /// next page's is.
+  bool _leaving = false;
+
   @override
   void initState() {
     super.initState();
@@ -69,7 +74,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     _saveTimer?.cancel();
     // Providers cannot change while the tree is being torn down, so the last
     // place is handed over once this frame is done.
-    if (_dirty) {
+    if (_dirty && !_leaving) {
       final places = _places, id = widget.id, n = widget.n;
       final offset = _offset;
       SchedulerBinding.instance.addPostFrameCallback(
@@ -84,7 +89,9 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
 
   bool _onScroll(ScrollNotification notification) {
     // Only the page's own scrolling (a wide table scrolls sideways inside).
-    if (notification.depth != 0 || !_scroll.hasClients) return false;
+    if (_leaving || notification.depth != 0 || !_scroll.hasClients) {
+      return false;
+    }
     _offset = _scroll.offset;
     _dirty = true;
     _saveTimer?.cancel();
@@ -103,7 +110,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   /// The page has loaded: notes it as the place, or returns to the saved
   /// offset when the place is this page.
   void _openPlace() {
-    if (!mounted) return;
+    if (!mounted || _leaving) return;
     final place = ref.read(bookPlacesProvider).of(widget.id);
     if (place != null && place.n == widget.n && _scroll.hasClients) {
       final to = place.offset.clamp(0.0, _scroll.position.maxScrollExtent);
@@ -126,6 +133,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   /// Leaves for [location], saving a place not saved yet first.
   void _go(String location) {
     _save();
+    _leaving = true;
     context.go(location);
   }
 
@@ -176,6 +184,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
           _opened = true;
           SchedulerBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
+            _leaving = true;
             final target = book.firstReadingFrom(widget.n);
             context.go(
               target == null
