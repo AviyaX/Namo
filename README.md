@@ -30,7 +30,7 @@ The Sources page in the app credits each of these:
 Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.
 
 The verse text reaches the app only through `tools/build_content.py`, which reads `content/extracted/*.json` and writes `assets/content/namaskaraya_to_pin_dima.json`.
-The English for sections 1–6 is prose from a narrow-column PDF, so the build re-sets it as sentences (line breaks and joining spaces only; it fails if any other character would change). English that is verse keeps the translator's line breaks.
+The English for sections 2–7 is prose from a narrow-column PDF, so the build re-sets it as sentences (line breaks and joining spaces only; it fails if any other character would change). The Nottingham booklet's English on its printed pages 17–34 is re-set the same way where a line breaks mid-sentence. English that is verse keeps the translator's line breaks.
 
 ## Pirith content
 

@@ -72,33 +72,34 @@ ORDER: list[tuple[str, object]] = [
 # their English (lines joined by "\n" within a unit, units by "\n\n"; a unit with none adds nothing,
 # so a verse whose Pali ends one page and whose Roman starts the next is one verse; a unit with no
 # Pali continues the unit before it and adds no break, see _unit_lines).
-# Two heading units are joined by HEADING_JOINER.
+# Two heading units are joined by HEADING_JOINER. A section's printed pages are those of its
+# verses' units (_pages_of).
 NOTTINGHAM_SECTIONS: dict[str, dict] = {
-    "bowing": {"heading": (3, 0), "pages": "3",
+    "bowing": {"heading": (3, 0),
                "verses": [[(3, 1)], [(3, 2)], [(3, 3)], [(3, 4)], [(3, 5)]]},
-    "recollection": {"heading": (9, 0), "pages": "9–11",
+    "recollection": {"heading": (9, 0),
                      "verses": [[(9, 1)], [(9, 2)], [(9, 3)], [(9, 4)], [(10, 0)], [(10, 1)], [(10, 2)],
                                 [(11, 0)]]},
-    "relatives": {"heading": (14, 5), "pages": "14", "verses": [[(14, 6)]]},
-    "aspirations": {"heading": (16, 2), "pages": "16–17",
+    "relatives": {"heading": (14, 5), "verses": [[(14, 6)]]},
+    "aspirations": {"heading": (16, 2),
                     "verses": [[(16, 3)], [(16, 4), (16, 5), (16, 6)], [(16, 7), (17, 0)], [(17, 1)]]},
-    "buddhanussati": {"heading": (17, 2), "pages": "17–19",
+    "buddhanussati": {"heading": (17, 2),
                       "verses": [[(17, 3)], [(17, 4)], [(17, 5)], [(18, 0)], [(18, 1)], [(18, 2)], [(18, 3)],
                                  [(18, 4), (19, 0)], [(19, 1)], [(19, 2)], [(19, 3)]]},
-    "mettanussati": {"heading": (19, 4), "pages": "19–20",
+    "mettanussati": {"heading": (19, 4),
                      "verses": [[(19, 5), (20, 0)], [(20, 1)], [(20, 2)], [(20, 3)], [(20, 4)]]},
-    "asubhanussati": {"heading": (21, 0), "pages": "21–22",
+    "asubhanussati": {"heading": (21, 0),
                       "verses": [[(21, 1)], [(21, 2)], [(21, 3)], [(21, 4)], [(21, 5), (22, 0)], [(22, 1)]]},
-    "marananussati": {"heading": (22, 2), "pages": "22–23",
+    "marananussati": {"heading": (22, 2),
                       "verses": [[(22, 3)], [(22, 4)], [(22, 5)], [(23, 0)], [(23, 1)], [(23, 2)], [(23, 3)]]},
-    "samvega": {"heading": (24, 0), "pages": "24", "verses": [[(24, 1)], [(24, 2)], [(24, 3)]]},
-    "anuloma": {"heading": [(25, 0), (25, 1)], "pages": "25", "verses": [[(25, 2)]]},
-    "patiloma": {"heading": [(25, 0), (26, 0)], "pages": "26", "verses": [[(26, 1)]]},
-    "true_refuge": {"heading": (27, 0), "pages": "27–28",
+    "samvega": {"heading": (24, 0), "verses": [[(24, 1)], [(24, 2)], [(24, 3)]]},
+    "anuloma": {"heading": [(25, 0), (25, 1)], "verses": [[(25, 2)]]},
+    "patiloma": {"heading": [(25, 0), (26, 0)], "verses": [[(26, 1)]]},
+    "true_refuge": {"heading": (27, 0),
                     "verses": [[(27, 1)], [(27, 2)], [(27, 3)], [(27, 4)], [(28, 0)]]},
-    "three_characteristics": {"heading": (28, 1), "pages": "28–29",
+    "three_characteristics": {"heading": (28, 1),
                               "verses": [[(28, 2)], [(28, 3)], [(28, 4)], [(29, 0)], [(29, 1)], [(29, 2)]]},
-    "metta": {"heading": (29, 3), "pages": "29–34",
+    "metta": {"heading": (29, 3),
               "verses": [[(29, 4)], [(30, 0)], [(30, 1)], [(30, 2)], [(30, 3), (31, 0)], [(31, 1)],
                          [(31, 2), (32, 0)], [(32, 1), (33, 0)], [(33, 1)], [(33, 2)], [(34, 0)]]},
 }
@@ -117,7 +118,6 @@ NOTTINGHAM_VERSES_INTO: dict[str, list[list[tuple[int, int]]]] = {
     "s06": [[(6, 4)], [(6, 5)], [(7, 0)], [(7, 1)]],
     "s07": [[(8, 1)], [(8, 2)], [(8, 3)], [(8, 4)]],
 }
-EXTENDED_PAGES = {"s05": "5–6", "s06": "6–7", "s07": "7–8"}
 
 # The owner's clearing table: the booklet sections read against the printed booklet and found right.
 # A key of NOTTINGHAM_SECTIONS or of NOTTINGHAM_VERSES_INTO ("s05", "s06", "s07"). A section listed
@@ -558,6 +558,13 @@ def _nottingham_unit(pages: dict, page: int, index: int) -> dict:
     return unit
 
 
+def _pages_of(verses: list[list[tuple[int, int]]]) -> str:
+    """The printed page, or first–last pages, of the units of `verses`."""
+    pages = [page for refs in verses for page, _ in refs]
+    first, last = min(pages), max(pages)
+    return str(first) if first == last else f"{first}–{last}"
+
+
 def _printed(pages: str) -> str:
     return f"printed {'pages' if '–' in pages else 'page'} {pages}"
 
@@ -665,7 +672,7 @@ def _nottingham_verse(pages: dict, refs: list[tuple[int, int]], checked: bool) -
     verse["check"] = CHECKED if checked else NEEDS_CHECKING
     if texts["english"] is not None:
         verse["english"] = texts["english"]
-        verse["english_source"] = _nottingham_source(str(refs[0][0]))
+        verse["english_source"] = _nottingham_source(str(_english_page(pages, refs)))
         verse["english_kind"] = "translation"
     return verse
 
@@ -689,10 +696,11 @@ def _nottingham_sections(nott: dict) -> dict[str, dict]:
     sections = {}
     for key, spec in NOTTINGHAM_SECTIONS.items():
         checked = key in NOTTINGHAM_CHECKED
+        printed_pages = _pages_of(spec["verses"])
         sections[key] = {
             "heading": _nottingham_heading(pages, spec["heading"]),
-            "source": _nottingham_source(spec["pages"]),
-            "notes": [] if checked else [NEW_SECTION_NOTE.format(pages=_printed(spec["pages"]))],
+            "source": _nottingham_source(printed_pages),
+            "notes": [] if checked else [NEW_SECTION_NOTE.format(pages=_printed(printed_pages))],
             "corrections": [], "origin": "nottingham",
             "verses": [_nottingham_verse(pages, refs, checked) for refs in spec["verses"]]}
     return sections
@@ -767,7 +775,7 @@ def _apply_nottingham(sections_by_key: dict, nott: dict) -> None:
             verse["source"] = _nottingham_source(str(refs[0][0]))
             section["verses"].append(verse)
         section["notes"] = [] if checked else [
-            EXTENDED_SECTION_NOTE.format(pages=_printed(EXTENDED_PAGES[section_id]))]
+            EXTENDED_SECTION_NOTE.format(pages=_printed(_pages_of(verses)))]
     verses = {v["id"]: v for s in sections_by_key.values() for v in s["verses"]}
     unknown = {row[0] for row in PALI_VARIANTS} - set(NOTTINGHAM_ROMAN)
     if unknown:
@@ -794,7 +802,8 @@ def _apply_nottingham(sections_by_key: dict, nott: dict) -> None:
         english = _unit_texts(pages, refs)["english"]
         if english is None:
             raise BuildError(f"{verse_id}: units {refs} have no English")
-        verse.update({"english": english, "english_source": _nottingham_source(str(refs[0][0])),
+        source = _nottingham_source(str(_english_page(pages, refs)))
+        verse.update({"english": english, "english_source": source,
                       "english_kind": "translation"})
 
 

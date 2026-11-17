@@ -50,7 +50,8 @@ NOTTINGHAM_ENGLISH = {"s19-v1", "s22-v2", "s22-v3"}
 NEW_SECTIONS = {"s01": "3", "s08": "9–11", "s21": "14", "s23": "16–17", "s24": "17–19", "s25": "19–20",
                 "s26": "21–22", "s27": "22–23", "s28": "24", "s29": "25", "s30": "26", "s31": "27–28",
                 "s32": "28–29", "s33": "29–34"}
-EXTENDED_SECTIONS = {"s05": "5–6", "s06": "6–7", "s07": "7–8"}
+# Sections 5-7 -> the printed page(s) of their verses 2-5 (s07's four are all on page 8).
+EXTENDED_SECTIONS = {"s05": "5–6", "s06": "6–7", "s07": "8"}
 PARITHA_PAGES = {"s08-v6": 3, "s08-v7": 3, "s08-v8": 3, "s23-v1": 38}
 # The rows of §5.3: printed form -> number of places.
 NAMO_COUNTS = {'ගච්චාමි': 9, 'විඡ්ඡාචරණ': 1, 'සමාදියාමී': 4, 'සුමාමේරය': 1, 'ධානේසු': 1,
@@ -148,6 +149,24 @@ class BuildContentTest(unittest.TestCase):
                              r"printed page \d+$", v["id"])
             self.assertEqual(v["english_source"]["collected"], "2026-11-17", v["id"])
 
+    def test_section_pages_come_from_the_units(self):
+        self.assertEqual(build_content._pages_of([[(8, 1)], [(8, 4)]]), "8")
+        self.assertEqual(build_content._pages_of([[(16, 3)], [(16, 7), (17, 0)], [(17, 1)]]), "16–17")
+        for spec in build_content.NOTTINGHAM_SECTIONS.values():
+            self.assertNotIn("pages", spec)
+        self.assertFalse(hasattr(build_content, "EXTENDED_PAGES"))
+        self.assertEqual(self.sections[6]["notes"],
+                         ["Verses 2–5 converted from the booklet's FM font; to be read against printed page 8."])
+
+    def test_english_locator_is_the_page_that_supplied_it(self):
+        def page(verse_id):
+            return self.by_id[verse_id]["english_source"]["locator"].rsplit(" ", 1)[1]
+
+        self.assertEqual(page("s23-v3"), "17")  # Pali on page 16, Roman and English on page 17
+        self.assertEqual(page("s19-v1"), "14")  # Pali on page 13, Roman and English on page 14
+        self.assertEqual(page("s24-v8"), "19")
+        self.assertEqual(page("s33-v7"), "31")  # English starts on page 31 and runs on to 32
+
     def test_english_kind(self):
         self.assertEqual({v["id"] for v in self.verses if v["english_kind"] == "explanation"}, EXPLANATION)
         others = {v["english_kind"] for v in self.verses if v["english"] is not None and v["id"] not in EXPLANATION}
@@ -217,7 +236,7 @@ class BuildContentTest(unittest.TestCase):
             s = by_section[section_id]
             self.assertEqual(s["check"], "needs checking", section_id)
             self.assertEqual(s["notes"], [f"Verses 2–5 converted from the booklet's FM font; to be read "
-                                          f"against printed pages {pages}."], section_id)
+                                          f"against {pages_phrase(pages)}."], section_id)
             self.assertEqual(s["source"]["name"], "namo.lk", section_id)
         for s in self.sections:
             if s["id"] not in NEW_SECTIONS and s["id"] not in EXTENDED_SECTIONS:
