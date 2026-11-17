@@ -44,7 +44,8 @@ class ReaderBottomBar extends StatelessWidget {
 
   /// How much of the reading the chant plays ("Chant plays 2 of 5
   /// sections"); null when it plays every section. Shown in the slider's
-  /// place until the chant is first asked for.
+  /// place until the chant is first asked for, unless the recording's row
+  /// is showing there.
   final String? coverage;
 
   /// Where the chanting's recording is; null when the store knows nothing
@@ -116,7 +117,9 @@ class ReaderBottomBar extends StatelessWidget {
             onPressed: loaded ? onChantRestart : null,
           ),
           Expanded(
-            child: coverage != null && state.status == ChantStatus.idle
+            child: missing
+                ? RecordingRow(status: status, onDownload: onDownload)
+                : coverage != null && state.status == ChantStatus.idle
                 ? Semantics(
                     liveRegion: true,
                     child: Text(
@@ -125,8 +128,6 @@ class ReaderBottomBar extends StatelessWidget {
                       style: NamoType.caption(p.textSecondary),
                     ),
                   )
-                : missing
-                ? RecordingRow(status: status, onDownload: onDownload)
                 : _ChantPosition(state: state, onSeek: onChantSeek),
           ),
           ChantSpeedButton(speed: chantSpeed, onPressed: onChantSpeed),

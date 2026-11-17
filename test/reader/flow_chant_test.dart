@@ -203,6 +203,30 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('a mixed flow whose first recording is not downloaded shows '
+      'its row and Download before Play, not the coverage line', (t) async {
+    final store = FakeRecordingStore()
+      ..set(mangalaReadingId, _status(Availability.notDownloaded));
+    await _open(t, [
+      ...await _buddha(t),
+      _whole(mangalaReadingId),
+      _whole(_karaniyaId),
+    ], store: store);
+    expect(_coverage, findsNothing);
+    expect(_row, findsOneWidget);
+    expect(_rowText(t), 'Recording not downloaded · 1.0 MB');
+    expect(
+      find.descendant(of: _download, matching: find.text('Download')),
+      findsOneWidget,
+    );
+
+    store.set(mangalaReadingId, _status(Availability.downloaded));
+    await t.pump();
+    expect(_row, findsNothing);
+    expect(t.widget<Text>(_coverage).data, 'Chant plays 2 of 5 sections');
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('the page stays until the first recorded block starts', (
     t,
   ) async {
