@@ -37,4 +37,4 @@ book, with their real names:
 - `bauddhayage-athpotha/6-7.html`: https://pitaka.lk/books/bauddhayage-athpotha/6-7.html (`<li>`s each holding a `div.gatha`)
 - `pattana-pakarana-sannaya/6-2.html`: https://pitaka.lk/books/pattana-pakarana-sannaya/6-2.html (an `<ol>` nested in a `<ul>`'s `<li>`)
 - `pohoya-dinaya/21-1.html`: https://pitaka.lk/books/pohoya-dinaya/21-1.html (the `<suli>` typo around a footnote mark, `<ol start="34">`, footnotes)
-- `punyopadeshaya/39-23.html`: https://pitaka.lk/books/punyopadeshaya/39-23.html (table cells holding `<p>`s (still refused; see the task report))
+- `punyopadeshaya/39-23.html`: https://pitaka.lk/books/punyopadeshaya/39-23.html (table cells each holding a `<p>`, kept as the cell's lines)

@@ -261,10 +261,16 @@ class ParsePageTest(unittest.TestCase):
         notes = self.blocks("abhidharmaye-mulika-karunu", "12.html")[-1]["items"]
         self.assertEqual(len(notes), 2)
         self.assertTrue(notes[0].startswith("අංගුත්තර අටුවා."), notes[0])
-        self.assertTrue(notes[0].endswith("↑"), notes[0])          # the back-link's own text is kept
+        # 12.html line 82: '<p> <text> <a href="#footnote-ref-1">\u2191</a></p>'. The back-link
+        # arrow and the space before it are the one thing left out; the rest is as written.
+        self.assertEqual(notes[0], "\u0d85\u0d82\u0d9c\u0dd4\u0dad\u0dca\u0dad\u0dbb \u0d85\u0da7\u0dd4\u0dc0\u0dcf. "
+                                   "\u0dc4\u0dda\u0dc0\u0dcf. \u0db8\u0dd4\u0daf\u0dca\u200d\u0dbb\u200d\u0dab\u0dba - 820 "
+                                   "\u0db4\u0dd2\u0da7.")
+        self.assertFalse([n for n in notes if "\u2191" in n])
         two = self.blocks("shasanavatharanaya", "7.html")[-1]["items"]
         self.assertEqual(len(two), 1)
         self.assertEqual(two[0].count("\n"), 1)                     # two <p>s, two lines
+        self.assertTrue(two[0].endswith(" - \u0db8\u0dc4\u0dcf\u0dc0\u0d9c\u0dca\u0d9c\u0ddc \u0dc3\u0dad\u0dca\u0dad\u0db8\u0ddc)"), two[0])
 
         table = self.blocks("abhidharma-margaya", "5-5.html")[12]
         self.assertFalse(table["header"])
@@ -328,10 +334,24 @@ class ParsePageTest(unittest.TestCase):
         with self.assertRaisesRegex(tool.SyncError, r"an <img> shares its paragraph with text"):
             tool.parse_page('<main class="page prose"><p>a <img src="i.png"></p></main>', "x/1.html")
 
-    def test_parse_page_rejects_a_cell_holding_a_block(self):
-        # A real page: its table cells hold <p>s (reported; six more pages like it).
-        with self.assertRaisesRegex(tool.SyncError, r"punyopadeshaya/39-23\.html: <td> holds a block <p>"):
-            self.blocks("punyopadeshaya", "39-23.html")
+    def test_parse_page_cells_with_paragraphs(self):
+        # A real page whose table cells each hold a <p> (six more pages like it).
+        blocks = self.blocks("punyopadeshaya", "39-23.html")
+        table = [b for b in blocks if b["kind"] == "table"][0]
+        self.assertEqual([len(r) for r in table["rows"]], [4, 4, 4, 4])
+        self.assertEqual(table["rows"][0][0], "7 \u0dba\u0dd9\u0dc3\u0dd4\u0db4\u0dca\u0db4")
+        # Made up: several <p>s are lines of the cell, as in a list item; other blocks still raise.
+        html = '<main class="page prose"><table><tr><td> a <p>b</p>\n<p> c </p></td></tr></table></main>'
+        self.assertEqual(tool.parse_page(html, "x")[0]["rows"], [["a\nb\nc"]])
+        with self.assertRaisesRegex(tool.SyncError, r"<td> holds a block <div>"):
+            tool.parse_page('<main class="page prose"><table><tr><td><div class="gatha"><p>a</p></div></td></tr>'
+                            '</table></main>', "x")
+
+    def test_footnote_arrow_is_only_dropped_when_it_is_the_back_link(self):
+        html = ('<main class="page prose"><ol class="footnotes">'
+                '<li id="footnote-1"><p> a \u2191 b <a href="#footnote-ref-1">\u2191</a></p></li>'
+                '<li id="footnote-2"><p> c \u2191</p></li></ol></main>')
+        self.assertEqual(tool.parse_page(html, "x")[0]["items"], ["a \u2191 b", "c \u2191"])
 
 
 class BuildBookTest(unittest.TestCase):

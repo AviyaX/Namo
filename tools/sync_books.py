@@ -17,7 +17,8 @@ Usage (from anywhere; <project> is the project folder):
   --covers   Download the covers listed in COVERS to assets/books/covers/.
 
 The text is never altered: tags are dropped, runs of HTML white space become
-one space, and that is all. A structure the parser does not know stops the
+one space, and that is all, with one deliberate omission: the website's
+back-link arrow at the end of each footnote (see _footnotes). A structure the parser does not know stops the
 fetch with the page and the tag. Standard library only. The downloaded pages
 are untrusted data: they are parsed, never run.
 """
@@ -80,6 +81,7 @@ SPACE_RE = re.compile(r"[ \t\n\r\f]+")       # HTML white space; no-break and ze
 MARKUP_RE = re.compile(r"<|&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z]+);")
 PNG_HEADER = b"\x89PNG\r\n\x1a\n"
 BREAK = "\x00"                               # stands for <br> until the text is cleaned
+BACK_LINK = "\u2191"                          # the website's "back to the text" arrow at the end of a footnote
 
 
 class SyncError(Exception):
@@ -306,9 +308,18 @@ def _list(el, where):
     return {"kind": "list", "marker": marker, "start": start, "items": items}
 
 
+def _is_back_link(el):
+    href = el.attrs.get("href") or ""
+    return el.tag == "a" and href.startswith("#footnote-ref") and _plain_text(el) == BACK_LINK
+
+
 def _footnotes(el, where):
     """ol.footnotes, e.g. abhidharmaye-mulika-karunu/12.html: one item per <li>; its <p>s
-    (two in shasanavatharanaya/7.html) are lines. The back-link's text is kept."""
+    (two in shasanavatharanaya/7.html) are lines.
+
+    The one deliberate omission in this tool: each note ends with the website's back-link
+    <a href="#footnote-ref-N">\u2191</a>, navigation rather than the book's text, so that
+    trailing arrow and the white space before it are left out of the item."""
     items = []
     for child in el.children:
         if isinstance(child, str):
@@ -321,7 +332,10 @@ def _footnotes(el, where):
                     lines.append(_clean(_inline(part, where, "p")))
                 elif isinstance(part, _Element) or part.strip(" \t\n\r\f"):
                     raise SyncError("%s: a footnote holds something besides <p>" % where)
-            items.append("\n".join(line for line in lines if line))
+            item = "\n".join(line for line in lines if line)
+            if any(_is_back_link(e) for e in child.iter()):
+                item = re.sub(r"[ \t\n\r\f]*" + BACK_LINK + "$", "", item)
+            items.append(item)
         else:
             raise _unknown(where, child)
     return {"kind": "footnotes", "items": items}
@@ -354,8 +368,28 @@ def _table(el, where):
                 raise _unknown(where, cell)
         if not rows:
             header = bool(cells) and all(c.tag == "th" for c in cells)
-        rows.append([_clean(_inline(c, where, c.tag)) for c in cells])
+        rows.append([_cell_text(c, where) for c in cells])
     return {"kind": "table", "header": header, "rows": rows}
+
+
+def _cell_text(cell, where):
+    """A cell's text; its <p>s (punyopadeshaya/39-23.html, keles-1500/2.html) are lines
+    joined by "\\n", as in a list item. Any other block inside a cell raises."""
+    parts, run = [], []
+
+    def flush():
+        if run:
+            parts.append(_clean(_inline_children(run, where, cell.tag)))
+            run.clear()
+
+    for child in cell.children:
+        if isinstance(child, _Element) and child.tag == "p" and not child.cls:
+            flush()
+            parts.append(_clean(_inline(child, where, "p")))
+        else:
+            run.append(child)
+    flush()
+    return "\n".join(part for part in parts if part)
 
 
 def _image(el):
