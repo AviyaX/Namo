@@ -18,7 +18,7 @@ Rect unionRect(Iterable<Rect> rects) =>
 Rect cutoutFor(Rect anchorsUnion) => anchorsUnion.inflate(6);
 
 /// Puts the bubble below the cut-out when it fits there, else above, centred
-/// on the cut-out and kept [margin] from the sides.
+/// on the cut-out and kept [margin] from every edge.
 class BubbleLayoutDelegate extends SingleChildLayoutDelegate {
   BubbleLayoutDelegate({
     required this.cutout,
@@ -40,9 +40,10 @@ class BubbleLayoutDelegate extends SingleChildLayoutDelegate {
   Offset getPositionForChild(Size size, Size childSize) {
     final below =
         cutout.bottom + gap + childSize.height <= size.height - margin;
-    final y = below
-        ? cutout.bottom + gap
-        : cutout.top - gap - childSize.height;
+    // A bubble too tall for either side stays on screen over the cut-out.
+    final maxY = math.max(margin, size.height - margin - childSize.height);
+    final y = (below ? cutout.bottom + gap : cutout.top - gap - childSize.height)
+        .clamp(margin, maxY);
     final maxX = math.max(margin, size.width - margin - childSize.width);
     final x = (cutout.center.dx - childSize.width / 2).clamp(margin, maxX);
     return Offset(x, y);

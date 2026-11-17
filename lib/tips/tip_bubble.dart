@@ -37,15 +37,21 @@ class TipBubble extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // The label above reads these; they are not read twice.
-              ExcludeSemantics(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(tip.title, style: NamoType.label(p.text)),
-                    const SizedBox(height: NamoSpace.xs),
-                    Text(tip.body, style: NamoType.body(p.text)),
-                  ],
+              // The label above reads these; they are not read twice. With
+              // large text on a small screen the words scroll and the button
+              // stays in reach.
+              Flexible(
+                child: ExcludeSemantics(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(tip.title, style: NamoType.label(p.text)),
+                        const SizedBox(height: NamoSpace.xs),
+                        Text(tip.body, style: NamoType.body(p.text)),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: NamoSpace.md),

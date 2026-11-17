@@ -112,6 +112,32 @@ void main() {
     expect(b.bottom, lessThanOrEqualTo(640 - 16));
   });
 
+  testWidgets('a tall bubble over a control near the top stays inside the screen',
+      (t) async {
+    t.platformDispatcher.textScaleFactorTestValue = 2.0;
+    addTearDown(t.platformDispatcher.clearTextScaleFactorTestValue);
+    await _pump(
+      t,
+      TipHost(
+        tipsFor: () => [Tip.myFlows],
+        child: Scaffold(
+          body: Align(
+            alignment: Alignment.topCenter,
+            child: TipAnchor(tip: Tip.myFlows, child: _control()),
+          ),
+        ),
+      ),
+      size: const Size(320, 568),
+    );
+    await t.pumpAndSettle();
+    expect(_bubbleFinder, findsOneWidget);
+    final b = _rectOf(t, _bubble);
+    expect(b.left, greaterThanOrEqualTo(16));
+    expect(b.top, greaterThanOrEqualTo(16));
+    expect(b.right, lessThanOrEqualTo(320 - 16));
+    expect(b.bottom, lessThanOrEqualTo(568 - 16));
+  });
+
   testWidgets('two anchors are covered by one cut-out', (t) async {
     await _pump(
       t,
@@ -368,6 +394,16 @@ void main() {
     test('above the cut-out when it does not fit below', () {
       final d = at(const Rect.fromLTWH(150, 700, 100, 48));
       expect(d.getPositionForChild(size, child), const Offset(50, 588));
+    });
+
+    test('y is clamped to the margins when neither side has room', () {
+      // A tall bubble over a control near the top of a 320 x 568 screen:
+      // below does not fit (58 + 12 + 500 > 552), above would start at -502.
+      final d = at(const Rect.fromLTWH(100, 10, 120, 48));
+      expect(
+        d.getPositionForChild(const Size(320, 568), const Size(288, 500)),
+        const Offset(16, 16),
+      );
     });
 
     test('x is clamped to the margins', () {
