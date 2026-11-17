@@ -198,6 +198,51 @@ void main() {
     });
   });
 
+  test('paliLengthsOf counts every phrased section in order', () {
+    Verse phrased(String id, List<String> pali) => Verse(
+      id: id,
+      phrases: [
+        for (final p in pali) Phrase(pali: p, sinhala: 'si', english: 'en'),
+      ],
+    );
+    final first = Section(
+      id: 'ra~p',
+      number: 1,
+      heading: 'First',
+      verses: [
+        phrased('ra~v1', ['ab', 'cdef']),
+        phrased('ra~v2', ['g']),
+      ],
+    );
+    const between = Section(
+      id: 'rb~s1',
+      number: 2,
+      heading: 'Between',
+      verses: [Verse(id: 'rb~v1', paliSi: 'plain words', sinhala: 'si')],
+    );
+    final second = Section(
+      id: 'rc~p',
+      number: 3,
+      heading: 'Second',
+      verses: [
+        phrased('rc~v1', ['hijkl', 'mn', 'o']),
+      ],
+    );
+    final flow = Reading(
+      id: 'flow-1',
+      title: 'A flow',
+      sections: [first, between, second],
+    );
+    List<List<int>> alone(Section s) =>
+        paliLengthsOf(Reading(id: 'x', title: 'x', sections: [s]));
+    expect(paliLengthsOf(flow), [
+      [2, 4],
+      [1],
+      [5, 2, 1],
+    ]);
+    expect(paliLengthsOf(flow), [...alone(first), ...alone(second)]);
+  });
+
   test('blockStart', () {
     final times = [bt(1, 2), null];
     expect(blockStart(times, 0), s(1));

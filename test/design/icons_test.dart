@@ -20,6 +20,7 @@ class _One implements AudioCatalogue {
     path: 'assets/audio/test.mp3',
     label: 'A test recording',
     placeholder: false,
+    duration: Duration(seconds: 20),
   );
 }
 

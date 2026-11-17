@@ -19,6 +19,7 @@ class _Real implements AudioCatalogue {
         path: 'assets/audio/r1.mp3',
         label: 'Recording of r1',
         placeholder: false,
+        duration: Duration(seconds: 20),
       );
 }
 
@@ -103,6 +104,67 @@ void main() {
       }
     }
     expect(n, 39);
+  });
+
+  test('a recording carries its duration', () {
+    const library = Library(categories: [
+      Category(id: 'c', title: 'c', subtitle: 's', readings: [
+        Reading(
+          id: 'timed',
+          title: 't',
+          sections: [],
+          audio: RecordingInfo(
+            path: 'a.m4a',
+            label: 'L',
+            blockTimes: [BlockTime(Duration.zero, Duration(seconds: 4))],
+            duration: Duration(seconds: 42),
+          ),
+        ),
+        Reading(
+          id: 'plain',
+          title: 't',
+          sections: [],
+          audio: RecordingInfo(path: 'b.m4a', label: 'L'),
+        ),
+      ]),
+    ]);
+    final catalogue = ContentAudioCatalogue(library);
+    expect(
+      catalogue.recordingFor('timed')!.duration,
+      const Duration(seconds: 42),
+    );
+    expect(catalogue.recordingFor('plain')!.duration, Duration.zero);
+    expect(
+      DevPlaceholderCatalogue(_Empty()).recordingFor('r1')!.duration,
+      Duration.zero,
+    );
+  });
+
+  test('a timed recording without a duration is refused', () {
+    const library = Library(categories: [
+      Category(id: 'c', title: 'c', subtitle: 's', readings: [
+        Reading(
+          id: 'no-length',
+          title: 't',
+          sections: [],
+          audio: RecordingInfo(
+            path: 'a.m4a',
+            label: 'L',
+            blockTimes: [BlockTime(Duration.zero, Duration(seconds: 4))],
+          ),
+        ),
+      ]),
+    ]);
+    expect(
+      () => ContentAudioCatalogue(library),
+      throwsA(
+        isA<StateError>().having(
+          (e) => e.message,
+          'message',
+          'recording for no-length has no duration',
+        ),
+      ),
+    );
   });
 
   test('the placeholder is chosen only in a debug build with the flag on', () {
