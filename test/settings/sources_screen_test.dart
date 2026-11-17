@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/surface_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -13,12 +14,16 @@ import '../support/pump_app.dart';
 import '../support/test_content.dart';
 import '../tipitaka/tipitaka_support.dart';
 
-Future<void> openSources(WidgetTester t, {AssetBytes? load}) async {
+Future<void> openSources(
+  WidgetTester t, {
+  AssetBytes? load,
+  Library? content,
+}) async {
   // The bundled file is read by real I/O, which fake-async time cannot
   // advance; read it first and hand the app the finished library.
-  final library = await t.runAsync(
-    () => AssetContentRepository(rootBundle).load(),
-  );
+  final library =
+      content ??
+      await t.runAsync(() => AssetContentRepository(rootBundle).load());
   await pumpApp(
     t,
     overrides: [
@@ -51,6 +56,36 @@ int keyed(String prefix) => find
     .evaluate()
     .length;
 
+Library _checkLibrary({required List<String> verseNotes}) => Library.fromJson({
+  'categories': [
+    {
+      'id': 'c1',
+      'title': 'C',
+      'subtitle': 'c',
+      'readings': [
+        {
+          'id': 'r1',
+          'title': 'R',
+          'sections': [
+            {
+              'id': 's01',
+              'number': 1,
+              'heading': 'H',
+              'check': 'needs checking',
+              'notes': ['check this section'],
+              'verses': [
+                {'id': 's01-v1', 'check': 'needs checking', 'notes': verseNotes},
+                {'id': 's01-v2', 'check': 'needs checking', 'notes': <String>[]},
+              ],
+            },
+            {'id': 's02', 'number': 2, 'heading': 'H2', 'verses': <Object>[]},
+          ],
+        },
+      ],
+    },
+  ],
+});
+
 void main() {
   testWidgets(
     'Sources names all four sources and says the app is not connected with namo.lk',
@@ -62,7 +97,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
+        text('Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.'),
         findsOneWidget,
       );
       expect(
@@ -75,6 +110,7 @@ void main() {
       expect(find.textContaining('paritha.org'), findsWidgets);
       expect(find.textContaining('Mahamevnawa'), findsWidgets);
       expect(find.textContaining('Cynthia Gunawardana'), findsWidgets);
+      expect(text('Shanthi Vihara, Nottingham'), findsOneWidget);
 
       expect(text('https://namo.lk/buddha-puja/'), findsOneWidget);
       expect(
@@ -152,7 +188,7 @@ void main() {
       findsNothing,
     );
     expect(
-      text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
+      text('Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.'),
       findsOneWidget,
     );
     expect(
@@ -257,8 +293,10 @@ void main() {
     expect(find.text('Still to be checked'), findsOneWidget);
     // The bundled file: 15 distinct verse corrections and 1 heading.
     expect(keyed('correction-'), 16);
-    // Buddha Wandanawa's 4 verses, and one row each for the two Samantha Pattana readings.
-    expect(keyed('check-'), 6);
+    // Buddha Wandanawa's 4 verses and 17 sections, and one row each for the two
+    // Samantha Pattana readings.
+    expect(keyed('check-'), 23);
+    expect(keyed('check-section-'), 17);
     expect(keyed('check-reading-'), 2);
     expect(find.textContaining('ගච්චාමි'), findsOneWidget);
     expect(find.textContaining('ගච්ඡාමි'), findsOneWidget);
@@ -278,8 +316,9 @@ void main() {
       ),
       findsOneWidget,
     );
-    // Buddha Wandanawa keeps one row per verse, by verse id.
-    expect(keyed('check-s'), 4);
+    // Buddha Wandanawa keeps one row per verse with notes, by verse id, and one
+    // per section from the Nottingham booklet: 4 + 17.
+    expect(keyed('check-s'), 21);
     // Pirith still has none.
     final library = await t.runAsync(
       () => AssetContentRepository(rootBundle).load(),
@@ -296,6 +335,9 @@ void main() {
 
   testWidgets('Font licences opens the licence page', (t) async {
     await openSources(t);
+    // The check rows push the button below a 9000 px surface; bring it into view.
+    await t.ensureVisible(find.text('Font licences'));
+    await t.pumpAndSettle();
     await t.tap(find.text('Font licences'));
     await t.pumpAndSettle();
     expect(find.byType(LicensePage), findsOneWidget);
@@ -358,8 +400,8 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 6 text sources + the Tripitaka + 4 pictures + 16 corrections + 6 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(33));
+    // 7 text sources + the Tripitaka + 4 pictures + 16 corrections + 23 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(51));
   });
 
   for (final dark in [false, true]) {
@@ -453,5 +495,22 @@ void main() {
     gate.complete();
     await t.pumpAndSettle();
     expect(find.textContaining('Version of 2026-01-02.'), findsOneWidget);
+  });
+
+  testWidgets('a section that needs checking with notes gets one row; its '
+      'verses without notes get none', (t) async {
+    await openSources(t, content: _checkLibrary(verseNotes: const []));
+    expect(keyed('check-section-s01'), 1);
+    expect(find.byKey(const ValueKey('check-s01-v1')), findsNothing);
+    expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
+  });
+
+  testWidgets('a verse with notes still gets its row under a section row',
+      (t) async {
+    await openSources(t, content: _checkLibrary(verseNotes: const ['n']));
+    final section = t.getTopLeft(find.byKey(const ValueKey('check-section-s01')));
+    final verse = t.getTopLeft(find.byKey(const ValueKey('check-s01-v1')));
+    expect(section.dy, lessThan(verse.dy));
+    expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
   });
 }

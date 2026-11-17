@@ -351,7 +351,7 @@ void main() {
       false,
       (t) async {
         final lib = await realLibrary(t);
-        final heading = lib.category(realCategoryId)!.readings.first.sections[2].heading;
+        final heading = lib.category(realCategoryId)!.readings.first.sections[3].heading;
         await typeSearch(t, String.fromCharCodes(heading.runes.take(2)));
       },
     ),

@@ -56,7 +56,7 @@ void main() {
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('the bundled content loads: Buddha Wandanawa (1 reading, 19 sections), Pirith, then Samantha Pattana', () async {
+  test('the bundled content loads: Buddha Wandanawa (1 reading, 33 sections), Pirith, then Samantha Pattana', () async {
     final lib = await AssetContentRepository(rootBundle).load();
     expect(lib.categories.map((c) => c.id), [
       'cat-namaskaraya',
@@ -67,8 +67,8 @@ void main() {
     final r = first.readings.single;
     expect(first.title, 'Buddha Wandanawa');
     expect(first.subtitle, 'බුද්ධ වන්දනාව');
-    expect(r.sections.length, 19);
-    expect(r.sections.map((s) => s.number), List.generate(19, (i) => i + 1));
+    expect(r.sections.length, 33);
+    expect(r.sections.map((s) => s.number), List.generate(33, (i) => i + 1));
     expect(lib.reading('namaskaraya'), same(r));
     expect(lib.reading('nope'), isNull);
     expect(lib.categoryOf('namaskaraya'), same(first));

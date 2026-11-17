@@ -51,6 +51,8 @@ LEGACY_MAP = {
     "ª": "ඳූ",       # ª
     "®": "ඣ",        # ®
     "¯": "ඣි",       # ¯
+    "ˉ": "ඣි",       # U+02C9: the ඣ-with-ි glyph in the Nottingham booklet (bujjhitvā), checked in the rendered page
+    "^": "(", "&": ")",  # round brackets in the Nottingham booklet ("(තුන් වරක්)"), checked in the rendered page
     "³": "★",        # ³
     "´": "ඕ",        # ´
     "¾": "ර්",       # ¾  (repha)
@@ -261,6 +263,8 @@ _SELF_TEST = [
     ("iq[Cod.dr", "සුඤ්ඤාගාර"),
     ("ilHmq`X.jx", "සක්‍යපුඞගවං"),
     ("m`vqrla", "පඬුරක්"),
+    ("^;=ka jrla&", "(තුන් වරක්)"),
+    ("nqÊˉ;ajd", "බුජ්ඣිත්වා"),
 ]
 
 

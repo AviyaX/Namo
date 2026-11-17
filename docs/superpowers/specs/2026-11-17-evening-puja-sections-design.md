@@ -270,7 +270,10 @@ naming its origin (`namo:<heading>`, `booklet:<n>`, `nottingham:<key>`).
 - Roman and English are copied as printed, including the booklet's own
   inconsistencies ("sārati", "bagavāti", "Ētēna/Ēthēna", "Dasova hasmi",
   "Sādu"). No correction rows for them; the Sources page already says
-  English is "as given".
+  English is "as given". On the booklet's prose pages (17–34) the English
+  is re-set as paragraphs, whitespace only and guarded, as the Mahamevnawa
+  English already is; pages 3–16 keep the booklet's line breaks (ruled
+  2026-11-17).
 - Checking the new material is recorded per section, not per verse, so
   the Sources page does not grow by ninety rows. The section schema gains
   `notes` (a list, like a verse's); the Dart `Section` reads it
@@ -283,8 +286,9 @@ naming its origin (`namo:<heading>`, `booklet:<n>`, `nottingham:<key>`).
   the note "Verses 2–5 converted from the booklet's FM font; to be read
   against printed pages N–M."; their first verses stay `checked`. That is
   17 section rows plus the 4 verse rows that exist today. The owner clears
-  a section by reading it in the app, and the build flips it to checked
-  (a row removed from the table).
+  a section by reading it in the app and adding its key to
+  `NOTTINGHAM_CHECKED` in `tools/build_content.py`; the rebuild then marks it
+  checked and drops its note (ruled 2026-11-17).
 
 ### Sources page, README, checklist
 

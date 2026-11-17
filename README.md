@@ -5,7 +5,7 @@ It has no ads, no payments and no analytics; its only network use is fetching th
 
 ## What is in it
 
-The first reading is **Buddha Wandanawa** (බුද්ධ වන්දනාව), in Pali, Sinhala and English.
+The first reading is **Buddha Wandanawa** (බුද්ධ වන්දනාව), 33 sections in Pali, Sinhala and English; Roman Pali is stored for search.
 
 - Home shows one picture card for each category. A card for a category with one reading opens the reader straight away; otherwise it opens the Library with that category open.
 - The Library lists the categories. Tapping one opens its numbered sections in place, on the same page.
@@ -20,16 +20,17 @@ A flow keeps only which sections it holds (a reading id and a section id for eac
 
 The Sources page in the app credits each of these:
 
-- namo.lk: sections 1–17.
-- The paritha.org booklet, compiled by Devapriya and Shyamali from the Piruwana Poth Wahanse: sections 18–19.
+- namo.lk: the first verses of sections 2–7 and sections 9–19.
+- The paritha.org booklet, compiled by Devapriya and Shyamali from the Piruwana Poth Wahanse: sections 20 and 22, and the Sinhala of three verses in 8 and one in 23.
+- Shanthi Vihara, Nottingham, "Evening Puja and Chanting" booklet (supplied by the owner): the Pali, Roman Pali and English of sections 1, 8, 21 and 23–33, verses 2–5 of sections 5–7, three English lines in 19 and 22, and the Roman Pali of the other sections.
 - The "Vandana" booklet of Mahamevnawa Bhavana Asapuwa, Markham, Ontario: part of the English.
 - "Daily Buddha Vandana", prepared by Cynthia Gunawardana, Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane: the rest of the English.
 - The Home card picture: made for this app by its owner with an AI image tool (a generated picture, not a photograph). Every picture is recorded in `docs/pictures.md`.
 
-Namo is not made by, or connected with, namo.lk.
+Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.
 
 The verse text reaches the app only through `tools/build_content.py`, which reads `content/extracted/*.json` and writes `assets/content/namaskaraya_to_pin_dima.json`.
-The English for sections 1–6 is prose from a narrow-column PDF, so the build re-sets it as sentences (line breaks and joining spaces only; it fails if any other character would change). English that is verse keeps the translator's line breaks.
+The English for sections 2–7 is prose from a narrow-column PDF, so the build re-sets it as sentences (line breaks and joining spaces only; it fails if any other character would change). The Nottingham booklet's English on its printed pages 17–34 is re-set the same way where a line breaks mid-sentence. English that is verse keeps the translator's line breaks.
 
 ## Pirith content
 
@@ -90,6 +91,7 @@ The recordings are not in the app. They are uploaded to the owner's Cloudflare R
 
 - Tests: `flutter test`.
 - Content check: `python -I -X utf8 tools/build_content.py . --check` (without `--check` it rebuilds the content file). Its tests: `python -I -X utf8 tools/test_build_content.py`.
+- Nottingham booklet extractor (only if the booklet PDF changes): `python -I -X utf8 tools/extract_nottingham_booklet.py source_material/evening_puja_nottingham/evening_puja_and_chanting.pdf content/extracted/nottingham_booklet.json content/review/05_evening_puja_nottingham.md`. Its tests: `python -I -X utf8 tools/test_extract_nottingham_booklet.py`.
 - Hosted audio check: `python -I -X utf8 tools/sync_hosted_audio.py . --check`. Its tests: `python -I -X utf8 tools/test_sync_hosted_audio.py`.
 - Web build: `flutter build web --no-web-resources-cdn`. This bundles the drawing engine (CanvasKit) with the app, so the engine itself is never fetched from the internet; only the recordings are.
 

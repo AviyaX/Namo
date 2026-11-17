@@ -92,7 +92,7 @@ void main() {
       await openReal(t, Routes.home, settings: AppSettings(themeMode: theme));
       final c = (await realLibrary(t)).categories.first;
       final card = find.byType(FeaturedCard);
-      for (final s in ['FEATURED COLLECTION', c.title, c.subtitle, '19 sections']) {
+      for (final s in ['FEATURED COLLECTION', c.title, c.subtitle, '33 sections']) {
         final text = t.widget<Text>(
           find.descendant(of: card, matching: find.text(s)),
         );
@@ -107,7 +107,7 @@ void main() {
     await openReal(t, Routes.home);
     final c = (await realLibrary(t)).categories.first;
     final node = find.bySemanticsLabel(
-      '${c.title}, ${c.subtitle}, 19 sections, Begin',
+      '${c.title}, ${c.subtitle}, 33 sections, Begin',
     );
     expect(node, findsOneWidget);
     expect(
@@ -169,7 +169,7 @@ void main() {
     final c = (await realLibrary(t)).categories.first;
     expect(c.id, 'cat-namaskaraya');
     expect(
-      find.bySemanticsLabel('${c.title}, ${c.subtitle}, 19 sections, Begin'),
+      find.bySemanticsLabel('${c.title}, ${c.subtitle}, 33 sections, Begin'),
       findsOneWidget,
     );
     expect(
@@ -266,7 +266,7 @@ void main() {
     expect(sectionCount(c), 3);
     expect(sectionCountLabel(1), '1 section');
     expect(sectionCountLabel(0), '0 sections');
-    expect(sectionCountLabel(19), '19 sections');
+    expect(sectionCountLabel(33), '33 sections');
   });
 
   testWidgets('focused by keyboard the card shows the focus ring; hover and '

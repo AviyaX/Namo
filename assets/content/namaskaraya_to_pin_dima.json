@@ -14,8 +14,117 @@
       {
        "id": "s01",
        "number": 1,
+       "heading": "තෙරුවන් නමස්කාර කිරීම",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed page 3."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 3",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s01-v1",
+         "source": null,
+         "pali_si": "බුද්ධං නමාමි",
+         "pali_roman": "Buddhan namāmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Homage to the Buddha",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 3",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s01-v2",
+         "source": null,
+         "pali_si": "ධම්මං නමාමි",
+         "pali_roman": "Dhamman namāmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Homage to the Dhamma",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 3",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s01-v3",
+         "source": null,
+         "pali_si": "සංඝං නමාමි",
+         "pali_roman": "Sanghan namāmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Homage to the Sangha",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 3",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s01-v4",
+         "source": null,
+         "pali_si": "අහං වන්දාමි සබ්බදා",
+         "pali_roman": "Ahan vandāmi sabbadā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "My homage to the triple gem forever",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 3",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s01-v5",
+         "source": null,
+         "pali_si": "සාධු! සාධු! සාධු!",
+         "pali_roman": "Sādhu    Sādhu    Sādhu",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": null,
+         "english_source": null,
+         "english_kind": null,
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s02",
+       "number": 2,
        "heading": "නමස්කාරය",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -25,10 +134,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s01-v1",
+         "id": "s02-v1",
+         "source": null,
          "pali_si": "නමෝ තස්ස භගවතෝ අරහතෝ සම්මා සම්බුද්ධස්ස.\nනමෝ තස්ස භගවතෝ අරහතෝ සම්මා සම්බුද්ධස්ස.\nනමෝ තස්ස භගවතෝ අරහතෝ සම්මා සම්බුද්ධස්ස.",
-         "pali_roman": null,
+         "pali_roman": "Namo tassa bhagavato arahato sammā sambuddhassa\nNamo tassa bhagavato arahato sammā sambuddhassa\nNamo tassa bhagavato arahato sammā sambuddhassa",
          "sinhala": "ඒ භාග්‍යවත් අරහත් සම්‍යක් සම්බුදු රජාණන් වහන්සේට මාගේ නමස්කාරය වේවා.\nඒ භාග්‍යවත් අරහත් සම්‍යක් සම්බුදු රජාණන් වහන්සේට මාගේ නමස්කාරය වේවා.\nඒ භාග්‍යවත් අරහත් සම්‍යක් සම්බුදු රජාණන් වහන්සේට මාගේ නමස්කාරය වේවා.",
+         "sinhala_source": null,
          "english": "Homage to the Blissful One, the Worthy One, the Fully Enlightened One.\nHomage to the Blissful One, the Worthy One, the Fully Enlightened One.\nHomage to the Blissful One, the Worthy One, the Fully Enlightened One.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -44,10 +155,11 @@
        ]
       },
       {
-       "id": "s02",
-       "number": 2,
+       "id": "s03",
+       "number": 3,
        "heading": "තිසරණ සරණයාම",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -57,10 +169,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s02-v1",
+         "id": "s03-v1",
+         "source": null,
          "pali_si": "බුද්ධං සරණං ගච්ඡාමි\nධම්මං සරණං ගච්ඡාමි\nසංඝං සරණං ගච්ඡාමි\n\nදුතියම්පි බුද්ධං සරණං ගච්ඡාමි\nදුතියම්පි ධම්මං සරණං ගච්ඡාමි\nදුතියම්පි සංඝං සරණං ගච්ඡාමි\n\nතතියම්පි බුද්ධං සරණං ගච්ඡාමි\nතතියම්පි ධම්මං සරණං ගච්ඡාමි\nතතියම්පි සංඝං සරණං ගච්ඡාමි",
-         "pali_roman": null,
+         "pali_roman": "Buddham saranam gacchāmi\nDhammam saranam  gacchāmi\nSangham saranam gacchāmi\n\nDutiyampi buddham saranam gacchāmi\nDutiyampi dhammam saranam gacchāmi\nDutiyampi sangham saranam gacchāmi\n\nTatiyampi buddham saranam gacchāmi\nTatiyampi dhammam saranam gacchāmi\nTatiyampi sangham saranam gacchāmi",
          "sinhala": "මම බුදුරජාණන් වහන්සේ සරණ යමි.\nමම ශ්‍රී සද්ධර්මය සරණ යමි.\nමම ආර්ය මහා සංඝරත්නය සරණ යමි.\n\nදෙවනුව ද මම බුදුරජාණන් වහන්සේ සරණ යමි.\nදෙවනුව ද මම ශ්‍රී සද්ධර්මය සරණ යමි.\nදෙවනුව ද මම ආර්ය මහා සංඝරත්නය සරණ යමි.\n\nතෙවනුව ද මම බුදුරජාණන් වහන්සේ සරණ යමි.\nතෙවනුව ද මම ශ්‍රී සද්ධර්මය සරණ යමි.\nතෙවනුව ද මම ආර්ය මහා සංඝරත්නය සරණ යමි.",
+         "sinhala_source": null,
          "english": "I go to the Buddha for refuge.\nI go to the Dhamma for refuge.\nI go to the Sangha for refuge.\n\nA second time, I go to the Buddha for refuge.\nA second time, I go to the Dhamma for refuge.\nA second time, I go to the Sangha for refuge.\n\nA third time, I go to the Buddha for refuge.\nA third time, I go to the Dhamma for refuge.\nA third time, I go to the Sangha for refuge.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -84,10 +198,11 @@
        ]
       },
       {
-       "id": "s03",
-       "number": 3,
+       "id": "s04",
+       "number": 4,
        "heading": "පංචශීලය සමාදන්වීම",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -97,10 +212,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s03-v1",
+         "id": "s04-v1",
+         "source": null,
          "pali_si": "පාණාතිපාතා වේරමණී සික්ඛාපදං සමාදියාමි\nඅදින්නාදානා වේරමණී සික්ඛාපදං සමාදියාමි\nකාමේසු මිච්ඡාචාරා වේරමණී සික්ඛාපදං සමාදියාමි\nමුසාවාදා වේරමණී සික්ඛාපදං සමාදියාමි\nසුරාමේරය මජ්ජපමාදට්ඨානා වේරමණී සික්ඛාපදං සමාදියාමි\n\nතිසරණේන සද්ධිං පංචසීලං සමාදියාමි",
-         "pali_roman": null,
+         "pali_roman": "Pānātipātā vēramanī sikkhāpadan samādiyāmi\nAdinnādānā vēramanī sikkhāpadan samādiyāmi\nKāmēsu micchācārā vēramanī sikkhāpadan samādiyāmi\nMusāvādā vēramanī sikkhāpadan samādiyāmi\nSurāmēraya majja pamādatthānā vēramanī sikkhāpadam\nsamādiyāmi",
          "sinhala": "මම සතුන් මැරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම සොරකම් කිරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම කාමයෙහි වරදවා හැසිරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම බොරු කීමෙන්, කේලාම් කීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.\nමම මදයට, ප්‍රමාදයට කරුණුවන මත්කුඩු, රහ මෙර, සුරාපානය කිරීමෙන් වෙන්වීමේ සිල්පදය සමාදන් වෙමි.",
+         "sinhala_source": null,
          "english": "I undertake the training rule to abstain from killing living beings.\nI undertake the training rule to abstain from taking that which is not given.\nI undertake the training rule to abstain from sexual misconduct.\nI undertake the training rule to abstain from false speech.\nI undertake the training rule to abstain from intoxicants and harmful drugs.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -131,10 +248,13 @@
        ]
       },
       {
-       "id": "s04",
-       "number": 4,
+       "id": "s05",
+       "number": 5,
        "heading": "බුදු ගුණ සිහි කිරීම",
-       "check": "checked against source",
+       "check": "needs checking",
+       "notes": [
+        "Verses 2–5 converted from the booklet's FM font; to be read against printed pages 5–6."
+       ],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -144,10 +264,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s04-v1",
+         "id": "s05-v1",
+         "source": null,
          "pali_si": "ඉතිපි සෝ භගවා අරහං සම්මා සම්බුද්ධෝ\nවිජ්ජාචරණ සම්පන්නෝ සුගතෝ ලෝකවිදූ අනුත්තරෝ\nපුරිසදම්මසාරථී සත්ථා දේවමනුස්සානං බුද්ධෝ භගවාතී",
-         "pali_roman": null,
+         "pali_roman": "Itipi so bhagavā arahan, sammā sambuddho, vijjā carana\nsampanno,\nsugato, lokavidū, anuttaro purisadhamma sārati,\nsatthā dēva manussānan, buddho, bagavāti.",
          "sinhala": "ස්වාමීණී! වාසනා සහිත සකල ක්ලේෂයන් දුරු කළ හෙයින්ද, සියලු කෙලෙස් සතුරන් නැසූ හෙයින්ද, සංසාර චක්‍රයේ අරටු සිඳලූ හෙයින්ද, ලෝවැසියන්ගේ ආමිස පූජා, ප්‍රතිපත්ති පූජා පිළිගැනීමට සුදුසු වන හෙයින් ද, රහසින්වත් පව් නොකළ හෙයින් ද අරහත් නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ චතුරාර්‍ය සත්‍ය ධර්මයන් තමන් වහන්සේ විසින්ම අවබෝධ කළ හෙයින් සම්මා සම්බුද්ධ නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ අෂ්ඨ විද්‍යාවෙන් හා පසළොස්චරණ ධර්මයන්ගෙන් යුක්ත වූ හෙයින් විජ්ඡාචරණ සම්පන්න නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ ශෝභන වූ ගමන් ඇති හෙයින් ද, සුන්දර වූ තැනට පැමිණි හෙයින් ද සුභාශිත වචන වදාළ හෙයින් සුගත නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ සියලු ලෝකයන් තත්වූ පරිද්දෙන් දන්නා හෙයින් ලෝකවිදු නම් වන සේක.\nඒ භාග්‍යවතුන්වහන්සේ සියල්ලන් දමනය කළ හෙයින් අනුත්තර පුරිස දම්ම සාරථී නම් වන සේක.\nදමනය කර නිවන කරා පමුණුවන හෙයින් ඒ භග්‍යවතුන් වහන්සේ දෙව් මිනිසුන් ප්‍රධාන සත්වයන්ට අනුශාසනා කරන හෙයින් සත්ථා නම් වන සේක.\nඒ භාග්‍යවතුන්වහන්සේ සංසාර ස්වභාවය සම්පූර්ණයෙන්ම දැන වදාළ හෙයින් බුද්ධ නම් වන සේක.\nඒ භාග්‍යවතුන් වහන්සේ භග ධර්මයන් ඇති හෙයින් ද, සියලු කෙළෙස් මුලිනිපුටා දැමූ හෙයින් ද, සසර ගමන සිඳලූ හෙයින් ද, නාම රූප ධර්මයන් විභාග කොට දෙසූ හෙයින් ද, භගවා නම් වන සේක.",
+         "sinhala_source": null,
          "english": "Such indeed is the Blessed One:\n\"Araham\" - eradicated greed, hatred, delusion, craving, and is free of all taints.\n\"Sammasambuddho\" - Understood the Four Noble Truths, the reality of life, without anyone’s help.\n\"Vijjacaranasampanno\" - Perfect in True Knowledge and Conduct. Buddha acquired 3 kinds of knowledge: understood His past lives; understood the passing away and arising of other beings; understood the nature and the path to eradicate taints.\n\"Sugato\" - Found and followed the Right Noble Eightfold Path (the Path leading to the cessation of Dukka).\n\"Lokavidu\" - Understood the presence and origin of all the worlds (hell, ghost, animal, human, heavenly, and the pure abodes).\n\"Anuttaro purisadammasarathi\" - Incomparable Leader of those to be tamed.\n\"Satta devamannussanam\" - Teacher of gods and humans.\n\"Buddho\" - Understood the Four Noble Truths without assistance and was able to teach Dhamma to others, without holding anything back.\n\"Bhagava\" - Only a Buddha, the Supreme Teacher holds these great, extra-ordinary qualities.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -167,14 +289,113 @@
            "reason": "18 elsewhere on namo.lk, 4 in the booklet"
           }
          ]
+        },
+        {
+         "id": "s05-v2",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 5",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "බුද්ධං ජීවිත පරියන්තං සරණං ගච්ඡාමි.",
+         "pali_roman": "Buddhan jīvita pariyantan saranan gacchāmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "I go to the Buddha as my refuge to the end of my life.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 5",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s05-v3",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 5",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "යේ ච බුද්ධා අතීතා ච - යේ ච බුද්ධා අනාගතා\nපච්චුප්පන්නා ච යේ බුද්ධා - අහං වන්දාමි සබ්බදා",
+         "pali_roman": "Yē ca buddhā atītā ca - yē ca buddhā anāgathā\npaccuppannā ca yē buddhā - ahan wandāmi sabbadā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The Buddhas in the past, the Buddhas in the future,\nthe Buddhas in the present, I shall respect you every day.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 5",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s05-v4",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "නත්ථී මේ සරණං අඤ්ඤං - බුද්ධෝ මේ සරණං වරං\nඒතේන සච්ච වජ්ජේන - හෝතු මේ ජය මංගලං",
+         "pali_roman": "Natthi mē saranan aññan - buddhō mē saranan waran\nēthēna sacca wajjēna - hotu mē jayamangalan",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "For me there is no other refuge, the Buddha is my matchless refuge;\nby the power these words of truth, may joyous victory be mine.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s05-v5",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "උත්තමංගේන වන්දේහං - පාදපං සුවරුත්තමං\nබුද්ධේ යෝ ඛලිතෝ දෝසෝ - බුද්ධෝ ඛමතු තං මමං",
+         "pali_roman": "uttamangēna wandēhan - pādapan suwaruttaman\nbuddhē yo kalitho doso - buddho khamatutan maman.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "With my forehead I pay reverence, to the dust at his feet;\nif buddha, I have wronged by mistake, may the buddha forgive me.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
         }
        ]
       },
       {
-       "id": "s05",
-       "number": 5,
+       "id": "s06",
+       "number": 6,
        "heading": "දහම් වැඳීම",
-       "check": "checked against source",
+       "check": "needs checking",
+       "notes": [
+        "Verses 2–5 converted from the booklet's FM font; to be read against printed pages 6–7."
+       ],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -184,10 +405,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s05-v1",
+         "id": "s06-v1",
+         "source": null,
          "pali_si": "ස්වාක්ඛාතෝ, භගවතා ධම්මෝ සන්දිට්ඨිකො, අකාලිකෝ,\nඒහිපස්සිකෝ, ඕපනයිකො, පච්චත්තං වේදිතබ්බො විඤ්ඤුහීති",
-         "pali_roman": null,
+         "pali_roman": "Svākkhāto Bhagavatā dhammo, sanditthiko, akāliko,\nehipassiko, opanayiko, paccattam veditabbo viññūhīti.",
          "sinhala": "භාග්‍යවතුන් වහන්සේ විසින් ඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය මනා කොට දේශනා කරන ලදී. එහෙයින් ස්වාක්ඛාත නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය තමා විසින් ම අවබෝධ කර ගත යුතු හෙයින් සන්දිට්ඨික නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය මාර්ග සිතට අනතුරුව ම කල් නොයොවා ඵල සිත පහළ වන හෙයින් අකාලික නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය සිතෙහි පිහිටුවා ගත යුතු හෙයින් ඕපනයික නම් වන සේක.\nඒ නව ලෝකෝත්තර ශ්‍රී සද්ධර්මය නුවණැත්තන් විසින් තම තමන්ම දත යුතු හෙයින් පච්චත්තවේදිතබ්බ නම් වන සේක.",
+         "sinhala_source": null,
          "english": "\"Svakkhato\" - The Dhamma taught by the Blessed One is Excellent in the beginning, Excellent in the middle and Excellent in the end - all of Buddha's Discourses are consistent and teach the same truth.\n\"Sanditthika\" - Dhamma is self-evident and can be understood in this life itself.\n\"Akaliko\" - Dhamma, Noble Truths, can not be changed nor can they be altered over time.\n\"Ehipassiko\" - \"come and see\"; Buddha's Dhamma is to be investigated.\n\"Opanayika\" - Dhamma can only be understood by oneself.\n\"Paccattam vedittabbo vinnuhiti\" - Dhamma is for the wise to understand and realize.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -199,14 +422,113 @@
          "check": "checked against source",
          "notes": [],
          "corrections": []
+        },
+        {
+         "id": "s06-v2",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "ධම්මං ජීවිත පරියන්තං සරණං ගච්ඡාමි.",
+         "pali_roman": "Dhamman jīvita pariyantan saranan gacchāmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "I go to the Dhamma as my refuge to the end of my life.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s06-v3",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "යේ ච ධම්මා අතීතා ච - යේ ච ධම්මා අනාගතා\nපච්චුප්පන්නා ච යේ ධම්මා - අහං වන්දාමි සබ්බදා",
+         "pali_roman": "Yē ca dhammā atītā ca - yē ca dhammā anāgathā\npaccuppannā ca yē dhammā - ahan wandāmi sabbadā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The dhammas in the past, the dhammas in the future,\nthe dhammas in the present, I shall respect you every day.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 6",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s06-v4",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 7",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "නත්ථී මේ සරණං අඤ්ඤං - ධම්මෝ මේ සරණං වරං\nඒතේන සච්ච වජ්ජේන - හෝතු මේ ජය මංගලං",
+         "pali_roman": "Natthi mē saranan aññan - dhammo mē saranan waran\nētēna sacca wajjēna - hotu mē jayamangalan",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "For me there is no other refuge, the Dhamma is my matchless refuge;\nby the power of these words of truth, may joyous victory be mine.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 7",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s06-v5",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 7",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "උත්තමංගේන වන්දේහං - ධම්මං ච තිවිධං වරං\nධම්මේ යෝ ඛලිතෝ දෝසෝ - ධම්මෝ ඛමතු තං මමං",
+         "pali_roman": "uttamangēna wandēhan - dhammañca tividan waran\ndhammē yo kalitho doso - dhammañca tividan waran",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "With my forehead I pay reverence, to the matchless threefold Dhamma,\nif I have done wrong to the Dhamma,  may the Dhamma forgive me.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 7",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
         }
        ]
       },
       {
-       "id": "s06",
-       "number": 6,
+       "id": "s07",
+       "number": 7,
        "heading": "සඟුන් වැඳීම",
-       "check": "checked against source",
+       "check": "needs checking",
+       "notes": [
+        "Verses 2–5 converted from the booklet's FM font; to be read against printed page 8."
+       ],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -216,10 +538,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s06-v1",
+         "id": "s07-v1",
+         "source": null,
          "pali_si": "සුපටිපන්නෝ භගවතො සාවක සංඝෝ\nඋජුපටිපන්නෝ භගවතො සාවක සංඝෝ\nඤායපටිපන්නෝ භගවතො සාවක සංඝෝ\nසාමීචිපටිපන්නෝ භගවතො සාවක සංඝෝ\nයදිදං චත්තාරි පුරිස යුගානි අට්ඨපුරිස පුග්ගලා\nඒස භගවතෝ සාවක සංඝෝ\nආහුනෙයියෝ පාහුනෙයියෝ දක්ඛිනෙයියෝ\nඅඤ්ජලිකරණීයෝ අනුත්තරං පුඤ්ඤක්ඛෙත්තං\nලෝකස්සාති",
-         "pali_roman": null,
+         "pali_roman": "Supaṭipanno Bhagavato sāvaka sangho.\nUjupaṭipanno Bhagavato sāvaka sangho.\nÑāyapaṭipanno Bhagavato sāvaka sangho.\nSāmīcipaṭipanno Bhagavato sāvaka sangho.\nYadidam cattāri purisayugāni, aṭṭha purisa puggalā,\nēsa Bhagavato sāvaka sangho;\nāhuneyyo, pāhuneyyo, dakkhineyyo, anjalikaranīyo,\nanuttaram puññakkhettan lokassā ti.",
          "sinhala": "භාග්‍යවතුන් වහන්සේ ආර්ය මහා සංඝරත්නය සසුන් මගට මනාව පිළිපන් හෙයින් සුපටිපන්න නම් වන සේක. මධ්‍යම ප්‍රතිපදාවට පිළිපන් හෙයින් උජුපටිපන්න නම් වන සේක. නිවන් පිළිස මනාව පිලිපන් හෙයින් ඤායපටිපන්න නම් වන සේක. සසර දුක නැති කරන ප්‍රතිපදාවන්ට මනාව පිලිපන් හෙයින් සාමීචිපටිපන්න නම් වන සේක. දුර බැහැර සිට පූජා ද්‍රව්‍යයන් ගෙනවුත් පිදීමට සුදුසු වන හෙයින් ආහුණ්‍යෙය නම් වන සේක. දුර බැහැරින් එන ඤාතීන්ට පිළියෙල කළ භෝජන පූජා කිරීමට සුදුසු වන හෙයින් පාහුණ්‍යෙය නම් වන සේක. දෙඅත් මුදුනෙහි තබා වැඳීමට සුදුසු වන හෙයින් අඤ්ජලිකරණීය නම් වන සේක. ලෝකයාට උසස් වු පින් කෙතක් වන හෙයින් අනුත්තර පිඤ්ඤඛෙත්ත නම් වන සේක.",
+         "sinhala_source": null,
          "english": "\"Supatipanno\" - The Order of the Blessed One are training to rid themselves of greed, hatred and delusion.\n\"Ujupatipanno\" - They follow the direct, Noble Eightfold Path.\n\"Nayapatipanno\" - The Noble Order understands the First Noble Truth and are practising to eradicate suffering\n\"Samicipatipanno\" - The Orders spreads the message of Dhamma by sharing what the Buddha taught.\nIn Buddha’s Order are the 8 kinds of individuals: the one striving to Enter the Stream of the Noble Path, the one who has entered the Stream; the one striving to attain the position of Once-Returner, the Once-Returner; the one striving to reach the Non- returner position, the Non-Returner; the one striving for Arahantship and the Arahant. A field of merit is the supreme Sangha, worthy of gifts, worthy of hospitality, worthy of respect and worship.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -231,14 +555,296 @@
          "check": "checked against source",
          "notes": [],
          "corrections": []
+        },
+        {
+         "id": "s07-v2",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "සංඝං ජීවිත පරියන්තං සරණං ගච්ඡාමි.",
+         "pali_roman": "Sanghan jīvita pariyantan saranan gacchāmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "I go to the Sangha as my refuge to the end of my life.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s07-v3",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "යේ ච සංඝා අතීතා ච - යේ ච සංඝා අනාගතා\nපච්චුප්පන්නා ච යේ සංඝා - අහං වන්දාමි සබ්බදා",
+         "pali_roman": "Yē ca sanghā atītā ca - yē ca sanghā anāgatā\npaccuppannā ca yē sanghā - ahan wandāmi sabbadā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The Noble disciples in the past, the noble disciples in the future,\nthe noble disciples in the present, I shall respect you every day.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s07-v4",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "නත්ථී මේ සරණං අඤ්ඤං - සංඝෝ මේ සරණං වරං\nඒතේන සච්ච වජ්ජේන - හෝතු මේ ජය මංගලං",
+         "pali_roman": "Natthi mē saranan aññan - sanghō mē saranan waran\nētēna sacca wajjēna - hotu mē jayamangalan",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "For me there is no other refuge, the Sangha is my matchless refuge;\nby the power if these words, may joyous victory be mine.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s07-v5",
+         "source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "pali_si": "උත්තමංගේන වන්දේහං - සංඝං ච තිවිධෝත්තමං\nසංඝේ යෝ ඛලිතෝ දෝසෝ - සංඝෝ ඛමතු තං මමං",
+         "pali_roman": "uttamangēna wandēhan - sanghañca tividottaman\nsanghē yo kalitho doso - sangho khamatu tan maman.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "With my forehead I pay reverence, to the matchless threefold Sangha,\nIf I have wronged by mistake, may the Sangha forgive me.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 8",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
         }
        ]
       },
       {
-       "id": "s07",
-       "number": 7,
+       "id": "s08",
+       "number": 8,
+       "heading": "සියල්ල එකට සිහි කිරීම",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 9–11."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 9–11",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s08-v1",
+         "source": null,
+         "pali_si": "බුද්ධ ධම්මා ච පච්චේක - බුද්ධ සංඝා ච සාමිකා\nදාසෝවා හස්මි මේතේසං - ගුණං ඨාතු සිරේ සදා",
+         "pali_roman": "Buddha dhamma ca paccēka - buddha sangha ca sāmikā\nDasova hasmi mētēsan - gunan thātu sirē sadā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The buddha, the Dhamma, the private Buddhas and the Sangha are my lords;\nand I am their servant. May I recollect their excellence.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 9",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v2",
+         "source": null,
+         "pali_si": "තිසරණං තිලක්ඛණූපේතං - නිබ්බාණමන්තිමං සුඛං\nසුවන්දේ සිරසා නිච්චං - ලබාමි තිවිධාමහං",
+         "pali_roman": "Tisaranan tilakkhanūpētan - nibbāna mantiman sukhan\nSuwandē sirasā niccan - labhāmi tividhāmahan",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The three refuges, imbued with three signs, Nibbana the ultimate happiness,\nI always revere them; may I gain the threefold happiness.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 9",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v3",
+         "source": null,
+         "pali_si": "තිසරණං ච සිරේ ඨාතු - සිරේ ඨාතු තිලක්ඛණං\nඋපෙක්ඛා ච සිරේ ඨාතු - නිබ්බාණං ඨාතු මේ සිරේ",
+         "pali_roman": "Tisaranañca sire thātu - sirē thātu tilakkhanan\nUpekkhā ca sirē thātu - nibbānan thātu mē sire",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May the three refuges be on my head - and may the three signs be on my head,\nMay the may equanimity be on my head, - and may the Nibbana so be on my head.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 9",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v4",
+         "source": null,
+         "pali_si": "බුද්ධේ සකරුණේ වන්දේ - ධම්මේ පච්චේක සම්බුද්ධේ\nසංඝේච සිරසායේව - තිධානිච්ච නමාමහං",
+         "pali_roman": "Buddhē sakarunē vandē - dhammē paccēka sambuddhē\nSanghē ca sirasāyēwa - Tidhā nicca namāmahan",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "homage to the compassionate Buddha, -  to the Dhamma, to the private buddhas;\nAnd to the Sangha, with my forehead - I always pay threefold reverence.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 9",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v5",
+         "source": null,
+         "pali_si": "නමාමි සත්ථුනෝවාද - අප්පමාද වචනන්තිමං\nසබ්බේපි චේතියේ වන්දේ - උපජ්ඣාචරියේ මමං\nමය්හං පනාම තේජේන - චිත්තං පාපේහි මුඤ්චිතංති.",
+         "pali_roman": "Namāmi satthunovāda - appamāda vacanantiman\nSabbēpi cētiyē vandē - upajjācariyē maman\nMayihanpanāma tējēna - cittan papēhi muñcitan.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Homage to the teachings of the Buddha, - to earnestness the last exhortation,\nto all the shrines, -  to my preceptors and teachers\nBy dint of this salutation, - may my mind be free from evil.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 10",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v6",
+         "source": null,
+         "pali_si": "නමාමි බුද්ධං ගුණසාගරන්තං\nසත්තා සදා හොන්තු සුඛී අවේරා\nකායෝ ජිගුච්ඡෝ සකලෝ දුගන්ධෝ\nගච්ඡන්ති සබ්බේ මරණං අහං ච",
+         "pali_roman": "Namāmi Buddhan guṇa sāgarantan\nSattā sadā hontu sukhī avērā\nKāyo jiguccho sakalo dugandho\nGacchanti sabbe maraṇaṃ ahañ ca",
+         "sinhala": "ගුණ නම් වූ මහා සයුරේ පරතෙරට ගියාවූ සම්බුදුරජානන් වහන්සේ වඳිමි. සියලූ සත්වයෝ සියලු කල්හී සැප ඇත්තෝ වෙත්වා. වෛර නැත්තෝ වෙත්වා. මෙම කය පිළිකුල්ය දුගඳ ය අන් සියල්ලන්ම සේම මමද මරණයට පත්වෙමි.",
+         "sinhala_source": {
+          "name": "paritha.org booklet (Wandana Gatha)",
+          "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed page 3",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english": "I worship the Buddha, the ocean of virtues.\nMay all beings be happy and free from enmity.\nThe body is repulsive and full of bad smell.\nAll beings, including myself must die.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 10",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v7",
+         "source": null,
+         "pali_si": "නමාමි ධම්මං සුගතේන දේසිතං\nසත්තා සදා හොන්තු සුඛී අවේරා\nකායෝ ජිගුච්ඡෝ සකලෝ දුගන්ධෝ\nගච්ඡන්ති සබ්බේ මරණං අහං ච",
+         "pali_roman": "Namāmi Dhamman sugatēna dēsitan\nSattā sadā hontu sukhī avērā\nKāyo jiguccho sakalo dugandho\nGacchanti sabbe maraṇaṃ ahañ ca",
+         "sinhala": "බුදුරජානන් වහන්සේ විසින් දේශිත ගුණ සයුරක් බදු වූ ශ්‍රී සද්ධර්මය වඳිමි. සියලූ සත්වයෝ සියලු කල්හී සැප ඇත්තෝ වෙත්වා. වෛර නැත්තෝ වෙත්වා. මෙම කය පිළිකුල්ය දුගඳ ය අන් සියල්ලන්ම සේම මමද මරණයට පත්වෙමි.",
+         "sinhala_source": {
+          "name": "paritha.org booklet (Wandana Gatha)",
+          "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed page 3",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english": "Homage to the Dhamma, preached by the Buddha.\nMay all beings be happy and free from enmity.\nThe body is repulsive and full of bad smell.\nAll beings, including myself must die.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 10",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s08-v8",
+         "source": null,
+         "pali_si": "නමාමි සංඝං මුනිරාජ සාවකං\nසත්තා සදා හොන්තු සුඛී අවේරා\nකායෝ ජිගුච්ඡෝ සකලෝ දුගන්ධෝ\nගච්ඡන්ති සබ්බේ මරණං අහං ච",
+         "pali_roman": "Namāmi Sanghan Munirāja sāvakan\nSattā sadā hontu sukhī avērā\nKāyo jiguccho sakalo dugandho\nGacchanti sabbe maraṇaṃ ahañ ca",
+         "sinhala": "බුදුරජානන් වහන්ගේ ආර්ය සංඝරත්නය වඳිමි. සියලූ සත්වයෝ සියලු කල්හී සැප ඇත්තෝ වෙත්වා. වෛර නැත්තෝ වෙත්වා. මෙම කය පිළිකුල්ය දුගඳ ය අන් සියල්ලන්ම සේම මමද මරණයට පත්වෙමි.",
+         "sinhala_source": {
+          "name": "paritha.org booklet (Wandana Gatha)",
+          "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed page 3",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english": "Homage to the Saṅgha, the disciples of the Buddha\nMay all beings be happy and free from enmity.\nThe body is repulsive and full of bad smell.\nAll beings, including myself must die.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 11",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s09",
+       "number": 9,
        "heading": "චෛත්‍ය වන්දනාව",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -248,10 +854,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s07-v1",
+         "id": "s09-v1",
+         "source": null,
          "pali_si": "වන්දාමි චේතියං සබ්බං – සබ්බ ඨානේසු පතිට්ඨිතං\nසාරීරික ධාතු මහා බෝධිං – බුද්ධ රූපං සකලං සදා",
-         "pali_roman": null,
+         "pali_roman": "Vandāmi cētiyan sabban - Sabbaṭhānēsu patiṭṭhitan\nSārīrikadhātu Mahā Bodhin - Buddharūpan sakalan sadā",
          "sinhala": "සියලු ස්ථානයන්හි පිහිටි චෛත්‍යයන්ද, ශාරීරික ධාතුන් වහන්සේලා ද, සියලු බුද්ධ ප්‍රතිමාවන් ද, මම සැමදා වඳිමි.",
+         "sinhala_source": null,
          "english": "I salute every chetiya\nThat may stand in any place\nThe bodily relics the great Bodhi\nAnd all images of the Buddha.",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -275,10 +883,11 @@
        ]
       },
       {
-       "id": "s08",
-       "number": 8,
+       "id": "s10",
+       "number": 10,
        "heading": "බෝධි වන්දනාව",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -288,10 +897,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s08-v1",
+         "id": "s10-v1",
+         "source": null,
          "pali_si": "යස්සමූලේ නිසින්නෝච – සබ්බාරි විජයං අකා\nපත්තෝ සබ්බඤ්ඤුතං සත්ථා – වන්දේතංබෝධිපාදපං",
-         "pali_roman": null,
+         "pali_roman": "Yassa mūlē nisinnova - Sabbāri vijayan akā\nPatto sabbaññutan satthā - Vandē tan Bodhi pādapan",
          "sinhala": "යම්කිසි වෘක්ෂ මූලයක වැඩහිඳ දසමරුන් පරදා අප ශාස්තෘ වූ බුදුරජාණන් වහන්සේ, උතුම් සර්වඥතා ඤාණය උපදවා ගත්තේද, ඒ උතුම් බෝධි වෘක්ෂ රාජයාණන් වහන්සේට මාගේ නමස්කාරය වේවා! වන්දනාමාන වේවා!",
+         "sinhala_source": null,
          "english": "Seated at whose base,\nThe teacher overcame all foes,\nAttaining Omniscience\nThat very bodhi tree do I adore",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -305,10 +916,12 @@
          "corrections": []
         },
         {
-         "id": "s08-v2",
+         "id": "s10-v2",
+         "source": null,
          "pali_si": "ඉමේ ඒතේ මහාබෝධී – ලෝකනාථේන පූජිතා\nඅහංපි තේ නමස්සාමි – බෝධිරාජා නමත්ථු තෙ",
-         "pali_roman": null,
+         "pali_roman": "Imē ētē mahā Bodhi - Loka nāthēna pūjitā\nAhaṃpi tē namassāmi - Bodhirājā namatthu tē.",
          "sinhala": "ලෝකනාථ වූ මාගේ බුදුරජාණන් වහන්සේ සත් දිනක් අනිමිස ලෝචන පූජාවෙන් පිදුම් කළා වූ ඒ උතුම් බෝධිරාජයාණන් වහන්සේට මම ද ගෞරවයෙන් යුතුව මෙසේ නමස්කාර කරමි.",
+         "sinhala_source": null,
          "english": "These great trees of enlightenment\nBy the lord of the world\nI too shall salute you\nMay there be homage to you. O great Bodhi.",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -322,10 +935,12 @@
          "corrections": []
         },
         {
-         "id": "s08-v3",
+         "id": "s10-v3",
+         "source": null,
          "pali_si": "ඉන්ද්‍රනීල වණ්ණ පත්ත සේත ඛන්ද භාසුරං\nසත්ථු නෙත්ත පංකජාහි පූජිතග්ග සාතදං\nඅග්ග බෝධි නාම වාම දේවරුක්ඛ සණ්ණිභං\nතං විසාල බෝධි පාදපං නමාමි සබ්බදා",
          "pali_roman": null,
          "sinhala": "ඉඳුනිල් මාණික්‍ය වැනි පත්‍ර වලින් හා සුදුපාට කඳින් බබලන්නා වූත්, මාගේ බුදුරජාණන් වහන්සේගේ නෙත් පියුම් වලින් පූජා ලැබුවා වූත්, අග්‍ර මිහිර ගෙන දෙන අග්‍ර බෝධි නම් සුන්දර වූ දෙව් රුකක් සේ වර්ණිත විශාල, එම බෝධි වෘක්ෂ රාජයාණන් වහන්සේ මම හැම කල්හිම වඳිමි.",
+         "sinhala_source": null,
          "english": null,
          "english_source": null,
          "english_kind": null,
@@ -344,10 +959,11 @@
        ]
       },
       {
-       "id": "s09",
-       "number": 9,
+       "id": "s11",
+       "number": 11,
        "heading": "බුද්ධ පූජා ආරාධනාව",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -357,10 +973,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s09-v1",
+         "id": "s11-v1",
+         "source": null,
          "pali_si": "නිවේදයාමි සම්බුද්ධං – වීතරාගං මහාමුනිං\nනිමන්තයාමි සුගතං – ලෝකජෙට්ඨං නරාසභං",
          "pali_roman": null,
          "sinhala": "වීතරාග මහා මුණි වූ, ලෝකාග්‍ර වූ, නර ශ්‍රේෂ්ඨ වූ, සුගත වූ, සම්බුදුරජාණන් වහන්සේට ආරාධනා කරමි.",
+         "sinhala_source": null,
          "english": null,
          "english_source": null,
          "english_kind": null,
@@ -371,10 +989,11 @@
        ]
       },
       {
-       "id": "s10",
-       "number": 10,
+       "id": "s12",
+       "number": 12,
        "heading": "පහන් පූජාව",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -384,10 +1003,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s10-v1",
+         "id": "s12-v1",
+         "source": null,
          "pali_si": "ඝනසාරප්ප දිත්තේන – දීපේන තමධංසිනා\nතිලෝකදීපං සම්බුද්ධං – පූජයාමි තමෝනුදං",
-         "pali_roman": null,
+         "pali_roman": "Ghanasārappa dittēna - Dīpēna tamadhansinā\nTilokadīpan sambuddhan - Pūjayāmi tamonudan",
          "sinhala": "ශ්‍රද්ධාවෙන් දල්වන ලද අඳුර දුරලන්නාවූ මේ පහන් ආලෝකයෙන් තුන් ලොවට මහා පහන් කණුවක් වැනි වූ මෝහන්ධකාරය දුරු කරන ලද බුදුරජාණන් වහන්සේ පුදමි.",
+         "sinhala_source": null,
          "english": "With lights brightly shining\nAbolishing this gloom\nI adore the Enlightened One\nThe Light of the three worlds*\nwho dispels the darkness ( of ignorance )\n\n(*three worlds – kama loka, rupa loka and arupa loka)",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -403,10 +1024,11 @@
        ]
       },
       {
-       "id": "s11",
-       "number": 11,
+       "id": "s13",
+       "number": 13,
        "heading": "සුවඳ දුම් පූජාව",
        "check": "needs checking",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -416,10 +1038,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s11-v1",
+         "id": "s13-v1",
+         "source": null,
          "pali_si": "ගන්ධ සම්භාර යුත්තේන – ධුපේනාහං සුගන්ධිනා\nසුගන්ධිනාහං ගන්ධේන – පූජයාමි තථාගතං",
          "pali_roman": null,
          "sinhala": "පූජාවන්ට සුදුසු වූ, පූජා ලැබුවා වූ, උතුම් බුදුරජාණන් වහන්සේට මේ සුවඳ දුමින් පුදමි.",
+         "sinhala_source": null,
          "english": "With perfumed incense,\nFrom fragrant substances,\nI worship the exalted one, worthy of worship,\nWho dispels the darkness (of ignorance)",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -436,10 +1060,12 @@
          "corrections": []
         },
         {
-         "id": "s11-v2",
+         "id": "s13-v2",
+         "source": null,
          "pali_si": "සුගන්ධිකාය වදනං – අනන්ත ගුණගන්ධිනා\nසුගන්ධිනාහං ගන්ධේන – පූජයාමි තථාගතං",
-         "pali_roman": null,
+         "pali_roman": "Sugandikāya vadanan - Ananta gunagandinā\nSugandināhan gandēna - pūjayāmi tathāgatan.",
          "sinhala": "අපමණ ගුණ සුවඳවත් වදන් ඇති, තථාගතයන් වහන්සේට සුවඳින් පුදමි.",
+         "sinhala_source": null,
          "english": "Fragrant of voice and form,\nFragrant of infinite virtues,\nThe fragrant one, Thathagatha (the exalted one),\nWith fragrance I worship.",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -455,10 +1081,11 @@
        ]
       },
       {
-       "id": "s12",
-       "number": 12,
+       "id": "s14",
+       "number": 14,
        "heading": "මල් පූජාව",
        "check": "needs checking",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -468,10 +1095,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s12-v1",
+         "id": "s14-v1",
+         "source": null,
          "pali_si": "වණ්ණ ගන්ධ ගුණෝපේතං – ඒතං කුසුම සන්තතිං\nපූජයාමි මුනින්දස්ස – සිරීපාද සරෝරුහේ",
-         "pali_roman": null,
+         "pali_roman": "Vaṇṇagandha guṇopētan - ētan Kusuma santatin\nPūjayāmi munindassa - Sirīpāda saroruhē",
          "sinhala": "පැහැයෙන් හා සුවඳින් යුත් මේ මල් රැස මුනිඳුන් සිරිපා පියුමට පුදනෙමි.",
+         "sinhala_source": null,
          "english": "This mass of flowers fresh, fragrant and colorful\nI offer at the sacred lotus like feet of the noble sage",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -485,10 +1114,12 @@
          "corrections": []
         },
         {
-         "id": "s12-v2",
+         "id": "s14-v2",
+         "source": null,
          "pali_si": "පූජේමි බුද්ධං කුසුමේනනේන\nපුඤ්ඤේනමේතේන ලභාමි මොක්ඛං\nපුප්ඵං මිලායාති යථා ඉදම්මේ\nකායෝ තථායාති විනාස භාවං",
-         "pali_roman": null,
+         "pali_roman": "Pujēmi Buddhan kusumēnanēna - Puññēna mētēna labhāmi\nmokkhan\nPupphaṃ milāyāti yathā idan mē - Kāyo tathā yāti\nvināsabhāvan",
          "sinhala": "මේ කුසුමින් බුදුන් පුදමි. මේ පිනෙන් මොක් සුවට ලබමි! මේ මල් මැලවී යන්නා සේ මාගේ සිරුරද විනාශයට පත් වේයි.",
+         "sinhala_source": null,
          "english": "I worship the Buddha with these flowers;\nMay this virtue be helpful for my emancipation;\nJust as these flowers fade,\nOur body will undergo decay.",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
@@ -506,69 +1137,11 @@
        ]
       },
       {
-       "id": "s13",
-       "number": 13,
-       "heading": "පැන් පූජාව",
-       "check": "checked against source",
-       "source": {
-        "name": "namo.lk",
-        "locator": "https://namo.lk/buddha-puja/",
-        "collected": "2026-11-09",
-        "translator": "not named by the source"
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "s13-v1",
-         "pali_si": "අධිවාසේතු නෝ භන්තේ – පානීයං පරිකප්පිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
-         "pali_roman": null,
-         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ පැන් අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
-         "english": "O Lord! The blessed one\nMay this water\nBe kindly accepted by you\nOut of great compassion on us.",
-         "english_source": {
-          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
-          "locator": "Vandana Gatha Booklet final.pdf, PDF page 11",
-          "collected": "2026-11-10",
-          "translator": "prepared by Cynthia Gunawardana"
-         },
-         "english_kind": "translation",
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      },
-      {
-       "id": "s14",
-       "number": 14,
-       "heading": "ආහාර පූජාව",
-       "check": "checked against source",
-       "source": {
-        "name": "namo.lk",
-        "locator": "https://namo.lk/buddha-puja/",
-        "collected": "2026-11-09",
-        "translator": "not named by the source"
-       },
-       "corrections": [],
-       "verses": [
-        {
-         "id": "s14-v1",
-         "pali_si": "අධිවාසේතු නෝ භන්තේ – භෝජනං උපනාමිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
-         "pali_roman": null,
-         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ බොජුන් අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
-         "english": null,
-         "english_source": null,
-         "english_kind": null,
-         "check": "checked against source",
-         "notes": [],
-         "corrections": []
-        }
-       ]
-      },
-      {
        "id": "s15",
        "number": 15,
-       "heading": "ගිලන්පස පූජාව",
+       "heading": "පැන් පූජාව",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -579,10 +1152,12 @@
        "verses": [
         {
          "id": "s15-v1",
-         "pali_si": "අධිවාසේතු නෝ භන්තේ – ගිලාන පච්චයං ඉමං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
-         "pali_roman": null,
-         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ ගිලන් පස අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
-         "english": "O Lord! The blessed one\nMay these gilan pasa\nBe kindly accepted by you\nOut of great compassion on us.\n\n(Gilan pasa – permissible food & drinks for Buddhist monks and nuns from noon to the following morning such as fruit juices, sugar candy)",
+         "source": null,
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – පානීයං පරිකප්පිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "pali_roman": "Adhivāsētu no bhante - pāniyan parikappitan\nAnukampan upādāya - patiganhātu muttaman",
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ පැන් අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
+         "sinhala_source": null,
+         "english": "O Lord! The blessed one\nMay this water\nBe kindly accepted by you\nOut of great compassion on us.",
          "english_source": {
           "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
           "locator": "Vandana Gatha Booklet final.pdf, PDF page 11",
@@ -599,8 +1174,9 @@
       {
        "id": "s16",
        "number": 16,
-       "heading": "දැහැත් පූජාව",
+       "heading": "ආහාර පූජාව",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -611,9 +1187,11 @@
        "verses": [
         {
          "id": "s16-v1",
-         "pali_si": "නාග වල්ලී දලූ පේතං – චුණ්ණ පූග සමායුතං\nතාම්බූලං පතිගණ්හාතු – සතං පූජේමිදං පිනෝ",
+         "source": null,
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – භෝජනං උපනාමිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
          "pali_roman": null,
-         "sinhala": "බුලතින් හා හුණු පුවක් කප්‍රින් යුත්, මේ දැහැත්, තථාගතයන් වහන්සේ ඉවසා වදාරණ සේක්වා !",
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ බොජුන් අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
+         "sinhala_source": null,
          "english": null,
          "english_source": null,
          "english_kind": null,
@@ -626,8 +1204,9 @@
       {
        "id": "s17",
        "number": 17,
-       "heading": "සියල්ල එකවිට පූජා කිරීම",
+       "heading": "ගිලන්පස පූජාව",
        "check": "checked against source",
+       "notes": [],
        "source": {
         "name": "namo.lk",
         "locator": "https://namo.lk/buddha-puja/",
@@ -638,12 +1217,84 @@
        "verses": [
         {
          "id": "s17-v1",
-         "pali_si": "අධිවාසේතු නෝ භන්තේ – සබ්බං සද්ධාය පූජිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "source": null,
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – ගිලාන පච්චයං ඉමං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "pali_roman": "Adhivāsētu no bhante - Gilāna paccayan iman\nAnukampan upādāya - patiganhātu muttaman",
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ මේ ගිලන් පස අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා!",
+         "sinhala_source": null,
+         "english": "O Lord! The blessed one\nMay these gilan pasa\nBe kindly accepted by you\nOut of great compassion on us.\n\n(Gilan pasa – permissible food & drinks for Buddhist monks and nuns from noon to the following morning such as fruit juices, sugar candy)",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 11",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s18",
+       "number": 18,
+       "heading": "දැහැත් පූජාව",
+       "check": "checked against source",
+       "notes": [],
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s18-v1",
+         "source": null,
+         "pali_si": "නාග වල්ලී දලූ පේතං – චුණ්ණ පූග සමායුතං\nතාම්බූලං පතිගණ්හාතු – සතං පූජේමිදං පිනෝ",
          "pali_roman": null,
-         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ සැදැහෙන් පුදන ලද මේ සියල්ල අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා !\n\nසාධූ! සාධූ! සාධූ!",
+         "sinhala": "බුලතින් හා හුණු පුවක් කප්‍රින් යුත්, මේ දැහැත්, තථාගතයන් වහන්සේ ඉවසා වදාරණ සේක්වා !",
+         "sinhala_source": null,
          "english": null,
          "english_source": null,
          "english_kind": null,
+         "check": "checked against source",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s19",
+       "number": 19,
+       "heading": "සියල්ල එකවිට පූජා කිරීම",
+       "check": "checked against source",
+       "notes": [],
+       "source": {
+        "name": "namo.lk",
+        "locator": "https://namo.lk/buddha-puja/",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s19-v1",
+         "source": null,
+         "pali_si": "අධිවාසේතු නෝ භන්තේ – සබ්බං සද්ධාය පූජිතං\nඅනුකම්පං උපාදාය – පතිගණ්හාතු මුත්තමං",
+         "pali_roman": "Adhivāsētu no bhante - sabban saddhāya pūjitan\nAnukampan upādāya - patiganhātu muttaman.",
+         "sinhala": "භාග්‍යවතුන් වහන්ස, පිළිගැනුමට යෝග්‍ය වූ සැදැහෙන් පුදන ලද මේ සියල්ල අනුකම්පා පෙරදැරිව ඉවසා වදාරන සේක්වා !\n\nසාධූ! සාධූ! සාධූ!",
+         "sinhala_source": null,
+         "english": "O, Blessed One, kindly take, all these, offered with utmost devotion.\nOut of great compassion, would you accept it, The Noble one.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 14",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
          "check": "checked against source",
          "notes": [],
          "corrections": [
@@ -659,160 +1310,11 @@
        ]
       },
       {
-       "id": "s18",
-       "number": 18,
-       "heading": "දෙවියන්ට පින් දීම",
-       "check": "needs checking",
-       "source": {
-        "name": "paritha.org booklet (Wandana Gatha)",
-        "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed page 37",
-        "collected": "2026-11-09",
-        "translator": "not named by the source"
-       },
-       "corrections": [
-        {
-         "field": "heading",
-         "from": "පින්දීම",
-         "to": "පින් දීම",
-         "count": 1,
-         "reason": "owner's spelling"
-        }
-       ],
-       "verses": [
-        {
-         "id": "s18-v1",
-         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ දේවා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
-         "pali_roman": null,
-         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු දෙවියෝ වෙත අනුමෝදන් වෙත්වා.",
-         "english": "May all devas share this merit\nWhich we have thus accumulated\nFor the acquisition of all kinds\nOf happiness and prosperity.",
-         "english_source": {
-          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
-          "locator": "Vandana Gatha Booklet final.pdf, PDF page 12",
-          "collected": "2026-11-10",
-          "translator": "prepared by Cynthia Gunawardana"
-         },
-         "english_kind": "translation",
-         "check": "checked against source",
-         "notes": [],
-         "corrections": [
-          {
-           "field": "sinhala",
-           "from": "රුස්කර",
-           "to": "රැස්කර",
-           "count": 1,
-           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
-          },
-          {
-           "field": "sinhala",
-           "from": "පුණ්ය",
-           "to": "පුණ්‍ය",
-           "count": 1,
-           "reason": "the booklet's own other use; namo.lk"
-          }
-         ]
-        },
-        {
-         "id": "s18-v2",
-         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ භූතා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
-         "pali_roman": null,
-         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු භූතයෝ වෙත අනුමෝදන් වෙත්වා.",
-         "english": null,
-         "english_source": null,
-         "english_kind": null,
-         "check": "checked against source",
-         "notes": [],
-         "corrections": [
-          {
-           "field": "sinhala",
-           "from": "රුස්කර",
-           "to": "රැස්කර",
-           "count": 1,
-           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
-          },
-          {
-           "field": "sinhala",
-           "from": "පුණ්ය",
-           "to": "පුණ්‍ය",
-           "count": 1,
-           "reason": "the booklet's own other use; namo.lk"
-          },
-          {
-           "field": "sinhala",
-           "from": "භූතයා්",
-           "to": "භූතයෝ",
-           "count": 1,
-           "reason": "3 times elsewhere in the booklet, 2 on namo.lk"
-          }
-         ]
-        },
-        {
-         "id": "s18-v3",
-         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ සත්තා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
-         "pali_roman": null,
-         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු සත්වයෝ වෙත අනුමෝදන් වෙත්වා.",
-         "english": null,
-         "english_source": null,
-         "english_kind": null,
-         "check": "checked against source",
-         "notes": [],
-         "corrections": [
-          {
-           "field": "sinhala",
-           "from": "රුස්කර",
-           "to": "රැස්කර",
-           "count": 1,
-           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
-          },
-          {
-           "field": "sinhala",
-           "from": "පුණ්ය",
-           "to": "පුණ්‍ය",
-           "count": 1,
-           "reason": "the booklet's own other use; namo.lk"
-          }
-         ]
-        },
-        {
-         "id": "s18-v4",
-         "pali_si": "ආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු ලෝක සාසනං\n\nආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු දේසනං\n\nආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු මං පරං",
-         "pali_roman": null,
-         "sinhala": "අහසෙහි වසන්නා වූද, පොළොවෙහි වසන්නා වූද, මහත් සෘද්ධි ඇති දෙවියෝ ද, නාගයෝ ද මේ පින් අනුමෝදන්ව නිරතුරුව ලෝකයත් සාසනයත් බොහෝ කල් යහතින් ආරක්ෂා කරත්වා.",
-         "english": "May mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and long protect the\nBuddha’s dispensation.\n\nMay mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and long protect the\nteaching of the Dhamma.\n\nMay mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and\nlong protect myself and others.",
-         "english_source": {
-          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
-          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF pages 16–17",
-          "collected": "2026-11-09",
-          "translator": "not named by the source"
-         },
-         "english_kind": "translation",
-         "check": "needs checking",
-         "notes": [
-          "The app's Pali reads \"ලෝක සාසනං\"; Mahamevnawa reads \"sasanam\". (The Brisbane booklet reads \"loka sasanam\", as the app does.)"
-         ],
-         "corrections": [
-          {
-           "field": "sinhala",
-           "from": "සාසණ",
-           "to": "සාසන",
-           "count": 1,
-           "reason": "8 elsewhere in the booklet, 5 on namo.lk"
-          },
-          {
-           "field": "pali_si",
-           "from": "දේවානාගා",
-           "to": "දේවා නාගා",
-           "count": 3,
-           "reason": "spacing only; both sources print two words elsewhere"
-          }
-         ]
-        }
-       ]
-      },
-      {
-       "id": "s19",
-       "number": 19,
+       "id": "s20",
+       "number": 20,
        "heading": "තෙරුවන් සමාකර ගැනීම",
        "check": "needs checking",
+       "notes": [],
        "source": {
         "name": "paritha.org booklet (Wandana Gatha)",
         "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed pages 37–38",
@@ -822,10 +1324,12 @@
        "corrections": [],
        "verses": [
         {
-         "id": "s19-v1",
+         "id": "s20-v1",
+         "source": null,
          "pali_si": "කායේන වාචා චිත්තේන පමාදේන මයා කතං\nඅච්චයං ඛම මේ භන්තේ භූරිපඤ්ඤ තථාගත",
-         "pali_roman": null,
+         "pali_roman": "Kāyēna vācā cittēna - pamādēna maya katan\nAccayan khama mē bhantē - bhūripañña tathāgatha.",
          "sinhala": "මා විසින් සිතින් හෝ කයින් හෝ වචනයෙන් හෝ යන තුන් දොරින් නොදැනුවත්ව සිදුකරන ලද යම් වරදක් වේ නම්, ඒ වරදට බුදුරජාණන් වහන්ස මට සමාව දෙන සේක්වා.",
+         "sinhala_source": null,
          "english": "If, due to negligence, I have done some\nwrong, by body, speech or mind,\nForgive me of that offence, O Bhante,\nPerfect one of vast wisdom.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -847,10 +1351,12 @@
          ]
         },
         {
-         "id": "s19-v2",
+         "id": "s20-v2",
+         "source": null,
          "pali_si": "කායේන වාචා චිත්තේන පමාදේන මයා කතං\nඅච්චයං ඛම මේ ධම්ම සන්දිට්ඨික අකාලික",
-         "pali_roman": null,
+         "pali_roman": "Kāyēna vācā cittēna - pamādēna maya katan\nAccayan khama mē Dhamma - sanditthika akālika.",
          "sinhala": "මා විසින් සිතින් හෝ කයින් හෝ වචනයෙන් හෝ යන තුන් දොරින් නොදැනුවත්ව සිදුකරන ලද යම් වරදක් වේ නම්, ඒ වරදට සන්දිට්ඨික වූ අකාලික වූ ධර්මරත්නය මට සමාව දෙන සේක්වා.",
+         "sinhala_source": null,
          "english": "If, due to negligence, I have done some\nwrong, by body, speech or mind,\nForgive me of that offence, O Dhamma,\nVisible and unaffected by time.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -872,10 +1378,12 @@
          ]
         },
         {
-         "id": "s19-v3",
+         "id": "s20-v3",
+         "source": null,
          "pali_si": "කායේන වාචා චිත්තේන පමාදේන මයා කතං\nඅච්චයං ඛම මේ සංඝ පුඤ්ඤක්ඛෙත්තං අනුත්තරං",
          "pali_roman": null,
          "sinhala": "මා විසින් සිතින් හෝ කයින් හෝ වචනයෙන් හෝ යන තුන් දොරින් නොදැනුවත්ව සිදුකරන ලද යම් වරදක් වේ නම්, ඒ වරදට පිං කෙතක් බදු වූ අෂ්ටාර්ය පුද්ගල මහා සංඝරත්නය මට සමාව දෙන සේක්වා.",
+         "sinhala_source": null,
          "english": "If, due to negligence, I have done some\nwrong, by body, speech or mind,\nForgive me of that offence, O Sangha,\nPractising well and supreme.",
          "english_source": {
           "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
@@ -911,6 +1419,1555 @@
            "reason": "3 elsewhere in the booklet, 10 on namo.lk"
           }
          ]
+        }
+       ]
+      },
+      {
+       "id": "s21",
+       "number": 21,
+       "heading": "මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed page 14."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 14",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s21-v1",
+         "source": null,
+         "pali_si": "ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ\nඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ\nඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ",
+         "pali_roman": "Idan mē ñātīnan hotu - sukitā hontu ñātayo\nIdan mē ñātīnan hotu - sukitā hontu ñātayo\nIdan mē ñātīnan hotu - sukitā hontu ñātayo",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Let this merit accrue to my departed relatives and may they be happy.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 14",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s22",
+       "number": 22,
+       "heading": "දෙවියන්ට පින් දීම",
+       "check": "needs checking",
+       "notes": [],
+       "source": {
+        "name": "paritha.org booklet (Wandana Gatha)",
+        "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed page 37",
+        "collected": "2026-11-09",
+        "translator": "not named by the source"
+       },
+       "corrections": [
+        {
+         "field": "heading",
+         "from": "පින්දීම",
+         "to": "පින් දීම",
+         "count": 1,
+         "reason": "owner's spelling"
+        }
+       ],
+       "verses": [
+        {
+         "id": "s22-v1",
+         "source": null,
+         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ දේවා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
+         "pali_roman": "Ettāvatā ca amhēhi - sambhatan puñña sampadan\nSabbe dēva anumōdantu - sabba sampatti siddhiya.",
+         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු දෙවියෝ වෙත අනුමෝදන් වෙත්වා.",
+         "sinhala_source": null,
+         "english": "May all devas share this merit\nWhich we have thus accumulated\nFor the acquisition of all kinds\nOf happiness and prosperity.",
+         "english_source": {
+          "name": "\"Daily Buddha Vandana\", Yasodhara Dhamma School, Sri Lankarama Maha Viharaya, Ellen Grove, Brisbane",
+          "locator": "Vandana Gatha Booklet final.pdf, PDF page 12",
+          "collected": "2026-11-10",
+          "translator": "prepared by Cynthia Gunawardana"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "රුස්කර",
+           "to": "රැස්කර",
+           "count": 1,
+           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "පුණ්ය",
+           "to": "පුණ්‍ය",
+           "count": 1,
+           "reason": "the booklet's own other use; namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s22-v2",
+         "source": null,
+         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ භූතා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
+         "pali_roman": "Ettāvatāca amhēhi - sambhatan puñña sampadan\nSabbe bhutā anumōdantu - sabba sampatti siddhiya.",
+         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු භූතයෝ වෙත අනුමෝදන් වෙත්වා.",
+         "sinhala_source": null,
+         "english": "All the merits, thus, accumulated by us,\nMay all the spirits share, for the acquisition of all kinds of happiness and prosperity.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 15",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "රුස්කර",
+           "to": "රැස්කර",
+           "count": 1,
+           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "පුණ්ය",
+           "to": "පුණ්‍ය",
+           "count": 1,
+           "reason": "the booklet's own other use; namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "භූතයා්",
+           "to": "භූතයෝ",
+           "count": 1,
+           "reason": "3 times elsewhere in the booklet, 2 on namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s22-v3",
+         "source": null,
+         "pali_si": "එත්තාවතා ච අම්හේහි, සම්භතං පුඤ්ඤසම්පදං\nසබ්බේ සත්තා අනුමෝදන්තු, සබ්බසම්පත්ති සිද්ධියා",
+         "pali_roman": "Ettāvatāca amhēhi - sambhatan puñña sampadan\nSabbe satthā anumōdantu - sabba sampatti siddhiya.",
+         "sinhala": "අප විසින් මෙසේ රැස්කරගන්නා ලද පුණ්‍ය සම්පත්, සියලු සම්පත් හි අභිවෘද්ධිය සඳහා සියලු සත්වයෝ වෙත අනුමෝදන් වෙත්වා.",
+         "sinhala_source": null,
+         "english": "All the merits, thus, accumulated by us,\nMay all the beings share, For the acquisition of all kinds of happiness and prosperity.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 15",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "checked against source",
+         "notes": [],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "රුස්කර",
+           "to": "රැස්කර",
+           "count": 1,
+           "reason": "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"
+          },
+          {
+           "field": "sinhala",
+           "from": "පුණ්ය",
+           "to": "පුණ්‍ය",
+           "count": 1,
+           "reason": "the booklet's own other use; namo.lk"
+          }
+         ]
+        },
+        {
+         "id": "s22-v4",
+         "source": null,
+         "pali_si": "ආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු ලෝක සාසනං\n\nආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු දේසනං\n\nආකාසට්ඨාච භුම්මට්ඨා, දේවා නාගා මහිද්ධිකා\nපුඤ්ඤංතං අනුමෝදිත්වා, චිරං රක්ඛන්තු මං පරං",
+         "pali_roman": "Ākāsattha ca bhummatthā - dēvā nāgā mahiddhikā\nPuññan tan anumoditva - ciran rakkhantu sāsanan\n\nĀkāsattha ca bhummatthā - dēvā nāgā mahiddhikā\nPuññan tan anumoditva - ciran rakkhantu dēsanan\n\nĀkāsattha ca bhummatthā - dēvā nāgā mahiddhikā\nPuññan tan anumoditva - ciran rakkhantu man paran.",
+         "sinhala": "අහසෙහි වසන්නා වූද, පොළොවෙහි වසන්නා වූද, මහත් සෘද්ධි ඇති දෙවියෝ ද, නාගයෝ ද මේ පින් අනුමෝදන්ව නිරතුරුව ලෝකයත් සාසනයත් බොහෝ කල් යහතින් ආරක්ෂා කරත්වා.",
+         "sinhala_source": null,
+         "english": "May mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and long protect the\nBuddha’s dispensation.\n\nMay mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and long protect the\nteaching of the Dhamma.\n\nMay mighty deities and nagas\ndwelling in space and on the earth,\nrejoice in this merit of ours and\nlong protect myself and others.",
+         "english_source": {
+          "name": "Mahamevnawa \"Vandana\" booklet (Mahamevna Bhavana Asapuwa, Markham ON)",
+          "locator": "https://www.mahamevnawa.ca/uploads/1/0/7/1/107195823/vandana_v1.pdf, PDF pages 16–17",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [
+          "The app's Pali reads \"ලෝක සාසනං\"; Mahamevnawa reads \"sasanam\". (The Brisbane booklet reads \"loka sasanam\", as the app does.)"
+         ],
+         "corrections": [
+          {
+           "field": "sinhala",
+           "from": "සාසණ",
+           "to": "සාසන",
+           "count": 1,
+           "reason": "8 elsewhere in the booklet, 5 on namo.lk"
+          },
+          {
+           "field": "pali_si",
+           "from": "දේවානාගා",
+           "to": "දේවා නාගා",
+           "count": 3,
+           "reason": "spacing only; both sources print two words elsewhere"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "s23",
+       "number": 23,
+       "heading": "ප්‍රාර්ථනා",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 16–17."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 16–17",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s23-v1",
+         "source": null,
+         "pali_si": "ඉමිනා පුඤ්ඤ කම්මේන - මා මේ බාල සමාගමෝ\nසතං සමාගමෝ හෝතු - යාව නිබ්බාණ පත්තියා",
+         "pali_roman": "Iminā puñña kammēna - mā mē bāla samāgamo\nSatan samāgamo hotu - yāva nibbāna pattiyā.",
+         "sinhala": "මෙසේ කරන ලද සියලු පුණ්‍ය කර්මයන්ගේ හේතුවෙන් නිවන් දක්නා ජාති දක්වා අසත්පුරුෂ, අනුවන, බාල, ඇසුරක් නොමවේවා යහපත් උතුම් සත් පුරුෂ ඇසුරක්ම වේවා.",
+         "sinhala_source": {
+          "name": "paritha.org booklet (Wandana Gatha)",
+          "locator": "https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf, printed page 38",
+          "collected": "2026-11-09",
+          "translator": "not named by the source"
+         },
+         "english": "By the grace of this merit that I have acquired, may I never follow the foolish;\nbut only the wise until I realise the final happiness, the Nibbana.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 16",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s23-v2",
+         "source": null,
+         "pali_si": "ඉමාය ධම්මානුධම්ම පටිපත්තියා බුද්ධං පූජේමි\nඉමාය ධම්මානුධම්ම පටිපත්තියා ධම්මං පූජේමි\nඉමාය ධම්මානුධම්ම පටිපත්තියා සංඝං පූජේමි",
+         "pali_roman": "Imāya dhammānudhamma patipattiyā buddhan pūjēmi\nImāya dhammānudhamma patipattiyā dhamman pūjēmi\nImāya dhammānudhamma patipattiyā sanghan pūjēmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "By this practice, in accordance with the Dhamma, I revere the Buddha\nBy this practice, in accordance with the Dhamma, I revere the Dhamma\nBy this practice, in accordance with the Dhamma, I revere the Sangha.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 16",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s23-v3",
+         "source": null,
+         "pali_si": "අද්ධාය ඉමාය පටිපත්තියා ජාති ජරා ව්‍යාධි මරණම්හා\nපරිමුඤ්චිස්සාමි.",
+         "pali_roman": "Addhāya imāya patipattiyā jāti jarā vyādhi maranamhā\nparimuncissāmi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Actually, by living in this practice, I will free from birth, aging, illness and death, etc.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 17",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s23-v4",
+         "source": null,
+         "pali_si": "ඉදං මේ පුඤ්ඤකම්මං ආසවක්ඛයාවහං හෝතු සබ්බ දුක්ඛා\nපමුඤ්චතු.",
+         "pali_roman": "Idam mē puñña kamman, āsavakkhayāvahan hōtu, sabba\ndukkhā pamuñcatu.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May this merit help to remove the defilements; may I be free from all sufferings.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 17",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s24",
+       "number": 24,
+       "heading": "බුද්ධානුස්සතිය",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 17–19."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 17–19",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s24-v1",
+         "source": null,
+         "pali_si": "බුද්ධානුස්සති මෙත්තා ච -  අසුභං මරණස්සති\nඉති ඉමා චතුරාරක්ඛා - භික්ඛු භාවෙය්‍ය සීලවා",
+         "pali_roman": "Buddhānussati mettā ca - asubhan maranassati\nIti imā caturārakkhā - bhikkhu bhāveyya sīlavā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The recollection of the Buddha, loving kindness, the unattractiveness (of the body) and mindfulness of death, these are the four protective meditations which a virtuous monk should develop.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 17",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v2",
+         "source": null,
+         "pali_si": "අනන්ත විත්තාර ගුණං - ගුණතෝනුස්සරං මුනිං\nභාවෙය්‍ය බුද්ධිමා භික්ඛු - බුද්ධානුස්සතිමාදිතෝ",
+         "pali_roman": "Ananta vittāra gunan - gunatorussaran munin\nBhāveyya buddhimā bhikkhu - Buddhānussati mādito",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Contemplating the infinite and extensive excellent qualities of the Buddha,\nAn intelligent monk, first, should develop the recollection of the Buddha as follows;",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 17",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v3",
+         "source": null,
+         "pali_si": "සවාසනේ කිලේසේසෝ - ඒකෝ සබ්බේ නිඝාතිය\nඅහූසු සුද්ධසන්තානෝ - පූජානං ච සදාරහෝ",
+         "pali_roman": "Savāsanē kilēsēso - eko sabbē nighātiya\nahūsu suddha santāno - pūjānañ ca sadāraho",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "He alone destroyed all the defilements together with the residual kammic impressions.\nHis mind is fully purified, and He, always, is worthy of offerings.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 17",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v4",
+         "source": null,
+         "pali_si": "සබ්බකාල ගතේ ධම්මේ - සබ්බේ සම්මා සයං මුනී\nසබ්බාකාරේන බුජ්ඣිත්වා - ඒකෝ සබ්බඤ්ඤුතං ගතෝ",
+         "pali_roman": "Sabbakāla gathē dhammē - sabbē sammā sayan muni\nsabbākārēna bujjhitvā - eko sabbaññutan gatho",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The Buddha has perfectly realised all phenomena related to all three times.\nHaving realised in every aspect, alone by himself, attained the Omniscience.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 18",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v5",
+         "source": null,
+         "pali_si": "විපස්සනාදි විජ්ජාහි - සීලාදි චරණේහි ච\nසුසමිද්ධේහි සම්පන්නෝ - ගගනාභේහි නායකෝ",
+         "pali_roman": "Vipassanādi vijjāhi - sīlādi caranēhi ca\nSusamiddhēhi sampanno - gaganābhēhi nāyako",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Accomplishments of the knowledge (eight-fold) such as insight and conduct (fifteen-fold) as virtue,\nThese are the qualities He is endowed with and he is as bright as the sun in the sky.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 18",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v6",
+         "source": null,
+         "pali_si": "සම්මාගතෝ සුභං ඨානං - අමෝඝ වචනෝ ච සෝ\nතිවිධස්සාපි ලෝකස්ස - ඤාතා නිරවසේසතෝ",
+         "pali_roman": "Sammāgato subhan thānan - amoga vacano ca so\nTividassāpi lokassa - ñātā niravasēsato",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "He perfectly attained to the blissfull state (Nibbana), and his words are accurate and fruitful.\nHe is the one who knows the three worlds in entirety.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 18",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v7",
+         "source": null,
+         "pali_si": "අනේකේහි ගුණෝඝේහි - සබ්බසත්තුත්තමෝ අහූ\nඅනේකේහි උපායේහි - නරදම්මේ දමේසි ච",
+         "pali_roman": "Anēkēhi gunogēhi - sabbasattuttamo ahu\nAnēkēhi upāyēhi - naradhamme damēsi ca",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "By innumerable ocean of qualities, he became supreme of all beings, by various means He tamed the tameable ones.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 18",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v8",
+         "source": null,
+         "pali_si": "ඒකෝ සබ්බස්ස ලෝකස්ස - සබ්බ සත්තානුසාසකෝ\nභාග්‍ය ඉස්සරියාදීනං - ගුණානං පරමෝ නිධි",
+         "pali_roman": "Eko sabbassa lokassa - sabba sattānusāsako\nBhāgya issariyādīnan - gunānan paramo nidhi",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "He is the unique adviser in every aspect of welfare for the entire world.\nHe is the supreme repository for the qualities such as fortune and prosperity.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 19",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v9",
+         "source": null,
+         "pali_si": "පඤ්ඤාස්ස සබ්බ ධම්මේසු - කරුණා සබ්බ ජන්තුසු\nඅත්තත්තානං පරත්තානං - සාධිකා ගුණජෙට්ඨිකා",
+         "pali_roman": "Paññāssa sabba dhammēsu - karunā sabba jantusu\nAtthatthānan paratthānan - sādhikā guna jetthikā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "His wisdom in all the phenomena, and compassion towards all beings - are the main qualities that benefit one and others.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 19",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v10",
+         "source": null,
+         "pali_si": "දයාය පාරමී චිත්වා - පඤ්ඤායත්තාන මුද්ධරි\nඋද්ධරි සබ්බ ධම්මේ ච - දයායඤ්ඤේ ච උද්ධරි",
+         "pali_roman": "Dayāya pārami citvā - paññāyattana muddhari\nUddhari sabba dhammē ca - dayāyaññē ca uddhari",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "He has cultivated perfections out of compassion and has liberated himself through wisdom;\nBy preaching the doctrine, in all aspects, out of compassion,  rescued others.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 19",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s24-v11",
+         "source": null,
+         "pali_si": "දිස්සමානෝපි තාවස්ස - රූපකායෝ අචින්තියෝ\nඅසාධාරණ ඤාණඩ්ඩේ - ධම්මකායේ කතාවකාති.",
+         "pali_roman": "Dissamānopi tāvassa - rūpakāyo acintiyo\nasādhārana ñānaddhē - dhamma kāyē kathāvakāti.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Though visible, his Rupa Kaya (physical body) was inconceivable.\nSo, what can be said about His Dhamma Kaya (Doctrinal body), enriched with his unique wisdom.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 19",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s25",
+       "number": 25,
+       "heading": "මෙත්තානුස්සතිය",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 19–20."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 19–20",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s25-v1",
+         "source": null,
+         "pali_si": "අත්තූපමාය සබ්බේසං - සත්තානං සුඛකාමතං\nපස්සිත්වා ඛමතෝ මෙත්තං - සබ්බ සත්තේසු භාවයේ",
+         "pali_roman": "Attūpamāya sabbēsan - sattānan sukhakhāmatan\nPassitvā khamato mettan - sabba sattēsu bhāvayē",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Having compared oneself with others, have a desire for the happiness of all living beings.\nHaving seen it, one should develop loving kindness towards all living beings.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 20",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s25-v2",
+         "source": null,
+         "pali_si": "සුඛී භවෙය්‍යං නිද්දුක්ඛෝ - අහං නිච්චං අහං විය\nහිතා ච මේ සුඛී හොන්තු - මජ්ඣත්තා තච වේරිනෝ",
+         "pali_roman": "Sukhī bhaveyyan niddhukkho - ahan niccan ahan viya\nHitā ca mē sukhī hontu - majjatthā thaca vērino",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May I always be happy and free from suffering and like myself, may my friends, neutral persons and hostile persons always be happy.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 20",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s25-v3",
+         "source": null,
+         "pali_si": "ඉමම්හි ගාමක්ඛෙත්තම්හි - සත්තා හොන්තු සුඛී සදා\nතතෝ පරඤ්ච රජ්ජේසු - චක්කවාලේසු ජන්තුනෝ",
+         "pali_roman": "Imamhi gāmakkettamhi - sattā hontu sukhī sadā\ntato parañ ca rajjēsu - cakkavālēsu jantuno",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "may the beings in this village, vicinity always be happy and those who live in other countries and the ones who live in all the world systems, be well and happy.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 20",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s25-v4",
+         "source": null,
+         "pali_si": "සමන්තා චක්කවාලේසු - සත්තානන්තේසු පානිනෝ\nසුඛිනෝ පුග්ගලා භූතා - අත්තභාවගතා සියුං",
+         "pali_roman": "samantā cakkavālēsu - sattānantēsu panino\nsukhino puggalā bhūtā - attabhāva gatā siyun",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Those living in the infinite surrounding world systems, all persons creatures and all living beings be well and happy;",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 20",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s25-v5",
+         "source": null,
+         "pali_si": "තථා ඉත්ථී පුමා චේව - අරියා අනරියාපි ච\nදේවා නරා අපායට්ඨා - තථා දසදිසාසු චාති",
+         "pali_roman": "tathā itthi pumā cēva - ariyā anariyāpi ca\ndēvā narā apāyatthā - tathā dasa disāsu cāti",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "likewise, female, male, noble ones, ignoble ones, gods, humans, the ones in woeful states, and all those in the ten directions be well and happy.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 20",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s26",
+       "number": 26,
+       "heading": "අසුභානුස්සතිය",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 21–22."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 21–22",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s26-v1",
+         "source": null,
+         "pali_si": "අවිඤ්ඤාණසුභනිභං - සවිඤ්ඤාණ සුභං ඉමං\nකායං අසුභතෝ පස්සං - අසුභං භාවයේ සති",
+         "pali_roman": "Aviññāna subhaniban - saviññana subhan iman\nKāyan asubhato passan - asubhan bhāvayē sati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Seeing the body unattractive with both with and without the consciousness, a meditator should reflect (meditate) on the loathsomeness of the body.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 21",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s26-v2",
+         "source": null,
+         "pali_si": "වණ්ණසණ්ඨාන ගන්ධේහි - ආසයෝ කාසතෝ තථා\nපටික්කූලානි කායේ මේ - කුණපානි ද්විසෝලස",
+         "pali_roman": "Vanna santāna gandhēhi - āsayo kāsato tathā\npatikkūlāni kāyē mē - kunapānidvisolasa",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "By way of their colour, shape, smell, associated location space and appearance;\nThe thirty-two parts of the body are repulsive",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 21",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s26-v3",
+         "source": null,
+         "pali_si": "පතිතම්හාපි කුණපා - ජෙගුච්ඡං කායනිස්සිතං\nආධාරෝහි සුචී තස්ස - කායේතු කුණපේ ඨිතං",
+         "pali_roman": "Patitamhāpi kunapā - jēgucchan kāya nissitan\nĀdhārohi sucī tassa - kāyētu kunapē thitan",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The impurities that are still remaining in the body are more disgusting than the ones which have fallen down.\nbecause the place upon where they have been fallen down is pure, but when they are in the body those impurities are in a foul body.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 21",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s26-v4",
+         "source": null,
+         "pali_si": "මීල්හේ කිමිව කායෝයං - අසුචිම්හි සමුට්ඨිතෝ\nඅන්තෝ අසුචි සම්පුන්නෝ - පුණ්ණවච්චකුටී විය",
+         "pali_roman": "Mīlhē kimiva kāyoyan - asucimhi samitthito\nAnto asuci sampunno - punna vaccakutī viya",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Just like a worm that is born in the filth, this body also is born in the filth.\nThis body is full of filth like a cesspit full of filth.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 21",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s26-v5",
+         "source": null,
+         "pali_si": "අසුචි සන්දතේ නිච්චං - යථා මේදකථාලිකා\nනානාකිමි කුලාවාසෝ - පක්ඛචන්දනිකා විය",
+         "pali_roman": "Asuci sandatē niccan - yathā mēdakathālikā\nNānākimi kulāvāso - pakkacandanikā viya",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Impure matters always flow out from this body constantly just like fat from a clay-pot when it is full.\nJust like a cesspool, this body is the home for various kinds of worms.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 22",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s26-v6",
+         "source": null,
+         "pali_si": "ගණ්ඩභූතෝ රෝගභූතෝ - වණභූතෝ සමුස්සයෝ\nඅතේකිච්ඡෝති ජේගුච්ඡෝ - පභින්නකුණපූපමෝති",
+         "pali_roman": "Gandabhūto rogabhūto - vanabhūto samussayo\nAtēkicchoti gēguccho - Pabhinna kunapūpamoti.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "This body is like a boil, a disease, an incurable wound,\nExtremely, repulsive and fragile. It is comparable to a decomposed corpse.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 22",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s27",
+       "number": 27,
+       "heading": "මරණානුස්සතිය",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 22–23."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 22–23",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s27-v1",
+         "source": null,
+         "pali_si": "පවාතදීප තුල්‍යාය - සායුසන්ත තියාක්කයං\nපරූපමාය සම්පස්සං - භාවයේ මරණස්සති",
+         "pali_roman": "Pavāta dīpa tulyāya - sāyu santa tiyākkhayan\nParūpamāya sampassan - bhāvayē maranassati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Seeing with wisdom, the end of life in others and comparing this to a lamp\nKept in windy place, one should meditate on death.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 22",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s27-v2",
+         "source": null,
+         "pali_si": "මහා සම්පත්ති සම්පත්තා - යථා සත්තා මතා ඉධ\nතථා අහං මරිස්සාමි - මරණං මම හෙස්සති",
+         "pali_roman": "Mahāsampatti sampattā - yathā sattā matā idha\nTathā ahan marissāmi - maranan mama hessati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Just as persons in this world who achieved great wealth and success have passed away, the same way I too will die.  For sure, the death will come to me.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 22",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s27-v3",
+         "source": null,
+         "pali_si": "උප්පත්තියා සහේවේදං - මරණං ආගතං සදා\nමරණත්තාය ඕකාසං - වධකෝ විය ඒසති",
+         "pali_roman": "Uppattiyā sahē vēdan - maranan āgatan sadā\nMaranattāya okāsan - vadako viya ēsati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The death always comes alone, together with birth, looking for an opportunity, as an executioner would do.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 22",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s27-v4",
+         "source": null,
+         "pali_si": "ඊසකං අනිවත්තන්තං - සතතං ගමනුස්සුකං\nජීවිතං උදයා අත්ථං - සුරියෝ විය ධාවති",
+         "pali_roman": "Īsakan anivattantan - satatan gamanussukan\nJīvitan udayā atthan - suriyo viya dhāvati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The life, without stopping even for a moment, and ever keen on moving,\nRuns like the sun that hastens to set after its rise.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 23",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s27-v5",
+         "source": null,
+         "pali_si": "විජ්ජුබුබ්බුල උස්සාව - ජලරාජී පරික්ඛයං\nඝාතකෝව රිපූතස්ස - සබ්බත්ථාපි අවාරියෝ",
+         "pali_roman": "Vijju bubbula ussāva - jalarāji parikkhayan\nGhātakova ripūtassa - sabbatthāpi avāriyo",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "This life is fragile, like a lightning, a bubble, a dew drop on a leaf or a line drawn on the water.\nLike an enemy intent on killing, death can never be avoided.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 23",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s27-v6",
+         "source": null,
+         "pali_si": "සුයසත්තාම පුඤ්ඤිද්ධි - බුද්ධිවුද්ධි ජිනද්වයං\nඝාතේසි මරණං ඛිප්පං - කාතුමාදිසකේ කථා",
+         "pali_roman": "Suyasatthāma puññiddhi - buddhivuddhi jinaddvayan\nGhātēsi maranan khippan - kātu mādisakē kata?",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "If the Death quickly killed the conqueror (The Buddha), who possessed great fame, strength, merit and supernatural powers. What can be said of one like me?",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 23",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s27-v7",
+         "source": null,
+         "pali_si": "පච්චයානඤ්ච වේකල්‍යා - බාහිරජ්ඣත්තුපද්දවා\nමරාමෝරං නිමේසාපි - මරමානෝ අනුක්ඛනන්ති",
+         "pali_roman": "Paccayānañca vēkalyā – bāhirajjattupaddavā\nMarāmoran nimēsāpi - maranāno anukkhananti.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "When there is a deficiency in conditions for life or some inner or outer danger\nI would die at any moment within a blink of an eye.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 23",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s28",
+       "number": 28,
+       "heading": "අට්ඨ මහා සංවේග වත්ථු",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed page 24."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 24",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s28-v1",
+         "source": null,
+         "pali_si": "භාවෙත්වා චතුරාරක්ඛා - ආවජ්ජෙය්‍ය අනන්තරං\nමහා සංවේග වත්ථූනි - අට්ඨ අට්ඨිත වීරියෝ",
+         "pali_roman": "Bhāvetvā caturārakkhā - āvajjeyya anantaran\nMahā sanvēga vatthūni - attha atthita vīriyo",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Having developed four protective meditations, the diligent meditator, thereafter, should contemplate on eight-fold miseries.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 24",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s28-v2",
+         "source": null,
+         "pali_si": "ජාති ජරා ව්‍යාධි ච්‍යුති අපායා - අතීත අප්පත්තක වට්ට දුක්ඛං\nඉදානි ආහාර ගවෙට්ඨි දුක්ඛං - සංවේග වත්ථූනි ඉමානි අට්ඨ",
+         "pali_roman": "Jāti jarā vyadhi cyuti apāyā - atīta appattaka vatta dukkhan\nIdāni āhāra gavetthi dukkhan - sanvēga vatthūni imāni attha.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Birth, old age, illness, death, miseries underwent in the hells, miseries underwent in the past lives, miseries yet to come in the future lives and miseries experience in the present life are called eight-fold miseries.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 24",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s28-v3",
+         "source": null,
+         "pali_si": "පාතෝ ච සායමපිචේව ඉමං විධිඤ්ඤෝ\nආසේවතේ සතතමත්ත හිතාභිලාසි\nපප්පෝති සෝති විපුලං හත පාරිපන්ථෝ\nසෙට්ඨං සුඛං මුනි විසිට්ඨමතං සුඛේනචාති",
+         "pali_roman": "Pāto ca sāya mapicēva iman vidhiñño\nĀsēvatē satatamatta hitābhilāsī\nPappoti soti vipulan hata pāri panto\nSetthan sukhan muni visitthamatan sukhēnacāti.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "If a person, wishing one’s own wellbeing or liberation, contemplate on these always in the morning and evening, he accomplishes his greatest happiness in this very life and attains the supreme bliss of Nibbana praised by the Buddhas.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 24",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s29",
+       "number": 29,
+       "heading": "පටිච්ච සමුප්පාදය – අනුලෝම",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed page 25."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 25",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s29-v1",
+         "source": null,
+         "pali_si": "අවිජ්ජා පච්චයා සංඛාරා, සංඛාර පච්චයා විඤ්ඤාණං,\nවිඤ්ඤාණ පච්චයා නාමරූපං, නාමරූප පච්චයා සලායතනං,\nසලායතන පච්චයා ඵස්සෝ, ඵස්ස පච්චයා වේදනා, වේදනා\nපච්චයා තණ්හා, තණ්හා පච්චයා උපාදානං, උපාදාන පච්චයා\nභවෝ, භව පච්චයා ජාති,  ජාති පච්චයා ජරා මරණං, සෝක\nපරිදේව දුක්ඛ දෝමනස්සුපායාසා සම්භවන්ති. ඒවමේතස්ස\nකේවලස්ස දුක්ඛක්ඛන්ධස්ස සමුදයෝ හෝතීති.",
+         "pali_roman": "Avijjāpaccayā sankhārā, Sankhāra paccayā viññāṇan,\nViññāṇa paccayā nāma-rūpan, Nāma-rūpa paccayā\nsaḷāyatanan,\nSaḷāyatana paccayā phasso, Phassa paccayā vēdanā, Vēdanā\npaccayā taṇhā,\nTaṇhā paccayā upādānan, Upādāna paccayā bhavo, Bhava\npaccayā jāti, Jāti paccayā jarā maraṇan, Soka paridēva,\ndukkha domanassupāyāsā\nsambhavanti, Ēvamētassa kēvalassa, dukkhakkhandhassa,\nsamudayo hoti’ti.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Dependent on ignorance arise volitional activities (moral and immoral), Dependent on volitional activities arises consciousness,\nDependent on consciousness arise mind and matter, Dependent on mind and matter arise the six spheres of sense,\nDependent on six spheres of sense arises contact, Dependent on contact arises sensation,\nDependent on sensation arises craving, Dependent on craving arises grasping, Dependent on grasping arises becoming,\nDependent on becoming arises birth, Dependent on birth arises decay, death, sorrow, lamentation, pain, grief and despair; Thus, the entire mass of suffering arises.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 25",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s30",
+       "number": 30,
+       "heading": "පටිච්ච සමුප්පාදය – පටිලෝම",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed page 26."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 26",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s30-v1",
+         "source": null,
+         "pali_si": "අවිජ්ජායත්වේව අසේස විරාග නිරෝධා සංඛාර නිරෝධෝ,\nසංඛාර නිරෝධා විඤ්ඤාණ නිරෝධෝ, විඤ්ඤාණ නිරෝධා\nනාමරූප නිරෝධෝ, නාමරූප නිරෝධා සලායතන නිරෝධෝ,\nසලායතන නිරෝධා ඵස්ස නිරෝධෝ, ඵස්ස නිරෝධා වේදනා\nනිරෝධෝ, වේදනා නිරෝධා තණ්හා නිරෝධෝ, තණ්හා\nනිරෝධා උපාදාන නිරෝධෝ, උපාදාන නිරෝධා භව නිරෝධෝ,\nභව නිරෝධා ජාති නිරෝධෝ,  ජාති නිරෝධා ජරා මරණං,\nසෝක පරිදේව දුක්ඛ දෝමනස්සුපායාසා නිරුජ්ඣන්ති.\nඒවමේතස්ස කේවලස්ස දුක්ඛක්ඛන්ධස්ස නිරෝධෝ හෝතීති.",
+         "pali_roman": "Avijjāyatvēva asēsa virāga nirodhā saṅkhāra nirodho,\nSaṅkhāra nirodhā viññaṇa nirodho, Viññāṇa nirodhā nāma-\nrūpa nirodho,\nNāma- rūpa nirodhā saḷāyatana nirodho, Saḷāyatana nirodhā\nphassa nirodho,\nPhassa nirodhā vēdanā nirodho, Vēdanā nirodhā tanhā\nnirodho,\nTaṇhā nirodhā upādāna nirodho, Upādāna nirodhā bhava\nnirodho,\nBhava nirodhā jāti nirodho, Jāti nirodhā jarā maraṇaṃ, soka\nparidēva,\ndukkha domanassupāyāsā nirujjhanti. Ēvamētassa\nkēvalassa,\ndukkhakkhandassa nirodho hoti’ti.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "The complete cessation of ignorance leads to the cessation of volitional activities. The cessation of volitional activities lead to the cessation of consciousness. The cessation of consciousness leads to the cessation of mind and matter.\nThe cessation of mind and matter leads to the cessation of six spheres of sense.\nThe cessation of six spheres of sense leads to the cessation of contact. The cessation of contact leads to the cessation of sensation.\nThe cessation of sensation leads to the cessation of craving. The cessation of craving leads - to the cessation of grasping. The cessation of grasping leads to the cessation of becoming.\nThe cessation of becoming - leads to the cessation of birth. The cessation of birth leads to the cessation of decay, death, sorrow, lamentation, pain, grief and despair. Thus, entire mass of suffering ceases.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 26",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s31",
+       "number": 31,
+       "heading": "නිවැරදි පිළිසරණ යෑම",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 27–28."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 27–28",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s31-v1",
+         "source": null,
+         "pali_si": "බහුං වේ සරණං යන්ති - පබ්බතානි වනානි ච\nආරාම රුක්ඛ චේත්‍යානි - මනුස්සා භය තජ්ජිතා",
+         "pali_roman": "Bahuṃ ve saraṇaṃ yanti - pabbatāni vanāni ca\nĀrāma rukkha cetyāni - manussā bhaya tajjitā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "To many refuges they go, To mountain slopes and forest glades,\nTo parkland shrines and sacred sites,  People overcome by fear",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 27",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s31-v2",
+         "source": null,
+         "pali_si": "නේතං ඛෝ සරණං ඛේමං - නේතං සරණමුත්තමං\nනේතං සරණමාගම්ම - සබ්බ දුක්ඛා පමුච්චති",
+         "pali_roman": "N’etaṃ kho saraṇaṃ khemaṃ - n’etaṃ saraṇamuttamaṃ\nN’etaṃ saraṇamāgamma - sabbadukkhā pamuccati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Such a refuge is not secure, such a refuge is not supreme,\nSuch a refuge does not bring, Complete release from suffering.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 27",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s31-v3",
+         "source": null,
+         "pali_si": "යෝ ච බුද්ධං ච ධම්මං ච - සංඝං ච සරණං ගතෝ\nචත්තාරි අරිය සච්චානි - සම්මප්පඤ්ඤාය පස්සති",
+         "pali_roman": "Yo ca Buddhañca Dhammañca - saṅghañca saraṇaṃ gato\nCattāri ariya-saccāni - sammappaññāya passati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Whoever goes to refuge, In the Triple Gem\nSees with right discernment, the Four Noble Truths:",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 27",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s31-v4",
+         "source": null,
+         "pali_si": "දුක්ඛං දුක්ඛසමුප්පාදං - දුක්ඛස්ස ච අතික්කමං\nඅරියං චට්ඨංගිකං මග්ගං - දුක්ඛූපසමගාමිනං",
+         "pali_roman": "Dukkhaṃ dukkha samuppādaṃ - dukkhassa ca atikkamaṃ\nAriyañ c’aṭṭh’aṅgikaṃ maggaṃ - dukkhūpa samagāminaṃ",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Suffering and its origin, and that which lies beyond\nThe Noble Eightfold Path, that leads the way to suffering’s end.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 27",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s31-v5",
+         "source": null,
+         "pali_si": "ඒතං ඛෝ සරණං ඛේමං - ඒතං සරණමුත්තමං\nඒතං සරණමාගම්ම - සබ්බ දුක්ඛා පමුච්චති",
+         "pali_roman": "Etaṃ kho saraṇaṃ khemaṃ - etaṃ saraṇamuttamaṃ\nEtaṃ saraṇamāgamma - sabbadukkhā pamuccati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Such a refuge is secure, such a refuge is supreme,\nSuch a refuge truly brings, complete release from all suffering.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 28",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s32",
+       "number": 32,
+       "heading": "තිලකුණු මෙනෙහි කිරීම",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 28–29."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 28–29",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s32-v1",
+         "source": null,
+         "pali_si": "සබ්බේ සංඛාරා අනිච්චාති - යදා පඤ්ඤාය පස්සති\nඅථ නිබ්බින්දතී දුක්ඛේ - ඒස මග්ගෝ විසුද්ධියා",
+         "pali_roman": "Sabbe saṅkhārā aniccā’ti - yadā paññāya passati\nAtha nibbindati dukkhe - esa maggo visuddhiyā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "‘Impermanent are all conditioned things’, when with wisdom this is seen\nOne feels weary of all dukkha; this is the path to purity.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 28",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s32-v2",
+         "source": null,
+         "pali_si": "සබ්බේ සංඛාරා දුක්ඛාති - යදා පඤ්ඤාය පස්සති\nඅථ නිබ්බින්දතී දුක්ඛේ - ඒස මග්ගෝ විසුද්ධියා",
+         "pali_roman": "Sabbe saṅkhārā dukkhā’ti - yadā paññāya passati\nAtha nibbindati dukkhe - esa maggo visuddhiyā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "‘Dukkha are all conditioned things’, when with wisdom this is seen\nOne feels weary of all dukkha; this is the path to purity.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 28",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s32-v3",
+         "source": null,
+         "pali_si": "සබ්බේ ධම්මා අනත්තාති - යදා පඤ්ඤාය පස්සති\nඅථ නිබ්බින්දතී දුක්ඛේ - ඒස මග්ගෝ විසුද්ධියා",
+         "pali_roman": "Sabbe dhammā anattā’ti - yadā paññāya passati\nAtha nibbindati dukkhe - esa maggo visuddhiyā",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "‘There is no self in anything’, when with wisdom this is seen\nOne feels weary of all dukkha; this is the path to purity.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 28",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s32-v4",
+         "source": null,
+         "pali_si": "අප්පකාතේ මනුස්සේසු - යේ ජනා පාරගාමිනෝ\nඅථායං ඉතරා පජා - තීරමේවානුධාවති",
+         "pali_roman": "Appakā te manussesu - ye janā pāragāmino\nAthāyaṃ itarā pajā - tīramevānudhāvati",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Few amongst humankind, are those who go beyond,\nYet there are the many folks, ever wandering on this shore.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 29",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s32-v5",
+         "source": null,
+         "pali_si": "යේ ච ඛෝ සම්ම දක්ඛාතේ - ධම්මේ ධම්මානුවත්තිනෝ\nතේ ජනා පාරමෙස්සන්ති - මච්චුධෙය්‍යං සුදුත්තරං",
+         "pali_roman": "Ye ca kho sammadakkhāte - dhamme dhammānuvattino\nTe janā pāramessanti - maccudheyyaṃ suduttaraṃ",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Wherever Dhamma is well-taught, those who train in line with it\nAre the ones who will cross over, the realm of death so hard to flee.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 29",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s32-v6",
+         "source": null,
+         "pali_si": "කණ්හං ධම්මං විප්පහාය - සුක්කං භාවේථ පණ්ඩිතෝ\nඕකා අනෝකං ආගම්ම - විවේකේ යත්ථ දූරමං\nතත්‍රාභිරති මිච්ඡෙය්‍ය - හිත්වා කාමේ අකිඤ්චනෝ",
+         "pali_roman": "Kaṇhaṃ dhammaṃ vippahāya - sukkaṃ bhāvetha paṇḍito\nOkā anokam āgamma - viveke yattha dūramaṃ\nTatrābhirati miccheyya - hitvā kāme akiñcano",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "Abandoning the darker states, the wise pursue the bright;\nFrom the floods dry land, they reach, living withdrawn so hard to do.\nSuch rare delight one should desire, sense pleasures cast away, not having anything.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 29",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        }
+       ]
+      },
+      {
+       "id": "s33",
+       "number": 33,
+       "heading": "මෛත්‍රී භාවනාව",
+       "check": "needs checking",
+       "notes": [
+        "Converted from the booklet's FM font; to be read against printed pages 29–34."
+       ],
+       "source": {
+        "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+        "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed pages 29–34",
+        "collected": "2026-11-17",
+        "translator": "not named by the source"
+       },
+       "corrections": [],
+       "verses": [
+        {
+         "id": "s33-v1",
+         "source": null,
+         "pali_si": "අහං අවේරෝ හෝමි, අබ්‍යාපජ්ඣෝ හෝමි, අනීඝෝ හෝමි\nසුඛී අත්තානං පරිහරාමි.",
+         "pali_roman": "Aham avēro homi, abyāpajjho homi, anīgho homi, sukhi\nattānam pariharāmi.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May I be free from enmity and danger, May I be free from mental suffering, May I be free from physical suffering. May I take care of myself happily.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 29",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v2",
+         "source": null,
+         "pali_si": "මම මාතා පිතූ, ආචරියා ච ඤාතිමිත්තා ච, සබ්‍රහ්මචාරිනෝ ච,\nඅවේරා හොන්තු, අබ්‍යාපජ්ඣා හොන්තු, අනීඝා හොන්තු, සුඛී\nඅත්තානං පරිහරන්තු.",
+         "pali_roman": "Mama mātā pitu, ācariya ca ñātimitta ca, sabrahma cārino\nca, avēra hontu,\nabyāpajjha hontu, anīgha hontu, sukhi attānam pariharantu.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May my parents, teachers relatives and friends, fellow Dhamma farers, be free from enmity and danger, be free from mental suffering, be free from physical suffering, may they take care of themselves happily.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 30",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v3",
+         "source": null,
+         "pali_si": "ඉමස්මිං ආරාමේ සබ්බේ යෝගිනෝ,  අවේරා හොන්තු,\nඅබ්‍යාපජ්ඣා හොන්තු, අනීඝා හොන්තු, සුඛී අත්තානං\nපරිහරන්තු.",
+         "pali_roman": "Imasmim ārāme sabbe yogino, avēra hontu, abyāpajjha\nhontu, anīgha hontu,\nsukhi attānam pariharantu.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May all meditators in this compound, be free from enmity and danger, be free from mental suffering, be free from physical suffering, May they take care of themselves happily",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 30",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v4",
+         "source": null,
+         "pali_si": "ඉමස්මිං ආරාමේ, සබ්බේ භික්ඛු සාමණේරා ච, උපාසක\nඋපාසිකායෝ ච, අවේරා හොන්තු, අබ්‍යාපජ්ඣා හොන්තු,\nඅනීඝා හොන්තු, සුඛී අත්තානං පරිහරන්තු.",
+         "pali_roman": "Imasmim ārāme, sabbe bhikkhu sāmanēra ca, upāsaka\nupāsikayo ca,\navēra hontu, abyāpajjha hontu, anīgha hontu, sukhi\nattānam pariharantu.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May all monks in this compound, novice monks, laymen and laywomen disciples, be free from enmity and danger, be free from mental suffering, be free from physical suffering, May they take care of themselves happily.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 30",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v5",
+         "source": null,
+         "pali_si": "අම්හාකං චතුපච්චය දායකා අවේරා හොන්තු, අබ්‍යාපජ්ඣා\nහොන්තු, අනීඝා හොන්තු, සුඛී අත්තානං පරිහරන්තු.",
+         "pali_roman": "Amhākam catupaccaya dāyaka, avēra hontu, abyāpajjha\nhontu,\nanīgha hontu, sukhi attānam pariharantu.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May our donors of the four supports: clothing, food, medicine and lodging, be free from enmity and danger, be free from mental suffering, be free from physical suffering, May they take care of themselves happily.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 31",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v6",
+         "source": null,
+         "pali_si": "අම්හාකං ආරක්ඛ දේවතා, ඉමස්මිං විහාරේ, ඉමස්මිං ආවාසේ,\nඉමස්මිං ආරාමේ, ආරක්ඛ දේවතා, අවේරා හොන්තු,\nඅබ්‍යාපජ්ඣා හොන්තු, අනීඝා හොන්තු, සුඛී අත්තානං\nපරිහරන්තු.",
+         "pali_roman": "Amhākam ārakkha dēvata, Imasmim vihāre, Imasmim\nāvāse,\nImasmim ārāme, arākkha dēvata, avēra hontu, abyāpajjha\nhontu,\nanīgha hontu, sukhi attānam pariharantu.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May our guardian devas, in this monastery, in this dwelling, in this compound, May the guardian devas, be free from enmity and danger, be free from mental suffering, be free from physical suffering, may they take care of themselves happily.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 31",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v7",
+         "source": null,
+         "pali_si": "සබ්බේ සත්තා, සබ්බේ පානා, සබ්බේ භූතා, සබ්බේ පුග්ගලා,\nසබ්බේ අත්තභාවපරියාපන්නා, සබ්බා ඉත්ථීයො, සබ්බේ\nපුරිසා, සබ්බේ අරියා, සබ්බේ අනරියා, සබ්බේ දේවා, සබ්බේ\nමනුස්සා, සබ්බේ විනිපාතිකා, අවේරා හොන්තු, අබ්‍යාපජ්ඣා\nහොන්තු, අනීඝා හොන්තු, සුඛී අත්තානං පරිහරන්තු, දුක්ඛා\nමුච්චන්තු, යථා ලද්ධ සම්පත්තිතෝ මාවිගච්ඡන්තු,\nකම්මස්සකා.",
+         "pali_roman": "Sabbe satta, sabbe pāna, sabbe bhuta, sabbe puggala, sabbe\nattabhāva pariyapanna,\nsabba itthiyo, sabbe purisa, sabbe ariya, sabbe anariya,\nsabbe dēva, sabbe manussa, sabbe vinipātika, avēra hontu,\nabyāpajjha hontu, anīgha hontu, sukhi attānam pariharantu,\nDukkha muccantu,\nYatha laddha sampattito māvigacchantu, Kammassaka.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "May all beings, all breathing things, all creatures, all individuals (all beings), all personalities\n(all beings with mind and body), may all females, all males, all noble, ones (saints), all worldlings (those yet to attain sainthood), all devas (deities), all humans, all those in the four woeful planes, be free from enmity and dangers, be free from mental suffering, be free from physical suffering, may they take care of themselves happily, May all being be free from suffering, May whatever they have gained not be lost, All beings are owners of their own Kamma.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 31",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v8",
+         "source": null,
+         "pali_si": "පුරත්ථීමාය දිසාය, පච්ඡිමාය දිසාය, උත්තරාය දිසාය,\nදක්ඛිණාය දිසාය, පුරත්ථීමාය අනුදිසාය, පච්ඡිමාය අනුදිසාය,\nඋත්තරාය අනුදිසාය, දක්ඛිණාය අනුදිසාය, හෙට්ඨිමාය දිසාය,\nඋපරිමාය දිසාය, සබ්බේ සත්තා, සබ්බේ පානා, සබ්බේ භූතා,\nසබ්බේ පුග්ගලා, සබ්බේ අත්තභාවපරියාපන්නා, සබ්බා\nඉත්ථීයො, සබ්බේ පුරිසා, සබ්බේ අරියා, සබ්බේ අනරියා,\nසබ්බේ දේවා, සබ්බේ මනුස්සා, සබ්බේ විනිපාතිකා, අවේරා\nහොන්තු, අබ්‍යාපජ්ඣා හොන්තු, අනීඝා හොන්තු, සුඛී\nඅත්තානං පරිහරන්තු. දුක්ඛා මුච්චන්තු, යථා ලද්ධ\nසම්පත්තිතෝ මාවිගච්ඡන්තු, කම්මස්සකා.",
+         "pali_roman": "Puratthimāya disāya, pacchimāya disāya, uttarāya disāya,\ndakkhināya disāya,\npuratthimāya anudisāya, pacchimāya anudisāya,\nuttarāya anudisāya, dakkhināya anudisāya, hetthimāya\ndisāya, uparimāya Dukkha\ndisāya, Sabbe satta, sabbe pāna, sabbe bhuta, sabbe\npuggala, sabbe attabhāva pariyāpanna,\nsabba itthiyo, sabbe purisa, sabbe ariya, sabbe anariya,\nsabbe deva, sabbe manussa, sabbe vinipātika, avēra hontu,\nabyāpajjha hontu, anīgha hontu, sukhi attānam pariharantu,\nDukkha muccantu, Yatha laddha sampattito māvigacchantu,\nKammassaka.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "In the eastern direction, in the western direction, in the northern direction, in the southern direction, in the\nSoutheast direction, in the northwest direction, in the northeast direction, in the southwest direction, in the direction below, in the direction above, May all beings, all breathing things, all creatures, all individuals (all beings), all personalities (all beings with mind and body) may all females, all males, all noble ones\n(saints), those yet to attain all personalities (all beings with mind and body) may all females, all males, all noble ones\n(saints), those yet to attain sainthood, all devas (deities), all humans, all those in the four woeful planes, be free from enmity and dangers, be free from mental suffering, be free from physical suffering, may they take care of themselves happily, May all beings be free from suffering, May whatever they have gained not be lost, all beings are owners of their own kamma",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 32",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v9",
+         "source": null,
+         "pali_si": "උද්ධං යාව භවග්ගා ච - අධෝ යාව අවීචිතෝ\nසමන්තා චක්කවාලේසු - යේ සත්තා පඨවී චරා\nඅබ්‍යාපජ්ඣා නිවේරා ච - නිදුක්ඛා ච නුපද්දවා",
+         "pali_roman": "Uddham yāva bhavagga ca - adho yāva avicito\nsamanta cakkavālesu - ye satta pathavicara\nabyāpajjha nivērā ca - nidukkha ca nupaddava.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "As far as the highest plane of existence, to as far down as the lowest plane in the entire universe, whatever beings that move on earth, may they be free of mental suffering and enmity and from physical suffering and danger.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 33",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v10",
+         "source": null,
+         "pali_si": "උද්ධං යාව භවග්ගා ච - අධෝ යාව අවීචිතෝ\nසමන්තා චක්කවාලේසු - යේ සත්තා උදකේ චරා\nඅබ්‍යාපජ්ඣා නිවේරා ච - නිදුක්ඛා ච නුපද්දවා",
+         "pali_roman": "Uddham yāva bhavagga ca - adho yāva avicito\nsamanta cakkavālesu - ye satta udakecara\nabyāpajjha nivērā ca - nidukkha ca nupaddava.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "As far as the highest plane of existence, to as far down as the lowest plane in the entire universe, whatever beings that move on water, may they are free of mental suffering and enmity and from physical suffering and danger.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 33",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
+        },
+        {
+         "id": "s33-v11",
+         "source": null,
+         "pali_si": "උද්ධං යාව භවග්ගා ච - අධෝ යාව අවීචිතෝ\nසමන්තා චක්කවාලේසු - යේ සත්තා ආකාසේ චරා\nඅබ්‍යාපජ්ඣා නිවේරා ච - නිදුක්ඛා ච නුපද්දවා",
+         "pali_roman": "Uddham yāva bhavagga ca - adho yāva avicito\nsamanta cakkavālesu - ye sattā’kāsecara\nabyāpajjha nivēra ca - nidukkha ca nupaddava.",
+         "sinhala": null,
+         "sinhala_source": null,
+         "english": "As far as the highest plane of existence, to as far down as the lowest plane in the entire universe, whatever beings that move in air, may they are free of mental suffering and enmity and from physical suffering and danger.",
+         "english_source": {
+          "name": "Shanthi Vihara, Nottingham — Evening Puja and Chanting",
+          "locator": "evening_puja_and_chanting.pdf (supplied by the app's owner, 2026-11-17), printed page 34",
+          "collected": "2026-11-17",
+          "translator": "not named by the source"
+         },
+         "english_kind": "translation",
+         "check": "needs checking",
+         "notes": [],
+         "corrections": []
         }
        ]
       }
