@@ -48,10 +48,14 @@ void main() {
       expect(size.width, greaterThanOrEqualTo(48));
       expect(size.height, greaterThanOrEqualTo(48));
     }
-    // In shelf order, side by side.
+    // In shelf order, side by side in one row.
     expect(
       t.getTopLeft(_card(tinyBookFlatId)).dx,
       lessThan(t.getTopLeft(_card(tinyBookNestedId)).dx),
+    );
+    expect(
+      t.getTopLeft(_card(tinyBookFlatId)).dy,
+      t.getTopLeft(_card(tinyBookNestedId)).dy,
     );
     expect(t.takeException(), isNull);
     h.dispose();
@@ -87,6 +91,56 @@ void main() {
       find.descendant(of: _card(tinyBookNestedId), matching: find.text('N')),
       findsOneWidget,
     );
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('a long shelf is one row that scrolls sideways', (t) async {
+    final assets = tinyBooks();
+    final index = Map<String, Object?>.of(
+      assets[tinyBooksIndexPath]! as Map<String, Object?>,
+    );
+    final first = (index['books']! as List).first as Map<String, Object?>;
+    index['books'] = [
+      for (var i = 1; i <= 8; i++)
+        {...first, 'id': 'book-$i', 'title': 'Book number $i'},
+    ];
+    assets[tinyBooksIndexPath] = index;
+    await openReal(t, Routes.library, size: _tall, books: fakeAssets(assets));
+    final screen = t.view.physicalSize.width;
+    // One row: every card at the same height.
+    final top = t.getTopLeft(_card('book-1')).dy;
+    expect(t.getTopLeft(_card('book-2')).dy, top);
+    // A card is cut by the right edge, so the row is seen to scroll.
+    final cut = [
+      for (var i = 1; i <= 8; i++)
+        if (_card('book-$i').evaluate().isNotEmpty &&
+            t.getTopLeft(_card('book-$i')).dx < screen &&
+            t.getTopRight(_card('book-$i')).dx > screen)
+          i,
+    ];
+    expect(cut, hasLength(1));
+    // The last card is reached by scrolling the row, and opens its book.
+    final row = find.descendant(of: _shelf, matching: find.byType(Scrollable));
+    await t.scrollUntilVisible(_card('book-8'), 200, scrollable: row);
+    await t.pumpAndSettle();
+    expect(t.getTopLeft(_card('book-8')).dy, top);
+    await t.tap(_card('book-8'));
+    await t.pumpAndSettle();
+    expect(_location(t), '/library/book/book-8');
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('the row fits at 320 wide with large text', (t) async {
+    await openReal(
+      t,
+      Routes.library,
+      size: const Size(320, 2000),
+      deviceTextScale: 2.0,
+    );
+    for (final id in [tinyBookFlatId, tinyBookNestedId]) {
+      expect(t.getSize(_card(id)).height, greaterThanOrEqualTo(48));
+      expect(t.getSize(_card(id)).width, greaterThanOrEqualTo(48));
+    }
     expect(t.takeException(), isNull);
   });
 

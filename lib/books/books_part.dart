@@ -43,21 +43,16 @@ class BooksPart extends ConsumerWidget {
         ),
         if (books != null) ...[
           const SizedBox(height: NamoSpace.sm),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: NamoSpace.sm),
-            child: LayoutBuilder(
-              builder: (context, box) {
-                // Four across when the Library's column is 600 wide or more.
-                final column = box.maxWidth + 2 * NamoSpace.sm;
-                final columns = column >= 600 ? 4 : 3;
-                final width = (box.maxWidth / columns).floorToDouble();
-                return Wrap(
-                  children: [
-                    for (final b in books)
-                      SizedBox(width: width, child: _BookCard(book: b)),
-                  ],
-                );
-              },
+          SizedBox(
+            height: _cardHeight(context),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              // The first cover lines up with the heading above it; the
+              // last clears the edge by the same.
+              padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
+              itemCount: books.length,
+              separatorBuilder: (_, _) => const SizedBox(width: NamoSpace.md),
+              itemBuilder: (context, i) => _BookCard(book: books[i]),
             ),
           ),
         ],
@@ -65,6 +60,18 @@ class BooksPart extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// A card's width; the cover is 2 : 3 within it.
+const _cardWidth = 112.0;
+
+/// The row's height: the cover, the gap and two lines of title at the
+/// device's text size, with a little room for Sinhala marks.
+double _cardHeight(BuildContext context) {
+  final title = NamoType.readingTitle(NamoPalette.of(context).text);
+  final line = MediaQuery.textScalerOf(context).scale(title.fontSize!) *
+      (title.height ?? 1.4);
+  return _cardWidth * 3 / 2 + NamoSpace.xs + 2 * line + NamoSpace.xs;
 }
 
 class _BookCard extends StatelessWidget {
@@ -80,10 +87,11 @@ class _BookCard extends StatelessWidget {
       semanticLabel: '${book.title}, book',
       excludeChildSemantics: true,
       onTap: () => context.go(Routes.book(book.id)),
-      child: Padding(
-        padding: const EdgeInsets.all(NamoSpace.sm),
+      child: SizedBox(
+        width: _cardWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             BookCover(asset: book.cover, title: book.title),
             const SizedBox(height: NamoSpace.xs),

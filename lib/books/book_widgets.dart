@@ -107,6 +107,8 @@ Widget bookChevron(BuildContext context) => Icon(
   color: NamoPalette.of(context).textSecondary,
 );
 
+String _countLabel(int count) => count == 1 ? '1 text' : '$count texts';
+
 /// A page of [book] as a row. A page with children shows how many and opens
 /// their list; a page without opens the reader. [own] is a parent's own
 /// text, at the top of its list: it opens the reader at the page.
@@ -132,6 +134,10 @@ class BookPageRow extends ConsumerWidget {
       key: ValueKey(own ? 'book-row-own-$n' : 'book-row-$n'),
       title: page.title,
       titleFamily: NamoFonts.sinhala,
+      // The count is spoken as the Tripitaka's rows speak theirs.
+      semanticLabel: children.isEmpty
+          ? null
+          : '${page.title}, ${_countLabel(children.length)}',
       trailing: children.isEmpty
           ? chevron
           : Row(

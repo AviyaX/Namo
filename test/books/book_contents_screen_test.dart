@@ -57,6 +57,7 @@ void main() {
   });
 
   testWidgets('a parent without text has no own row', (t) async {
+    final h = t.ensureSemantics();
     // Page 5 is "2": no text; "2-1" (6) under it, which has "2-1-1" (7).
     await _open(t, Routes.bookContents(tinyBookNestedId, 5));
     expect(_own(5), findsNothing);
@@ -65,11 +66,16 @@ void main() {
       find.descendant(of: _row(6), matching: find.text('1')),
       findsOneWidget,
     );
+    expect(find.bySemanticsLabel('Two one, 1 text'), findsOneWidget);
     await t.tap(_row(6));
     await t.pumpAndSettle();
     expect(_location(t), '/library/book/tiny-nested/contents/6');
     expect(_own(6), findsOneWidget);
     expect(_row(7), findsOneWidget);
+    // An own row and a leaf are their titles alone.
+    expect(t.getSemantics(_own(6)).label, 'Two one');
+    expect(t.getSemantics(_row(7)).label, 'Two one one');
+    h.dispose();
   });
 
   testWidgets('Back goes to the parent list or the book page', (t) async {
