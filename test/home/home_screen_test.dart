@@ -415,11 +415,11 @@ void main() {
 
   group('featured card', () {
     testWidgets('bundled content: "FEATURED COLLECTION", the title, the '
-        'subtitle and "19 sections"', (t) async {
+        'subtitle and "33 sections"', (t) async {
       await openReal(t, Routes.home);
       final c = (await realLibrary(t)).categories.first;
       final card = find.byType(FeaturedCard);
-      for (final s in ['FEATURED COLLECTION', 'Buddha Wandanawa', c.subtitle, '19 sections']) {
+      for (final s in ['FEATURED COLLECTION', 'Buddha Wandanawa', c.subtitle, '33 sections']) {
         expect(find.descendant(of: card, matching: find.text(s)), findsOneWidget,
             reason: s);
       }

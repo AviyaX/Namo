@@ -10,7 +10,7 @@ import 'quality_support.dart';
 void main() {
   setUpAll(loadBundledFonts);
 
-  testWidgets('the real reading shows 19 headings and reaches the end', (t) async {
+  testWidgets('the real reading shows 33 headings and reaches the end', (t) async {
     final library = await realLibrary(t);
     final reading = library.reading(realReadingId)!;
     await openReal(t, Routes.reader(realReadingId));
@@ -20,18 +20,18 @@ void main() {
           w.key is ValueKey<String> &&
           (w.key! as ValueKey<String>).value.startsWith('heading-'),
     );
-    expect(reading.sections, hasLength(19));
-    expect(headings, findsNWidgets(19));
+    expect(reading.sections, hasLength(33));
+    expect(headings, findsNWidgets(33));
 
     final position = t.state<ScrollableState>(find.byType(Scrollable).first).position;
     position.jumpTo(position.maxScrollExtent);
     await t.pumpAndSettle();
-    expect(find.text('තෙරුවන් සමාකර ගැනීම'), findsOneWidget);
+    expect(find.text('මෛත්‍රී භාවනාව'), findsOneWidget);
     expect(t.takeException(), isNull);
   });
 
   testWidgets(
-    'English + Pali shows the not-available line on sections 9, 14, 16 and 17 only (whole section)',
+    'English + Pali shows the not-available line on sections 11, 16 and 18 only (whole section)',
     (t) async {
       final library = await realLibrary(t);
       final reading = library.reading(realReadingId)!;
@@ -54,8 +54,8 @@ void main() {
         final line = find.descendant(of: heading, matching: find.text(wholeLine));
         if (line.evaluate().isNotEmpty) withLine.add(s.number);
       }
-      expect(withLine, [9, 14, 16, 17]);
-      expect(find.text(wholeLine), findsNWidgets(4));
+      expect(withLine, [11, 16, 18]);
+      expect(find.text(wholeLine), findsNWidgets(3));
       // Pali is in every section.
       expect(find.textContaining('Pali is not yet available'), findsNothing);
     },

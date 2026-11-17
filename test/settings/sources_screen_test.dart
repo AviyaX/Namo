@@ -292,8 +292,10 @@ void main() {
     expect(find.text('Still to be checked'), findsOneWidget);
     // The bundled file: 15 distinct verse corrections and 1 heading.
     expect(keyed('correction-'), 16);
-    // Buddha Wandanawa's 4 verses, and one row each for the two Samantha Pattana readings.
-    expect(keyed('check-'), 6);
+    // Buddha Wandanawa's 4 verses and 17 sections, and one row each for the two
+    // Samantha Pattana readings.
+    expect(keyed('check-'), 23);
+    expect(keyed('check-section-'), 17);
     expect(keyed('check-reading-'), 2);
     expect(find.textContaining('ගච්චාමි'), findsOneWidget);
     expect(find.textContaining('ගච්ඡාමි'), findsOneWidget);
@@ -313,8 +315,9 @@ void main() {
       ),
       findsOneWidget,
     );
-    // Buddha Wandanawa keeps one row per verse, by verse id.
-    expect(keyed('check-s'), 4);
+    // Buddha Wandanawa keeps one row per verse with notes, by verse id, and one
+    // per section from the Nottingham booklet: 4 + 17.
+    expect(keyed('check-s'), 21);
     // Pirith still has none.
     final library = await t.runAsync(
       () => AssetContentRepository(rootBundle).load(),
@@ -331,6 +334,9 @@ void main() {
 
   testWidgets('Font licences opens the licence page', (t) async {
     await openSources(t);
+    // The check rows push the button below a 9000 px surface; bring it into view.
+    await t.ensureVisible(find.text('Font licences'));
+    await t.pumpAndSettle();
     await t.tap(find.text('Font licences'));
     await t.pumpAndSettle();
     expect(find.byType(LicensePage), findsOneWidget);
@@ -393,8 +399,8 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 6 text sources + the Tripitaka + 4 pictures + 16 corrections + 6 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(33));
+    // 6 text sources + the Tripitaka + 4 pictures + 16 corrections + 23 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(50));
   });
 
   for (final dark in [false, true]) {

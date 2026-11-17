@@ -210,7 +210,7 @@ void main() {
     expect(percent.bottom, greaterThan(card.center.dy));
     expect(
       find.bySemanticsLabel(
-        '${c.title}, ${c.subtitle}, 19 sections, Continue, 34% complete',
+        '${c.title}, ${c.subtitle}, 33 sections, Continue, 34% complete',
       ),
       findsOneWidget,
     );

@@ -79,11 +79,11 @@ void main() {
   });
 
   testWidgets(
-    'tapping the card shows all 19 sections in place and stays on /library',
+    'tapping the card shows all 33 sections in place and stays on /library',
     (t) async {
       final lib = await realLibrary(t);
       final reading = lib.reading(realReadingId)!;
-      expect(reading.sections.length, 19);
+      expect(reading.sections.length, 33);
       await openReal(
         t,
         Routes.library,
