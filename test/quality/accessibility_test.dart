@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/home/featured_carousel.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../books/books_support.dart';
 import 'quality_support.dart';
 
 Future<void> expectGuidelines(WidgetTester t) async {
@@ -565,4 +567,41 @@ void main() {
       handle.dispose();
     });
   });
+
+  // The books (the made-up fixture): the same guidelines on the shelf, a
+  // book's page without and with a place, a contents list and the reader on
+  // its three kinds of page, in both themes.
+  final booksScreens = <(String, String, Map<String, String>)>[
+    ('Books shelf', Routes.library, const {}),
+    ('Book page', Routes.book(tinyBookNestedId), const {}),
+    (
+      'Book page with a place',
+      Routes.book(tinyBookNestedId),
+      {
+        bookPlacesKey: jsonEncode({
+          tinyBookNestedId: {'n': 3, 'offset': 0},
+        }),
+      },
+    ),
+    ('Book contents', Routes.bookContents(tinyBookNestedId, 2), const {}),
+    ('Book reader (gatha)', Routes.bookReader(tinyBookNestedId, 3), const {}),
+    (
+      'Book reader (list, table, picture)',
+      Routes.bookReader(tinyBookNestedId, 7),
+      const {},
+    ),
+    ('Book reader (footnotes)', Routes.bookReader(tinyBookNestedId, 4), const {}),
+  ];
+  for (final dark in [false, true]) {
+    final theme = dark ? 'dark' : 'light';
+    for (final (name, location, extras) in booksScreens) {
+      testWidgets('$name ($theme) meets tap-target, label and contrast '
+          'guidelines', (t) async {
+        final handle = t.ensureSemantics();
+        await openReal(t, location, size: const Size(390, 1400), dark: dark, storeExtras: extras);
+        await expectGuidelines(t);
+        handle.dispose();
+      });
+    }
+  }
 }

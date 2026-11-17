@@ -34,6 +34,13 @@
   - [ ] Run `python -I -X utf8 tools/check_tipitaka_glyphs.py .`; a `substituted` line for U+05F4 is expected.
   - [ ] Owner checks on a phone and in a web browser: open each pitaka; read one sutta in each view (Pali, Sinhala, both); open a footnote; search in Sinhala and in English letters; a bookmark shows in Saved; close the app and open it again and the place is kept.
   - [ ] Confirm the Tripitaka wording on the Sources page.
+- [ ] Books (text from pitaka.lk, covers from rerukanemahanahimi.lk): do not publish the app or push the repository to a public place until the owner confirms permission from the Sri Chandawimala Dhamma Treatises Preservation Board (books and covers) and from pathnirvana (the digitised text); then add "used with permission" to the Sources entry.
+- [ ] Books, owner checks:
+  - [ ] Before each release run `python -I -X utf8 tools/sync_books.py . --check` and the glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`).
+  - [ ] On a phone, open three books, one of them nested (chapters inside chapters).
+  - [ ] Continue reading restores the place after closing the app and opening it again.
+  - [ ] The covers look right in dark and in light.
+  - [ ] Confirm the Books wording on the Sources page.
 - [ ] Reader improvements, owner checks on a phone:
   - [ ] Open a pirith: press Scroll with no sound, then Chant; the captions "Scroll" and "Chant" read right.
   - [ ] Change the speed while chanting (1× → 1.25× → 1.5× → 0.75×); the highlight stays in step.

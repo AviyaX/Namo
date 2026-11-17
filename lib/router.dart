@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'books/book_contents_screen.dart';
+import 'books/book_reader_screen.dart';
+import 'books/book_screen.dart';
 import 'design/transitions.dart';
 import 'design/widgets/app_shell.dart';
 import 'design/widgets/fade_indexed_stack.dart';
@@ -54,6 +57,16 @@ abstract final class Routes {
 
   /// The editor of one flow.
   static String flowEditor(String flowId) => '/library/flow/$flowId';
+
+  /// A book's page: its cover, the way in and its chapters.
+  static String book(String id) => '/library/book/$id';
+
+  /// The pages under page [n] of a book.
+  static String bookContents(String id, int n) =>
+      '/library/book/$id/contents/$n';
+
+  /// A book's reader at page [n].
+  static String bookReader(String id, int n) => '/library/book/$id/read/$n';
 
   /// The Tripitaka tab's first page.
   static const tipitaka = '/tipitaka';
@@ -123,6 +136,33 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                     ),
                   ),
                 ),
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'book/:id',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: BookScreen(id: state.pathParameters['id']!),
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: 'contents/:n',
+                      pageBuilder: (context, state) {
+                        final n = int.tryParse(state.pathParameters['n']!);
+                        return namoPage(
+                          key: state.pageKey,
+                          context: context,
+                          child: n == null
+                              ? const NotFoundScreen()
+                              : BookContentsScreen(
+                                  id: state.pathParameters['id']!,
+                                  n: n,
+                                ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
@@ -188,6 +228,26 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               ReaderFrom.values.asNameMap()[state.uri.queryParameters['from']],
         ),
       ),
+    ),
+    // Outside the shell: the reader has the whole screen.
+    GoRoute(
+      path: '/library/book/:id/read/:n',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['id']!;
+        final n = int.tryParse(state.pathParameters['n']!);
+        return namoPage(
+          key: state.pageKey,
+          context: context,
+          child: n == null
+              ? const NotFoundScreen()
+              : BookReaderScreen(
+                  // A new page starts afresh, at its top.
+                  key: ValueKey('book-reader-$id-$n'),
+                  id: id,
+                  n: n,
+                ),
+        );
+      },
     ),
     GoRoute(
       path: '/tipitaka/read/:key',

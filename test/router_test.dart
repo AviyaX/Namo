@@ -1,3 +1,6 @@
+import 'package:buddhist_gatha/books/book_contents_screen.dart';
+import 'package:buddhist_gatha/books/book_reader_screen.dart';
+import 'package:buddhist_gatha/books/book_screen.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/widgets/empty_state.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
@@ -23,6 +26,55 @@ final _loaded = [
 void main() {
   test('the flow editor\'s address', () {
     expect(Routes.flowEditor('flow-3'), '/library/flow/flow-3');
+  });
+
+  test("the books' addresses", () {
+    expect(Routes.book('x'), '/library/book/x');
+    expect(Routes.bookContents('x', 2), '/library/book/x/contents/2');
+    expect(Routes.bookReader('x', 3), '/library/book/x/read/3');
+  });
+
+  testWidgets('the book paths resolve to their screens', (t) async {
+    await pumpApp(t, overrides: _loaded, location: '/library/book/x');
+    expect(find.byType(BookScreen), findsOneWidget);
+    expect(t.widget<BookScreen>(find.byType(BookScreen)).id, 'x');
+    await t.pumpWidget(const SizedBox());
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: '/library/book/x/contents/2',
+    );
+    expect(find.byType(BookContentsScreen), findsOneWidget);
+    final contents = t.widget<BookContentsScreen>(
+      find.byType(BookContentsScreen),
+    );
+    expect((contents.id, contents.n), ('x', 2));
+    // A part that is not a number is no page.
+    await t.pumpWidget(const SizedBox());
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: '/library/book/x/contents/two',
+    );
+    expect(find.byType(BookContentsScreen), findsNothing);
+    expect(find.byType(NotFoundScreen), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets("the book reader's path resolves outside the shell", (t) async {
+    await pumpApp(t, overrides: _loaded, location: '/library/book/x/read/3');
+    expect(find.byType(BookReaderScreen), findsOneWidget);
+    final reader = t.widget<BookReaderScreen>(find.byType(BookReaderScreen));
+    expect((reader.id, reader.n), ('x', 3));
+    expect(reader.key, const ValueKey('book-reader-x-3'));
+    // No tab bar: the reader has the whole screen.
+    expect(find.byKey(const ValueKey('nav-bar')), findsNothing);
+    expect(find.byKey(const ValueKey('nav-rail')), findsNothing);
+    await t.pumpWidget(const SizedBox());
+    await pumpApp(t, overrides: _loaded, location: '/library/book/x/read/3a');
+    expect(find.byType(BookReaderScreen), findsNothing);
+    expect(find.byType(NotFoundScreen), findsOneWidget);
+    expect(t.takeException(), isNull);
   });
 
   test("the Library's search address", () {

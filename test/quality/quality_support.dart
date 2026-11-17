@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../books/books_support.dart';
 import '../support/fake_chant_player.dart';
 import '../support/passages.dart';
 import '../support/pump_app.dart';
@@ -152,7 +153,8 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// [storeExtras] are extra saved values (a remembered reading place, say).
 /// [overrides] are added to the app's provider overrides (a fixed clock, say).
 /// [tipitaka] serves the Tripitaka's files (by default the made-up
-/// [tinyTipitaka], parsed on the test's own clock).
+/// [tinyTipitaka], parsed on the test's own clock). [books] serves the
+/// books' files (by default the made-up [tinyBooks], likewise).
 Future<void> openReal(
   WidgetTester t,
   String location, {
@@ -171,6 +173,7 @@ Future<void> openReal(
   bool settle = true,
   AssetBytes? tipitaka,
   bool tips = false,
+  AssetBytes? books,
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -234,6 +237,7 @@ Future<void> openReal(
     recordingStore: recordingStore,
     settle: settle,
     tips: tips,
+    books: books ?? fakeAssets(tinyBooks()),
   );
 }
 

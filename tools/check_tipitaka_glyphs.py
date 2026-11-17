@@ -3,7 +3,9 @@
 Run: python -I -X utf8 tools/check_tipitaka_glyphs.py .
 
 Reads (never writes) assets/tipitaka/tree.json.gz names and every entry and
-footnote text of assets/tipitaka/text/*.json.gz. Prints one line per code point
+footnote text of assets/tipitaka/text/*.json.gz, and the Rerukane books:
+assets/books/index.json (titles, subtitles) and every assets/books/*.json.gz
+(page titles, block text, lines, items, table cells, image alt). Prints one line per code point
 that none of NotoSansSinhala, NotoSerif and Lora has:
   U+XXXX <unicode name> count=<n> first=<file>
 or `OK`. Code points in DISPLAY_SUBSTITUTED are not missing when their
@@ -44,8 +46,49 @@ def _footnote_text(note):
     return note if isinstance(note, str) else ""
 
 
+def _block_strings(block):
+    for key in ("text", "alt"):
+        if isinstance(block.get(key), str):
+            yield block[key]
+    for key in ("lines", "items"):
+        for item in block.get(key) or []:
+            yield str(item)
+    for row in block.get("rows") or []:
+        for cell in row:
+            yield str(cell)
+
+
+def book_texts(root):
+    """(file label, text) for the Rerukane books' titles and every drawn string; none if absent."""
+    base = root / "assets" / "books"
+    index_path = base / "index.json"
+    if not index_path.is_file():
+        return
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    for entry in index.get("books", []):
+        for key in ("title", "subtitle"):
+            if entry.get(key):
+                yield "books/index.json", entry[key]
+    for path in sorted(base.glob("*.json.gz")):
+        label = f"books/{path.name}"
+        book = _read(path)
+        for key in ("title", "subtitle"):
+            if book.get(key):
+                yield label, book[key]
+        for pg in book.get("pages", []):
+            yield label, pg.get("title", "")
+            for block in pg.get("blocks", []):
+                for text in _block_strings(block):
+                    yield label, text
+
+
 def texts(root):
-    """(file label, text) for every drawn string, tree first, then books by name."""
+    """(file label, text) for every drawn string, tree first, then books by name, then the Rerukane books."""
+    yield from _tipitaka_texts(root)
+    yield from book_texts(root)
+
+
+def _tipitaka_texts(root):
     base = root / "assets" / "tipitaka"
     tree = _read(base / "tree.json.gz")
     for key, node in tree.items():

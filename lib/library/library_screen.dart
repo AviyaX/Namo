@@ -4,6 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/audio_controls.dart';
+import '../books/book_model.dart';
+import '../books/book_search.dart';
+import '../books/books_part.dart';
+import '../books/books_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -144,6 +148,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     final open = ref.watch(openCategoriesProvider);
     final selection = ref.watch(settingsProvider.select((s) => s.languages));
     final index = ref.watch(searchIndexProvider);
+    final books = ref.watch(booksIndexProvider).value?.books ?? const [];
     return NamoPage(
       children: [
         LibraryGate(
@@ -188,12 +193,14 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 const SizedBox(height: NamoSpace.lg),
                 if (searching)
                   _Results(
+                    books: searchBooks(books, query),
                     hits: index?.search(query, selection) ?? const [],
                     query: query.trim(),
                   )
                 else ...[
                   MyFlowsPart(library: library),
                   const SizedBox(height: NamoSpace.xl),
+                  const BooksPart(),
                   if (n >= 2) ...[
                     ChoiceChips<String?>(
                       key: const ValueKey('library-chips'),
@@ -225,17 +232,23 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   }
 }
 
-/// The sections that match the search, or a nothing-found state.
+/// The books and the sections that match the search, or a nothing-found
+/// state.
 class _Results extends StatelessWidget {
-  const _Results({required this.hits, required this.query});
+  const _Results({
+    required this.books,
+    required this.hits,
+    required this.query,
+  });
 
+  final List<BookSummary> books;
   final List<SearchHit> hits;
   final String query;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    if (hits.isEmpty) {
+    if (books.isEmpty && hits.isEmpty) {
       return EmptyState(
         key: const ValueKey('library-results'),
         icon: Symbols.search_off_rounded,
@@ -247,6 +260,28 @@ class _Results extends StatelessWidget {
       key: const ValueKey('library-results'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (books.isNotEmpty) ...[
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: NamoSpace.lg),
+            child: Overline('Books', header: true),
+          ),
+          const SizedBox(height: NamoSpace.sm),
+          for (final b in books)
+            ListRow(
+              key: ValueKey('book-hit-${b.id}'),
+              title: b.title,
+              titleFamily: NamoFonts.sinhala,
+              subtitle: b.subtitle,
+              onTap: () => context.go(Routes.book(b.id)),
+              trailing: Icon(
+                Symbols.chevron_right_rounded,
+                size: NamoSizes.iconSmall,
+                weight: 300,
+                color: p.textSecondary,
+              ),
+            ),
+          if (hits.isNotEmpty) const SizedBox(height: NamoSpace.lg),
+        ],
         for (final h in hits)
           ListRow(
             // A topic gone through reading by reading numbers its readings.

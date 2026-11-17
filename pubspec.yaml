@@ -106,6 +106,9 @@ flutter:
     - assets/content/
     - assets/tipitaka/
     - assets/tipitaka/text/
+    - assets/books/
+    - assets/books/covers/
+    - assets/books/pictures/
     - assets/pictures/buddha_wandanawa.jpg
     - assets/pictures/hero_dark.jpg
     - assets/pictures/hero_light.jpg
