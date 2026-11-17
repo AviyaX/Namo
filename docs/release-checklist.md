@@ -8,6 +8,8 @@
   - [ ] When the address of the book's page on tipitaka.lk is known, replace the placeholder locator "(the page on tipitaka.lk is not yet known)" in `tools/build_samantha_patthana.py`, then rebuild with `python -I -X utf8 tools/build_samantha_patthana.py .`.
   - [ ] Confirm the Samantha Pattana wording on the Sources page, including "No English meaning is included." and the picture credit.
   - [ ] In a web browser: the recording is requested only when play is pressed, and it plays and seeks.
+- [ ] Buddha Wandanawa (sections and English from the Shanthi Vihara, Nottingham booklet "Evening Puja and Chanting"): do not publish the app or push the repository to a public place until the owner confirms the vihara's permission; then add "used with permission" to the Sources entry.
+- [ ] Buddha Wandanawa, owner checks: read sections 1, 5–8, 21, 23–33 in the app against the booklet's pages and clear their "needs checking" notes in tools/build_content.py. While reading section 8, look at two Sinhala spellings reused from the paritha.org booklet as printed: "සියලූ" (long ū, three times) and "වහන්ගේ" (once, verse 8); decide whether to add correction rows.
 - [ ] My flows, by hand on a phone (Android and iOS) and in a web browser:
   - [ ] In the Library, make a new flow from a reading; the editor shows all its sections.
   - [ ] Reorder sections by dragging the handle (on a phone, with a finger), and with Move up / Move down from a row's menu.

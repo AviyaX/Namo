@@ -25,12 +25,24 @@ class _Credit {
 }
 
 const _credits = [
-  _Credit('namo.lk', 'Sections 1–17.', 'https://namo.lk/buddha-puja/'),
+  _Credit(
+    'namo.lk',
+    'The first verses of sections 2–7 and sections 9–19.',
+    'https://namo.lk/buddha-puja/',
+  ),
   _Credit(
     'The paritha.org booklet',
     'Compiled by Devapriya and Shyamali from the Piruwana Poth Wahanse, '
-        '"for free distribution". Sections 18–19.',
+        '"for free distribution". Sections 20 and 22, and the Sinhala of '
+        'three verses in 8 and one in 23.',
     'https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf',
+  ),
+  _Credit(
+    'Shanthi Vihara, Nottingham',
+    'Evening Puja and Chanting booklet: the Pali, Roman Pali and English of '
+        'sections 1, 8, 21 and 23–33, verses 2–5 of sections 5–7, three '
+        'English lines in 19 and 22, and the Roman Pali of the other '
+        'sections.',
   ),
   _Credit(
     'The "Vandana" booklet of Mahamevnawa Bhavana Asapuwa, Markham, Ontario',
@@ -217,7 +229,8 @@ class SourcesScreen extends StatelessWidget {
         ),
         const SizedBox(height: NamoSpace.sm),
         Text(
-          'Namo is not made by, or connected with, namo.lk or pitaka.lk.',
+          'Namo is not made by, or connected with, namo.lk, pitaka.lk or '
+          'Shanthi Vihara.',
           textAlign: TextAlign.center,
           style: NamoType.body(p.text),
         ),

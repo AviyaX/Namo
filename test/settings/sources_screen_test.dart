@@ -97,7 +97,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
+        text('Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.'),
         findsOneWidget,
       );
       expect(
@@ -110,6 +110,7 @@ void main() {
       expect(find.textContaining('paritha.org'), findsWidgets);
       expect(find.textContaining('Mahamevnawa'), findsWidgets);
       expect(find.textContaining('Cynthia Gunawardana'), findsWidgets);
+      expect(text('Shanthi Vihara, Nottingham'), findsOneWidget);
 
       expect(text('https://namo.lk/buddha-puja/'), findsOneWidget);
       expect(
@@ -187,7 +188,7 @@ void main() {
       findsNothing,
     );
     expect(
-      text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
+      text('Namo is not made by, or connected with, namo.lk, pitaka.lk or Shanthi Vihara.'),
       findsOneWidget,
     );
     expect(
@@ -399,8 +400,8 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 6 text sources + the Tripitaka + 4 pictures + 16 corrections + 23 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(50));
+    // 7 text sources + the Tripitaka + 4 pictures + 16 corrections + 23 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(51));
   });
 
   for (final dark in [false, true]) {
