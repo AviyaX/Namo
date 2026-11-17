@@ -231,19 +231,42 @@ class BuildContentTest(unittest.TestCase):
         minor = {row[0] for row in build_content.PALI_VARIANTS if row[1] == "minor"}
         self.assertIn("s05-v1", minor)
         self.assertTrue(self.by_id["s05-v1"]["pali_roman"])  # a minor variant keeps its Roman
+        partial = {row[0] for row in build_content.PALI_VARIANTS if row[1] == "partial"}
+        self.assertEqual(partial, {"s04-v1"})
+        # A partial variant has Roman for the lines the booklet prints: here the five precepts, one
+        # unit each (the fifth printed over two lines), with no blank line among them.
+        s04 = self.by_id["s04-v1"]["pali_roman"]
+        self.assertNotIn("\n\n", s04)
+        self.assertEqual(len(s04.split("\n")), 6)
+        self.assertTrue(s04.startswith("Pānātipātā"))
         for v in self.verses:
             listed = v["id"] in build_content.NOTTINGHAM_ROMAN and v["id"] not in wording
             if listed or v["id"] in self.new_verses:
                 self.assertTrue(v["pali_roman"] and v["pali_roman"].strip(), v["id"])
             else:
                 self.assertIsNone(v["pali_roman"], v["id"])
-        self.assertEqual(len(self.by_id["s22-v4"]["pali_roman"].split("\n\n")), 3)
+
+    def test_roman_follows_the_pali_layout(self):
+        def stanzas(text):
+            return [stanza.split("\n") for stanza in text.split("\n\n")]
+
+        # An existing verse: the Roman takes the app's stanza breaks.
+        s03 = stanzas(self.by_id["s03-v1"]["pali_roman"])
+        self.assertEqual([len(st) for st in s03], [3, 3, 3])
+        self.assertTrue(all(line.strip() for st in s03 for line in st))
+        self.assertEqual([len(st) for st in stanzas(self.by_id["s22-v4"]["pali_roman"])], [2, 2, 2])
+        # A new verse of one-line units: one line each, no blank line.
+        for field in ("pali_si", "pali_roman", "english"):
+            lines = self.by_id["s23-v2"][field].split("\n")
+            self.assertEqual(len(lines), 3, field)
+            self.assertTrue(all(line.strip() for line in lines), field)
 
     def test_variants_are_listed_and_gate(self):
-        for verse_id, kind, description in build_content.PALI_VARIANTS:
-            self.assertIn(kind, ("minor", "wording"), verse_id)
+        for verse_id, kind, description, digest in build_content.PALI_VARIANTS:
+            self.assertIn(kind, ("minor", "partial", "wording"), verse_id)
             self.assertIn(verse_id, build_content.NOTTINGHAM_ROMAN, verse_id)
             self.assertTrue(description.strip(), verse_id)
+            self.assertRegex(digest, r"^[0-9a-f]{8}$", verse_id)
         original = build_content._namo_sections
 
         def altered(namo):
@@ -258,7 +281,49 @@ class BuildContentTest(unittest.TestCase):
                 build_content.build(ROOT)
         finally:
             build_content._namo_sections = original
-        self.assertIn("s15-v1", str(caught.exception))
+        message = str(caught.exception)
+        self.assertIn("s15-v1", message)
+        self.assertIn("පානියං", message)  # the app's (altered) text
+        self.assertIn("පානීයං", message)  # the booklet's text
+
+    def test_a_variant_row_covers_only_its_booklet_text(self):
+        """A listed verse whose booklet text changes (say, after a converter change) fails the build."""
+        original = build_content._load
+
+        def load(root, name):
+            data = original(root, name)
+            if name == "nottingham_booklet":
+                data = copy.deepcopy(data)
+                page = next(p for p in data["pages"] if p["printed_page"] == 5)
+                unit = page["units"][4]  # Itipi so (s05-v1, a minor variant)
+                unit["pali_si"][0] = unit["pali_si"][0].replace("අරහං", "අරහන්")
+            return data
+
+        build_content._load = load
+        try:
+            with self.assertRaises(build_content.BuildError) as caught:
+                build_content.build(ROOT)
+        finally:
+            build_content._load = original
+        message = str(caught.exception)
+        self.assertIn("s05-v1", message)
+        self.assertIn("අරහන්", message)  # the booklet's changed text
+        self.assertIn("ඉතිපි සෝ භගවා අරහං", message)  # the app's text
+
+    def test_partial_must_be_the_first_lines(self):
+        app = "අ\nආ\n\nඉ"
+        variant = build_content._pali_variant
+        rows = build_content.PALI_VARIANTS
+        try:
+            for booklet, ok in (("අ\nආ", True), ("අ", True), ("ආ", False), ("අ ඉ", False)):
+                build_content.PALI_VARIANTS = [("x", "partial", "test", build_content._pali_hash(booklet))]
+                if ok:
+                    self.assertEqual(variant("x", app, booklet), "partial", booklet)
+                else:
+                    with self.assertRaises(build_content.BuildError, msg=booklet):
+                        variant("x", app, booklet)
+        finally:
+            build_content.PALI_VARIANTS = rows
 
     def test_conversion_problem_fails_the_build(self):
         original = build_content._load
@@ -272,23 +337,25 @@ class BuildContentTest(unittest.TestCase):
                     if mark_unit:
                         page["units"][1]["pali_si"][0] += "⟦x⟧"
                     else:
-                        data["conversion_problems"] = [{"pdf_page": 24, "line": 3, "problem": "x"}]
+                        data["conversion_problems"] = [{"pdf_page": 24, "line": 3, "problem": "⟦x⟧"}]
                 return data
             return load
 
         for mark_unit in (True, False):
             build_content._load = with_problem(mark_unit)
             try:
-                with self.assertRaises(build_content.BuildError):
+                with self.assertRaises(build_content.BuildError) as caught:
                     build_content.build(ROOT)
             finally:
                 build_content._load = original
+            message = str(caught.exception)
+            self.assertIn("page 24", message, mark_unit)
+            self.assertIn("⟦x⟧", message, mark_unit)
 
     def test_stanzas(self):
         self.assertEqual(len(self.by_id["s22-v4"]["pali_si"].split("\n\n")), 3)
         self.assertEqual(len(self.by_id["s22-v4"]["english"].split("\n\n")), 3)
         self.assertTrue(self.by_id["s19-v1"]["sinhala"].endswith("\n\nසාධූ! සාධූ! සාධූ!"))
-        self.assertEqual(len(self.by_id["s23-v2"]["pali_si"].split("\n\n")), 3)
         self.assertEqual(len(self.by_id["s01-v1"]["pali_si"].split("\n")), 1)
 
     def test_corrections_are_the_listed_ones(self):

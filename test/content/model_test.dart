@@ -27,9 +27,8 @@ void main() {
   test('every verse has Pali; the verses the booklet prints have Roman Pali', () {
     expect(verses.length, 114);
     // The app's own verses the Nottingham booklet does not print, and the
-    // two whose booklet wording differs (Roman stays empty for those).
+    // one whose booklet wording differs (Roman stays empty for it).
     const noRoman = {
-      's04-v1',
       's10-v3',
       's11-v1',
       's13-v1',
@@ -124,6 +123,23 @@ void main() {
       expect(v.check, CheckStatus.needsChecking, reason: v.id);
     }
     const newSections = [1, 8, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33];
+    // Exactly these need checking: the four old verses, every verse of the new
+    // sections, and verses 2-5 of sections 5-7.
+    expect(
+      verses.where((v) => v.check == CheckStatus.needsChecking).map((v) => v.id).toSet(),
+      {
+        's13-v1',
+        's14-v2',
+        's22-v4',
+        's20-v3',
+        for (final n in newSections) ...sec(n).verses.map((v) => v.id),
+        for (final n in [5, 6, 7]) ...sec(n).verses.skip(1).map((v) => v.id),
+      },
+    );
+    expect(
+      [for (final n in [5, 6, 7]) sec(n).verses.length],
+      [5, 5, 5],
+    );
     for (final n in [...newSections, 5, 6, 7]) {
       expect(sec(n).check, CheckStatus.needsChecking, reason: '$n');
       expect(sec(n).notes, hasLength(1), reason: '$n');

@@ -12,6 +12,7 @@ instruction printed after its Pali and stands three times instead; see THREE_TIM
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import pathlib
 import re
@@ -157,23 +158,28 @@ NEW_SECTION_NOTE = "Converted from the booklet's FM font; to be read against {pa
 EXTENDED_SECTION_NOTE = "Verses 2–5 converted from the booklet's FM font; to be read against {pages}."
 
 # Where the booklet's Pali differs from the app's for a verse both print (after _normalise_pali).
-# (verse id, "minor" | "wording", what differs). minor: vowel length, a word split, a single letter;
-# wording: different words. A difference not listed here stops the build. The app's Pali is never
-# changed; pali_roman is filled for a match or a minor variant and left empty for wording.
-PALI_VARIANTS: list[tuple[str, str, str]] = [
-    ("s04-v1", "wording", "the app ends with a sixth line, තිසරණේන සද්ධිං පංචසීලං සමාදියාමි, "
-                          "which the booklet does not print"),
-    ("s05-v1", "minor", "සාරථී/සාරථි, භගවාතී/භගවාති (vowel length)"),
+# (verse id, "minor" | "partial" | "wording", what differs, booklet hash). minor: vowel length, a
+# word split, a single letter; partial: the booklet prints the app's first lines and not the rest
+# (checked); wording: different words. The hash is the first 8 hex digits of the sha256 of the
+# booklet's normalised Pali (_pali_hash), so a row covers only the text it was written for. A
+# difference not listed here stops the build. The app's Pali is never changed; pali_roman is filled
+# for a match, a minor or a partial variant and left empty for wording.
+PALI_VARIANTS: list[tuple[str, str, str, str]] = [
+    ("s04-v1", "partial", "the app ends with a sixth line, තිසරණේන සද්ධිං පංචසීලං සමාදියාමි, "
+                          "which the booklet does not print", "5d5093e4"),
+    ("s05-v1", "minor", "සාරථී/සාරථි, භගවාතී/භගවාති (vowel length)", "a5fe8022"),
     ("s06-v1", "minor", "සන්දිට්ඨිකො/සන්දිට්ඨිකෝ, ඕපනයිකො/ඕපනයිකෝ, වේදිතබ්බො/වේදිතබ්බෝ, "
-                        "විඤ්ඤුහීති/විඤ්ඤූහීති (vowel length)"),
+                        "විඤ්ඤුහීති/විඤ්ඤූහීති (vowel length)", "3f096e67"),
     ("s07-v1", "minor", "භගවතො/භගවතෝ (four times, vowel length); ආහුනෙයියෝ/ආහුනෙය්‍යෝ, "
                         "පාහුනෙයියෝ/පාහුනෙය්‍යෝ, දක්ඛිනෙයියෝ/දක්ඛිණෙය්‍යෝ, "
-                        "අඤ්ජලිකරණීයෝ/අඤ්ජලිකරණීය්‍යෝ (a single letter or sign)"),
-    ("s10-v1", "minor", "නිසින්නෝච/නිසින්නෝව (a single letter)"),
-    ("s10-v2", "minor", "මහාබෝධී/මහා බෝධි (a word split and vowel length), තෙ/තේ (vowel length)"),
-    ("s12-v1", "minor", "ඝනසාරප්ප/ඝණසාරප්ප (a single letter)"),
-    ("s14-v2", "minor", "ලභාමි/ලබාමි (a single letter), ඉදම්මේ/ඉදං මේ (a word split)"),
-    ("s20-v3", "wording", "the app ends පුඤ්ඤක්ඛෙත්තං අනුත්තරං; the booklet ends සුපටිපන්න අනුත්තර"),
+                        "අඤ්ජලිකරණීයෝ/අඤ්ජලිකරණීය්‍යෝ (a single letter or sign)", "06c44ce2"),
+    ("s10-v1", "minor", "නිසින්නෝච/නිසින්නෝව (a single letter)", "5d443d90"),
+    ("s10-v2", "minor", "මහාබෝධී/මහා බෝධි (a word split and vowel length), තෙ/තේ (vowel length)",
+     "eb5cd60b"),
+    ("s12-v1", "minor", "ඝනසාරප්ප/ඝණසාරප්ප (a single letter)", "ca99e96f"),
+    ("s14-v2", "minor", "ලභාමි/ලබාමි (a single letter), ඉදම්මේ/ඉදං මේ (a word split)", "7027547c"),
+    ("s20-v3", "wording", "the app ends පුඤ්ඤක්ඛෙත්තං අනුත්තරං; the booklet ends සුපටිපන්න අනුත්තර",
+     "ef8a7c3a"),
 ]
 PALI_PUNCTUATION = ".,;:!?\"'–-()"
 
@@ -548,9 +554,9 @@ def _three_times(lines: list[str], strip_instruction: bool, where: str) -> list[
     return [line] * 3
 
 
-def _unit_texts(pages: dict, refs: list[tuple[int, int]]) -> dict:
-    """The Pali, Roman and English of the units `refs`, each None when no unit has it."""
-    parts: dict[str, list[str]] = {"pali_si": [], "roman": [], "english": []}
+def _unit_lines(pages: dict, refs: list[tuple[int, int]]) -> dict[str, list[list[str]]]:
+    """The Pali, Roman and English lines of the units `refs`, one list per unit that has the field."""
+    parts: dict[str, list[list[str]]] = {"pali_si": [], "roman": [], "english": []}
     for page, index in refs:
         unit = _nottingham_unit(pages, page, index)
         if unit["heading"] is not None:
@@ -561,8 +567,47 @@ def _unit_texts(pages: dict, refs: list[tuple[int, int]]) -> dict:
             pali, roman = _three_times(pali, True, where), _three_times(roman, False, where)
         for field, lines in (("pali_si", pali), ("roman", roman), ("english", unit["english"])):
             if lines:
-                parts[field].append("\n".join(line.strip(" ") for line in lines))
-    return {field: "\n\n".join(texts) if texts else None for field, texts in parts.items()}
+                parts[field].append([line.strip(" ") for line in lines])
+    return parts
+
+
+def _unit_texts(pages: dict, refs: list[tuple[int, int]]) -> dict:
+    """The Pali, Roman and English of the units `refs`, each None when no unit has it. Lines join with
+    "\n" inside a unit; units join with "\n" when each of them is one Pali line (the three Imāya
+    lines), otherwise with "\n\n"."""
+    joiner = "\n" if all(len(_nottingham_unit(pages, *ref)["pali_si"]) == 1 for ref in refs) else "\n\n"
+    return {field: joiner.join("\n".join(lines) for lines in units) if units else None
+            for field, units in _unit_lines(pages, refs).items()}
+
+
+def _first_lines_covered(app_pali: str, booklet_pali: str) -> int | None:
+    """How many of the app's (non-blank) Pali lines the booklet's Pali is, from the first; None when
+    it is not a run of the app's first lines."""
+    app_lines = [_normalise_pali(line) for line in app_pali.split("\n") if line.strip()]
+    booklet = _normalise_pali(booklet_pali)
+    for k in range(1, len(app_lines) + 1):
+        if "".join(app_lines[:k]) == booklet:
+            return k
+    return None
+
+
+def _mirror_lines(units: list[list[str]], app_pali: str, covered: int) -> str | None:
+    """The Roman `units` laid out like the app's first `covered` Pali lines, with a blank line wherever
+    the app's Pali has one: line for line when the Roman has `covered` lines, else unit for line when
+    there are `covered` units (a unit's own lines kept). None when neither count fits."""
+    lines = [line for unit in units for line in unit]
+    if len(lines) == covered:
+        items = lines
+    elif len(units) == covered:
+        items = ["\n".join(unit) for unit in units]
+    else:
+        return None
+    out, rest = [], list(items)
+    for line in app_pali.split("\n"):
+        if not rest:
+            break
+        out.append(rest.pop(0) if line.strip() else "")
+    return "\n".join(out)
 
 
 def _nottingham_verse(pages: dict, refs: list[tuple[int, int]]) -> dict:
@@ -617,7 +662,8 @@ def _check_conversion(nott: dict) -> None:
     used = _nottingham_used_pages()
     for problem in nott["conversion_problems"]:
         if printed.get(problem["pdf_page"]) in used:
-            raise BuildError(f"Nottingham booklet: conversion problem on a page the reading uses: {problem}")
+            raise BuildError(f"Nottingham booklet: conversion problem on a page the reading uses: PDF page "
+                             f"{problem['pdf_page']} line {problem['line']}: {problem['problem']}")
 
 
 def _pali_variant(verse_id: str, app_pali: str, booklet_pali: str) -> str | None:
@@ -625,13 +671,32 @@ def _pali_variant(verse_id: str, app_pali: str, booklet_pali: str) -> str | None
     rows = [row for row in PALI_VARIANTS if row[0] == verse_id]
     if len(rows) > 1:
         raise BuildError(f"{verse_id}: listed {len(rows)} times in PALI_VARIANTS")
+    both = f"\n  app:     {app_pali!r}\n  booklet: {booklet_pali!r}"
     same = _normalise_pali(app_pali) == _normalise_pali(booklet_pali)
     if same and rows:
         raise BuildError(f"{verse_id}: listed in PALI_VARIANTS but the booklet's Pali is the app's")
-    if not same and not rows:
-        raise BuildError(f"{verse_id}: the Nottingham booklet's Pali differs from the app's and is not "
-                         f"listed in PALI_VARIANTS\n  app:     {app_pali!r}\n  booklet: {booklet_pali!r}")
-    return rows[0][1] if rows else None
+    if not rows:
+        if not same:
+            raise BuildError(f"{verse_id}: the Nottingham booklet's Pali differs from the app's and is not "
+                             f"listed in PALI_VARIANTS{both}")
+        return None
+    _, kind, _, digest = rows[0]
+    if _pali_hash(booklet_pali) != digest:
+        raise BuildError(f"{verse_id}: the booklet's Pali is not the text its PALI_VARIANTS row was written "
+                         f"for (hash {_pali_hash(booklet_pali)}, the row says {digest}){both}")
+    if kind == "partial":
+        covered = _first_lines_covered(app_pali, booklet_pali)
+        if covered is None or covered == sum(1 for line in app_pali.split("\n") if line.strip()):
+            raise BuildError(f"{verse_id}: listed as partial but the booklet's Pali is not the app's first "
+                             f"lines{both}")
+    elif kind not in ("minor", "wording"):
+        raise BuildError(f"{verse_id}: unknown variant class {kind!r}")
+    return kind
+
+
+def _pali_hash(text: str) -> str:
+    """The first 8 hex digits of the sha256 of the normalised Pali (PALI_VARIANTS' fourth element)."""
+    return hashlib.sha256(_normalise_pali(text).encode("utf-8")).hexdigest()[:8]
 
 
 def _section_of(sections_by_key: dict, section_id: str) -> dict:
@@ -661,9 +726,15 @@ def _apply_nottingham(sections_by_key: dict, nott: dict) -> None:
         if texts["pali_si"] is None or texts["roman"] is None:
             raise BuildError(f"{verse_id}: units {refs} lack Pali or Roman")
         kind = _pali_variant(verse_id, verse["pali_si"], texts["pali_si"])
-        if kind not in (None, "minor", "wording"):
-            raise BuildError(f"{verse_id}: unknown variant class {kind!r}")
-        verse["pali_roman"] = None if kind == "wording" else texts["roman"]
+        if kind == "wording":
+            continue
+        # The Roman takes the app's Pali layout (its stanza breaks) when the line counts allow it.
+        roman_units = _unit_lines(pages, refs)["roman"]
+        covered = (_first_lines_covered(verse["pali_si"], texts["pali_si"]) if kind == "partial"
+                   else sum(1 for line in verse["pali_si"].split("\n") if line.strip()))
+        mirrored = _mirror_lines(roman_units, verse["pali_si"], covered)
+        verse["pali_roman"] = mirrored if mirrored is not None else "\n\n".join(
+            "\n".join(unit) for unit in roman_units)
     for verse_id, refs in NOTTINGHAM_ENGLISH.items():
         verse = verses[verse_id]
         if verse["english"] is not None:
