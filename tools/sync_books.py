@@ -30,6 +30,7 @@ import json
 import pathlib
 import re
 import time
+import urllib.parse
 import urllib.request
 
 SLUGS = [
@@ -67,11 +68,12 @@ PUBLISHER = {"si": "ශ්‍රී චන්දවිමල ධර්මපු�
 COVERS: dict[str, tuple[str, str]] = {}
 
 BLOCK_TAGS = {"p": "para", "h2": "heading", "h3": "heading", "h4": "heading", "ol": "list", "ul": "list"}
-INLINE_TAGS = {"b", "strong", "i", "em", "u", "span", "a", "sup", "sub", "br"}   # flattened to their text; <br> is a line break
+INLINE_TAGS = {"b", "strong", "i", "em", "u", "span", "a", "sup", "sub", "br", "suli"}   # flattened to their text; <br> is a line break; "suli" is a typo in pohoya-dinaya/21-1.html
 SKIP_TAGS_IN_MAIN = {"nav", "dialog", "button", "script", "svg", "style"}        # plus div.page-title
 
 TEXT_KINDS = ("heading", "subhead", "para")
-KINDS = TEXT_KINDS + ("gatha", "list")
+KINDS = TEXT_KINDS + ("gatha", "list", "footnotes", "table", "image")
+MARKERS = ("number", "bullet", "none")
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 NAME_RE = re.compile(r"^[0-9A-Za-z][0-9A-Za-z-]*$")
 SPACE_RE = re.compile(r"[ \t\n\r\f]+")       # HTML white space; no-break and zero-width characters are text
@@ -259,6 +261,30 @@ def _gatha(el, where):
     return {"kind": "gatha", "lines": [line for line in lines if line]}
 
 
+def _item_text(li, where):
+    """A list item's text: inline runs, plus the lines of a div.gatha inside it
+    (bauddhayage-athpotha/6-7.html) and the items of a list nested in it
+    (pattana-pakarana-sannaya/6-2.html), each as further lines joined by "\\n"."""
+    parts, run = [], []
+
+    def flush():
+        if run:
+            parts.append(_clean(_inline_children(run, where, "li")))
+            run.clear()
+
+    for child in li.children:
+        if isinstance(child, _Element) and child.tag == "div" and child.cls == "gatha":
+            flush()
+            parts += _gatha(child, where)["lines"]
+        elif isinstance(child, _Element) and child.tag in ("ol", "ul") and child.cls in ("", "enum"):
+            flush()
+            parts += _list(child, where)["items"]
+        else:
+            run.append(child)
+    flush()
+    return "\n".join(part for part in parts if part)
+
+
 def _list(el, where):
     items = []
     for child in el.children:
@@ -266,7 +292,7 @@ def _list(el, where):
             if child.strip(" \t\n\r\f"):
                 raise SyncError("%s: text outside an item in a list" % where)
         elif child.tag == "li" and not child.cls:
-            items.append(_clean(_inline(child, where, "li")))
+            items.append(_item_text(child, where))
         else:
             raise _unknown(where, child)
     start = el.attrs.get("start") if el.tag == "ol" else None
@@ -274,7 +300,80 @@ def _list(el, where):
         start = int(start) if start is not None else 1
     except ValueError:
         raise SyncError('%s: <ol start="%s"> is not a number' % (where, start))
-    return {"kind": "list", "ordered": el.tag == "ol", "start": start, "items": items}
+    # ol.enum, e.g. abhidharma-margaya/2-7.html: each <li> starts with the source's own
+    # <span class="li-num">(1)</span>, kept in the text, so the reader draws no marker.
+    marker = "none" if el.cls == "enum" else "number" if el.tag == "ol" else "bullet"
+    return {"kind": "list", "marker": marker, "start": start, "items": items}
+
+
+def _footnotes(el, where):
+    """ol.footnotes, e.g. abhidharmaye-mulika-karunu/12.html: one item per <li>; its <p>s
+    (two in shasanavatharanaya/7.html) are lines. The back-link's text is kept."""
+    items = []
+    for child in el.children:
+        if isinstance(child, str):
+            if child.strip(" \t\n\r\f"):
+                raise SyncError("%s: text outside a footnote" % where)
+        elif child.tag == "li" and not child.cls:
+            lines = []
+            for part in child.children:
+                if isinstance(part, _Element) and part.tag == "p" and not part.cls:
+                    lines.append(_clean(_inline(part, where, "p")))
+                elif isinstance(part, _Element) or part.strip(" \t\n\r\f"):
+                    raise SyncError("%s: a footnote holds something besides <p>" % where)
+            items.append("\n".join(line for line in lines if line))
+        else:
+            raise _unknown(where, child)
+    return {"kind": "footnotes", "items": items}
+
+
+def _table(el, where):
+    """<table>, and table.collapse (abhidharma-margaya/5-5.html): rows of cell text."""
+    trs = []
+    for child in el.children:
+        if isinstance(child, _Element) and child.tag in ("thead", "tbody", "tfoot") and not child.cls:
+            trs += child.children
+        else:
+            trs.append(child)
+    rows, header = [], False
+    for tr in trs:
+        if isinstance(tr, str):
+            if tr.strip(" \t\n\r\f"):
+                raise SyncError("%s: text outside a table row" % where)
+            continue
+        if tr.tag != "tr" or tr.cls:
+            raise _unknown(where, tr)
+        cells = []
+        for cell in tr.children:
+            if isinstance(cell, str):
+                if cell.strip(" \t\n\r\f"):
+                    raise SyncError("%s: text outside a table cell" % where)
+            elif cell.tag in ("td", "th") and not cell.cls:
+                cells.append(cell)
+            else:
+                raise _unknown(where, cell)
+        if not rows:
+            header = bool(cells) and all(c.tag == "th" for c in cells)
+        rows.append([_clean(_inline(c, where, c.tag)) for c in cells])
+    return {"kind": "table", "header": header, "rows": rows}
+
+
+def _image(el):
+    return {"kind": "image", "src": el.attrs.get("src") or "", "alt": _clean(el.attrs.get("alt") or "")}
+
+
+def _paragraph_images(el, where):
+    """The images of a <p> that holds nothing but images, inline tags and white space
+    (bodhi-poojawa/28-2.html; inside a <b> in punyopadeshaya/39-25.html); [] if it has none."""
+    images = [e for e in el.iter() if e.tag == "img"]
+    if not images:
+        return []
+    for e in el.iter():
+        if e.tag not in INLINE_TAGS and e.tag != "img":
+            raise _unknown(where, e)
+    if any(isinstance(c, str) and c.strip(" \t\n\r\f") for e in [el, *el.iter()] for c in e.children):
+        raise SyncError("%s: an <img> shares its paragraph with text" % where)
+    return [_image(e) for e in images]
 
 
 def _subheads(el, where):
@@ -305,13 +404,17 @@ def _blocks(root, where):
             block = _gatha(el, where)
             if block["lines"]:
                 blocks.append(block)
-        elif kind == "list" and not el.cls:
+        elif kind == "list" and (not el.cls or (el.tag == "ol" and el.cls == "enum")):
             blocks.append(_list(el, where))
-        elif el.tag == "ol" and el.cls == "enum":
-            # e.g. abhidharma-margaya/2-7.html: each <li> starts with the source's own
-            # <span class="li-num">(1)</span>, kept in the text; so the list is unordered.
-            block = _list(el, where)
-            blocks.append(dict(block, ordered=False))
+        elif el.tag == "ol" and el.cls == "footnotes":
+            blocks.append(_footnotes(el, where))
+        elif el.tag == "table" and el.cls in ("", "collapse"):
+            blocks.append(_table(el, where))
+        elif el.tag == "img":
+            blocks.append(_image(el))
+        elif el.tag == "p" and not el.cls and _paragraph_images(el, where):
+            blocks += _paragraph_images(el, where)
+            kind = None
         elif el.tag == "p" and el.cls == "subhead":
             kind = "subhead"
         elif el.tag == "div" and el.cls == "subhead":
@@ -336,6 +439,16 @@ def _blocks(root, where):
     return blocks
 
 
+def _resolve_images(blocks, url, where):
+    """Image sources become absolute URLs, resolved against the page they are on."""
+    for block in blocks:
+        if block["kind"] == "image":
+            if url is None and not re.match(r"https?://", block["src"]):
+                raise SyncError("%s: an image with a relative src and no page URL" % where)
+            block["src"] = urllib.parse.urljoin(url or "", block["src"])
+    return blocks
+
+
 def _plain_text(el):
     """Text of a title element, leaving out icons and buttons."""
     out = []
@@ -347,7 +460,8 @@ def _plain_text(el):
     return SPACE_RE.sub(" ", "".join(out)).strip(" ")
 
 
-def parse_index(text):
+def parse_index(text, url=None):
+    """url: the index page's address, against which front-matter images are resolved."""
     root = _tree(text)
     head = root.find("div", "book-head")
     h1 = head.find("h1") if head else None
@@ -362,6 +476,7 @@ def parse_index(text):
         summary = details.find("summary")
         body = details.find("div", "front-body")
         blocks = _blocks(body, "index front matter") if body is not None else []
+        _resolve_images(blocks, url, "index front matter")
         if blocks:
             front = {"title": _plain_text(summary) if summary else "", "blocks": blocks}
 
@@ -391,11 +506,12 @@ def _main_text(root):
     return None
 
 
-def parse_page(text, where):
+def parse_page(text, where, url=None):
+    """where: "<slug>/<page>.html"; url: the page's address (default BASE_URL + where)."""
     main = _main_text(_tree(text))
     if main is None:
         raise SyncError("%s: no main.page.prose" % where)
-    return _blocks(main, where)
+    return _resolve_images(_blocks(main, where), url or BASE_URL + where, where)
 
 
 def build_book(slug, index, pages_html, fetched):
@@ -409,7 +525,8 @@ def build_book(slug, index, pages_html, fetched):
         if row["href"] not in pages_html:
             raise SyncError("%s: page not read" % where)
         pages.append({"n": len(pages) + 1, "key": row["key"], "level": row["level"], "title": row["title"],
-                      "url": base + row["href"], "blocks": parse_page(pages_html[row["href"]], where)})
+                      "url": base + row["href"],
+                      "blocks": parse_page(pages_html[row["href"]], where, base + row["href"])})
     return {"id": slug, "title": index["title"], "subtitle": index["subtitle"],
             "source": {"url": base + "index.html", "fetched": fetched}, "pages": pages}
 
@@ -493,23 +610,46 @@ def _text_problems(where, text):
     return []
 
 
+def _strings_problems(where, what, items):
+    if not isinstance(items, list) or not items:
+        return ["%s: %s without items" % (where, what)]
+    return [p for item in items for p in _text_problems(where, item)]
+
+
 def _block_problems(where, block):
     kind = block.get("kind") if isinstance(block, dict) else None
     if kind in TEXT_KINDS:
         return _text_problems(where, block.get("text"))
     if kind == "gatha":
-        lines = block.get("lines")
-        if not isinstance(lines, list) or not lines:
-            return ["%s: gatha without lines" % where]
-        return [p for line in lines for p in _text_problems(where, line)]
+        return _strings_problems(where, "gatha", block.get("lines"))
     if kind == "list":
         problems = []
-        if not isinstance(block.get("ordered"), bool) or not isinstance(block.get("start"), int):
-            problems.append("%s: list without ordered/start" % where)
-        items = block.get("items")
-        if not isinstance(items, list) or not items:
-            return problems + ["%s: list without items" % where]
-        return problems + [p for item in items for p in _text_problems(where, item)]
+        if block.get("marker") not in MARKERS or not isinstance(block.get("start"), int):
+            problems.append("%s: list without a known marker and a start" % where)
+        return problems + _strings_problems(where, "list", block.get("items"))
+    if kind == "footnotes":
+        return _strings_problems(where, "footnotes", block.get("items"))
+    if kind == "table":
+        rows = block.get("rows")
+        problems = [] if isinstance(block.get("header"), bool) else ["%s: table without a header flag" % where]
+        if not isinstance(rows, list) or not rows or not all(isinstance(r, list) and r for r in rows):
+            return problems + ["%s: table with no rows or an empty row" % where]
+        for cell in (c for r in rows for c in r):
+            if not isinstance(cell, str):
+                problems.append("%s: table cell is not text" % where)
+            elif MARKUP_RE.search(cell):
+                problems.append("%s: markup left in the text: %r" % (where, cell[:60]))
+        return problems
+    if kind == "image":
+        problems = []
+        if not isinstance(block.get("src"), str) or not re.match(r"https?://[^/]+/", block["src"]):
+            problems.append("%s: image src %r is not an absolute URL" % (where, block.get("src")))
+        alt = block.get("alt")
+        if not isinstance(alt, str):
+            problems.append("%s: image without alt text field" % where)
+        elif MARKUP_RE.search(alt):
+            problems.append("%s: markup left in the text: %r" % (where, alt[:60]))
+        return problems
     return ["%s: unknown block kind %r" % (where, kind)]
 
 
@@ -648,7 +788,7 @@ def fetch_all(project, opener=urllib.request.urlopen):
     fetched = datetime.date.today().isoformat()
     books = []
     for slug in SLUGS:
-        index = parse_index(cached_page(cache, slug, "index.html", opener))
+        index = parse_index(cached_page(cache, slug, "index.html", opener), BASE_URL + slug + "/index.html")
         pages = {row["href"]: cached_page(cache, slug, row["href"], opener) for row in index["toc"]}
         books.append(build_book(slug, index, pages, fetched))
     return write_bundle(project, books, fetched)

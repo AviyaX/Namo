@@ -24,3 +24,17 @@ whose file is here.
 No page of the 23 books has `<h2>`/`<h3>` inside its main text (survey of
 2026-11-17), so the heading mapping is tested on a short made-up snippet in
 the test file instead.
+
+Pages for the kinds added after the survey, under folders named after their
+book, with their real names:
+
+- `abhidharmaye-mulika-karunu/12.html`: https://pitaka.lk/books/abhidharmaye-mulika-karunu/12.html (`ol.footnotes`, one `<p>` per note, `<sup><a class="footnote-ref">`)
+- `shasanavatharanaya/7.html`: https://pitaka.lk/books/shasanavatharanaya/7.html (a footnote with two `<p>`s)
+- `abhidharma-margaya/5-5.html`: https://pitaka.lk/books/abhidharma-margaya/5-5.html (`table.collapse`, `<br>` inside cells)
+- `abhidharma-margaya/2-7.html`: https://pitaka.lk/books/abhidharma-margaya/2-7.html (`ol.enum` with `span.li-num` labels, then a plain `<ol>`)
+- `bodhi-poojawa/28-2.html`: https://pitaka.lk/books/bodhi-poojawa/28-2.html (an `<img>` alone in a `<p>`)
+- `punyopadeshaya/39-25.html`: https://pitaka.lk/books/punyopadeshaya/39-25.html (an `<img>` inside `<b>` in a `<p>`)
+- `bauddhayage-athpotha/6-7.html`: https://pitaka.lk/books/bauddhayage-athpotha/6-7.html (`<li>`s each holding a `div.gatha`)
+- `pattana-pakarana-sannaya/6-2.html`: https://pitaka.lk/books/pattana-pakarana-sannaya/6-2.html (an `<ol>` nested in a `<ul>`'s `<li>`)
+- `pohoya-dinaya/21-1.html`: https://pitaka.lk/books/pohoya-dinaya/21-1.html (the `<suli>` typo around a footnote mark, `<ol start="34">`, footnotes)
+- `punyopadeshaya/39-23.html`: https://pitaka.lk/books/punyopadeshaya/39-23.html (table cells holding `<p>`s (still refused; see the task report))

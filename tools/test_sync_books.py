@@ -79,7 +79,10 @@ def small_book(slug):
             {"n": 2, "key": "1", "level": 1, "title": "One", "url": url + "1.html", "blocks": []},
             {"n": 3, "key": "1-1", "level": 2, "title": "One one", "url": url + "1-1.html",
              "blocks": [para("b"), {"kind": "gatha", "lines": ["x", "y"]},
-                        {"kind": "list", "ordered": True, "start": 1, "items": ["i"]}]},
+                        {"kind": "list", "marker": "number", "start": 1, "items": ["i"]},
+                        {"kind": "table", "header": True, "rows": [["h"], [""]]},
+                        {"kind": "image", "src": url + "images/p.png", "alt": ""},
+                        {"kind": "footnotes", "items": ["n"]}]},
         ],
     }
 
@@ -156,7 +159,7 @@ class ParsePageTest(unittest.TestCase):
         self.assertEqual(len(gathas[1]["lines"]), 4)
 
         lst = self.blocks("nested", "2-4.html")[-1]
-        self.assertEqual(lst["ordered"], True)
+        self.assertEqual(lst["marker"], "number")
         self.assertEqual(lst["start"], 1)
         self.assertEqual(len(lst["items"]), 14)
         self.assertEqual(lst["items"][0], "පරමාර්ථ සතර මොනවා ද?")
@@ -166,12 +169,12 @@ class ParsePageTest(unittest.TestCase):
     def test_parse_page_keeps_text(self):
         # 8-1-1.html line 47, its <b>...</b> flattened to the text (escaped so the
         # zero-width joiners are visible).
-        want = ("රූප - ශබ්ද - ගන්ධ - රස - "
-                "ස්ප්‍ර‍ෂ්ටව්‍ය "
-                "යන පඤ්ච කාමයන් ගැන "
-                "ඇති ආශාව වූ ඖදාරික "
-                "ලෝභය කාමාශ්‍ර‍ව "
-                "නම් වේ.")
+        want = ("\u0dbb\u0dd6\u0db4 - \u0dc1\u0db6\u0dca\u0daf - \u0d9c\u0db1\u0dca\u0db0 - \u0dbb\u0dc3 - "
+                "\u0dc3\u0dca\u0db4\u0dca\u200d\u0dbb\u200d\u0dc2\u0dca\u0da7\u0dc0\u0dca\u200d\u0dba \u0dba\u0db1 "
+                "\u0db4\u0da4\u0dca\u0da0 \u0d9a\u0dcf\u0db8\u0dba\u0db1\u0dca \u0d9c\u0dd0\u0db1 "
+                "\u0d87\u0dad\u0dd2 \u0d86\u0dc1\u0dcf\u0dc0 \u0dc0\u0dd6 \u0d96\u0daf\u0dcf\u0dbb\u0dd2\u0d9a "
+                "\u0dbd\u0ddd\u0db7\u0dba \u0d9a\u0dcf\u0db8\u0dcf\u0dc1\u0dca\u200d\u0dbb\u200d\u0dc0 "
+                "\u0db1\u0db8\u0dca \u0dc0\u0dda.")
         self.assertEqual(self.blocks("nested", "8-1-1.html")[1], para(want))
 
     def test_parse_page_whitespace_breaks_and_headings(self):
@@ -187,8 +190,8 @@ class ParsePageTest(unittest.TestCase):
             {"kind": "heading", "text": "three"},
             {"kind": "para", "text": "a b c\nd"},
             {"kind": "gatha", "lines": ["x", "y", "z"]},
-            {"kind": "list", "ordered": True, "start": 4, "items": ["one 1", "two"]},
-            {"kind": "list", "ordered": False, "start": 1, "items": ["u"]},
+            {"kind": "list", "marker": "number", "start": 4, "items": ["one 1", "two"]},
+            {"kind": "list", "marker": "bullet", "start": 1, "items": ["u"]},
         ])
 
     def test_parse_page_survey_mappings(self):
@@ -213,7 +216,7 @@ class ParsePageTest(unittest.TestCase):
             {"kind": "subhead", "text": "රේරුකානේ"},
             {"kind": "para", "text": "“සුණාතු මෙ භන්තෙ සඞ්ඝො."},
             {"kind": "para", "text": "චිරං තිට්ඨතු සද්ධම්මෝ."},
-            {"kind": "list", "ordered": False, "start": 1, "items": ["(1)පළමු සිත උපදී.", "(2)දෙවන"]},
+            {"kind": "list", "marker": "none", "start": 1, "items": ["(1)පළමු සිත උපදී.", "(2)දෙවන"]},
         ])
 
     def test_parse_page_gatha_with_loose_lines(self):
@@ -232,27 +235,103 @@ class ParsePageTest(unittest.TestCase):
             {"kind": "gatha", "lines": ["c", "d", "e", "f"]},
         ])
 
-    def test_parse_page_rejects_what_cannot_be_kept(self):
-        # Footnotes, tables and images stay unknown until there is a way to keep them whole.
-        for inner, tag in [('<ol class="footnotes"><li id="footnote-1"><p> x <a href="#r">↑</a></p></li></ol>',
-                            '<ol class="footnotes">'),
-                           ('<table class="collapse"><tbody><tr><td>තී</td></tr></tbody></table>',
-                            '<table class="collapse">'),
-                           ('<p><img src="images/a.png" alt="චක්‍රය"></p>', '<img class="">'),
-                           ('<ol><li>x<suli><a class="footnote-ref">[1]</a></suli></li></ol>', '<suli class="">')]:
-            with self.assertRaisesRegex(tool.SyncError, "unknown " + re.escape(tag)):
-                tool.parse_page('<main class="page prose">%s</main>' % inner, "x")
+    def test_parse_page_new_kinds(self):
+        # Real pages for the kinds added after the survey (see the fixture README).
+        cases = {
+            ("abhidharmaye-mulika-karunu", "12.html"): ["para"] * 22 + ["gatha"] + ["para"] * 7 + ["footnotes"],
+            ("shasanavatharanaya", "7.html"): ["para"] * 8 + ["footnotes"],
+            ("abhidharma-margaya", "5-5.html"): ["para"] * 11 + ["subhead", "table"] + ["para"] * 5,
+            ("abhidharma-margaya", "2-7.html"): ["list", "para", "para", "list"],
+            ("bodhi-poojawa", "28-2.html"): ["image"] + ["para"] * 6 + ["list"] + ["para"] * 4,
+            ("punyopadeshaya", "39-25.html"): ["image", "para", "para", "gatha", "para"],
+            ("bauddhayage-athpotha", "6-7.html"): (["para"] * 8 + ["list"] + ["para"] * 3 + ["list", "para", "list"]
+                                                   + ["para"] * 5),
+            ("pattana-pakarana-sannaya", "6-2.html"): (["para"] * 34 + ["subhead", "para", "para", "subhead"]
+                                                       + ["para"] * 5
+                                                       + (["gatha", "para", "para"] * 7)[:-1]
+                                                       + ["para", "gatha", "para", "gatha", "para", "para", "gatha",
+                                                          "para", "gatha", "para", "para", "para", "list", "para",
+                                                          "gatha", "para", "gatha", "para", "para", "para", "subhead",
+                                                          "para"]),
+            ("pohoya-dinaya", "21-1.html"): ["list", "subhead", "list", "para", "para", "footnotes"],
+        }
+        for (book, name), want in cases.items():
+            self.assertEqual(kinds(self.blocks(book, name)), want, name)
+
+        notes = self.blocks("abhidharmaye-mulika-karunu", "12.html")[-1]["items"]
+        self.assertEqual(len(notes), 2)
+        self.assertTrue(notes[0].startswith("අංගුත්තර අටුවා."), notes[0])
+        self.assertTrue(notes[0].endswith("↑"), notes[0])          # the back-link's own text is kept
+        two = self.blocks("shasanavatharanaya", "7.html")[-1]["items"]
+        self.assertEqual(len(two), 1)
+        self.assertEqual(two[0].count("\n"), 1)                     # two <p>s, two lines
+
+        table = self.blocks("abhidharma-margaya", "5-5.html")[12]
+        self.assertFalse(table["header"])
+        self.assertEqual([len(r) for r in table["rows"]], [9, 9])
+        self.assertEqual(table["rows"][0][0], "තී\nооо\n1")
+        self.assertEqual(table["rows"][1][8], "භ\nооо\n..")
+
+        enum, _, _, plain = self.blocks("abhidharma-margaya", "2-7.html")
+        self.assertEqual((enum["marker"], enum["start"], len(enum["items"])), ("none", 1, 8))
+        self.assertTrue(all(i.startswith("(%d)" % (n + 1)) for n, i in enumerate(enum["items"])))
+        self.assertEqual((plain["marker"], plain["start"], len(plain["items"])), ("number", 1, 7))
+        self.assertFalse([i for i in plain["items"] if re.match(r"\d+\.", i)])
+
+        image = self.blocks("bodhi-poojawa", "28-2.html")[0]
+        self.assertEqual(image["src"], "https://pitaka.lk/books/bodhi-poojawa/images/377a05be20.png")
+        self.assertTrue(image["alt"].startswith("දැති සහිත"), image["alt"])
+        inside_b = self.blocks("punyopadeshaya", "39-25.html")[0]
+        self.assertEqual(inside_b["src"], "https://pitaka.lk/books/punyopadeshaya/images/75000eeb95.png")
+
+        verses = self.blocks("bauddhayage-athpotha", "6-7.html")[12]
+        self.assertEqual(verses["marker"], "number")
+        self.assertEqual(len(verses["items"]), 4)
+        self.assertEqual([i.count("\n") for i in verses["items"]], [1, 1, 1, 1])   # a two-line gatha per item
+        self.assertEqual(verses["items"][0].split("\n")[1], "ජායන්ති තත්ථ පාරොහා - අහො රත්තාන මච්චයෙ")
+
+        nested = self.blocks("pattana-pakarana-sannaya", "6-2.html")[75]
+        self.assertEqual((nested["marker"], len(nested["items"])), ("bullet", 1))
+        self.assertEqual(len(nested["items"][0].split("\n")), 9)    # the nine items of the inner <ol>
+
+        first, _, second, _, _, notes = self.blocks("pohoya-dinaya", "21-1.html")
+        self.assertTrue([i for i in first["items"] if "[1]" in i])   # the <suli> footnote mark, flattened
+        self.assertEqual((second["start"], len(second["items"])), (34, 17))
+        self.assertEqual(len(notes["items"]), 1)
+
+    def test_parse_page_new_kinds_made_up(self):
+        html = ('<main class="page prose">'
+                '<table><thead><tr><th>A</th><th> B </th></tr></thead><tbody><tr><td>1</td><td></td></tr></tbody></table>'
+                '<img src="/books/x/images/p.png">'
+                '<ul><li>top <ol class="enum"><li>(i) a</li></ol><div class="gatha"><p>l1</p><p>l2</p></div></li></ul>'
+                '</main>')
+        self.assertEqual(tool.parse_page(html, "x/3.html"), [
+            {"kind": "table", "header": True, "rows": [["A", "B"], ["1", ""]]},
+            {"kind": "image", "src": "https://pitaka.lk/books/x/images/p.png", "alt": ""},
+            {"kind": "list", "marker": "bullet", "start": 1, "items": ["top\n(i) a\nl1\nl2"]},
+        ])
+        self.assertEqual(tool.parse_page('<main class="page prose"><img src="i.png"></main>', "y/1.html",
+                                         "https://example.org/z/1.html")[0]["src"], "https://example.org/z/i.png")
 
     def test_parse_page_rejects_unknown(self):
-        table = '<main class="page prose"><p>a</p><table><tr><td>x</td></tr></table></main>'
-        with self.assertRaisesRegex(tool.SyncError, r"book/3\.html: unknown <table"):
-            tool.parse_page(table, "book/3.html")
+        with self.assertRaisesRegex(tool.SyncError, r"book/3\.html: unknown <table class=\"wide\">"):
+            tool.parse_page('<main class="page prose"><p>a</p><table class="wide"><tr><td>x</td></tr></table></main>',
+                            "book/3.html")
+        with self.assertRaisesRegex(tool.SyncError, r"unknown <form"):
+            tool.parse_page('<main class="page prose"><form>x</form></main>', "x")
         with self.assertRaisesRegex(tool.SyncError, r"x: .*main\.page\.prose"):
             tool.parse_page('<main class="page"><p>a</p></main>', "x")
         with self.assertRaisesRegex(tool.SyncError, r"unknown <div class=\"other\">"):
             tool.parse_page('<main class="page prose"><div class="other"><p>a</p></div></main>', "x")
         with self.assertRaisesRegex(tool.SyncError, r"<li> holds a block <p>"):
             tool.parse_page('<main class="page prose"><ol><li><p>a</p></li></ol></main>', "x")
+        with self.assertRaisesRegex(tool.SyncError, r"an <img> shares its paragraph with text"):
+            tool.parse_page('<main class="page prose"><p>a <img src="i.png"></p></main>', "x/1.html")
+
+    def test_parse_page_rejects_a_cell_holding_a_block(self):
+        # A real page: its table cells hold <p>s (reported; six more pages like it).
+        with self.assertRaisesRegex(tool.SyncError, r"punyopadeshaya/39-23\.html: <td> holds a block <p>"):
+            self.blocks("punyopadeshaya", "39-23.html")
 
 
 class BuildBookTest(unittest.TestCase):
@@ -374,7 +453,7 @@ class CheckTest(unittest.TestCase):
         self.assert_named(self.problems(out_of_order), gz, "n is 7")
 
         def unknown_kind(book):
-            book["pages"][2]["blocks"].append({"kind": "table", "text": "x"})
+            book["pages"][2]["blocks"].append({"kind": "chart", "text": "x"})
         self.assert_named(self.problems(unknown_kind), gz, "unknown block")
 
         def markup(book):
@@ -384,6 +463,23 @@ class CheckTest(unittest.TestCase):
         def markup_in_list(book):
             book["pages"][2]["blocks"][2]["items"][0] = "&nbsp;x"
         self.assert_named(self.problems(markup_in_list), gz, "markup")
+
+        def empty_footnote(book):
+            book["pages"][2]["blocks"][5]["items"] = [""]
+        self.assert_named(self.problems(empty_footnote), gz, "empty")
+
+        def empty_row(book):
+            book["pages"][2]["blocks"][3]["rows"].append([])
+        self.assert_named(self.problems(empty_row), gz, "empty row")
+
+        def relative_image(book):
+            book["pages"][2]["blocks"][4]["src"] = "images/p.png"
+        self.assert_named(self.problems(relative_image), gz, "absolute")
+
+        def old_list(book):
+            block = book["pages"][2]["blocks"][2]
+            block["ordered"] = block.pop("marker") == "number"
+        self.assert_named(self.problems(old_list), gz, "marker")
 
         def level_jump(book):
             book["pages"][2]["level"] = 3
@@ -424,7 +520,8 @@ class SurveyTest(unittest.TestCase):
             count, first = table[key]
             self.assertGreater(count, 0)
             self.assertTrue((FIX / first).is_file(), first)
-        self.assertEqual(table[("div", "gatha")][0], 4)   # both front matters 1 each, nested/6-12.html 2
+        for key in [("ol", "footnotes"), ("ol", "enum"), ("table", "collapse"), ("img", ""), ("suli", "")]:
+            self.assertIn(key, table)
         # Skipped subtrees are counted at their root only.
         self.assertIn(("nav", "subheadings toc"), table)
         self.assertNotIn(("h1", ""), table)
