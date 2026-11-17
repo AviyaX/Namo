@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
+import '../books/books_support.dart';
 import '../quality/quality_support.dart';
 
 const _search = ValueKey('library-search');
@@ -153,6 +154,51 @@ void main() {
       expect(t.takeException(), isNull);
     });
   }
+
+  testWidgets('a book title shows under Books and opens the book page', (
+    t,
+  ) async {
+    await openReal(t, Routes.library, size: const Size(390, 3000));
+    await _type(t, 'Nested bo');
+    final hit = find.byKey(const ValueKey('book-hit-$tinyBookNestedId'));
+    expect(
+      find.descendant(of: find.byKey(_results), matching: find.text('Books')),
+      findsOneWidget,
+    );
+    expect(hit, findsOneWidget);
+    expect(
+      find.descendant(of: hit, matching: find.text('Nested book')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: hit, matching: find.text('A made-up subtitle')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('book-hit-$tinyBookFlatId')), findsNothing);
+    // The group comes before the section hits.
+    expect(
+      t.getTopLeft(find.text('Books')).dy,
+      lessThan(t.getTopLeft(hit).dy),
+    );
+    final router = _router(t);
+    await t.tap(hit);
+    await t.pumpAndSettle();
+    expect(_location(router), Routes.book(tinyBookNestedId));
+  });
+
+  testWidgets('no results needs both lists empty', (t) async {
+    await openReal(t, Routes.library);
+    await _type(t, 'zzzz');
+    expect(find.text(_noResults), findsOneWidget);
+    expect(find.text('Books'), findsNothing);
+    // A query that only a book matches is not "no results".
+    await _type(t, 'made-up subtitle');
+    expect(find.text('No results for “made-up subtitle”'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('book-hit-$tinyBookNestedId')),
+      findsOneWidget,
+    );
+  });
 
   testWidgets('clearing brings back the topic list with the same topics open', (
     t,

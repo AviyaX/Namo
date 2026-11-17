@@ -131,6 +131,19 @@ Map<String, Object?> _summary(
   'cover_source': 'https://example.invalid/cover.png',
 };
 
+/// An index with no books: a Library without a shelf.
+Map<String, Object> noBooks() => {
+  tinyBooksIndexPath: {
+    'schema': 1,
+    'source': {
+      'name': 'example',
+      'url': 'https://example.invalid/books/',
+      'fetched': '2026-01-02',
+    },
+    'books': <Object>[],
+  },
+};
+
 /// The index and the two books, by asset path.
 Map<String, Object> tinyBooks() => {
   tinyBooksIndexPath: {

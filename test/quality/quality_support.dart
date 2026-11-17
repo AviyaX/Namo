@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/audio/recording_store.dart';
-import 'package:buddhist_gatha/books/books_repository.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
@@ -224,12 +223,6 @@ Future<void> openReal(
           inBackground: false,
         ),
       ),
-      booksRepositoryProvider.overrideWithValue(
-        BooksRepository(
-          load: books ?? fakeAssets(tinyBooks()),
-          inBackground: false,
-        ),
-      ),
       if (audio) audioCatalogueProvider.overrideWithValue(PlaceholderCatalogue()),
       // Never a real player: nothing makes a sound in a test.
       chantPlayerProvider.overrideWith((ref) {
@@ -241,6 +234,7 @@ Future<void> openReal(
     size: size,
     recordingStore: recordingStore,
     settle: settle,
+    books: books ?? fakeAssets(tinyBooks()),
   );
 }
 
