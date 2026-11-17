@@ -106,6 +106,10 @@ HEADING_JOINER = " – "
 # A unit carrying this note is chanted three times: its Pali line loses the printed instruction in
 # brackets at its end and, like its Roman line, stands three times in the verse (as Namo tassa does).
 THREE_TIMES_NOTE = "(Three times)"
+# The booklet's printed pages whose English is prose set to the page width: each unit's English is
+# re-set with _reflow_wrapped (whitespace only). Pages 3-16 keep the booklet's lines, one English
+# line to a Pali line.
+NOTTINGHAM_PROSE_PAGES = range(17, 35)
 
 # The booklet's verses 2-5 of the Buddha, Dhamma and Sangha vandanā, added after the namo.lk verse.
 NOTTINGHAM_VERSES_INTO: dict[str, list[list[tuple[int, int]]]] = {
@@ -445,6 +449,24 @@ def _reflow_prose(text: str) -> str:
     return result
 
 
+def _reflow_wrapped(text: str) -> str:
+    """Join the lines of a paragraph that the booklet's page width broke mid-sentence: a line that
+    ends without '.', '!', '?', ':' or ';' and is followed by a line starting with a lower-case
+    letter joins it with one space. Other line breaks stay (the booklet's verse lines)."""
+    paragraphs = []
+    for paragraph in text.split("\n\n"):
+        lines: list[str] = []
+        for line in paragraph.split("\n"):
+            if lines and not lines[-1].endswith((".", "!", "?", ":", ";")) and line[:1].islower():
+                lines[-1] += " " + line
+            else:
+                lines.append(line)
+        paragraphs.append("\n".join(lines))
+    result = "\n\n".join(paragraphs)
+    _check_whitespace_only(text, result)
+    return result
+
+
 def _join_footnote(text: str) -> str:
     """Join each paragraph that is a '( ... )' footnote into one line."""
     paragraphs = []
@@ -558,8 +580,9 @@ def _three_times(lines: list[str], strip_instruction: bool, where: str) -> list[
 def _unit_lines(pages: dict, refs: list[tuple[int, int]]) -> dict[str, list[list[str]]]:
     """The Pali, Roman and English lines of the units `refs`, one list per unit that has the field.
     A unit with no Pali after the first (the Roman and English running on after a page break)
-    continues the unit before it: its lines are added to that unit's Roman and English."""
-    merged: list[dict[str, list[str]]] = []
+    continues the unit before it: its lines are added to that unit's Roman and English. A unit's
+    English from a page in NOTTINGHAM_PROSE_PAGES is re-set with _reflow_wrapped."""
+    merged: list[dict] = []
     for page, index in refs:
         unit = _nottingham_unit(pages, page, index)
         if unit["heading"] is not None:
@@ -568,14 +591,24 @@ def _unit_lines(pages: dict, refs: list[tuple[int, int]]) -> dict[str, list[list
         if THREE_TIMES_NOTE in unit["notes"]:
             where = f"Nottingham booklet printed page {page} unit {index}"
             pali, roman = _three_times(pali, True, where), _three_times(roman, False, where)
-        lines = {"pali_si": list(pali), "roman": list(roman), "english": list(unit["english"])}
+        lines = {"pali_si": list(pali), "roman": list(roman), "english": list(unit["english"]),
+                 "english_page": page if unit["english"] else None}
         if not pali and merged:
             merged[-1]["roman"] += lines["roman"]
             merged[-1]["english"] += lines["english"]
+            merged[-1]["english_page"] = merged[-1]["english_page"] or lines["english_page"]
         else:
             merged.append(lines)
-    return {field: [[line.strip(" ") for line in unit[field]] for unit in merged if unit[field]]
-            for field in ("pali_si", "roman", "english")}
+    for unit in merged:
+        unit.update({field: [line.strip(" ") for line in unit[field]] for field in ("pali_si", "roman", "english")})
+        if unit["english"] and unit["english_page"] in NOTTINGHAM_PROSE_PAGES:
+            unit["english"] = _reflow_wrapped("\n".join(unit["english"])).split("\n")
+    return {field: [unit[field] for unit in merged if unit[field]] for field in ("pali_si", "roman", "english")}
+
+
+def _english_page(pages: dict, refs: list[tuple[int, int]]) -> int:
+    """The printed page of the first of the units `refs` that has English."""
+    return next(page for page, index in refs if _nottingham_unit(pages, page, index)["english"])
 
 
 def _unit_texts(pages: dict, refs: list[tuple[int, int]]) -> dict:

@@ -476,6 +476,28 @@ class BuildContentTest(unittest.TestCase):
         with self.assertRaises(build_content.BuildError):
             build_content._check_whitespace_only("a b", "a c")
 
+    def test_nottingham_prose_pages_reflowed(self):
+        self.assertEqual(build_content.NOTTINGHAM_PROSE_PAGES, range(17, 35))
+        # Page 19-20: a line ending mid-sentence joins the next.
+        self.assertEqual(self.english("s25-v1").split("\n"), [
+            "Having compared oneself with others, have a desire for the happiness of all living beings.",
+            "Having seen it, one should develop loving kindness towards all living beings."])
+        # Page 10 (before the prose pages): the booklet's lines stay, one English line per Pali line.
+        self.assertEqual(self.english("s08-v5").split("\n"), [
+            "Homage to the teachings of the Buddha, - to earnestness the last exhortation,",
+            "to all the shrines, -  to my preceptors and teachers",
+            "By dint of this salutation, - may my mind be free from evil."])
+        # A verse line that starts with a capital letter stays a line.
+        self.assertEqual(len(self.english("s31-v2").split("\n")), 2)
+
+    def test_nottingham_reflow_function(self):
+        reflow = build_content._reflow_wrapped
+        self.assertEqual(reflow("all living\nbeings.\nHaving seen it;\nthen more,\nAnd (so)\nend"),
+                         "all living beings.\nHaving seen it;\nthen more,\nAnd (so) end")
+        self.assertEqual(reflow("a,\nb\n\nc\nd"), "a, b\n\nc d")
+        with self.assertRaises(build_content.BuildError):
+            build_content._check_whitespace_only("all living beings.", "all living beings,")
+
     def test_whole_word_correction(self):
         """ම විසින් is corrected only where ම stands alone, never at the end of a longer word."""
         row = next(r for r in build_content.CORRECTIONS if r[1] == "ම විසින්")
