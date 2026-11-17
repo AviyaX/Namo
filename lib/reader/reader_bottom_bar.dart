@@ -8,6 +8,8 @@ import '../design/typography.dart';
 import '../design/widgets/buttons.dart';
 import '../design/widgets/floating_bar.dart';
 import '../design/widgets/pressable.dart';
+import '../tips/tip_anchor.dart';
+import '../tips/tips.dart';
 import 'auto_scroll.dart';
 import 'chant_bar.dart';
 
@@ -134,33 +136,36 @@ class ReaderBottomBar extends StatelessWidget {
             ),
           ),
           Flexible(
-            child: _LabelledRound(
-              key: const ValueKey('reader-autoscroll'),
-              label: 'Scroll',
-              button: Tooltip(
-                message: switch (autoScroll) {
-                  AutoScrollStatus.running => 'Pause auto-scroll',
-                  AutoScrollStatus.paused => 'Resume auto-scroll',
-                  AutoScrollStatus.stopped ||
-                  AutoScrollStatus.finished => 'Start auto-scroll',
-                },
-                child: SizedBox.square(
-                  dimension: _playSize,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: running ? p.sage : p.surface,
-                      border: Border.all(color: p.sage, width: 1.5),
-                    ),
-                    child: Pressable(
-                      onTap: onPlay,
-                      borderRadius: BorderRadius.circular(_playSize / 2),
-                      excludeChildSemantics: true,
-                      child: Icon(
-                        Symbols.swipe_vertical_rounded,
-                        size: NamoSizes.icon,
-                        weight: 300,
-                        color: running ? p.onSage : p.sage,
+            child: TipAnchor(
+              tip: Tip.scrollChant,
+              child: _LabelledRound(
+                key: const ValueKey('reader-autoscroll'),
+                label: 'Scroll',
+                button: Tooltip(
+                  message: switch (autoScroll) {
+                    AutoScrollStatus.running => 'Pause auto-scroll',
+                    AutoScrollStatus.paused => 'Resume auto-scroll',
+                    AutoScrollStatus.stopped ||
+                    AutoScrollStatus.finished => 'Start auto-scroll',
+                  },
+                  child: SizedBox.square(
+                    dimension: _playSize,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: running ? p.sage : p.surface,
+                        border: Border.all(color: p.sage, width: 1.5),
+                      ),
+                      child: Pressable(
+                        onTap: onPlay,
+                        borderRadius: BorderRadius.circular(_playSize / 2),
+                        excludeChildSemantics: true,
+                        child: Icon(
+                          Symbols.swipe_vertical_rounded,
+                          size: NamoSizes.icon,
+                          weight: 300,
+                          color: running ? p.onSage : p.sage,
+                        ),
                       ),
                     ),
                   ),
@@ -169,14 +174,17 @@ class ReaderBottomBar extends StatelessWidget {
             ),
           ),
           Flexible(
-            child: _LabelledRound(
-              label: 'Chant',
-              button: _ChantPlayButton(
-                state: state,
-                onPressed: onChantPlay,
-                busy:
-                    missing &&
-                    status.availability == Availability.downloading,
+            child: TipAnchor(
+              tip: Tip.scrollChant,
+              child: _LabelledRound(
+                label: 'Chant',
+                button: _ChantPlayButton(
+                  state: state,
+                  onPressed: onChantPlay,
+                  busy:
+                      missing &&
+                      status.availability == Availability.downloading,
+                ),
               ),
             ),
           ),

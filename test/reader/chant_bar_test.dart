@@ -6,14 +6,18 @@ import 'package:buddhist_gatha/reader/auto_scroll.dart';
 import 'package:buddhist_gatha/reader/chant_bar.dart';
 import 'package:buddhist_gatha/reader/reader_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../quality/quality_support.dart';
 
+// The Scroll and Chant buttons are tip anchors, which live in a ProviderScope.
 Widget _app(Widget bar, {Brightness brightness = Brightness.light}) =>
-    MaterialApp(
-      theme: namoTheme(brightness),
-      home: Scaffold(bottomNavigationBar: bar),
+    ProviderScope(
+      child: MaterialApp(
+        theme: namoTheme(brightness),
+        home: Scaffold(bottomNavigationBar: bar),
+      ),
     );
 
 ReaderBottomBar _bar(

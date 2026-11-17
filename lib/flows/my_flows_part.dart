@@ -11,6 +11,8 @@ import '../design/widgets/list_row.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/surface_card.dart';
 import '../router.dart';
+import '../tips/tip_anchor.dart';
+import '../tips/tips.dart';
 import 'flow_reading.dart';
 import 'flows.dart';
 import 'new_flow_sheet.dart';
@@ -43,19 +45,22 @@ class MyFlowsPart extends ConsumerWidget {
         ),
         const SizedBox(height: NamoSpace.sm),
         if (flows.isEmpty)
-          SurfaceCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Make your own flow', style: NamoType.cardTitle(p.text)),
-                const SizedBox(height: NamoSpace.xs),
-                Text(
-                  'Choose the sections you chant, in your order.',
-                  style: NamoType.body(p.textSecondary),
-                ),
-                const SizedBox(height: NamoSpace.lg),
-                newFlow,
-              ],
+          TipAnchor(
+            tip: Tip.myFlows,
+            child: SurfaceCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Make your own flow', style: NamoType.cardTitle(p.text)),
+                  const SizedBox(height: NamoSpace.xs),
+                  Text(
+                    'Choose the sections you chant, in your order.',
+                    style: NamoType.body(p.textSecondary),
+                  ),
+                  const SizedBox(height: NamoSpace.lg),
+                  newFlow,
+                ],
+              ),
             ),
           )
         else ...[
@@ -80,7 +85,7 @@ class MyFlowsPart extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
             child: Align(
               alignment: AlignmentDirectional.centerStart,
-              child: newFlow,
+              child: TipAnchor(tip: Tip.myFlows, child: newFlow),
             ),
           ),
         ],
