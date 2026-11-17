@@ -214,7 +214,7 @@ class SourcesScreen extends StatelessWidget {
         ),
         const SizedBox(height: NamoSpace.sm),
         Text(
-          "The recordings are fetched from the app's own storage (audio.intendable.us), not from the sources' sites.",
+          "The recordings are fetched from the app's own storage (namo-audio.v-g-a-induwara.workers.dev), not from the sources' sites.",
           textAlign: TextAlign.center,
           style: NamoType.body(p.text),
         ),

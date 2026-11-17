@@ -27,7 +27,7 @@ void main() {
 
   test('without a dart-define the base is the default host', () {
     expect(audioBaseUrl, defaultAudioBaseUrl);
-    expect(recordingUrl(r).host, 'audio.intendable.us');
+    expect(recordingUrl(r).host, 'namo-audio.v-g-a-induwara.workers.dev');
   });
 
   test('locations compare by value', () {

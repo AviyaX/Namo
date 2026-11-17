@@ -1,7 +1,7 @@
 import 'audio_catalogue.dart';
 
 /// The host the recordings are downloaded from.
-const defaultAudioBaseUrl = 'https://audio.intendable.us';
+const defaultAudioBaseUrl = 'https://namo-audio.v-g-a-induwara.workers.dev';
 
 /// Sent with every request the app makes; no device or person detail.
 const audioUserAgent = 'namo-app/1.0';

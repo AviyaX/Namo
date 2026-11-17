@@ -78,7 +78,7 @@ The Samantha Pattana Dharma Wandanawa topic (an Introduction and the Vandana, wi
 
 ## Hosting the recordings
 
-The recordings are not in the app. They are uploaded to the owner's Cloudflare R2 bucket, and after install the app fetches them by itself (on Wi-Fi unless the person changes the setting) and keeps them on the device; a recording that has not arrived yet can be fetched from its reader. The folder `hosted/` mirrors the bucket; see `hosted/README.md`.
+The recordings are not in the app. They are uploaded to the owner's Cloudflare R2 bucket and served by a small Worker (`cloudflare/audio-worker/`), and after install the app fetches them by itself (on Wi-Fi unless the person changes the setting) and keeps them on the device; a recording that has not arrived yet can be fetched from its reader. The folder `hosted/` mirrors the bucket; see `hosted/README.md`.
 
 - Check, offline: `python -I -X utf8 tools/sync_hosted_audio.py . --check`
 - Print the upload commands: `python -I -X utf8 tools/sync_hosted_audio.py . --plan`

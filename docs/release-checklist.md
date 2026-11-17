@@ -34,7 +34,7 @@
   - [ ] With Pali and English chosen, Side by side is refused with "Side by side needs Pali and Sinhala."
   - [ ] Choose Sinhala first, then Pali, and Side by side: Pali is still on the left in a gatha and in a pirith.
 - [ ] Hosted recordings (Cloudflare R2), owner steps:
-  - [ ] Create the bucket `namo-audio` and the custom domain `audio.intendable.us` on the account that holds the zone.
+  - [ ] Done 2026-11-17 on the owner's Cloudflare account: bucket `namo-audio`, CORS, the 40 uploads (verified with `--verify-full`) and the Worker `cloudflare/audio-worker/` serving them at `https://namo-audio.v-g-a-induwara.workers.dev`. No custom domain: `intendable.us` is on another account. Redeploy the Worker with `npx wrangler deploy` from its folder if it ever changes.
   - [ ] Set the CORS policy from `hosted/README.md`.
   - [ ] Keep the bucket private (no public access, no r2.dev) until the pirith and Samantha Pattana recording permissions are confirmed; a public bucket is publication.
   - [ ] Run `npx wrangler login` once, then `python -I -X utf8 tools/sync_hosted_audio.py . --upload` and `python -I -X utf8 tools/sync_hosted_audio.py . --verify-full`.

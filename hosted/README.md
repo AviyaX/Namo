@@ -1,6 +1,6 @@
 # Hosted recordings
 
-This folder mirrors the Cloudflare R2 bucket `namo-audio`, served at `https://audio.intendable.us`.
+This folder mirrors the Cloudflare R2 bucket `namo-audio`, served at `https://namo-audio.v-g-a-induwara.workers.dev` by the Worker in `cloudflare/audio-worker/` (deploy it from that folder with `npx wrangler deploy`). A custom domain was not used because `intendable.us` lives on a different Cloudflare account; if a zone ever lands on this account, attach it to the Worker and change `defaultAudioBaseUrl` in `lib/audio/audio_host.dart`.
 An object's key is its path under `hosted/` (for example `audio/pirith/08-mahamangala.m4a`). The app fetches each recording once and keeps it.
 
 **Never replace a file under the same name.** Clients cache recordings for a year (`immutable`). A changed recording needs a new file name, and the content must point at it.

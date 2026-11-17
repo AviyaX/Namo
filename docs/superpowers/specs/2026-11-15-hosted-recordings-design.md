@@ -347,6 +347,15 @@ the recordings moved out of the bundle.
 
 ## Open with the owner
 
+Resolved 2026-11-17: the owner chose to make the bucket public now. `intendable.us`
+is on a different Cloudflare account, and an R2 custom domain needs the zone on
+the bucket's account, so the files are served by a small Worker
+(`cloudflare/audio-worker/`, free plan, GET/HEAD, Range and CORS handled there)
+at `https://namo-audio.v-g-a-induwara.workers.dev`; `defaultAudioBaseUrl`, the sync tool and the
+Sources page use that host. The custom-domain route above stays as the
+alternative if a zone ever lands on this account. Bucket, CORS, upload and
+`--verify-full` are done; `r2.dev` stays off.
+
 Defaults taken on 2026-11-16 so the build could start: the names below are
 used as proposed (`audioBaseUrl` and the sync tool's constants are the only
 places to change them); the bucket stays private until the owner confirms

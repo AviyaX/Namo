@@ -23,7 +23,7 @@ import tempfile
 import urllib.error
 import urllib.request
 
-BASE_URL = "https://audio.intendable.us"
+BASE_URL = "https://namo-audio.v-g-a-induwara.workers.dev"
 BUCKET = "namo-audio"
 USER_AGENT = "namo-app-build/1.0"
 CONTENT_TYPE = "audio/mp4"
