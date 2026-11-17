@@ -2,6 +2,8 @@ import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../audio/audio_catalogue.dart';
+import '../audio/chant_programme.dart';
 import '../content/content_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
@@ -13,6 +15,7 @@ import '../design/widgets/sheet_frame.dart';
 import 'flow_name_sheet.dart' show FlowSheetScaffold, showFlowSheet;
 import 'flow_reading.dart' show flowSectionId;
 import 'flows.dart';
+import 'recording_mark.dart';
 
 /// The sections of the library that are not yet in flow [flowId]. Tapping one
 /// adds it to the end of the flow and takes it off this list; a section is
@@ -44,12 +47,16 @@ class _SectionLine extends _Line {
     required this.number,
     required this.title,
     this.subtitle,
+    this.recorded = false,
   });
 
   final FlowRef ref;
   final int number;
   final String title;
   final String? subtitle;
+
+  /// Whether the section has a recording.
+  final bool recorded;
 }
 
 /// The lines for [library] without the sections in [taken], in library
@@ -57,7 +64,11 @@ class _SectionLine extends _Line {
 /// (and its Roman title); a reading with several has its title over them when
 /// its category has other readings. A category or reading with nothing left
 /// to add is left out.
-List<_Line> _lines(Library library, Set<FlowRef> taken) {
+List<_Line> _lines(
+  Library library,
+  Set<FlowRef> taken,
+  AudioCatalogue catalogue,
+) {
   final lines = <_Line>[];
   for (final c in library.categories) {
     final inCategory = <_Line>[];
@@ -71,6 +82,10 @@ List<_Line> _lines(Library library, Set<FlowRef> taken) {
               number: c.numberOf(r.id),
               title: r.title,
               subtitle: r.titleRoman,
+              recorded: sectionIsRecorded(
+                r.sections.single,
+                catalogue.recordingFor(r.id),
+              ),
             ),
           );
         }
@@ -83,6 +98,7 @@ List<_Line> _lines(Library library, Set<FlowRef> taken) {
               ref: FlowRef(readingId: r.id, sectionId: s.id),
               number: s.number,
               title: s.heading,
+              recorded: sectionIsRecorded(s, catalogue.recordingFor(r.id)),
             ),
       ];
       if (left.isEmpty) continue;
@@ -106,9 +122,10 @@ class _AddSectionsSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final library = ref.watch(libraryProvider).value;
     final flow = ref.watch(flowsProvider).flow(flowId);
+    final catalogue = ref.watch(audioCatalogueProvider);
     final lines = library == null
         ? const <_Line>[]
-        : _lines(library, {...?flow?.sections});
+        : _lines(library, {...?flow?.sections}, catalogue);
     final p = NamoPalette.of(context);
     if (library != null && lines.isEmpty) {
       return const FlowSheetScaffold(
@@ -171,6 +188,11 @@ class _AddSectionsSheet extends ConsumerWidget {
       titleFamily: NamoFonts.sinhala,
       subtitle: line.subtitle,
       subtitleFamily: NamoFonts.romanPali,
+      trailing: line.recorded
+          ? RecordingMark(key: ValueKey('flow-recorded-${flowSectionId(line.ref)}'))
+          : null,
+      // The row speaks one label of its own; the mark's is said here.
+      detailLabel: line.recorded ? 'has a recording' : null,
       onTap: () => ref.read(flowsProvider.notifier).add(flowId, line.ref),
     );
   }

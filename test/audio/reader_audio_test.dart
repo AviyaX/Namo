@@ -28,6 +28,7 @@ class _One implements AudioCatalogue {
         path: 'assets/audio/test.mp3',
         label: placeholder ? _placeholderLabel : 'A test recording',
         placeholder: placeholder,
+        duration: placeholder ? Duration.zero : const Duration(seconds: 20),
       );
 }
 

@@ -135,6 +135,7 @@ class PlaceholderCatalogue implements AudioCatalogue {
     path: placeholderToneAsset,
     label: placeholderToneLabel,
     placeholder: true,
+    duration: Duration.zero,
   );
 }
 

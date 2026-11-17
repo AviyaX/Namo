@@ -287,7 +287,8 @@ void main() {
     ('Library with My flows', Routes.library, const Size(390, 1400), 'Evening', null),
     ('New flow sheet', Routes.library, const Size(390, 844), 'Start from', (t) => tapKey(t, 'new-flow')),
     ('Home with Your flows', Routes.home, const Size(390, 2800), 'Your flows', expectWholeHome),
-    ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections', null),
+    ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections · 1 with a recording', null),
+    ('Flow reader with the chant bar', Routes.reader('flow-1'), const Size(390, 844), 'Chant', null),
     ('Flow editor, move menu open', Routes.flowEditor('flow-1'), const Size(390, 1400), 'Move down',
         (t) async {
           final first = (await realLibrary(t)).reading(realReadingId)!.sections.first;

@@ -143,12 +143,15 @@ loudly on a timed recording without one). A single reading with a recording
 gives a programme of one leg with `start` zero — today's behaviour.
 
 Leg starts come from the content's `duration_ms` (every recording has one).
-When a leg's file turns out a little longer than listed, the inner position
-is clamped to the leg's length before it is mapped, so the highlight and the
-slider never spill into the next section; a file a little shorter leaves a
-gap of under a second before the next leg's times begin. There is no
-correction of the timeline from the player's reported length: the listed
-durations come from the files themselves.
+The build tools measure it from the recording file itself
+(`tools/build_pirith.py` reads the MP4 `mvhd` box's timescale and duration,
+to the millisecond; the Samantha Pattana constant is its file's length,
+2,855.87 s, rounded to the second), and a test checks every timed recording is at least as long
+as its last block's end time. Should a file still run past its listed length,
+the inner position is held just below the leg's end (one microsecond short)
+before it is mapped, so the highlight and the slider never spill into the
+next section, whose first block may start at 0 s. There is no correction of
+the timeline from the player's reported length.
 
 ### The player (`lib/audio/programme_player.dart`)
 
@@ -158,7 +161,7 @@ durations come from the files themselves.
 class ProgrammePlayer {
   ProgrammePlayer(this._inner, {required bool Function(Recording) isAvailable});
   /// One leg: the inner state as it is (today's slider, times and tests).
-  /// Several legs: position = leg.start + min(inner position, leg length); duration = programme.total.
+  /// Several legs: position = leg.start + inner position, held just below leg.end; duration = programme.total.
   ValueListenable<ChantState> get state;
   Stream<ChantState> get states;
   int? get leg;                                 // the leg loaded now
@@ -166,7 +169,7 @@ class ProgrammePlayer {
   ({int leg, Duration at})? get awaiting;
   /// Called when the chant needs a leg whose file is not available; the reader starts the download and shows the row.
   void Function(int leg)? onAwait;
-  Future<void> load(ChantProgramme p);          // leg 0 when available (state ready); else awaits it
+  void bind(ChantProgramme p);                  // stores it; the first Play loads
   Future<void> playLeg(int leg, {Duration at = Duration.zero, bool play = true});
       // available → load if needed, seek to `at`, play (or stay paused); not available → awaiting = (leg, at),
       // state paused at legs[leg].start + at, onAwait(leg)

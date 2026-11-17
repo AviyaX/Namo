@@ -41,7 +41,14 @@ class ReaderBottomBar extends StatelessWidget {
     this.onChantSpeed,
     this.recording,
     this.onDownload,
+    this.coverage,
   });
+
+  /// How much of the reading the chant plays ("Chant plays 2 of 5
+  /// sections"); null when it plays every section. Shown in the slider's
+  /// place until the chant is first asked for, unless the recording's row
+  /// is showing there.
+  final String? coverage;
 
   /// Where the chanting's recording is; null when the store knows nothing
   /// of it. Until it is downloaded, its row takes the slider's place.
@@ -58,7 +65,8 @@ class ReaderBottomBar extends StatelessWidget {
   /// Plays or pauses the chanting.
   final VoidCallback? onChantPlay;
 
-  /// Starts the chanting again from the beginning.
+  /// Starts the chanting again from the beginning; shown enabled only once a
+  /// recording is loaded.
   final VoidCallback? onChantRestart;
 
   /// Moves the chanting to a place, when the person lets go of the slider.
@@ -108,11 +116,20 @@ class ReaderBottomBar extends StatelessWidget {
             key: const ValueKey('chant-restart'),
             tooltip: 'Restart chanting',
             icon: Symbols.replay_rounded,
-            onPressed: loaded && !missing ? onChantRestart : null,
+            onPressed: loaded ? onChantRestart : null,
           ),
           Expanded(
             child: missing
                 ? RecordingRow(status: status, onDownload: onDownload)
+                : coverage != null && state.status == ChantStatus.idle
+                ? Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      coverage!,
+                      key: const ValueKey('chant-coverage'),
+                      style: NamoType.caption(p.textSecondary),
+                    ),
+                  )
                 : _ChantPosition(state: state, onSeek: onChantSeek),
           ),
           ChantSpeedButton(speed: chantSpeed, onPressed: onChantSpeed),

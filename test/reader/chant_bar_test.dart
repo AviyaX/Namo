@@ -258,6 +258,61 @@ void main() {
     }
   }
 
+  testWidgets('the coverage line sits where the slider goes until the chant '
+      'starts', (t) async {
+    ReaderBottomBar bar(ChantState state, {String? coverage}) =>
+        ReaderBottomBar(
+          onPrevious: () {},
+          onNext: () {},
+          onPlay: () {},
+          chantState: state,
+          onChantPlay: () {},
+          onChantRestart: () {},
+          onChantSeek: (_) {},
+          coverage: coverage,
+        );
+    final coverage = find.byKey(const ValueKey('chant-coverage'));
+    final slider = find.byKey(const ValueKey('chant-slider'));
+    const line = 'Chant plays 2 of 5 sections';
+
+    await t.pumpWidget(_app(bar(const ChantState(), coverage: line)));
+    expect(t.widget<Text>(coverage).data, line);
+    expect(slider, findsNothing);
+    double x(Finder f) => t.getCenter(f).dx;
+    expect(x(find.byKey(const ValueKey('chant-restart'))),
+        lessThan(x(coverage)));
+    expect(x(coverage), lessThan(x(find.byKey(const ValueKey('chant-speed')))));
+    final live = find.ancestor(
+      of: coverage,
+      matching: find.byWidgetPredicate(
+        (w) => w is Semantics && (w.properties.liveRegion ?? false),
+      ),
+    );
+    expect(live, findsWidgets);
+
+    for (final status in [
+      ChantStatus.loading,
+      ChantStatus.playing,
+      ChantStatus.paused,
+    ]) {
+      await t.pumpWidget(
+        _app(bar(ChantState(status: status), coverage: line)),
+      );
+      expect(coverage, findsNothing, reason: '$status');
+      expect(slider, findsOneWidget, reason: '$status');
+    }
+    await t.pumpWidget(
+      _app(bar(const ChantState(status: ChantStatus.failed), coverage: line)),
+    );
+    expect(coverage, findsNothing);
+    expect(find.text('The recording could not be played.'), findsOneWidget);
+
+    // A reading that chants all its sections has no line.
+    await t.pumpWidget(_app(bar(const ChantState())));
+    expect(coverage, findsNothing);
+    expect(slider, findsOneWidget);
+  });
+
   test('ChantSlider keeps the key the reader finds it by', () {
     const s = ChantSlider(
       position: Duration.zero,

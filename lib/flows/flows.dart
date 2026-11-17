@@ -158,6 +158,14 @@ String flowName(String raw, Iterable<String> taken) {
 /// "0 sections", "1 section", "N sections".
 String sectionCount(int n) => n == 1 ? '1 section' : '$n sections';
 
+/// "1 with a recording", "N with recordings".
+String recordedCount(int n) => n == 1 ? '1 with a recording' : '$n with recordings';
+
+/// A flow's caption: its sections, and how many of them have a recording.
+String flowCaption({required int sections, required int recorded}) =>
+    sectionCount(sections) +
+    (recorded > 0 ? ' · ${recordedCount(recorded)}' : '');
+
 class FlowsController extends Notifier<FlowsState> {
   @override
   FlowsState build() {

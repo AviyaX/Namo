@@ -97,6 +97,17 @@ void main() {
     expect(sectionCount(7), '7 sections');
   });
 
+  test('recordedCount and flowCaption', () {
+    expect(recordedCount(1), '1 with a recording');
+    expect(recordedCount(3), '3 with recordings');
+    expect(flowCaption(sections: 3, recorded: 0), '3 sections');
+    expect(flowCaption(sections: 1, recorded: 1), '1 section · 1 with a recording');
+    expect(
+      flowCaption(sections: 5, recorded: 2),
+      '5 sections · 2 with recordings',
+    );
+  });
+
   test('isFlowId', () {
     expect(isFlowId('flow-1'), isTrue);
     expect(isFlowId('pirith'), isFalse);

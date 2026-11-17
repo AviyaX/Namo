@@ -25,6 +25,7 @@ final a = Recording(
   sha256: _sha('abcdef'),
   label: 'A',
   placeholder: false,
+  duration: Duration(seconds: 20),
 );
 final b = Recording(
   readingId: 'rb',
@@ -33,6 +34,7 @@ final b = Recording(
   sha256: _sha('xyz'),
   label: 'B',
   placeholder: false,
+  duration: Duration(seconds: 20),
 );
 
 Uri _url(Recording r) => Uri.parse('https://host.test/${r.path}');
@@ -508,6 +510,7 @@ void main() {
       path: placeholderToneAsset,
       label: placeholderToneLabel,
       placeholder: true,
+      duration: Duration.zero,
     );
     final s = store(auto: AutoDownload.off);
     expect(s.locationFor(tone), const AssetLocation(placeholderToneAsset));

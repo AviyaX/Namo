@@ -16,6 +16,7 @@ class Recording {
     this.sectionCues = const {},
     this.blockTimes = const [],
     this.lineTimes = const [],
+    required this.duration,
   });
 
   final String readingId;
@@ -41,6 +42,10 @@ class Recording {
   /// When each line of each block starts; empty when only blocks are timed.
   final List<List<Duration?>> lineTimes;
 
+  /// How long the recording plays; zero where it is not known (the
+  /// placeholder tone, or an untimed recording the content gives no length).
+  final Duration duration;
+
   bool get timed => blockTimes.isNotEmpty;
 }
 
@@ -57,18 +62,26 @@ class ContentAudioCatalogue implements AudioCatalogue {
         for (final category in library.categories)
           for (final reading in category.readings)
             if (reading.audio != null)
-              reading.id: Recording(
-                readingId: reading.id,
-                path: reading.audio!.path,
-                bytes: reading.audio!.bytes,
-                sha256: reading.audio!.sha256,
-                label: reading.audio!.label,
-                placeholder: false,
-                sectionCues: reading.audio!.sectionCues,
-                blockTimes: reading.audio!.blockTimes,
-                lineTimes: reading.audio!.lineTimes,
-              ),
+              reading.id: _recordingOf(reading.id, reading.audio!),
       };
+
+  static Recording _recordingOf(String readingId, RecordingInfo info) {
+    if (info.blockTimes.isNotEmpty && info.duration == null) {
+      throw StateError('recording for $readingId has no duration');
+    }
+    return Recording(
+      readingId: readingId,
+      path: info.path,
+      bytes: info.bytes,
+      sha256: info.sha256,
+      label: info.label,
+      placeholder: false,
+      sectionCues: info.sectionCues,
+      blockTimes: info.blockTimes,
+      lineTimes: info.lineTimes,
+      duration: info.duration ?? Duration.zero,
+    );
+  }
 
   final Map<String, Recording> _byReading;
 
@@ -97,6 +110,7 @@ class DevPlaceholderCatalogue implements AudioCatalogue {
         path: placeholderToneAsset,
         label: placeholderToneLabel,
         placeholder: true,
+        duration: Duration.zero,
       );
 }
 

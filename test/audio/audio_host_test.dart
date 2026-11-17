@@ -8,6 +8,7 @@ const r = Recording(
   path: 'audio/pirith/08-mahamangala.m4a',
   label: '',
   placeholder: false,
+  duration: Duration(seconds: 20),
 );
 
 void main() {

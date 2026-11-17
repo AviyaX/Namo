@@ -10,6 +10,8 @@ import '../audio/audio_catalogue.dart';
 import '../audio/audio_controls.dart';
 import '../audio/chant_timing.dart';
 import '../audio/chant_player.dart';
+import '../audio/chant_programme.dart';
+import '../audio/programme_player.dart';
 import '../audio/recording_store.dart';
 import '../audio/recording_store_provider.dart';
 import '../content/model.dart';
@@ -84,38 +86,37 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   late final Ticker _ticker;
   Duration _lastTick = Duration.zero;
 
-  /// The recording's player, once bound; null for a reading without one.
-  ChantPlayer? _player;
+  /// The provider's player, once bound; null for a reading without a
+  /// recording.
+  ChantPlayer? _inner;
   String? _playerReading;
   StreamSubscription<ChantState>? _audioSub;
   ChantStatus _audioStatus = ChantStatus.idle;
 
-  /// The recording when it is a timed one (a chant), whose controls are
-  /// the chanting bar; null otherwise.
-  Recording? _timed;
+  /// The reading's recorded sections, chanted one after another (a pirith's
+  /// one recording is a programme of one); null when none is recorded.
+  ChantProgramme? _programme;
+
+  /// Plays [_programme] on [_inner]; null without a programme.
+  ProgrammePlayer? _player;
+
+  /// The recordings Play has just asked the store for, so the player's own
+  /// request for one of them is not sent twice.
+  Set<Recording> _askedAtPlay = const {};
 
   /// Where the chanting is. Idle until the first play of this reader asks
-  /// for the recording; the player is not asked before that.
+  /// for a recording; the player is not asked before that.
   final _chant = ValueNotifier<ChantState>(const ChantState());
-  bool _chantLoaded = false;
 
   /// The chanting's place on the page and whether the page follows it; null
   /// for a reading without chant timing.
   ChantFollow? _follow;
 
-  /// Whether the person's last word is "chant": set by Play chanting, cleared
-  /// by auto-scroll starting, the app going to the background and leaving
-  /// this reader. A load that finishes while it is false does not play.
-  bool _chantWanted = false;
-
-  /// Play asked for a recording not on the device yet: it plays on arrival.
-  bool _chantAwaitsFile = false;
-
   /// The recordings, listened to so a chant asked for before its file
   /// arrived plays when it does.
   RecordingStore? _store;
 
-  /// Whether this reader has asked the player for its recording.
+  /// Whether this reader has asked the player for a recording.
   bool _startedChant = false;
 
   /// Set once Previous or Next pirith has paused the player; the reader
@@ -216,84 +217,143 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _autoScroll.onFrame(since);
   }
 
-  /// Loads [recording] into [player] (both null for a reading without
-  /// one) and watches it. Called on every build; does nothing new unless
-  /// the reading or the player changed.
-  void _bindAudio(Reading reading, Recording? recording, ChantPlayer? player) {
+  /// Binds [programme] (or the untimed [recording]) to [inner], the
+  /// provider's player (null for a reading without a recording), and
+  /// watches it. Called on every build; does nothing new unless the reading
+  /// or the player changed.
+  void _bindAudio(
+    Reading reading,
+    ChantProgramme? programme,
+    Recording? recording,
+    ChantPlayer? inner,
+  ) {
     // Only a reading with a recording watches the store.
-    final store = recording == null ? null : ref.read(recordingStoreProvider);
+    final store = programme == null && recording == null
+        ? null
+        : ref.read(recordingStoreProvider);
     if (!identical(store, _store)) {
       _store?.snapshot.removeListener(_onRecordings);
       _store = store;
       store?.snapshot.addListener(_onRecordings);
     }
-    final readingId = recording?.readingId;
-    if (identical(player, _player) && readingId == _playerReading) return;
-    final old = _player;
+    final readingId = programme != null ? reading.id : recording?.readingId;
+    if (identical(inner, _inner) && readingId == _playerReading) return;
+    final old = _inner;
+    final oldPlayer = _player;
     _audioSub?.cancel();
     _audioSub = null;
     _audioStatus = ChantStatus.idle;
     _updateAwake();
-    _player = player;
+    _inner = inner;
     _playerReading = readingId;
-    if (player != null) {
-      unawaited(player.setSpeed(ref.read(settingsProvider).chantSpeed));
+    if (inner != null) {
+      unawaited(inner.setSpeed(ref.read(settingsProvider).chantSpeed));
     }
-    _timed = recording != null && recording.timed ? recording : null;
-    _chantLoaded = false;
-    _chantAwaitsFile = false;
+    _programme = programme;
+    _player = null;
     _chant.value = const ChantState();
     _setFollow(
-      _timed == null
+      programme == null
           ? null
           : ChantFollow(
-              times: _timed!.blockTimes,
-              paliLengths: paliLengthsOf(reading),
-              lineTimes: _timed!.lineTimes,
+              times: programme.times,
+              paliLengths: programme.paliLengths,
+              lineTimes: programme.lineTimes,
             ),
     );
     if (old != null) unawaited(old.pause());
-    if (recording == null || player == null) return;
-    if (_timed != null) {
-      // Only listened to now; the recording is asked for at the first play.
+    if (oldPlayer != null) unawaited(oldPlayer.dispose());
+    if (inner == null) return;
+    if (programme != null) {
+      // Only listened to now; a recording is asked for at the first play.
+      final player = ProgrammePlayer(inner, isAvailable: _available)
+        ..onAwait = _onAwait
+        ..bind(programme);
+      _player = player;
       SchedulerBinding.instance.addPostFrameCallback((_) {
         if (!mounted || !identical(_player, player)) return;
         _audioSub = player.states.listen(_onAudio);
       });
       return;
     }
+    if (recording == null) return;
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || !identical(_player, player)) return;
-      _audioSub = player.states.listen(_onAudio);
-      player.load(recording);
+      if (!mounted || !identical(_inner, inner)) return;
+      _audioSub = inner.states.listen(_onAudio);
+      inner.load(recording);
     });
   }
 
-  /// A recording arrived: the chant asked for before it did plays now.
-  void _onRecordings() {
-    final recording = _timed, store = _store;
-    if (!mounted || recording == null || store == null) return;
-    if (!_chantWanted ||
-        !_chantAwaitsFile ||
-        (_chantLoaded && _chant.value.status != ChantStatus.failed)) {
-      return;
-    }
+  /// Whether [r]'s file is on the device (a recording the store knows
+  /// nothing of counts as on it).
+  bool _available(Recording r) =>
+      (ref
+              .read(recordingStoreProvider)
+              .snapshot
+              .value
+              .of(r.readingId)
+              ?.availability ??
+          Availability.downloaded) ==
+      Availability.downloaded;
+
+  /// The chant needs leg [leg], whose file is not on the device: it is
+  /// asked for, unless it is downloading or Play has just asked for it.
+  void _onAwait(int leg) {
+    final programme = _programme;
+    if (!mounted || programme == null) return;
+    final recording = programme.legs[leg].recording;
+    if (_askedAtPlay.contains(recording)) return;
+    final store = ref.read(recordingStoreProvider);
     final status = store.snapshot.value.of(recording.readingId);
-    if (status?.availability != Availability.downloaded) return;
-    _chantAwaitsFile = false;
-    unawaited(_chantPlayOrPause());
+    if (status?.availability == Availability.downloading) return;
+    unawaited(store.download(recording));
+  }
+
+  /// The recording the bar's row is about: the awaited leg's while the
+  /// chant waits for it, else the loaded leg's, else the first leg's.
+  Recording? get _rowRecording {
+    final programme = _programme, player = _player;
+    if (programme == null) return null;
+    final leg = player?.awaiting?.leg ?? player?.leg ?? 0;
+    return programme.legs[leg].recording;
+  }
+
+  RecordingStatus? _rowStatus(RecordingStore? store) {
+    final recording = _rowRecording;
+    return recording == null
+        ? null
+        : store?.snapshot.value.of(recording.readingId);
+  }
+
+  /// Restart works once a recording is loaded, and on a flow while it waits
+  /// for the next one; a single recording missing its file does not.
+  bool _canRestart(RecordingStore? store) {
+    final player = _player, programme = _programme;
+    if (player == null || programme == null || player.leg == null) {
+      return false;
+    }
+    if (!programme.single) return true;
+    final status = _rowStatus(store);
+    return status == null || status.availability == Availability.downloaded;
+  }
+
+  /// A recording arrived: the chant waiting for it goes on.
+  void _onRecordings() {
+    final player = _player, programme = _programme;
+    if (!mounted || player == null || programme == null) return;
+    final waiting = player.awaiting;
+    if (waiting == null) return;
+    if (!_available(programme.legs[waiting.leg].recording)) return;
+    unawaited(player.arrived());
   }
 
   /// The one link between audio and auto-scroll: audio starting starts the
   /// scroll, if the setting asks for it.
   void _onAudio(ChantState state) {
-    if (_timed != null) {
+    if (_programme != null) {
       _audioStatus = state.status;
-      // What a player left from another reading is not this one's chanting.
-      if (_chantLoaded) {
-        _chant.value = state;
-        _follow?.onState(state);
-      }
+      _chant.value = state;
+      _follow?.onState(state);
       _updateAwake();
       return;
     }
@@ -373,7 +433,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   /// Otherwise as [_tapBlock].
   void _tapLine(int block, int line) {
     final follow = _follow;
-    if (follow == null || _timed == null || !follow.started) return;
+    if (follow == null || _programme == null || !follow.started) return;
     final status = _chant.value.status;
     if (status != ChantStatus.playing && status != ChantStatus.paused) return;
     final start = follow.lineStart(block, line);
@@ -383,10 +443,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   void _toBackground() {
-    _chantWanted = false;
     _autoScroll.pause();
-    final player = _player;
-    if (player != null) unawaited(player.pause());
+    _pauseAudio();
     // The player reports its pause later; the screen is let go now.
     _setAwake(false);
     _save();
@@ -397,8 +455,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       _autoScroll.pause();
     } else {
       // Only one of the two at a time; the later request wins.
-      _chantWanted = false;
-      if (_chantLoaded) unawaited(_player?.pause());
+      if (_startedChant) unawaited(_player?.pause());
       _autoScroll.play();
     }
   }
@@ -412,46 +469,53 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         .setChantSpeed(AppSettings.nextChantSpeed(current));
   }
 
-  /// Plays, pauses or resumes the chanting. The recording is asked for the
-  /// first time it is played (and again after a failure). One not on the
-  /// device yet is downloaded first and played when it arrives.
+  /// Pauses the chant (and a wait for a file), or the untimed recording.
+  void _pauseAudio() {
+    final player = _player, inner = _inner;
+    if (player != null) {
+      unawaited(player.pause());
+    } else if (inner != null) {
+      unawaited(inner.pause());
+    }
+  }
+
+  /// Plays, pauses or resumes the chanting. A recording is asked for the
+  /// first time it is needed (and again after a failure). Every recording
+  /// not on the device yet is queued for download at once; the chant waits
+  /// for one it reaches before it arrives.
   Future<void> _chantPlayOrPause() async {
-    final player = _player, recording = _timed;
-    if (player == null || recording == null) return;
+    final player = _player, programme = _programme;
+    if (player == null || programme == null) return;
     final status = _chant.value.status;
     if (status == ChantStatus.loading) return;
     if (status == ChantStatus.playing) {
-      _chantWanted = false;
       await player.pause();
       return;
     }
-    final store = ref.read(recordingStoreProvider);
-    final availability =
-        store.snapshot.value.of(recording.readingId)?.availability ??
-        Availability.downloaded;
-    if (availability != Availability.downloaded) {
-      _chantWanted = true;
-      _chantAwaitsFile = true;
-      _autoScroll.pause();
-      if (availability != Availability.downloading) {
-        unawaited(store.download(recording));
-      }
-      return;
-    }
-    _chantWanted = true;
+    _startedChant = true;
     _autoScroll.pause();
-    if (!_chantLoaded || status == ChantStatus.failed) {
-      _chantLoaded = true;
-      _startedChant = true;
-      _chant.value = const ChantState(status: ChantStatus.loading);
-      await player.load(recording);
-      if (!mounted || !identical(_player, player) || !_chantWanted) return;
+    final store = ref.read(recordingStoreProvider);
+    final asked = <Recording>{};
+    for (final leg in programme.legs) {
+      final recording = leg.recording;
+      final availability =
+          store.snapshot.value.of(recording.readingId)?.availability ??
+          Availability.downloaded;
+      if (availability == Availability.downloaded ||
+          availability == Availability.downloading ||
+          !asked.add(recording)) {
+        continue;
+      }
+      unawaited(store.download(recording));
     }
-    await player.play();
+    // The player asks for a file it waits for at once, while this runs.
+    _askedAtPlay = asked;
+    final playing = player.play();
+    _askedAtPlay = const {};
+    await playing;
   }
 
   void _chantRestart() {
-    _chantWanted = true;
     _autoScroll.pause();
     unawaited(_player?.restart());
   }
@@ -487,14 +551,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _saveLater();
     _audioSub?.cancel();
     _store?.snapshot.removeListener(_onRecordings);
-    // Quiet before the player is let go.
-    _chantWanted = false;
     // Only a reader that started the chanting and still owns the player
     // silences it; the next pirith's reader may be playing already.
-    final player = _player;
-    if (player != null && !_handedOver && (_startedChant || _timed == null)) {
-      unawaited(player.pause());
+    final inner = _inner;
+    if (inner != null &&
+        !_handedOver &&
+        (_startedChant || _programme == null)) {
+      unawaited(inner.pause());
     }
+    final player = _player;
+    if (player != null) unawaited(player.dispose());
     _setFollow(null);
     _chant.dispose();
     _setAwake(false);
@@ -806,12 +872,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     final next = category.readings[to];
     return () {
       _autoScroll.pause();
-      final player = _player;
-      if (player != null) unawaited(player.pause());
+      _pauseAudio();
       // This reader may outlive the hand-over by a frame; it must not
       // release the screen lock after the next pirith has taken it.
       _setAwake(false);
-      _chantWanted = false;
       _follow?.reset();
       _handedOver = true;
       _audioSub?.cancel();
@@ -857,8 +921,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (_chant.value.status == ChantStatus.playing) return false;
     if (_autoScroll.status == AutoScrollStatus.running) return false;
     if (tip != Tip.scrollChant) return true;
-    final recording = _timed, store = _store;
-    if (recording == null || store == null) return true;
+    final programme = _programme, store = _store;
+    if (programme == null || store == null) return true;
+    final recording = programme.legs.first.recording;
     return (store.snapshot.value.of(recording.readingId)?.availability ??
             Availability.downloaded) ==
         Availability.downloaded;
@@ -876,7 +941,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       }
       _autoScroll.speed = next.scrollSpeed;
       if (previous.chantSpeed != next.chantSpeed) {
-        unawaited(_player?.setSpeed(next.chantSpeed));
+        unawaited(_inner?.setSpeed(next.chantSpeed));
       }
     });
     final settings = ref.watch(settingsProvider);
@@ -893,8 +958,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             widget.readingId,
           );
           if (reading == null) return const NotFoundScreen();
-          // A flow has no favourite, no recording and no neighbours, and is
-          // gone through section by section even when it holds only pirith.
+          // A flow has no favourite and no neighbours, and is gone through
+          // section by section even when it holds only pirith; its recorded
+          // sections chant one after another.
           final flow = isFlowId(reading.id);
           // Only a flow can have no sections.
           final empty = flow && reading.sections.isEmpty;
@@ -912,16 +978,18 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           final favourite = saved.isFavourite(reading.id);
           final previousReading = _neighbour(category, reading, -1);
           final nextReading = _neighbour(category, reading, 1);
-          final recording = flow
-              ? null
-              : ref.watch(audioCatalogueProvider).recordingFor(reading.id);
-          final store = recording == null
-              ? null
-              : ref.watch(recordingStoreProvider);
+          final catalogue = ref.watch(audioCatalogueProvider);
+          final programme = ChantProgramme.of(reading, catalogue);
+          // The untimed development tone keeps its own controls; a flow
+          // never has them.
+          final recording = flow ? null : catalogue.recordingFor(reading.id);
+          final audible = programme != null || recording != null;
+          final store = audible ? ref.watch(recordingStoreProvider) : null;
           _bindAudio(
             reading,
+            programme,
             recording,
-            recording == null ? null : ref.watch(chantPlayerProvider),
+            audible ? ref.watch(chantPlayerProvider) : null,
           );
 
           if (!_opened) {
@@ -947,7 +1015,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             child: TipHost(
               tipsFor: () => [
                 Tip.readerSettings,
-                if (recording != null && recording.timed) Tip.scrollChant,
+                if (programme != null) Tip.scrollChant,
               ],
               canShow: _canShowTip,
               reevaluateOn: [
@@ -1074,24 +1142,24 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                     audio: recording == null || recording.timed
                         ? null
                         : AudioControls(recording: recording),
-                    chantState: recording != null && recording.timed
-                        ? _chant.value
-                        : null,
+                    chantState: programme == null ? null : _chant.value,
                     chantSpeed: settings.chantSpeed,
                     onChantSpeed: _cycleChantSpeed,
                     onChantPlay: _chantPlayOrPause,
-                    onChantRestart: _chantRestart,
+                    onChantRestart: _canRestart(store) ? _chantRestart : null,
                     onChantSeek: (to) => unawaited(_player?.seek(to)),
-                    recording: recording == null
-                        ? null
-                        : store?.snapshot.value.of(recording.readingId),
-                    onDownload: recording == null
+                    recording: _rowStatus(store),
+                    onDownload: _rowRecording == null
                         ? null
                         : () => unawaited(
                             ref
                                 .read(recordingStoreProvider)
-                                .download(recording),
+                                .download(_rowRecording!),
                           ),
+                    coverage: programme != null && programme.partial
+                        ? 'Chant plays ${programme.recordedCount} of '
+                              '${programme.sectionCount} sections'
+                        : null,
                   ),
                 ),
               ),

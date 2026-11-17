@@ -68,11 +68,18 @@ ChantPlace? placeAt(
   return ChantPlace(block, lengths.length - 1);
 }
 
-/// The Pali length of every phrase, one list per verse of the first section.
+/// The Pali length of every phrase, `[block][phrase]`, over every section whose
+/// verses are all phrased, in order: the reader's block numbering.
 List<List<int>> paliLengthsOf(Reading reading) => [
-  for (final v in reading.sections.first.verses)
-    [for (final p in v.phrases) p.pali.length],
+  for (final s in reading.sections)
+    if (sectionIsPhrased(s))
+      for (final v in s.verses) [for (final p in v.phrases) p.pali.length],
 ];
+
+/// True for a section the reader shows as blocks of phrases: it has verses
+/// and every one is phrased (as `buildReaderItems` numbers them).
+bool sectionIsPhrased(Section s) =>
+    s.verses.isNotEmpty && s.verses.every((v) => v.isPhrased);
 
 /// When [block] starts; null for an untimed (or missing) block.
 Duration? blockStart(List<BlockTime?> times, int block) =>

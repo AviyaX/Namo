@@ -67,18 +67,21 @@ void main() {
       path: 'audio/a.mp3',
       label: 'a',
       placeholder: false,
+      duration: Duration(seconds: 20),
     );
     const waiting = Recording(
       readingId: 'b',
       path: 'audio/b.mp3',
       label: 'b',
       placeholder: false,
+      duration: Duration(seconds: 20),
     );
     const tone = Recording(
       readingId: 'c',
       path: placeholderToneAsset,
       label: placeholderToneLabel,
       placeholder: true,
+      duration: Duration.zero,
     );
     final store = FakeRecordingStore(everything: Availability.waiting)
       ..set(

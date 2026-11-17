@@ -166,7 +166,7 @@ Future<List<FlowRef>> _journey(
   expect(c.read(flowsProvider).flow('flow-1')!.sections, made);
   expect(savedFlow(c, 'flow-1')!.sections, made);
   expect(await _editorRows(t), [for (final r in made) flowSectionId(r)]);
-  expect(find.text(sectionCount(made.length)), findsOneWidget);
+  expect(find.text(flowCaption(sections: made.length, recorded: 1)), findsOneWidget);
 
   // Start chanting: the headings in the edited order, numbered from 1.
   final start = find.byKey(const ValueKey('flow-start'));
@@ -222,7 +222,7 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.descendant(of: row, matching: find.text(sectionCount(made.length))),
+      find.descendant(of: row, matching: find.text(flowCaption(sections: made.length, recorded: 1))),
       findsOneWidget,
     );
 
