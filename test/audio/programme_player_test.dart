@@ -13,10 +13,31 @@ class _SpyPlayer extends FakeChantPlayer {
 
   final seeks = <Duration>[];
 
+  /// Every load, play and pause, in order.
+  final calls = <String>[];
+
   @override
   Future<void> seek(Duration to) {
     seeks.add(to);
     return super.seek(to);
+  }
+
+  @override
+  Future<void> load(Recording r) {
+    calls.add('load ${r.readingId}');
+    return super.load(r);
+  }
+
+  @override
+  Future<void> play() {
+    calls.add('play');
+    return super.play();
+  }
+
+  @override
+  Future<void> pause() {
+    calls.add('pause');
+    return super.pause();
   }
 }
 
@@ -233,16 +254,22 @@ void main() {
     expect(r.player.state, st(ChantStatus.playing, s(12), s(30)));
   });
 
-  test('a position past the listed length is clamped', () async {
-    final short = rec('cc', s(8));
-    final r = _Rig();
-    r.player.bind(programme([short, b]));
-    await r.player.play();
-    await settle();
-    r.inner.advance(s(9));
-    await settle();
-    expect(r.player.state, st(ChantStatus.playing, s(8), s(28)));
-  });
+  test(
+    'a position past the listed length is held just inside the leg',
+    () async {
+      final short = rec('cc', s(8));
+      final r = _Rig();
+      final p = programme([short, b]);
+      r.player.bind(p);
+      await r.player.play();
+      await settle();
+      r.inner.advance(s(9));
+      await settle();
+      final held = s(8) - const Duration(microseconds: 1);
+      expect(r.player.state, st(ChantStatus.playing, held, s(28)));
+      expect(p.legAt(r.player.state.position), 0, reason: 'not the next leg');
+    },
+  );
 
   test(
     'with leg 2 unavailable the chant waits paused at its start and asks once',
@@ -334,6 +361,59 @@ void main() {
     expect(p.player.state, st(ChantStatus.paused, s(12), s(30)));
   });
 
+  test('a seek into another leg after the end loads it paused', () async {
+    final r = _Rig();
+    r.player.bind(programme([a, b]));
+    await r.player.play();
+    await settle();
+    r.inner.advance(s(10));
+    await settle();
+    r.inner.advance(s(10));
+    await settle();
+    expect(r.player.state.status, ChantStatus.completed);
+    final before = r.inner.calls.length;
+    await r.player.seek(s(4));
+    await settle();
+    final calls = r.inner.calls.sublist(before);
+    expect(r.inner.loaded, [a, b, a]);
+    // just_audio stays "playing" after the end, so the load is paused
+    // around: before it, and once it is loaded.
+    expect(calls, ['pause', 'load aa', 'pause']);
+    expect(r.player.state, st(ChantStatus.paused, s(4), s(30)));
+  });
+
+  test('a seek into another leg while the first loads keeps Play', () async {
+    final r = _Rig();
+    final gate = r.inner.gate = Completer<void>();
+    r.player.bind(programme([a, b]));
+    unawaited(r.player.play());
+    await settle();
+    expect(r.player.state.status, ChantStatus.loading);
+    unawaited(r.player.seek(s(15)));
+    await settle();
+    r.inner.gate = null;
+    gate.complete();
+    await settle();
+    expect(r.inner.loaded, [a, b]);
+    expect(r.player.leg, 1);
+    expect(r.player.state, st(ChantStatus.playing, s(15), s(30)));
+  });
+
+  test('after dispose nothing reaches the inner player', () async {
+    final r = _Rig();
+    r.player.bind(programme([a, b]));
+    await r.player.dispose();
+    await r.player.play();
+    await r.player.playLeg(1);
+    await r.player.seek(s(15));
+    await r.player.restart();
+    await r.player.setSpeed(1.5);
+    await settle();
+    expect(r.inner.loaded, isEmpty);
+    expect(r.inner.calls, isEmpty);
+    expect(r.inner.speeds, isEmpty);
+  });
+
   test('seek into an unavailable leg waits at the chosen point', () async {
     final r = _Rig(missing: {b});
     r.player.bind(programme([a, b]));
@@ -352,10 +432,12 @@ void main() {
     final r = _Rig(missing: {b});
     await r.throughLeg1();
     await r.player.setSpeed(1.25);
+    final set = r.inner.speeds.length;
     r.missing.clear();
     await r.player.arrived();
     await settle();
     expect(r.inner.loaded, [a, b]);
+    expect(r.inner.speeds, hasLength(set + 1), reason: 'applied again on load');
     expect(r.inner.speeds.last, 1.25);
     expect(r.inner.speed, 1.25);
   });

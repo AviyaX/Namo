@@ -54,6 +54,7 @@ void main() {
   });
 
   testWidgets('the editor shows the mark on recorded sections', (t) async {
+    final semantics = t.ensureSemantics();
     await openReal(
       t,
       Routes.flowEditor('flow-1'),
@@ -74,9 +75,16 @@ void main() {
       findsNothing,
     );
     expect(find.byKey(const ValueKey('flow-row-$_pirithSection')), findsOneWidget);
+    expect(
+      find.bySemanticsLabel(RegExp(r', has a recording$')),
+      findsOneWidget,
+      reason: 'the recorded row says so; the unrecorded ones do not',
+    );
+    semantics.dispose();
   });
 
   testWidgets('the Add sections sheet marks recorded readings', (t) async {
+    final semantics = t.ensureSemantics();
     await openReal(
       t,
       Routes.flowEditor('flow-3'),
@@ -98,6 +106,10 @@ void main() {
       ),
       findsOneWidget,
     );
+    expect(
+      t.getSemantics(find.byKey(const ValueKey('add-tick-$_pirithSection'))).label,
+      endsWith(', has a recording'),
+    );
     final buddha = (await realLibrary(t)).reading(realReadingId)!;
     expect(
       find.byKey(
@@ -105,5 +117,11 @@ void main() {
       ),
       findsNothing,
     );
+    final plain = find.byKey(
+      ValueKey('add-tick-$realReadingId~${buddha.sections.first.id}'),
+    );
+    await t.scrollUntilVisible(plain, -300, scrollable: list);
+    expect(t.getSemantics(plain).label, isNot(contains('has a recording')));
+    semantics.dispose();
   });
 }

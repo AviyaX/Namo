@@ -6,6 +6,7 @@ import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
+import 'package:buddhist_gatha/reader/chant_bar.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/reader/reader_bottom_bar.dart';
 import 'package:buddhist_gatha/router.dart';
@@ -474,6 +475,66 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('going to the background while waiting disarms the wait', (
+    t,
+  ) async {
+    final first = await _recording(t, mangalaReadingId);
+    final second = await _recording(t, _karaniyaId);
+    final store = FakeRecordingStore()
+      ..set(_karaniyaId, _status(Availability.waiting));
+    final player = await _open(t, [
+      _whole(mangalaReadingId),
+      _whole(_karaniyaId),
+    ], store: store);
+    await _tap(t, _play);
+    await _finish(t, player);
+    expect(player.ids, [first.readingId]);
+
+    t.binding
+      ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
+      ..handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    t.binding
+      ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
+      ..handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await t.pump();
+
+    store.set(_karaniyaId, _status(Availability.downloaded));
+    await t.pump();
+    await t.pump();
+    await t.pump();
+    expect(player.ids, [first.readingId, second.readingId]);
+    expect(player.state.status, isNot(ChantStatus.playing));
+    expect(find.byTooltip('Play chanting'), findsOneWidget);
+
+    await _tap(t, _play);
+    expect(player.state.status, ChantStatus.playing);
+    expect(player.ids, [first.readingId, second.readingId]);
+  });
+
+  testWidgets('a failed load of the second recording says so and Play '
+      'tries again', (t) async {
+    final first = await _recording(t, mangalaReadingId);
+    final second = await _recording(t, _karaniyaId);
+    final player = await _open(t, [
+      _whole(mangalaReadingId),
+      _whole(_karaniyaId),
+    ]);
+    await _tap(t, _play);
+    player.failOnLoad = true;
+    await _finish(t, player);
+    await t.pump();
+    expect(player.ids, [first.readingId, second.readingId]);
+    expect(find.text(chantFailedMessage), findsOneWidget);
+
+    player.failOnLoad = false;
+    await _tap(t, _play);
+    await t.pump();
+    expect(player.ids, [first.readingId, second.readingId, second.readingId]);
+    expect(player.state.status, ChantStatus.playing);
+    expect(find.text(chantFailedMessage), findsNothing);
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('speed survives the leg change', (t) async {
     final second = await _recording(t, _karaniyaId);
     final player = await _open(t, [
@@ -483,10 +544,12 @@ void main() {
     await _tap(t, _play);
     await _tap(t, find.byKey(const ValueKey('chant-speed')));
     expect(player.speed, 1.25);
+    final set = player.speeds.length;
 
     await _finish(t, player);
     expect(player.ids.last, second.readingId);
     expect(player.speed, 1.25);
+    expect(player.speeds, hasLength(set + 1), reason: 'applied on the load');
     expect(player.speeds.last, 1.25);
     expect(find.text('1.25×'), findsOneWidget);
   });

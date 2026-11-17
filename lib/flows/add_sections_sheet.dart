@@ -191,6 +191,8 @@ class _AddSectionsSheet extends ConsumerWidget {
       trailing: line.recorded
           ? RecordingMark(key: ValueKey('flow-recorded-${flowSectionId(line.ref)}'))
           : null,
+      // The row speaks one label of its own; the mark's is said here.
+      detailLabel: line.recorded ? 'has a recording' : null,
       onTap: () => ref.read(flowsProvider.notifier).add(flowId, line.ref),
     );
   }

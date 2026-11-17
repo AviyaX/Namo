@@ -5,6 +5,12 @@ import 'chant_timing.dart';
 
 /// True when [recording] chants [section]: the section shows as blocks of
 /// phrases and the recording times exactly its blocks.
+///
+/// The design also asks that the recording's reading has exactly one
+/// section; every recorded reading has one today, so the verse count stands
+/// in for it. A recording of a reading with several sections would attach to
+/// each section whose verse count matches its blocks; such a recording needs
+/// per-section cues ([Recording.sectionCues]) first.
 bool sectionIsRecorded(Section section, Recording? recording) =>
     sectionIsPhrased(section) &&
     recording != null &&
