@@ -13,7 +13,7 @@
      "audio": {
       "path": "audio/pirith/08-mahamangala.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 346000,
+      "duration_ms": 347185,
       "bytes": 1046598,
       "sha256": "e47350c07ba5c724bc8bd3f784860acda15ac13c4ac5e8d443a2fa39fce9cd99",
       "block_times": [
@@ -973,7 +973,7 @@
      "audio": {
       "path": "audio/pirith/09-rathana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 621000,
+      "duration_ms": 621830,
       "bytes": 1874163,
       "sha256": "250061c5c9289935ee15acf0b428939de11f5a442c624f6b3442c5464306a681",
       "block_times": [
@@ -2798,7 +2798,7 @@
      "audio": {
       "path": "audio/pirith/10-karaniya.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 242000,
+      "duration_ms": 243159,
       "bytes": 731185,
       "sha256": "0c9b6f319ea515edae3b07d1dfe5865bfa8fb0691145edd91a57768cc2eb5695",
       "block_times": [
@@ -3556,7 +3556,7 @@
      "audio": {
       "path": "audio/pirith/02-saranagamanam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 101000,
+      "duration_ms": 102075,
       "bytes": 306807,
       "sha256": "3ab37028e9f28b36ebda7fcf34d89049f305d7681d304f90787695def79a319b",
       "block_times": [
@@ -3791,7 +3791,7 @@
      "audio": {
       "path": "audio/pirith/03-dasasikkhapadani.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 108000,
+      "duration_ms": 109134,
       "bytes": 327245,
       "sha256": "afe17198f16eb46a6745bf5726fe72606b4a4133de9890c5e1b8ce6e12da7578",
       "block_times": [
@@ -4042,7 +4042,7 @@
      "audio": {
       "path": "audio/pirith/04-samanera-panha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 113000,
+      "duration_ms": 113592,
       "bytes": 339366,
       "sha256": "457a0eaa612f06c70895376db7670d46d435d7e174014bb39dc4269733d7e2be",
       "block_times": [
@@ -4313,7 +4313,7 @@
      "audio": {
       "path": "audio/pirith/05-dvattimsakaraya.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 69000,
+      "duration_ms": 69660,
       "bytes": 209211,
       "sha256": "2ef0efb4518de3c09cef3bec8b44ca83865de32beda143dbb71ac2a960082e78",
       "block_times": [
@@ -4591,7 +4591,7 @@
      "audio": {
       "path": "audio/pirith/06-paccavekkhana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 204000,
+      "duration_ms": 204893,
       "bytes": 614582,
       "sha256": "92dd20b037044b88f4fda630be1f4fe1fb80a1cd9e23d014aa0a33330cae6702",
       "block_times": [
@@ -4980,7 +4980,7 @@
      "audio": {
       "path": "audio/pirith/07-dasadhamma.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 324000,
+      "duration_ms": 324801,
       "bytes": 980754,
       "sha256": "615957c5121a418ac37904972f09f791165efe96158e88c8bff38fb2845e5dd7",
       "block_times": [
@@ -5793,7 +5793,7 @@
      "audio": {
       "path": "audio/pirith/11-khandha-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 410000,
+      "duration_ms": 410622,
       "bytes": 1241819,
       "sha256": "4cad754fa4ce9540b8370c93d17d1bcc490235a1af06e482792d3b8fa89a70ac",
       "block_times": [
@@ -6727,7 +6727,7 @@
      "audio": {
       "path": "audio/pirith/12-mettanisamsa.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 213000,
+      "duration_ms": 213252,
       "bytes": 641828,
       "sha256": "d5ae4d2698f7d7e76e37c9d4af2d60df5c476f3171fc63ecbcbe04cefa467e13",
       "block_times": [
@@ -7229,7 +7229,7 @@
      "audio": {
       "path": "audio/pirith/13-mittanisamsa.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 207000,
+      "duration_ms": 207865,
       "bytes": 624736,
       "sha256": "014373ff1a6c66a915abeeeb71cb1fde023c7a8772d688b52d1cdc5e64de2958",
       "block_times": [
@@ -7857,7 +7857,7 @@
      "audio": {
       "path": "audio/pirith/14-mora-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 145000,
+      "duration_ms": 145821,
       "bytes": 440429,
       "sha256": "c8a20c2efd9ad352c51ae34d2272ba6a101eda80214407c1cbcdad4d570fa5a8",
       "block_times": [
@@ -8352,7 +8352,7 @@
      "audio": {
       "path": "audio/pirith/15-canda-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 206000,
+      "duration_ms": 206658,
       "bytes": 621150,
       "sha256": "fc5bcb7fe4fcff681c8472dc6979d2cb41cdc999fe3d0cf3ea2e26125bd89eb7",
       "block_times": [
@@ -8920,7 +8920,7 @@
      "audio": {
       "path": "audio/pirith/16-suriya-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 220000,
+      "duration_ms": 220311,
       "bytes": 665895,
       "sha256": "96392e8bb3d63bb8812bad2ac75a0eec1bfafc8b17d9ebd087b151df1397fbe2",
       "block_times": [
@@ -9570,7 +9570,7 @@
      "audio": {
       "path": "audio/pirith/17-dhajagga-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 673000,
+      "duration_ms": 673379,
       "bytes": 2039940,
       "sha256": "b949a8be9fc3edb18d07883f5dabcddfb364b891a1cf8d5c350f5d0b34086a37",
       "block_times": [
@@ -11241,7 +11241,7 @@
      "audio": {
       "path": "audio/pirith/18-kassapa-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 425000,
+      "duration_ms": 425482,
       "bytes": 1288655,
       "sha256": "adcc9c1f9695e51ba75a76ccabff70d551f3999cb3980b6577cb04fb88a30d4b",
       "block_times": [
@@ -12291,7 +12291,7 @@
      "audio": {
       "path": "audio/pirith/19-moggallana-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 423000,
+      "duration_ms": 423996,
       "bytes": 1282265,
       "sha256": "235186be14a03637f49dbbed5bbb589b32f8620b7aa9646d96a57e4e56de9d44",
       "block_times": [
@@ -13341,7 +13341,7 @@
      "audio": {
       "path": "audio/pirith/20-chunda-bojjhanga.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 413000,
+      "duration_ms": 413315,
       "bytes": 1244288,
       "sha256": "12b8dd267a6146e2e97826c9e8780db44e8b8ced921f944aeba17891ded44974",
       "block_times": [
@@ -14279,7 +14279,7 @@
      "audio": {
       "path": "audio/pirith/21-girimananda-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 1451000,
+      "duration_ms": 1452083,
       "bytes": 4385718,
       "sha256": "66fa2356e92226df74e5f766b920048c10dd8b7b9532a780a893ed49f8c35e5a",
       "block_times": [
@@ -18093,7 +18093,7 @@
      "audio": {
       "path": "audio/pirith/22-isigili-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 983000,
+      "duration_ms": 983412,
       "bytes": 2976828,
       "sha256": "0aa5c30b88c93db5c6187169c7dcf42a51bf9ff758dc747d5b44ca6aad062b80",
       "block_times": [
@@ -19700,7 +19700,7 @@
      "audio": {
       "path": "audio/pirith/23-dhammacakkappavattana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 1468000,
+      "duration_ms": 1468523,
       "bytes": 4432617,
       "sha256": "7fe4bfe81815c790b2c2071b23e89ec641ed2c3a5545a226db529bc03600e661",
       "block_times": [
@@ -23115,7 +23115,7 @@
      "audio": {
       "path": "audio/pirith/24-mahasamaya-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 1817000,
+      "duration_ms": 1811621,
       "bytes": 5484930,
       "sha256": "2019ee84fa6d2cc7e3af1c35d7c3a476b9dd25f146cce77b46160444612d5fcd",
       "block_times": [
@@ -29182,7 +29182,7 @@
      "audio": {
       "path": "audio/pirith/25-alavaka-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 580000,
+      "duration_ms": 580406,
       "bytes": 1762032,
       "sha256": "62a838408836946183adbe949c2f32a06b72abb2c461f12448dd5e3a30074d40",
       "block_times": [
@@ -30155,7 +30155,7 @@
      "audio": {
       "path": "audio/pirith/26-kasibharadvaja-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 709000,
+      "duration_ms": 710066,
       "bytes": 2153756,
       "sha256": "37ecb2fb8d1414cd54bcf648380d1aeaa0e0e0448c9016c9a46afd16c61dd95d",
       "block_times": [
@@ -30869,7 +30869,7 @@
      "audio": {
       "path": "audio/pirith/27-parabhava-suttam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 600000,
+      "duration_ms": 600282,
       "bytes": 1816778,
       "sha256": "0dddc405cec001fd610a25384e2aafd20d58e4eedb538bbaf2029d732222c1ab",
       "block_times": [
@@ -31880,7 +31880,7 @@
      "audio": {
       "path": "audio/pirith/50-angulimala.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 123000,
+      "duration_ms": 123902,
       "bytes": 379792,
       "sha256": "2be9b0e1affeb2c28141ec95aff7f8ab42a231afd6c1a1187555b80cd68135a7",
       "block_times": [
@@ -32200,7 +32200,7 @@
      "audio": {
       "path": "audio/pirith/51-atavisi.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 128000,
+      "duration_ms": 128731,
       "bytes": 396279,
       "sha256": "672736bd10d43dbe8138c4c361ae734db1d3156fd2a26db44907a46b6434271d",
       "block_times": [
@@ -32551,7 +32551,7 @@
      "audio": {
       "path": "audio/pirith/52-wattaka.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 121000,
+      "duration_ms": 122230,
       "bytes": 368927,
       "sha256": "001109d2a214c2d80b8dd9d91fa21de7d7bc3c00db29ee2484538469fc228a2a",
       "block_times": [
@@ -32818,7 +32818,7 @@
      "audio": {
       "path": "audio/pirith/53-jaya-mangala-attha-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 286000,
+      "duration_ms": 286441,
       "bytes": 863296,
       "sha256": "7ad73c1594dc13171c930324f2303113ada9f28667f4dc5bfa60fb252fde5876",
       "block_times": [
@@ -33154,7 +33154,7 @@
      "audio": {
       "path": "audio/pirith/54-narasiha-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 201000,
+      "duration_ms": 202112,
       "bytes": 623035,
       "sha256": "4fe8070ebb9a314c8c37c6d26ce3536336e740224075d03325766d82c9235b40",
       "block_times": [
@@ -33473,7 +33473,7 @@
      "audio": {
       "path": "audio/pirith/55-maha-jaya-mangala-gatha.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 334000,
+      "duration_ms": 334925,
       "bytes": 1028953,
       "sha256": "83b527f6f8d4b65226ceae201df057ecbe407f8b0a1f2dda71ea0dd1672e38e8",
       "block_times": [
@@ -34312,7 +34312,7 @@
      "audio": {
       "path": "audio/pirith/56-jaya-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 202000,
+      "duration_ms": 202942,
       "bytes": 623757,
       "sha256": "f7a318f4c7f40634552533fececc918c5a359f1af50f4a0407c895aea5a04760",
       "block_times": [
@@ -34748,7 +34748,7 @@
      "audio": {
       "path": "audio/pirith/57-jvara-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 952000,
+      "duration_ms": 953133,
       "bytes": 2888982,
       "sha256": "49503e3f84b638a36444c8d7b11af1c1748fe9368e7daa1b263983c20215b26e",
       "block_times": [
@@ -35867,7 +35867,7 @@
      "audio": {
       "path": "audio/pirith/58-antharaya-nivarana-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 53000,
+      "duration_ms": 54242,
       "bytes": 171439,
       "sha256": "ff865c8d370ac5ba8b514674740d4e60233c893b74162e083df282e02c33ab36",
       "block_times": [
@@ -36030,7 +36030,7 @@
      "audio": {
       "path": "audio/pirith/59-jinapanjara-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 370000,
+      "duration_ms": 370405,
       "bytes": 1122645,
       "sha256": "c44dac83fa6766ee879c1814c67e138d314ff799db6bd8a00c27155881106425",
       "block_times": [
@@ -36741,7 +36741,7 @@
      "audio": {
       "path": "audio/pirith/60-dasa-disa-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 90000,
+      "duration_ms": 90836,
       "bytes": 281293,
       "sha256": "9ba7ec257d8592a38b9d48d4edbfea0cb48d567346a34fa21ddd6cd8b740b127",
       "block_times": [
@@ -36914,7 +36914,7 @@
      "audio": {
       "path": "audio/pirith/61-bojjhanga-parittam.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 198000,
+      "duration_ms": 198949,
       "bytes": 601766,
       "sha256": "c12e1ebb996ddc7d6b8acaf23e59b12850e00d768f9b697f4a6cba58946efb22",
       "block_times": [
@@ -37324,7 +37324,7 @@
      "audio": {
       "path": "audio/pirith/62-samantha-pattana.m4a",
       "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
-      "duration_ms": 2448000,
+      "duration_ms": 2448498,
       "bytes": 7420182,
       "sha256": "2bbc6555ad660fe305aafcc0f0255b60b8d750e35527e9d4bcff24307edfcd4c",
       "block_times": [
