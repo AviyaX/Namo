@@ -2610,7 +2610,8 @@
      "font": "FMBindumathix",
      "size": 19.0,
      "text": "ත්‍රිවිධ චෛත්‍ය වන්දනාව",
-     "heading_en": "Homage to the three main objects of veneration"
+     "heading_en": "Homage to the three main objects of veneration",
+     "promoted": true
     },
     {
      "kind": "break",
@@ -3479,7 +3480,8 @@
      "font": "FMBindumathix",
      "size": 20.0,
      "text": "තෙරුවන් සමා කර ගැනීම",
-     "heading_en": "Requesting forgiveness from the triple gem"
+     "heading_en": "Requesting forgiveness from the triple gem",
+     "promoted": true
     },
     {
      "kind": "break",
@@ -3636,7 +3638,8 @@
      "font": "FMBindumathix",
      "size": 18.0,
      "text": "මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම",
-     "heading_en": "Sharing merits with departed relatives."
+     "heading_en": "Sharing merits with departed relatives.",
+     "promoted": true
     },
     {
      "kind": "break",

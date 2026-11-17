@@ -50,6 +50,13 @@ class Classify(unittest.TestCase):
                                      "x Flowers"), "subheading")
         self.assertEqual(ex.classify([], ""), "break")
 
+    def test_fm_with_calibri_is_a_heading_only_in_the_title_bands(self):
+        it = span("Calibri-BoldItalic", 15, "Flowers", flags=18)
+        self.assertEqual(ex.classify([span(FM, 19, "a b c"), span("Calibri", 12, "Homage")], "x"), "pali_si")
+        self.assertEqual(ex.classify([span(FM, 19, "a b c d e f g"), it], "x"), "pali_si")
+        self.assertEqual(ex.classify([span(FM, 18, "a b"), it], "x"), "pali_si")
+        self.assertEqual(ex.classify([span(FM, 19, "a b c"), it], "x"), "subheading")
+
     def test_english_title_is_a_heading(self):
         self.assertEqual(ex.classify([span("Calibri-Bold", 18, "BOWING TO THE TRIPLE GEM")],
                                      "BOWING TO THE TRIPLE GEM"), "heading")
@@ -118,6 +125,84 @@ class Units(unittest.TestCase):
         self.assertEqual(units[0]["notes"], ["(n)"])
 
 
+EXPECTED_HEADINGS = {
+    3: [
+        ('heading', 'තෙරුවන්  නමස්කාර කිරීම', False),
+    ],
+    4: [
+        ('heading', 'පඤ්ච සීලය', False),
+    ],
+    5: [
+        ('heading', 'බුද්ධ වන්දනා', False),
+    ],
+    6: [
+        ('heading', 'ධම්ම වන්දනා', False),
+    ],
+    7: [
+        ('heading', 'සංඝ වන්දනා', False),
+    ],
+    9: [
+        ('heading', 'සියල්ල එකට සිහි කිරීම', False),
+    ],
+    11: [
+        ('heading', 'ත්\u200dරිවිධ චෛත්\u200dය වන්දනාව', True),
+        ('subheading', 'බෝධි වන්දනය', False),
+    ],
+    12: [
+        ('heading', 'ආමිස පූජා', False),
+        ('subheading', 'පහන් පූජාව', False),
+        ('subheading', 'සුවඳ දුම් පූජාව', False),
+        ('subheading', 'මල් පූජාව', False),
+    ],
+    13: [
+        ('subheading', 'පැන් පූජා කිරීම', False),
+        ('subheading', 'ගිලන්පස පුජා කිරීම', False),
+        ('subheading', 'සියළු දෑ පූජා කිරීම', False),
+    ],
+    14: [
+        ('heading', 'තෙරුවන් සමා කර ගැනීම', True),
+        ('heading', 'මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම', True),
+    ],
+    16: [
+        ('heading', 'ප්\u200dරාර්ථනා', False),
+    ],
+    17: [
+        ('heading', 'බුද්ධානුස්සතිය', False),
+    ],
+    19: [
+        ('heading', 'මෙත්තානුස්සතිය', False),
+    ],
+    21: [
+        ('heading', 'අසුභානුස්සතිය', False),
+    ],
+    22: [
+        ('heading', 'මරණානුස්සතිය', False),
+    ],
+    24: [
+        ('heading', 'අට්ඨ මහා සංවේග වත්ථු', False),
+    ],
+    25: [
+        ('heading', 'පටිච්ච සමුප්පාදය', False),
+        ('heading', 'අනුලෝම', False),
+    ],
+    26: [
+        ('heading', 'පටිලෝම', False),
+    ],
+    27: [
+        ('heading', 'නිවැරදි පිළිසරණ යෑම', False),
+    ],
+    28: [
+        ('heading', 'තිලකුණු මෙනෙහි කිරීම', False),
+    ],
+    29: [
+        ('heading', 'මෛත්\u200dරී භාවනාව', False),
+    ],
+    34: [
+        ('heading', 'සාදු! සාදු! සාදු!', False),
+    ],
+}
+
+
 class RealPdf(unittest.TestCase):
     @unittest.skipUnless(os.path.exists(PDF), "booklet PDF not present")
     def test_real_pdf_page_3(self):
@@ -127,6 +212,24 @@ class RealPdf(unittest.TestCase):
         self.assertTrue(any(u["pali_si"] == ["බුද්ධං නමාමි"] and u["roman"] == ["Buddhan namāmi"]
                             and u["english"] == ["Homage to the Buddha"] and u["notes"] == ["(Bow)"]
                             for u in units))
+
+    @unittest.skipUnless(os.path.exists(PDF), "booklet PDF not present")
+    def test_real_pdf_headings_are_exactly_the_booklet_titles(self):
+        """Pinned per page: (kind, converted Sinhala title, promoted). Checked against the raw dump
+        (every English title sits on its own page there); a Pali line listed here would be a rule bug."""
+        data = ex.extract(PDF)
+        got = {}
+        for pg in data["pages"]:
+            hs = [(ln["kind"], ln["text"], bool(ln.get("promoted"))) for ln in pg["lines"]
+                  if ln["kind"] in ("heading", "subheading")]
+            if hs:
+                got[pg["pdf_page"]] = hs
+        self.assertEqual(got, EXPECTED_HEADINGS)
+        for pg in data["pages"]:
+            for ln in pg["lines"]:
+                if (ln["font"].startswith("FM") and 17 <= ln["size"] <= 19 and any("඀" <= c <= "෿" for c in ln["text"])
+                        and ln["kind"] not in ("heading", "subheading")):
+                    self.assertEqual(ln["kind"], "pali_si", (pg["pdf_page"], ln["text"]))
 
 
 if __name__ == "__main__":

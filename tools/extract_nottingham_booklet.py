@@ -92,8 +92,15 @@ def classify(spans: list[dict], text: str) -> str:
     fm = [s for s in bearing if is_fm(s["font"])]
     other = [s for s in bearing if not is_fm(s["font"])]
     if fm and other and all(_name(s).startswith("Calibri") for s in other):
-        # a Sinhala title with its English beside it: a heading (large type) or an offering sub-heading
-        return "heading" if max(s["size"] for s in fm) >= 20 else "subheading"
+        # a Sinhala title with its English beside it
+        fm_size = max(s["size"] for s in fm)
+        if fm_size >= 20:
+            return "heading"
+        words = len("".join(s["text"] for s in fm).split())
+        if (fm_size >= 19 and words <= 6
+                and all(s["flags"] & 18 for s in other if not _letterless(s))):  # bold and/or italic
+            return "subheading"
+        return "pali_si"
     if text.startswith("(") and text.endswith(")"):
         return "note"
     if fm and not other:
@@ -143,6 +150,7 @@ def _promote_titles(lines: list[dict]) -> list[dict]:
             if k >= len(lines) or lines[k]["kind"] != "roman":
                 ln["kind"] = "heading"
                 ln["heading_en"] = lines[j]["text"]
+                ln["promoted"] = True
                 out.append(ln)
                 i = j + 1
                 continue
@@ -288,6 +296,8 @@ def write_review(data: dict, path: str) -> None:
         md += ["| kind | text |", "|---|---|"]
         for ln in pg["lines"]:
             text = ln["text"].replace("|", "/")
+            if ln.get("promoted"):
+                text += "  **(promoted title: English line below it became its heading_en)**"
             if ln.get("heading_en"):
                 text += f"  _[{ln['heading_en']}]_"
             md.append(f"| {ln['kind']} | {text} |")

@@ -448,7 +448,7 @@ Units:
 | roman | Gacchanti sabbe maraṇaṃ ahañ ca |
 | english | All beings, including myself must die. |
 | break |  |
-| heading | ත්‍රිවිධ චෛත්‍ය වන්දනාව  _[Homage to the three main objects of veneration]_ |
+| heading | ත්‍රිවිධ චෛත්‍ය වන්දනාව  **(promoted title: English line below it became its heading_en)**  _[Homage to the three main objects of veneration]_ |
 | break |  |
 | pali_si | වන්දාමි චේතියං සබ්බං - සබ්බ ඨානේසු පතිට්ඨිතං |
 | pali_si | සාරීරික ධාතු මහා බෝධිං - බුද්ධ රූපං සකලං සදා |
@@ -593,7 +593,7 @@ Units:
 | roman | Anukampan upādāya - patiganhātu muttaman. |
 | english | Out of great compassion, would you accept it, The Noble one. |
 | break |  |
-| heading | තෙරුවන් සමා කර ගැනීම  _[Requesting forgiveness from the triple gem]_ |
+| heading | තෙරුවන් සමා කර ගැනීම  **(promoted title: English line below it became its heading_en)**  _[Requesting forgiveness from the triple gem]_ |
 | break |  |
 | pali_si | කායේන වාචා චිත්තේන - පමාදේන මයා කතං |
 | pali_si | අච්චයං ඛම මේ භන්තේ - භූරිපඤ්ඤ තථාගත |
@@ -619,7 +619,7 @@ Units:
 | roman | Accayan khama mē sangha - supatipanna anuttara. |
 | english | any wrong-doing, Forgive me Sangha, endowed with good conduct and noble |
 | break |  |
-| heading | මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම  _[Sharing merits with departed relatives.]_ |
+| heading | මියගිය ඤාතීන්ට පින් අනුමෝදන් කිරීම  **(promoted title: English line below it became its heading_en)**  _[Sharing merits with departed relatives.]_ |
 | break |  |
 | pali_si | ඉදං මේ ඤාතීනං හෝතු සුඛිතා හොන්තු ඤාතයෝ (තුන් වරක්) |
 | roman | Idan mē ñātīnan hotu - sukitā hontu ñātayo |
