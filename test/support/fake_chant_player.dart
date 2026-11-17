@@ -62,6 +62,8 @@ class FakeChantPlayer implements ChantPlayer {
       _set(const ChantState(status: ChantStatus.loading));
       await g.future;
     }
+    // The real player applies its rate again after every load.
+    if (!failOnLoad) speeds.add(speed);
     _set(failOnLoad
         ? const ChantState(status: ChantStatus.failed)
         : ChantState(status: ChantStatus.ready, duration: length));
