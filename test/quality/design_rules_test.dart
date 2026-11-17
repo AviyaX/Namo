@@ -135,6 +135,8 @@ void main() {
     // Motion durations come from NamoMotion. These are not motion: they are
     // timers of behaviour, each with its reason.
     const allowed = {
+      'lib/books/book_reader_screen.dart':
+          'the place-save debounce (400 ms) while scrolling; not drawn',
       'lib/reader/auto_scroll.dart':
           'the longest step of the auto-scroll tick, so a stalled frame does '
               'not make the page jump',

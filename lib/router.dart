@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'books/book_contents_screen.dart';
+import 'books/book_reader_screen.dart';
 import 'books/book_screen.dart';
 import 'design/transitions.dart';
 import 'design/widgets/app_shell.dart';
@@ -227,6 +228,26 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               ReaderFrom.values.asNameMap()[state.uri.queryParameters['from']],
         ),
       ),
+    ),
+    // Outside the shell: the reader has the whole screen.
+    GoRoute(
+      path: '/library/book/:id/read/:n',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['id']!;
+        final n = int.tryParse(state.pathParameters['n']!);
+        return namoPage(
+          key: state.pageKey,
+          context: context,
+          child: n == null
+              ? const NotFoundScreen()
+              : BookReaderScreen(
+                  // A new page starts afresh, at its top.
+                  key: ValueKey('book-reader-$id-$n'),
+                  id: id,
+                  n: n,
+                ),
+        );
+      },
     ),
     GoRoute(
       path: '/tipitaka/read/:key',
