@@ -294,6 +294,69 @@ void main() {
     expect(c.read(tipsProvider).seen, {Tip.myFlows});
   });
 
+  testWidgets('a text field that had focus has it back after Got it',
+      (t) async {
+    final field = FocusNode();
+    addTearDown(field.dispose);
+    final anchored = ValueNotifier(false);
+    addTearDown(anchored.dispose);
+    await _pump(
+      t,
+      TipHost(
+        tipsFor: () => [Tip.myFlows],
+        child: Scaffold(
+          body: Column(children: [
+            const SizedBox(height: 100),
+            TextField(key: const ValueKey('field'), focusNode: field),
+            // The anchor comes after the field has focus, as the My flows
+            // card does when a search is cleared.
+            ValueListenableBuilder<bool>(
+              valueListenable: anchored,
+              builder: (_, on, _) => on
+                  ? TipAnchor(tip: Tip.myFlows, child: _control())
+                  : const SizedBox(),
+            ),
+          ]),
+        ),
+      ),
+    );
+    field.requestFocus();
+    await t.pumpAndSettle();
+    expect(_bubbleFinder, findsNothing);
+    expect(field.hasFocus, isTrue);
+    anchored.value = true;
+    await t.pumpAndSettle();
+    expect(_bubbleFinder, findsOneWidget);
+    expect(field.hasFocus, isFalse);
+    await t.tap(find.byKey(_gotIt));
+    await t.pumpAndSettle();
+    expect(_bubbleFinder, findsNothing);
+    expect(field.hasFocus, isTrue);
+  });
+
+  testWidgets(
+      'semantics: the words, then a separate Got it button, then Dismiss tip',
+      (t) async {
+    final semantics = t.ensureSemantics();
+    await _pump(t, _hostPage());
+    await t.pumpAndSettle();
+    final words = '${Tip.myFlows.title}. ${Tip.myFlows.body}';
+    final bubble = t.getSemantics(find.bySemanticsLabel(words));
+    expect(bubble.label, words);
+    expect(bubble.getSemanticsData().flagsCollection.isButton, isFalse);
+    final gotIt = t.getSemantics(find.byKey(_gotIt));
+    expect(identical(gotIt, bubble), isFalse);
+    expect(gotIt.label, 'Got it');
+    expect(gotIt.getSemanticsData().flagsCollection.isButton, isTrue);
+
+    final order = [
+      for (final n in t.semantics.simulatedAccessibilityTraversal())
+        n.label,
+    ].where((l) => l.isNotEmpty).toList();
+    expect(order, [words, 'Got it', 'Dismiss tip']);
+    semantics.dispose();
+  });
+
   testWidgets(
       'an anchor scrolled out of view waits; scrolling it in shows the tip',
       (t) async {

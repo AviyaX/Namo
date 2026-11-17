@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:buddhist_gatha/app.dart';
-import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/marks.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
@@ -12,6 +11,7 @@ import 'package:buddhist_gatha/home/home_header.dart';
 import 'package:buddhist_gatha/home/today.dart';
 import 'package:buddhist_gatha/reader/screen_awake.dart';
 import 'package:buddhist_gatha/router.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

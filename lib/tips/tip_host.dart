@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -91,6 +92,13 @@ class _TipHostState extends ConsumerState<TipHost> {
   Rect _cutout = Rect.zero;
   bool _evaluateScheduled = false;
 
+  /// Whether the last build showed a tip.
+  bool _wasShowing = false;
+
+  /// The control on the page that had focus when the tip came up: it has it
+  /// back when the tip is read.
+  FocusNode? _focusBefore;
+
   @override
   void initState() {
     super.initState();
@@ -152,7 +160,9 @@ class _TipHostState extends ConsumerState<TipHost> {
 
     final mine = _mine;
     if (mine != null && active == mine) {
-      final rects = _showable(mine, host);
+      // The tab under the tip has changed (a browser Back, say).
+      final rects =
+          widget.tipsFor().contains(mine) ? _showable(mine, host) : null;
       if (rects == null) {
         _mine = null;
         tips.withdraw(mine);
@@ -187,7 +197,15 @@ class _TipHostState extends ConsumerState<TipHost> {
     final bounds = Offset.zero & host.size;
     final rects = <Rect>[];
     for (final key in _anchors.keysFor(tip)) {
-      final box = key.currentContext?.findRenderObject();
+      final anchor = key.currentContext;
+      // An anchor on a hidden tab, or on a page with another pushed over it,
+      // is still laid out but cannot be seen.
+      if (anchor == null ||
+          ModalRoute.of(anchor)?.isCurrent != true ||
+          !TickerMode.getValuesNotifier(anchor).value.enabled) {
+        continue;
+      }
+      final box = anchor.findRenderObject();
       if (box is! RenderBox ||
           !box.attached ||
           !box.hasSize ||
@@ -220,7 +238,29 @@ class _TipHostState extends ConsumerState<TipHost> {
 
   void _dismiss() {
     _mine = null;
+    final before = _focusBefore;
+    _focusBefore = null;
     ref.read(tipsProvider.notifier).dismiss();
+    if (before == null) return;
+    // Once the layer is gone and the page can take focus again.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && before.context != null && before.canRequestFocus) {
+        before.requestFocus();
+      }
+    });
+  }
+
+  /// The focused control, when it is on this host's page.
+  FocusNode? _focusedHere() {
+    final node = FocusManager.instance.primaryFocus;
+    final focused = node?.context;
+    if (focused == null || !focused.mounted) return null;
+    var here = false;
+    focused.visitAncestorElements((e) {
+      here = identical(e, context);
+      return !here;
+    });
+    return here ? node : null;
   }
 
   @override
@@ -231,6 +271,12 @@ class _TipHostState extends ConsumerState<TipHost> {
     ModalRoute.isCurrentOf(context);
     _schedule();
     final showing = _mine != null && active == _mine ? _mine : null;
+    if (showing != null && !_wasShowing) {
+      _focusBefore = _focusedHere();
+    } else if (showing == null) {
+      _focusBefore = null;
+    }
+    _wasShowing = showing != null;
     return Stack(
       fit: StackFit.passthrough,
       children: [
@@ -329,7 +375,11 @@ class _TipLayerState extends State<_TipLayer> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
+                    // A node of its own beside the bubble's, read after the
+                    // bubble's words though it starts higher on the screen.
                     Semantics(
+                      container: true,
+                      sortKey: const OrdinalSortKey(1),
                       button: true,
                       label: 'Dismiss tip',
                       onTap: widget.onDismiss,

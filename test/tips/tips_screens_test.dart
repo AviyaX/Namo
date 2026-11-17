@@ -327,4 +327,114 @@ void main() {
       _expectInCutout(t, find.byKey(const ValueKey('nav-settings')));
     },
   );
+  testWidgets(
+    'a tab switched under the My flows tip takes it away unread; it comes back with the tab',
+    (t) async {
+      await openReal(
+        t,
+        Routes.library,
+        library: await realLibrary(t),
+        tips: true,
+        storeExtras: {tipsKey: '{"seen":["recordings"]}'},
+      );
+      _expectBubble(Tip.myFlows);
+
+      // As a browser Back does: the address changes, no Back is heard.
+      final router = _container(t).read(routerProvider);
+      router.go(Routes.home);
+      await t.pumpAndSettle();
+      expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+      expect(_bubble, findsNothing);
+      expect(_container(t).read(tipsProvider).active, isNull);
+      expect(_container(t).read(tipsProvider).seen, {Tip.recordings});
+
+      router.go(Routes.library);
+      await t.pumpAndSettle();
+      _expectBubble(Tip.myFlows);
+    },
+  );
+
+  testWidgets(
+    'no My flows tip over the flow editor; it shows back on the Library',
+    (t) async {
+      await openReal(
+        t,
+        Routes.library,
+        library: await realLibrary(t),
+        tips: true,
+        storeExtras: {
+          ...await realFlowsStore(t),
+          tipsKey: '{"seen":["myFlows","recordings"]}',
+        },
+      );
+      expect(_bubble, findsNothing);
+      final router = _container(t).read(routerProvider);
+      router.go(Routes.flowEditor('flow-1'));
+      await t.pumpAndSettle();
+      expect(find.byKey(const ValueKey('screen-library')), findsNothing);
+
+      // As Settings' "Show the tips again" does.
+      _container(t).read(tipsProvider.notifier).resetAll();
+      await t.pumpAndSettle();
+      expect(_bubble, findsNothing);
+      expect(_container(t).read(tipsProvider).active, isNull);
+
+      router.go(Routes.library);
+      await t.pumpAndSettle();
+      _expectBubble(Tip.myFlows);
+    },
+  );
+
+  testWidgets(
+    'the Library search opened with tips on has its focus back after My flows',
+    (t) async {
+      await openReal(
+        t,
+        Routes.librarySearch,
+        library: await realLibrary(t),
+        tips: true,
+      );
+      _expectBubble(Tip.myFlows);
+      await t.tap(_gotIt);
+      await t.pumpAndSettle();
+      expect(_bubble, findsNothing);
+      final field = t.widget<EditableText>(
+        find.descendant(
+          of: find.byKey(const ValueKey('library-search')),
+          matching: find.byType(EditableText),
+        ),
+      );
+      expect(field.focusNode.hasFocus, isTrue);
+    },
+  );
+
+  testWidgets(
+    'a reader tip waits while Scroll runs and shows once it is paused',
+    (t) async {
+      final player = await _mangalaPlayer(t);
+      await openReal(
+        t,
+        Routes.reader(mangalaReadingId),
+        library: await realLibrary(t),
+        tips: true,
+        player: player,
+        storeExtras: {tipsKey: '{"seen":["readerSettings","scrollChant"]}'},
+      );
+      expect(_bubble, findsNothing);
+      final scroll = find.byKey(const ValueKey('reader-autoscroll'));
+      await t.tap(scroll);
+      await t.pump();
+      await t.pump(const Duration(seconds: 1));
+
+      _container(t).read(tipsProvider.notifier).resetAll();
+      await t.pump();
+      await t.pump();
+      expect(_bubble, findsNothing);
+
+      // Paused, not stopped: the tips come.
+      await t.tap(scroll);
+      await t.pumpAndSettle();
+      _expectBubble(Tip.readerSettings);
+    },
+  );
 }

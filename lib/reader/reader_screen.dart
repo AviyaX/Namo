@@ -850,11 +850,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     };
   }
 
-  /// No tip over the page while it chants or scrolls by itself; Scroll and
-  /// Chant only once the recording is on the device.
+  /// No tip over the page while it chants or scrolls by itself (a paused or
+  /// finished Scroll is not running); Scroll and Chant only once the
+  /// recording is on the device.
   bool _canShowTip(Tip tip) {
     if (_chant.value.status == ChantStatus.playing) return false;
-    if (_autoScroll.status != AutoScrollStatus.stopped) return false;
+    if (_autoScroll.status == AutoScrollStatus.running) return false;
     if (tip != Tip.scrollChant) return true;
     final recording = _timed, store = _store;
     if (recording == null || store == null) return true;
@@ -939,7 +940,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
             canPop: false,
             // Every PopScope of the route hears Back, this one first (the
             // tip's is made later): while a tip shows, Back only takes the
-            // tip away.
+            // tip away. The tip's layer must stay inside the TipHost below.
             onPopInvokedWithResult: (didPop, _) {
               if (!didPop && ref.read(tipsProvider).active == null) _back();
             },

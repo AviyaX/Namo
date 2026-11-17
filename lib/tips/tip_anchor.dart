@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 import 'tips.dart';
 
@@ -42,9 +41,11 @@ class TipAnchors extends ChangeNotifier {
   }
 }
 
-final tipAnchorsProvider = ChangeNotifierProvider<TipAnchors>(
-  (_) => TipAnchors(),
-);
+final tipAnchorsProvider = Provider<TipAnchors>((ref) {
+  final anchors = TipAnchors();
+  ref.onDispose(anchors.dispose);
+  return anchors;
+});
 
 /// Marks [child] as the control [tip] points at. Several anchors for one tip
 /// share one cut-out.

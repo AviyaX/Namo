@@ -1,7 +1,6 @@
 import 'dart:ui' show Tristate;
 
 import 'package:buddhist_gatha/app.dart';
-import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:buddhist_gatha/audio/audio_controls.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
@@ -9,6 +8,7 @@ import 'package:buddhist_gatha/design/typography.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/design/widgets/pressable.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
