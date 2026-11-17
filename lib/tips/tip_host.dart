@@ -234,14 +234,19 @@ class _TipHostState extends ConsumerState<TipHost> {
     return Stack(
       fit: StackFit.passthrough,
       children: [
+        // While a tip shows, neither screen readers nor the keyboard reach
+        // the page: keys go to the tip, as taps do.
         ExcludeSemantics(
           excluding: showing != null,
-          child: NotificationListener<ScrollEndNotification>(
-            onNotification: (_) {
-              _schedule();
-              return false;
-            },
-            child: widget.child,
+          child: ExcludeFocus(
+            excluding: showing != null,
+            child: NotificationListener<ScrollEndNotification>(
+              onNotification: (_) {
+                _schedule();
+                return false;
+              },
+              child: widget.child,
+            ),
           ),
         ),
         if (showing != null)
@@ -276,13 +281,23 @@ class _TipLayer extends StatefulWidget {
 
 class _TipLayerState extends State<_TipLayer> {
   bool _faded = false;
+  final _focus = FocusNode(debugLabel: 'tip');
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) setState(() => _faded = true);
+      if (!mounted) return;
+      // Taken even from a control that had focus, so Escape reaches us.
+      _focus.requestFocus();
+      setState(() => _faded = true);
     });
+  }
+
+  @override
+  void dispose() {
+    _focus.dispose();
+    super.dispose();
   }
 
   @override
@@ -298,7 +313,7 @@ class _TipLayerState extends State<_TipLayer> {
           const SingleActivator(LogicalKeyboardKey.escape): widget.onDismiss,
         },
         child: Focus(
-          autofocus: true,
+          focusNode: _focus,
           child: AnimatedOpacity(
             opacity: _faded || duration == Duration.zero ? 1 : 0,
             duration: duration,

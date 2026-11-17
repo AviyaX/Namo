@@ -255,6 +255,45 @@ void main() {
     expect(c.read(tipsProvider).seen, {Tip.myFlows});
   });
 
+  testWidgets('keys go to the tip, not to a page control that had focus',
+      (t) async {
+    final c = await _pump(
+      t,
+      TipHost(
+        tipsFor: () => [Tip.myFlows],
+        child: Scaffold(
+          body: Column(children: [
+            const SizedBox(height: 100),
+            // A page control that has focus and acts on Enter.
+            Focus(
+              autofocus: true,
+              onKeyEvent: (_, e) {
+                if (e is! KeyDownEvent ||
+                    e.logicalKey != LogicalKeyboardKey.enter) {
+                  return KeyEventResult.ignored;
+                }
+                taps++;
+                return KeyEventResult.handled;
+              },
+              child: const SizedBox(width: 10, height: 10),
+            ),
+            TipAnchor(tip: Tip.myFlows, child: _control()),
+          ]),
+        ),
+      ),
+    );
+    await t.pumpAndSettle();
+    expect(_bubbleFinder, findsOneWidget);
+    await t.sendKeyEvent(LogicalKeyboardKey.enter);
+    await t.pump();
+    expect(taps, 0);
+    expect(c.read(tipsProvider).active, Tip.myFlows);
+    await t.sendKeyEvent(LogicalKeyboardKey.escape);
+    await t.pumpAndSettle();
+    expect(_bubbleFinder, findsNothing);
+    expect(c.read(tipsProvider).seen, {Tip.myFlows});
+  });
+
   testWidgets(
       'an anchor scrolled out of view waits; scrolling it in shows the tip',
       (t) async {
