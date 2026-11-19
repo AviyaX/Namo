@@ -200,7 +200,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 else ...[
                   MyFlowsPart(library: library),
                   const SizedBox(height: NamoSpace.xl),
-                  const BooksPart(),
                   if (n >= 2) ...[
                     ChoiceChips<String?>(
                       key: const ValueKey('library-chips'),
@@ -222,6 +221,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                         open: open.contains(c.id) || c.id == requested?.id,
                         animate: c.id != requested?.id,
                       ),
+                  // The books come after the topics.
+                  const SizedBox(height: NamoSpace.xl),
+                  const BooksPart(),
                 ],
               ],
             );

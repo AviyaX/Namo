@@ -64,6 +64,20 @@ void main() {
     h.dispose();
   });
 
+  testWidgets('the shelf comes after the topics', (t) async {
+    await openReal(t, Routes.library, size: _tall);
+    final topics = find.byWidgetPredicate(
+      (w) => w.runtimeType.toString() == '_CategoryEntry',
+    );
+    expect(topics, findsWidgets);
+    final shelfTop = t.getTopLeft(_shelf).dy;
+    for (final e in topics.evaluate()) {
+      final box = e.renderObject! as RenderBox;
+      final bottom = box.localToGlobal(Offset(0, box.size.height)).dy;
+      expect(bottom, lessThanOrEqualTo(shelfTop));
+    }
+  });
+
   testWidgets('a tap opens the book page', (t) async {
     await openReal(t, Routes.library, size: _tall);
     await t.tap(_card(tinyBookFlatId));
