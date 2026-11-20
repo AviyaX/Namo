@@ -180,7 +180,8 @@ const footnoteMinLead = NamoSpace.xl;
 /// The height of the rule over the footnotes and the gap under it.
 const footnoteRuleHeight = 1.0 + NamoSpace.sm;
 
-/// One block of a book page, whole.
+/// One block of a book page, whole. Paragraphs and list and footnote item
+/// text are justified; headings, verses, tables and captions are not.
 class BookBlockView extends StatelessWidget {
   const BookBlockView({
     super.key,
@@ -199,7 +200,11 @@ class BookBlockView extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = styles;
     return switch (block) {
-      BookPara(:final text) => Text(text, style: s.prose),
+      BookPara(:final text) => Text(
+        text,
+        style: s.prose,
+        textAlign: TextAlign.justify,
+      ),
       BookHeading(:final text) => Text(text, style: s.heading),
       BookSubhead(:final text) => Text(text, style: s.strong),
       BookGatha(:final lines) => Padding(
@@ -286,6 +291,7 @@ class BookPicture extends StatelessWidget {
 /// Items, each led by its label (a number, a bullet or none) in a lead as
 /// wide as the widest label at the current text size, so "14." never breaks
 /// over two lines; never narrower than [minLead]. A null label has no lead.
+/// The items' text is justified.
 class LeadRows extends StatelessWidget {
   const LeadRows({
     super.key,
@@ -321,7 +327,13 @@ class LeadRows extends StatelessWidget {
                   width: lead,
                   child: Text(label, style: style, softWrap: false),
                 ),
-              Expanded(child: Text(items[i], style: style)),
+              Expanded(
+                child: Text(
+                  items[i],
+                  style: style,
+                  textAlign: TextAlign.justify,
+                ),
+              ),
             ],
           ),
       ],

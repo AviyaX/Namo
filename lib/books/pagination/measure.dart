@@ -22,6 +22,15 @@ List<int> runningStarts(List<int> lengths) {
   return starts;
 }
 
+/// The character each of [painter]'s lines ([metrics], its line metrics)
+/// starts at.
+List<int> lineStarts(TextPainter painter, List<LineMetrics> metrics) => [
+  for (final line in metrics)
+    painter
+        .getLineBoundary(painter.getPositionForOffset(Offset(0, line.baseline)))
+        .start,
+];
+
 /// A text laid out at a width: where each line starts and how tall it is.
 class TextLines {
   TextLines._(this.text, this.starts, this.heights);
@@ -39,12 +48,8 @@ class TextLines {
       textScaler: scaler,
     )..layout(maxWidth: width);
     final metrics = painter.computeLineMetrics();
-    final starts = <int>[], heights = <double>[];
-    for (final line in metrics) {
-      final at = painter.getPositionForOffset(Offset(0, line.baseline));
-      starts.add(painter.getLineBoundary(at).start);
-      heights.add(line.height);
-    }
+    final starts = lineStarts(painter, metrics);
+    final heights = [for (final line in metrics) line.height];
     painter.dispose();
     if (starts.isEmpty) {
       starts.add(0);

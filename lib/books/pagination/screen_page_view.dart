@@ -8,6 +8,7 @@ import '../../design/tokens.dart';
 import '../book_blocks.dart';
 import '../book_model.dart';
 import 'book_paginator.dart';
+import 'justified_lines.dart';
 
 /// The space between a sheet's edge and its text.
 const pageSheetPadding = NamoSpace.lg;
@@ -158,7 +159,8 @@ class ScreenPageView extends StatelessWidget {
   }
 
   /// The text `charStart` to `charEnd` of a paragraph, heading, subhead,
-  /// list item, footnote or verse line, in that block's style.
+  /// list item, footnote or verse line, in that block's style. Paragraph,
+  /// list item and footnote lines are justified ([JustifiedLines]).
   Widget _lines(BookBlock b, int item, int charStart, int charEnd) {
     final s = styles;
     if (b is BookGatha) {
@@ -170,8 +172,16 @@ class ScreenPageView extends StatelessWidget {
         ),
       );
     }
+    JustifiedLines justified(String text, TextStyle style) => JustifiedLines(
+      text: text,
+      style: style,
+      scaler: s.scaler,
+      direction: s.direction,
+      charStart: charStart,
+      charEnd: charEnd,
+    );
+    if (b case BookPara(:final text)) return justified(text, s.prose);
     final whole = switch (b) {
-      BookPara(:final text) => (text, s.prose),
       BookHeading(:final text) => (text, s.heading),
       BookSubhead(:final text) => (text, s.strong),
       _ => null,
@@ -206,12 +216,7 @@ class ScreenPageView extends StatelessWidget {
                     ? Text(label, style: style, softWrap: false)
                     : null,
               ),
-            Expanded(
-              child: Text(
-                items[item].substring(charStart, charEnd),
-                style: style,
-              ),
-            ),
+            Expanded(child: justified(items[item], style)),
           ],
         ),
       ],

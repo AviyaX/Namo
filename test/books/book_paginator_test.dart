@@ -2,6 +2,7 @@ import 'package:buddhist_gatha/books/book_blocks.dart';
 import 'package:buddhist_gatha/books/book_model.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/books/pagination/book_paginator.dart';
+import 'package:buddhist_gatha/books/pagination/justified_lines.dart';
 import 'package:buddhist_gatha/books/pagination/screen_page_view.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
@@ -111,6 +112,22 @@ Future<void> _expectDrawnAsMeasured(
         reason: 'page $i slice $j ${slices[j]}',
       );
       bottom = rect.bottom;
+      // Paragraph, list item and footnote lines are justified; heading,
+      // subhead and verse lines are not.
+      if (slices[j] case LinesSlice(:final block)) {
+        final justified = switch (page.blocks[block]) {
+          BookPara() || BookList() || BookFootnotes() => true,
+          _ => false,
+        };
+        expect(
+          find.descendant(
+            of: find.byKey(ValueKey('page-slice-$j')),
+            matching: find.byType(JustifiedLines),
+          ),
+          justified ? findsOneWidget : findsNothing,
+          reason: 'page $i slice $j ${page.blocks[block].runtimeType}',
+        );
+      }
     }
     expect(bottom, lessThanOrEqualTo(box.height + 0.01), reason: 'page $i');
   }
@@ -213,6 +230,36 @@ void main() {
         reason: 'at font scale $scale',
       );
       expect(all.whereType<TableSlice>(), isNotEmpty);
+    }
+  });
+
+  testWidgets('justified slices are drawn as tall as measured', (t) async {
+    for (final scale in [1.0, 1.6]) {
+      final s = _styles(fontScale: scale);
+      final page = _chapter([
+        ..._thirtyParagraphs(),
+        BookList(
+          marker: ListMarker.bullet,
+          start: 1,
+          items: [for (var i = 0; i < 12; i++) _words(i, 20 + i * 11)],
+        ),
+        BookPara('${_words(40, 30)}\n${_words(41, 40)}\n\n${_words(42, 50)}'),
+        BookFootnotes([for (var i = 0; i < 12; i++) _words(i, 15 + i * 9)]),
+      ]);
+      final pages = paginate(page, s, _box).toList();
+      await _expectDrawnAsMeasured(t, page, pages, s, _box);
+      final slices = [for (final p in pages) ...p.slices];
+      for (final kind in [BookPara, BookList, BookFootnotes]) {
+        expect(
+          slices.any(
+            (slice) =>
+                slice is LinesSlice &&
+                page.blocks[slice.block].runtimeType == kind,
+          ),
+          isTrue,
+          reason: '$kind cut by lines at font scale $scale',
+        );
+      }
     }
   });
 
