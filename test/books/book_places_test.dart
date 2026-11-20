@@ -116,4 +116,71 @@ void main() {
     );
     expect(BookPlaces.fromJson(null).byBook, isEmpty);
   });
+
+  test('a place with a spot round-trips', () {
+    final p = BookPlaces.fromJson({
+      'b': {
+        'n': 3,
+        'key': '1-2',
+        'offset': 10.0,
+        'spot': [2, 140],
+      },
+    });
+    expect(p.of('b')!.spot, const BookSpot(2, 140));
+    expect(
+      BookPlaces.fromJson(p.toJson()).of('b')!.spot,
+      const BookSpot(2, 140),
+    );
+  });
+
+  test('an old place without a spot still reads', () {
+    expect(
+      BookPlaces.fromJson({
+        'b': {'n': 3, 'offset': 10},
+      }).of('b')!.spot,
+      isNull,
+    );
+  });
+
+  test('a damaged spot is dropped alone', () {
+    for (final bad in <Object>[
+      ['x', -1],
+      [-2, 0],
+      [0, -1],
+      [1],
+      'nope',
+    ]) {
+      final p = BookPlaces.fromJson({
+        'b': {'n': 3, 'offset': 0, 'spot': bad},
+      });
+      expect(p.of('b')!.n, 3);
+      expect(p.of('b')!.spot, isNull);
+    }
+  });
+
+  test('the title spot is allowed and spots order by block then char', () {
+    final p = BookPlaces.fromJson({
+      'b': {
+        'n': 1,
+        'offset': 0,
+        'spot': [-1, 0],
+      },
+    });
+    expect(p.of('b')!.spot, BookSpot.title);
+    expect(BookSpot.title.compareTo(BookSpot.start), lessThan(0));
+    expect(const BookSpot(1, 5).compareTo(const BookSpot(1, 9)), lessThan(0));
+    expect(
+      const BookSpot(2, 0).compareTo(const BookSpot(1, 9)),
+      greaterThan(0),
+    );
+    expect(const BookSpot(1, 5).hashCode, const BookSpot(1, 5).hashCode);
+  });
+
+  test('remember keeps the spot', () {
+    final c = _on(InMemoryKeyValueStore());
+    c
+        .read(bookPlacesProvider.notifier)
+        .remember('b', n: 2, offset: 0, spot: const BookSpot(3, 7));
+    expect(c.read(bookPlacesProvider).of('b')!.spot, const BookSpot(3, 7));
+  });
 }
