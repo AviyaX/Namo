@@ -14,6 +14,7 @@ import 'home/home_screen.dart';
 import 'library/library_screen.dart';
 import 'reader/reader_screen.dart';
 import 'saved/saved_screen.dart';
+import 'settings/settings.dart';
 import 'settings/settings_screen.dart';
 import 'settings/sources_screen.dart';
 import 'tipitaka/tipitaka_home_screen.dart';
@@ -235,14 +236,23 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
         final n = int.tryParse(state.pathParameters['n']!);
+        // Read page by page, the screen stays as the pages carry on into
+        // the next chapter: the address changes, the page and its state do
+        // not. Scrolled, a new page starts afresh, at its top.
+        final pages =
+            ProviderScope.containerOf(context)
+                .read(settingsProvider)
+                .bookReadingMode ==
+            BookReadingMode.pages;
         return namoPage(
-          key: state.pageKey,
+          key: pages ? ValueKey('book-read-$id') : state.pageKey,
           context: context,
           child: n == null
               ? const NotFoundScreen()
               : BookReaderScreen(
-                  // A new page starts afresh, at its top.
-                  key: ValueKey('book-reader-$id-$n'),
+                  key: ValueKey(
+                    pages ? 'book-reader-$id' : 'book-reader-$id-$n',
+                  ),
                   id: id,
                   n: n,
                 ),

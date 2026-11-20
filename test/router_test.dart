@@ -66,7 +66,9 @@ void main() {
     expect(find.byType(BookReaderScreen), findsOneWidget);
     final reader = t.widget<BookReaderScreen>(find.byType(BookReaderScreen));
     expect((reader.id, reader.n), ('x', 3));
-    expect(reader.key, const ValueKey('book-reader-x-3'));
+    // Read page by page (the default), one reader per book: turning into
+    // the next chapter keeps it.
+    expect(reader.key, const ValueKey('book-reader-x'));
     // No tab bar: the reader has the whole screen.
     expect(find.byKey(const ValueKey('nav-bar')), findsNothing);
     expect(find.byKey(const ValueKey('nav-rail')), findsNothing);

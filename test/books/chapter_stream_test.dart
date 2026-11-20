@@ -424,4 +424,30 @@ void main() {
     expect(errors.single.exception, isA<StateError>());
     expect(s.waiting, isFalse);
   });
+
+  test('each peek names the chapter it belongs to', () async {
+    // Chapter 3 has no text: the neighbours of 2 are 1 and 4.
+    final s = _stream(_book(4, empty: 3), 2, perChapter: 3);
+    addTearDown(s.dispose);
+    expect(s.peekNextChapter, isNull);
+    expect(s.peekPreviousChapter, isNull);
+    await _settle();
+    // First page: the previous page is chapter 1's last.
+    expect(s.peekNextChapter, 2);
+    expect(s.peekPreviousChapter, 1);
+    expect(s.next(), isTrue);
+    expect((s.peekNextChapter, s.peekPreviousChapter), (2, 2));
+    expect(s.next(), isTrue);
+    // Last page: the next page is chapter 4's first.
+    expect((s.peekNextChapter, s.peekPreviousChapter), (4, 2));
+    expect(s.next(), isTrue);
+    await _settle();
+    expect(s.n, 4);
+    expect((s.peekNextChapter, s.peekPreviousChapter), (4, 2));
+    expect(s.next(), isTrue);
+    expect(s.next(), isTrue);
+    // The book's end: no next page, so no chapter for it.
+    expect(s.peekNext, isNull);
+    expect(s.peekNextChapter, isNull);
+  });
 }

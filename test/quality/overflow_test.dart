@@ -773,6 +773,10 @@ void main() {
               size: size,
               deviceTextScale: scale,
               dark: dark,
+              // The reader scrolled; Pages mode has its own cases.
+              settings: const AppSettings(
+                bookReadingMode: BookReadingMode.scroll,
+              ),
               storeExtras: extras,
             );
             expect(t.takeException(), isNull);

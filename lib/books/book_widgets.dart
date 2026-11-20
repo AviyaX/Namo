@@ -17,21 +17,29 @@ import 'book_model.dart';
 
 /// A quiet progress mark while a book loads (the Library's own).
 class BookLoading extends StatelessWidget {
-  const BookLoading({super.key});
+  const BookLoading({super.key}) : _small = false;
+
+  /// The mark alone at 16 points, with no room around it: for a control
+  /// waiting on something.
+  const BookLoading.small({super.key}) : _small = true;
+
+  final bool _small;
 
   @override
-  Widget build(BuildContext context) => Center(
-    child: Padding(
-      padding: const EdgeInsets.all(NamoSpace.xl),
-      child: SizedBox.square(
-        dimension: 24,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: NamoPalette.of(context).sage,
-        ),
+  Widget build(BuildContext context) {
+    final mark = SizedBox.square(
+      dimension: _small ? 16 : 24,
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: NamoPalette.of(context).sage,
       ),
-    ),
-  );
+    );
+    return Center(
+      child: _small
+          ? mark
+          : Padding(padding: const EdgeInsets.all(NamoSpace.xl), child: mark),
+    );
+  }
 }
 
 /// A book failed to load: a plain message and a way to try again.

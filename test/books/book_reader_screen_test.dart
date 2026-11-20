@@ -57,7 +57,8 @@ Future<void> _open(
     location,
     size: size,
     deviceTextScale: deviceTextScale,
-    settings: settings,
+    // These are the Scroll mode's tests; Pages mode has its own.
+    settings: settings.copyWith(bookReadingMode: BookReadingMode.scroll),
     storeExtras: storeExtras,
     books: books == null ? null : fakeAssets(books),
   );
@@ -568,6 +569,7 @@ void main() {
       t,
       Routes.bookReader(tinyBookNestedId, 2),
       size: _tall,
+      settings: const AppSettings(bookReadingMode: BookReadingMode.scroll),
       books: load,
     );
     expect(find.text('The book could not be opened.'), findsOneWidget);

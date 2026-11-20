@@ -105,24 +105,37 @@ class ChapterStream extends ChangeNotifier {
 
   /// The page after [current]; null at the book's end or while it is not
   /// cut yet.
-  ScreenPage? get peekNext {
-    if (!_located) return null;
-    final c = _chapters[_n]!;
-    if (_index + 1 < c.pages.length) return c.pages[_index + 1];
-    if (!c.done) return null;
-    final next = book.nextReading(_n);
-    final pages = next == null ? null : _chapters[next]?.pages;
-    return pages == null || pages.isEmpty ? null : pages.first;
-  }
+  ScreenPage? get peekNext => _peekNext?.$2;
+
+  /// The chapter [peekNext] belongs to (the next reading page's after the
+  /// current chapter's last page); null when [peekNext] is.
+  int? get peekNextChapter => _peekNext?.$1;
 
   /// The page before [current]; null at the book's start or while it is not
   /// cut yet (a previous chapter's last page needs the whole chapter).
-  ScreenPage? get peekPrevious {
+  ScreenPage? get peekPrevious => _peekPrevious?.$2;
+
+  /// The chapter [peekPrevious] belongs to; null when [peekPrevious] is.
+  int? get peekPreviousChapter => _peekPrevious?.$1;
+
+  (int, ScreenPage)? get _peekNext {
     if (!_located) return null;
-    if (_index > 0) return _chapters[_n]!.pages[_index - 1];
+    final c = _chapters[_n]!;
+    if (_index + 1 < c.pages.length) return (_n, c.pages[_index + 1]);
+    if (!c.done) return null;
+    final next = book.nextReading(_n);
+    final pages = next == null ? null : _chapters[next]?.pages;
+    return pages == null || pages.isEmpty ? null : (next!, pages.first);
+  }
+
+  (int, ScreenPage)? get _peekPrevious {
+    if (!_located) return null;
+    if (_index > 0) return (_n, _chapters[_n]!.pages[_index - 1]);
     final previous = book.previousReading(_n);
     final c = previous == null ? null : _chapters[previous];
-    return c == null || !c.done || c.pages.isEmpty ? null : c.pages.last;
+    return c == null || !c.done || c.pages.isEmpty
+        ? null
+        : (previous!, c.pages.last);
   }
 
   /// True while a turn was refused only because the page is still being cut.

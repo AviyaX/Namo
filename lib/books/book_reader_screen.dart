@@ -16,20 +16,21 @@ import '../router.dart';
 import '../settings/settings.dart';
 import 'book_blocks.dart';
 import 'book_model.dart';
+import 'book_pages_view.dart';
 import 'book_places.dart';
 import 'book_widgets.dart';
 import 'books_repository.dart';
 
-/// The place is saved once the page has been still this long.
-const _saveDelay = Duration(milliseconds: 400);
-
-/// One page of a book, full screen: its title and text in one column, the
-/// way back and the reading settings above, the previous and next reading
-/// pages and the count below.
+/// One page of a book, full screen, the way back and the reading settings
+/// above. Read in Pages mode it is a [BookPagesView]: the text on pages
+/// turned like paper, carrying on into the next reading pages while this
+/// screen stays (the address follows). In Scroll mode it is the page's
+/// title and text in one column, with the previous and next reading pages
+/// and the count below.
 ///
-/// The place (the page and how far down it) is noted on opening and once
-/// scrolling stops, and a page opened again at its saved place returns
-/// there. A page without text, or a number past the end, goes on to the
+/// In Scroll mode the place (the page and how far down it) is noted on
+/// opening and once scrolling stops, and a page opened again at its saved
+/// place returns there. A page without text, or a number past the end, goes on to the
 /// nearest reading page.
 class BookReaderScreen extends ConsumerStatefulWidget {
   const BookReaderScreen({super.key, required this.id, required this.n});
@@ -45,8 +46,12 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   final _scroll = ScrollController();
   late final BookPlacesController _places;
 
-  /// The book the steps below were worked out for, and the page's key.
+  final _pagesKey = GlobalKey<BookPagesViewState>();
+
+  /// The book and page the steps below were worked out for, and the page's
+  /// key.
   Book? _book;
+  int? _stepsN;
   String? _key;
   int _index = 0, _total = 0;
   int? _previous, _next;
@@ -68,6 +73,14 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   void initState() {
     super.initState();
     _places = ref.read(bookPlacesProvider.notifier);
+  }
+
+  @override
+  void didUpdateWidget(BookReaderScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // In Pages mode the screen stays while the pages move on (or another
+    // page is asked for): the new page is checked afresh.
+    if (oldWidget.n != widget.n) _opened = false;
   }
 
   @override
@@ -96,7 +109,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     _offset = _scroll.offset;
     _dirty = true;
     _saveTimer?.cancel();
-    _saveTimer = Timer(_saveDelay, _save);
+    _saveTimer = Timer(bookPlaceSaveDelay, _save);
     return false;
   }
 
@@ -134,6 +147,8 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   }
 
   void _backToBeginning() {
+    final pages = _pagesKey.currentState;
+    if (pages != null) return pages.backToBeginning();
     if (_scroll.hasClients) _scroll.jumpTo(0);
   }
 
@@ -144,6 +159,12 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     _save();
     _leaving = true;
     context.go(location);
+  }
+
+  /// Back from the top bar or the system: the pages save their place first.
+  void _backPressed() {
+    final pages = _pagesKey.currentState;
+    pages == null ? _back() : pages.back();
   }
 
   void _back() {
@@ -164,8 +185,9 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   }
 
   void _stepsFor(Book book) {
-    if (identical(book, _book)) return;
+    if (identical(book, _book) && _stepsN == widget.n) return;
     _book = book;
+    _stepsN = widget.n;
     _key = book.page(widget.n)?.key;
     _index = book.readingIndexOf(widget.n);
     _total = book.readingPages.length;
@@ -187,6 +209,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
 
     Widget body;
     Widget? bar;
+    var opened = false;
     if (book != null) {
       final page = book.page(widget.n);
       if (page == null || !page.hasText) {
@@ -204,12 +227,23 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
           });
         }
         body = const BookLoading();
+      } else if (ref.watch(settingsProvider.select((s) => s.bookReadingMode)) ==
+          BookReadingMode.pages) {
+        opened = true;
+        body = BookPagesView(
+          key: _pagesKey,
+          book: book,
+          n: widget.n,
+          onChapter: (n) => context.go(Routes.bookReader(widget.id, n)),
+          onBack: _back,
+        );
       } else {
         _stepsFor(book);
         if (!_opened) {
           _opened = true;
           SchedulerBinding.instance.addPostFrameCallback((_) => _openPlace());
         }
+        opened = true;
         body = _page(context, page);
         bar = _bottomBar(context);
       }
@@ -224,7 +258,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) _back();
+        if (!didPop) _backPressed();
       },
       child: Scaffold(
         backgroundColor: p.background,
@@ -233,8 +267,8 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
           children: [
             _TopBar(
               title: title,
-              onBack: _back,
-              onSettings: bar == null
+              onBack: _backPressed,
+              onSettings: !opened
                   ? null
                   : () => showReaderSettingsSheet(
                       context,
