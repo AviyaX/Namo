@@ -78,6 +78,47 @@ void main() {
     expect(c.read(settingsProvider).bookReadingMode, BookReadingMode.scroll);
   });
 
+  testWidgets('the book sheet shows Paper: Cream / Dark under Pages / Scroll',
+      (t) async {
+    final c = await _openSheet(t, bookMode: true);
+    expect(find.text('Paper'), findsOneWidget);
+    final paper = find.byKey(const ValueKey('book-paper'));
+    final cream = find.descendant(of: paper, matching: find.text('Cream'));
+    final dark = find.descendant(of: paper, matching: find.text('Dark'));
+    expect(cream, findsOneWidget);
+    expect(dark, findsOneWidget);
+    expect(
+      t.getTopLeft(find.byKey(const ValueKey('book-paper'))).dy,
+      greaterThan(
+          t.getTopLeft(find.byKey(const ValueKey('book-reading-mode'))).dy),
+    );
+    await t.tap(dark);
+    await t.pumpAndSettle();
+    expect(c.read(settingsProvider).bookPaper, BookPaper.dark);
+  });
+
+  testWidgets('the Tripitaka sheet has no Paper chooser', (t) async {
+    await _openSheet(t, bookMode: false);
+    expect(find.text('Paper'), findsNothing);
+    expect(find.byKey(const ValueKey('book-paper')), findsNothing);
+  });
+
+  test('bookColours gives the cream tokens for cream in both palettes', () {
+    for (final p in [NamoPalette.dark, NamoPalette.light]) {
+      final c = bookColours(p, BookPaper.cream);
+      expect(c.paper, const Color(0xFFF7EFDC));
+      expect(c.ink, const Color(0xFF2A2A22));
+      expect(c.inkSoft, const Color(0xFF8A7A55));
+      expect(c.cover, const Color(0xFF5B3A22));
+      expect(c.rule, const Color(0xFFD2B26C));
+      final d = bookColours(p, BookPaper.dark);
+      expect(d.paper, NamoPalette.dark.surface);
+      expect(d.ink, NamoPalette.dark.text);
+      expect(d.cover, const Color(0xFF3A2616));
+      expect(d.rule, const Color(0x99D2B26C));
+    }
+  });
+
   testWidgets('the Tripitaka sheet has no Pages / Scroll', (t) async {
     await _openSheet(t, bookMode: false);
     expect(find.text('Pages'), findsNothing);

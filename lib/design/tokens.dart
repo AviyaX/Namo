@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../settings/settings.dart';
+
 abstract final class NamoSizes {
   static const readingColumn = 680.0;
   static const wideBreakpoint = 840.0;
@@ -73,6 +75,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     required this.shadow,
     required this.error,
     required this.onError,
+    required this.bookPaper,
+    required this.bookInk,
+    required this.bookInkSoft,
+    required this.bookCover,
+    required this.bookRule,
+    required this.bookPaperDark,
+    required this.bookInkDark,
+    required this.bookCoverDark,
+    required this.bookRuleDark,
   });
 
   final Color background;
@@ -92,6 +103,30 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   final Color error;
   final Color onError;
 
+  /// A book's cream paper, its ink, soft ink (page numbers), cover and the
+  /// gold rule. The same in both app themes: a book is the same book.
+  final Color bookPaper;
+  final Color bookInk;
+  final Color bookInkSoft;
+  final Color bookCover;
+  final Color bookRule;
+
+  /// The same, for a book printed on dark paper.
+  final Color bookPaperDark;
+  final Color bookInkDark;
+  final Color bookCoverDark;
+  final Color bookRuleDark;
+
+  static const _bookPaper = Color(0xFFF7EFDC);
+  static const _bookInk = Color(0xFF2A2A22);
+  static const _bookInkSoft = Color(0xFF8A7A55);
+  static const _bookCover = Color(0xFF5B3A22);
+  static const _bookRule = Color(0xFFD2B26C);
+  static const _bookPaperDark = Color(0xFF1A241C);
+  static const _bookInkDark = Color(0xFFEFE9DA);
+  static const _bookCoverDark = Color(0xFF3A2616);
+  static const _bookRuleDark = Color(0x99D2B26C);
+
   static const dark = NamoPalette(
     background: Color(0xFF0E1410),
     backgroundAlt: Color(0xFF141C16),
@@ -107,6 +142,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     shadow: Color(0x4D000000),
     error: Color(0xFFE08A7C),
     onError: Color(0xFF151714),
+    bookPaper: _bookPaper,
+    bookInk: _bookInk,
+    bookInkSoft: _bookInkSoft,
+    bookCover: _bookCover,
+    bookRule: _bookRule,
+    bookPaperDark: _bookPaperDark,
+    bookInkDark: _bookInkDark,
+    bookCoverDark: _bookCoverDark,
+    bookRuleDark: _bookRuleDark,
   );
 
   static const light = NamoPalette(
@@ -124,6 +168,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     shadow: Color(0x1F22251F),
     error: Color(0xFF9B3B2F),
     onError: Color(0xFFFDFBF6),
+    bookPaper: _bookPaper,
+    bookInk: _bookInk,
+    bookInkSoft: _bookInkSoft,
+    bookCover: _bookCover,
+    bookRule: _bookRule,
+    bookPaperDark: _bookPaperDark,
+    bookInkDark: _bookInkDark,
+    bookCoverDark: _bookCoverDark,
+    bookRuleDark: _bookRuleDark,
   );
 
   /// Text drawn over a picture, and the scrim colour it sits on.
@@ -169,6 +222,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     Color? shadow,
     Color? error,
     Color? onError,
+    Color? bookPaper,
+    Color? bookInk,
+    Color? bookInkSoft,
+    Color? bookCover,
+    Color? bookRule,
+    Color? bookPaperDark,
+    Color? bookInkDark,
+    Color? bookCoverDark,
+    Color? bookRuleDark,
   }) =>
       NamoPalette(
         background: background ?? this.background,
@@ -185,6 +247,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
         shadow: shadow ?? this.shadow,
         error: error ?? this.error,
         onError: onError ?? this.onError,
+        bookPaper: bookPaper ?? this.bookPaper,
+        bookInk: bookInk ?? this.bookInk,
+        bookInkSoft: bookInkSoft ?? this.bookInkSoft,
+        bookCover: bookCover ?? this.bookCover,
+        bookRule: bookRule ?? this.bookRule,
+        bookPaperDark: bookPaperDark ?? this.bookPaperDark,
+        bookInkDark: bookInkDark ?? this.bookInkDark,
+        bookCoverDark: bookCoverDark ?? this.bookCoverDark,
+        bookRuleDark: bookRuleDark ?? this.bookRuleDark,
       );
 
   @override
@@ -206,6 +277,38 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
       shadow: mix(shadow, other.shadow),
       error: mix(error, other.error),
       onError: mix(onError, other.onError),
+      bookPaper: mix(bookPaper, other.bookPaper),
+      bookInk: mix(bookInk, other.bookInk),
+      bookInkSoft: mix(bookInkSoft, other.bookInkSoft),
+      bookCover: mix(bookCover, other.bookCover),
+      bookRule: mix(bookRule, other.bookRule),
+      bookPaperDark: mix(bookPaperDark, other.bookPaperDark),
+      bookInkDark: mix(bookInkDark, other.bookInkDark),
+      bookCoverDark: mix(bookCoverDark, other.bookCoverDark),
+      bookRuleDark: mix(bookRuleDark, other.bookRuleDark),
     );
   }
 }
+
+/// The colours a book page is drawn with on the chosen paper. Soft ink on dark
+/// paper is the dark palette's secondary text, so it reads in either theme.
+({Color paper, Color ink, Color inkSoft, Color cover, Color rule}) bookColours(
+  NamoPalette p,
+  BookPaper paper,
+) =>
+    switch (paper) {
+      BookPaper.cream => (
+          paper: p.bookPaper,
+          ink: p.bookInk,
+          inkSoft: p.bookInkSoft,
+          cover: p.bookCover,
+          rule: p.bookRule,
+        ),
+      BookPaper.dark => (
+          paper: p.bookPaperDark,
+          ink: p.bookInkDark,
+          inkSoft: NamoPalette.dark.textSecondary,
+          cover: p.bookCoverDark,
+          rule: p.bookRuleDark,
+        ),
+    };

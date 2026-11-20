@@ -177,6 +177,27 @@ class BookReadingModeChooser extends ConsumerWidget {
   }
 }
 
+/// The paper a book is printed on: cream, or dark.
+class BookPaperChooser extends ConsumerWidget {
+  const BookPaperChooser({super.key = const ValueKey('book-paper')});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paper = ref.watch(settingsProvider.select((s) => s.bookPaper));
+    return Padding(
+      padding: _chooserPadding,
+      child: SegmentedSelector<BookPaper>(
+        semanticLabel: 'Paper',
+        segments: [
+          for (final p in BookPaper.values) Segment(p, p.label),
+        ],
+        selected: {paper},
+        onPressed: ref.read(settingsProvider.notifier).setBookPaper,
+      ),
+    );
+  }
+}
+
 /// When recordings download by themselves: on Wi-Fi, on any connection, never.
 class AutoDownloadChooser extends ConsumerWidget {
   const AutoDownloadChooser({super.key});

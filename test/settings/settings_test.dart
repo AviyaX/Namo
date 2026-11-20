@@ -16,6 +16,19 @@ ProviderContainer containerOn(KeyValueStore store) {
 }
 
 void main() {
+  test('bookPaper defaults to cream and round-trips', () {
+    expect(const AppSettings().bookPaper, BookPaper.cream);
+    final s = const AppSettings().copyWith(bookPaper: BookPaper.dark);
+    expect(AppSettings.fromJson(s.toJson()).bookPaper, BookPaper.dark);
+    expect(AppSettings.fromJson({'bookPaper': 'sepia'}).bookPaper,
+        BookPaper.cream);
+    expect(AppSettings.fromJson(<String, dynamic>{}).bookPaper,
+        BookPaper.cream);
+    expect(s.toJson()['bookPaper'], 'dark');
+    expect(BookPaper.cream.label, 'Cream');
+    expect(BookPaper.dark.label, 'Dark');
+  });
+
   test('bookReadingMode defaults to pages and round-trips', () {
     expect(const AppSettings().bookReadingMode, BookReadingMode.pages);
     final s =

@@ -19,6 +19,16 @@ enum BookReadingMode {
   final String label;
 }
 
+/// The paper a book's pages are printed on: warm cream, or dark like the app.
+enum BookPaper {
+  cream('Cream'),
+  dark('Dark');
+
+  const BookPaper(this.label);
+
+  final String label;
+}
+
 enum LayoutOutcome { changed, refusedPair }
 
 class AppSettings {
@@ -33,6 +43,7 @@ class AppSettings {
     this.autoDownload = AutoDownload.wifiOnly,
     this.themeMode = ThemeMode.dark,
     this.bookReadingMode = BookReadingMode.pages,
+    this.bookPaper = BookPaper.cream,
   });
 
   static const fontScaleRange = (min: 0.85, max: 1.6);
@@ -70,6 +81,7 @@ class AppSettings {
   final AutoDownload autoDownload;
   final ThemeMode themeMode;
   final BookReadingMode bookReadingMode;
+  final BookPaper bookPaper;
 
   /// The layout to draw: side by side only holds for Pali and Sinhala, so
   /// for any other pair the saved choice is kept but verse by verse is shown.
@@ -89,6 +101,7 @@ class AppSettings {
     AutoDownload? autoDownload,
     ThemeMode? themeMode,
     BookReadingMode? bookReadingMode,
+    BookPaper? bookPaper,
   }) =>
       AppSettings(
         languages: languages ?? this.languages,
@@ -101,6 +114,7 @@ class AppSettings {
         autoDownload: autoDownload ?? this.autoDownload,
         themeMode: themeMode ?? this.themeMode,
         bookReadingMode: bookReadingMode ?? this.bookReadingMode,
+        bookPaper: bookPaper ?? this.bookPaper,
       );
 
   Map<String, dynamic> toJson() => {
@@ -114,6 +128,7 @@ class AppSettings {
         'autoDownload': autoDownload.name,
         'themeMode': themeMode.name,
         'bookReadingMode': bookReadingMode.name,
+        'bookPaper': bookPaper.name,
       };
 
   /// Each field is read alone: a missing, wrongly typed or out-of-range value
@@ -145,6 +160,8 @@ class AppSettings {
       bookReadingMode: BookReadingMode.values
               .asNameMap()[json['bookReadingMode']] ??
           d.bookReadingMode,
+      bookPaper:
+          BookPaper.values.asNameMap()[json['bookPaper']] ?? d.bookPaper,
     );
   }
 }
@@ -209,6 +226,7 @@ class SettingsController extends Notifier<AppSettings> {
   void setThemeMode(ThemeMode v) => _set(state.copyWith(themeMode: v));
   void setBookReadingMode(BookReadingMode v) =>
       _set(state.copyWith(bookReadingMode: v));
+  void setBookPaper(BookPaper v) => _set(state.copyWith(bookPaper: v));
 }
 
 final settingsProvider =

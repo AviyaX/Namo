@@ -110,6 +110,9 @@ class ReaderSettingsSheet extends ConsumerWidget {
                     const SettingLabel('Reading'),
                     const BookReadingModeChooser(),
                     gap,
+                    const SettingLabel('Paper'),
+                    const BookPaperChooser(),
+                    gap,
                   ],
                   SliderSetting.textSize(
                     sliderKey: const ValueKey('reader-text-size'),
