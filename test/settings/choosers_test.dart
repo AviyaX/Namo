@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/design/theme.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
+import 'package:buddhist_gatha/reader/reader_settings_sheet.dart';
 import 'package:buddhist_gatha/settings/auto_download.dart';
 import 'package:buddhist_gatha/settings/choosers.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
@@ -42,7 +43,47 @@ Future<(ProviderContainer, InMemoryKeyValueStore)> _pump(
 
 Finder _tapLabel(String l) => find.text(l);
 
+Future<ProviderContainer> _openSheet(WidgetTester t, {required bool bookMode}) async {
+  final (c, _) = await _pump(
+    t,
+    Builder(
+      builder: (context) => TextButton(
+        onPressed: () => showReaderSettingsSheet(
+          context,
+          onBackToBeginning: () {},
+          textOnly: true,
+          bookMode: bookMode,
+        ),
+        child: const Text('open'),
+      ),
+    ),
+  );
+  await t.tap(find.text('open'));
+  await t.pumpAndSettle();
+  return c;
+}
+
 void main() {
+  testWidgets('the book reader sheet shows Pages / Scroll above text size',
+      (t) async {
+    final c = await _openSheet(t, bookMode: true);
+    expect(find.text('Pages'), findsOneWidget);
+    expect(find.text('Scroll'), findsOneWidget);
+    expect(
+      t.getTopLeft(find.byKey(const ValueKey('book-reading-mode'))).dy,
+      lessThan(t.getTopLeft(find.byKey(const ValueKey('reader-text-size'))).dy),
+    );
+    await t.tap(find.text('Scroll'));
+    await t.pumpAndSettle();
+    expect(c.read(settingsProvider).bookReadingMode, BookReadingMode.scroll);
+  });
+
+  testWidgets('the Tripitaka sheet has no Pages / Scroll', (t) async {
+    await _openSheet(t, bookMode: false);
+    expect(find.text('Pages'), findsNothing);
+    expect(find.byKey(const ValueKey('book-reading-mode')), findsNothing);
+  });
+
   group('LanguageChooser', () {
     testWidgets('a third language is refused with the message', (t) async {
       final (c, _) = await _pump(t, const LanguageChooser());

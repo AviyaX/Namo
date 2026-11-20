@@ -18,6 +18,7 @@ Future<void> showReaderSettingsSheet(
   required VoidCallback onBackToBeginning,
   LayoutChooserKind layoutChooser = LayoutChooserKind.full,
   bool textOnly = false,
+  bool bookMode = false,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
@@ -37,6 +38,7 @@ Future<void> showReaderSettingsSheet(
     onBackToBeginning: onBackToBeginning,
     layoutChooser: layoutChooser,
     textOnly: textOnly,
+    bookMode: bookMode,
   ),
 );
 
@@ -48,6 +50,7 @@ class ReaderSettingsSheet extends ConsumerWidget {
     required this.onBackToBeginning,
     this.layoutChooser = LayoutChooserKind.full,
     this.textOnly = false,
+    this.bookMode = false,
   });
 
   /// Which layout choice to show: none (an introduction), the full three, or
@@ -58,6 +61,9 @@ class ReaderSettingsSheet extends ConsumerWidget {
   /// Tripitaka): only text size, line spacing, theme and 'Back to the
   /// beginning'.
   final bool textOnly;
+
+  /// True in the book reader: adds the Pages / Scroll choice above text size.
+  final bool bookMode;
 
   /// Called after the sheet closes for 'Back to the beginning'.
   final VoidCallback onBackToBeginning;
@@ -98,6 +104,11 @@ class ReaderSettingsSheet extends ConsumerWidget {
                   if (layoutChooser != LayoutChooserKind.hidden && !textOnly) ...[
                     const SettingLabel('When two languages show'),
                     LayoutChooser(pirith: layoutChooser == LayoutChooserKind.pirith),
+                    gap,
+                  ],
+                  if (bookMode) ...[
+                    const SettingLabel('Reading'),
+                    const BookReadingModeChooser(),
                     gap,
                   ],
                   SliderSetting.textSize(

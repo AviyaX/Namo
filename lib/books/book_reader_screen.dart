@@ -240,6 +240,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
                       context,
                       onBackToBeginning: _backToBeginning,
                       textOnly: true,
+                      bookMode: true,
                     ),
             ),
             Expanded(child: body),

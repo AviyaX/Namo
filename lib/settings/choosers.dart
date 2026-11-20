@@ -156,6 +156,27 @@ class ThemeChooser extends ConsumerWidget {
   }
 }
 
+/// Turn a book's pages, or scroll it as one long page.
+class BookReadingModeChooser extends ConsumerWidget {
+  const BookReadingModeChooser({super.key = const ValueKey('book-reading-mode')});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(settingsProvider.select((s) => s.bookReadingMode));
+    return Padding(
+      padding: _chooserPadding,
+      child: SegmentedSelector<BookReadingMode>(
+        semanticLabel: 'Reading',
+        segments: [
+          for (final m in BookReadingMode.values) Segment(m, m.label),
+        ],
+        selected: {mode},
+        onPressed: ref.read(settingsProvider.notifier).setBookReadingMode,
+      ),
+    );
+  }
+}
+
 /// When recordings download by themselves: on Wi-Fi, on any connection, never.
 class AutoDownloadChooser extends ConsumerWidget {
   const AutoDownloadChooser({super.key});

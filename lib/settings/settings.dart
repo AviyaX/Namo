@@ -9,6 +9,16 @@ import 'reading_language.dart';
 
 const settingsKey = 'namo.settings.v1';
 
+/// How a book reads: turning pages, or one long scroll.
+enum BookReadingMode {
+  pages('Pages'),
+  scroll('Scroll');
+
+  const BookReadingMode(this.label);
+
+  final String label;
+}
+
 enum LayoutOutcome { changed, refusedPair }
 
 class AppSettings {
@@ -22,6 +32,7 @@ class AppSettings {
     this.chantSpeed = 1.0,
     this.autoDownload = AutoDownload.wifiOnly,
     this.themeMode = ThemeMode.dark,
+    this.bookReadingMode = BookReadingMode.pages,
   });
 
   static const fontScaleRange = (min: 0.85, max: 1.6);
@@ -58,6 +69,7 @@ class AppSettings {
   final double chantSpeed;
   final AutoDownload autoDownload;
   final ThemeMode themeMode;
+  final BookReadingMode bookReadingMode;
 
   /// The layout to draw: side by side only holds for Pali and Sinhala, so
   /// for any other pair the saved choice is kept but verse by verse is shown.
@@ -76,6 +88,7 @@ class AppSettings {
     double? chantSpeed,
     AutoDownload? autoDownload,
     ThemeMode? themeMode,
+    BookReadingMode? bookReadingMode,
   }) =>
       AppSettings(
         languages: languages ?? this.languages,
@@ -87,6 +100,7 @@ class AppSettings {
         chantSpeed: chantSpeed ?? this.chantSpeed,
         autoDownload: autoDownload ?? this.autoDownload,
         themeMode: themeMode ?? this.themeMode,
+        bookReadingMode: bookReadingMode ?? this.bookReadingMode,
       );
 
   Map<String, dynamic> toJson() => {
@@ -99,6 +113,7 @@ class AppSettings {
         'chantSpeed': chantSpeed,
         'autoDownload': autoDownload.name,
         'themeMode': themeMode.name,
+        'bookReadingMode': bookReadingMode.name,
       };
 
   /// Each field is read alone: a missing, wrongly typed or out-of-range value
@@ -127,6 +142,9 @@ class AppSettings {
           d.autoDownload,
       themeMode:
           ThemeMode.values.asNameMap()[json['themeMode']] ?? d.themeMode,
+      bookReadingMode: BookReadingMode.values
+              .asNameMap()[json['bookReadingMode']] ??
+          d.bookReadingMode,
     );
   }
 }
@@ -189,6 +207,8 @@ class SettingsController extends Notifier<AppSettings> {
       _set(state.copyWith(autoDownload: v));
 
   void setThemeMode(ThemeMode v) => _set(state.copyWith(themeMode: v));
+  void setBookReadingMode(BookReadingMode v) =>
+      _set(state.copyWith(bookReadingMode: v));
 }
 
 final settingsProvider =

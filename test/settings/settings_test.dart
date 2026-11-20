@@ -16,6 +16,18 @@ ProviderContainer containerOn(KeyValueStore store) {
 }
 
 void main() {
+  test('bookReadingMode defaults to pages and round-trips', () {
+    expect(const AppSettings().bookReadingMode, BookReadingMode.pages);
+    final s =
+        const AppSettings().copyWith(bookReadingMode: BookReadingMode.scroll);
+    expect(AppSettings.fromJson(s.toJson()).bookReadingMode,
+        BookReadingMode.scroll);
+    expect(AppSettings.fromJson({'bookReadingMode': 'sideways'}).bookReadingMode,
+        BookReadingMode.pages);
+    expect(BookReadingMode.pages.label, 'Pages');
+    expect(BookReadingMode.scroll.label, 'Scroll');
+  });
+
   test('defaults', () {
     final s = containerOn(InMemoryKeyValueStore()).read(settingsProvider);
     expect(s.languages.languages,
