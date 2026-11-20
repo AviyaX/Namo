@@ -347,6 +347,47 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('a place below a picture reopens at its exact offset', (t) async {
+    // A square picture over the long page: measured as 4:3 (before its
+    // size is read) it would be a quarter of the width too short.
+    final books = _changed((pages) {
+      final blocks = pages[5]['blocks'] as List;
+      blocks.insert(0, {
+        'kind': 'image',
+        'src': 'https://example.invalid/square.png',
+        'alt': 'A square picture',
+        'asset': tinyBookCover,
+      });
+      for (var i = 0; i < 40; i++) {
+        blocks.add({'kind': 'para', 'text': 'Long paragraph $i.'});
+      }
+    });
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 6),
+      size: _small,
+      books: books,
+    );
+    await t.drag(find.text('Two one text.'), const Offset(0, -600));
+    await t.pumpAndSettle();
+    await t.pump(const Duration(milliseconds: 500));
+    final offset = _position(t).pixels;
+    expect(offset, greaterThan(0));
+    final saved = _storedPlaces(t)!;
+    expect((jsonDecode(saved)[tinyBookNestedId] as Map)['spot'], isNotNull);
+
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 6),
+      size: _small,
+      books: books,
+      storeExtras: {bookPlacesKey: saved},
+    );
+    expect(_position(t).pixels, offset);
+    expect(_storedPlaces(t), saved);
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('a saved place is found by its key when the numbers moved', (
     t,
   ) async {

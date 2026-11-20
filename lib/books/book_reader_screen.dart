@@ -69,9 +69,10 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   Timer? _saveTimer;
 
   /// The scroll column last drawn (the page, its styles and width) and the
-  /// pictures' sizes, to find the line at an offset and the other way.
+  /// pictures' sizes (null until they are read), to find the line at an
+  /// offset and the other way.
   (BookPage, BookTextStyles, double)? _column;
-  Map<String, Size> _sizes = const {};
+  Map<String, Size>? _sizes;
 
   /// Set once this page has been left. It may stay on screen for its exit
   /// transition, still moving, but its place is no longer the person's: the
@@ -137,15 +138,16 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   }
 
   /// The first line at or below [offset] in the scroll column; null before
-  /// it is drawn.
+  /// it is drawn or the pictures' sizes are read (it would be measured
+  /// with every picture taken as 4:3).
   BookSpot? _spotAt(double offset) {
     final column = _column;
-    if (column == null) return null;
+    if (column == null || _sizes == null) return null;
     final (page, styles, width) = column;
     return spotAtOffset(page, styles, width, offset, imageSize: _imageSize);
   }
 
-  Size? _imageSize(String asset) => _sizes[asset];
+  Size? _imageSize(String asset) => _sizes?[asset];
 
   /// The page has loaded: notes it as the place, or returns to the saved
   /// place when it is this page (found by its key first). The saved line is
@@ -305,10 +307,12 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
       } else {
         _stepsFor(book);
         // Read so the column is measured with each picture as tall as it
-        // is drawn.
-        _sizes =
-            ref.watch(bookPictureSizesProvider(widget.id)).value ?? const {};
-        if (!_opened) {
+        // is drawn; the place is gone back to once they are.
+        final sizes = ref.watch(bookPictureSizesProvider(widget.id));
+        _sizes = sizes.hasValue || sizes.hasError
+            ? sizes.value ?? const {}
+            : null;
+        if (!_opened && _sizes != null) {
           _opened = true;
           SchedulerBinding.instance.addPostFrameCallback((_) => _openPlace());
         }
