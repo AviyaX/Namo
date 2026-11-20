@@ -85,10 +85,17 @@ class BlockSlice extends PageSlice {
 
 /// Some lines of a paragraph ([item] 0), a list item or a footnote (the
 /// [item]th), or of a heading or subhead taller than a page ([item] 0):
-/// the text `charStart` to `charEnd`, drawn in the block's own style at
-/// the same width. A list item or footnote keeps its lead; its label is
-/// drawn when [charStart] is 0. The footnotes' rule is drawn over the first
-/// footnote's first slice.
+/// the text `charStart` to `charEnd`, drawn at the same width in the
+/// block's own style: prose for a paragraph or list item, caption for a
+/// footnote, and the heading's or subhead's style (as `BookBlockView` draws
+/// them) for a slice of a heading or subhead block. A list item or footnote
+/// keeps its lead; its label is drawn when [charStart] is 0. The footnotes'
+/// rule is drawn over the first footnote's first slice.
+///
+/// A hard line break (`\n`) that falls at a cut belongs to neither slice:
+/// the cut is the break, and drawn at the end of a slice it would add an
+/// empty line. Joining a block's slices with a `\n` at such cuts gives back
+/// its text exactly.
 class LinesSlice extends PageSlice {
   const LinesSlice(
     this.block,
@@ -277,6 +284,18 @@ class _Cutter {
 
   bool get _empty => _slices.isEmpty;
 
+  /// The page so far holds only the title, headings or subheads: what
+  /// follows must start here, or they would end the page alone.
+  bool get _onlyHeadings =>
+      !_empty &&
+      _slices.every(
+        (s) =>
+            s is TitleSlice ||
+            s is BlockSlice &&
+                (page.blocks[s.block] is BookHeading ||
+                    page.blocks[s.block] is BookSubhead),
+      );
+
   double _gap(int block) => _gapBefore(_slices.lastOrNull, block);
 
   /// The height left for a slice of [block].
@@ -334,7 +353,10 @@ class _Cutter {
         return _placeTable(b, metrics, room);
       case ImageMetrics(:final height):
         var scale = 1.0;
-        if (height > box.height) {
+        if (_onlyHeadings && height > room && room > 0) {
+          // Moved on, the headings above would end this page alone.
+          scale = room / height;
+        } else if (height > box.height) {
           if (!_empty) return false;
           scale = box.height / height;
         } else if (height > room && !_empty) {
@@ -469,7 +491,9 @@ class _Cutter {
         );
         return _nextBlock();
       }
-      if (metrics.height <= box.height) return false;
+      // Fits a page: moves to the next whole, unless only headings are
+      // above it here (then it starts under them, broken).
+      if (metrics.height <= box.height && !_onlyHeadings) return false;
     }
     // Taller than a page: broken between its lines, 2 or more at the foot
     // of a page.
@@ -503,7 +527,9 @@ class _Cutter {
         _addRows(b, metrics, 0, rows, false);
         return _nextBlock();
       }
-      if (metrics.height <= box.height) return false;
+      // Fits a page: moves to the next whole, unless only headings are
+      // above it here (then it starts under them, broken).
+      if (metrics.height <= box.height && !_onlyHeadings) return false;
     }
     // Taller than a page: broken between rows, the header row repeated on
     // each later page, and never a header alone at the foot of a page.

@@ -507,6 +507,90 @@ void main() {
     expect(image.top, 0, reason: 'on a page of its own');
   });
 
+  test('a heading over a picture taller than the page stays with it', () {
+    const picture = BookImage(
+      src: 'https://example.invalid/tall.png',
+      alt: 'A tall picture',
+      asset: 'assets/branding/namo_icon_square.png',
+    );
+    for (final blocks in [
+      [BookPara(_words(1, 40)), const BookHeading('A heading'), picture],
+      [const BookHeading('A heading'), picture],
+      [
+        BookPara(_words(1, 40)),
+        const BookHeading('A heading'),
+        const BookSubhead('A subhead'),
+        picture,
+      ],
+    ]) {
+      final page = _chapter(blocks);
+      final pages = paginate(
+        page,
+        _styles(),
+        _box,
+        imageSize: (_) => const Size(100, 400),
+      ).toList();
+      for (final p in pages) {
+        expect(
+          p.slices.every(
+            (s) =>
+                s is TitleSlice ||
+                page.blocks[s.block] is BookHeading ||
+                page.blocks[s.block] is BookSubhead,
+          ),
+          isFalse,
+          reason: 'a page of only headings: ${p.slices}',
+        );
+        final last = p.slices.last;
+        expect(last.top + last.height, lessThanOrEqualTo(_box.height + 0.01));
+      }
+      final image = pages.last.slices.last as ImageSlice;
+      expect(image.scale, lessThan(1));
+    }
+  });
+
+  test('a heading over a verse or table that fits only a fresh page stays '
+      'with it', () {
+    // Sizes around a page's height, so some fit a fresh page but not under
+    // the heading.
+    for (final follower in <BookBlock>[
+      for (var n = 16; n <= 24; n++)
+        BookGatha([for (var i = 0; i < n; i++) 'Verse line $i']),
+      for (var n = 10; n <= 16; n++)
+        BookTable(
+          header: true,
+          rows: [
+            ['Name', 'Count'],
+            for (var r = 1; r < n; r++) ['Row $r', '$r'],
+          ],
+        ),
+    ]) {
+      final page = _chapter([
+        BookPara(_words(2, 30)),
+        const BookHeading('A heading'),
+        follower,
+      ]);
+      final pages = paginate(page, _styles(), _box).toList();
+      for (final p in pages.take(pages.length - 1)) {
+        final last = p.slices.last;
+        expect(
+          last is BlockSlice && page.blocks[last.block] is BookHeading,
+          isFalse,
+          reason: '$follower: ${p.slices}',
+        );
+      }
+      for (final p in pages) {
+        expect(
+          p.slices.every(
+            (s) => s is TitleSlice || page.blocks[s.block] is BookHeading,
+          ),
+          isFalse,
+          reason: '$follower: a page of only headings',
+        );
+      }
+    }
+  });
+
   test('a picture that fits is drawn at full size', () {
     final page = _chapter([
       const BookImage(
