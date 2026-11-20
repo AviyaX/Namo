@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
+import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../books/books_support.dart';
 import '../support/fake_recording_store.dart';
 import '../tipitaka/tipitaka_app_support.dart';
+import '../tipitaka/tipitaka_support.dart';
 import 'quality_support.dart';
 
 const _sizes = [Size(320, 568), Size(390, 844), Size(1280, 800)];
@@ -786,4 +788,56 @@ void main() {
       }
     }
   }
+
+  // The books read page by page, at the app's largest text on the smallest
+  // phone: every page of both made-up books (the long list, footnotes and
+  // table included), turned through with the Next page arrow.
+  final pageNext = find.byKey(const ValueKey('book-page-next'));
+  for (final dark in [false, true]) {
+    for (final id in [tinyBookFlatId, tinyBookNestedId]) {
+      testWidgets(
+        'Book reader in Pages mode, every page of $id, does not overflow: '
+        '320x568, text 1.6, ${dark ? 'dark' : 'light'}',
+        (t) async {
+          await openReal(
+            t,
+            Routes.bookReader(id, 1),
+            size: const Size(320, 568),
+            dark: dark,
+            settings: const AppSettings(fontScale: 1.6),
+            books: fakeAssets(tinyBooksWithLongBlocks()),
+          );
+          await t.pumpAndSettle();
+          expect(t.takeException(), isNull);
+          var turns = 0;
+          while (t.widget<NamoIconButton>(pageNext).onPressed != null) {
+            await t.tap(pageNext);
+            await t.pumpAndSettle();
+            expect(t.takeException(), isNull, reason: 'after turn $turns');
+            expect(++turns, lessThan(200));
+          }
+          // Turned through to the book's last page.
+          expect(turns, greaterThan(0));
+        },
+      );
+    }
+  }
+
+  testWidgets('every tap target in Pages mode is at least 48 x 48', (t) async {
+    await openReal(
+      t,
+      Routes.bookReader(tinyBookNestedId, 8),
+      size: const Size(320, 568),
+      settings: const AppSettings(fontScale: 1.6),
+      books: fakeAssets(tinyBooksWithLongBlocks()),
+    );
+    await t.pumpAndSettle();
+    await expectLater(t, meetsGuideline(androidTapTargetGuideline));
+    for (final key in ['book-page-prev', 'book-page-next']) {
+      final size = t.getSize(find.byKey(ValueKey(key)));
+      expect(size.width, greaterThanOrEqualTo(48), reason: key);
+      expect(size.height, greaterThanOrEqualTo(48), reason: key);
+    }
+    expect(t.takeException(), isNull);
+  });
 }

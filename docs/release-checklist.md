@@ -41,6 +41,7 @@
   - [ ] Continue reading restores the place after closing the app and opening it again.
   - [ ] The covers look right in dark and in light.
   - [ ] Confirm the Books wording on the Sources page.
+  - [ ] Page flipping: on a phone, turn pages by dragging the corner, by tapping the edges and with the arrows; cross into the next and previous chapter; change text size mid-chapter; switch Pages/Scroll — the passage stays.
 - [ ] Reader improvements, owner checks on a phone:
   - [ ] Open a pirith: press Scroll with no sound, then Chant; the captions "Scroll" and "Chant" read right.
   - [ ] Change the speed while chanting (1× → 1.25× → 1.5× → 0.75×); the highlight stays in step.

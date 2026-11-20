@@ -212,8 +212,8 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
   }
 
   /// Where chapter [n] opens: the saved spot when the place is in it (a
-  /// place saved by the scroll view is found from its offset), else null
-  /// (its first page).
+  /// place saved before spots were is found from its scroll offset), else
+  /// null (its first page).
   BookSpot? _openingSpot(int n, BookTextStyles styles, double screen) {
     final book = widget.book;
     final place = ref.read(bookPlacesProvider).of(book.id);

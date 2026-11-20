@@ -615,4 +615,34 @@ void main() {
       inInclusiveRange(1, pages.length - 1),
     );
   });
+
+  test('offsetOfSpot is the inverse of spotAtOffset', () {
+    final s = _styles(fontScale: 1.6);
+    final page = _chapter([..._withHeadings(), ..._thirtyParagraphs()]);
+    expect(offsetOfSpot(page, s, _box.width, BookSpot.title), 0);
+    var previous = 0.0;
+    for (var offset = 0.0; offset < 20000; offset += 61) {
+      final spot = spotAtOffset(page, s, _box.width, offset);
+      final back = offsetOfSpot(page, s, _box.width, spot);
+      // The line holding the spot is at or below the offset it was found
+      // at, and is found again there.
+      if (spot != BookSpot.title) expect(back, greaterThanOrEqualTo(offset));
+      expect(spotAtOffset(page, s, _box.width, back), spot);
+      expect(back, greaterThanOrEqualTo(previous));
+      previous = back;
+    }
+    // A spot within a line is that line's; past the end, the last line's.
+    final pages = paginate(page, s, _box).toList();
+    for (final screen in pages.skip(1)) {
+      final at = offsetOfSpot(page, s, _box.width, screen.start);
+      expect(spotAtOffset(page, s, _box.width, at), screen.start);
+      final within = BookSpot(screen.start.block, screen.start.char + 1);
+      expect(offsetOfSpot(page, s, _box.width, within), at);
+    }
+    final end = spotAtOffset(page, s, _box.width, 1e9);
+    expect(
+      offsetOfSpot(page, s, _box.width, const BookSpot(999, 0)),
+      offsetOfSpot(page, s, _box.width, end),
+    );
+  });
 }

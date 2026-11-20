@@ -252,6 +252,34 @@ BookSpot spotAtOffset(
   return last;
 }
 
+/// The scroll offset that brings the line holding [spot] to the top of
+/// [page]'s scroll column [width] wide (laid out as for [spotAtOffset], of
+/// which it is the inverse: the spot at the offset found is that line's).
+/// 0 for the title; the last line's offset for a spot past the end.
+double offsetOfSpot(
+  BookPage page,
+  BookTextStyles styles,
+  double width,
+  BookSpot spot, {
+  Size? Function(String asset)? imageSize,
+}) {
+  if (spot.block < 0 || page.blocks.isEmpty) return 0;
+  final m = BookMeasurer(styles, width, fitTables: false, imageSize: imageSize);
+  var y = scrollTopPadding + m.titleHeight(page.title) + NamoSpace.lg;
+  var line = y;
+  for (var b = 0; b < page.blocks.length; b++) {
+    if (b > 0) y += NamoSpace.md;
+    final metrics = m.measure(page.blocks[b]);
+    for (final (dy, char) in metrics.lineTops) {
+      if (b == spot.block && char > spot.char) return line;
+      line = y + dy;
+    }
+    if (b == spot.block) return line;
+    y += metrics.height;
+  }
+  return line;
+}
+
 /// Cuts pages one after another from a cursor: the block, the part of it
 /// (item, verse line or table row) and the line within that part.
 class _Cutter {

@@ -25,9 +25,13 @@ final _next = find.byKey(const ValueKey('book-next'));
 ProviderContainer _container(WidgetTester t) =>
     ProviderScope.containerOf(t.element(find.byType(MaterialApp)));
 
-String _location(WidgetTester t) => _container(
-  t,
-).read(routerProvider).routeInformationProvider.value.uri.toString();
+String _location(WidgetTester t) =>
+    _container(t)
+        .read(routerProvider)
+        .routeInformationProvider
+        .value
+        .uri
+        .toString();
 
 String? _storedPlaces(WidgetTester t) =>
     _container(t).read(keyValueStoreProvider).read(bookPlacesKey);
@@ -125,7 +129,10 @@ void main() {
       expect(find.text(cell), findsOneWidget, reason: cell);
     }
     expect(find.byType(Table), findsOneWidget);
-    expect(t.widget<Text>(find.text('Name')).style!.fontWeight, FontWeight.w600);
+    expect(
+      t.widget<Text>(find.text('Name')).style!.fontWeight,
+      FontWeight.w600,
+    );
     expect(
       t.widget<Text>(find.text('Apples')).style!.fontWeight,
       isNot(FontWeight.w600),
@@ -288,7 +295,12 @@ void main() {
       books: _longBooks(),
     );
     expect(jsonDecode(_storedPlaces(t)!), {
-      tinyBookNestedId: {'n': 6, 'key': '2-1', 'offset': 0},
+      tinyBookNestedId: {
+        'n': 6,
+        'key': '2-1',
+        'offset': 0,
+        'spot': [-1, 0],
+      },
     });
     await t.drag(find.text('Two one text.'), const Offset(0, -300));
     await t.pumpAndSettle();
@@ -296,8 +308,14 @@ void main() {
     final offset = _position(t).pixels;
     expect(offset, greaterThan(0));
     final saved = _storedPlaces(t)!;
-    expect(jsonDecode(saved), {
-      tinyBookNestedId: {'n': 6, 'key': '2-1', 'offset': offset},
+    // With the first line shown (found from the offset; see
+    // book_mode_switch_test.dart).
+    final place = jsonDecode(saved)[tinyBookNestedId] as Map;
+    expect(place, {
+      'n': 6,
+      'key': '2-1',
+      'offset': offset,
+      'spot': isA<List>().having((s) => s[0], 'block', greaterThanOrEqualTo(0)),
     });
 
     await _open(
@@ -319,7 +337,12 @@ void main() {
     );
     expect(_position(t).pixels, 0);
     expect(jsonDecode(_storedPlaces(t)!), {
-      tinyBookNestedId: {'n': 7, 'key': '2-1-1', 'offset': 0},
+      tinyBookNestedId: {
+        'n': 7,
+        'key': '2-1-1',
+        'offset': 0,
+        'spot': [-1, 0],
+      },
     });
     expect(t.takeException(), isNull);
   });
@@ -361,14 +384,17 @@ void main() {
     );
     expect(_position(t).pixels, 0);
     expect(jsonDecode(_storedPlaces(t)!), {
-      tinyBookNestedId: {'n': 3, 'key': '1-1', 'offset': 0},
+      tinyBookNestedId: {
+        'n': 3,
+        'key': '1-1',
+        'offset': 0,
+        'spot': [-1, 0],
+      },
     });
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('numbers past 9 stay on one line beside their items', (
-    t,
-  ) async {
+  testWidgets('numbers past 9 stay on one line beside their items', (t) async {
     for (final (scale, font) in [(1.0, 1.0), (2.0, 1.6)]) {
       await _open(
         t,
@@ -469,7 +495,8 @@ void main() {
         of: find.byType(Table),
         matching: find.byWidgetPredicate(
           (w) =>
-              w is SingleChildScrollView && w.scrollDirection == Axis.horizontal,
+              w is SingleChildScrollView &&
+              w.scrollDirection == Axis.horizontal,
         ),
       ),
       findsOneWidget,
@@ -513,7 +540,12 @@ void main() {
     await t.pump(const Duration(milliseconds: 500));
     expect(_location(t), '/library/book/tiny-nested/read/7');
     expect(jsonDecode(_storedPlaces(t)!), {
-      tinyBookNestedId: {'n': 7, 'key': '2-1-1', 'offset': 0},
+      tinyBookNestedId: {
+        'n': 7,
+        'key': '2-1-1',
+        'offset': 0,
+        'spot': [-1, 0],
+      },
     });
     expect(t.takeException(), isNull);
   });

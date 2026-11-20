@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,6 +21,7 @@ import 'book_pages_view.dart';
 import 'book_places.dart';
 import 'book_widgets.dart';
 import 'books_repository.dart';
+import 'pagination/book_paginator.dart';
 
 /// One page of a book, full screen, the way back and the reading settings
 /// above. Read in Pages mode it is a [BookPagesView]: the text on pages
@@ -28,10 +30,12 @@ import 'books_repository.dart';
 /// title and text in one column, with the previous and next reading pages
 /// and the count below.
 ///
-/// In Scroll mode the place (the page and how far down it) is noted on
-/// opening and once scrolling stops, and a page opened again at its saved
-/// place returns there. A page without text, or a number past the end, goes on to the
-/// nearest reading page.
+/// In Scroll mode the place (the page, how far down it and the first line
+/// shown) is noted on opening and once scrolling stops, and a page opened
+/// again at its saved place returns there. Switching between Pages and
+/// Scroll keeps the passage: the place is saved as the mode changes, and
+/// the other view opens at it. A page without text, or a number past the
+/// end, goes on to the nearest reading page.
 class BookReaderScreen extends ConsumerStatefulWidget {
   const BookReaderScreen({super.key, required this.id, required this.n});
 
@@ -64,6 +68,11 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   bool _dirty = false;
   Timer? _saveTimer;
 
+  /// The scroll column last drawn (the page, its styles and width) and the
+  /// pictures' sizes, to find the line at an offset and the other way.
+  (BookPage, BookTextStyles, double)? _column;
+  Map<String, Size> _sizes = const {};
+
   /// Set once this page has been left. It may stay on screen for its exit
   /// transition, still moving, but its place is no longer the person's: the
   /// next page's is.
@@ -90,9 +99,9 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     // place is handed over once this frame is done.
     if (_dirty && !_leaving) {
       final places = _places, id = widget.id, n = widget.n, key = _key;
-      final offset = _offset;
+      final offset = _offset, spot = _spotAt(offset);
       SchedulerBinding.instance.addPostFrameCallback(
-        (_) => places.remember(id, n: n, key: key, offset: offset),
+        (_) => places.remember(id, n: n, key: key, offset: offset, spot: spot),
       );
     }
     _scroll.dispose();
@@ -118,19 +127,45 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     _saveTimer = null;
     if (!_dirty) return;
     _dirty = false;
-    _places.remember(widget.id, n: widget.n, key: _key, offset: _offset);
+    _places.remember(
+      widget.id,
+      n: widget.n,
+      key: _key,
+      offset: _offset,
+      spot: _spotAt(_offset),
+    );
   }
 
+  /// The first line at or below [offset] in the scroll column; null before
+  /// it is drawn.
+  BookSpot? _spotAt(double offset) {
+    final column = _column;
+    if (column == null) return null;
+    final (page, styles, width) = column;
+    return spotAtOffset(page, styles, width, offset, imageSize: _imageSize);
+  }
+
+  Size? _imageSize(String asset) => _sizes[asset];
+
   /// The page has loaded: notes it as the place, or returns to the saved
-  /// offset when the place is this page (found by its key first).
+  /// place when it is this page (found by its key first). The saved line is
+  /// gone back to when the saved offset no longer shows it at the top (the
+  /// place was saved by the pages, or at another text size or width).
   void _openPlace() {
     final book = _book;
     if (!mounted || _leaving || book == null) return;
     final place = ref.read(bookPlacesProvider).of(widget.id);
     if (place != null && place.pageIn(book) == widget.n) {
       // Not laid out: the saved offset is kept rather than noted as 0.
-      if (!_scroll.hasClients) return;
-      final to = place.offset.clamp(0.0, _scroll.position.maxScrollExtent);
+      final column = _column;
+      if (!_scroll.hasClients || column == null) return;
+      final spot = place.spot;
+      var to = place.offset;
+      if (spot != null && _spotAt(to) != spot) {
+        final (page, styles, width) = column;
+        to = offsetOfSpot(page, styles, width, spot, imageSize: _imageSize);
+      }
+      to = to.clamp(0.0, _scroll.position.maxScrollExtent);
       _scroll.jumpTo(to);
       _offset = to;
       _dirty = false;
@@ -139,11 +174,35 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
       // Found by its key under another n, or saved before keys were: noted
       // again as it is now.
       if (place.n != widget.n || place.key != _key) {
-        _places.remember(widget.id, n: widget.n, key: _key, offset: to);
+        _places.remember(
+          widget.id,
+          n: widget.n,
+          key: _key,
+          offset: to,
+          spot: spot ?? _spotAt(to),
+        );
       }
     } else {
-      _places.remember(widget.id, n: widget.n, key: _key, offset: 0);
+      _places.remember(
+        widget.id,
+        n: widget.n,
+        key: _key,
+        offset: 0,
+        spot: BookSpot.title,
+      );
     }
+  }
+
+  /// The reading mode is changing: the place is saved now, so the other
+  /// view opens at the passage shown, and Scroll looks for it afresh.
+  void _modeChanged(BookReadingMode? before, BookReadingMode now) {
+    if (before == now) return;
+    if (now == BookReadingMode.pages) {
+      _save();
+    } else {
+      _pagesKey.currentState?.saveNow();
+    }
+    _opened = false;
   }
 
   void _backToBeginning() {
@@ -206,6 +265,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     final loaded = ref.watch(bookProvider(widget.id));
     final book = loaded.value;
     final title = book?.title ?? summary?.title ?? '';
+    ref.listen(settingsProvider.select((s) => s.bookReadingMode), _modeChanged);
 
     Widget body;
     Widget? bar;
@@ -244,6 +304,10 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
         );
       } else {
         _stepsFor(book);
+        // Read so the column is measured with each picture as tall as it
+        // is drawn.
+        _sizes =
+            ref.watch(bookPictureSizesProvider(widget.id)).value ?? const {};
         if (!_opened) {
           _opened = true;
           SchedulerBinding.instance.addPostFrameCallback((_) => _openPlace());
@@ -292,7 +356,13 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
 
   Widget _page(BuildContext context, BookPage page) {
     final styles = BookTextStyles.of(context, ref.watch(settingsProvider));
-    final margin = NamoSizes.pageMargin(MediaQuery.sizeOf(context).width);
+    final screen = MediaQuery.sizeOf(context).width;
+    final margin = NamoSizes.pageMargin(screen);
+    _column = (
+      page,
+      styles,
+      math.min(screen - 2 * margin, NamoSizes.readingColumn),
+    );
     final blocks = [
       for (final b in page.blocks) BookBlockView(block: b, styles: styles),
     ];
