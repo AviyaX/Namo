@@ -42,6 +42,7 @@ class _Host {
                   : null,
               onTurnedForward: () => forward++,
               onTurnedBack: () => back++,
+              flapColour: NamoPalette.light.bookPaper,
             ),
           ),
         ),
@@ -122,6 +123,7 @@ class _ColourBookState extends State<_ColourBook> {
                 previous: _page(page - 1),
                 onTurnedForward: () => setState(() => page++),
                 onTurnedBack: () => setState(() => page--),
+                flapColour: NamoPalette.light.bookPaper,
               ),
             ),
           ),
@@ -144,6 +146,23 @@ Future<Color> _colourAt(WidgetTester t, GlobalKey boundary, Offset at) async {
     return [for (var k = 0; k < 4; k++) data!.getUint8(i + k)];
   }))!;
   return Color.fromARGB(bytes[3], bytes[0], bytes[1], bytes[2]);
+}
+
+/// How many pixels inside [boundary] are clearly blue.
+Future<int> _bluePixels(WidgetTester t, GlobalKey boundary) async {
+  final box =
+      boundary.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+  return (await t.runAsync(() async {
+    final image = await box.toImage();
+    final data = (await image.toByteData())!;
+    image.dispose();
+    var blue = 0;
+    for (var i = 0; i < data.lengthInBytes; i += 4) {
+      final r = data.getUint8(i), b = data.getUint8(i + 2);
+      if (b > r + 100) blue++;
+    }
+    return blue;
+  }))!;
 }
 
 void main() {
@@ -407,5 +426,53 @@ void main() {
       await _colourAt(t, boundary, const Offset(10, 10)),
       _ColourBook.colours[2],
     );
+  });
+
+  testWidgets('the back of a turning page is tinted the flap colour', (
+    t,
+  ) async {
+    final controller = PageCurlController();
+    final boundary = GlobalKey();
+    const white = ColoredBox(color: Color(0xFFFFFFFF));
+    await t.pumpWidget(
+      Theme(
+        data: ThemeData(extensions: const [NamoPalette.light]),
+        child: MediaQuery(
+          data: const MediaQueryData(size: Size(360, 640)),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: RepaintBoundary(
+                key: boundary,
+                child: SizedBox(
+                  width: 360,
+                  height: 640,
+                  child: PageCurl(
+                    controller: controller,
+                    current: white,
+                    next: white,
+                    previous: null,
+                    onTurnedForward: () {},
+                    onTurnedBack: () {},
+                    flapColour: const Color(0xFF0000FF),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(await _bluePixels(t, boundary), 0);
+    final drag = await t.startGesture(const Offset(350, 500));
+    for (var i = 1; i <= 15; i++) {
+      await drag.moveBy(const Offset(-10, -5));
+      await t.pump(const Duration(milliseconds: 40));
+    }
+    expect(find.byKey(_curlPaint), findsOneWidget);
+    expect(await _bluePixels(t, boundary), greaterThan(500));
+    await drag.up();
+    await t.pumpAndSettle();
   });
 }

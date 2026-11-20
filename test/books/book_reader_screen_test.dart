@@ -487,7 +487,9 @@ void main() {
       await _open(
         t,
         Routes.bookReader(tinyBookNestedId, 8),
-        size: const Size(320, 4000),
+        // A phone wide enough for the cell's longest words side by side on
+        // the book's paper at double text.
+        size: const Size(390, 4000),
         deviceTextScale: scale,
         books: tinyBooksWithLongBlocks(),
       );

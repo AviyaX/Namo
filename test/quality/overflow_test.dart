@@ -790,54 +790,94 @@ void main() {
   }
 
   // The books read page by page, at the app's largest text on the smallest
-  // phone: every page of both made-up books (the long list, footnotes and
-  // table included), turned through with the Next page arrow.
+  // phone, on both papers in both themes: every page of both made-up books
+  // (the long list, footnotes and table included), turned through with the
+  // Next page arrow.
   final pageNext = find.byKey(const ValueKey('book-page-next'));
-  for (final dark in [false, true]) {
-    for (final id in [tinyBookFlatId, tinyBookNestedId]) {
-      testWidgets(
-        'Book reader in Pages mode, every page of $id, does not overflow: '
-        '320x568, text 1.6, ${dark ? 'dark' : 'light'}',
-        (t) async {
-          await openReal(
-            t,
-            Routes.bookReader(id, 1),
-            size: const Size(320, 568),
-            dark: dark,
-            settings: const AppSettings(fontScale: 1.6),
-            books: fakeAssets(tinyBooksWithLongBlocks()),
-          );
-          await t.pumpAndSettle();
-          expect(t.takeException(), isNull);
-          var turns = 0;
-          while (t.widget<NamoIconButton>(pageNext).onPressed != null) {
-            await t.tap(pageNext);
+  for (final paper in BookPaper.values) {
+    for (final dark in [false, true]) {
+      for (final id in [tinyBookFlatId, tinyBookNestedId]) {
+        testWidgets(
+          'Book reader in Pages mode, every page of $id, does not overflow: '
+          '320x568, text 1.6, ${paper.name} paper, ${dark ? 'dark' : 'light'}',
+          (t) async {
+            await openReal(
+              t,
+              Routes.bookReader(id, 1),
+              size: const Size(320, 568),
+              dark: dark,
+              settings: AppSettings(fontScale: 1.6, bookPaper: paper),
+              books: fakeAssets(tinyBooksWithLongBlocks()),
+            );
             await t.pumpAndSettle();
-            expect(t.takeException(), isNull, reason: 'after turn $turns');
-            expect(++turns, lessThan(200));
-          }
-          // Turned through to the book's last page.
-          expect(turns, greaterThan(0));
-        },
-      );
+            expect(t.takeException(), isNull);
+            var turns = 0;
+            while (t.widget<NamoIconButton>(pageNext).onPressed != null) {
+              await t.tap(pageNext);
+              await t.pumpAndSettle();
+              expect(t.takeException(), isNull, reason: 'after turn $turns');
+              expect(++turns, lessThan(200));
+            }
+            // Turned through to the book's last page.
+            expect(turns, greaterThan(0));
+          },
+        );
+      }
     }
   }
 
-  testWidgets('every tap target in Pages mode is at least 48 x 48', (t) async {
-    await openReal(
-      t,
-      Routes.bookReader(tinyBookNestedId, 8),
-      size: const Size(320, 568),
-      settings: const AppSettings(fontScale: 1.6),
-      books: fakeAssets(tinyBooksWithLongBlocks()),
-    );
-    await t.pumpAndSettle();
-    await expectLater(t, meetsGuideline(androidTapTargetGuideline));
-    for (final key in ['book-page-prev', 'book-page-next']) {
-      final size = t.getSize(find.byKey(ValueKey(key)));
-      expect(size.width, greaterThanOrEqualTo(48), reason: key);
-      expect(size.height, greaterThanOrEqualTo(48), reason: key);
+  // The books scrolled, likewise: the verse, footnotes, list, table and
+  // picture pages.
+  for (final paper in BookPaper.values) {
+    for (final dark in [false, true]) {
+      for (final n in [3, 4, 7, 8]) {
+        testWidgets(
+          'Book reader in Scroll mode, page $n, does not overflow: '
+          '320x568, text 1.6, ${paper.name} paper, ${dark ? 'dark' : 'light'}',
+          (t) async {
+            await openReal(
+              t,
+              Routes.bookReader(tinyBookNestedId, n),
+              size: const Size(320, 568),
+              dark: dark,
+              settings: AppSettings(
+                fontScale: 1.6,
+                bookPaper: paper,
+                bookReadingMode: BookReadingMode.scroll,
+              ),
+              books: fakeAssets(tinyBooksWithLongBlocks()),
+            );
+            await t.pumpAndSettle();
+            expect(t.takeException(), isNull);
+            await scrollThrough(t);
+          },
+        );
+      }
     }
-    expect(t.takeException(), isNull);
-  });
+  }
+
+  for (final mode in BookReadingMode.values) {
+    testWidgets('every tap target in ${mode.name} mode is at least 48 x 48', (
+      t,
+    ) async {
+      await openReal(
+        t,
+        Routes.bookReader(tinyBookNestedId, 8),
+        size: const Size(320, 568),
+        settings: AppSettings(fontScale: 1.6, bookReadingMode: mode),
+        books: fakeAssets(tinyBooksWithLongBlocks()),
+      );
+      await t.pumpAndSettle();
+      await expectLater(t, meetsGuideline(androidTapTargetGuideline));
+      final keys = mode == BookReadingMode.pages
+          ? ['book-page-prev', 'book-page-next']
+          : ['book-prev', 'book-next'];
+      for (final key in keys) {
+        final size = t.getSize(find.byKey(ValueKey(key)));
+        expect(size.width, greaterThanOrEqualTo(48), reason: key);
+        expect(size.height, greaterThanOrEqualTo(48), reason: key);
+      }
+      expect(t.takeException(), isNull);
+    });
+  }
 }

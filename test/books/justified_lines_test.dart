@@ -187,6 +187,25 @@ void main() {
     expect(_render(t).lineRange, (1, 2));
   });
 
+  testWidgets('glyphs reaching past the sides are not cut off', (t) async {
+    final lines = _measured(text);
+    await t.pumpWidget(_host(_slice(text, lines.starts[1], lines.starts[3])));
+    final height = t.getSize(find.byType(JustifiedLines)).height;
+    // Sideways the clip leaves room for an overhanging glyph; up and down
+    // it is exactly the slice's lines.
+    expect(
+      _render(t),
+      paints..clipRect(
+        rect: Rect.fromLTRB(
+          -justifiedOverhang,
+          0,
+          _width + justifiedOverhang,
+          height,
+        ),
+      ),
+    );
+  });
+
   testWidgets('a slice reads as its own text', (t) async {
     final handle = t.ensureSemantics();
     final lines = _measured(text);

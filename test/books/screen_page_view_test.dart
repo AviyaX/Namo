@@ -53,37 +53,12 @@ void main() {
     ).toList();
     await t.pumpWidget(
       _host(
-        ScreenPageView(
-          chapter: chapter,
-          page: pages.first,
-          styles: _styles(1),
-          sheet: false,
-        ),
+        ScreenPageView(chapter: chapter, page: pages.first, styles: _styles(1)),
       ),
     );
     expect(find.text('A chapter'), findsOneWidget);
     expect(find.text(text), findsOneWidget);
     expect(find.text(_words(2, 8)), findsOneWidget);
-  });
-
-  testWidgets('a sheet page draws on paper', (t) async {
-    final chapter = _chapter([BookPara(_words(1, 8))]);
-    final pages = paginate(
-      chapter,
-      _styles(1),
-      const PageBox(width: 320, height: 600),
-    ).toList();
-    await t.pumpWidget(
-      _host(
-        ScreenPageView(
-          chapter: chapter,
-          page: pages.first,
-          styles: _styles(1),
-          sheet: true,
-        ),
-      ),
-    );
-    expect(find.byType(PageSheet), findsOneWidget);
   });
 
   testWidgets('no overflow at 320 wide with fontScale 1.6', (t) async {
@@ -111,12 +86,7 @@ void main() {
         _host(
           SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
-            child: ScreenPageView(
-              chapter: chapter,
-              page: page,
-              styles: styles,
-              sheet: false,
-            ),
+            child: ScreenPageView(chapter: chapter, page: page, styles: styles),
           ),
           width: 320,
         ),
@@ -137,12 +107,7 @@ void main() {
     ).toList();
     await t.pumpWidget(
       _host(
-        ScreenPageView(
-          chapter: chapter,
-          page: pages.first,
-          styles: _styles(1),
-          sheet: false,
-        ),
+        ScreenPageView(chapter: chapter, page: pages.first, styles: _styles(1)),
       ),
     );
     expect(

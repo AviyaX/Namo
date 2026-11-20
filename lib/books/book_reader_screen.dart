@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -16,6 +15,7 @@ import '../reader/reader_settings_sheet.dart';
 import '../router.dart';
 import '../settings/settings.dart';
 import 'book_blocks.dart';
+import 'book_frame.dart';
 import 'book_model.dart';
 import 'book_pages_view.dart';
 import 'book_places.dart';
@@ -27,8 +27,9 @@ import 'pagination/book_paginator.dart';
 /// above. Read in Pages mode it is a [BookPagesView]: the text on pages
 /// turned like paper, carrying on into the next reading pages while this
 /// screen stays (the address follows). In Scroll mode it is the page's
-/// title and text in one column, with the previous and next reading pages
-/// and the count below.
+/// title and text in one column on the paper of a bound book
+/// ([BookFrame], without the page marks), with the previous and next
+/// reading pages and the count below.
 ///
 /// In Scroll mode the place (the page, how far down it and the first line
 /// shown) is noted on opening and once scrolling stops, and a page opened
@@ -366,47 +367,62 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   }
 
   Widget _page(BuildContext context, BookPage page) {
-    final styles = BookTextStyles.of(context, ref.watch(settingsProvider));
+    final settings = ref.watch(settingsProvider);
+    final styles = BookTextStyles.onPaper(context, settings);
     final screen = MediaQuery.sizeOf(context).width;
     final margin = NamoSizes.pageMargin(screen);
-    _column = (
-      page,
-      styles,
-      math.min(screen - 2 * margin, NamoSizes.readingColumn),
-    );
+    _column = (page, styles, bookScrollTextWidth(screen));
     final blocks = [
       for (final b in page.blocks) BookBlockView(block: b, styles: styles),
     ];
     return SafeArea(
       top: false,
-      child: NotificationListener<ScrollNotification>(
-        onNotification: _onScroll,
-        child: SingleChildScrollView(
-          controller: _scroll,
-          padding: EdgeInsets.fromLTRB(
-            margin,
-            scrollTopPadding,
-            margin,
-            NamoSpace.xxl,
-          ),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: NamoSizes.readingColumn,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Semantics(
-                    header: true,
-                    child: Text(page.title, style: styles.title),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          margin,
+          scrollTopPadding,
+          margin,
+          NamoSpace.sm,
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: NamoSizes.readingColumn,
+            ),
+            // As tall as the space: the page is the book's, however short
+            // its text.
+            child: SizedBox.expand(
+              child: BookFrame(
+                paper: settings.bookPaper,
+                pageMarks: false,
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: _onScroll,
+                  child: SingleChildScrollView(
+                    controller: _scroll,
+                    // The title starts [scrollTopPadding] down, as the place
+                    // is measured.
+                    padding: const EdgeInsets.fromLTRB(
+                      bookPaperPadding,
+                      scrollTopPadding,
+                      bookPaperPadding,
+                      NamoSpace.xxl,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Semantics(
+                          header: true,
+                          child: Text(page.title, style: styles.title),
+                        ),
+                        const SizedBox(height: NamoSpace.lg),
+                        for (var i = 0; i < blocks.length; i++) ...[
+                          if (i > 0) const SizedBox(height: NamoSpace.md),
+                          blocks[i],
+                        ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: NamoSpace.lg),
-                  for (var i = 0; i < blocks.length; i++) ...[
-                    if (i > 0) const SizedBox(height: NamoSpace.md),
-                    blocks[i],
-                  ],
-                ],
+                ),
               ),
             ),
           ),

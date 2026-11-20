@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:buddhist_gatha/books/book_blocks.dart';
+import 'package:buddhist_gatha/books/book_frame.dart';
 import 'package:buddhist_gatha/books/book_model.dart';
 import 'package:buddhist_gatha/books/book_pages_view.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/books/book_reader_screen.dart';
 import 'package:buddhist_gatha/books/books_repository.dart';
 import 'package:buddhist_gatha/books/pagination/book_paginator.dart';
+import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -19,10 +21,10 @@ import '../tipitaka/tipitaka_support.dart';
 import 'books_support.dart';
 
 // The app's largest text on a short phone: "3" (n 8) is three pages, and
-// its scroll column (350 wide) several screens.
+// its scroll column (the text on the book's paper) several screens.
 const _phone = Size(390, 700);
 const _large = AppSettings(fontScale: 1.6);
-const _width = 350.0;
+final _width = bookScrollTextWidth(_phone.width);
 final _next = find.byKey(const ValueKey('book-page-next'));
 final _column = find.byWidgetPredicate(
   (w) => w is SingleChildScrollView && w.scrollDirection == Axis.vertical,
@@ -34,13 +36,16 @@ ProviderContainer _container(WidgetTester t) =>
 BookPage _chapter(WidgetTester t) =>
     _container(t).read(bookProvider(tinyBookNestedId)).value!.page(8)!;
 
-BookTextStyles _styles(WidgetTester t) => BookTextStyles.of(
+BookTextStyles _styles(WidgetTester t) => BookTextStyles.onPaper(
   t.element(find.byType(BookReaderScreen)),
   _container(t).read(settingsProvider),
 );
 
 BookSpot? _pagesSpot(WidgetTester t) =>
     t.state<BookPagesViewState>(find.byType(BookPagesView)).spot;
+
+bool _nextEnabled(WidgetTester t) =>
+    t.widget<NamoIconButton>(_next).onPressed != null;
 
 ScrollController _scroll(WidgetTester t) =>
     t.widget<SingleChildScrollView>(_column).controller!;
@@ -61,11 +66,15 @@ Future<void> _switchTo(WidgetTester t, BookReadingMode mode) async {
   await t.pumpAndSettle();
 }
 
-Future<void> _open(WidgetTester t, BookReadingMode mode) async {
+Future<void> _open(
+  WidgetTester t,
+  BookReadingMode mode, {
+  Size size = _phone,
+}) async {
   await openReal(
     t,
     Routes.bookReader(tinyBookNestedId, 8),
-    size: _phone,
+    size: size,
     settings: _large.copyWith(bookReadingMode: mode),
     books: fakeAssets(tinyBooksWithLongBlocks()),
   );
@@ -81,7 +90,7 @@ void main() {
       t,
     ) async {
       await _open(t, BookReadingMode.scroll);
-      await t.drag(_column, const Offset(0, -900));
+      await t.drag(_column, const Offset(0, -500));
       await t.pumpAndSettle();
       if (waited) await t.pump(const Duration(milliseconds: 500));
       final wanted = _scrollSpot(t);
@@ -146,11 +155,12 @@ void main() {
     "the last page's first line below the column's end: Scroll goes to the "
     'end, and back in Pages the same page shows',
     (t) async {
-      await _open(t, BookReadingMode.pages);
+      // A taller phone: "3" is two pages, and the second starts less than
+      // a screen from the scroll column's end.
+      await _open(t, BookReadingMode.pages, size: const Size(390, 1000));
       await t.tap(_next);
       await t.pumpAndSettle();
-      await t.tap(_next);
-      await t.pumpAndSettle();
+      expect(_nextEnabled(t), isFalse);
       final shown = _pagesSpot(t)!;
       final offset = offsetOfSpot(_chapter(t), _styles(t), _width, shown);
 

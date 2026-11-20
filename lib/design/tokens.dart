@@ -38,6 +38,9 @@ abstract final class NamoRadius {
   static const md = 16.0;
   static const lg = 24.0;
 
+  /// A book's cover.
+  static const cover = 6.0;
+
   /// Cards (SurfaceCard).
   static const card = 20.0;
 
@@ -84,6 +87,10 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     required this.bookInkDark,
     required this.bookCoverDark,
     required this.bookRuleDark,
+    required this.bookFold,
+    required this.bookFoldDark,
+    required this.bookSpine,
+    required this.bookSpineDark,
   });
 
   final Color background;
@@ -117,6 +124,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   final Color bookCoverDark;
   final Color bookRuleDark;
 
+  /// The underside of a page's lifted corner, on cream and on dark paper.
+  final Color bookFold;
+  final Color bookFoldDark;
+
+  /// The shadow of the binding down a page's spine edge, on cream and on
+  /// dark paper (at its darkest; it fades to nothing across the page).
+  final Color bookSpine;
+  final Color bookSpineDark;
+
   static const _bookPaper = Color(0xFFF7EFDC);
   static const _bookInk = Color(0xFF2A2A22);
   static const _bookInkSoft = Color(0xFF8A7A55);
@@ -126,6 +142,10 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   static const _bookInkDark = Color(0xFFEFE9DA);
   static const _bookCoverDark = Color(0xFF3A2616);
   static const _bookRuleDark = Color(0x99D2B26C);
+  static const _bookFold = Color(0xFFE4D3AC);
+  static const _bookFoldDark = Color(0xFF2C3A2E);
+  static const _bookSpine = Color(0x40000000);
+  static const _bookSpineDark = Color(0x80000000);
 
   static const dark = NamoPalette(
     background: Color(0xFF0E1410),
@@ -151,6 +171,10 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     bookInkDark: _bookInkDark,
     bookCoverDark: _bookCoverDark,
     bookRuleDark: _bookRuleDark,
+    bookFold: _bookFold,
+    bookFoldDark: _bookFoldDark,
+    bookSpine: _bookSpine,
+    bookSpineDark: _bookSpineDark,
   );
 
   static const light = NamoPalette(
@@ -177,6 +201,10 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     bookInkDark: _bookInkDark,
     bookCoverDark: _bookCoverDark,
     bookRuleDark: _bookRuleDark,
+    bookFold: _bookFold,
+    bookFoldDark: _bookFoldDark,
+    bookSpine: _bookSpine,
+    bookSpineDark: _bookSpineDark,
   );
 
   /// Text drawn over a picture, and the scrim colour it sits on.
@@ -231,6 +259,10 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     Color? bookInkDark,
     Color? bookCoverDark,
     Color? bookRuleDark,
+    Color? bookFold,
+    Color? bookFoldDark,
+    Color? bookSpine,
+    Color? bookSpineDark,
   }) =>
       NamoPalette(
         background: background ?? this.background,
@@ -256,6 +288,10 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
         bookInkDark: bookInkDark ?? this.bookInkDark,
         bookCoverDark: bookCoverDark ?? this.bookCoverDark,
         bookRuleDark: bookRuleDark ?? this.bookRuleDark,
+        bookFold: bookFold ?? this.bookFold,
+        bookFoldDark: bookFoldDark ?? this.bookFoldDark,
+        bookSpine: bookSpine ?? this.bookSpine,
+        bookSpineDark: bookSpineDark ?? this.bookSpineDark,
       );
 
   @override
@@ -286,13 +322,25 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
       bookInkDark: mix(bookInkDark, other.bookInkDark),
       bookCoverDark: mix(bookCoverDark, other.bookCoverDark),
       bookRuleDark: mix(bookRuleDark, other.bookRuleDark),
+      bookFold: mix(bookFold, other.bookFold),
+      bookFoldDark: mix(bookFoldDark, other.bookFoldDark),
+      bookSpine: mix(bookSpine, other.bookSpine),
+      bookSpineDark: mix(bookSpineDark, other.bookSpineDark),
     );
   }
 }
 
 /// The colours a book page is drawn with on the chosen paper. Soft ink on dark
 /// paper is the dark palette's secondary text, so it reads in either theme.
-({Color paper, Color ink, Color inkSoft, Color cover, Color rule}) bookColours(
+({
+  Color paper,
+  Color ink,
+  Color inkSoft,
+  Color cover,
+  Color rule,
+  Color fold,
+  Color spine,
+}) bookColours(
   NamoPalette p,
   BookPaper paper,
 ) =>
@@ -303,6 +351,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
           inkSoft: p.bookInkSoft,
           cover: p.bookCover,
           rule: p.bookRule,
+          fold: p.bookFold,
+          spine: p.bookSpine,
         ),
       BookPaper.dark => (
           paper: p.bookPaperDark,
@@ -310,5 +360,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
           inkSoft: NamoPalette.dark.textSecondary,
           cover: p.bookCoverDark,
           rule: p.bookRuleDark,
+          fold: p.bookFoldDark,
+          spine: p.bookSpineDark,
         ),
     };

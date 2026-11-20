@@ -18,6 +18,7 @@ import '../design/widgets/buttons.dart';
 import '../design/widgets/floating_bar.dart';
 import '../settings/settings.dart';
 import 'book_blocks.dart';
+import 'book_frame.dart';
 import 'book_model.dart';
 import 'book_places.dart';
 import 'book_widgets.dart';
@@ -25,6 +26,7 @@ import 'books_repository.dart';
 import 'curl/page_curl.dart';
 import 'pagination/book_paginator.dart';
 import 'pagination/chapter_stream.dart';
+import 'pagination/justified_lines.dart';
 import 'pagination/screen_page_view.dart';
 
 /// A book's place is saved once the page has been still this long (in
@@ -75,11 +77,11 @@ class _TurnIntent extends Intent {
   final bool forward;
 }
 
-/// The book read page by page from reading page [n]: the page (a sheet in
-/// the reading column on a wide window, the whole width on a phone) turned
-/// by dragging or tapping its sides, by the arrows below, by the arrow and
-/// Page Up / Page Down keys, or by a screen reader's Next page / Previous
-/// page actions.
+/// The book read page by page from reading page [n]: the page (a page of a
+/// bound book, [BookFrame], centred in the reading column, on the paper
+/// chosen) turned by dragging or tapping its sides, by the arrows below, by
+/// the arrow and Page Up / Page Down keys, or by a screen reader's Next
+/// page / Previous page actions.
 ///
 /// Turning carries on across a chapter's end; [onChapter] is then told the
 /// reading page now shown. The place (the reading page and the first
@@ -109,7 +111,9 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
 
   ChapterStream? _stream;
 
-  /// What the pages were cut for; a change re-cuts them.
+  /// What the pages were cut for (the text's shape, not its colour: a
+  /// change of paper only draws the same pages in another ink); a change
+  /// re-cuts them.
   Object? _cutFor;
   BookTextStyles? _cutStyles;
   PageBox? _cutBox;
@@ -222,14 +226,10 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
     if (spot != null) return spot;
     final page = book.page(n);
     if (page == null) return null;
-    final width = math.min(
-      screen - 2 * NamoSizes.pageMargin(screen),
-      NamoSizes.readingColumn,
-    );
     return spotAtOffset(
       page,
       styles,
-      width,
+      bookScrollTextWidth(screen),
       place.offset,
       imageSize: _imageSize,
     );
@@ -348,9 +348,8 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
     if (sizes.isLoading && !sizes.hasValue) return const BookLoading();
     _sizes = sizes.value ?? const {};
     final settings = ref.watch(settingsProvider);
-    final styles = BookTextStyles.of(context, settings);
+    final styles = BookTextStyles.onPaper(context, settings);
     final screen = MediaQuery.sizeOf(context).width;
-    final sheet = screen >= NamoSizes.wideBreakpoint;
 
     return Shortcuts(
       shortcuts: const {
@@ -385,7 +384,7 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
                       context,
                       area.biggest,
                       styles,
-                      sheet: sheet,
+                      paper: settings.bookPaper,
                       screen: screen,
                     ),
                   ),
@@ -402,12 +401,14 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
   /// Cuts the pages for [box] and [styles] (the first time, or again when
   /// either changed).
   void _cut(PageBox box, BookTextStyles styles, double screen) {
+    TextStyle shape(TextStyle style) =>
+        style.copyWith(color: Colors.transparent);
     final cutFor = (
       box,
-      styles.prose,
-      styles.heading,
-      styles.title,
-      styles.caption,
+      shape(styles.prose),
+      shape(styles.heading),
+      shape(styles.title),
+      shape(styles.caption),
       styles.scaler,
       styles.direction,
     );
@@ -435,11 +436,14 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
     )..addListener(_changed);
   }
 
+  /// The page in its frame, centred in the reading column: the curl turns
+  /// the paper inside the frame's rule, and the pages are cut for the text
+  /// area inside the paper's insets ([bookTextInsets]).
   Widget _pageArea(
     BuildContext context,
     Size area,
     BookTextStyles styles, {
-    required bool sheet,
+    required BookPaper paper,
     required double screen,
   }) {
     final margin = NamoSizes.pageMargin(screen);
@@ -449,50 +453,44 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
     );
     const top = scrollTopPadding, bottom = NamoSpace.sm;
     final height = math.max(0.0, area.height - top - bottom);
-    final box = sheet
-        ? PageBox(
-            width: math.max(0, column - 2 * pageSheetPadding),
-            height: math.max(0, height - 2 * pageSheetPadding),
-          )
-        : PageBox(width: column, height: height);
+    final insets = bookTextInsets(context, pageMarks: true);
+    const edge = 2 * (bookCoverInset + bookRuleWidth);
+    final box = PageBox(
+      width: math.max(0, column - edge - insets.horizontal),
+      height: math.max(0, height - edge - insets.vertical),
+    );
     if (box.width <= 0 || box.height <= 0) return const SizedBox.shrink();
     _cut(box, styles, screen);
     final stream = _stream!;
     final book = widget.book;
+    final colours = bookColours(NamoPalette.of(context), paper);
 
     Widget? page(ScreenPage? page, int? n) {
       final chapter = n == null ? null : book.page(n);
       if (page == null || chapter == null) return null;
       final held = _held;
       final old = held != null && identical(page, held.$1);
-      Widget view = ScreenPageView(
-        chapter: chapter,
-        page: page,
-        styles: old ? held.$2 : styles,
-        sheet: sheet,
-      );
-      if (old) {
-        // Cut for another text size or box: drawn as it was cut, clipped.
-        final inset = sheet ? 2 * pageSheetPadding : 0.0;
-        view = OverflowBox(
-          alignment: Alignment.topCenter,
-          minWidth: held.$3.width + inset,
-          maxWidth: held.$3.width + inset,
-          minHeight: held.$3.height + inset,
-          maxHeight: held.$3.height + inset,
-          child: view,
-        );
-      }
-      // A sheet fills the curl; its shadow is drawn once, under the curl.
-      if (sheet) return ClipRect(child: view);
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(0, top, 0, bottom),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: SizedBox(
-            width: box.width,
-            height: box.height,
-            child: ClipRect(child: view),
+      // A page cut for another text size or box is drawn as it was cut,
+      // clipped to this box.
+      final cut = old ? held.$3 : box;
+      return ColoredBox(
+        color: colours.paper,
+        child: Padding(
+          padding: insets,
+          child: ClipRect(
+            clipper: const _TextClip(),
+            child: OverflowBox(
+              alignment: Alignment.topCenter,
+              minWidth: cut.width,
+              maxWidth: cut.width,
+              minHeight: cut.height,
+              maxHeight: cut.height,
+              child: ScreenPageView(
+                chapter: chapter,
+                page: page,
+                styles: old ? held.$2 : styles,
+              ),
+            ),
           ),
         ),
       );
@@ -513,35 +511,30 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       onTurnedForward: _turnedForward,
       onTurnedBack: _turnedBack,
       controller: _curl,
+      flapColour: colours.paper,
     );
     final canNext = !_atEnd(forward: true);
     final canPrevious = !_atEnd(forward: false);
-    final turnable = Semantics(
-      key: const ValueKey('book-page-area'),
-      container: true,
-      customSemanticsActions: {
-        if (canNext) _nextPage: () => _turn(forward: true),
-        if (canPrevious) _previousPage: () => _turn(forward: false),
-      },
-      child: curl,
-    );
-    if (!sheet) return turnable;
-    final p = NamoPalette.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, top, 0, bottom),
       child: Align(
         alignment: Alignment.topCenter,
         child: SizedBox(
-          key: const ValueKey('book-page-sheet'),
           width: column,
           height: height,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: p.surface,
-              borderRadius: BorderRadius.circular(NamoRadius.sm),
-              boxShadow: p.floatShadow,
+          child: BookFrame(
+            paper: paper,
+            pageMarks: true,
+            pageNumber: stream.index + 1,
+            child: Semantics(
+              key: const ValueKey('book-page-area'),
+              container: true,
+              customSemanticsActions: {
+                if (canNext) _nextPage: () => _turn(forward: true),
+                if (canPrevious) _previousPage: () => _turn(forward: false),
+              },
+              child: curl,
             ),
-            child: turnable,
           ),
         ),
       ),
@@ -602,6 +595,23 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       ),
     );
   }
+}
+
+/// Clips a page's text to its box, but for a glyph reaching a little past
+/// either side ([justifiedOverhang]).
+class _TextClip extends CustomClipper<Rect> {
+  const _TextClip();
+
+  @override
+  Rect getClip(Size size) => Rect.fromLTRB(
+    -justifiedOverhang,
+    0,
+    size.width + justifiedOverhang,
+    size.height,
+  );
+
+  @override
+  bool shouldReclip(_TextClip oldClipper) => false;
 }
 
 /// An arrow that, while its page is still being cut, shows a small progress

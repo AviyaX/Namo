@@ -86,12 +86,7 @@ Future<void> _expectDrawnAsMeasured(
               alignment: Alignment.topLeft,
               child: SizedBox(
                 width: box.width,
-                child: ScreenPageView(
-                  chapter: page,
-                  page: pages[i],
-                  styles: s,
-                  sheet: false,
-                ),
+                child: ScreenPageView(chapter: page, page: pages[i], styles: s),
               ),
             ),
           ),

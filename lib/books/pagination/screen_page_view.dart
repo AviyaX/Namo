@@ -4,57 +4,27 @@ library;
 
 import 'package:flutter/material.dart';
 
-import '../../design/tokens.dart';
 import '../book_blocks.dart';
 import '../book_model.dart';
 import 'book_paginator.dart';
 import 'justified_lines.dart';
 
-/// The space between a sheet's edge and its text.
-const pageSheetPadding = NamoSpace.lg;
-
-/// A page of paper: [NamoPalette.surface] with the app's shadow and soft
-/// corners, its [child] inset by [pageSheetPadding].
-class PageSheet extends StatelessWidget {
-  const PageSheet({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = NamoPalette.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(NamoRadius.sm),
-        boxShadow: p.floatShadow,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(pageSheetPadding),
-        child: child,
-      ),
-    );
-  }
-}
-
 /// The slices of [page] (a screen page of [chapter]) drawn top to bottom
 /// with the paginator's gaps. The text starts at the top of the available
-/// space and is as wide as it, so give it the [PageBox] it was cut for
-/// (inside the sheet's padding when [sheet]). With [sheet] the page is a
-/// [PageSheet]; otherwise it is full-bleed on the background.
+/// space and is as wide as it, so give it the [PageBox] it was cut for. It
+/// draws no background: it lies on the paper its caller gives it (see
+/// `BookFrame`), in [styles]' ink.
 class ScreenPageView extends StatelessWidget {
   const ScreenPageView({
     super.key,
     required this.chapter,
     required this.page,
     required this.styles,
-    required this.sheet,
   });
 
   final BookPage chapter;
   final ScreenPage page;
   final BookTextStyles styles;
-  final bool sheet;
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +41,7 @@ class ScreenPageView extends StatelessWidget {
         ],
       ],
     );
-    return RepaintBoundary(
-      child: sheet
-          ? PageSheet(child: text)
-          : ColoredBox(color: NamoPalette.of(context).background, child: text),
-    );
+    return RepaintBoundary(child: text);
   }
 
   Widget _slice(PageSlice slice) {

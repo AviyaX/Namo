@@ -8,7 +8,14 @@ library;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../design/tokens.dart';
 import 'measure.dart';
+
+/// How far past each side a slice's glyphs may be drawn: a glyph whose
+/// ink reaches a little past its advance (an italic, a Sinhala vowel sign)
+/// at the start or end of a line is not cut off. Above and below, a slice
+/// is clipped exactly to its lines.
+const justifiedOverhang = NamoSpace.xs;
 
 /// The lines of [text] holding the characters [charStart] to [charEnd],
 /// with the text laid out in full, justified, at the width given, in
@@ -165,7 +172,12 @@ class RenderJustifiedLines extends RenderBox {
     _clip.layer = context.pushClipRect(
       needsCompositing,
       offset,
-      Offset.zero & size,
+      Rect.fromLTRB(
+        -justifiedOverhang,
+        0,
+        size.width + justifiedOverhang,
+        size.height,
+      ),
       (context, offset) =>
           _painter.paint(context.canvas, offset + Offset(0, -_top)),
       oldLayer: _clip.layer,

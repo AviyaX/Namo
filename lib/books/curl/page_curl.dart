@@ -43,7 +43,8 @@ class PageCurlController extends ChangeNotifier {
 /// completes and [onTurnedForward] / [onTurnedBack] is called (the caller
 /// then gives new pages); otherwise the page falls back. A tap in the outer
 /// fifth of either side turns too. With reduced motion pages change at
-/// once with no curl.
+/// once with no curl. The back of a turning page is tinted [flapColour]
+/// (the paper's colour).
 ///
 /// [next] and [previous] are kept laid out and painted beneath [current]
 /// (hidden from touch, focus and screen readers) so that each can be
@@ -57,6 +58,7 @@ class PageCurl extends StatefulWidget {
     required this.onTurnedForward,
     required this.onTurnedBack,
     required this.controller,
+    required this.flapColour,
   });
 
   final Widget current;
@@ -65,6 +67,9 @@ class PageCurl extends StatefulWidget {
   final VoidCallback onTurnedForward;
   final VoidCallback onTurnedBack;
   final PageCurlController controller;
+
+  /// The colour of a turning page's back.
+  final Color flapColour;
 
   @override
   State<PageCurl> createState() => _PageCurlState();
@@ -506,6 +511,7 @@ class _PageCurlState extends State<PageCurl>
                       turning: curl.turning,
                       beneath: curl.beneath,
                       palette: palette,
+                      flap: widget.flapColour,
                     ),
                   ),
                 ),
@@ -533,21 +539,23 @@ class _FrontClipper extends CustomClipper<Path> {
 }
 
 /// Paints one frame of the curl: the page beneath, a shadow on it along the
-/// fold, the flat part of the turning page, and its back as a tinted mirror
-/// with a highlight across the bend. Without pictures only the shading and
-/// an untextured back are painted over the clipped live pages.
+/// fold, the flat part of the turning page, and its back as a mirror tinted
+/// [flap], with a highlight across the bend. Without pictures only the
+/// shading and an untextured back are painted over the clipped live pages.
 class _CurlPainter extends CustomPainter {
   _CurlPainter({
     required this.geometry,
     required this.turning,
     required this.beneath,
     required this.palette,
+    required this.flap,
   }) : super(repaint: geometry);
 
   final ValueListenable<CurlGeometry?> geometry;
   final ui.Image? turning;
   final ui.Image? beneath;
   final NamoPalette palette;
+  final Color flap;
 
   static final _picture = Paint()..filterQuality = FilterQuality.low;
 
@@ -607,8 +615,7 @@ class _CurlPainter extends CustomPainter {
       canvas
         ..drawRect(
           page,
-          Paint()
-            ..color = palette.surface.withValues(alpha: pictured ? 0.85 : 1),
+          Paint()..color = flap.withValues(alpha: pictured ? 0.85 : 1),
         )
         ..drawRect(
           page,
@@ -640,5 +647,6 @@ class _CurlPainter extends CustomPainter {
       old.geometry != geometry ||
       old.turning != turning ||
       old.beneath != beneath ||
-      old.palette != palette;
+      old.palette != palette ||
+      old.flap != flap;
 }

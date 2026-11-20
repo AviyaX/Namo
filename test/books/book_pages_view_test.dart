@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:buddhist_gatha/books/book_blocks.dart';
+import 'package:buddhist_gatha/books/book_frame.dart';
 import 'package:buddhist_gatha/books/book_model.dart';
 import 'package:buddhist_gatha/books/book_pages_view.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
@@ -502,9 +503,8 @@ void main() {
     await _open(
       t,
       Routes.bookReader(tinyBookNestedId, 8),
-      settings: const AppSettings(fontScale: 1.2),
+      settings: const AppSettings(fontScale: 1.0),
     );
-    await _tapNext(t);
     await _tapNext(t);
     final before = _view(t).spot!;
     final (_, smallCount) = _shown(t);
@@ -543,23 +543,18 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('a wide window draws the page as a sheet in the reading column', (
-    t,
-  ) async {
+  testWidgets('a wide window draws the book in the reading column', (t) async {
     const size = Size(1280, 900);
     await _open(t, Routes.bookReader(tinyBookNestedId, 8), size: size);
-    final sheet = find.byKey(const ValueKey('book-page-sheet'));
-    expect(sheet, findsOneWidget);
-    expect(t.getSize(sheet).width, NamoSizes.readingColumn);
-    expect(t.getTopLeft(sheet).dx, (size.width - NamoSizes.readingColumn) / 2);
-    expect(find.byType(PageSheet), findsWidgets);
-    // The curl's edges are the sheet's.
-    expect(
-      t.getRect(find.byKey(const ValueKey('book-page-curl'))),
-      t.getRect(sheet),
-    );
-    // A tap in the sheet's outer right fifth turns.
-    final rect = t.getRect(sheet);
+    final cover = find.byKey(const ValueKey('book-cover'));
+    expect(cover, findsOneWidget);
+    expect(t.getSize(cover).width, NamoSizes.readingColumn);
+    expect(t.getTopLeft(cover).dx, (size.width - NamoSizes.readingColumn) / 2);
+    // The curl's edges are the paper's, inside its rule.
+    final paper = t.getRect(find.byKey(const ValueKey('book-paper')));
+    final rect = t.getRect(find.byKey(const ValueKey('book-page-curl')));
+    expect(rect, paper.deflate(bookRuleWidth));
+    // A tap in the page's outer right fifth turns.
     final (_, n) = _shown(t);
     await t.tapAt(Offset(rect.right - 20, rect.center.dy));
     await t.pumpAndSettle();
@@ -584,8 +579,17 @@ void main() {
     );
     final picture = find.byType(BookPicture);
     expect(picture, findsOneWidget);
-    // 350 wide at 1:1, not 4:3.
-    expect(t.getSize(picture), const Size(350, 350));
+    // As wide as the page's text, at 1:1, not 4:3.
+    final width = t
+        .getSize(
+          find.descendant(
+            of: find.byKey(const ValueKey('page-curl-current')),
+            matching: find.byType(ScreenPageView),
+          ),
+        )
+        .width;
+    expect(width, greaterThan(250));
+    expect(t.getSize(picture), Size(width, width));
     expect(t.takeException(), isNull);
   });
 

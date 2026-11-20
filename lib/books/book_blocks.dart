@@ -67,6 +67,26 @@ class BookTextStyles {
         direction: Directionality.of(context),
       );
 
+  /// The styles as [context] draws them for [settings] on a book's page:
+  /// in the ink of the paper chosen ([AppSettings.bookPaper]), whatever the
+  /// app's theme, with the soft ink for captions and footnotes and the
+  /// paper's gold rule for table borders.
+  static BookTextStyles onPaper(BuildContext context, AppSettings settings) {
+    final p = NamoPalette.of(context);
+    final c = bookColours(p, settings.bookPaper);
+    return BookTextStyles.from(
+      palette: p.copyWith(
+        text: c.ink,
+        textSecondary: c.inkSoft,
+        border: c.rule,
+      ),
+      settings: settings,
+      base: DefaultTextStyle.of(context).style,
+      scaler: MediaQuery.textScalerOf(context),
+      direction: Directionality.of(context),
+    );
+  }
+
   /// Paragraphs, verses, list items and table cells.
   final TextStyle prose;
 
