@@ -108,6 +108,19 @@ class BookTextStyles {
   final TextScaler scaler;
   final TextDirection direction;
 
+  /// These styles (their fonts, sizes and spacing: the text's shape) drawn
+  /// in [other]'s colours.
+  BookTextStyles inInkOf(BookTextStyles other) => BookTextStyles(
+    prose: prose.copyWith(color: other.prose.color),
+    strong: strong.copyWith(color: other.strong.color),
+    heading: heading.copyWith(color: other.heading.color),
+    caption: caption.copyWith(color: other.caption.color),
+    title: title.copyWith(color: other.title.color),
+    border: other.border,
+    scaler: scaler,
+    direction: direction,
+  );
+
   /// The style of [table]'s row [r].
   TextStyle tableRow(BookTable table, int r) =>
       table.header && r == 0 ? strong : prose;

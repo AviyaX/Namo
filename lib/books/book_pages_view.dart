@@ -119,8 +119,8 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
   PageBox? _cutBox;
 
   /// The page shown when the pages were last re-cut, with the styles and
-  /// box it was cut for: it stays on screen, drawn as it was cut, until the
-  /// page holding its passage is cut afresh.
+  /// box it was cut for: it stays on screen, drawn as it was cut (in the
+  /// current paper's ink), until the page holding its passage is cut afresh.
   (ScreenPage, BookTextStyles, PageBox)? _held;
 
   /// The way (1 next, -1 previous) an arrow was refused while the page was
@@ -412,7 +412,12 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       styles.scaler,
       styles.direction,
     );
-    if (cutFor == _cutFor) return;
+    // The same shape in another ink: the pages stay as cut, and a page
+    // held from an earlier cut is drawn in the new ink too.
+    if (cutFor == _cutFor) {
+      _cutStyles = styles;
+      return;
+    }
     _cutFor = cutFor;
     final shown = _stream?.current;
     if (shown != null && !identical(shown, _held?.$1)) {
@@ -488,7 +493,7 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
               child: ScreenPageView(
                 chapter: chapter,
                 page: page,
-                styles: old ? held.$2 : styles,
+                styles: old ? held.$2.inInkOf(styles) : styles,
               ),
             ),
           ),

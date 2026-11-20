@@ -196,6 +196,50 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  group('a page held while the text is cut again is drawn in the new ink', () {
+    SettingsController settings(WidgetTester t) =>
+        ProviderScope.containerOf(t.element(find.byType(BookPagesView)))
+            .read(settingsProvider.notifier);
+
+    ScreenPageView shown(WidgetTester t) =>
+        t.widget<ScreenPageView>(_onPage(find.byType(ScreenPageView)));
+
+    testWidgets('paper switched, then the text size', (t) async {
+      await _open(t);
+      await t.tap(_next);
+      await t.pumpAndSettle();
+      final page = shown(t).page;
+      settings(t).setBookPaper(BookPaper.dark);
+      await t.pump();
+      settings(t).setFontScale(1.2);
+      await t.pump();
+      // Still the page as it was cut, held until its passage is cut again.
+      expect(shown(t).page, same(page));
+      final p = _palette(t);
+      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      await t.pumpAndSettle();
+      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      expect(t.takeException(), isNull);
+    });
+
+    testWidgets('paper and text size changed at once', (t) async {
+      await _open(t);
+      await t.tap(_next);
+      await t.pumpAndSettle();
+      final page = shown(t).page;
+      // The page is held with the styles it was cut with: the old ink.
+      settings(t).setFontScale(1.2);
+      settings(t).setBookPaper(BookPaper.dark);
+      await t.pump();
+      expect(shown(t).page, same(page));
+      final p = _palette(t);
+      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      await t.pumpAndSettle();
+      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      expect(t.takeException(), isNull);
+    });
+  });
+
   group('BookFrame', () {
     Widget host(Widget child) => Theme(
       data: ThemeData(extensions: const [NamoPalette.dark]),
