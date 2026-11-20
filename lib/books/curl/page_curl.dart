@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../design/tokens.dart';
 import 'curl_geometry.dart';
@@ -18,7 +19,7 @@ class PageCurlController extends ChangeNotifier {
   _PageCurlState? _state;
 
   /// Whether a page is being turned (dragged or animating).
-  bool get turning => _state?._curl != null;
+  bool get turning => _state?._busy ?? false;
 
   /// Turns to the next page with the curl; completes when the turn has
   /// ended. Does nothing while turning or when there is no next page.
@@ -117,6 +118,11 @@ class _PageCurlState extends State<PageCurl>
 
   Size _size = Size.zero;
   _Curl? _curl;
+
+  /// A turn with no finger is waiting for the pages to be painted.
+  bool _starting = false;
+
+  bool get _busy => _curl != null || _starting;
 
   /// Where the turning corner is held, as the finger given to
   /// [CurlGeometry.forward] or [CurlGeometry.backward].
@@ -231,7 +237,10 @@ class _PageCurlState extends State<PageCurl>
   /// little on the way, as a hand turning a page would lift it.
   Future<void> _move(Offset to, {bool lift = false}) async {
     final from = _held;
-    final share = ((to - from).distance / (2 * _size.width)).clamp(0.35, 1.0);
+    // A forward turn's corner travels from the right edge past the spine
+    // (2 widths), a back turn's held finger across the page (1 width).
+    final range = _curl!.turn == _Turn.forward ? 2 * _size.width : _size.width;
+    final share = ((to - from).distance / range).clamp(0.35, 1.0);
     _animation.duration = _duration * share;
     final curve = lift ? Curves.easeInOut : Curves.easeOut;
     void step() {
@@ -264,9 +273,21 @@ class _PageCurlState extends State<PageCurl>
 
   /// A turn with no finger: arrows, taps and keys.
   Future<void> _turnAlone(_Turn turn) async {
-    if (_curl != null || _target(turn) == null || _size.isEmpty) return;
+    if (_busy || _target(turn) == null || _size.isEmpty) return;
     if (_duration == Duration.zero) {
       turn == _Turn.forward ? widget.onTurnedForward() : widget.onTurnedBack();
+      return;
+    }
+    // The pages may have been given this very frame (a turn straight after
+    // a turn): wait until they are painted, so the pictures are of them and
+    // not of the pages before.
+    _starting = true;
+    widget.controller._changed();
+    await SchedulerBinding.instance.endOfFrame;
+    _starting = false;
+    if (!mounted) return;
+    if (_target(turn) == null || _size.isEmpty) {
+      widget.controller._changed();
       return;
     }
     _begin(turn, top: false, drawn: true);
@@ -290,7 +311,7 @@ class _PageCurlState extends State<PageCurl>
   void _panDown(DragDownDetails d) {
     _dragging = false;
     _dragTurn = null;
-    if (_curl != null) return;
+    if (_busy) return;
     _down = d.localPosition;
     final edge = _edgeWidth(_size.width);
     if (_down.dx >= _size.width - edge && widget.next != null) {
@@ -307,7 +328,7 @@ class _PageCurlState extends State<PageCurl>
     if (!_dragging) {
       final moved = finger - _down;
       if (moved.distance < kTouchSlop) return;
-      if (moved.dy.abs() > moved.dx.abs() || _curl != null) {
+      if (moved.dy.abs() > moved.dx.abs() || _busy) {
         _dragTurn = null;
         return;
       }
