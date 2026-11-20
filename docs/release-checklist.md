@@ -41,7 +41,14 @@
   - [ ] Continue reading restores the place after closing the app and opening it again.
   - [ ] The covers look right in dark and in light.
   - [ ] Confirm the Books wording on the Sources page.
-  - [ ] Page flipping: on a phone, turn pages by dragging the corner, by tapping the edges and with the arrows; cross into the next and previous chapter; change text size mid-chapter; switch Pages/Scroll — the passage stays.
+  - [ ] Page flipping:
+    - [ ] On a phone, turn pages by dragging the corner, by tapping the edges and with the arrows; cross into the next and previous chapter; change text size mid-chapter; switch Pages/Scroll — the passage stays.
+    - [ ] The curl looks right (the page bends, its back and shadow show, pictures are not blank or flashing) and moves smoothly, with no stutter, on a mid-range Android phone and in a web browser.
+    - [ ] On an Android phone with gesture navigation (swipe from the edge to go back): dragging a page from near either side turns the page and does not leave the book; a swipe from the very edge still goes back.
+    - [ ] On an iPhone: drag, tap and arrow turning work, and the curl looks and moves as on Android.
+    - [ ] In a web browser: the Left and Right arrow keys and Page Up / Page Down turn pages.
+    - [ ] With "remove animations" turned on in the phone's accessibility settings, pages change at once with no curl.
+    - [ ] With TalkBack (Android) and VoiceOver (iPhone): the page's "Next page" and "Previous page" actions turn pages, and the new page number is read out.
 - [ ] Reader improvements, owner checks on a phone:
   - [ ] Open a pirith: press Scroll with no sound, then Chant; the captions "Scroll" and "Chant" read right.
   - [ ] Change the speed while chanting (1× → 1.25× → 1.5× → 0.75×); the highlight stays in step.

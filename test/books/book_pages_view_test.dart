@@ -31,6 +31,22 @@ final _next = find.byKey(const ValueKey('book-page-next'));
 final _count = find.byKey(const ValueKey('book-page-count'));
 const _nextPage = CustomSemanticsAction(label: 'Next page');
 
+/// [text] on the page shown (not in the top bar or the pages beneath).
+Finder _onPage(String text) => find.descendant(
+  of: find.byKey(const ValueKey('page-curl-current')),
+  matching: find.text(text),
+);
+
+/// The title in the reader's top bar.
+String _topTitle(WidgetTester t) => t
+    .widget<Text>(
+      find.descendant(
+        of: find.byKey(const ValueKey('book-reader-top-bar')),
+        matching: find.byType(Text),
+      ),
+    )
+    .data!;
+
 ProviderContainer _container(WidgetTester t) =>
     ProviderScope.containerOf(t.element(find.byType(MaterialApp)));
 
@@ -132,7 +148,9 @@ void main() {
     final (i, n) = _shown(t);
     expect(i, 1);
     expect(n, greaterThan(1));
-    expect(find.text(tinyLongBlocksTitle), findsOneWidget);
+    expect(_onPage(tinyLongBlocksTitle), findsOneWidget);
+    // The top bar names the chapter.
+    expect(_topTitle(t), tinyLongBlocksTitle);
     // The chapter before is a page back; the book goes on after.
     expect(_enabled(t, _prev), isTrue);
     expect(_enabled(t, _next), isTrue);
@@ -167,6 +185,7 @@ void main() {
       // "2-1-1" (n 7) is followed by "3" (n 8).
       await _open(t, Routes.bookReader(tinyBookNestedId, 7));
       final screen = t.state(find.byType(BookReaderScreen));
+      expect(_topTitle(t), 'Two one one');
       var (i, n) = _shown(t);
       while (i < n) {
         await _tapNext(t);
@@ -183,11 +202,13 @@ void main() {
       expect(t.state(find.byType(BookReaderScreen)), same(screen));
       expect(_location(t), '/library/book/tiny-nested/read/8');
       expect(_shown(t).$1, 1);
-      expect(find.text(tinyLongBlocksTitle), findsOneWidget);
+      expect(_onPage(tinyLongBlocksTitle), findsOneWidget);
+      expect(_topTitle(t), tinyLongBlocksTitle);
       // And back across into the last page of "2-1-1".
       await t.tap(_prev);
       await t.pumpAndSettle();
       expect(_location(t), '/library/book/tiny-nested/read/7');
+      expect(_topTitle(t), 'Two one one');
       expect(_shown(t), (n, n));
       expect(t.state(find.byType(BookReaderScreen)), same(screen));
       expect(t.takeException(), isNull);
@@ -223,7 +244,8 @@ void main() {
         .go(Routes.bookReader(tinyBookNestedId, 3));
     await t.pumpAndSettle();
     expect(t.state(find.byType(BookReaderScreen)), same(screen));
-    expect(find.text(tinyLongTitle), findsOneWidget);
+    expect(_onPage(tinyLongTitle), findsOneWidget);
+    expect(_topTitle(t), tinyLongTitle);
     expect(_shown(t).$1, 1);
     expect(_view(t).spot, BookSpot.title);
     expect(t.takeException(), isNull);
@@ -316,6 +338,57 @@ void main() {
       await t.pump(const Duration(milliseconds: 20));
     }
     expect(_shown(t), (2, n));
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('two quick Next presses turn two pages', (t) async {
+    await _open(t, Routes.bookReader(tinyBookNestedId, 8));
+    final (_, n) = _shown(t);
+    expect(n, greaterThanOrEqualTo(3));
+    await t.tap(_next);
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 50));
+    // The second press comes while the first page is still turning.
+    expect(find.byKey(const ValueKey('page-curl-paint')), findsOneWidget);
+    await t.tap(_next);
+    await t.pumpAndSettle();
+    expect(_shown(t), (3, n));
+    // A key during a turn is kept as well, the other way too.
+    await t.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 50));
+    expect(find.byKey(const ValueKey('page-curl-paint')), findsOneWidget);
+    await t.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await t.pumpAndSettle();
+    expect(_shown(t), (1, n));
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('a page without text sent on in Pages mode still saves its place '
+      'after switching to Scroll', (t) async {
+    // "2" (n 5) has no text and goes on to "2-1" (n 6), made long.
+    final books = tinyBooksWithLongBlocks();
+    final path = tinyBookFile(tinyBookNestedId);
+    final book = jsonDecode(jsonEncode(books[path])) as Map<String, dynamic>;
+    final blocks = (book['pages'] as List)[5]['blocks'] as List;
+    for (var i = 0; i < 40; i++) {
+      blocks.add({'kind': 'para', 'text': 'Long paragraph $i.'});
+    }
+    books[path] = book.cast<String, Object>();
+    await _open(t, Routes.bookReader(tinyBookNestedId, 5), books: books);
+    expect(_location(t), '/library/book/tiny-nested/read/6');
+    expect(find.byType(BookPagesView), findsOneWidget);
+    _container(t)
+        .read(settingsProvider.notifier)
+        .setBookReadingMode(BookReadingMode.scroll);
+    await t.pumpAndSettle();
+    expect(find.byType(BookPagesView), findsNothing);
+    await t.drag(find.byType(Scrollable).first, const Offset(0, -400));
+    await t.pumpAndSettle();
+    await t.pump(const Duration(milliseconds: 500));
+    final place = _stored(t);
+    expect(place['n'], 6);
+    expect(place['offset'] as num, greaterThan(0));
     expect(t.takeException(), isNull);
   });
 
@@ -513,6 +586,28 @@ void main() {
     expect(picture, findsOneWidget);
     // 350 wide at 1:1, not 4:3.
     expect(t.getSize(picture), const Size(350, 350));
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets("a picture later in the chapter is read before it's reached", (
+    t,
+  ) async {
+    // "2-1-1" (n 7), several pages long, ends with its picture bundled.
+    final books = _longSeven();
+    final path = tinyBookFile(tinyBookNestedId);
+    final book = jsonDecode(jsonEncode(books[path])) as Map<String, dynamic>;
+    final blocks = (book['pages'] as List)[6]['blocks'] as List;
+    (blocks.last as Map)['asset'] = tinyBookCover;
+    books[path] = book.cast<String, Object>();
+    imageCache.clear();
+    await _open(t, Routes.bookReader(tinyBookNestedId, 7), books: books);
+    final (i, n) = _shown(t);
+    expect(i, 1);
+    expect(n, greaterThan(3));
+    // Neither the page shown nor those either side has the picture, yet it
+    // is being read.
+    expect(find.byType(BookPicture), findsNothing);
+    expect(imageCache.pendingImageCount + imageCache.currentSize, 1);
     expect(t.takeException(), isNull);
   });
 

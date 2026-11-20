@@ -158,9 +158,18 @@ class ScreenPageView extends StatelessWidget {
   }
 
   /// The text `charStart` to `charEnd` of a paragraph, heading, subhead,
-  /// list item or footnote, in that block's style.
+  /// list item, footnote or verse line, in that block's style.
   Widget _lines(BookBlock b, int item, int charStart, int charEnd) {
     final s = styles;
+    if (b is BookGatha) {
+      return Padding(
+        padding: const EdgeInsetsDirectional.only(start: gathaIndent),
+        child: Text(
+          b.lines[item].substring(charStart, charEnd),
+          style: s.prose,
+        ),
+      );
+    }
     final whole = switch (b) {
       BookPara(:final text) => (text, s.prose),
       BookHeading(:final text) => (text, s.heading),

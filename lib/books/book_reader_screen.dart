@@ -90,7 +90,12 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     super.didUpdateWidget(oldWidget);
     // In Pages mode the screen stays while the pages move on (or another
     // page is asked for): the new page is checked afresh.
-    if (oldWidget.n != widget.n) _opened = false;
+    // In Pages mode the screen also stays when a page without text is sent
+    // on to the nearest reading page: the new page is not being left.
+    if (oldWidget.n != widget.n) {
+      _opened = false;
+      _leaving = false;
+    }
   }
 
   @override
@@ -266,7 +271,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
     if (index.hasValue && summary == null) return const NotFoundScreen();
     final loaded = ref.watch(bookProvider(widget.id));
     final book = loaded.value;
-    final title = book?.title ?? summary?.title ?? '';
+    var title = book?.title ?? summary?.title ?? '';
     ref.listen(settingsProvider.select((s) => s.bookReadingMode), _modeChanged);
 
     Widget body;
@@ -292,6 +297,8 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
       } else if (ref.watch(settingsProvider.select((s) => s.bookReadingMode)) ==
           BookReadingMode.pages) {
         opened = true;
+        // The chapter being read (it follows the pages across chapters).
+        title = page.title.isEmpty ? title : page.title;
         body = BookPagesView(
           key: _pagesKey,
           book: book,
@@ -378,7 +385,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
           controller: _scroll,
           padding: EdgeInsets.fromLTRB(
             margin,
-            NamoSpace.sm,
+            scrollTopPadding,
             margin,
             NamoSpace.xxl,
           ),
@@ -451,8 +458,9 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   }
 }
 
-/// The reader's quiet top bar: Back, the book's title on one line, and the
-/// reading settings once the page is open.
+/// The reader's quiet top bar: Back, the title on one line (the book's in
+/// Scroll mode, the chapter's in Pages mode), and the reading settings once
+/// the page is open.
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.title, required this.onBack, this.onSettings});
 

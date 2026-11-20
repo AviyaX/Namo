@@ -517,6 +517,39 @@ void main() {
     }
   });
 
+  testWidgets('a verse line taller than a page is broken between the lines '
+      'it wraps to', (t) async {
+    // As in two bundled books: a "verse" of one long line, then a short
+    // verse line after it.
+    const box = PageBox(width: 288, height: 200);
+    final s = _styles(fontScale: 1.6);
+    final long = _words(3, 120);
+    final page = _chapter([
+      BookPara(_words(1, 20)),
+      BookGatha([long, 'A short verse line']),
+      BookPara(_words(2, 20)),
+    ]);
+    final pages = paginate(page, s, box).toList();
+    final parts = [
+      for (final p in pages)
+        for (final slice in p.slices)
+          if (slice.block == 1) slice,
+    ];
+    final lines = parts.whereType<LinesSlice>().toList();
+    expect(lines.length, greaterThan(1));
+    // The long line's text, each character once, in order.
+    expect(lines.first.charStart, 0);
+    for (var i = 1; i < lines.length; i++) {
+      expect(lines[i].charStart, lines[i - 1].charEnd);
+      expect(lines[i].item, 0);
+    }
+    expect(lines.last.charEnd, long.length);
+    // Then the short line, whole.
+    final last = parts.last as GathaSlice;
+    expect((last.fromLine, last.toLine), (1, 2));
+    await _expectDrawnAsMeasured(t, page, pages, s, box);
+  });
+
   test('a heading over a verse or table that fits only a fresh page stays '
       'with it', () {
     // Sizes around a page's height, so some fit a fresh page but not under

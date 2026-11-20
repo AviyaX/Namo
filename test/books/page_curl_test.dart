@@ -15,12 +15,16 @@ class _Host {
   var forward = 0;
   var back = 0;
 
-  Widget build({bool reducedMotion = false}) => Theme(
+  Widget build({
+    bool reducedMotion = false,
+    EdgeInsets gestureInsets = EdgeInsets.zero,
+  }) => Theme(
     data: ThemeData(extensions: const [NamoPalette.light]),
     child: MediaQuery(
       data: MediaQueryData(
         size: const Size(360, 640),
         disableAnimations: reducedMotion,
+        systemGestureInsets: gestureInsets,
       ),
       child: Directionality(
         textDirection: TextDirection.ltr,
@@ -264,13 +268,81 @@ void main() {
     await t.pump(const Duration(milliseconds: 100));
     expect(find.byKey(_curlPaint), findsOneWidget);
     expect(h.forward, 0);
-    // A second call while turning is ignored.
-    await h.controller.turnForward();
     await t.pumpAndSettle();
     expect(done, isTrue);
     expect(h.forward, 1);
     expect(h.controller.turning, isFalse);
   });
+
+  testWidgets('a turn asked for while turning follows it; one waits at most', (
+    t,
+  ) async {
+    final h = _Host();
+    await t.pumpWidget(h.build());
+    var second = false, third = false;
+    h.controller.turnForward();
+    await t.pump(const Duration(milliseconds: 100));
+    h.controller.turnForward().then((_) => second = true);
+    h.controller.turnBack().then((_) => third = true);
+    await t.pumpAndSettle();
+    expect(second, isTrue);
+    expect(third, isTrue, reason: 'one not kept still completes');
+    expect(h.forward, 2);
+    expect(h.back, 0);
+    expect(h.controller.turning, isFalse);
+    // The other way waits too.
+    h.controller.turnForward();
+    await t.pump(const Duration(milliseconds: 100));
+    await t.tapAt(const Offset(20, 300));
+    await t.pumpAndSettle();
+    expect(h.forward, 3);
+    expect(h.back, 1);
+  });
+
+  testWidgets(
+    "with gesture navigation a drag in the system's edge band does nothing; "
+    'the drag zone starts past it',
+    (t) async {
+      const insets = EdgeInsets.symmetric(horizontal: 30);
+      final h = _Host();
+      await t.pumpWidget(h.build(gestureInsets: insets));
+      // Inside the right band and the left band: the system's Back swipe.
+      await _dragWithoutCurl(t, const Offset(350, 500), const Offset(-12, 0));
+      await _dragWithoutCurl(t, const Offset(10, 500), const Offset(12, 0));
+      await t.pumpAndSettle();
+      expect(h.forward + h.back, 0);
+      // Just inside each zone, past the band.
+      await t.timedDragFrom(
+        const Offset(325, 500),
+        const Offset(-250, 0),
+        const Duration(seconds: 1),
+      );
+      await t.pumpAndSettle();
+      expect(h.forward, 1);
+      await t.timedDragFrom(
+        const Offset(35, 500),
+        const Offset(250, 0),
+        const Duration(seconds: 1),
+      );
+      await t.pumpAndSettle();
+      expect(h.back, 1);
+      // The zone is 54 px wide past the band: 30 + 54 = 84 from each side.
+      await t.timedDragFrom(
+        const Offset(80, 500),
+        const Offset(250, 0),
+        const Duration(seconds: 1),
+      );
+      await t.pumpAndSettle();
+      expect(h.back, 2);
+      await _dragWithoutCurl(t, const Offset(90, 500), const Offset(12, 0));
+      await t.pumpAndSettle();
+      expect(h.back, 2);
+      // Taps in the outer fifth still turn, even in the band.
+      await t.tapAt(const Offset(350, 300));
+      await t.pumpAndSettle();
+      expect(h.forward, 2);
+    },
+  );
 
   testWidgets('a tap in the outer fifth turns; in the middle it does not', (
     t,

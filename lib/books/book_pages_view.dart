@@ -238,6 +238,23 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
   Map<String, Size> _sizes = const {};
   Size? _imageSize(String asset) => _sizes[asset];
 
+  /// The chapters whose pictures have been asked to be read.
+  final _precached = <int>{};
+
+  /// Reads the pictures of chapter [n] ahead of time, so that each is ready
+  /// by the time its page is the next or previous one and is photographed
+  /// for a turn (a picture still being read would be blank in the curl).
+  void _precache(int? n) {
+    final chapter = n == null ? null : widget.book.page(n);
+    if (chapter == null || !_precached.add(n!)) return;
+    for (final block in chapter.blocks) {
+      final asset = block is BookImage ? block.asset : null;
+      if (asset == null) continue;
+      // A picture that cannot be read is named on its page instead.
+      precacheImage(AssetImage(asset), context, onError: (_, _) {});
+    }
+  }
+
   // ---- turning ------------------------------------------------------------
 
   void _changed() {
@@ -286,10 +303,15 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
   }
 
   /// Turns with the curl when the page that way is cut; otherwise asks the
-  /// stream, which waits for it (or refuses at the book's end).
+  /// stream, which waits for it (or refuses at the book's end). Asked while
+  /// a page is turning, the curl turns again once that turn ends.
   void _turn({required bool forward}) {
     final stream = _stream;
-    if (stream == null || _curl.turning) return;
+    if (stream == null) return;
+    if (_curl.turning) {
+      forward ? _curl.turnForward() : _curl.turnBack();
+      return;
+    }
     final ready = forward ? stream.peekNext : stream.peekPrevious;
     if (ready != null) {
       forward ? _curl.turnForward() : _curl.turnBack();
@@ -478,6 +500,11 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
 
     final current = page(stream.current, stream.n);
     if (current == null) return const BookLoading();
+    // The chapter and those either side: every page the curl may turn to
+    // next has its pictures read ahead.
+    _precache(stream.n);
+    _precache(book.nextReading(stream.n));
+    _precache(book.previousReading(stream.n));
     final curl = PageCurl(
       key: const ValueKey('book-page-curl'),
       current: current,

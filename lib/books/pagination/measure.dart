@@ -127,7 +127,11 @@ class WholeMetrics extends BlockMetrics {
 
 /// A verse: each of its lines (a line may wrap).
 class GathaMetrics extends BlockMetrics {
-  GathaMetrics(this.lineHeights, this.lineChars);
+  GathaMetrics(this.wrapped, this.lineChars)
+    : lineHeights = [for (final w in wrapped) w.height(0, w.count)];
+
+  /// Each verse line as it wraps.
+  final List<TextLines> wrapped;
   final List<double> lineHeights;
 
   /// The character each verse line starts at, counting the lines before it
@@ -290,7 +294,7 @@ class BookMeasurer {
       ),
       BookSubhead(:final text) => HeadingMetrics(_lines(text, s.strong, width)),
       BookGatha(:final lines) => GathaMetrics([
-        for (final l in lines) _height(l, s.prose, width - gathaIndent),
+        for (final l in lines) _lines(l, s.prose, width - gathaIndent),
       ], runningStarts([for (final l in lines) l.length])),
       final BookList list => _items(
         listLabels(list),

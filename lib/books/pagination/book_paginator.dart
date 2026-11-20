@@ -8,7 +8,8 @@
 ///
 /// The rules: never break mid-line; a paragraph (or item) of 4 or more
 /// lines keeps at least 2 lines on each side of a break; a heading or
-/// subhead never ends a page; a verse stays whole when it fits a page; a
+/// subhead never ends a page; a verse stays whole when it fits a page (a
+/// verse line taller than a page is broken as a paragraph is); a
 /// table or picture that does not fit the rest of the page moves to the
 /// next; a table taller than a page breaks between rows with its header
 /// row repeated; a picture taller than a page is scaled to fit it.
@@ -84,7 +85,8 @@ class BlockSlice extends PageSlice {
 }
 
 /// Some lines of a paragraph ([item] 0), a list item or a footnote (the
-/// [item]th), or of a heading or subhead taller than a page ([item] 0):
+/// [item]th), of a verse line taller than a page (the [item]th, set in as
+/// a verse is), or of a heading or subhead taller than a page ([item] 0):
 /// the text `charStart` to `charEnd`, drawn at the same width in the
 /// block's own style: prose for a paragraph or list item, caption for a
 /// footnote, and the heading's or subhead's style (as `BookBlockView` draws
@@ -509,7 +511,7 @@ class _Cutter {
 
   bool _placeGatha(int b, GathaMetrics metrics, double room) {
     final count = metrics.lineHeights.length;
-    if (_part == 0) {
+    if (_part == 0 && _line == 0) {
       if (metrics.height <= room) {
         _add(
           b,
@@ -527,28 +529,60 @@ class _Cutter {
       if (metrics.height <= box.height && !_onlyHeadings) return false;
     }
     // Taller than a page: broken between its lines, 2 or more at the foot
-    // of a page.
-    final from = _part;
-    var fit = 0;
-    while (from + fit < count && metrics.lines(from, from + fit + 1) <= room) {
-      fit++;
-    }
-    if (fit < count - from && fit < 2 && !_empty) return false;
-    if (fit == 0) fit = 1;
-    final to = from + fit;
-    _add(
-      b,
-      (top) => GathaSlice(
+    // of a page. A verse line taller than a page is itself broken between
+    // the lines it wraps to, as a paragraph is.
+    while (_part < count) {
+      final from = _part;
+      if (_line > 0 || metrics.lineHeights[from] > box.height) {
+        final wrapped = metrics.wrapped[from];
+        final stop = _flow(
+          b,
+          wrapped.count,
+          _line,
+          wrapped.height,
+          (a, z, top, height) => LinesSlice(
+            b,
+            from,
+            wrapped.start(a),
+            wrapped.end(z),
+            spot: BookSpot(b, metrics.lineChars[from] + wrapped.start(a)),
+            top: top,
+            height: height,
+          ),
+        );
+        if (stop < wrapped.count) {
+          _line = stop;
+          return false;
+        }
+        _part++;
+        _line = 0;
+        continue;
+      }
+      final left = _room(b);
+      var fit = 0;
+      while (from + fit < count &&
+          metrics.lines(from, from + fit + 1) <= left) {
+        fit++;
+      }
+      if (fit < count - from && fit < 2 && !_empty) return false;
+      if (fit == 0) fit = 1;
+      final to = from + fit;
+      _add(
         b,
-        from,
-        to,
-        spot: BookSpot(b, metrics.lineChars[from]),
-        top: top,
-        height: metrics.lines(from, to),
-      ),
-    );
-    _part = to;
-    return to == count ? _nextBlock() : false;
+        (top) => GathaSlice(
+          b,
+          from,
+          to,
+          spot: BookSpot(b, metrics.lineChars[from]),
+          top: top,
+          height: metrics.lines(from, to),
+        ),
+      );
+      _part = to;
+      // Only a verse line taller than a page goes on under these.
+      if (to < count && metrics.lineHeights[to] <= box.height) return false;
+    }
+    return _nextBlock();
   }
 
   bool _placeTable(int b, TableMetrics metrics, double room) {

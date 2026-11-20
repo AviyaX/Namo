@@ -2,6 +2,7 @@
 /// finger, and arrows, taps and keys turn with the same curl on their own.
 library;
 
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -22,7 +23,9 @@ class PageCurlController extends ChangeNotifier {
   bool get turning => _state?._busy ?? false;
 
   /// Turns to the next page with the curl; completes when the turn has
-  /// ended. Does nothing while turning or when there is no next page.
+  /// ended. Asked while a page is turning, it waits and turns once that
+  /// turn ends (one turn waits at most; more are not kept). Does nothing
+  /// when there is no next page.
   Future<void> turnForward() => _state?._turnAlone(_Turn.forward) ?? _done;
 
   /// Turns back to the previous page; as [turnForward].
@@ -69,8 +72,8 @@ class PageCurl extends StatefulWidget {
 
 enum _Turn { forward, back }
 
-/// A drag can start a turn this close to a side: 15% of the width, at least
-/// 48 px.
+/// A drag can start a turn this close to a side (measured from where the
+/// system's own edge gestures end): 15% of the width, at least 48 px.
 double _edgeWidth(double width) => math.max(width * 0.15, 48);
 
 /// A turn flung faster than this (logical px/s) its own way completes.
@@ -122,6 +125,9 @@ class _PageCurlState extends State<PageCurl>
   /// A turn with no finger is waiting for the pages to be painted.
   bool _starting = false;
 
+  /// A turn asked for while another was under way, started when it ends.
+  (_Turn, Completer<void>)? _queued;
+
   bool get _busy => _curl != null || _starting;
 
   /// Where the turning corner is held, as the finger given to
@@ -155,6 +161,8 @@ class _PageCurlState extends State<PageCurl>
   @override
   void dispose() {
     if (widget.controller._state == this) widget.controller._state = null;
+    _queued?.$2.complete();
+    _queued = null;
     _animation.dispose();
     _curl?.dispose();
     _geometry.dispose();
@@ -231,6 +239,15 @@ class _PageCurlState extends State<PageCurl>
           ? widget.onTurnedForward()
           : widget.onTurnedBack();
     }
+    _startQueued();
+  }
+
+  /// Starts the turn that was waiting for the last one to end.
+  void _startQueued() {
+    final queued = _queued;
+    if (queued == null) return;
+    _queued = null;
+    queued.$2.complete(_turnAlone(queued.$1));
   }
 
   /// Moves the held corner from where it is to [to]; with [lift] it rises a
@@ -271,9 +288,16 @@ class _PageCurlState extends State<PageCurl>
     };
   }
 
-  /// A turn with no finger: arrows, taps and keys.
+  /// A turn with no finger: arrows, taps and keys. Asked while turning, it
+  /// waits for the turn under way (one at most waits).
   Future<void> _turnAlone(_Turn turn) async {
-    if (_busy || _target(turn) == null || _size.isEmpty) return;
+    if (_busy) {
+      if (_queued != null) return;
+      final queued = (turn, Completer<void>());
+      _queued = queued;
+      return queued.$2.future;
+    }
+    if (_target(turn) == null || _size.isEmpty) return;
     if (_duration == Duration.zero) {
       turn == _Turn.forward ? widget.onTurnedForward() : widget.onTurnedBack();
       return;
@@ -288,6 +312,7 @@ class _PageCurlState extends State<PageCurl>
     if (!mounted) return;
     if (_target(turn) == null || _size.isEmpty) {
       widget.controller._changed();
+      _startQueued();
       return;
     }
     _begin(turn, top: false, drawn: true);
@@ -308,15 +333,33 @@ class _PageCurlState extends State<PageCurl>
     }
   }
 
+  /// How far in from each side of the page the system's own edge gestures
+  /// reach (Android's Back swipe with gesture navigation): a drag starting
+  /// there is the system's, so a page's drag zone starts past it.
+  (double, double) _systemBands() {
+    final insets = MediaQuery.systemGestureInsetsOf(context);
+    if (insets.left <= 0 && insets.right <= 0) return (0, 0);
+    final box = context.findRenderObject();
+    if (box is! RenderBox || !box.hasSize) return (0, 0);
+    final left = box.localToGlobal(Offset.zero).dx;
+    final screen = MediaQuery.sizeOf(context).width;
+    return (
+      math.max(0.0, insets.left - left),
+      math.max(0.0, left + _size.width - (screen - insets.right)),
+    );
+  }
+
   void _panDown(DragDownDetails d) {
     _dragging = false;
     _dragTurn = null;
     if (_busy) return;
     _down = d.localPosition;
     final edge = _edgeWidth(_size.width);
-    if (_down.dx >= _size.width - edge && widget.next != null) {
+    final (left, right) = _systemBands();
+    final x = _down.dx, w = _size.width;
+    if (x >= w - right - edge && x <= w - right && widget.next != null) {
       _dragTurn = _Turn.forward;
-    } else if (_down.dx <= edge && widget.previous != null) {
+    } else if (x >= left && x <= left + edge && widget.previous != null) {
       _dragTurn = _Turn.back;
     }
   }
