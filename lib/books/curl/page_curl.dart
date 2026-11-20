@@ -19,7 +19,8 @@ import 'curl_geometry.dart';
 class PageCurlController extends ChangeNotifier {
   _PageCurlState? _state;
 
-  /// Whether a page is being turned (dragged or animating).
+  /// Whether a page is being turned (dragged or animating) or its corner
+  /// peeled ([peek]): the curl is drawn, or about to be.
   bool get turning => _state?._busy ?? false;
 
   /// Turns to the next page with the curl; completes when the turn has
@@ -30,6 +31,17 @@ class PageCurlController extends ChangeNotifier {
 
   /// Turns back to the previous page; as [turnForward].
   Future<void> turnBack() => _state?._turnAlone(_Turn.back) ?? _done;
+
+  /// Lifts the bottom right corner a little, as a forward turn would, to
+  /// [lift] of the way, and lets it fall back, over [duration] in all; no
+  /// page is turned. Completes when the corner lies flat again. A finger
+  /// put down on the page, or a turn asked for, cuts it short at once.
+  /// Does nothing while a page is turning, when there is no next page, or
+  /// with reduced motion.
+  Future<void> peek({
+    double lift = 0.15,
+    Duration duration = NamoMotion.peel,
+  }) => _state?._peek(lift, duration) ?? _done;
 
   void _changed() => notifyListeners();
 
@@ -132,6 +144,10 @@ class _PageCurlState extends State<PageCurl>
 
   /// A turn asked for while another was under way, started when it ends.
   (_Turn, Completer<void>)? _queued;
+
+  /// The corner is being peeled ([PageCurlController.peek]), or is about
+  /// to be.
+  bool _peeling = false;
 
   bool get _busy => _curl != null || _starting;
 
@@ -296,6 +312,7 @@ class _PageCurlState extends State<PageCurl>
   /// A turn with no finger: arrows, taps and keys. Asked while turning, it
   /// waits for the turn under way (one at most waits).
   Future<void> _turnAlone(_Turn turn) async {
+    _stopPeel();
     if (_busy) {
       if (_queued != null) return;
       final queued = (turn, Completer<void>());
@@ -324,6 +341,67 @@ class _PageCurlState extends State<PageCurl>
     _hold(_rest(turn, completed: false));
     await _move(_rest(turn, completed: true), lift: true);
     _end(completed: true);
+  }
+
+  /// Peels the next page's corner up to [lift] of a turn and back, with no
+  /// turn; see [PageCurlController.peek].
+  Future<void> _peek(double lift, Duration duration) async {
+    if (_busy || widget.next == null || _size.isEmpty) return;
+    if (_duration == Duration.zero) return;
+    _peeling = true;
+    // As a turn with no finger: the pictures are taken once painted.
+    _starting = true;
+    widget.controller._changed();
+    await SchedulerBinding.instance.endOfFrame;
+    // Cut short while waiting: [_stopPeel] has already let go.
+    if (!mounted || !_peeling) return;
+    _starting = false;
+    if (widget.next == null || _size.isEmpty) {
+      _peeling = false;
+      widget.controller._changed();
+      _startQueued();
+      return;
+    }
+    _begin(_Turn.forward, top: false, drawn: true);
+    final curl = _curl;
+    _hold(_rest(_Turn.forward, completed: false));
+    void step() {
+      // A peel cut short leaves nothing more to move.
+      if (!identical(_curl, curl)) return;
+      final t = _animation.value;
+      final p = lift * Curves.easeInOut.transform(t < 0.5 ? 2 * t : 2 - 2 * t);
+      final w = _size.width, h = _size.height;
+      // The corner rises a little as it lifts, as a thumb lifts a page.
+      _hold(Offset(w * (1 - p), h * (1 - p * 0.25)));
+    }
+
+    _animation
+      ..duration = duration
+      ..addListener(step);
+    try {
+      await _animation.forward(from: 0).orCancel;
+    } on TickerCanceled {
+      // Cut short, or disposed.
+    } finally {
+      _animation.removeListener(step);
+    }
+    if (!identical(_curl, curl)) return;
+    _peeling = false;
+    _end(completed: false);
+  }
+
+  /// Ends a peel at once, the corner flat again, before a finger or a turn
+  /// takes the page.
+  void _stopPeel() {
+    if (!_peeling) return;
+    _peeling = false;
+    if (_starting) {
+      _starting = false;
+      widget.controller._changed();
+      return;
+    }
+    _animation.stop();
+    _end(completed: false);
   }
 
   // --- Gestures ------------------------------------------------------------
@@ -489,33 +567,38 @@ class _PageCurlState extends State<PageCurl>
           onPanUpdate: _panUpdate,
           onPanEnd: _panEnd,
           onPanCancel: _panCancel,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // The page turning back comes over the current one.
-              if (back) ...[
-                ?next,
-                current,
-                ?previous,
-              ] else ...[
-                ?previous,
-                ?next,
-                current,
-              ],
-              if (drawn)
-                IgnorePointer(
-                  child: CustomPaint(
-                    key: const ValueKey('page-curl-paint'),
-                    painter: _CurlPainter(
-                      geometry: _geometry,
-                      turning: curl.turning,
-                      beneath: curl.beneath,
-                      palette: palette,
-                      flap: widget.flapColour,
+          // Under the gesture detector, so a finger ends a peel before the
+          // drag it may start is looked at.
+          child: Listener(
+            onPointerDown: (_) => _stopPeel(),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // The page turning back comes over the current one.
+                if (back) ...[
+                  ?next,
+                  current,
+                  ?previous,
+                ] else ...[
+                  ?previous,
+                  ?next,
+                  current,
+                ],
+                if (drawn)
+                  IgnorePointer(
+                    child: CustomPaint(
+                      key: const ValueKey('page-curl-paint'),
+                      painter: _CurlPainter(
+                        geometry: _geometry,
+                        turning: curl.turning,
+                        beneath: curl.beneath,
+                        palette: palette,
+                        flap: widget.flapColour,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },

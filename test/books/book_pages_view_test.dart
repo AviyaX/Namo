@@ -14,6 +14,7 @@ import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -94,6 +95,8 @@ Future<void> _open(
   Map<String, String> storeExtras = const {},
   double deviceTextScale = 1.0,
   Map<String, Object>? books,
+  bool tips = false,
+  bool settle = true,
 }) async {
   await t.pumpWidget(const SizedBox());
   await openReal(
@@ -104,9 +107,39 @@ Future<void> _open(
     settings: settings,
     storeExtras: storeExtras,
     books: fakeAssets(books ?? tinyBooksWithLongBlocks()),
+    tips: tips,
+    settle: settle,
   );
   // The chapters around are cut a few pages a frame.
+  if (settle) await t.pumpAndSettle();
+}
+
+/// Pumps 50 ms frames for three seconds and counts the peels: each time the
+/// curl comes to be painted with no turn asked for. When one starts the
+/// tip is already seen.
+Future<int> _peels(WidgetTester t) async {
+  final paint = find.byKey(const ValueKey('page-curl-paint'));
+  var peels = 0;
+  var showing = false;
+  for (var f = 0; f < 60; f++) {
+    await t.pump(const Duration(milliseconds: 50));
+    final now = paint.evaluate().isNotEmpty;
+    if (now && !showing) {
+      peels++;
+      expect(_container(t).read(tipsProvider).seen, contains(Tip.bookPeel));
+    }
+    showing = now;
+  }
   await t.pumpAndSettle();
+  return peels;
+}
+
+/// Leaves the reader for the book's page and opens chapter "3" again.
+Future<void> _reopen(WidgetTester t) async {
+  final router = _container(t).read(routerProvider);
+  router.go(Routes.book(tinyBookNestedId));
+  await t.pumpAndSettle();
+  router.go(Routes.bookReader(tinyBookNestedId, 8));
 }
 
 /// The long-blocks books with forty more paragraphs in "2-1-1" (n 7), so
@@ -625,4 +658,98 @@ void main() {
     expect(pngSize(ByteData(24)), isNull);
     expect(pngSize(ByteData(8)), isNull);
   });
+  testWidgets(
+    'the first open in Pages mode peels once and marks the tip seen',
+    (t) async {
+      await _open(
+        t,
+        Routes.bookReader(tinyBookNestedId, 8),
+        tips: true,
+        settle: false,
+      );
+      expect(await _peels(t), 1);
+      expect(_container(t).read(tipsProvider).seen, contains(Tip.bookPeel));
+      // No page was turned.
+      expect(_shown(t).$1, 1);
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets('a second open does not peel', (t) async {
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 8),
+      tips: true,
+      settle: false,
+    );
+    expect(await _peels(t), 1);
+    await _reopen(t);
+    expect(await _peels(t), 0);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('after Show the tips again it peels again', (t) async {
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 8),
+      tips: true,
+      settle: false,
+    );
+    expect(await _peels(t), 1);
+    // As Settings' "Show the tips again" does.
+    _container(t).read(tipsProvider.notifier).resetAll();
+    await _reopen(t);
+    expect(await _peels(t), 1);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('with animations off it does not peel but marks the tip seen', (
+    t,
+  ) async {
+    t.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 8),
+      tips: true,
+      settle: false,
+    );
+    expect(await _peels(t), 0);
+    expect(_container(t).read(tipsProvider).seen, contains(Tip.bookPeel));
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('with tips switched off it does not peel', (t) async {
+    await _open(t, Routes.bookReader(tinyBookNestedId, 8), settle: false);
+    expect(await _peels(t), 0);
+    expect(_container(t).read(tipsProvider).seen, isEmpty);
+  });
+
+  testWidgets(
+    'while a page turns its corner and number are not drawn; after, they '
+    'are, with the new number',
+    (t) async {
+      await _open(t, Routes.bookReader(tinyBookNestedId, 8));
+      final corner = find.byKey(const ValueKey('book-corner'));
+      final number = find.byKey(const ValueKey('book-page-number'));
+      String numberText() => t
+          .widget<Text>(
+            find.descendant(of: number, matching: find.byType(Text)),
+          )
+          .data!;
+      expect(corner, findsOneWidget);
+      expect(numberText(), '1');
+      await t.tap(_next);
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 100));
+      expect(find.byKey(const ValueKey('page-curl-paint')), findsOneWidget);
+      expect(corner, findsNothing);
+      expect(number, findsNothing);
+      await t.pumpAndSettle();
+      expect(corner, findsOneWidget);
+      expect(numberText(), '2');
+      expect(t.takeException(), isNull);
+    },
+  );
 }

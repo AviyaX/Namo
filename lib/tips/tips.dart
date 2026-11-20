@@ -23,7 +23,12 @@ enum Tip {
   scrollChant(
     'Scroll and Chant',
     'Scroll moves the text by itself. Chant plays the recording and follows the words.',
-  );
+  ),
+
+  /// A tip told by motion, not a bubble: the corner of a book's page peels
+  /// up and back once, the first time a book opens in Pages mode. No screen
+  /// shows it as a bubble.
+  bookPeel('Turning pages', '');
 
   const Tip(this.title, this.body);
   final String title, body;
@@ -107,6 +112,13 @@ class TipsController extends Notifier<TipsState> {
   /// The screen went away before the tip was read: it stays due.
   void withdraw(Tip t) {
     if (state.active == t) state = state.copyWith(clearActive: true);
+  }
+
+  /// [t] has been shown by other means than a bubble (the book's peel): it
+  /// is seen for good.
+  void markSeen(Tip t) {
+    if (state.seen.contains(t)) return;
+    _set(state.copyWith(seen: Set.unmodifiable({...state.seen, t})));
   }
 
   void resetAll() => _set(const TipsState());

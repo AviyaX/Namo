@@ -53,6 +53,11 @@ abstract final class NamoMotion {
   static const quick = Duration(milliseconds: 200);
   static const open = Duration(milliseconds: 300);
   static const close = Duration(milliseconds: 200);
+
+  /// A book's corner lifting and falling back, once, for a first-time
+  /// reader.
+  static const peel = Duration(milliseconds: 1200);
+
   static const curve = Curves.easeOutCubic;
 
   /// [d], or zero when the person has asked for no animation.

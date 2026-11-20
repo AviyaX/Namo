@@ -68,6 +68,19 @@ void main() {
     expect(store.read(tipsKey), isNull);
   });
 
+  test('markSeen saves a tip as seen and leaves the tip on show', () {
+    final store = InMemoryKeyValueStore();
+    final c = containerOn(store);
+    final n = c.read(tipsProvider.notifier);
+    n.request(Tip.myFlows);
+    n.markSeen(Tip.bookPeel);
+    expect(c.read(tipsProvider).active, Tip.myFlows);
+    expect(n.isDue(Tip.bookPeel), isFalse);
+    expect(store.read(tipsKey), '{"seen":["bookPeel"]}');
+    n.resetAll();
+    expect(n.isDue(Tip.bookPeel), isTrue);
+  });
+
   test('resetAll forgets everything and saves', () {
     final store = InMemoryKeyValueStore();
     final c = containerOn(store);

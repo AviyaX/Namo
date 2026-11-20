@@ -17,6 +17,7 @@ import '../design/typography.dart';
 import '../design/widgets/buttons.dart';
 import '../design/widgets/floating_bar.dart';
 import '../settings/settings.dart';
+import '../tips/tips.dart';
 import 'book_blocks.dart';
 import 'book_frame.dart';
 import 'book_model.dart';
@@ -87,6 +88,11 @@ class _TurnIntent extends Intent {
 /// reading page now shown. The place (the reading page and the first
 /// passage on the page) is saved once a page has been still a moment.
 /// [onBack] leaves the reader, after the place is saved.
+///
+/// The first time a book opens in Pages mode with a page after the one
+/// shown, the page's corner peels up and back once ([Tip.bookPeel]), so a
+/// new reader sees the page can be turned; with animations off it does not,
+/// but counts as shown.
 class BookPagesView extends ConsumerStatefulWidget {
   const BookPagesView({
     super.key,
@@ -129,6 +135,9 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
 
   /// Set once the opening page has been noted as the place.
   bool _noted = false;
+
+  /// Set once the first-time peel has been asked for, or found not due.
+  bool _peelAsked = false;
 
   /// Whether the shown page is not saved as the place yet.
   bool _dirty = false;
@@ -256,6 +265,24 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
   }
 
   // ---- turning ------------------------------------------------------------
+
+  /// Peels the page's corner once for a first-time reader, when there is a
+  /// page to peel to and nothing is turning. The tip is seen as it starts
+  /// (and with animations off, though nothing is drawn).
+  void _peelIfDue() {
+    final stream = _stream;
+    if (_peelAsked || !mounted || stream == null) return;
+    if (stream.current == null || stream.peekNext == null || _curl.turning) {
+      return;
+    }
+    _peelAsked = true;
+    if (!ref.read(tipsAllowedProvider)) return;
+    final tips = ref.read(tipsProvider.notifier);
+    if (!tips.isDue(Tip.bookPeel)) return;
+    tips.markSeen(Tip.bookPeel);
+    if (MediaQuery.disableAnimationsOf(context)) return;
+    _curl.peek();
+  }
 
   void _changed() {
     final stream = _stream;
@@ -518,6 +545,10 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       controller: _curl,
       flapColour: colours.paper,
     );
+    if (!_peelAsked) {
+      // Once the curl is laid out at its size.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _peelIfDue());
+    }
     final canNext = !_atEnd(forward: true);
     final canPrevious = !_atEnd(forward: false);
     return Padding(
@@ -531,6 +562,7 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
             paper: paper,
             pageMarks: true,
             pageNumber: stream.index + 1,
+            turning: _curl.turning,
             child: Semantics(
               key: const ValueKey('book-page-area'),
               container: true,

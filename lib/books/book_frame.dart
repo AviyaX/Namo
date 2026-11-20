@@ -77,26 +77,30 @@ double bookScrollTextWidth(double screen) =>
 /// down the paper's left edge, [pageNumber] is centred at the foot in the
 /// soft ink, and the bottom right corner is lifted, over [child]. None of
 /// them takes a touch, and the number is not read out (the page count
-/// below already is).
+/// below already is). While [turning] (the page's curl is drawn) the corner
+/// and the number are left out: they would sit over the corner being lifted
+/// and over the page beneath as it shows.
 class BookFrame extends StatelessWidget {
   const BookFrame({
     super.key,
     required this.paper,
     required this.pageMarks,
     this.pageNumber,
+    this.turning = false,
     required this.child,
   });
 
   final BookPaper paper;
   final bool pageMarks;
   final int? pageNumber;
+  final bool turning;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final c = bookColours(p, paper);
-    final number = pageNumber;
+    final number = turning ? null : pageNumber;
     return DecoratedBox(
       key: const ValueKey('book-cover'),
       decoration: BoxDecoration(
@@ -155,22 +159,23 @@ class BookFrame extends StatelessWidget {
                             ),
                           ),
                         ),
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        width: bookCornerSize,
-                        height: bookCornerSize,
-                        child: IgnorePointer(
-                          child: CustomPaint(
-                            key: const ValueKey('book-corner'),
-                            painter: _CornerPainter(
-                              paper: c.paper,
-                              fold: c.fold,
-                              shadow: p.curlShadow,
+                      if (!turning)
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          width: bookCornerSize,
+                          height: bookCornerSize,
+                          child: IgnorePointer(
+                            child: CustomPaint(
+                              key: const ValueKey('book-corner'),
+                              painter: _CornerPainter(
+                                paper: c.paper,
+                                fold: c.fold,
+                                shadow: p.curlShadow,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
           ),

@@ -475,4 +475,84 @@ void main() {
     await drag.up();
     await t.pumpAndSettle();
   });
+  testWidgets('peek lifts the corner and settles without turning', (t) async {
+    final h = _Host();
+    await t.pumpWidget(h.build());
+    var done = false;
+    h.controller.peek().then((_) => done = true);
+    await t.pump();
+    expect(h.controller.turning, isTrue);
+    // As a turn does, the peel starts a frame later, once the pages are
+    // painted.
+    await t.pump(const Duration(milliseconds: 16));
+    await t.pump(const Duration(milliseconds: 300));
+    expect(find.byKey(_curlPaint), findsOneWidget);
+    await t.pump(const Duration(milliseconds: 600));
+    expect(find.byKey(_curlPaint), findsOneWidget);
+    // The whole peel, up and down, is over in 1.2 s.
+    await t.pump(const Duration(milliseconds: 300));
+    await t.pump(const Duration(milliseconds: 16));
+    expect(find.byKey(_curlPaint), findsNothing);
+    expect(h.controller.turning, isFalse);
+    expect(done, isTrue);
+    expect(h.forward, 0);
+    expect(find.text('Current page').hitTestable(), findsOneWidget);
+  });
+
+  testWidgets('a drag cancels the peel', (t) async {
+    final h = _Host();
+    await t.pumpWidget(h.build());
+    h.controller.peek();
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+    expect(find.byKey(_curlPaint), findsOneWidget);
+    final drag = await t.startGesture(const Offset(350, 500));
+    await t.pump();
+    expect(find.byKey(_curlPaint), findsNothing);
+    expect(h.controller.turning, isFalse);
+    // The same finger then turns the page as any drag does.
+    for (var i = 1; i <= 25; i++) {
+      await drag.moveBy(const Offset(-10, 0));
+      await t.pump(const Duration(milliseconds: 40));
+    }
+    expect(find.byKey(_curlPaint), findsOneWidget);
+    await drag.up();
+    await t.pumpAndSettle();
+    expect(h.forward, 1);
+  });
+
+  testWidgets('an arrow turn during the peel turns at once', (t) async {
+    final h = _Host();
+    await t.pumpWidget(h.build());
+    h.controller.peek();
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+    h.controller.turnForward();
+    // A plain turn, not one waiting the rest of the peel out.
+    final took = await _timeUntil(t, () => h.forward == 1);
+    expect(took, lessThan(NamoMotion.open + NamoMotion.close));
+    await t.pumpAndSettle();
+  });
+
+  testWidgets('reduced motion: no peel', (t) async {
+    final h = _Host();
+    await t.pumpWidget(h.build(reducedMotion: true));
+    h.controller.peek();
+    for (var f = 0; f < 20; f++) {
+      await t.pump(const Duration(milliseconds: 50));
+      expect(find.byKey(_curlPaint), findsNothing);
+      expect(h.controller.turning, isFalse);
+    }
+    expect(h.forward, 0);
+  });
+
+  testWidgets('no next page: no peel', (t) async {
+    final h = _Host(hasNext: false);
+    await t.pumpWidget(h.build());
+    h.controller.peek();
+    for (var f = 0; f < 20; f++) {
+      await t.pump(const Duration(milliseconds: 50));
+      expect(find.byKey(_curlPaint), findsNothing);
+    }
+  });
 }
