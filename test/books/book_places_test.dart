@@ -173,7 +173,9 @@ void main() {
       const BookSpot(2, 0).compareTo(const BookSpot(1, 9)),
       greaterThan(0),
     );
-    expect(const BookSpot(1, 5).hashCode, const BookSpot(1, 5).hashCode);
+    final char = int.parse('5');
+    expect(const BookSpot(1, 5).hashCode, BookSpot(1, char).hashCode);
+    expect(const BookSpot(1, 5), BookSpot(1, char));
   });
 
   test('remember keeps the spot', () {

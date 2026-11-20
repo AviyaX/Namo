@@ -6,9 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../storage/key_value_store.dart';
 import 'book_model.dart';
 
-/// JSON `{"<book id>": {"n": 3, "key": "1-2", "offset": 120.5,
-/// "spot": [2, 140]}}`. "key" and "spot" were added later; an entry without
-/// them is still read.
+/// JSON `{"<book id>": {"n": 3, "key": "1-2", "offset": 120.5, "spot": [2, 1]}}`.
+/// "key" and "spot" were added later; an entry without them is still read.
 const bookPlacesKey = 'namo.books.places.v1';
 
 /// A position in a page's text: the [block] (an index into the page's
@@ -83,12 +82,15 @@ class BookPlace {
     return n;
   }
 
-  Map<String, dynamic> toJson() => {
-    'n': n,
-    if (key != null) 'key': key,
-    'offset': offset,
-    if (spot != null) 'spot': [spot!.block, spot!.char],
-  };
+  Map<String, dynamic> toJson() {
+    final spot = this.spot;
+    return {
+      'n': n,
+      if (key != null) 'key': key,
+      'offset': offset,
+      if (spot != null) 'spot': [spot.block, spot.char],
+    };
+  }
 
   /// Null when [json] cannot be read. A key that is not text, or a spot that
   /// is damaged, is left out.
