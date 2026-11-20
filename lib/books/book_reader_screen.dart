@@ -13,8 +13,8 @@ import '../design/widgets/floating_bar.dart';
 import '../design/widgets/not_found.dart';
 import '../reader/reader_settings_sheet.dart';
 import '../router.dart';
-import '../settings/reading_language.dart';
 import '../settings/settings.dart';
+import 'book_blocks.dart';
 import 'book_model.dart';
 import 'book_places.dart';
 import 'book_widgets.dart';
@@ -252,16 +252,11 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
   }
 
   Widget _page(BuildContext context, BookPage page) {
-    final p = NamoPalette.of(context);
-    final settings = ref.watch(settingsProvider);
-    final prose = readingStyle(
-      ReadingLanguage.sinhala,
-      fontScale: settings.fontScale,
-      lineSpacing: settings.lineSpacing,
-      color: p.text,
-    );
+    final styles = BookTextStyles.of(context, ref.watch(settingsProvider));
     final margin = NamoSizes.pageMargin(MediaQuery.sizeOf(context).width);
-    final blocks = [for (final b in page.blocks) _block(context, b, prose)];
+    final blocks = [
+      for (final b in page.blocks) BookBlockView(block: b, styles: styles),
+    ];
     return SafeArea(
       top: false,
       child: NotificationListener<ScrollNotification>(
@@ -284,10 +279,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
                 children: [
                   Semantics(
                     header: true,
-                    child: Text(
-                      page.title,
-                      style: NamoType.sectionTitleSinhala(p.text),
-                    ),
+                    child: Text(page.title, style: styles.title),
                   ),
                   const SizedBox(height: NamoSpace.lg),
                   for (var i = 0; i < blocks.length; i++) ...[
@@ -301,77 +293,6 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
         ),
       ),
     );
-  }
-
-  Widget _block(BuildContext context, BookBlock block, TextStyle prose) {
-    final p = NamoPalette.of(context);
-    final strong = prose.copyWith(fontWeight: FontWeight.w600);
-    final caption = NamoType.caption(p.textSecondary);
-    return switch (block) {
-      BookPara(:final text) => Text(text, style: prose),
-      BookHeading(:final text) => Text(
-        text,
-        style: strong.copyWith(fontSize: prose.fontSize! * 1.25),
-      ),
-      BookSubhead(:final text) => Text(text, style: strong),
-      BookGatha(:final lines) => Padding(
-        padding: const EdgeInsetsDirectional.only(start: NamoSpace.xl),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [for (final line in lines) Text(line, style: prose)],
-        ),
-      ),
-      BookList(:final marker, :final start, :final items) => _LeadRows(
-        labels: [
-          for (var i = 0; i < items.length; i++)
-            switch (marker) {
-              ListMarker.number => '${start + i}.',
-              ListMarker.bullet => '•',
-              ListMarker.none => null,
-            },
-        ],
-        items: items,
-        style: prose,
-        minLead: NamoSpace.xxl,
-      ),
-      BookFootnotes(:final items) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(height: 1, child: ColoredBox(color: p.border)),
-          const SizedBox(height: NamoSpace.sm),
-          _LeadRows(
-            labels: [for (var i = 0; i < items.length; i++) '${i + 1}'],
-            items: items,
-            style: caption,
-            minLead: NamoSpace.xl,
-          ),
-        ],
-      ),
-      BookTable(:final header, :final rows) => _BookTable(
-        rows: rows,
-        border: p.border,
-        styleOf: (r) => header && r == 0 ? strong : prose,
-      ),
-      BookImage(:final alt, :final asset) =>
-        asset != null
-            ? Semantics(
-                image: true,
-                label: alt,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(NamoRadius.sm),
-                  child: Image.asset(
-                    asset,
-                    fit: BoxFit.contain,
-                    width: double.infinity,
-                    excludeFromSemantics: true,
-                  ),
-                ),
-              )
-            : Text(
-                alt.isEmpty ? 'Picture on pitaka.lk' : 'Picture: $alt',
-                style: caption,
-              ),
-    };
   }
 
   Widget _bottomBar(BuildContext context) {
@@ -415,151 +336,6 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
       ),
     );
   }
-}
-
-/// How wide [text] is on one line in [style] at the device's text size.
-double _lineWidth(BuildContext context, String text, TextStyle style) {
-  final painter = TextPainter(
-    text: TextSpan(
-      text: text,
-      style: DefaultTextStyle.of(context).style.merge(style),
-    ),
-    textDirection: Directionality.of(context),
-    textScaler: MediaQuery.textScalerOf(context),
-    maxLines: 1,
-  )..layout();
-  final width = painter.width;
-  painter.dispose();
-  return width;
-}
-
-/// Items, each led by its label (a number, a bullet or none) in a lead as
-/// wide as the widest label at the current text size, so "14." never breaks
-/// over two lines; never narrower than [minLead]. A null label has no lead.
-class _LeadRows extends StatelessWidget {
-  const _LeadRows({
-    required this.labels,
-    required this.items,
-    required this.style,
-    required this.minLead,
-  });
-
-  final List<String?> labels;
-  final List<String> items;
-  final TextStyle style;
-  final double minLead;
-
-  @override
-  Widget build(BuildContext context) {
-    var lead = minLead;
-    for (final label in labels.nonNulls.toSet()) {
-      final width = _lineWidth(context, label, style).ceilToDouble();
-      if (width + NamoSpace.sm > lead) lead = width + NamoSpace.sm;
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (var i = 0; i < items.length; i++)
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (labels[i] case final label?)
-                SizedBox(
-                  width: lead,
-                  child: Text(label, style: style, softWrap: false),
-                ),
-              Expanded(child: Text(items[i], style: style)),
-            ],
-          ),
-      ],
-    );
-  }
-}
-
-/// A table. Columns of short cells (the syllable grids) keep their natural
-/// widths and the table scrolls sideways when wider than the column of
-/// text; a table with longer cells is fitted to the column, its widest
-/// columns narrowed so their cells wrap, but never below a cell's longest
-/// word.
-class _BookTable extends StatelessWidget {
-  const _BookTable({
-    required this.rows,
-    required this.border,
-    required this.styleOf,
-  });
-
-  final List<List<String>> rows;
-  final Color border;
-  final TextStyle Function(int row) styleOf;
-
-  static const _pad = NamoSpace.sm;
-
-  @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final columns = rows.fold(0, (m, r) => r.length > m ? r.length : m);
-      // Each column's width unwrapped (its longest line) and at the least
-      // (its longest word), with the cell padding and a pixel to spare.
-      final most = List.filled(columns, 0.0), least = List.filled(columns, 0.0);
-      for (var r = 0; r < rows.length; r++) {
-        final style = styleOf(r);
-        for (var c = 0; c < rows[r].length; c++) {
-          final cell = rows[r][c];
-          for (final line in cell.split('\n')) {
-            final w =
-                _lineWidth(context, line, style).ceilToDouble() + 2 * _pad + 1;
-            if (w > most[c]) most[c] = w;
-          }
-          for (final word in cell.split(RegExp(r'[ \n]+'))) {
-            final w =
-                _lineWidth(context, word, style).ceilToDouble() + 2 * _pad + 1;
-            if (w > least[c]) least[c] = w;
-          }
-        }
-      }
-      final room = constraints.maxWidth;
-      final natural = most.fold(0.0, (a, b) => a + b);
-      final narrowest = least.fold(0.0, (a, b) => a + b);
-      final List<double> widths;
-      if (!room.isFinite || natural <= room) {
-        widths = most;
-      } else if (narrowest >= room) {
-        widths = least;
-      } else {
-        // The room left over the narrowest widths goes to the columns that
-        // can use it, in proportion to how much more each would take.
-        final spare = room - narrowest, wants = natural - narrowest;
-        widths = [
-          for (var c = 0; c < columns; c++)
-            least[c] + spare * (most[c] - least[c]) / wants,
-        ];
-      }
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Table(
-          border: TableBorder.all(color: border),
-          columnWidths: {
-            for (var c = 0; c < columns; c++) c: FixedColumnWidth(widths[c]),
-          },
-          children: [
-            for (var r = 0; r < rows.length; r++)
-              TableRow(
-                children: [
-                  for (var c = 0; c < columns; c++)
-                    Padding(
-                      padding: const EdgeInsets.all(_pad),
-                      child: Text(
-                        c < rows[r].length ? rows[r][c] : '',
-                        style: styleOf(r),
-                      ),
-                    ),
-                ],
-              ),
-          ],
-        ),
-      );
-    },
-  );
 }
 
 /// The reader's quiet top bar: Back, the book's title on one line, and the
