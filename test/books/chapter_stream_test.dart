@@ -4,6 +4,7 @@ import 'package:buddhist_gatha/books/book_model.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/books/pagination/book_paginator.dart';
 import 'package:buddhist_gatha/books/pagination/chapter_stream.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// A book of [chapters] chapters; chapter [empty] (if given) has no text.
@@ -328,5 +329,99 @@ void main() {
     gate.complete();
     await _settle();
     expect(pulled, isEmpty);
+  });
+
+  test('a textless chapter between two keeps both neighbours cut', () async {
+    final pulled = <int, int>{};
+    final s = _stream(
+      _book(3, empty: 2),
+      1,
+      spot: const BookSpot(199, 0),
+      pulled: pulled,
+    );
+    addTearDown(s.dispose);
+    await _settle();
+    expect(s.next(), isTrue);
+    expect(s.n, 3);
+    await _settle();
+    expect(s.peekPrevious, isNotNull);
+    expect(s.previous(), isTrue);
+    expect(s.n, 1);
+    expect(s.peekNext, isNotNull);
+    expect(s.next(), isTrue);
+    expect(s.n, 3);
+    expect(s.peekPrevious, isNotNull);
+    await _settle();
+    expect(pulled, {1: 10, 3: 10});
+  });
+
+  test('opening on a textless chapter resolves to a reading page', () async {
+    final s = _stream(_book(3, empty: 2), 2, spot: null);
+    addTearDown(s.dispose);
+    await _settle();
+    expect(s.n, 3);
+    expect(s.current, isNotNull);
+    s.jumpTo(2, null);
+    await _settle();
+    expect(s.n, 3);
+    expect(s.current, isNotNull);
+  });
+
+  test('a book with no text has no pages and nothing to wait for', () async {
+    final s = _stream(_book(1, empty: 1), 1, spot: null);
+    addTearDown(s.dispose);
+    await _settle();
+    expect(s.current, isNull);
+    expect(s.next(), isFalse);
+    expect(s.previous(), isFalse);
+    expect(s.waiting, isFalse);
+  });
+
+  test('a successful turn clears waiting', () async {
+    final gates = <Completer<void>>[];
+    final s = ChapterStream(
+      book: _book(3),
+      n: 2,
+      spot: const BookSpot(0, 0),
+      cut: _cutInto(10),
+      yieldFrame: () {
+        final c = Completer<void>();
+        gates.add(c);
+        return c.future;
+      },
+    );
+    addTearDown(s.dispose);
+    Future<void> frame() async {
+      await _settle();
+      gates.removeLast().complete();
+      await _settle();
+    }
+
+    await frame(); // 4 pages of chapter 2
+    expect(s.previous(), isFalse); // first page, previous chapter not cut
+    expect(s.waiting, isTrue);
+    expect(s.next(), isTrue);
+    expect(s.waiting, isFalse);
+  });
+
+  test('an error in the cut is reported, not thrown', () async {
+    final errors = <FlutterErrorDetails>[];
+    final old = FlutterError.onError;
+    FlutterError.onError = errors.add;
+    addTearDown(() => FlutterError.onError = old);
+    final s = ChapterStream(
+      book: _book(3),
+      n: 2,
+      spot: null,
+      cut: (page) sync* {
+        throw StateError('bad cut');
+      },
+      yieldFrame: () async {},
+    );
+    addTearDown(s.dispose);
+    await _settle();
+    expect(errors, hasLength(1));
+    expect(errors.single.exception, isA<StateError>());
+    expect(s.waiting, isFalse);
   });
 }

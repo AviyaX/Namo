@@ -48,11 +48,12 @@ class ChapterStream extends ChangeNotifier {
     required BookSpot? spot,
     required Iterable<ScreenPage> Function(BookPage) cut,
     Future<void> Function() yieldFrame = _nextFrame,
-  }) : _n = n,
+  }) : _n = book.firstReadingFrom(n) ?? n,
+       _noText = book.firstReadingFrom(n) == null,
        _spot = spot,
        _cut = cut,
        _yieldFrame = yieldFrame {
-    _run(_generation);
+    if (!_noText) _run(_generation);
   }
 
   final Book book;
@@ -61,6 +62,9 @@ class ChapterStream extends ChangeNotifier {
 
   final Map<int, _Chapter> _chapters = {};
   int _n;
+
+  /// True when the book has no page with text: nothing to cut.
+  bool _noText;
   int _index = 0;
 
   /// Where the current chapter opens; null for its first page.
@@ -94,7 +98,8 @@ class ChapterStream extends ChangeNotifier {
     return c.done ? c.pages.length : null;
   }
 
-  /// Null only until the current chapter's first page is cut.
+  /// Null until the page holding the opening spot (the first page when
+  /// there is none) is cut, and for a book with no text.
   ScreenPage? get current =>
       _located ? _chapters[_n]!.pages[_index] : _heldCurrent;
 
@@ -126,10 +131,12 @@ class ChapterStream extends ChangeNotifier {
   /// Moves to the next page, across a chapter's end when need be. False at
   /// the book's end, or (with [waiting] set) when the page is not cut yet.
   bool next() {
+    if (_noText) return false;
     if (!_located) return _wait(1);
     final c = _chapters[_n]!;
     if (_index + 1 < c.pages.length) {
       _index++;
+      _waitingFor = 0;
       notifyListeners();
       return true;
     }
@@ -144,9 +151,11 @@ class ChapterStream extends ChangeNotifier {
 
   /// Moves to the previous page; as [next], the other way.
   bool previous() {
+    if (_noText) return false;
     if (!_located) return _wait(-1);
     if (_index > 0) {
       _index--;
+      _waitingFor = 0;
       notifyListeners();
       return true;
     }
@@ -162,6 +171,7 @@ class ChapterStream extends ChangeNotifier {
   /// box changed), keeping the page that holds the current passage. The old
   /// page stays in [current] until the new one is cut.
   void recut(Iterable<ScreenPage> Function(BookPage) cut) {
+    if (_noText) return;
     if (_located) {
       _heldCurrent = current;
       _heldIndex = _index;
@@ -178,14 +188,21 @@ class ChapterStream extends ChangeNotifier {
   /// Opens chapter [n] at [spot] (its first page when null), cutting
   /// afresh except for chapters already cut.
   void jumpTo(int n, BookSpot? spot) {
-    _n = n;
+    final reading = book.firstReadingFrom(n);
+    _noText = reading == null;
+    _n = reading ?? n;
     _spot = spot;
     _located = false;
     _waitingFor = 0;
     _heldCurrent = null;
     _heldIndex = 0;
     _heldCount = null;
-    _chapters.removeWhere((k, _) => k < n - 1 || k > n + 1);
+    _prune();
+    if (_noText) {
+      _generation++;
+      notifyListeners();
+      return;
+    }
     _restart();
     notifyListeners();
   }
@@ -197,9 +214,17 @@ class ChapterStream extends ChangeNotifier {
     super.dispose();
   }
 
+  /// Refuses a turn; [waiting] is set only while cutting that can end the
+  /// wait is still to come.
   bool _wait(int direction) {
-    _waitingFor = direction;
+    _waitingFor = _toCut() == null ? 0 : direction;
     return false;
+  }
+
+  /// Keeps the current chapter and its reading neighbours, drops the rest.
+  void _prune() {
+    final keep = {_n, book.nextReading(_n), book.previousReading(_n)};
+    _chapters.removeWhere((k, _) => !keep.contains(k));
   }
 
   /// Crosses into chapter [n] at page [index], dropping what is now out of
@@ -208,7 +233,7 @@ class ChapterStream extends ChangeNotifier {
     _n = n;
     _index = index;
     _waitingFor = 0;
-    _chapters.removeWhere((k, _) => k < n - 1 || k > n + 1);
+    _prune();
     _generation++;
     notifyListeners();
     _run(_generation);
@@ -252,14 +277,31 @@ class ChapterStream extends ChangeNotifier {
   };
 
   Future<void> _run(int generation) async {
-    while (true) {
-      final c = _toCut();
-      if (c == null) return;
-      await _yieldFrame();
+    try {
+      while (true) {
+        final c = _toCut();
+        if (c == null) break;
+        await _yieldFrame();
+        if (_disposed || generation != _generation) return;
+        c.cutSome();
+        _locate();
+        if (_waitingFor != 0 && _turnReady()) _waitingFor = 0;
+        notifyListeners();
+      }
+    } catch (error, stack) {
       if (_disposed || generation != _generation) return;
-      c.cutSome();
-      _locate();
-      if (_waitingFor != 0 && _turnReady()) _waitingFor = 0;
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: error,
+          stack: stack,
+          library: 'chapter stream',
+          context: ErrorDescription('while cutting a chapter into pages'),
+        ),
+      );
+    }
+    if (_disposed || generation != _generation) return;
+    if (_waitingFor != 0) {
+      _waitingFor = 0;
       notifyListeners();
     }
   }
