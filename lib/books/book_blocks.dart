@@ -69,7 +69,7 @@ class BookTextStyles {
 
   /// The styles as [context] draws them for [settings] on a book's page:
   /// in the ink of the paper chosen ([AppSettings.bookPaper]), whatever the
-  /// app's theme, with the soft ink for captions and footnotes and the
+  /// app's theme, with the secondary ink for captions and footnotes and the
   /// paper's gold rule for table borders.
   static BookTextStyles onPaper(BuildContext context, AppSettings settings) {
     final p = NamoPalette.of(context);
@@ -77,7 +77,7 @@ class BookTextStyles {
     return BookTextStyles.from(
       palette: p.copyWith(
         text: c.ink,
-        textSecondary: c.inkSoft,
+        textSecondary: c.inkSecondary,
         border: c.rule,
       ),
       settings: settings,

@@ -223,8 +223,10 @@ int pageIndexOf(List<ScreenPage> pages, BookSpot spot) {
   return found;
 }
 
-/// The space over the title in the scroll column.
-const scrollTopPadding = NamoSpace.sm;
+/// The space over the title in the scroll column: the paper's padding, so
+/// the title sits as far below the paper's top as the text sits in from its
+/// sides, as in Pages mode.
+const scrollTopPadding = NamoSpace.lg;
 
 /// The spot of the first line at or below [offset] in [page]'s scroll
 /// column [width] wide (laid out as the scroll view draws it: the title,

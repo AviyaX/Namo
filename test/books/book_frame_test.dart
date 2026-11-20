@@ -1,3 +1,4 @@
+import 'package:buddhist_gatha/books/book_blocks.dart';
 import 'package:buddhist_gatha/books/book_frame.dart';
 import 'package:buddhist_gatha/books/book_pages_view.dart';
 import 'package:buddhist_gatha/books/pagination/justified_lines.dart';
@@ -124,6 +125,8 @@ void main() {
     final paper = t.getRect(_paper);
     final title = t.getRect(find.text(tinyLongBlocksTitle));
     expect(title.left, paper.left + bookRuleWidth + bookPaperPadding);
+    // As far down from the paper's top as from its side, as in Pages mode.
+    expect(title.top, paper.top + bookRuleWidth + bookPaperPadding);
     expect(
       paper.width - 2 * (bookRuleWidth + bookPaperPadding),
       bookScrollTextWidth(_phone.width),
@@ -141,6 +144,13 @@ void main() {
         find.descendant(of: _number, matching: find.byType(Text)),
       );
       expect(number.style!.color, p.bookInkSoft);
+      // Captions and footnotes take the darker secondary ink, which reads
+      // at 4.5:1 on cream; the soft ink is the page number's only.
+      final styles = BookTextStyles.onPaper(
+        t.element(find.byType(BookFrame)),
+        _large,
+      );
+      expect(styles.caption.color, p.bookInkSecondary);
     });
 
     testWidgets('dark paper in the light theme', (t) async {

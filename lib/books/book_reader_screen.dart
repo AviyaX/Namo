@@ -380,7 +380,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
       child: Padding(
         padding: EdgeInsets.fromLTRB(
           margin,
-          scrollTopPadding,
+          NamoSpace.sm,
           margin,
           NamoSpace.sm,
         ),

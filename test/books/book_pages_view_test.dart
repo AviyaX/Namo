@@ -6,11 +6,13 @@ import 'package:buddhist_gatha/books/book_model.dart';
 import 'package:buddhist_gatha/books/book_pages_view.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/books/book_reader_screen.dart';
+import 'package:buddhist_gatha/books/book_widgets.dart';
 import 'package:buddhist_gatha/books/books_repository.dart';
 import 'package:buddhist_gatha/books/pagination/book_paginator.dart';
 import 'package:buddhist_gatha/books/pagination/screen_page_view.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
+import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -142,14 +144,14 @@ Future<void> _reopen(WidgetTester t) async {
   router.go(Routes.bookReader(tinyBookNestedId, 8));
 }
 
-/// The long-blocks books with forty more paragraphs in "2-1-1" (n 7), so
+/// The long-blocks books with [extra] more paragraphs in "2-1-1" (n 7), so
 /// the chapter before "3" (n 8) is several pages.
-Map<String, Object> _longSeven() {
+Map<String, Object> _longSeven({int extra = 40}) {
   final books = tinyBooksWithLongBlocks();
   final path = tinyBookFile(tinyBookNestedId);
   final book = jsonDecode(jsonEncode(books[path])) as Map<String, dynamic>;
   final blocks = (book['pages'] as List)[6]['blocks'] as List;
-  for (var i = 0; i < 40; i++) {
+  for (var i = 0; i < extra; i++) {
     blocks.insert(0, {'kind': 'para', 'text': 'Long paragraph $i.'});
   }
   books[path] = book.cast<String, Object>();
@@ -719,6 +721,47 @@ void main() {
     expect(_container(t).read(tipsProvider).seen, contains(Tip.bookPeel));
     expect(t.takeException(), isNull);
   });
+
+  testWidgets(
+    'Previous pressed during the peel, the chapter before not cut yet, '
+    'shows the waiting mark (it is not lost); once cut, it turns back',
+    (t) async {
+      await _open(
+        t,
+        Routes.bookReader(tinyBookNestedId, 8),
+        // Long enough that it is still being cut when the peel starts.
+        books: _longSeven(extra: 1000),
+        tips: true,
+        settle: false,
+      );
+      final paint = find.byKey(const ValueKey('page-curl-paint'));
+      for (var f = 0; f < 60 && paint.evaluate().isEmpty; f++) {
+        await t.pump(const Duration(milliseconds: 20));
+      }
+      expect(paint, findsOneWidget, reason: 'the peel is under way');
+      // The mark is drawn over the arrow, in the arrows' bar.
+      final waitingMark = find.descendant(
+        of: find.ancestor(of: _prev, matching: find.byType(FloatingBar)),
+        matching: find.byType(BookLoading),
+      );
+      expect(waitingMark, findsNothing);
+      await t.tap(_prev);
+      await t.pump();
+      // The peel has ended and the press waits for the chapter before.
+      expect(paint, findsNothing);
+      expect(waitingMark, findsOneWidget);
+      expect(_location(t), '/library/book/tiny-nested/read/8');
+      await t.pumpAndSettle();
+      expect(waitingMark, findsNothing);
+      await t.tap(_prev);
+      await t.pumpAndSettle();
+      expect(_location(t), '/library/book/tiny-nested/read/7');
+      expect(_topTitle(t), 'Two one one');
+      final (i, n) = _shown(t);
+      expect(i, n);
+      expect(t.takeException(), isNull);
+    },
+  );
 
   testWidgets('with tips switched off it does not peel', (t) async {
     await _open(t, Routes.bookReader(tinyBookNestedId, 8), settle: false);

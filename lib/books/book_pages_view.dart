@@ -331,10 +331,13 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
 
   /// Turns with the curl when the page that way is cut; otherwise asks the
   /// stream, which waits for it (or refuses at the book's end). Asked while
-  /// a page is turning, the curl turns again once that turn ends.
+  /// a page is turning, the curl turns again once that turn ends. A peel is
+  /// ended first and does not count as a turn, so a page not cut yet is
+  /// still waited for.
   void _turn({required bool forward}) {
     final stream = _stream;
     if (stream == null) return;
+    if (_curl.peeling) _curl.stopPeel();
     if (_curl.turning) {
       forward ? _curl.turnForward() : _curl.turnBack();
       return;
@@ -483,7 +486,7 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       0.0,
       math.min(area.width - 2 * margin, NamoSizes.readingColumn),
     );
-    const top = scrollTopPadding, bottom = NamoSpace.sm;
+    const top = NamoSpace.sm, bottom = NamoSpace.sm;
     final height = math.max(0.0, area.height - top - bottom);
     final insets = bookTextInsets(context, pageMarks: true);
     const edge = 2 * (bookCoverInset + bookRuleWidth);

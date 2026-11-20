@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:buddhist_gatha/design/tokens.dart';
+import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -89,6 +90,23 @@ void main() {
       expect(contrast(p.onSage, p.sage), greaterThanOrEqualTo(4.5));
       expect(contrast(p.onError, p.error), greaterThanOrEqualTo(4.5));
       expect(contrast(p.error, p.background), greaterThanOrEqualTo(3.0));
+    });
+  }
+
+  for (final (name, p) in [
+    ('dark', NamoPalette.dark),
+    ('light', NamoPalette.light),
+  ]) {
+    test('book pages meet contrast in the $name palette', () {
+      for (final paper in BookPaper.values) {
+        final c = bookColours(p, paper);
+        expect(contrast(c.ink, c.paper), greaterThanOrEqualTo(4.5),
+            reason: '$paper ink');
+        expect(contrast(c.inkSecondary, c.paper), greaterThanOrEqualTo(4.5),
+            reason: '$paper captions and footnotes');
+        expect(contrast(c.inkSoft, c.paper), greaterThanOrEqualTo(3.0),
+            reason: '$paper page number');
+      }
     });
   }
 

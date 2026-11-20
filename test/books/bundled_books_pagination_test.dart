@@ -21,7 +21,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../quality/quality_support.dart';
 
 /// The page box on a 320×568 phone (the top bar 56 high, the page arrows'
-/// bar 98, [scrollTopPadding] and [NamoSpace.sm] round the page, a 16 px
+/// bar 98, [NamoSpace.sm] above and below the page, a 16 px
 /// margin each side), as the reader cuts it.
 const _box = PageBox(width: 288, height: 398);
 

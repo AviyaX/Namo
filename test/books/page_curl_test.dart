@@ -534,6 +534,34 @@ void main() {
     await t.pumpAndSettle();
   });
 
+  testWidgets('peeling is told, and stopPeel lays the corner flat', (
+    t,
+  ) async {
+    final h = _Host();
+    await t.pumpWidget(h.build());
+    expect(h.controller.peeling, isFalse);
+    h.controller.peek();
+    // Waiting for the pages to be painted counts as peeling too.
+    expect(h.controller.peeling, isTrue);
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+    expect(h.controller.peeling, isTrue);
+    expect(find.byKey(_curlPaint), findsOneWidget);
+    h.controller.stopPeel();
+    await t.pump();
+    expect(h.controller.peeling, isFalse);
+    expect(h.controller.turning, isFalse);
+    expect(find.byKey(_curlPaint), findsNothing);
+    expect(h.forward, 0);
+    // A turn is not a peel.
+    h.controller.turnForward();
+    await t.pump();
+    expect(h.controller.turning, isTrue);
+    expect(h.controller.peeling, isFalse);
+    await t.pumpAndSettle();
+    expect(h.forward, 1);
+  });
+
   testWidgets('reduced motion: no peel', (t) async {
     final h = _Host();
     await t.pumpWidget(h.build(reducedMotion: true));

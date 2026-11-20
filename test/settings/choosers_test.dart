@@ -109,6 +109,7 @@ void main() {
       expect(c.paper, const Color(0xFFF7EFDC));
       expect(c.ink, const Color(0xFF2A2A22));
       expect(c.inkSoft, const Color(0xFF8A7A55));
+      expect(c.inkSecondary, const Color(0xFF6E6042));
       expect(c.cover, const Color(0xFF5B3A22));
       expect(c.rule, const Color(0xFFD2B26C));
       final d = bookColours(p, BookPaper.dark);

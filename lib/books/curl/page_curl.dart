@@ -23,6 +23,14 @@ class PageCurlController extends ChangeNotifier {
   /// peeled ([peek]): the curl is drawn, or about to be.
   bool get turning => _state?._busy ?? false;
 
+  /// Whether the corner is being peeled ([peek]), or is about to be, and
+  /// no page is being turned.
+  bool get peeling => _state?._peeling ?? false;
+
+  /// Ends a peel at once, the corner flat again; does nothing when there is
+  /// no peel.
+  void stopPeel() => _state?._stopPeel();
+
   /// Turns to the next page with the curl; completes when the turn has
   /// ended. Asked while a page is turning, it waits and turns once that
   /// turn ends (one turn waits at most; more are not kept). Does nothing

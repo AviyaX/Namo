@@ -86,6 +86,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     required this.bookPaper,
     required this.bookInk,
     required this.bookInkSoft,
+    required this.bookInkSecondary,
     required this.bookCover,
     required this.bookRule,
     required this.bookPaperDark,
@@ -115,11 +116,13 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   final Color error;
   final Color onError;
 
-  /// A book's cream paper, its ink, soft ink (page numbers), cover and the
-  /// gold rule. The same in both app themes: a book is the same book.
+  /// A book's cream paper, its ink, soft ink (page numbers), secondary ink
+  /// (captions and footnotes, which must read at 4.5:1), cover and the gold
+  /// rule. The same in both app themes: a book is the same book.
   final Color bookPaper;
   final Color bookInk;
   final Color bookInkSoft;
+  final Color bookInkSecondary;
   final Color bookCover;
   final Color bookRule;
 
@@ -141,6 +144,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   static const _bookPaper = Color(0xFFF7EFDC);
   static const _bookInk = Color(0xFF2A2A22);
   static const _bookInkSoft = Color(0xFF8A7A55);
+  static const _bookInkSecondary = Color(0xFF6E6042);
   static const _bookCover = Color(0xFF5B3A22);
   static const _bookRule = Color(0xFFD2B26C);
   static const _bookPaperDark = Color(0xFF1A241C);
@@ -170,6 +174,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     bookPaper: _bookPaper,
     bookInk: _bookInk,
     bookInkSoft: _bookInkSoft,
+    bookInkSecondary: _bookInkSecondary,
     bookCover: _bookCover,
     bookRule: _bookRule,
     bookPaperDark: _bookPaperDark,
@@ -200,6 +205,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     bookPaper: _bookPaper,
     bookInk: _bookInk,
     bookInkSoft: _bookInkSoft,
+    bookInkSecondary: _bookInkSecondary,
     bookCover: _bookCover,
     bookRule: _bookRule,
     bookPaperDark: _bookPaperDark,
@@ -258,6 +264,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
     Color? bookPaper,
     Color? bookInk,
     Color? bookInkSoft,
+    Color? bookInkSecondary,
     Color? bookCover,
     Color? bookRule,
     Color? bookPaperDark,
@@ -287,6 +294,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
         bookPaper: bookPaper ?? this.bookPaper,
         bookInk: bookInk ?? this.bookInk,
         bookInkSoft: bookInkSoft ?? this.bookInkSoft,
+        bookInkSecondary: bookInkSecondary ?? this.bookInkSecondary,
         bookCover: bookCover ?? this.bookCover,
         bookRule: bookRule ?? this.bookRule,
         bookPaperDark: bookPaperDark ?? this.bookPaperDark,
@@ -321,6 +329,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
       bookPaper: mix(bookPaper, other.bookPaper),
       bookInk: mix(bookInk, other.bookInk),
       bookInkSoft: mix(bookInkSoft, other.bookInkSoft),
+      bookInkSecondary: mix(bookInkSecondary, other.bookInkSecondary),
       bookCover: mix(bookCover, other.bookCover),
       bookRule: mix(bookRule, other.bookRule),
       bookPaperDark: mix(bookPaperDark, other.bookPaperDark),
@@ -335,12 +344,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   }
 }
 
-/// The colours a book page is drawn with on the chosen paper. Soft ink on dark
-/// paper is the dark palette's secondary text, so it reads in either theme.
+/// The colours a book page is drawn with on the chosen paper. Soft ink is
+/// for the page number only; captions and footnotes take the secondary ink.
+/// On dark paper both are the dark palette's secondary text, so they read in
+/// either theme.
 ({
   Color paper,
   Color ink,
   Color inkSoft,
+  Color inkSecondary,
   Color cover,
   Color rule,
   Color fold,
@@ -354,6 +366,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
           paper: p.bookPaper,
           ink: p.bookInk,
           inkSoft: p.bookInkSoft,
+          inkSecondary: p.bookInkSecondary,
           cover: p.bookCover,
           rule: p.bookRule,
           fold: p.bookFold,
@@ -363,6 +376,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
           paper: p.bookPaperDark,
           ink: p.bookInkDark,
           inkSoft: NamoPalette.dark.textSecondary,
+          inkSecondary: NamoPalette.dark.textSecondary,
           cover: p.bookCoverDark,
           rule: p.bookRuleDark,
           fold: p.bookFoldDark,
