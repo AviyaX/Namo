@@ -141,6 +141,15 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   List<BoxShadow> get floatShadow =>
       [BoxShadow(color: shadow, blurRadius: 24, offset: const Offset(0, 8))];
 
+  /// The shade a turning page casts along its fold: [shadow], stronger.
+  Color get curlShadow =>
+      shadow.withValues(alpha: (shadow.a * 2.5).clamp(0.0, 0.6));
+
+  /// The light catching the bend of a turning page.
+  Color get curlHighlight =>
+      Color.lerp(surface, const Color(0xFFFFFFFF), 0.6)!
+          .withValues(alpha: 0.35);
+
   static NamoPalette of(BuildContext context) =>
       Theme.of(context).extension<NamoPalette>()!;
 
