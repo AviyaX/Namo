@@ -8,18 +8,24 @@ import '../content/model.dart';
 class Recording {
   const Recording({
     required this.readingId,
-    required this.asset,
+    required this.path,
+    this.bytes = 0,
+    this.sha256 = '',
     required this.label,
     required this.placeholder,
     this.sectionCues = const {},
     this.blockTimes = const [],
     this.lineTimes = const [],
+    required this.duration,
   });
 
   final String readingId;
 
-  /// The bundled audio file.
-  final String asset;
+  /// Where the recording lives on the host (`audio/...`), or the asset path
+  /// of the placeholder tone.
+  final String path;
+  final int bytes;
+  final String sha256;
 
   /// What the listener is told this is.
   final String label;
@@ -35,6 +41,10 @@ class Recording {
 
   /// When each line of each block starts; empty when only blocks are timed.
   final List<List<Duration?>> lineTimes;
+
+  /// How long the recording plays; zero where it is not known (the
+  /// placeholder tone, or an untimed recording the content gives no length).
+  final Duration duration;
 
   bool get timed => blockTimes.isNotEmpty;
 }
@@ -52,18 +62,31 @@ class ContentAudioCatalogue implements AudioCatalogue {
         for (final category in library.categories)
           for (final reading in category.readings)
             if (reading.audio != null)
-              reading.id: Recording(
-                readingId: reading.id,
-                asset: reading.audio!.asset,
-                label: reading.audio!.label,
-                placeholder: false,
-                sectionCues: reading.audio!.sectionCues,
-                blockTimes: reading.audio!.blockTimes,
-                lineTimes: reading.audio!.lineTimes,
-              ),
+              reading.id: _recordingOf(reading.id, reading.audio!),
       };
 
+  static Recording _recordingOf(String readingId, RecordingInfo info) {
+    if (info.blockTimes.isNotEmpty && info.duration == null) {
+      throw StateError('recording for $readingId has no duration');
+    }
+    return Recording(
+      readingId: readingId,
+      path: info.path,
+      bytes: info.bytes,
+      sha256: info.sha256,
+      label: info.label,
+      placeholder: false,
+      sectionCues: info.sectionCues,
+      blockTimes: info.blockTimes,
+      lineTimes: info.lineTimes,
+      duration: info.duration ?? Duration.zero,
+    );
+  }
+
   final Map<String, Recording> _byReading;
+
+  /// Every reading's recording, in library order.
+  List<Recording> get recordings => _byReading.values.toList();
 
   @override
   Recording? recordingFor(String readingId) => _byReading[readingId];
@@ -84,9 +107,10 @@ class DevPlaceholderCatalogue implements AudioCatalogue {
       real.recordingFor(readingId) ??
       Recording(
         readingId: readingId,
-        asset: placeholderToneAsset,
+        path: placeholderToneAsset,
         label: placeholderToneLabel,
         placeholder: true,
+        duration: Duration.zero,
       );
 }
 

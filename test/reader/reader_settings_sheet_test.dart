@@ -142,7 +142,7 @@ void main() {
     }
   });
 
-  testWidgets('without the layout choice (a pirith) the rest stays', (t) async {
+  testWidgets('without the layout choice (an introduction) the rest stays', (t) async {
     await t.pumpWidget(
       ProviderScope(
         overrides: [
@@ -152,7 +152,7 @@ void main() {
           theme: namoTheme(Brightness.light),
           home: ReaderSettingsSheet(
             onBackToBeginning: () {},
-            showLayout: false,
+            layoutChooser: LayoutChooserKind.hidden,
           ),
         ),
       ),
@@ -162,6 +162,27 @@ void main() {
     expect(find.text('Text size'), findsOneWidget);
     expect(find.text('Scroll speed'), findsOneWidget);
     expect(find.text('Back to the beginning'), findsOneWidget);
+  });
+
+  testWidgets('the pirith sheet offers Meaning below and Side by side', (t) async {
+    await t.pumpWidget(
+      ProviderScope(
+        overrides: [
+          keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+        ],
+        child: MaterialApp(
+          theme: namoTheme(Brightness.light),
+          home: ReaderSettingsSheet(
+            onBackToBeginning: () {},
+            layoutChooser: LayoutChooserKind.pirith,
+          ),
+        ),
+      ),
+    );
+    expect(find.text('When two languages show'), findsOneWidget);
+    expect(find.text('Meaning below'), findsOneWidget);
+    expect(find.text('Side by side'), findsOneWidget);
+    expect(find.text('Verse by verse'), findsNothing);
   });
 
   testWidgets('no layout choice for the Introduction', (t) async {

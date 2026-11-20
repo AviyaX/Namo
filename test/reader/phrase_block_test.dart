@@ -51,6 +51,7 @@ Future<ScrollController> _pump(
   required double scale,
   double height = 700,
   ValueNotifier<ChantPlace?>? place,
+  TwoLanguageLayout layout = TwoLanguageLayout.verse,
 }) async {
   t.view.physicalSize = Size(width, height);
   t.view.devicePixelRatio = 1;
@@ -70,7 +71,7 @@ Future<ScrollController> _pump(
             items: buildReaderItems(
               reading,
               LanguageSelection(languages),
-              TwoLanguageLayout.verse,
+              layout,
             ),
             controller: controller,
             fontScale: 1,
@@ -377,6 +378,72 @@ void main() {
     expect(passageText(t, passage('x-0', 'pali')), isNot(contains('\n')));
   });
 
+  for (final scale in [1.0, 2.0]) {
+    testWidgets(
+      'side by side at 320: the meaning is beside the phrases, text $scale',
+      (t) async {
+        await _pump(
+          t,
+          _reading(),
+          [_pali, _sinhala],
+          width: 320,
+          dark: false,
+          scale: scale,
+          layout: TwoLanguageLayout.sideBySide,
+        );
+        final phrase = t.getRect(_text('pali 0.0'));
+        final meaning = t.getRect(_text('sinhala 0.0'));
+        expect(meaning.top, closeTo(phrase.top, 0.5));
+        expect(meaning.left, greaterThan(phrase.right - 0.5));
+        expect(t.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets('side by side with Sinhala chosen first: Pali is still on the '
+      'left', (t) async {
+    await _pump(
+      t,
+      _reading(),
+      [_sinhala, _pali],
+      width: 320,
+      dark: false,
+      scale: 1,
+      layout: TwoLanguageLayout.sideBySide,
+    );
+    final pali = _text('pali 0.0');
+    final sinhala = _text('sinhala 0.0');
+    final pr = t.getRect(pali);
+    final sr = t.getRect(sinhala);
+    expect(pr.left, lessThan(sr.left));
+    expect(pr.top, closeTo(sr.top, 0.5));
+    Color? colour(Finder f) =>
+        (t.widget<Text>(f).textSpan! as TextSpan).style!.color;
+    final p = NamoPalette.of(t.element(pali));
+    expect(colour(pali), p.text);
+    expect(colour(sinhala), p.textSecondary);
+  });
+
+  testWidgets('side by side: the chanted phrase is marked in both passages', (
+    t,
+  ) async {
+    final place = ValueNotifier<ChantPlace?>(const ChantPlace(0, 1));
+    addTearDown(place.dispose);
+    await _pump(
+      t,
+      _reading(),
+      [_pali, _sinhala],
+      width: 320,
+      dark: false,
+      scale: 1,
+      layout: TwoLanguageLayout.sideBySide,
+      place: place,
+    );
+    expect(markedIn(t, passage('x-0', 'pali')), [1]);
+    expect(markedIn(t, passage('x-0', 'sinhala')), [1]);
+    expect(find.byKey(const ValueKey('block-active')), findsOneWidget);
+  });
+
   group('a unit kept line by line', () {
     const lines = [
       Phrase(pali: 'lone', sinhala: '', english: ''),
@@ -456,6 +523,23 @@ void main() {
       await _pump(t, units(), [_sinhala], width: 390, dark: false, scale: 1);
       expect(passageText(t, passage('u-0', 'sinhala')), 'mone\nmtwo');
       expect(passage('u-0', 'pali'), findsNothing);
+    });
+
+    testWidgets('side by side: a unit has its lines left and its meaning '
+        'right', (t) async {
+      await _pump(
+        t,
+        units(),
+        [_pali, _sinhala],
+        width: 390,
+        dark: false,
+        scale: 1,
+        layout: TwoLanguageLayout.sideBySide,
+      );
+      final lines = t.getRect(passage('u-0', 'pali'));
+      final meaning = t.getRect(passage('u-0', 'sinhala'));
+      expect(meaning.top, closeTo(lines.top, 0.5));
+      expect(meaning.left, greaterThan(lines.right - 0.5));
     });
 
     testWidgets('a unit with no meaning has no Sinhala passage', (t) async {

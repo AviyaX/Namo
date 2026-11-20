@@ -7,25 +7,33 @@ import 'buttons.dart';
 
 /// A one-line search box: a quiet fill, a magnifier, the label as hint and
 /// accessibility label, a clear button while there is text, and a sage ring
-/// while it has focus. It never takes focus by itself.
+/// while it has focus. It never takes focus by itself; give it a
+/// [focusNode] to focus it from outside.
 class SearchField extends StatefulWidget {
   const SearchField({
     super.key,
     required this.controller,
     required this.label,
     this.onChanged,
+    this.focusNode,
   });
 
   final TextEditingController controller;
   final String label;
   final ValueChanged<String>? onChanged;
 
+  /// The field's focus node; when null the field makes (and disposes) its
+  /// own. A given node is left for its owner to dispose.
+  final FocusNode? focusNode;
+
   @override
   State<SearchField> createState() => _SearchFieldState();
 }
 
 class _SearchFieldState extends State<SearchField> {
-  final _focus = FocusNode();
+  FocusNode? _ownFocus;
+
+  FocusNode get _focus => widget.focusNode ?? (_ownFocus ??= FocusNode());
 
   @override
   void initState() {
@@ -41,12 +49,19 @@ class _SearchFieldState extends State<SearchField> {
       old.controller.removeListener(_changed);
       widget.controller.addListener(_changed);
     }
+    if (old.focusNode != widget.focusNode) {
+      // The field's own node, once made, is kept until it is disposed: the
+      // text field may still hold it in this frame.
+      (old.focusNode ?? _ownFocus)?.removeListener(_changed);
+      _focus.addListener(_changed);
+    }
   }
 
   @override
   void dispose() {
     widget.controller.removeListener(_changed);
-    _focus.dispose();
+    widget.focusNode?.removeListener(_changed);
+    _ownFocus?.dispose();
     super.dispose();
   }
 

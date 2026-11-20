@@ -9,10 +9,14 @@ class FloatingBar extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(NamoSpace.sm),
+    this.pill = false,
   });
 
   final Widget child;
   final EdgeInsetsGeometry padding;
+
+  /// A full pill (the app's bottom bar) instead of the rounded card shape.
+  final bool pill;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,9 @@ class FloatingBar extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: p.surface,
-        borderRadius: BorderRadius.circular(NamoRadius.lg),
+        borderRadius: BorderRadius.circular(
+          pill ? NamoRadius.pill : NamoRadius.lg,
+        ),
         border: Border.all(color: p.border),
         boxShadow: p.floatShadow,
       ),

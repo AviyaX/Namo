@@ -14,6 +14,10 @@ import '../design/widgets/page_header.dart';
 import '../home/card_art.dart';
 import '../library/library_gate.dart';
 import '../router.dart';
+import '../tipitaka/tipitaka_labels.dart';
+import '../tipitaka/tipitaka_repository.dart';
+import '../tipitaka/tipitaka_state.dart';
+import '../tipitaka/tipitaka_tree.dart';
 import 'saved.dart';
 
 class SavedScreen extends ConsumerWidget {
@@ -24,6 +28,27 @@ class SavedScreen extends ConsumerWidget {
     final saved = ref.watch(savedProvider);
     final controller = ref.read(savedProvider.notifier);
     final p = NamoPalette.of(context);
+    final tipitakaKeys = ref.watch(tipitakaSavedProvider);
+    // The tree is asked for only when something is bookmarked, and nothing
+    // is drawn for it (no spinner) while it loads or if it fails.
+    final tree = tipitakaKeys.isEmpty
+        ? null
+        : ref.watch(tipitakaTreeProvider).value;
+    // A tree that failed to load counts as no Tripitaka rows.
+    final treeFailed =
+        tipitakaKeys.isNotEmpty && ref.watch(tipitakaTreeProvider).hasError;
+    final tipitaka = <TipitakaNode>[
+      if (tree != null)
+        for (final key in tipitakaKeys)
+          if (tree.isReading(key)) ?tree.node(key),
+    ];
+    // Until the tree has loaded, any stored key counts; once it has, only
+    // keys that are still readings do (stale keys alone leave Saved empty).
+    final hasTipitaka = treeFailed
+        ? false
+        : tree == null
+        ? tipitakaKeys.isNotEmpty
+        : tipitaka.isNotEmpty;
     return NamoPage(
       columnKey: const ValueKey('saved-column'),
       children: [
@@ -44,7 +69,7 @@ class SavedScreen extends ConsumerWidget {
               for (final id in saved.favourites.toList().reversed)
                 ?library.reading(id),
             ];
-            if (bookmarks.isEmpty && favourites.isEmpty) {
+            if (bookmarks.isEmpty && favourites.isEmpty && !hasTipitaka) {
               return EmptyState(
                 icon: Symbols.bookmark_rounded,
                 title: 'Nothing saved yet',
@@ -117,6 +142,36 @@ class SavedScreen extends ConsumerWidget {
                       onPressed: () => controller.toggleFavourite(reading.id),
                     ),
                   ),
+                if (tipitaka.isNotEmpty) ...[
+                  const SizedBox(height: NamoSpace.xxl),
+                  Padding(
+                    key: const ValueKey('saved-tipitaka-group'),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: NamoSpace.lg,
+                    ),
+                    child: Overline('Tripitaka', header: true),
+                  ),
+                  const SizedBox(height: NamoSpace.sm),
+                  for (final node in tipitaka)
+                    ListRow(
+                      title: tipitakaName(node),
+                      titleFamily: NamoFonts.sinhala,
+                      subtitle: tipitakaPath(tree!, node.key),
+                      subtitleFamily: NamoFonts.sinhala,
+                      onTap: () => context.go(
+                        Routes.tipitakaReader(node.key, fromSaved: true),
+                      ),
+                      action: NamoIconButton(
+                        icon: Symbols.close_rounded,
+                        tooltip:
+                            'Remove bookmark: ${tipitakaName(node)}',
+                        color: p.textSecondary,
+                        onPressed: () => ref
+                            .read(tipitakaSavedProvider.notifier)
+                            .toggle(node.key),
+                      ),
+                    ),
+                ],
               ],
             );
           },

@@ -56,6 +56,22 @@ class VerseTextItem extends ReaderItem {
   final bool secondary;
 }
 
+/// One verse in Pali and Sinhala for two columns side by side.
+class VersePairItem extends ReaderItem {
+  VersePairItem({
+    required this.sectionId,
+    required this.verseId,
+    required this.pali,
+    required this.sinhala,
+  });
+
+  @override
+  final String sectionId;
+  @override
+  final String verseId;
+  final String pali, sinhala;
+}
+
 /// One block of a pirith: its phrases together, shown in [languages] (the
 /// chosen selection, in order). [index] is the block's zero-based position
 /// in the reading.
@@ -72,6 +88,7 @@ class PhraseBlockItem extends ReaderItem {
     required this.languages,
     this.keepLines = false,
     this.meaning,
+    this.sideBySide = false,
   });
 
   @override
@@ -83,6 +100,9 @@ class PhraseBlockItem extends ReaderItem {
   final List<ReadingLanguage> languages;
   final bool keepLines;
   final String? meaning;
+
+  /// The block's two passages go side by side at any width.
+  final bool sideBySide;
 }
 
 /// The block for phrased verse [v] of section [s]. A unit kept line by line
@@ -94,15 +114,24 @@ PhraseBlockItem _block(
   Section s,
   Verse v,
   int index,
-  List<ReadingLanguage> languages,
-) {
+  List<ReadingLanguage> languages, {
+  bool sideBySide = false,
+}) {
   if (!v.keepLines) {
     return PhraseBlockItem(
       sectionId: s.id,
       verseId: v.id,
       index: index,
       phrases: v.phrases,
-      languages: languages,
+      // Side by side draws the first language on the left: Pali, whichever
+      // was chosen first.
+      languages: sideBySide
+          ? [
+              ...languages.where((l) => l != ReadingLanguage.sinhala),
+              ...languages.where((l) => l == ReadingLanguage.sinhala),
+            ]
+          : languages,
+      sideBySide: sideBySide,
     );
   }
   final meaning = v.sinhala;
@@ -133,6 +162,7 @@ PhraseBlockItem _block(
     languages: [...lines, if (shows) ReadingLanguage.sinhala],
     keepLines: true,
     meaning: meaning,
+    sideBySide: sideBySide,
   );
 }
 
@@ -181,6 +211,12 @@ List<ReaderItem> buildReaderItems(
   TwoLanguageLayout layout,
 ) {
   final languages = selection.languages;
+  // Side by side is only for Pali with Sinhala; any other pair is by verse.
+  final effective =
+      layout == TwoLanguageLayout.sideBySide && !selection.isPaliAndSinhala
+      ? TwoLanguageLayout.verse
+      : layout;
+  final sideBySide = effective == TwoLanguageLayout.sideBySide;
   final items = <ReaderItem>[];
 
   if (reading.isPhrased) {
@@ -197,7 +233,7 @@ List<ReaderItem> buildReaderItems(
         ),
       );
       for (final v in s.verses) {
-        items.add(_block(s, v, block++, languages));
+        items.add(_block(s, v, block++, languages, sideBySide: sideBySide));
       }
     }
     return items;
@@ -222,7 +258,7 @@ List<ReaderItem> buildReaderItems(
     if (s.verses.isNotEmpty && s.verses.every((v) => v.isPhrased)) {
       items.add(HeadingItem(s, const [], canBookmark: false));
       for (final v in s.verses) {
-        items.add(_block(s, v, block++, languages));
+        items.add(_block(s, v, block++, languages, sideBySide: sideBySide));
       }
       continue;
     }
@@ -245,7 +281,42 @@ List<ReaderItem> buildReaderItems(
       continue;
     }
     items.add(HeadingItem(s, _notes(s, languages)));
-    if (layout == TwoLanguageLayout.verse) {
+    if (sideBySide) {
+      for (final v in s.verses) {
+        final pi = v.text(ReadingLanguage.pali);
+        final si = v.text(ReadingLanguage.sinhala);
+        if (pi != null && si != null) {
+          items.add(
+            VersePairItem(
+              sectionId: s.id,
+              verseId: v.id,
+              pali: pi,
+              sinhala: si,
+            ),
+          );
+        } else if (pi != null) {
+          items.add(
+            VerseTextItem(
+              sectionId: s.id,
+              verseId: v.id,
+              language: ReadingLanguage.pali,
+              text: pi,
+              secondary: false,
+            ),
+          );
+        } else if (si != null) {
+          items.add(
+            VerseTextItem(
+              sectionId: s.id,
+              verseId: v.id,
+              language: ReadingLanguage.sinhala,
+              text: si,
+              secondary: true,
+            ),
+          );
+        }
+      }
+    } else if (effective == TwoLanguageLayout.verse) {
       for (final v in s.verses) {
         for (var i = 0; i < languages.length; i++) {
           final t = item(s, v, i);

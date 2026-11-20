@@ -1,3 +1,5 @@
+Superseded in part by `2026-11-17-flow-chant-design.md`: flows now chant their recorded sections.
+
 # Namo — My Flows (personal chanting sequences) — Design
 
 Date: 2026-11-10. Status: approved by the owner on 2026-11-10 ("yes thats right"), including the calls in section 10. Built after the premium redesign is finished; its plan is written then, against the redesign's real components.

@@ -1,0 +1,14 @@
+# The front door of the hosted recordings: a Worker that serves the objects of
+# the R2 bucket `namo-audio` on this account's workers.dev address.
+# Deploy from this folder with `npx wrangler deploy` (after `npx wrangler login`).
+name = "namo-audio"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[[r2_buckets]]
+binding = "AUDIO"
+bucket_name = "namo-audio"
+
+[observability]
+enabled = false

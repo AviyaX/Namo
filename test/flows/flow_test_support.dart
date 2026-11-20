@@ -4,13 +4,16 @@ import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../books/books_support.dart';
 import '../quality/quality_support.dart';
 import '../support/test_content.dart';
+import '../tipitaka/tipitaka_support.dart';
 
 FlowRef ref(String readingId, String sectionId) =>
     FlowRef(readingId: readingId, sectionId: sectionId);
@@ -72,7 +75,8 @@ String storedFlows(Map<String, List<FlowRef>> flows) => jsonEncode(
   ).toJson(),
 );
 
-/// Opens the app at [location] with [flows] saved.
+/// Opens the app at [location] with [flows] saved. [books] serves the
+/// books' files (by default [noBooks]: the Library has no shelf).
 Future<ProviderContainer> openFlows(
   WidgetTester t,
   String location,
@@ -83,6 +87,7 @@ Future<ProviderContainer> openFlows(
   bool? dark,
   Map<String, String> extras = const {},
   List<Override> overrides = const [],
+  AssetBytes? books,
 }) async {
   await openReal(
     t,
@@ -93,6 +98,7 @@ Future<ProviderContainer> openFlows(
     dark: dark,
     overrides: overrides,
     storeExtras: {flowsKey: storedFlows(flows), ...extras},
+    books: books ?? fakeAssets(noBooks()),
   );
   return ProviderScope.containerOf(t.element(find.byType(MaterialApp)));
 }

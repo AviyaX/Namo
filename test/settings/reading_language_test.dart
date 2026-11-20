@@ -36,4 +36,20 @@ void main() {
     expect(LanguageSelection.fromCodes([]).languages,
         LanguageSelection.initial.languages);
   });
+
+  test('isPaliAndSinhala is true for that pair in either order only', () {
+    const pi = ReadingLanguage.pali,
+        si = ReadingLanguage.sinhala,
+        en = ReadingLanguage.english;
+    expect(const LanguageSelection([pi, si]).isPaliAndSinhala, isTrue);
+    expect(const LanguageSelection([si, pi]).isPaliAndSinhala, isTrue);
+    expect(const LanguageSelection([pi]).isPaliAndSinhala, isFalse);
+    expect(const LanguageSelection([pi, en]).isPaliAndSinhala, isFalse);
+    expect(const LanguageSelection([si, en]).isPaliAndSinhala, isFalse);
+  });
+
+  test('the layout values are section, verse, side by side', () {
+    expect(TwoLanguageLayout.values.map((l) => l.label),
+        ['Section by section', 'Verse by verse', 'Side by side']);
+  });
 }

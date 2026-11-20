@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +12,10 @@ import '../design/widgets/namo_switch.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/pressable.dart';
 import '../router.dart';
+import '../tips/tips.dart';
 import 'choosers.dart';
+import 'powered_by.dart';
+import 'recordings_group.dart';
 import 'setting_controls.dart';
 import 'settings.dart';
 
@@ -120,6 +124,8 @@ class SettingsScreen extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: NamoSpace.lg),
+        const RecordingsGroup(),
+        const SizedBox(height: NamoSpace.lg),
         SettingsGroup(
           icon: Symbols.swipe_vertical_rounded,
           label: 'Auto-scroll',
@@ -140,7 +146,9 @@ class SettingsScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
               child: Text(
-                'Free. No ads. Works offline.',
+                kIsWeb
+                    ? 'Free. No ads. Texts work offline.'
+                    : 'Free. No ads. Texts work offline; recordings are downloaded once.',
                 softWrap: true,
                 style: NamoType.body(p.textSecondary),
               ),
@@ -156,8 +164,22 @@ class SettingsScreen extends ConsumerWidget {
                 color: p.textSecondary,
               ),
             ),
+            ListRow(
+              key: const ValueKey('tips-reset'),
+              title: 'Show the tips again',
+              onTap: () {
+                ref.read(tipsProvider.notifier).resetAll();
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(content: Text('The tips will show again.')),
+                  );
+              },
+            ),
           ],
         ),
+        const SizedBox(height: NamoSpace.xl),
+        const PoweredBy(),
       ],
     );
   }

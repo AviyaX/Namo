@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../tokens.dart';
 import 'pressable.dart';
 
-/// A flat card: surface fill, a 1 px border, no shadow. With [onTap] the whole
+/// A flat card: a soft surface-to-backgroundAlt gradient, a 1 px border, no
+/// shadow. With [onTap] the whole
 /// card is one [Pressable]; [leadingLine] draws a 2 px line down its leading
 /// edge.
 class SurfaceCard extends StatelessWidget {
@@ -11,10 +12,11 @@ class SurfaceCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(NamoSpace.lg),
-    this.radius = NamoRadius.md,
+    this.radius = NamoRadius.card,
     this.onTap,
     this.semanticLabel,
     this.leadingLine,
+    this.framed = false,
   });
 
   final Widget child;
@@ -24,15 +26,22 @@ class SurfaceCard extends StatelessWidget {
   final String? semanticLabel;
   final Color? leadingLine;
 
+  /// True for a featured or gatha card: the border is the gold [NamoPalette.frame].
+  final bool framed;
+
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final shape = BorderRadius.circular(radius);
     final card = DecoratedBox(
       decoration: BoxDecoration(
-        color: p.surface,
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [p.surface, p.backgroundAlt],
+        ),
         borderRadius: shape,
-        border: Border.all(color: p.border),
+        border: Border.all(color: framed ? p.frame : p.border),
       ),
       child: ClipRRect(
         borderRadius: shape,

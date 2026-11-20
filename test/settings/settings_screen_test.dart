@@ -7,6 +7,7 @@ import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/settings/setting_controls.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -86,7 +87,7 @@ void main() {
 
     await t.tap(row('Pali'));
     await t.pump();
-    for (final l in ['Section by section', 'Verse by verse']) {
+    for (final l in ['Section by section', 'Verse by verse', 'Side by side']) {
       final node = t.getSemantics(row(l));
       expect(node.hint, 'Needs two languages');
     }
@@ -192,6 +193,7 @@ void main() {
     'Reading',
     'Languages',
     'Audio',
+    'Recordings',
     'Auto-scroll',
     'About Namo',
   ];
@@ -218,9 +220,9 @@ void main() {
     expect(lines('Reading'), findsNWidgets(2));
   });
 
-  testWidgets('Settings shows its six groups in order', (t) async {
+  testWidgets('Settings shows its seven groups in order', (t) async {
     await openSettings(t, size: const Size(390, 2400));
-    expect(find.byType(SettingsGroup), findsNWidgets(6));
+    expect(find.byType(SettingsGroup), findsNWidgets(7));
     var last = -1.0;
     for (final label in groupLabels) {
       final y = t.getTopLeft(find.text(label)).dy;
@@ -264,10 +266,35 @@ void main() {
       findsOneWidget,
     );
     expect(
-      inGroup('About Namo', find.text('Free. No ads. Works offline.')),
+      inGroup('About Namo', find.text('Free. No ads. Texts work offline; recordings are downloaded once.')),
       findsOneWidget,
     );
     expect(inGroup('About Namo', find.text('Sources')), findsOneWidget);
+    expect(
+      inGroup('About Namo', find.text('Show the tips again')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('Show the tips again forgets the seen tips and says so', (t) async {
+    final store = InMemoryKeyValueStore();
+    await store.write(
+      tipsKey,
+      '{"seen":["myFlows","readerSettings","recordings","scrollChant"]}',
+    );
+    await pumpApp(
+      t,
+      overrides: [
+        contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
+        keyValueStoreProvider.overrideWithValue(store),
+      ],
+      location: '/settings',
+      size: const Size(390, 2400),
+    );
+    await t.tap(find.byKey(const ValueKey('tips-reset')));
+    await t.pump();
+    expect(store.read(tipsKey), '{"seen":[]}');
+    expect(find.text('The tips will show again.'), findsOneWidget);
   });
 
   testWidgets('Settings uses no SwitchListTile, Card or AppBar', (t) async {
@@ -345,7 +372,7 @@ void main() {
           t.platformDispatcher.clearPlatformBrightnessTestValue();
         });
         await openSettings(t, size: Size(w, 800));
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 7; i++) {
           await t.drag(find.byType(Scrollable).first, const Offset(0, -400));
           await t.pump();
         }

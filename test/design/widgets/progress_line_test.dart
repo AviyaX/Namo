@@ -72,5 +72,38 @@ void main() {
       await _pump(t, 0.5, height: 4);
       expect(t.getSize(find.byType(ProgressLine)).height, 4);
     });
+
+    testWidgets('rounded: the track and the fill have round ends, the fill '
+        'still the fraction of the width', (t) async {
+      await pumpThemed(
+        t,
+        const SizedBox(
+          width: 200,
+          child: ProgressLine(value: 0.25, height: 4, rounded: true),
+        ),
+      );
+      expect(t.getSize(find.byType(ProgressLine)).height, 4);
+      BoxDecoration decorationOf(Color c) => t
+          .widgetList<Widget>(
+            find.descendant(of: find.byType(ProgressLine), matching: find.byWidgetPredicate(
+              (w) =>
+                  (w is Container && (w.decoration as BoxDecoration?)?.color == c) ||
+                  (w is DecoratedBox && (w.decoration as BoxDecoration).color == c),
+            )),
+          )
+          .map((w) => w is Container ? w.decoration! : (w as DecoratedBox).decoration)
+          .whereType<BoxDecoration>()
+          .first;
+      expect(decorationOf(NamoPalette.dark.border).borderRadius, BorderRadius.circular(2));
+      expect(decorationOf(NamoPalette.dark.sage).borderRadius, BorderRadius.circular(2));
+      final fill = find.descendant(
+        of: find.byType(ProgressLine),
+        matching: find.byWidgetPredicate(
+          (w) => w is DecoratedBox && (w.decoration as BoxDecoration).color == NamoPalette.dark.sage,
+        ),
+      );
+      expect(t.getSize(fill).width, 50);
+      expect(const ProgressLine(value: 0).rounded, isFalse);
+    });
   });
 }

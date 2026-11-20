@@ -26,7 +26,12 @@ class ListRow extends StatelessWidget {
     this.inMutuallyExclusiveGroup,
     this.detail,
     this.detailLabel,
+    this.semanticLabel,
   });
+
+  /// What screen readers say for the row, in place of the label made from
+  /// its number, title, subtitle, caption and detail.
+  final String? semanticLabel;
 
   /// Shown at the right end of the row, inside the tappable row (a chevron,
   /// say). It is part of the row's one spoken label.
@@ -83,7 +88,7 @@ class ListRow extends StatelessWidget {
       checked: checked,
       inMutuallyExclusiveGroup: inMutuallyExclusiveGroup,
       excludeChildSemantics: true,
-      semanticLabel: [
+      semanticLabel: semanticLabel ?? [
         if (number != null) '$number',
         title,
         if (subtitle != null) subtitle,

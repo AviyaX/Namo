@@ -5,6 +5,45 @@ import 'package:flutter_test/flutter_test.dart';
 import 'widget_support.dart';
 
 void main() {
+  testWidgets('a given focus node is used and left undisposed', (t) async {
+    final c = TextEditingController();
+    final node = FocusNode();
+    addTearDown(c.dispose);
+    addTearDown(node.dispose);
+    await pumpThemed(
+      t,
+      SearchField(controller: c, label: 'Search', focusNode: node),
+    );
+    expect(t.widget<EditableText>(find.byType(EditableText)).focusNode, node);
+    node.requestFocus();
+    await t.pump();
+    expect(find.byKey(const ValueKey('search-focus-ring')), findsOneWidget);
+    await pumpThemed(t, const SizedBox());
+    // Still usable: the field did not dispose it.
+    node.addListener(() {});
+  });
+
+  testWidgets('switching between its own node and a given one works', (
+    t,
+  ) async {
+    final c = TextEditingController();
+    final node = FocusNode();
+    addTearDown(c.dispose);
+    addTearDown(node.dispose);
+    const key = ValueKey('field');
+    await pumpThemed(t, SearchField(key: key, controller: c, label: 'S'));
+    await pumpThemed(
+      t,
+      SearchField(key: key, controller: c, label: 'S', focusNode: node),
+    );
+    node.requestFocus();
+    await t.pumpAndSettle();
+    expect(find.byKey(const ValueKey('search-focus-ring')), findsOneWidget);
+    await pumpThemed(t, SearchField(key: key, controller: c, label: 'S'));
+    expect(find.byKey(const ValueKey('search-focus-ring')), findsNothing);
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('is not focused on first build', (t) async {
     final c = TextEditingController();
     addTearDown(c.dispose);

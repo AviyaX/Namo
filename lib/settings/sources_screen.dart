@@ -14,6 +14,7 @@ import '../design/widgets/page_header.dart';
 import '../design/widgets/surface_card.dart';
 import '../library/library_gate.dart';
 import '../router.dart';
+import '../tipitaka/tipitaka_repository.dart';
 
 /// One credited source. An address is shown as text to copy, never opened.
 class _Credit {
@@ -24,12 +25,24 @@ class _Credit {
 }
 
 const _credits = [
-  _Credit('namo.lk', 'Sections 1–17.', 'https://namo.lk/buddha-puja/'),
+  _Credit(
+    'namo.lk',
+    'The first verses of sections 2–7 and sections 9–19.',
+    'https://namo.lk/buddha-puja/',
+  ),
   _Credit(
     'The paritha.org booklet',
     'Compiled by Devapriya and Shyamali from the Piruwana Poth Wahanse, '
-        '"for free distribution". Sections 18–19.',
+        '"for free distribution". Sections 20 and 22, and the Sinhala of '
+        'three verses in 8 and one in 23.',
     'https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf',
+  ),
+  _Credit(
+    'Shanthi Vihara, Nottingham',
+    'Evening Puja and Chanting booklet: the Pali, Roman Pali and English of '
+        'sections 1, 8, 21 and 23–33, verses 2–5 of sections 5–7, three '
+        'English lines in 19 and 22, and the Roman Pali of the other '
+        'sections.',
   ),
   _Credit(
     'The "Vandana" booklet of Mahamevnawa Bhavana Asapuwa, Markham, Ontario',
@@ -59,10 +72,10 @@ const _pictureCredits = [
         'generated picture, not a photograph of a real statue or place.',
   ),
   _Credit(
-    'Home banner picture',
-    'Shown across the top of Home on wide screens. Made for this app by its '
-        'owner with an AI image tool; a generated picture, not a photograph '
-        'of a real place.',
+    'Home header and featured pictures',
+    'Shown behind the Home header and on the featured card. Made for this app '
+        'by its owner with an AI image tool; generated pictures, not '
+        'photographs of a real statue or place.',
   ),
   _Credit(
     'Pirith card picture',
@@ -149,8 +162,17 @@ List<(String key, String title, List<String> notes)> _collectChecks(
         continue;
       }
       for (final section in reading.sections) {
+        if (section.check == CheckStatus.needsChecking &&
+            section.notes.isNotEmpty) {
+          rows.add((
+            'check-section-${section.id}',
+            'Section ${section.number}',
+            section.notes,
+          ));
+        }
         for (final verse in section.verses) {
-          if (verse.check == CheckStatus.needsChecking) {
+          if (verse.check == CheckStatus.needsChecking &&
+              verse.notes.isNotEmpty) {
             rows.add((
               'check-${verse.id}',
               'Section ${section.number}',
@@ -207,12 +229,21 @@ class SourcesScreen extends StatelessWidget {
         ),
         const SizedBox(height: NamoSpace.sm),
         Text(
-          'Namo is not made by, or connected with, namo.lk or pitaka.lk.',
+          'Namo is not made by, or connected with, namo.lk, pitaka.lk, Shanthi '
+          'Vihara or the Sri Chandawimala Dhamma Treatises Preservation Board.',
+          textAlign: TextAlign.center,
+          style: NamoType.body(p.text),
+        ),
+        const SizedBox(height: NamoSpace.sm),
+        Text(
+          "The recordings are fetched from the app's own storage (namo-audio.v-g-a-induwara.workers.dev), not from the sources' sites.",
           textAlign: TextAlign.center,
           style: NamoType.body(p.text),
         ),
         for (final credit in _credits) _CreditBlock(credit),
         const _SamanthaCreditBlock(),
+        const _TipitakaCreditBlock(),
+        const _BooksCreditBlock(),
         const _SectionLabel('Pictures'),
         for (final credit in _pictureCredits) _CreditBlock(credit),
         LibraryGate(
@@ -261,6 +292,83 @@ class _SamanthaCreditBlock extends ConsumerWidget {
   }
 }
 
+/// The Tripitaka credit. The version sentence waits for the manifest (and is
+/// left out if it cannot be read).
+class _TipitakaCreditBlock extends ConsumerWidget {
+  const _TipitakaCreditBlock();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final p = NamoPalette.of(context);
+    final date = ref.watch(tipitakaManifestProvider).value?.commitDate;
+    final sentences = [
+      'The Tripitaka text is the Buddha Jayanti Tripitaka Pali text and its '
+          'Sinhala translation as published by tipitaka.lk '
+          '(github.com/pathnirvana/tipitaka.lk).',
+      'Licence: Creative Commons Attribution-NoDerivatives 4.0 '
+          'International. The text is included unchanged.',
+      ?(date == null ? null : 'Version of $date.'),
+      'Namo is not connected to tipitaka.lk.',
+      'If you find an error in the text, please report it to '
+          'path.nirvana@gmail.com so it can be corrected at the source.',
+    ];
+    return _SourceCard(
+      key: const ValueKey('sources-tripitaka'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Text('Tripitaka', style: NamoType.cardTitle(p.text)),
+          ),
+          for (final sentence in sentences)
+            Padding(
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
+              child: Text(sentence, style: NamoType.body(p.textSecondary)),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The credit for the books of Ven. Rerukane Chandawimala Maha Nahimi.
+class _BooksCreditBlock extends StatelessWidget {
+  const _BooksCreditBlock();
+
+  static const _sentences = [
+    'The books of Ven. Rerukane Chandawimala Maha Nahimi are the Unicode text '
+        'published by pitaka.lk (pathnirvana) and are included unchanged.',
+    'The books and their covers are published by the Sri Chandawimala Dhamma '
+        'Treatises Preservation Board, Pokunuwita (rerukanemahanahimi.lk).',
+    'Namo is not connected with pitaka.lk or the Board.',
+    'If you find an error in a book, please report it to the publisher or to '
+        'pitaka.lk so it can be corrected at the source.',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return _SourceCard(
+      key: const ValueKey('sources-books'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Text('Books', style: NamoType.cardTitle(p.text)),
+          ),
+          for (final sentence in _sentences)
+            Padding(
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
+              child: Text(sentence, style: NamoType.body(p.textSecondary)),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 /// A heading over a run of cards.
 class _SectionLabel extends StatelessWidget {
   const _SectionLabel(this.text);
@@ -283,7 +391,7 @@ class _SectionLabel extends StatelessWidget {
 
 /// A card in a run of cards, 16 below the one before.
 class _SourceCard extends StatelessWidget {
-  const _SourceCard({required this.child});
+  const _SourceCard({super.key, required this.child});
 
   final Widget child;
 

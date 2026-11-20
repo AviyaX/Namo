@@ -7,6 +7,7 @@ Hand-made data uses placeholders such as "A1"; real text is only read from the e
 import hashlib
 import re
 import shutil
+import struct
 import importlib.util
 import json
 import pathlib
@@ -23,6 +24,25 @@ SCRIPT = ROOT / "tools" / "build_pirith.py"
 EXTRACTED = ROOT / "content" / "extracted" / "pitaka_lk_pirith.json"
 
 
+def box(kind, body):
+    return struct.pack(">I4s", 8 + len(body), kind) + body
+
+
+def mp4(timescale, duration, version=0):
+    """A minimal MP4: ftyp, then moov holding an mvhd of the given version (fields after the
+    duration are zeros)."""
+    if version == 0:
+        fields = struct.pack(">BxxxIIII", 0, 1, 2, timescale, duration)
+    else:
+        fields = struct.pack(">BxxxQQIQ", 1, 1, 2, timescale, duration)
+    mvhd = box(b"mvhd", fields + bytes(80))
+    return box(b"ftyp", b"M4A \x00\x00\x00\x00M4A mp42isom") + box(b"moov", box(b"free", b"x") + mvhd)
+
+
+# A recording 1:41 long, as the made-up listings say.
+AUDIO = mp4(1000, 101000)
+
+
 def pair(tag):
     return {"pali": f"P{tag}", "sinhala": f"S{tag}", "english": f"E{tag}"}
 
@@ -31,7 +51,7 @@ def block(n, start, end, tags):
     return {"n": n, "start": start, "end": end, "pairs": [pair(t) for t in tags]}
 
 
-def item(item_id, number, blocks, audio=b"abcdef"):
+def item(item_id, number, blocks, audio=AUDIO):
     return {"id": item_id, "number": number, "title_si": "T-" + item_id, "chanter": "c1",
             "duration": "1:41", "audio_file": f"{item_id}.m4a", "audio_bytes": len(audio),
             "blocks": blocks}
@@ -48,9 +68,9 @@ def tree(items, audios):
         json.dumps(data, ensure_ascii=False), encoding="utf-8")
     names = {i["id"].split("-", 1)[0]: "Name " + i["id"].split("-", 1)[0] for i in items if i["blocks"]}
     (root / "content" / "pirith_names_en.json").write_text(json.dumps(names), encoding="utf-8")
-    (root / "assets" / "audio" / "pirith").mkdir(parents=True)
+    (root / "hosted" / "audio" / "pirith").mkdir(parents=True)
     for name, content in audios.items():
-        (root / "assets" / "audio" / "pirith" / f"{name}.m4a").write_bytes(content)
+        (root / "hosted" / "audio" / "pirith" / f"{name}.m4a").write_bytes(content)
     return tmp, root
 
 
@@ -62,7 +82,7 @@ def small_tree():
     two = [block(1, 0.0, 1.0, ["d1"])]
     items = [item("05-a", 1, one), item("06-empty", 2, []), item("08-mahamangala", 3, two),
              item("09-rathana", 4, two), item("10-karaniya", 5, two), item("11-b", 6, two)]
-    return tree(items, {i["id"]: b"abcdef" for i in items if i["blocks"]})
+    return tree(items, {i["id"]: AUDIO for i in items if i["blocks"]})
 
 
 def run_cli(root, *args):
@@ -99,8 +119,10 @@ class SmallBuildTest(unittest.TestCase):
         self.assertEqual(audio["block_times"], [[1.5, 3.0], None, None])
         self.assertEqual(len(audio["block_times"]), len(r["sections"][0]["verses"]))
         self.assertEqual(audio["duration_ms"], 101000)
-        self.assertEqual(audio["bytes"], 6)
-        self.assertEqual(audio["sha256"], hashlib.sha256(b"abcdef").hexdigest())
+        self.assertEqual(audio["path"], "audio/pirith/05-a.m4a")
+        self.assertNotIn("asset", audio)
+        self.assertEqual(audio["bytes"], len(AUDIO))
+        self.assertEqual(audio["sha256"], hashlib.sha256(AUDIO).hexdigest())
         self.assertEqual(audio["label"], "Chanted by Ven. Test Thero")
 
     def test_phrases_keep_order_and_strings(self):
@@ -137,8 +159,8 @@ class SmallBuildTest(unittest.TestCase):
         ok = run_cli(self.root, "--check")
         self.assertEqual(ok.returncode, 0, ok.stderr)
         self.assertIn("pirith content is up to date", ok.stdout)
-        path = self.root / "assets" / "audio" / "pirith" / "05-a.m4a"
-        path.write_bytes(b"abcdeg")
+        path = self.root / "hosted" / "audio" / "pirith" / "05-a.m4a"
+        path.write_bytes(AUDIO[:-1] + b"\x01")
         bad = run_cli(self.root, "--check")
         self.assertNotEqual(bad.returncode, 0)
         self.assertIn("05-a.m4a", bad.stderr)
@@ -157,11 +179,50 @@ class SmallBuildTest(unittest.TestCase):
         src = pathlib.Path(self.tmp.name) / "dl"
         src.mkdir()
         for i in self.readings:
-            (src / (i["id"][len("pirith-"):] + ".m4a")).write_bytes(b"abcdef")
+            (src / (i["id"][len("pirith-"):] + ".m4a")).write_bytes(AUDIO)
         (src / "05-a.m4a").write_bytes(b"abc")
         with self.assertRaises(build_pirith.BuildError) as ctx:
             build_pirith.import_audio(self.root, src)
         self.assertIn("05-a.m4a", str(ctx.exception))
+
+
+class DurationTest(unittest.TestCase):
+    def test_version_0(self):
+        self.assertEqual(build_pirith.mp4_duration_ms(mp4(11025, 1366016)), 123902)
+
+    def test_version_1(self):
+        self.assertEqual(build_pirith.mp4_duration_ms(mp4(8000, 1616896, version=1)), 202112)
+        self.assertEqual(build_pirith.mp4_duration_ms(mp4(44100, 2**33, version=1)),
+                         round(2**33 * 1000 / 44100))
+
+    def test_rounds_to_the_nearest_millisecond(self):
+        self.assertEqual(build_pirith.mp4_duration_ms(mp4(3, 1)), 333)
+        self.assertEqual(build_pirith.mp4_duration_ms(mp4(3, 2)), 667)
+
+    def test_not_an_mp4_fails(self):
+        for data in (b"abcdef", box(b"ftyp", b"M4A "), box(b"moov", box(b"mvhd", b"\x00\x00")),
+                     box(b"moov", box(b"mvhd", bytes(20))), box(b"moov", box(b"mvhd", b"\x02" + bytes(40)))):
+            with self.subTest(data=data[:16]), self.assertRaises(build_pirith.BuildError):
+                build_pirith.mp4_duration_ms(data)
+
+    def test_build_reads_the_length_from_the_file_not_the_listing(self):
+        tmp, root = tree([item("08-mahamangala", 1, [block(1, 0.0, 1.0, ["d1"])], audio=mp4(1000, 5250)),
+                          item("09-rathana", 2, [block(1, 0.0, 1.0, ["d1"])]),
+                          item("10-karaniya", 3, [block(1, 0.0, 1.0, ["d1"])])],
+                         {"08-mahamangala": mp4(1000, 5250), "09-rathana": AUDIO, "10-karaniya": AUDIO})
+        with tmp:
+            readings = build_pirith.build(root)["categories"][0]["readings"]
+            self.assertEqual(readings[0]["audio"]["duration_ms"], 5250)
+
+    def test_build_names_a_recording_without_a_length(self):
+        tmp, root = tree([item("08-mahamangala", 1, [block(1, 0.0, 1.0, ["d1"])], audio=b"abcdef"),
+                          item("09-rathana", 2, [block(1, 0.0, 1.0, ["d1"])]),
+                          item("10-karaniya", 3, [block(1, 0.0, 1.0, ["d1"])])],
+                         {"08-mahamangala": b"abcdef", "09-rathana": AUDIO, "10-karaniya": AUDIO})
+        with tmp:
+            with self.assertRaises(build_pirith.BuildError) as ctx:
+                build_pirith.build(root)
+            self.assertIn("08-mahamangala.m4a", str(ctx.exception))
 
 
 class RealDataTest(unittest.TestCase):
@@ -198,9 +259,17 @@ class RealDataTest(unittest.TestCase):
     def test_recordings_are_the_originals(self):
         for r in self.readings:
             a = r["audio"]
-            data = (ROOT / a["asset"]).read_bytes()
+            self.assertTrue(a["path"].startswith("audio/pirith/"))
+            data = (ROOT / "hosted" / a["path"]).read_bytes()
             self.assertEqual((len(data), hashlib.sha256(data).hexdigest()), (a["bytes"], a["sha256"]))
             self.assertEqual(len(a["block_times"]), len(r["sections"][0]["verses"]))
+
+    def test_every_recording_is_at_least_as_long_as_its_last_timed_block(self):
+        for r in self.readings:
+            a = r["audio"]
+            ends = [t[1] for t in a["block_times"] if t]
+            with self.subTest(reading=r["id"]):
+                self.assertGreaterEqual(a["duration_ms"], round(max(ends) * 1000))
 
 
 if __name__ == "__main__":

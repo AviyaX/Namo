@@ -4,6 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/audio_controls.dart';
+import '../books/book_model.dart';
+import '../books/book_search.dart';
+import '../books/books_part.dart';
+import '../books/books_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -27,16 +31,19 @@ import 'search.dart';
 /// same page. Search results take the place of both.
 ///
 /// [openCategory] or [openReading] (from the address) opens that category
-/// once; an id that matches nothing is ignored.
+/// once; an id that matches nothing is ignored. [focusSearch] (from the
+/// address) puts the focus in the search box once.
 class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({
     super.key = const ValueKey('screen-library'),
     this.openCategory,
     this.openReading,
+    this.focusSearch = false,
   });
 
   final String? openCategory;
   final String? openReading;
+  final bool focusSearch;
 
   @override
   ConsumerState<LibraryScreen> createState() => _LibraryScreenState();
@@ -48,6 +55,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   String? _handled;
 
   final _query = TextEditingController();
+  final _searchFocus = FocusNode();
 
   /// The topic chosen with the chips; null is "All". Not stored.
   String? _chip;
@@ -57,9 +65,32 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   final _headers = <String, GlobalKey>{};
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.focusSearch) _focusSearchSoon();
+  }
+
+  @override
+  void didUpdateWidget(LibraryScreen old) {
+    super.didUpdateWidget(old);
+    if (widget.focusSearch && !old.focusSearch) _focusSearchSoon();
+  }
+
+  @override
   void dispose() {
     _query.dispose();
+    _searchFocus.dispose();
     super.dispose();
+  }
+
+  /// After this frame, puts the focus in the search box and clears the
+  /// request from the address, so that asking again is a new request.
+  void _focusSearchSoon() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _searchFocus.requestFocus();
+      context.replace(Routes.library);
+    });
   }
 
   /// The category the address asks for, if it names one that exists.
@@ -117,6 +148,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     final open = ref.watch(openCategoriesProvider);
     final selection = ref.watch(settingsProvider.select((s) => s.languages));
     final index = ref.watch(searchIndexProvider);
+    final books = ref.watch(booksIndexProvider).value?.books ?? const [];
     return NamoPage(
       children: [
         LibraryGate(
@@ -154,12 +186,14 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 SearchField(
                   key: const ValueKey('library-search'),
                   controller: _query,
+                  focusNode: _searchFocus,
                   label: 'Search the library',
                   onChanged: (_) => setState(() {}),
                 ),
                 const SizedBox(height: NamoSpace.lg),
                 if (searching)
                   _Results(
+                    books: searchBooks(books, query),
                     hits: index?.search(query, selection) ?? const [],
                     query: query.trim(),
                   )
@@ -187,6 +221,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                         open: open.contains(c.id) || c.id == requested?.id,
                         animate: c.id != requested?.id,
                       ),
+                  // The books come after the topics.
+                  const SizedBox(height: NamoSpace.xl),
+                  const BooksPart(),
                 ],
               ],
             );
@@ -197,17 +234,23 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   }
 }
 
-/// The sections that match the search, or a nothing-found state.
+/// The books and the sections that match the search, or a nothing-found
+/// state.
 class _Results extends StatelessWidget {
-  const _Results({required this.hits, required this.query});
+  const _Results({
+    required this.books,
+    required this.hits,
+    required this.query,
+  });
 
+  final List<BookSummary> books;
   final List<SearchHit> hits;
   final String query;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    if (hits.isEmpty) {
+    if (books.isEmpty && hits.isEmpty) {
       return EmptyState(
         key: const ValueKey('library-results'),
         icon: Symbols.search_off_rounded,
@@ -219,6 +262,28 @@ class _Results extends StatelessWidget {
       key: const ValueKey('library-results'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (books.isNotEmpty) ...[
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: NamoSpace.lg),
+            child: Overline('Books', header: true),
+          ),
+          const SizedBox(height: NamoSpace.sm),
+          for (final b in books)
+            ListRow(
+              key: ValueKey('book-hit-${b.id}'),
+              title: b.title,
+              titleFamily: NamoFonts.sinhala,
+              subtitle: b.subtitle,
+              onTap: () => context.go(Routes.book(b.id)),
+              trailing: Icon(
+                Symbols.chevron_right_rounded,
+                size: NamoSizes.iconSmall,
+                weight: 300,
+                color: p.textSecondary,
+              ),
+            ),
+          if (hits.isNotEmpty) const SizedBox(height: NamoSpace.lg),
+        ],
         for (final h in hits)
           ListRow(
             // A topic gone through reading by reading numbers its readings.

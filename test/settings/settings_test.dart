@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:buddhist_gatha/settings/auto_download.dart';
 import 'package:buddhist_gatha/settings/reading_language.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
@@ -15,6 +16,31 @@ ProviderContainer containerOn(KeyValueStore store) {
 }
 
 void main() {
+  test('bookPaper defaults to cream and round-trips', () {
+    expect(const AppSettings().bookPaper, BookPaper.cream);
+    final s = const AppSettings().copyWith(bookPaper: BookPaper.dark);
+    expect(AppSettings.fromJson(s.toJson()).bookPaper, BookPaper.dark);
+    expect(AppSettings.fromJson({'bookPaper': 'sepia'}).bookPaper,
+        BookPaper.cream);
+    expect(AppSettings.fromJson(<String, dynamic>{}).bookPaper,
+        BookPaper.cream);
+    expect(s.toJson()['bookPaper'], 'dark');
+    expect(BookPaper.cream.label, 'Cream');
+    expect(BookPaper.dark.label, 'Dark');
+  });
+
+  test('bookReadingMode defaults to pages and round-trips', () {
+    expect(const AppSettings().bookReadingMode, BookReadingMode.pages);
+    final s =
+        const AppSettings().copyWith(bookReadingMode: BookReadingMode.scroll);
+    expect(AppSettings.fromJson(s.toJson()).bookReadingMode,
+        BookReadingMode.scroll);
+    expect(AppSettings.fromJson({'bookReadingMode': 'sideways'}).bookReadingMode,
+        BookReadingMode.pages);
+    expect(BookReadingMode.pages.label, 'Pages');
+    expect(BookReadingMode.scroll.label, 'Scroll');
+  });
+
   test('defaults', () {
     final s = containerOn(InMemoryKeyValueStore()).read(settingsProvider);
     expect(s.languages.languages,
@@ -23,6 +49,7 @@ void main() {
     expect(s.fontScale, 1.0);
     expect(s.lineSpacing, 1.6);
     expect(s.scrollSpeed, 22.0);
+    expect(s.chantSpeed, 1.0);
     expect(s.autoScrollWithAudio, isFalse);
     expect(s.themeMode, ThemeMode.dark);
   });
@@ -37,6 +64,7 @@ void main() {
     n.setFontScale(1.3);
     n.setLineSpacing(2.0);
     n.setScrollSpeed(40);
+    n.setChantSpeed(1.25);
     n.setAutoScrollWithAudio(true);
     n.setThemeMode(ThemeMode.dark);
 
@@ -47,6 +75,7 @@ void main() {
     expect(s.fontScale, 1.3);
     expect(s.lineSpacing, 2.0);
     expect(s.scrollSpeed, 40);
+    expect(s.chantSpeed, 1.25);
     expect(s.autoScrollWithAudio, isTrue);
     expect(s.themeMode, ThemeMode.dark);
     expect(jsonDecode(store.read('namo.settings.v1')!)['languages'],
@@ -113,5 +142,77 @@ void main() {
     final store = InMemoryKeyValueStore()
       ..write('namo.settings.v1', '"nonsense"');
     expect(containerOn(store).read(settingsProvider).themeMode, ThemeMode.dark);
+  });
+
+  test('chant speed snaps to the nearest allowed value', () {
+    expect(AppSettings.snapChantSpeed(1.1), 1.0);
+    expect(AppSettings.snapChantSpeed(1.2), 1.25);
+    expect(AppSettings.snapChantSpeed(3), 1.5);
+    expect(AppSettings.snapChantSpeed(0.1), 0.75);
+    expect(AppSettings.snapChantSpeed(0.875), 0.75); // a tie goes down
+    expect(AppSettings.snapChantSpeed('fast'), 1.0);
+    expect(AppSettings.snapChantSpeed(null), 1.0);
+    expect(AppSettings.snapChantSpeed(double.nan), 1.0);
+  });
+
+  test('the next chant speed cycles 1, 1.25, 1.5, 0.75, 1', () {
+    var s = 1.0;
+    final seen = <double>[];
+    for (var i = 0; i < 5; i++) {
+      s = AppSettings.nextChantSpeed(s);
+      seen.add(s);
+    }
+    expect(seen, [1.25, 1.5, 0.75, 1.0, 1.25]);
+    expect(AppSettings.nextChantSpeed(1.1), 1.25); // snapped first
+  });
+
+  test('a damaged saved chant speed falls back alone', () {
+    final s = AppSettings.fromJson({'chantSpeed': 'x', 'fontScale': 1.2});
+    expect(s.chantSpeed, 1.0);
+    expect(s.fontScale, 1.2);
+    expect(AppSettings.fromJson({'chantSpeed': 1.5}).chantSpeed, 1.5);
+    expect(
+        jsonDecode(jsonEncode(const AppSettings(chantSpeed: 1.25).toJson()))[
+            'chantSpeed'],
+        1.25);
+  });
+
+  test('side by side is refused for a pair that is not Pali and Sinhala', () {
+    final store = InMemoryKeyValueStore();
+    final c = containerOn(store);
+    final n = c.read(settingsProvider.notifier);
+    expect(n.setLayout(TwoLanguageLayout.sideBySide), LayoutOutcome.changed);
+    expect(c.read(settingsProvider).layout, TwoLanguageLayout.sideBySide);
+    n.toggleLanguage(ReadingLanguage.sinhala); // now Pali alone
+    n.toggleLanguage(ReadingLanguage.english); // Pali + English
+    expect(c.read(settingsProvider).layout, TwoLanguageLayout.sideBySide,
+        reason: 'kept');
+    expect(c.read(settingsProvider).effectiveLayout, TwoLanguageLayout.verse);
+    expect(n.setLayout(TwoLanguageLayout.verse), LayoutOutcome.changed);
+    expect(n.setLayout(TwoLanguageLayout.sideBySide), LayoutOutcome.refusedPair);
+    expect(c.read(settingsProvider).layout, TwoLanguageLayout.verse);
+  });
+
+  test('effectiveLayout is the saved layout for Pali and Sinhala', () {
+    const s = AppSettings(layout: TwoLanguageLayout.sideBySide);
+    expect(s.effectiveLayout, TwoLanguageLayout.sideBySide);
+    expect(AppSettings.fromJson({'layout': 'sideBySide'}).layout,
+        TwoLanguageLayout.sideBySide);
+  });
+
+  test('auto download defaults to Wi-Fi only', () {
+    expect(const AppSettings().autoDownload, AutoDownload.wifiOnly);
+  });
+  test('auto download is saved by name and read back', () {
+    final store = InMemoryKeyValueStore();
+    final c = containerOn(store);
+    c.read(settingsProvider.notifier).setAutoDownload(AutoDownload.off);
+    expect((jsonDecode(store.read(settingsKey)!) as Map)['autoDownload'], 'off');
+    expect(containerOn(store).read(settingsProvider).autoDownload, AutoDownload.off);
+  });
+  test('an unknown auto download value falls back alone', () {
+    final s = AppSettings.fromJson({'autoDownload': 'sometimes', 'fontScale': 1.2});
+    expect(s.autoDownload, AutoDownload.wifiOnly);
+    expect(s.fontScale, 1.2);
   });
 }

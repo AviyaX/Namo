@@ -8,9 +8,63 @@
   - [ ] When the address of the book's page on tipitaka.lk is known, replace the placeholder locator "(the page on tipitaka.lk is not yet known)" in `tools/build_samantha_patthana.py`, then rebuild with `python -I -X utf8 tools/build_samantha_patthana.py .`.
   - [ ] Confirm the Samantha Pattana wording on the Sources page, including "No English meaning is included." and the picture credit.
   - [ ] In a web browser: the recording is requested only when play is pressed, and it plays and seeks.
+- [ ] Buddha Wandanawa (sections and English from the Shanthi Vihara, Nottingham booklet "Evening Puja and Chanting"): do not publish the app or push the repository to a public place until the owner confirms the vihara's permission; then add "used with permission" to the Sources entry.
+- [ ] Buddha Wandanawa, owner checks: read sections 1, 5–8, 21, 23–33 in the app against the booklet's pages. To clear a section, add its key to NOTTINGHAM_CHECKED in tools/build_content.py and rebuild (the keys are the names in NOTTINGHAM_SECTIONS, and "s05", "s06", "s07"). While reading section 8, look at two Sinhala spellings reused from the paritha.org booklet as printed: "සියලූ" (long ū, three times) and "වහන්ගේ" (once, verse 8); decide whether to add correction rows. While reading, look at the booklet's own slips, both kept as printed: s33-v8's English prints two lines twice (booklet page 33) and its Roman reads "uparimāya Dukkha disāya" (page 32). Also read the Roman Pali of the eight verses whose booklet spelling differs slightly from the screen (s05-v1, s06-v1, s07-v1, s10-v1, s10-v2, s12-v1, s14-v2, s04-v1 partial).
+- [ ] Buddha Wandanawa, owner: after installing this build, bookmarks and the saved place inside Buddha Wandanawa point at shifted sections (the reading was renumbered); re-make them once.
 - [ ] My flows, by hand on a phone (Android and iOS) and in a web browser:
   - [ ] In the Library, make a new flow from a reading; the editor shows all its sections.
   - [ ] Reorder sections by dragging the handle (on a phone, with a finger), and with Move up / Move down from a row's menu.
   - [ ] Remove a section, then Undo; add a pirith from Add sections.
   - [ ] Start chanting: the sections are in your order, numbered from 1; Back returns to the editor.
   - [ ] Close the app fully and open it again: the flow, its order and your place in it are still there, and it shows on Home under "Your flows".
+  - [ ] Owner, on a phone: chant a flow of two pirith, in order, as one recording after the other.
+  - [ ] Owner, on a phone: with one of the two pirith not downloaded, the chant waits, and goes on when it arrives.
+  - [ ] Owner, on a phone: a flow of Buddha Wandanawa sections plus a pirith shows "Chant plays 1 of 4 sections" before Play.
+  - [ ] Owner, on a phone: after a flow's chant ends, drag the slider back into the first pirith: it stays paused.
+- [ ] Premium Home, owner checks on a phone:
+  - [ ] Look at Home in light and dark on a phone.
+  - [ ] Look at the Home header text over the picture (a soft glow sits behind it) in light and dark.
+  - [ ] Featured card: the small "FEATURED COLLECTION" line is cream, not gold, for readability - confirm.
+  - [ ] Quick Access: four in a row from 390 px wide phones, two rows of two on narrower ones - confirm.
+  - [ ] Look at the joined-palms mark in Quick Access.
+  - [ ] Supply the new Samantha Pattana picture.
+  - [ ] Confirm the picture credit wording.
+- [ ] Tripitaka (text from tipitaka.lk):
+  - [ ] Before each release run `python -I -X utf8 tools/sync_tipitaka.py . --fetch`, then `python -I -X utf8 tools/sync_tipitaka.py . --check`.
+  - [ ] Run `python -I -X utf8 tools/check_tipitaka_glyphs.py .`; a `substituted` line for U+05F4 is expected.
+  - [ ] Owner checks on a phone and in a web browser: open each pitaka; read one sutta in each view (Pali, Sinhala, both); open a footnote; search in Sinhala and in English letters; a bookmark shows in Saved; close the app and open it again and the place is kept.
+  - [ ] Confirm the Tripitaka wording on the Sources page.
+- [ ] Books (text from pitaka.lk, covers from rerukanemahanahimi.lk): do not publish the app or push the repository to a public place until the owner confirms permission from the Sri Chandawimala Dhamma Treatises Preservation Board (books and covers) and from pathnirvana (the digitised text); then add "used with permission" to the Sources entry.
+- [ ] Books, owner checks:
+  - [ ] Before each release run `python -I -X utf8 tools/sync_books.py . --check` and the glyph check (`python -I -X utf8 tools/check_ui_glyphs.py .`).
+  - [ ] On a phone, open three books, one of them nested (chapters inside chapters).
+  - [ ] Continue reading restores the place after closing the app and opening it again.
+  - [ ] The covers look right in dark and in light.
+  - [ ] Confirm the Books wording on the Sources page.
+  - [ ] Page flipping:
+    - [ ] On a phone, turn pages by dragging the corner, by tapping the edges and with the arrows; cross into the next and previous chapter; change text size mid-chapter; switch Pages/Scroll — the passage stays.
+    - [ ] The curl looks right (the page bends, its back and shadow show, pictures are not blank or flashing) and moves smoothly, with no stutter, on a mid-range Android phone and in a web browser.
+    - [ ] On an Android phone with gesture navigation (swipe from the edge to go back): dragging a page from near either side turns the page and does not leave the book; a swipe from the very edge still goes back.
+    - [ ] On an iPhone: drag, tap and arrow turning work, and the curl looks and moves as on Android.
+    - [ ] In a web browser: the Left and Right arrow keys and Page Up / Page Down turn pages.
+    - [ ] With "remove animations" turned on in the phone's accessibility settings, pages change at once with no curl.
+    - [ ] With TalkBack (Android) and VoiceOver (iPhone): the page's "Next page" and "Previous page" actions turn pages, and the new page number is read out.
+- [ ] Reader improvements, owner checks on a phone:
+  - [ ] Open a pirith: press Scroll with no sound, then Chant; the captions "Scroll" and "Chant" read right.
+  - [ ] Change the speed while chanting (1× → 1.25× → 1.5× → 0.75×); the highlight stays in step.
+  - [ ] Choose Side by side (Settings, or the reader's sheet; in a pirith the sheet says "Meaning below" / "Side by side") and read a gatha and a pirith at your usual text size.
+  - [ ] With Pali and English chosen, Side by side is refused with "Side by side needs Pali and Sinhala."
+  - [ ] Choose Sinhala first, then Pali, and Side by side: Pali is still on the left in a gatha and in a pirith.
+- [ ] Hosted recordings (Cloudflare R2), owner steps:
+  - [ ] Done 2026-11-17 on the owner's Cloudflare account: bucket `namo-audio`, CORS, the 40 uploads (verified with `--verify-full`) and the Worker `cloudflare/audio-worker/` serving them at `https://namo-audio.v-g-a-induwara.workers.dev`. No custom domain: `intendable.us` is on another account. Redeploy the Worker with `npx wrangler deploy` from its folder if it ever changes.
+  - [ ] Set the CORS policy from `hosted/README.md`.
+  - [ ] Keep the bucket private (no public access, no r2.dev) until the pirith and Samantha Pattana recording permissions are confirmed; a public bucket is publication.
+  - [ ] Run `npx wrangler login` once, then `python -I -X utf8 tools/sync_hosted_audio.py . --upload` and `python -I -X utf8 tools/sync_hosted_audio.py . --verify-full`.
+  - [ ] On a phone over Wi-Fi: fresh install; Settings → Recordings shows progress and ends at "All 40 recordings downloaded".
+  - [ ] Turn Wi-Fi off half way and on again; the download resumes.
+  - [ ] Airplane mode: a text opens; an undownloaded recording shows "Recording not downloaded · … MB" with Download; a downloaded one plays.
+  - [ ] Set "Any connection" on mobile data and watch one download.
+  - [ ] "Remove downloaded recordings" empties the device and sets Off.
+  - [ ] Web: play streams from the host.
+  - [ ] iOS: build and run once (never built here).
+- [ ] First-run tips: on a fresh install the four tips appear in turn (Home → the Settings tab; Library → My flows; a gatha reader → the settings button; a pirith, once its recording has arrived → Scroll and Chant); each goes with one tap or Back; Settings → About Namo → "Show the tips again" brings them back; on the web the Recordings tip does not appear.

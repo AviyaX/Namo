@@ -9,11 +9,16 @@ import '../settings/settings.dart';
 import '../settings/setting_controls.dart';
 import '../settings/choosers.dart';
 
+/// Which layout choice the reader settings sheet offers.
+enum LayoutChooserKind { hidden, full, pirith }
+
 /// Opens the reader settings over the reader.
 Future<void> showReaderSettingsSheet(
   BuildContext context, {
   required VoidCallback onBackToBeginning,
-  bool showLayout = true,
+  LayoutChooserKind layoutChooser = LayoutChooserKind.full,
+  bool textOnly = false,
+  bool bookMode = false,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
@@ -31,7 +36,9 @@ Future<void> showReaderSettingsSheet(
   ),
   builder: (_) => ReaderSettingsSheet(
     onBackToBeginning: onBackToBeginning,
-    showLayout: showLayout,
+    layoutChooser: layoutChooser,
+    textOnly: textOnly,
+    bookMode: bookMode,
   ),
 );
 
@@ -41,11 +48,22 @@ class ReaderSettingsSheet extends ConsumerWidget {
   const ReaderSettingsSheet({
     super.key,
     required this.onBackToBeginning,
-    this.showLayout = true,
+    this.layoutChooser = LayoutChooserKind.full,
+    this.textOnly = false,
+    this.bookMode = false,
   });
 
-  /// False in a pirith, which always shows flowing passages.
-  final bool showLayout;
+  /// Which layout choice to show: none (an introduction), the full three, or
+  /// the pirith's two.
+  final LayoutChooserKind layoutChooser;
+
+  /// True for a reader with its own language switch and no auto-scroll (the
+  /// Tripitaka): only text size, line spacing, theme and 'Back to the
+  /// beginning'.
+  final bool textOnly;
+
+  /// True in the book reader: adds the Pages / Scroll choice above text size.
+  final bool bookMode;
 
   /// Called after the sheet closes for 'Back to the beginning'.
   final VoidCallback onBackToBeginning;
@@ -78,12 +96,22 @@ class ReaderSettingsSheet extends ConsumerWidget {
               child: SheetFrame(
                 title: 'Reading settings',
                 children: [
-                  const SettingLabel('Languages'),
-                  const LanguageChooser(),
-                  gap,
-                  if (showLayout) ...[
+                  if (!textOnly) ...[
+                    const SettingLabel('Languages'),
+                    const LanguageChooser(),
+                    gap,
+                  ],
+                  if (layoutChooser != LayoutChooserKind.hidden && !textOnly) ...[
                     const SettingLabel('When two languages show'),
-                    const LayoutChooser(),
+                    LayoutChooser(pirith: layoutChooser == LayoutChooserKind.pirith),
+                    gap,
+                  ],
+                  if (bookMode) ...[
+                    const SettingLabel('Reading'),
+                    const BookReadingModeChooser(),
+                    gap,
+                    const SettingLabel('Paper'),
+                    const BookPaperChooser(),
                     gap,
                   ],
                   SliderSetting.textSize(
@@ -98,12 +126,17 @@ class ReaderSettingsSheet extends ConsumerWidget {
                     onChanged: controller.setLineSpacing,
                   ),
                   gap,
-                  const SettingLabel('Scroll speed'),
-                  ScrollSpeedControl(
-                    sliderKey: const ValueKey('reader-scroll-speed'),
-                    value: settings.scrollSpeed,
-                    onChanged: controller.setScrollSpeed,
-                  ),
+                  if (textOnly) ...[
+                    const SettingLabel('Theme'),
+                    const ThemeChooser(),
+                  ] else ...[
+                    const SettingLabel('Scroll speed'),
+                    ScrollSpeedControl(
+                      sliderKey: const ValueKey('reader-scroll-speed'),
+                      value: settings.scrollSpeed,
+                      onChanged: controller.setScrollSpeed,
+                    ),
+                  ],
                   gap,
                   Align(
                     alignment: AlignmentDirectional.centerStart,

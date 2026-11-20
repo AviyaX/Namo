@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/design/widgets/list_row.dart';
 import 'package:buddhist_gatha/home/continue_card.dart';
+import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/reader/position_controller.dart';
 import 'package:buddhist_gatha/reader/reader_body.dart';
 import 'package:buddhist_gatha/reader/reading_position.dart';
@@ -64,8 +65,8 @@ void main() {
   });
 
   group('Continue reading', () {
-    testWidgets('after opening and leaving the Vandana the card shows its '
-        'title and Roman name', (t) async {
+    testWidgets('after opening and leaving the Vandana: no Continue reading '
+        'card; the featured page names it and continues it', (t) async {
       final lib = await realLibrary(t);
       final vandana = lib.reading(spVandanaId)!;
       await openReal(t, Routes.reader(spVandanaId));
@@ -80,26 +81,25 @@ void main() {
       await t.pumpAndSettle();
       await t.tap(find.text('Home'));
       await t.pumpAndSettle();
-      final card = find.byType(ContinueCard);
-      expect(card, findsOneWidget);
-      for (final s in [vandana.title, vandana.titleRoman!]) {
-        expect(
-          find.descendant(of: card, matching: find.text(s)),
-          findsOneWidget,
-          reason: s,
-        );
-      }
-      await t.tap(card);
+      // Only a flow gets the Continue reading card.
+      expect(find.byType(ContinueCard), findsNothing);
+      final card = find.byType(FeaturedCard);
+      // The Vandana's title is also the topic's Sinhala title: the page
+      // shows it twice, the second time naming the reading picked up.
+      expect(
+        find.descendant(of: card, matching: find.text(vandana.title)),
+        findsNWidgets(2),
+      );
+      await t.tap(find.descendant(of: card, matching: find.text('Continue')));
       await t.pumpAndSettle();
       expect(_location(t), startsWith(Routes.reader(spVandanaId)));
     });
 
-    testWidgets('the Introduction shows "Introduction" and, as its heading '
-        'is the same, the topic name', (t) async {
+    testWidgets('the Introduction read last: no Continue reading card; the '
+        'featured page names it once, under the topic', (t) async {
       final lib = await realLibrary(t);
       final intro = lib.reading(spIntroductionId)!;
       final sp = lib.category(samanthaCategoryId)!;
-      final topic = sp.shortTitle ?? sp.title;
       await openReal(
         t,
         Routes.home,
@@ -122,20 +122,16 @@ void main() {
           ),
         },
       );
-      final card = find.byType(ContinueCard);
-      expect(card, findsOneWidget);
+      expect(find.byType(ContinueCard), findsNothing);
+      final card = find.byType(FeaturedCard);
       expect(intro.title, 'Introduction');
-      expect(intro.sections.single.heading, 'Introduction');
-      // The title once, then the topic name in place of the same heading.
-      expect(
-        find.descendant(of: card, matching: find.text('Introduction')),
-        findsOneWidget,
-      );
-      expect(topic, isNot('Introduction'));
-      expect(
-        find.descendant(of: card, matching: find.text(topic)),
-        findsOneWidget,
-      );
+      for (final s in [sp.title, 'Introduction', 'Continue']) {
+        expect(
+          find.descendant(of: card, matching: find.text(s)),
+          findsOneWidget,
+          reason: s,
+        );
+      }
     });
   });
 

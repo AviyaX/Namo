@@ -86,6 +86,6 @@ void main() {
     final l = await realLibrary(t);
     final rec = ContentAudioCatalogue(l).recordingFor(mangalaReadingId)!;
     expect(rec.timed, isTrue);
-    expect(rec.asset, 'assets/audio/pirith/08-mahamangala.m4a');
+    expect(rec.path, 'audio/pirith/08-mahamangala.m4a');
   });
 }

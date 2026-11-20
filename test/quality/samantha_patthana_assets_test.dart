@@ -12,7 +12,7 @@ const _known = <String, Set<String>>{
   'category': {'id', 'title', 'subtitle', 'short_title', 'readings'},
   'reading': {'id', 'title', 'title_roman', 'audio', 'sections'},
   'audio': {
-    'asset',
+    'path',
     'label',
     'duration_ms',
     'bytes',
@@ -57,8 +57,7 @@ void main() {
   Future<List<String>> manifest() async =>
       (await AssetManifest.loadFromAssetBundle(rootBundle)).listAssets();
 
-  testWidgets('the bundle has exactly one file under '
-      'assets/audio/samantha_patthana/, the one the Vandana names', (t) async {
+  testWidgets('no recording is bundled; the Vandana names a hosted file', (t) async {
     final names = (await t.runAsync(manifest))!;
     final audio = names
         .where((a) => a.startsWith('assets/audio/samantha_patthana/'))
@@ -66,7 +65,9 @@ void main() {
     final lib = await realLibrary(t);
     final vandana = lib.reading(spVandanaId)!;
     expect(vandana.audio, isNotNull);
-    expect(audio, [vandana.audio!.asset]);
+    expect(audio, isEmpty);
+    expect(vandana.audio!.path, 'audio/samantha_patthana/hYXyO3o7Iac.m4a');
+    expect(vandana.audio!.bytes, 46219957);
     expect(lib.reading(spIntroductionId)!.audio, isNull);
     // No caption file is bundled anywhere.
     expect(names.where((a) => a.contains('caption')), isEmpty);

@@ -1,20 +1,29 @@
+import 'dart:async';
+
 import 'package:buddhist_gatha/content/content_repository.dart';
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/surface_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
+import '../tipitaka/tipitaka_support.dart';
 
-Future<void> openSources(WidgetTester t) async {
+Future<void> openSources(
+  WidgetTester t, {
+  AssetBytes? load,
+  Library? content,
+}) async {
   // The bundled file is read by real I/O, which fake-async time cannot
   // advance; read it first and hand the app the finished library.
-  final library = await t.runAsync(
-    () => AssetContentRepository(rootBundle).load(),
-  );
+  final library =
+      content ??
+      await t.runAsync(() => AssetContentRepository(rootBundle).load());
   await pumpApp(
     t,
     overrides: [
@@ -22,11 +31,25 @@ Future<void> openSources(WidgetTester t) async {
         FakeContentRepository(library: library),
       ),
       keyValueStoreProvider.overrideWithValue(InMemoryKeyValueStore()),
+      tipitakaRepositoryProvider.overrideWithValue(
+        TipitakaRepository(
+          load: load ?? fakeAssets(tinyTipitaka()),
+          inBackground: false,
+        ),
+      ),
     ],
     location: Routes.sources,
-    size: const Size(390, 8000),
+    size: const Size(390, 9000),
   );
 }
+
+/// The Tripitaka card (the tab bar has a "Tripitaka" label too).
+Finder get tripitakaCard => find.byKey(const ValueKey('sources-tripitaka'));
+
+/// The sentence at the top of the page about who the app is not made by.
+const notMadeBy =
+    'Namo is not made by, or connected with, namo.lk, pitaka.lk, Shanthi '
+    'Vihara or the Sri Chandawimala Dhamma Treatises Preservation Board.';
 
 Finder text(String s) => find.text(s, findRichText: true);
 
@@ -37,6 +60,36 @@ int keyed(String prefix) => find
     )
     .evaluate()
     .length;
+
+Library _checkLibrary({required List<String> verseNotes}) => Library.fromJson({
+  'categories': [
+    {
+      'id': 'c1',
+      'title': 'C',
+      'subtitle': 'c',
+      'readings': [
+        {
+          'id': 'r1',
+          'title': 'R',
+          'sections': [
+            {
+              'id': 's01',
+              'number': 1,
+              'heading': 'H',
+              'check': 'needs checking',
+              'notes': ['check this section'],
+              'verses': [
+                {'id': 's01-v1', 'check': 'needs checking', 'notes': verseNotes},
+                {'id': 's01-v2', 'check': 'needs checking', 'notes': <String>[]},
+              ],
+            },
+            {'id': 's02', 'number': 2, 'heading': 'H2', 'verses': <Object>[]},
+          ],
+        },
+      ],
+    },
+  ],
+});
 
 void main() {
   testWidgets(
@@ -49,13 +102,20 @@ void main() {
         findsOneWidget,
       );
       expect(
-        text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
+        text(notMadeBy),
+        findsOneWidget,
+      );
+      expect(
+        text(
+          "The recordings are fetched from the app's own storage (namo-audio.v-g-a-induwara.workers.dev), not from the sources' sites.",
+        ),
         findsOneWidget,
       );
       expect(find.textContaining('namo.lk', findRichText: true), findsWidgets);
       expect(find.textContaining('paritha.org'), findsWidgets);
       expect(find.textContaining('Mahamevnawa'), findsWidgets);
       expect(find.textContaining('Cynthia Gunawardana'), findsWidgets);
+      expect(text('Shanthi Vihara, Nottingham'), findsOneWidget);
 
       expect(text('https://namo.lk/buddha-puja/'), findsOneWidget);
       expect(
@@ -133,7 +193,7 @@ void main() {
       findsNothing,
     );
     expect(
-      text('Namo is not made by, or connected with, namo.lk or pitaka.lk.'),
+      text(notMadeBy),
       findsOneWidget,
     );
     expect(
@@ -209,12 +269,13 @@ void main() {
     },
   );
 
-  testWidgets('Sources credits the Home banner picture under Pictures', (t) async {
+  testWidgets('Sources credits the Home header and featured pictures under Pictures', (t) async {
     await openSources(t);
-    final name = text('Home banner picture');
+    final name = text('Home header and featured pictures');
     expect(name, findsOneWidget);
+    expect(text('Home banner picture'), findsNothing);
     expect(
-      find.textContaining('the top of Home on wide screens', findRichText: true),
+      find.textContaining('Shown behind the Home header and on the featured card', findRichText: true),
       findsOneWidget,
     );
     final y = t.getTopLeft(find.text('Pictures')).dy;
@@ -237,8 +298,10 @@ void main() {
     expect(find.text('Still to be checked'), findsOneWidget);
     // The bundled file: 15 distinct verse corrections and 1 heading.
     expect(keyed('correction-'), 16);
-    // Buddha Wandanawa's 4 verses, and one row each for the two Samantha Pattana readings.
-    expect(keyed('check-'), 6);
+    // Buddha Wandanawa's 4 verses and 17 sections, and one row each for the two
+    // Samantha Pattana readings.
+    expect(keyed('check-'), 23);
+    expect(keyed('check-section-'), 17);
     expect(keyed('check-reading-'), 2);
     expect(find.textContaining('ගච්චාමි'), findsOneWidget);
     expect(find.textContaining('ගච්ඡාමි'), findsOneWidget);
@@ -258,8 +321,9 @@ void main() {
       ),
       findsOneWidget,
     );
-    // Buddha Wandanawa keeps one row per verse, by verse id.
-    expect(keyed('check-s'), 4);
+    // Buddha Wandanawa keeps one row per verse with notes, by verse id, and one
+    // per section from the Nottingham booklet: 4 + 17.
+    expect(keyed('check-s'), 21);
     // Pirith still has none.
     final library = await t.runAsync(
       () => AssetContentRepository(rootBundle).load(),
@@ -276,6 +340,9 @@ void main() {
 
   testWidgets('Font licences opens the licence page', (t) async {
     await openSources(t);
+    // The check rows push the button below a 9000 px surface; bring it into view.
+    await t.ensureVisible(find.text('Font licences'));
+    await t.pumpAndSettle();
     await t.tap(find.text('Font licences'));
     await t.pumpAndSettle();
     expect(find.byType(LicensePage), findsOneWidget);
@@ -338,8 +405,9 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 6 text sources + 4 pictures + 16 corrections + 6 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(32));
+    // 7 text sources + the Tripitaka + the Books + 4 pictures + 16 corrections
+    // + 23 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(52));
   });
 
   for (final dark in [false, true]) {
@@ -364,4 +432,124 @@ void main() {
       });
     }
   }
+
+  testWidgets(
+    'Sources shows the Tripitaka entry with the five sentences and the '
+    "manifest's date",
+    (t) async {
+      await openSources(t);
+      await t.pumpAndSettle();
+      final card = tripitakaCard;
+      expect(card, findsOneWidget);
+      for (final sentence in [
+        'The Tripitaka text is the Buddha Jayanti Tripitaka Pali text and its '
+            'Sinhala translation as published by tipitaka.lk '
+            '(github.com/pathnirvana/tipitaka.lk).',
+        'Licence: Creative Commons Attribution-NoDerivatives 4.0 '
+            'International. The text is included unchanged.',
+        'Version of 2026-01-02.',
+        'Namo is not connected to tipitaka.lk.',
+        'If you find an error in the text, please report it to '
+            'path.nirvana@gmail.com so it can be corrected at the source.',
+      ]) {
+        expect(
+          find.descendant(of: card, matching: find.textContaining(
+            sentence,
+            findRichText: true,
+          )),
+          findsOneWidget,
+          reason: sentence,
+        );
+      }
+    },
+  );
+
+  testWidgets('credits the books and the Board', (t) async {
+    await openSources(t);
+    await t.pumpAndSettle();
+    final card = find.byKey(const ValueKey('sources-books'));
+    expect(card, findsOneWidget);
+    for (final sentence in [
+      'The books of Ven. Rerukane Chandawimala Maha Nahimi are the Unicode '
+          'text published by pitaka.lk (pathnirvana) and are included '
+          'unchanged.',
+      'The books and their covers are published by the Sri Chandawimala '
+          'Dhamma Treatises Preservation Board, Pokunuwita '
+          '(rerukanemahanahimi.lk).',
+      'Namo is not connected with pitaka.lk or the Board.',
+      'If you find an error in a book, please report it to the publisher or '
+          'to pitaka.lk so it can be corrected at the source.',
+    ]) {
+      expect(
+        find.descendant(
+          of: card,
+          matching: find.textContaining(sentence, findRichText: true),
+        ),
+        findsOneWidget,
+        reason: sentence,
+      );
+    }
+    expect(text(notMadeBy), findsOneWidget);
+    // It follows the Tripitaka card.
+    expect(
+      t.getTopLeft(card).dy,
+      greaterThan(t.getTopLeft(tripitakaCard).dy),
+    );
+  });
+
+  testWidgets('Sources entry does not say "used with permission"', (t) async {
+    await openSources(t);
+    await t.pumpAndSettle();
+    expect(tripitakaCard, findsOneWidget);
+    expect(
+      find.descendant(
+        of: tripitakaCard,
+        matching: find.textContaining('permission', findRichText: true),
+      ),
+      findsNothing,
+    );
+  });
+
+  testWidgets('Sources leaves out the version sentence while it loads', (
+    t,
+  ) async {
+    final gate = Completer<void>();
+    final inner = fakeAssets(tinyTipitaka());
+    await openSources(
+      t,
+      load: (path) async {
+        await gate.future;
+        return inner(path);
+      },
+    );
+    expect(tripitakaCard, findsOneWidget);
+    expect(find.textContaining('Version of'), findsNothing);
+    expect(
+      find.descendant(
+        of: tripitakaCard,
+        matching: find.textContaining('Namo is not connected to tipitaka.lk.'),
+      ),
+      findsOneWidget,
+    );
+    gate.complete();
+    await t.pumpAndSettle();
+    expect(find.textContaining('Version of 2026-01-02.'), findsOneWidget);
+  });
+
+  testWidgets('a section that needs checking with notes gets one row; its '
+      'verses without notes get none', (t) async {
+    await openSources(t, content: _checkLibrary(verseNotes: const []));
+    expect(keyed('check-section-s01'), 1);
+    expect(find.byKey(const ValueKey('check-s01-v1')), findsNothing);
+    expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
+  });
+
+  testWidgets('a verse with notes still gets its row under a section row',
+      (t) async {
+    await openSources(t, content: _checkLibrary(verseNotes: const ['n']));
+    final section = t.getTopLeft(find.byKey(const ValueKey('check-section-s01')));
+    final verse = t.getTopLeft(find.byKey(const ValueKey('check-s01-v1')));
+    expect(section.dy, lessThan(verse.dy));
+    expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
+  });
 }

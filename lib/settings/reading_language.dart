@@ -29,6 +29,12 @@ class LanguageSelection {
 
   bool has(ReadingLanguage l) => languages.contains(l);
 
+  /// True only for exactly Pali and Sinhala, in either order.
+  bool get isPaliAndSinhala =>
+      languages.length == 2 &&
+      has(ReadingLanguage.pali) &&
+      has(ReadingLanguage.sinhala);
+
   (LanguageSelection, ToggleOutcome) toggle(ReadingLanguage l) {
     if (has(l)) {
       if (languages.length == 1) return (this, ToggleOutcome.refusedLast);
@@ -56,7 +62,8 @@ class LanguageSelection {
 
 enum TwoLanguageLayout {
   section('Section by section'),
-  verse('Verse by verse');
+  verse('Verse by verse'),
+  sideBySide('Side by side');
 
   const TwoLanguageLayout(this.label);
 

@@ -4,7 +4,7 @@ Extract mode reads <src>/converted/structure.json, <src>/converted/pages/page-NN
 <src>/introduction_owner_supplied.md (as data only) and writes
 content/extracted/samantha_patthana.json, the tracked file every later step builds from.
 Build mode turns that file and content/extracted/samantha_patthana_times.json into
-assets/content/samantha_patthana.json, and checks the bundled recording is the original.
+assets/content/samantha_patthana.json, and checks the hosted recording (hosted/audio/samantha_patthana/) is the original.
 
   python -I -X utf8 tools/build_samantha_patthana.py <project_root>
   python -I -X utf8 tools/build_samantha_patthana.py <project_root> --check
@@ -22,7 +22,7 @@ import sys
 OUTPUT = pathlib.Path("content/extracted/samantha_patthana.json")
 TIMES = pathlib.Path("content/extracted/samantha_patthana_times.json")
 ASSET = pathlib.Path("assets/content/samantha_patthana.json")
-AUDIO_DIR = pathlib.Path("assets/audio/samantha_patthana")
+AUDIO_DIR = pathlib.Path("hosted/audio/samantha_patthana")
 STRUCTURE = pathlib.Path("converted/structure.json")
 PAGES = pathlib.Path("converted/pages")
 INTRODUCTION = pathlib.Path("introduction_owner_supplied.md")
@@ -228,7 +228,7 @@ def _audio(timed: list[dict], untimed) -> dict:
             line_times.append([None if unit["id"] in untimed else _seconds(l["start_ms"]) for l in unit["lines"]])
     except KeyError as e:
         raise BuildError(f"times file is missing the key {e.args[0]!r}")
-    return {"asset": f"{AUDIO_DIR.as_posix()}/{RECORDING}", "label": RECORDING_LABEL,
+    return {"path": f"audio/samantha_patthana/{RECORDING}", "label": RECORDING_LABEL,
             "duration_ms": DURATION_MS, "bytes": RECORDING_BYTES, "sha256": RECORDING_SHA256,
             "block_times": block_times, "line_times": line_times}
 

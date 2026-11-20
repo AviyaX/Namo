@@ -39,6 +39,10 @@ dependencies:
   just_audio: ^0.10.6
   material_symbols_icons: ^4.2960.0
   wakelock_plus: ^1.8.2
+  archive: ^4.6.0
+  background_downloader: ^9.6.6
+  crypto: ^3.0.8
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:
@@ -101,12 +105,18 @@ flutter:
     - assets/fonts/OFL-Lora.txt
     - assets/branding/
     - assets/content/
+    - assets/tipitaka/
+    - assets/tipitaka/text/
+    - assets/books/
+    - assets/books/covers/
+    - assets/books/pictures/
     - assets/pictures/buddha_wandanawa.jpg
-    - assets/pictures/home_banner.jpg
+    - assets/pictures/hero_dark.jpg
+    - assets/pictures/hero_light.jpg
+    - assets/pictures/header_dark.jpg
+    - assets/pictures/header_light.jpg
     - assets/pictures/pirith.jpg
-    - assets/audio/pirith/
     - assets/pictures/samantha_patthana.jpg
-    - assets/audio/samantha_patthana/
     - assets/audio_dev/placeholder_tone_not_a_chant.wav
 
   fonts:

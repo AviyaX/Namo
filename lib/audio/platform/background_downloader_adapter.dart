@@ -1,0 +1,115 @@
+import 'dart:async';
+
+import 'package:background_downloader/background_downloader.dart';
+
+import '../audio_host.dart';
+import '../downloader.dart';
+
+/// [Downloader] on the background_downloader plugin. The only file that
+/// imports it.
+class BackgroundDownloaderAdapter implements Downloader {
+  final _events = StreamController<DownloadEvent>.broadcast();
+  StreamSubscription<TaskUpdate>? _subscription;
+
+  @override
+  Stream<DownloadEvent> get events => _events.stream;
+
+  @override
+  Future<String> start() async {
+    final downloader = FileDownloader();
+    await _subscription?.cancel();
+    _subscription = downloader.updates.listen(_onUpdate);
+    try {
+      await downloader.configure(
+        globalConfig: [(Config.checkAvailableSpace, 100)],
+        iOSConfig: [(Config.excludeFromCloudBackup, true)],
+      );
+      await downloader.start();
+      return await Task.baseDirectoryPath(BaseDirectory.applicationSupport);
+    } catch (_) {
+      await _subscription?.cancel();
+      _subscription = null;
+      rethrow;
+    }
+  }
+
+  void _onUpdate(TaskUpdate update) {
+    switch (update) {
+      case TaskStatusUpdate():
+        _events.add(
+          DownloadStatusEvent(
+            update.task.taskId,
+            _statusOf(update.status),
+          ),
+        );
+      case TaskProgressUpdate():
+        if (update.progress >= 0 && update.progress <= 1) {
+          _events.add(
+            DownloadProgressEvent(update.task.taskId, update.progress),
+          );
+        }
+    }
+  }
+
+  @override
+  Future<void> enqueue(DownloadRequest request) async {
+    final queued = await FileDownloader().enqueue(
+      DownloadTask(
+        taskId: request.id,
+        url: request.url.toString(),
+        headers: const {'User-Agent': audioUserAgent},
+        directory: request.directory,
+        filename: request.filename,
+        baseDirectory: BaseDirectory.applicationSupport,
+        group: request.group,
+        updates: Updates.statusAndProgress,
+        requiresWiFi: request.requiresWiFi,
+        retries: 3,
+        allowPause: true,
+        metaData: request.id,
+      ),
+    );
+    if (!queued) throw StateError('the downloader refused ${request.id}');
+  }
+
+  @override
+  Future<void> cancelGroup(String group) async {
+    await FileDownloader().cancelAll(group: group);
+  }
+
+  @override
+  Future<void> cancel(String id) async {
+    await FileDownloader().cancelTaskWithId(id);
+  }
+
+  @override
+  Future<List<DownloadRequest>> active() async {
+    final tasks = [
+      ...await FileDownloader().allTasks(group: autoGroup),
+      ...await FileDownloader().allTasks(group: manualGroup),
+    ];
+    return [
+      for (final t in tasks)
+        if (t is DownloadTask)
+          DownloadRequest(
+            id: t.taskId,
+            url: Uri.parse(t.url),
+            directory: t.directory,
+            filename: t.filename,
+            group: t.group,
+            requiresWiFi: t.requiresWiFi,
+          ),
+    ];
+  }
+}
+
+DownloadStatus _statusOf(TaskStatus status) => switch (status) {
+  TaskStatus.enqueued => DownloadStatus.enqueued,
+  TaskStatus.running => DownloadStatus.running,
+  TaskStatus.complete => DownloadStatus.complete,
+  TaskStatus.notFound => DownloadStatus.notFound,
+  TaskStatus.failed => DownloadStatus.failed,
+  TaskStatus.canceled => DownloadStatus.canceled,
+  TaskStatus.waitingToRetry => DownloadStatus.waitingToRetry,
+  TaskStatus.paused => DownloadStatus.paused,
+};

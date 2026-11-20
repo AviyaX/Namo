@@ -1,0 +1,4 @@
+tags:
+  # Tests that take a minute or more. They run in the normal suite; skip
+  # them while iterating with `flutter test --exclude-tags slow`.
+  slow:

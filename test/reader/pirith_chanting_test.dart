@@ -5,6 +5,7 @@ import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../quality/quality_support.dart';
@@ -50,8 +51,54 @@ Future<FakeChantPlayer> _open(
   return p;
 }
 
+ProviderContainer _container(WidgetTester t) =>
+    ProviderScope.containerOf(t.element(find.byType(MaterialApp)));
+
 void main() {
   setUpAll(loadBundledFonts);
+
+  testWidgets('the speed button cycles, is saved, and reaches the player', (
+    t,
+  ) async {
+    final player = await _open(t);
+    final speed = find.byKey(const ValueKey('chant-speed'));
+    expect(
+      find.descendant(of: speed, matching: find.text('1×')),
+      findsOneWidget,
+    );
+    for (final (label, value) in [
+      ('1.25×', 1.25),
+      ('1.5×', 1.5),
+      ('0.75×', 0.75),
+      ('1×', 1.0),
+    ]) {
+      await t.tap(speed);
+      await t.pump();
+      expect(
+        find.descendant(of: speed, matching: find.text(label)),
+        findsOneWidget,
+        reason: label,
+      );
+      expect(player.speed, value);
+      expect(_container(t).read(settingsProvider).chantSpeed, value);
+    }
+  });
+
+  testWidgets(
+    'a saved speed is shown and applied before and after the first play',
+    (t) async {
+      final player = await _open(
+        t,
+        settings: const AppSettings(chantSpeed: 1.5),
+      );
+      expect(find.text('1.5×'), findsOneWidget);
+      expect(player.speed, 1.5);
+      await t.tap(_play);
+      await t.pump();
+      expect(player.state.status, ChantStatus.playing);
+      expect(player.speed, 1.5);
+    },
+  );
 
   testWidgets('nothing is loaded on opening; the first play loads once', (
     t,
@@ -64,7 +111,7 @@ void main() {
 
     await t.tap(_play);
     await t.pump();
-    expect(player.loaded.map((r) => r.asset), [recording.asset]);
+    expect(player.loaded.map((r) => r.path), [recording.path]);
     expect(player.state.status, ChantStatus.playing);
     expect(_chantTip(t), 'Pause chanting');
 
@@ -79,9 +126,7 @@ void main() {
     expect(player.loaded, hasLength(1));
   });
 
-  testWidgets('a pirith bar has its five controls', (
-    t,
-  ) async {
+  testWidgets('a pirith bar has its five controls', (t) async {
     await _open(t);
     for (final tip in [
       'Previous pirith',
@@ -257,7 +302,10 @@ void main() {
   });
 
   testWidgets('a second tap while loading loads once', (t) async {
-    final player = await _open(t, player: FakeChantPlayer()..gate = Completer());
+    final player = await _open(
+      t,
+      player: FakeChantPlayer()..gate = Completer(),
+    );
     await t.tap(_play);
     await t.pump();
     expect(player.state.status, ChantStatus.loading);
@@ -272,7 +320,10 @@ void main() {
   testWidgets('auto-scroll asked for while loading wins over the chanting', (
     t,
   ) async {
-    final player = await _open(t, player: FakeChantPlayer()..gate = Completer());
+    final player = await _open(
+      t,
+      player: FakeChantPlayer()..gate = Completer(),
+    );
     await t.tap(_play);
     await t.pump();
     await t.tap(_scrollButton);
@@ -286,7 +337,10 @@ void main() {
   });
 
   testWidgets('Next pirith while loading: the old one never starts', (t) async {
-    final player = await _open(t, player: FakeChantPlayer()..gate = Completer());
+    final player = await _open(
+      t,
+      player: FakeChantPlayer()..gate = Completer(),
+    );
     await t.tap(_play);
     await t.pump();
     await t.tap(_next);

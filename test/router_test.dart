@@ -1,17 +1,26 @@
+import 'package:buddhist_gatha/books/book_contents_screen.dart';
+import 'package:buddhist_gatha/books/book_reader_screen.dart';
+import 'package:buddhist_gatha/books/book_screen.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/design/widgets/empty_state.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
 import 'package:buddhist_gatha/design/widgets/not_found.dart';
+import 'package:buddhist_gatha/library/library_screen.dart';
 import 'package:buddhist_gatha/router.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/pump_app.dart';
 import 'support/test_content.dart';
+import 'tipitaka/tipitaka_support.dart';
 
 // The library loads at once; while it loads, a ring turns and never settles.
 final _loaded = [
   contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
+  tipitakaRepositoryProvider.overrideWithValue(
+    TipitakaRepository(load: fakeAssets(tinyTipitaka()), inBackground: false),
+  ),
 ];
 
 void main() {
@@ -19,9 +28,82 @@ void main() {
     expect(Routes.flowEditor('flow-3'), '/library/flow/flow-3');
   });
 
-  testWidgets('four tabs switch screens', (t) async {
+  test("the books' addresses", () {
+    expect(Routes.book('x'), '/library/book/x');
+    expect(Routes.bookContents('x', 2), '/library/book/x/contents/2');
+    expect(Routes.bookReader('x', 3), '/library/book/x/read/3');
+  });
+
+  testWidgets('the book paths resolve to their screens', (t) async {
+    await pumpApp(t, overrides: _loaded, location: '/library/book/x');
+    expect(find.byType(BookScreen), findsOneWidget);
+    expect(t.widget<BookScreen>(find.byType(BookScreen)).id, 'x');
+    await t.pumpWidget(const SizedBox());
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: '/library/book/x/contents/2',
+    );
+    expect(find.byType(BookContentsScreen), findsOneWidget);
+    final contents = t.widget<BookContentsScreen>(
+      find.byType(BookContentsScreen),
+    );
+    expect((contents.id, contents.n), ('x', 2));
+    // A part that is not a number is no page.
+    await t.pumpWidget(const SizedBox());
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: '/library/book/x/contents/two',
+    );
+    expect(find.byType(BookContentsScreen), findsNothing);
+    expect(find.byType(NotFoundScreen), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets("the book reader's path resolves outside the shell", (t) async {
+    await pumpApp(t, overrides: _loaded, location: '/library/book/x/read/3');
+    expect(find.byType(BookReaderScreen), findsOneWidget);
+    final reader = t.widget<BookReaderScreen>(find.byType(BookReaderScreen));
+    expect((reader.id, reader.n), ('x', 3));
+    // Read page by page (the default), one reader per book: turning into
+    // the next chapter keeps it.
+    expect(reader.key, const ValueKey('book-reader-x'));
+    // No tab bar: the reader has the whole screen.
+    expect(find.byKey(const ValueKey('nav-bar')), findsNothing);
+    expect(find.byKey(const ValueKey('nav-rail')), findsNothing);
+    await t.pumpWidget(const SizedBox());
+    await pumpApp(t, overrides: _loaded, location: '/library/book/x/read/3a');
+    expect(find.byType(BookReaderScreen), findsNothing);
+    expect(find.byType(NotFoundScreen), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
+
+  test("the Library's search address", () {
+    expect(Routes.librarySearch, '/library?focus=search');
+  });
+
+  testWidgets('focus=search asks the Library to focus its search; other '
+      'addresses do not', (t) async {
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: Routes.librarySearch,
+      settle: false,
+    );
+    expect(t.widget<LibraryScreen>(find.byType(LibraryScreen)).focusSearch, isTrue);
+    await pumpApp(
+      t,
+      overrides: _loaded,
+      location: '/library?focus=other',
+      settle: false,
+    );
+    expect(t.widget<LibraryScreen>(find.byType(LibraryScreen)).focusSearch, isFalse);
+  });
+
+  testWidgets('five tabs switch screens', (t) async {
     await pumpApp(t, overrides: _loaded);
-    for (final label in ['Home', 'Library', 'Saved', 'Settings']) {
+    for (final label in ['Home', 'Library', 'Tripitaka', 'Saved', 'Settings']) {
       await t.tap(find.descendant(
         of: find.byKey(ValueKey('nav-${label.toLowerCase()}')),
         matching: find.text(label),

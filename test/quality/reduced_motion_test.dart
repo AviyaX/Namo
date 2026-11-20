@@ -3,6 +3,7 @@ import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/choosers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/fake_chant_player.dart';
@@ -12,12 +13,30 @@ import 'quality_support.dart';
 /// With animations off, one pump after each action is enough to reach the end
 /// state.
 void main() {
-  Future<void> open(WidgetTester t, String location, {Library? library}) async {
+  Future<void> open(
+    WidgetTester t,
+    String location, {
+    Library? library,
+    bool tips = false,
+  }) async {
     t.platformDispatcher.accessibilityFeaturesTestValue =
         const FakeAccessibilityFeatures(disableAnimations: true);
     addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
-    await openReal(t, location, size: const Size(390, 2400), library: library);
+    await openReal(
+      t,
+      location,
+      size: const Size(390, 2400),
+      library: library,
+      tips: tips,
+    );
   }
+
+  testWidgets('a tip appears at once and leaves nothing running', (t) async {
+    await open(t, Routes.home, tips: true);
+    await t.pump();
+    expect(find.byKey(const ValueKey('tip-bubble')), findsOneWidget);
+    expect(t.hasRunningAnimations, isFalse);
+  });
 
   testWidgets('switching tab', (t) async {
     await open(t, Routes.home);
@@ -25,6 +44,21 @@ void main() {
     await t.pump();
     expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
     expect(find.byKey(const ValueKey('screen-home')), findsNothing);
+  });
+
+  testWidgets('Home: a featured page change leaves nothing running', (t) async {
+    final handle = t.ensureSemantics();
+    await open(t, Routes.home);
+    final node = t.getSemantics(find.bySemanticsLabel('Featured collections'));
+    expect(node.value, 'Page 1 of 3');
+    node.owner!.performAction(node.id, SemanticsAction.increase);
+    await t.pump();
+    expect(
+      t.getSemantics(find.bySemanticsLabel('Featured collections')).value,
+      'Page 2 of 3',
+    );
+    expect(t.hasRunningAnimations, isFalse);
+    handle.dispose();
   });
 
   testWidgets('opening a Library topic', (t) async {
@@ -245,5 +279,49 @@ void main() {
     final top = markTop(t, find.byType(CustomScrollView));
     expect(top, isNotNull);
     expect((top! - area.top - area.height / 3).abs(), lessThan(24));
+  });
+
+  group('Tripitaka', () {
+    /// Taps [finder]; two frames later nothing is moving.
+    Future<void> tapAndStop(WidgetTester t, Finder finder) async {
+      await t.tap(finder);
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 16));
+      await t.pump(const Duration(milliseconds: 16));
+      expect(t.hasRunningAnimations, isFalse);
+    }
+
+    testWidgets('switching to the Tripitaka tab', (t) async {
+      await open(t, Routes.home);
+      await tapAndStop(t, find.byKey(const ValueKey('nav-tripitaka')));
+      expect(find.byKey(const ValueKey('screen-tripitaka')), findsOneWidget);
+      expect(find.byKey(const ValueKey('screen-home')), findsNothing);
+    });
+
+    testWidgets('a pitaka card, a row and the reader open at once', (t) async {
+      await open(t, Routes.tipitaka);
+      await tapAndStop(t, find.byKey(const ValueKey('tipitaka-pitaka-vp')));
+      expect(find.byKey(const ValueKey('tipitaka-row-vp-1')), findsOneWidget);
+      await tapAndStop(t, find.byKey(const ValueKey('tipitaka-row-vp-1')));
+      await tapAndStop(t, find.byKey(const ValueKey('tipitaka-row-vp-1-1')));
+      expect(find.byKey(const ValueKey('tipitaka-reader-top-bar')), findsOneWidget);
+    });
+
+    testWidgets('the language switch and the footnotes sheet act at once',
+        (t) async {
+      await open(t, Routes.tipitakaReader('vp-1-1'));
+      await tapAndStop(t, find.text('Both'));
+      final selector = find.byKey(const ValueKey('selector-thumb'));
+      final place = t.getRect(selector);
+      await t.pumpAndSettle();
+      expect(t.getRect(selector), place);
+      await tapAndStop(
+          t, find.byKey(const ValueKey('tipitaka-footnote-mark-1')).first);
+      final sheet = find.byType(BottomSheet);
+      expect(sheet, findsOneWidget);
+      final top = t.getTopLeft(sheet).dy;
+      await t.pumpAndSettle();
+      expect(t.getTopLeft(sheet).dy, top);
+    });
   });
 }

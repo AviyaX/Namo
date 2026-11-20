@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../audio/audio_catalogue.dart';
+import '../audio/chant_programme.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -11,6 +13,8 @@ import '../design/widgets/list_row.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/surface_card.dart';
 import '../router.dart';
+import '../tips/tip_anchor.dart';
+import '../tips/tips.dart';
 import 'flow_reading.dart';
 import 'flows.dart';
 import 'new_flow_sheet.dart';
@@ -27,6 +31,7 @@ class MyFlowsPart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = NamoPalette.of(context);
     final flows = ref.watch(flowsProvider).flows;
+    final catalogue = ref.watch(audioCatalogueProvider);
     final newFlow = QuietButton(
       key: const ValueKey('new-flow'),
       label: 'New flow',
@@ -43,19 +48,22 @@ class MyFlowsPart extends ConsumerWidget {
         ),
         const SizedBox(height: NamoSpace.sm),
         if (flows.isEmpty)
-          SurfaceCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Make your own flow', style: NamoType.cardTitle(p.text)),
-                const SizedBox(height: NamoSpace.xs),
-                Text(
-                  'Choose the sections you chant, in your order.',
-                  style: NamoType.body(p.textSecondary),
-                ),
-                const SizedBox(height: NamoSpace.lg),
-                newFlow,
-              ],
+          TipAnchor(
+            tip: Tip.myFlows,
+            child: SurfaceCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Make your own flow', style: NamoType.cardTitle(p.text)),
+                  const SizedBox(height: NamoSpace.xs),
+                  Text(
+                    'Choose the sections you chant, in your order.',
+                    style: NamoType.body(p.textSecondary),
+                  ),
+                  const SizedBox(height: NamoSpace.lg),
+                  newFlow,
+                ],
+              ),
             ),
           )
         else ...[
@@ -64,7 +72,13 @@ class MyFlowsPart extends ConsumerWidget {
               key: ValueKey('flow-open-${flow.id}'),
               leading: const _FlowMark(),
               title: flow.name,
-              caption: sectionCount(liveRefs(flow, library).length),
+              caption: flowCaption(
+                sections: liveRefs(flow, library).length,
+                recorded: recordedSectionCount(
+                  flowReading(flow, library),
+                  catalogue,
+                ),
+              ),
               speakCaption: true,
               onTap: () => context.go(Routes.reader(flow.id)),
               action: NamoIconButton(
@@ -80,7 +94,7 @@ class MyFlowsPart extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: NamoSpace.lg),
             child: Align(
               alignment: AlignmentDirectional.centerStart,
-              child: newFlow,
+              child: TipAnchor(tip: Tip.myFlows, child: newFlow),
             ),
           ),
         ],

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
+import 'package:buddhist_gatha/audio/recording_store.dart';
 import 'package:buddhist_gatha/content/content_repository.dart';
 import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/flows/flows.dart';
@@ -9,14 +10,17 @@ import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/saved/saved.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart' hide Flow;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../books/books_support.dart';
 import '../support/fake_chant_player.dart';
 import '../support/passages.dart';
 import '../support/pump_app.dart';
+import '../tipitaka/tipitaka_support.dart';
 
 const realReadingId = 'namaskaraya';
 const realCategoryId = 'cat-namaskaraya';
@@ -129,9 +133,10 @@ class PlaceholderCatalogue implements AudioCatalogue {
   @override
   Recording? recordingFor(String readingId) => Recording(
     readingId: readingId,
-    asset: placeholderToneAsset,
+    path: placeholderToneAsset,
     label: placeholderToneLabel,
     placeholder: true,
+    duration: Duration.zero,
   );
 }
 
@@ -147,6 +152,9 @@ class PlaceholderCatalogue implements AudioCatalogue {
 /// puts the placeholder recording on every reading.
 /// [storeExtras] are extra saved values (a remembered reading place, say).
 /// [overrides] are added to the app's provider overrides (a fixed clock, say).
+/// [tipitaka] serves the Tripitaka's files (by default the made-up
+/// [tinyTipitaka], parsed on the test's own clock). [books] serves the
+/// books' files (by default the made-up [tinyBooks], likewise).
 Future<void> openReal(
   WidgetTester t,
   String location, {
@@ -159,9 +167,13 @@ Future<void> openReal(
   bool audio = false,
   bool audioFails = false,
   ChantPlayer? player,
+  RecordingStore? recordingStore,
   List<Override> overrides = const [],
   Map<String, String> storeExtras = const {},
   bool settle = true,
+  AssetBytes? tipitaka,
+  bool tips = false,
+  AssetBytes? books,
 }) async {
   final lib = library ?? await realLibrary(t);
   t.platformDispatcher.textScaleFactorTestValue = deviceTextScale;
@@ -207,6 +219,12 @@ Future<void> openReal(
         _FixedRepository(lib),
       ),
       keyValueStoreProvider.overrideWithValue(store),
+      tipitakaRepositoryProvider.overrideWithValue(
+        TipitakaRepository(
+          load: tipitaka ?? fakeAssets(tinyTipitaka()),
+          inBackground: false,
+        ),
+      ),
       if (audio) audioCatalogueProvider.overrideWithValue(PlaceholderCatalogue()),
       // Never a real player: nothing makes a sound in a test.
       chantPlayerProvider.overrideWith((ref) {
@@ -216,7 +234,10 @@ Future<void> openReal(
     ],
     location: location,
     size: size,
+    recordingStore: recordingStore,
     settle: settle,
+    tips: tips,
+    books: books ?? fakeAssets(tinyBooks()),
   );
 }
 

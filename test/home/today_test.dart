@@ -63,10 +63,10 @@ void main() {
       final lib = await realLibrary(t);
       final picks = eligibleGathas(lib);
       expect(_ids(picks), [
-        's01-v1', 's07-v1', 's08-v1', 's08-v2', 's08-v3', 's09-v1',
-        's10-v1', 's11-v2', 's12-v1', 's13-v1', 's14-v1', 's15-v1',
-        's16-v1', 's17-v1', 's18-v1', 's18-v2', 's18-v3', 's19-v1',
-        's19-v2',
+        's02-v1', 's09-v1', 's10-v1', 's10-v2', 's10-v3', 's11-v1',
+        's12-v1', 's13-v2', 's14-v1', 's15-v1', 's16-v1', 's17-v1',
+        's18-v1', 's19-v1', 's20-v1', 's20-v2', 's22-v1', 's22-v2',
+        's22-v3',
       ]);
       for (final p in picks) {
         expect(p.verse.check, CheckStatus.checkedAgainstSource);

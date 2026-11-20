@@ -2,7 +2,8 @@
 
 Reads content/extracted/pitaka_lk_pirith.json (as data only), writes
 assets/content/pirith.json and content/pirith_names.md, and checks that every
-recording under assets/audio/pirith/ is the downloaded original.
+recording under hosted/audio/pirith/ is the downloaded original. Each recording's length is
+measured from its file (the MP4 mvhd box); the source's "m:ss" listing is whole seconds and not used.
 
   python -I -X utf8 tools/build_pirith.py <project_root>
   python -I -X utf8 tools/build_pirith.py <project_root> --check
@@ -14,12 +15,13 @@ import hashlib
 import json
 import pathlib
 import shutil
+import struct
 import sys
 
 SOURCE = pathlib.Path("content/extracted/pitaka_lk_pirith.json")
 OUTPUT = pathlib.Path("assets/content/pirith.json")
 NAMES = pathlib.Path("content/pirith_names.md")
-AUDIO_DIR = pathlib.Path("assets/audio/pirith")
+AUDIO_DIR = pathlib.Path("hosted/audio/pirith")
 
 
 class BuildError(Exception):
@@ -57,22 +59,55 @@ def _load(root: pathlib.Path) -> dict:
         raise BuildError(f"cannot read {SOURCE}: {e}")
 
 
-def _duration_ms(text: str) -> int:
+def _boxes(data: bytes, start: int, end: int):
+    """Yields (type, body start, box end) for the MP4 boxes in data[start:end]."""
+    i = start
+    while i + 8 <= end:
+        size, kind = struct.unpack(">I4s", data[i:i + 8])
+        header = 8
+        if size == 1:
+            if i + 16 > end:
+                return
+            size, header = struct.unpack(">Q", data[i + 8:i + 16])[0], 16
+        elif size == 0:
+            size = end - i
+        if size < header or i + size > end:
+            return
+        yield kind, i + header, i + size
+        i += size
+
+
+def mp4_duration_ms(data: bytes) -> int:
+    """The movie's length in whole milliseconds (rounded), from moov/mvhd's timescale and duration."""
+    for kind, start, end in _boxes(data, 0, len(data)):
+        if kind != b"moov":
+            continue
+        for inner, body, stop in _boxes(data, start, end):
+            if inner != b"mvhd":
+                continue
+            version = data[body] if body < stop else None
+            # version, flags (4), then creation and modification times (4 or 8 bytes each).
+            if version == 0 and body + 20 <= stop:
+                timescale, duration = struct.unpack(">II", data[body + 12:body + 20])
+            elif version == 1 and body + 32 <= stop:
+                timescale, duration = struct.unpack(">IQ", data[body + 20:body + 32])
+            else:
+                raise BuildError("the mvhd box is too short or of an unknown version")
+            if timescale == 0:
+                raise BuildError("the mvhd box has a timescale of 0")
+            return round(duration * 1000 / timescale)
+    raise BuildError("no moov/mvhd box")
+
+
+def _read_recording(path: pathlib.Path) -> bytes:
     try:
-        parts = [int(p) for p in text.split(":")]
-    except ValueError:
-        raise BuildError(f"bad duration {text!r}")
-    seconds = 0
-    for p in parts:
-        seconds = seconds * 60 + p
-    return seconds * 1000
+        return path.read_bytes()
+    except OSError as e:
+        raise BuildError(f"cannot read recording {path.as_posix()}: {e}")
 
 
 def _sha_and_size(path: pathlib.Path) -> tuple[str, int]:
-    try:
-        data = path.read_bytes()
-    except OSError as e:
-        raise BuildError(f"cannot read recording {path.as_posix()}: {e}")
+    data = _read_recording(path)
     return hashlib.sha256(data).hexdigest(), len(data)
 
 
@@ -81,17 +116,23 @@ def _times(blocks: list[dict]) -> list:
 
 
 def _reading(root: pathlib.Path, src: dict, item: dict, collected: str, roman: str) -> dict:
-    sha, size = _sha_and_size(root / AUDIO_DIR / f"{item['id']}.m4a")
+    path = root / AUDIO_DIR / f"{item['id']}.m4a"
+    data = _read_recording(path)
+    sha, size = hashlib.sha256(data).hexdigest(), len(data)
     if size != item["audio_bytes"]:
         raise BuildError(f"{item['id']}.m4a is {size} bytes, expected {item['audio_bytes']}")
+    try:
+        duration_ms = mp4_duration_ms(data)
+    except BuildError as e:
+        raise BuildError(f"{path.name}: {e}")
     chanter = src["chanters"][item["chanter"]]["name_en"]
     return {
         "id": f"pirith-{item['id']}",
         "title": item["title_si"],
         "title_roman": roman,
-        "audio": {"asset": f"assets/audio/pirith/{item['id']}.m4a",
+        "audio": {"path": f"audio/pirith/{item['id']}.m4a",
                   "label": f"Chanted by Ven. {chanter}",
-                  "duration_ms": _duration_ms(item["duration"]),
+                  "duration_ms": duration_ms,
                   "bytes": size, "sha256": sha, "block_times": _times(item["blocks"])},
         "sections": [{
             "id": "p", "number": 1, "heading": item["title_si"], "check": "checked against source",
@@ -166,7 +207,7 @@ def _check(root: pathlib.Path, data: dict, rendered: bytes, names: bytes) -> str
         stored = []
     for r in stored + readings:
         a = r["audio"]
-        path = root / a["asset"]
+        path = root / "hosted" / a["path"]
         sha, size = _sha_and_size(path)
         if (sha, size) != (a["sha256"], a["bytes"]):
             return f"{path.name} differs from the original"
@@ -174,7 +215,7 @@ def _check(root: pathlib.Path, data: dict, rendered: bytes, names: bytes) -> str
         path = root / rel
         if not path.exists() or path.read_bytes() != want:
             return f"{rel.as_posix()} is out of date"
-    wanted = {pathlib.Path(r["audio"]["asset"]).name for r in readings}
+    wanted = {pathlib.Path(r["audio"]["path"]).name for r in readings}
     extra = sorted(p.name for p in (root / AUDIO_DIR).glob("*") if p.name not in wanted)
     if extra:
         return f"unexpected file in {AUDIO_DIR.as_posix()}: {extra[0]}"

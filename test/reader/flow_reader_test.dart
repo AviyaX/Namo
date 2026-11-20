@@ -150,8 +150,9 @@ void main() {
   });
 
   for (final audio in [false, true]) {
-    testWidgets('no favourite button and no recording, with a pirith in the '
-        'flow (${audio ? 'every reading has a tone' : 'its own recording'})', (
+    testWidgets('no favourite button, and the chant only with the pirith\'s '
+        'own timed recording, with a pirith in the flow '
+        '(${audio ? 'every reading has a tone' : 'its own recording'})', (
       t,
     ) async {
       final pirith = (await realLibrary(t)).reading(mangalaReadingId)!;
@@ -168,8 +169,11 @@ void main() {
       expect(_heading('${pirith.id}~p'), findsOneWidget);
       expect(find.byTooltip('Add to favourites'), findsNothing);
       expect(find.byTooltip('Remove from favourites'), findsNothing);
-      expect(find.byKey(const ValueKey('chant-play')), findsNothing);
-      expect(find.byKey(const ValueKey('chant-slider')), findsNothing);
+      // The development tone is untimed: it never chants a flow.
+      expect(
+        find.byKey(const ValueKey('chant-play')),
+        audio ? findsNothing : findsOneWidget,
+      );
       expect(find.byKey(const ValueKey('follow-chanting')), findsNothing);
       expect(find.byType(AudioControls), findsNothing);
       expect(
@@ -183,7 +187,8 @@ void main() {
     testWidgets('a flow of both Samantha Pattana readings, '
         '${sinhala ? 'Pali and Sinhala' : 'Pali only'}: the Introduction\'s '
         'paragraphs show, a unit keeps its lines'
-        '${sinhala ? ' with its meaning under it' : ''}; no recording', (
+        '${sinhala ? ' with its meaning under it' : ''}; the Vandana '
+        'chants', (
       t,
     ) async {
       final lib = await realLibrary(t);
@@ -263,7 +268,7 @@ void main() {
         expect(meaning, findsNothing);
       }
 
-      expect(find.byKey(const ValueKey('chant-play')), findsNothing);
+      expect(find.byKey(const ValueKey('chant-play')), findsOneWidget);
       expect(find.byKey(const ValueKey('follow-chanting')), findsNothing);
       expect(find.byType(AudioControls), findsNothing);
       expect(
@@ -282,7 +287,7 @@ void main() {
     await _open(t, Routes.reader('flow-1'), {
       'flow-1': [_ref(a.id, 'p'), _ref(b.id, 'p')],
     }, library: await _withPirith(t));
-    expect(find.byKey(const ValueKey('chant-play')), findsNothing);
+    expect(find.byKey(const ValueKey('chant-play')), findsOneWidget);
     expect(find.byTooltip('Add to favourites'), findsNothing);
     expect(find.byTooltip('Next pirith'), findsNothing);
     expect(find.byTooltip('Previous pirith'), findsNothing);
@@ -304,8 +309,8 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('the settings sheet offers the layout choice in a mixed flow '
-      'but not in a flow of pirith only', (t) async {
+  testWidgets('the settings sheet offers the full layout choice in a mixed '
+      'flow and the pirith choice in a flow of pirith only', (t) async {
     final [a, b] = await _longPirith(t);
     final library = await _withPirith(t);
     Future<void> openSheet(List<FlowRef> sections) async {
@@ -319,10 +324,13 @@ void main() {
     }
 
     await openSheet([_ref(a.id, 'p'), _ref(b.id, 'p')]);
-    expect(find.text('When two languages show'), findsNothing);
+    expect(find.text('When two languages show'), findsOneWidget);
+    expect(find.text('Meaning below'), findsOneWidget);
+    expect(find.text('Verse by verse'), findsNothing);
 
     await openSheet([_ref('r1', 's01'), _ref(a.id, 'p')]);
     expect(find.text('When two languages show'), findsOneWidget);
+    expect(find.text('Verse by verse'), findsOneWidget);
   });
 
   testWidgets('a bookmark in a flow is the original section\'s', (t) async {

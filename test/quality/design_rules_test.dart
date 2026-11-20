@@ -135,12 +135,20 @@ void main() {
     // Motion durations come from NamoMotion. These are not motion: they are
     // timers of behaviour, each with its reason.
     const allowed = {
+      'lib/books/book_pages_view.dart':
+          'the book place-save debounce (400 ms) after scrolling or turning; '
+              'not drawn',
       'lib/reader/auto_scroll.dart':
           'the longest step of the auto-scroll tick, so a stalled frame does '
               'not make the page jump',
       'lib/reader/reader_screen.dart':
           'the position-save debounce (400 ms) and the longest wait while '
               'moving (2500 ms); neither is drawn',
+      'lib/tipitaka/tipitaka_reader_screen.dart':
+          'the place-save throttle (400 ms) while scrolling; not drawn',
+      'lib/tipitaka/tipitaka_repository.dart':
+          'gives up waiting (250 ms) for the end of a frame that never comes '
+              '(a hidden tab) before unpacking a book; not drawn',
     };
     final found = _hits(
       (s) => _outsideTokens(s) && !allowed.containsKey(s.path),

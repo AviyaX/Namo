@@ -92,7 +92,7 @@ void main() {
       await openReal(t, Routes.home, settings: AppSettings(themeMode: theme));
       final c = (await realLibrary(t)).categories.first;
       final card = find.byType(FeaturedCard);
-      for (final s in ['Buddha Vandana', c.title, c.subtitle, '19 sections']) {
+      for (final s in ['FEATURED COLLECTION', c.title, c.subtitle, '33 sections']) {
         final text = t.widget<Text>(
           find.descendant(of: card, matching: find.text(s)),
         );
@@ -102,11 +102,13 @@ void main() {
   }
 
   testWidgets('the card is one button for screen readers, labelled '
-      '"<title>, <subtitle>, <count>"', (t) async {
+      '"<title>, <subtitle>, <count>, <button>"', (t) async {
     final handle = t.ensureSemantics();
     await openReal(t, Routes.home);
     final c = (await realLibrary(t)).categories.first;
-    final node = find.bySemanticsLabel('${c.title}, ${c.subtitle}, 19 sections');
+    final node = find.bySemanticsLabel(
+      '${c.title}, ${c.subtitle}, 33 sections, Begin',
+    );
     expect(node, findsOneWidget);
     expect(
       t.getSemantics(node).getSemanticsData().flagsCollection.isButton,
@@ -118,8 +120,8 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('on a phone the card shows assets/pictures/buddha_wandanawa.jpg, '
-      'decoded no wider than needed', (t) async {
+  testWidgets('on a phone the card shows the hero picture of the theme, '
+      'statue to the right, decoded no wider than needed', (t) async {
     await openReal(t, Routes.home);
     await _untilDecoded(t);
     final picture = find.descendant(
@@ -133,20 +135,26 @@ void main() {
     );
     final image = t.widget<Image>(picture);
     expect(image.fit, BoxFit.cover);
-    expect(image.alignment, Alignment.center);
+    expect(image.alignment, Alignment.centerRight);
     expect((image.image as ResizeImage).width, lessThanOrEqualTo(1600));
+    final dark =
+        Theme.of(t.element(find.byType(FeaturedCard))).brightness ==
+        Brightness.dark;
     expect(
       ((image.image as ResizeImage).imageProvider as AssetImage).assetName,
-      'assets/pictures/buddha_wandanawa.jpg',
+      dark ? 'assets/pictures/hero_dark.jpg' : 'assets/pictures/hero_light.jpg',
     );
   });
 
   test('every registered picture is a bundled asset listed in pubspec.yaml', () async {
     expect(cardPictures['cat-namaskaraya'], 'assets/pictures/buddha_wandanawa.jpg');
-    expect(widePictures['cat-namaskaraya'], 'assets/pictures/home_banner.jpg');
-    expect(featuredOverlines['cat-namaskaraya'], 'Buddha Vandana');
+    expect(heroPictures['cat-namaskaraya']?.dark, 'assets/pictures/hero_dark.jpg');
+    expect(heroPictures['cat-namaskaraya']?.light, 'assets/pictures/hero_light.jpg');
     final pubspec = File('pubspec.yaml').readAsStringSync();
-    for (final path in [...cardPictures.values, ...widePictures.values]) {
+    for (final path in [
+      ...cardPictures.values,
+      for (final p in heroPictures.values) ...[p.dark, p.light],
+    ]) {
       expect(pubspec, contains('- $path'));
       final data = await rootBundle.load(path);
       expect(data.lengthInBytes, greaterThan(0), reason: path);
@@ -160,7 +168,10 @@ void main() {
     await _untilDecoded(t);
     final c = (await realLibrary(t)).categories.first;
     expect(c.id, 'cat-namaskaraya');
-    expect(find.bySemanticsLabel('${c.title}, ${c.subtitle}, 19 sections'), findsOneWidget);
+    expect(
+      find.bySemanticsLabel('${c.title}, ${c.subtitle}, 33 sections, Begin'),
+      findsOneWidget,
+    );
     expect(
       find.descendant(
         of: find.byType(TopicPicture).first,
@@ -170,7 +181,7 @@ void main() {
     );
     expect(
       find.bySemanticsLabel(
-        RegExp('buddha_wandanawa|home_banner|jpg|picture', caseSensitive: false),
+        RegExp('buddha_wandanawa|hero_dark|hero_light|jpg|picture', caseSensitive: false),
       ),
       findsNothing,
     );
@@ -255,7 +266,7 @@ void main() {
     expect(sectionCount(c), 3);
     expect(sectionCountLabel(1), '1 section');
     expect(sectionCountLabel(0), '0 sections');
-    expect(sectionCountLabel(19), '19 sections');
+    expect(sectionCountLabel(33), '33 sections');
   });
 
   testWidgets('focused by keyboard the card shows the focus ring; hover and '

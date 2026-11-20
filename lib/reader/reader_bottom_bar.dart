@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/chant_player.dart';
+import '../audio/recording_store.dart';
 import '../design/tokens.dart';
+import '../design/typography.dart';
 import '../design/widgets/buttons.dart';
 import '../design/widgets/floating_bar.dart';
 import '../design/widgets/pressable.dart';
+import '../tips/tip_anchor.dart';
+import '../tips/tips.dart';
 import 'auto_scroll.dart';
 import 'chant_bar.dart';
 
@@ -33,7 +37,25 @@ class ReaderBottomBar extends StatelessWidget {
     this.onChantPlay,
     this.onChantRestart,
     this.onChantSeek,
+    this.chantSpeed = 1.0,
+    this.onChantSpeed,
+    this.recording,
+    this.onDownload,
+    this.coverage,
   });
+
+  /// How much of the reading the chant plays ("Chant plays 2 of 5
+  /// sections"); null when it plays every section. Shown in the slider's
+  /// place until the chant is first asked for, unless the recording's row
+  /// is showing there.
+  final String? coverage;
+
+  /// Where the chanting's recording is; null when the store knows nothing
+  /// of it. Until it is downloaded, its row takes the slider's place.
+  final RecordingStatus? recording;
+
+  /// Asks for the recording now.
+  final VoidCallback? onDownload;
 
   /// Where the chanting of a timed recording is; null for a reading
   /// without one, whose bar is then unchanged. When set, the bar shows the
@@ -43,11 +65,16 @@ class ReaderBottomBar extends StatelessWidget {
   /// Plays or pauses the chanting.
   final VoidCallback? onChantPlay;
 
-  /// Starts the chanting again from the beginning.
+  /// Starts the chanting again from the beginning; shown enabled only once a
+  /// recording is loaded.
   final VoidCallback? onChantRestart;
 
   /// Moves the chanting to a place, when the person lets go of the slider.
   final ValueChanged<Duration>? onChantSeek;
+
+  /// How fast the chanting plays, and the step to the next speed.
+  final double chantSpeed;
+  final VoidCallback? onChantSpeed;
 
   /// What the two outer buttons are called (a pirith's go to the previous
   /// and next pirith).
@@ -71,49 +98,127 @@ class ReaderBottomBar extends StatelessWidget {
     child: SizedBox(height: 1, child: ColoredBox(color: p.border)),
   );
 
-  /// Previous, auto-scroll, chanting, restart, next.
-  Widget _chantRow(ChantState state) {
+  /// Restart, slider and speed; then previous, Scroll, Chant, next.
+  List<Widget> _chantRows(NamoPalette p, ChantState state) {
     final loaded =
         state.status != ChantStatus.idle &&
         state.status != ChantStatus.loading &&
         state.status != ChantStatus.failed;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        NamoIconButton(
-          key: const ValueKey('reader-prev'),
-          tooltip: previousTooltip,
-          icon: Symbols.skip_previous_rounded,
-          onPressed: onPrevious,
-        ),
-        NamoIconButton(
-          key: const ValueKey('reader-autoscroll'),
-          tooltip: switch (autoScroll) {
-            AutoScrollStatus.running => 'Pause auto-scroll',
-            AutoScrollStatus.paused => 'Resume auto-scroll',
-            AutoScrollStatus.stopped ||
-            AutoScrollStatus.finished => 'Start auto-scroll',
-          },
-          icon: Symbols.swipe_vertical_rounded,
-          // Filled while the page is scrolling by itself.
-          filled: autoScroll == AutoScrollStatus.running,
-          onPressed: onPlay,
-        ),
-        _ChantPlayButton(state: state, onPressed: onChantPlay),
-        NamoIconButton(
-          key: const ValueKey('chant-restart'),
-          tooltip: 'Restart chanting',
-          icon: Symbols.replay_rounded,
-          onPressed: loaded ? onChantRestart : null,
-        ),
-        NamoIconButton(
-          key: const ValueKey('reader-next'),
-          tooltip: nextTooltip,
-          icon: Symbols.skip_next_rounded,
-          onPressed: onNext,
-        ),
-      ],
-    );
+    final running = autoScroll == AutoScrollStatus.running;
+    final status = recording;
+    final missing =
+        status != null && status.availability != Availability.downloaded;
+    return [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          NamoIconButton(
+            key: const ValueKey('chant-restart'),
+            tooltip: 'Restart chanting',
+            icon: Symbols.replay_rounded,
+            onPressed: loaded ? onChantRestart : null,
+          ),
+          Expanded(
+            child: missing
+                ? RecordingRow(status: status, onDownload: onDownload)
+                : coverage != null && state.status == ChantStatus.idle
+                ? Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      coverage!,
+                      key: const ValueKey('chant-coverage'),
+                      style: NamoType.caption(p.textSecondary),
+                    ),
+                  )
+                : _ChantPosition(state: state, onSeek: onChantSeek),
+          ),
+          ChantSpeedButton(speed: chantSpeed, onPressed: onChantSpeed),
+        ],
+      ),
+      _divider(p),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Centred on the round buttons, which are taller.
+          SizedBox(
+            height: _playSize,
+            child: Center(
+              child: NamoIconButton(
+                key: const ValueKey('reader-prev'),
+                tooltip: previousTooltip,
+                icon: Symbols.skip_previous_rounded,
+                onPressed: onPrevious,
+              ),
+            ),
+          ),
+          Flexible(
+            child: TipAnchor(
+              tip: Tip.scrollChant,
+              child: _LabelledRound(
+                key: const ValueKey('reader-autoscroll'),
+                label: 'Scroll',
+                button: Tooltip(
+                  message: switch (autoScroll) {
+                    AutoScrollStatus.running => 'Pause auto-scroll',
+                    AutoScrollStatus.paused => 'Resume auto-scroll',
+                    AutoScrollStatus.stopped ||
+                    AutoScrollStatus.finished => 'Start auto-scroll',
+                  },
+                  child: SizedBox.square(
+                    dimension: _playSize,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: running ? p.sage : p.surface,
+                        border: Border.all(color: p.sage, width: 1.5),
+                      ),
+                      child: Pressable(
+                        onTap: onPlay,
+                        borderRadius: BorderRadius.circular(_playSize / 2),
+                        excludeChildSemantics: true,
+                        child: Icon(
+                          Symbols.swipe_vertical_rounded,
+                          size: NamoSizes.icon,
+                          weight: 300,
+                          color: running ? p.onSage : p.sage,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Flexible(
+            child: TipAnchor(
+              tip: Tip.scrollChant,
+              child: _LabelledRound(
+                label: 'Chant',
+                button: _ChantPlayButton(
+                  state: state,
+                  onPressed: onChantPlay,
+                  busy:
+                      missing &&
+                      status.availability == Availability.downloading,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: _playSize,
+            child: Center(
+              child: NamoIconButton(
+                key: const ValueKey('reader-next'),
+                tooltip: nextTooltip,
+                icon: Symbols.skip_next_rounded,
+                onPressed: onNext,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ];
   }
 
   @override
@@ -137,16 +242,10 @@ class ReaderBottomBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (chantState != null) ...[
-                  _ChantPosition(state: chantState!, onSeek: onChantSeek),
-                  _divider(p),
-                ] else if (audio != null) ...[
-                  audio!,
-                  _divider(p),
-                ],
                 if (chantState != null)
-                  _chantRow(chantState!)
-                else
+                  ..._chantRows(p, chantState!)
+                else ...[
+                  if (audio != null) ...[audio!, _divider(p)],
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -167,11 +266,46 @@ class ReaderBottomBar extends StatelessWidget {
                       ),
                     ],
                   ),
+                ],
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// A round button with its name written under it.
+class _LabelledRound extends StatelessWidget {
+  const _LabelledRound({super.key, required this.button, required this.label});
+
+  final Widget button;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        button,
+        const SizedBox(height: NamoSpace.xs),
+        // The button's own tooltip names it for screen readers.
+        // The name shrinks to the room the Row gives it rather than push
+        // the other buttons off the bar at the largest text sizes.
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: ExcludeSemantics(
+            child: Text(
+              label,
+              maxLines: 1,
+              softWrap: false,
+              style: NamoType.caption(p.textSecondary),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -239,18 +373,25 @@ class _ChantPosition extends StatelessWidget {
 }
 
 /// The round sage chanting button: play or pause, a spinner while the
-/// recording is loading.
+/// recording is loading or [busy] downloading.
 class _ChantPlayButton extends StatelessWidget {
-  const _ChantPlayButton({required this.state, required this.onPressed});
+  const _ChantPlayButton({
+    required this.state,
+    required this.onPressed,
+    this.busy = false,
+  });
 
   final ChantState state;
   final VoidCallback? onPressed;
+
+  /// The recording is downloading: a spinner that does nothing.
+  final bool busy;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
     final playing = state.status == ChantStatus.playing;
-    final loading = state.status == ChantStatus.loading;
+    final loading = busy || state.status == ChantStatus.loading;
     return Tooltip(
       key: const ValueKey('chant-play'),
       message: playing ? 'Pause chanting' : 'Play chanting',
@@ -280,7 +421,9 @@ class _ChantPlayButton extends StatelessWidget {
                     ),
                   )
                 : Icon(
-                    playing ? Symbols.pause_rounded : Symbols.play_arrow_rounded,
+                    playing
+                        ? Symbols.pause_rounded
+                        : Symbols.play_arrow_rounded,
                     size: NamoSizes.icon,
                     weight: 300,
                     color: p.onSage,

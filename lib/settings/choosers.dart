@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
 import '../design/widgets/segmented_selector.dart';
+import 'auto_download.dart';
 import 'reading_language.dart';
 import 'settings.dart';
 
@@ -54,14 +55,30 @@ class LanguageChooser extends ConsumerWidget {
 }
 
 /// How two languages are ordered; only usable with two languages chosen.
+/// [pirith] shows the two choices a pirith has: 'Meaning below' (the flowing
+/// default) and 'Side by side'.
 class LayoutChooser extends ConsumerWidget {
-  const LayoutChooser({super.key});
+  const LayoutChooser({super.key, this.pirith = false});
+
+  final bool pirith;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final enabled = settings.languages.languages.length == 2;
     final p = NamoPalette.of(context);
+    final effective = settings.effectiveLayout;
+    final segments = pirith
+        ? const [
+            Segment(TwoLanguageLayout.verse, 'Meaning below'),
+            Segment(TwoLanguageLayout.sideBySide, 'Side by side'),
+          ]
+        : [for (final l in TwoLanguageLayout.values) Segment(l, l.label)];
+    final selected = pirith
+        ? (effective == TwoLanguageLayout.sideBySide
+              ? TwoLanguageLayout.sideBySide
+              : TwoLanguageLayout.verse)
+        : effective;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -71,11 +88,26 @@ class LayoutChooser extends ConsumerWidget {
             semanticLabel: 'Layout',
             enabled: enabled,
             disabledHint: 'Needs two languages',
-            segments: [
-              for (final l in TwoLanguageLayout.values) Segment(l, l.label),
-            ],
-            selected: {settings.layout},
-            onPressed: (l) => ref.read(settingsProvider.notifier).setLayout(l),
+            segments: segments,
+            selected: {selected},
+            onPressed: (l) {
+              final controller = ref.read(settingsProvider.notifier);
+              if (pirith &&
+                  l == TwoLanguageLayout.verse &&
+                  settings.layout != TwoLanguageLayout.sideBySide) {
+                return;
+              }
+              final outcome = controller.setLayout(l);
+              if (outcome == LayoutOutcome.refusedPair) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(
+                      content: Text('Side by side needs Pali and Sinhala.'),
+                    ),
+                  );
+              }
+            },
           ),
         ),
         if (!enabled)
@@ -119,6 +151,67 @@ class ThemeChooser extends ConsumerWidget {
         ],
         selected: {mode},
         onPressed: ref.read(settingsProvider.notifier).setThemeMode,
+      ),
+    );
+  }
+}
+
+/// Turn a book's pages, or scroll it as one long page.
+class BookReadingModeChooser extends ConsumerWidget {
+  const BookReadingModeChooser({super.key = const ValueKey('book-reading-mode')});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(settingsProvider.select((s) => s.bookReadingMode));
+    return Padding(
+      padding: _chooserPadding,
+      child: SegmentedSelector<BookReadingMode>(
+        semanticLabel: 'Reading',
+        segments: [
+          for (final m in BookReadingMode.values) Segment(m, m.label),
+        ],
+        selected: {mode},
+        onPressed: ref.read(settingsProvider.notifier).setBookReadingMode,
+      ),
+    );
+  }
+}
+
+/// The paper a book is printed on: cream, or dark.
+class BookPaperChooser extends ConsumerWidget {
+  const BookPaperChooser({super.key = const ValueKey('book-paper')});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paper = ref.watch(settingsProvider.select((s) => s.bookPaper));
+    return Padding(
+      padding: _chooserPadding,
+      child: SegmentedSelector<BookPaper>(
+        semanticLabel: 'Paper',
+        segments: [
+          for (final p in BookPaper.values) Segment(p, p.label),
+        ],
+        selected: {paper},
+        onPressed: ref.read(settingsProvider.notifier).setBookPaper,
+      ),
+    );
+  }
+}
+
+/// When recordings download by themselves: on Wi-Fi, on any connection, never.
+class AutoDownloadChooser extends ConsumerWidget {
+  const AutoDownloadChooser({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final value = ref.watch(settingsProvider.select((s) => s.autoDownload));
+    return Padding(
+      padding: _chooserPadding,
+      child: SegmentedSelector<AutoDownload>(
+        semanticLabel: 'Download automatically',
+        segments: [for (final a in AutoDownload.values) Segment(a, a.label)],
+        selected: {value},
+        onPressed: ref.read(settingsProvider.notifier).setAutoDownload,
       ),
     );
   }

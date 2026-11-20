@@ -8,6 +8,7 @@ import 'package:buddhist_gatha/design/typography.dart';
 import 'package:buddhist_gatha/home/featured_card.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/design/widgets/pressable.dart';
+import 'package:buddhist_gatha/tips/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -79,11 +80,11 @@ void main() {
   });
 
   testWidgets(
-    'tapping the card shows all 19 sections in place and stays on /library',
+    'tapping the card shows all 33 sections in place and stays on /library',
     (t) async {
       final lib = await realLibrary(t);
       final reading = lib.reading(realReadingId)!;
-      expect(reading.sections.length, 19);
+      expect(reading.sections.length, 33);
       await openReal(
         t,
         Routes.library,
@@ -438,6 +439,7 @@ void main() {
         await t.pumpWidget(
           ProviderScope(
             overrides: [
+              tipsAllowedProvider.overrideWithValue(false),
               ...fake,
               routerProvider.overrideWith(
                 (ref) => buildRouter(initialLocation: Routes.category('c1')),
@@ -496,6 +498,7 @@ void main() {
       await t.pumpWidget(
         ProviderScope(
           overrides: [
+            tipsAllowedProvider.overrideWithValue(false),
             ...fake,
             routerProvider.overrideWith((ref) {
               final r = buildRouter(initialLocation: Routes.category('c1'));

@@ -106,6 +106,8 @@ class Verse {
     this.sinhala,
     this.english,
     this.englishSource,
+    this.source,
+    this.sinhalaSource,
     this.englishKind,
     this.check = CheckStatus.unchecked,
     this.notes = const [],
@@ -124,6 +126,12 @@ class Verse {
     englishSource: json['english_source'] == null
         ? null
         : SourceRecord.fromJson(json['english_source'] as Map<String, dynamic>),
+    source: json['source'] == null
+        ? null
+        : SourceRecord.fromJson(json['source'] as Map<String, dynamic>),
+    sinhalaSource: json['sinhala_source'] == null
+        ? null
+        : SourceRecord.fromJson(json['sinhala_source'] as Map<String, dynamic>),
     englishKind: EnglishKind.parse(json['english_kind']),
     check: CheckStatus.parse(json['check']),
     notes: [for (final n in (json['notes'] as List?) ?? const []) n as String],
@@ -139,6 +147,12 @@ class Verse {
   final String id;
   final String? paliSi, paliRoman, sinhala, english;
   final SourceRecord? englishSource;
+
+  /// Where this verse's Pali comes from when it differs from its section.
+  final SourceRecord? source;
+
+  /// Where the Sinhala meaning comes from when it differs from the Pali.
+  final SourceRecord? sinhalaSource;
   final EnglishKind? englishKind;
   final CheckStatus check;
   final List<String> notes;
@@ -156,6 +170,9 @@ class Verse {
 
   bool get isPhrased => phrases.isNotEmpty;
 
+  /// This verse's own source, else its [section]'s.
+  SourceRecord sourceOr(Section section) => source ?? section.source;
+
   /// This verse under [id]; every other field is the identical object.
   Verse withId(String id) => Verse(
     id: id,
@@ -164,6 +181,8 @@ class Verse {
     sinhala: sinhala,
     english: english,
     englishSource: englishSource,
+    source: source,
+    sinhalaSource: sinhalaSource,
     englishKind: englishKind,
     check: check,
     notes: notes,
@@ -203,7 +222,9 @@ Duration _seconds(num s) => Duration(microseconds: (s * 1000000).round());
 
 class RecordingInfo {
   const RecordingInfo({
-    required this.asset,
+    required this.path,
+    this.bytes = 0,
+    this.sha256 = '',
     required this.label,
     this.sectionCues = const {},
     this.blockTimes = const [],
@@ -212,7 +233,9 @@ class RecordingInfo {
   });
 
   factory RecordingInfo.fromJson(Map<String, dynamic> json) => RecordingInfo(
-    asset: json['asset'] as String,
+    path: json['path'] as String,
+    bytes: (json['bytes'] as num?)?.toInt() ?? 0,
+    sha256: json['sha256'] as String? ?? '',
     label: json['label'] as String? ?? '',
     duration: json['duration_ms'] == null
         ? null
@@ -235,7 +258,15 @@ class RecordingInfo {
     ],
   );
 
-  final String asset, label;
+  /// Where the recording lives on the host, e.g. `audio/pirith/08-x.m4a`.
+  final String path;
+
+  /// Size in bytes; 0 when the content does not say.
+  final int bytes;
+
+  /// Lower-case hex SHA-256; empty when the content does not say.
+  final String sha256;
+  final String label;
   final Map<String, Duration> sectionCues;
 
   /// One entry per block of the reading; null where the block has no time.
@@ -259,6 +290,7 @@ class Section {
       translator: '',
     ),
     this.check = CheckStatus.unchecked,
+    this.notes = const [],
     this.corrections = const [],
     this.verses = const [],
   });
@@ -276,6 +308,7 @@ class Section {
           )
         : SourceRecord.fromJson(json['source'] as Map<String, dynamic>),
     check: CheckStatus.parse(json['check']),
+    notes: [for (final n in (json['notes'] as List?) ?? const []) n as String],
     corrections: _corrections(json['corrections']),
     verses: [
       for (final v in (json['verses'] as List?) ?? const [])
@@ -288,6 +321,9 @@ class Section {
   final String heading;
   final SourceRecord source;
   final CheckStatus check;
+
+  /// What still needs checking in this section, noted once for all its verses.
+  final List<String> notes;
   final List<Correction> corrections;
   final List<Verse> verses;
 

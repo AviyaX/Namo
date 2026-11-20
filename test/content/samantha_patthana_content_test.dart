@@ -130,7 +130,7 @@ void main() {
   testWidgets('the recording is timed by block and by line', (t) async {
     lib = await realLibrary(t);
     final audio = lib.reading(spVandanaId)!.audio!;
-    expect(audio.asset, 'assets/audio/samantha_patthana/hYXyO3o7Iac.m4a');
+    expect(audio.path, 'audio/samantha_patthana/hYXyO3o7Iac.m4a');
     expect(audio.label, 'Chanted by Ven. Kiriwaththuduwe Ariyadassana Thero');
     expect(audio.duration, const Duration(minutes: 47, seconds: 36));
     expect(audio.blockTimes.length, 28);

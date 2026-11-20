@@ -1,6 +1,10 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'books/book_contents_screen.dart';
+import 'books/book_reader_screen.dart';
+import 'books/book_screen.dart';
 import 'design/transitions.dart';
 import 'design/widgets/app_shell.dart';
 import 'design/widgets/fade_indexed_stack.dart';
@@ -10,8 +14,12 @@ import 'home/home_screen.dart';
 import 'library/library_screen.dart';
 import 'reader/reader_screen.dart';
 import 'saved/saved_screen.dart';
+import 'settings/settings.dart';
 import 'settings/settings_screen.dart';
 import 'settings/sources_screen.dart';
+import 'tipitaka/tipitaka_home_screen.dart';
+import 'tipitaka/tipitaka_list_screen.dart';
+import 'tipitaka/tipitaka_reader_screen.dart';
 
 abstract final class Routes {
   static const home = '/';
@@ -19,6 +27,9 @@ abstract final class Routes {
   static const saved = '/saved';
   static const settings = '/settings';
   static const sources = '/settings/sources';
+
+  /// The Library with its search box focused.
+  static const librarySearch = '/library?focus=search';
 
   /// The Library with this category's sections showing.
   static String category(String id) =>
@@ -47,6 +58,26 @@ abstract final class Routes {
 
   /// The editor of one flow.
   static String flowEditor(String flowId) => '/library/flow/$flowId';
+
+  /// A book's page: its cover, the way in and its chapters.
+  static String book(String id) => '/library/book/$id';
+
+  /// The pages under page [n] of a book.
+  static String bookContents(String id, int n) =>
+      '/library/book/$id/contents/$n';
+
+  /// A book's reader at page [n].
+  static String bookReader(String id, int n) => '/library/book/$id/read/$n';
+
+  /// The Tripitaka tab's first page.
+  static const tipitaka = '/tipitaka';
+
+  /// The list of a Tripitaka node's children.
+  static String tipitakaNode(String key) => '/tipitaka/n/$key';
+
+  /// The Tripitaka reader; Back goes to Saved when [fromSaved].
+  static String tipitakaReader(String key, {bool fromSaved = false}) =>
+      fromSaved ? '/tipitaka/read/$key?from=saved' : '/tipitaka/read/$key';
 }
 
 /// The pages that open the reader and want Back to return to them. The
@@ -82,6 +113,7 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               builder: (context, state) => LibraryScreen(
                 openCategory: state.uri.queryParameters['open'],
                 openReading: state.uri.queryParameters['reading'],
+                focusSearch: state.uri.queryParameters['focus'] == 'search',
               ),
               routes: [
                 // Saved links from before the in-place list.
@@ -102,6 +134,54 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                     context: context,
                     child: FlowEditorScreen(
                       flowId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ),
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'book/:id',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: BookScreen(id: state.pathParameters['id']!),
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: 'contents/:n',
+                      pageBuilder: (context, state) {
+                        final n = int.tryParse(state.pathParameters['n']!);
+                        return namoPage(
+                          key: state.pageKey,
+                          context: context,
+                          child: n == null
+                              ? const NotFoundScreen()
+                              : BookContentsScreen(
+                                  id: state.pathParameters['id']!,
+                                  n: n,
+                                ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.tipitaka,
+              builder: (context, state) => const TipitakaHomeScreen(),
+              routes: [
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'n/:key',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: TipitakaListScreen(
+                      nodeKey: state.pathParameters['key']!,
                     ),
                   ),
                 ),
@@ -149,6 +229,53 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               ReaderFrom.values.asNameMap()[state.uri.queryParameters['from']],
         ),
       ),
+    ),
+    // Outside the shell: the reader has the whole screen.
+    GoRoute(
+      path: '/library/book/:id/read/:n',
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['id']!;
+        final n = int.tryParse(state.pathParameters['n']!);
+        // The page key is the route's own, the same for every book and
+        // chapter, so moving to another chapter never plays a route
+        // transition (whatever the mode was when the reader opened). Read
+        // page by page, the screen stays too as the pages carry on into the
+        // next chapter; scrolled, a new chapter starts afresh, at its top.
+        final pages =
+            ProviderScope.containerOf(context)
+                .read(settingsProvider)
+                .bookReadingMode ==
+            BookReadingMode.pages;
+        return namoPage(
+          key: state.pageKey,
+          context: context,
+          child: n == null
+              ? const NotFoundScreen()
+              : BookReaderScreen(
+                  key: ValueKey(
+                    pages ? 'book-reader-$id' : 'book-reader-$id-$n',
+                  ),
+                  id: id,
+                  n: n,
+                ),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/tipitaka/read/:key',
+      pageBuilder: (context, state) {
+        final key = state.pathParameters['key']!;
+        return namoPage(
+          key: state.pageKey,
+          context: context,
+          child: TipitakaReaderScreen(
+            // A new reading starts afresh (its own place, its own scroll).
+            key: ValueKey('tipitaka-reader-$key'),
+            readingKey: key,
+            fromSaved: state.uri.queryParameters['from'] == 'saved',
+          ),
+        );
+      },
     ),
   ],
 );

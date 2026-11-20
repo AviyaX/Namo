@@ -39,6 +39,16 @@ void main() {
       expect(text.style!.fontSize, 12);
     });
 
+    testWidgets('accent is gold, upper-case, spaced, labelled as written', (t) async {
+      final handle = t.ensureSemantics();
+      await pumpThemed(t, const Overline("Today's gatha", accent: true));
+      final text = t.widget<Text>(find.text("TODAY'S GATHA"));
+      expect(text.style!.color, NamoPalette.dark.gold);
+      expect(text.style!.letterSpacing, 2.0);
+      expect(find.bySemanticsLabel("Today's gatha"), findsOneWidget);
+      handle.dispose();
+    });
+
     testWidgets('takes a colour', (t) async {
       await pumpThemed(t, Overline('Label', color: NamoPalette.dark.gold));
       expect(t.widget<Text>(find.text('Label')).style!.color, NamoPalette.dark.gold);
