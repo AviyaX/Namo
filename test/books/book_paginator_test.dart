@@ -2,6 +2,7 @@ import 'package:buddhist_gatha/books/book_blocks.dart';
 import 'package:buddhist_gatha/books/book_model.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/books/pagination/book_paginator.dart';
+import 'package:buddhist_gatha/books/pagination/screen_page_view.dart';
 import 'package:buddhist_gatha/design/tokens.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -59,104 +60,6 @@ int _lineCount(String text, TextStyle style, double width) {
   return lines;
 }
 
-/// The drawing of [slice], as Task 4's page will draw it, to measure it
-/// independently of the paginator.
-Widget _draw(BookPage page, PageSlice slice, BookTextStyles s) {
-  switch (slice) {
-    case TitleSlice():
-      return Text(page.title, style: s.title);
-    case BlockSlice(:final block):
-      return BookBlockView(
-        block: page.blocks[block],
-        styles: s,
-        fitTables: true,
-      );
-    case LinesSlice(
-      :final block,
-      :final item,
-      :final charStart,
-      :final charEnd,
-    ):
-      final b = page.blocks[block];
-      final whole = switch (b) {
-        BookPara(:final text) => (text, s.prose),
-        BookHeading(:final text) => (text, s.heading),
-        BookSubhead(:final text) => (text, s.strong),
-        _ => null,
-      };
-      if (whole case (final text, final style)) {
-        return Text(text.substring(charStart, charEnd), style: style);
-      }
-      final (labels, items, style, minLead) = switch (b) {
-        final BookList l => (listLabels(l), l.items, s.prose, listMinLead),
-        final BookFootnotes f => (
-          footnoteLabels(f),
-          f.items,
-          s.caption,
-          footnoteMinLead,
-        ),
-        _ => throw StateError('lines of $b'),
-      };
-      final lead = leadWidth(labels, style, minLead, s.scaler, s.direction);
-      final label = labels[item];
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (b is BookFootnotes && item == 0 && charStart == 0)
-            FootnoteRule(color: s.border),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (label != null)
-                SizedBox(
-                  width: lead,
-                  child: charStart == 0
-                      ? Text(label, style: style, softWrap: false)
-                      : null,
-                ),
-              Expanded(
-                child: Text(
-                  items[item].substring(charStart, charEnd),
-                  style: style,
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
-    case GathaSlice(:final block, :final fromLine, :final toLine):
-      final g = page.blocks[block] as BookGatha;
-      return Padding(
-        padding: const EdgeInsetsDirectional.only(start: gathaIndent),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (final line in g.lines.sublist(fromLine, toLine))
-              Text(line, style: s.prose),
-          ],
-        ),
-      );
-    case TableSlice(
-      :final block,
-      :final fromRow,
-      :final toRow,
-      :final repeatHeader,
-    ):
-      final t = page.blocks[block] as BookTable;
-      return BookTableView(
-        rows: t.rows,
-        border: s.border,
-        styleOf: (r) => s.tableRow(t, r),
-        fitWidth: true,
-        repeatHeader: repeatHeader,
-        fromRow: fromRow,
-        toRow: toRow,
-      );
-    case ImageSlice(:final height):
-      return SizedBox(height: height);
-  }
-}
-
 /// Draws each of [pages] with real widgets and checks every slice is as
 /// tall as the paginator measured, sits where it said, and the page fits.
 Future<void> _expectDrawnAsMeasured(
@@ -172,30 +75,22 @@ Future<void> _expectDrawnAsMeasured(
   for (var i = 0; i < pages.length; i++) {
     final slices = pages[i].slices;
     await t.pumpWidget(
-      MediaQuery(
-        data: const MediaQueryData(),
-        child: Directionality(
-          textDirection: TextDirection.ltr,
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: SizedBox(
-              width: box.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  for (var j = 0; j < slices.length; j++) ...[
-                    SizedBox(
-                      height: gapBefore(
-                        j == 0 ? null : slices[j - 1],
-                        slices[j],
-                      ),
-                    ),
-                    KeyedSubtree(
-                      key: ValueKey('slice-$j'),
-                      child: _draw(page, slices[j], s),
-                    ),
-                  ],
-                ],
+      Theme(
+        data: ThemeData(extensions: const [NamoPalette.light]),
+        child: MediaQuery(
+          data: const MediaQueryData(),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: SizedBox(
+                width: box.width,
+                child: ScreenPageView(
+                  chapter: page,
+                  page: pages[i],
+                  styles: s,
+                  sheet: false,
+                ),
               ),
             ),
           ),
@@ -204,7 +99,7 @@ Future<void> _expectDrawnAsMeasured(
     );
     var bottom = 0.0;
     for (var j = 0; j < slices.length; j++) {
-      final rect = t.getRect(find.byKey(ValueKey('slice-$j')));
+      final rect = t.getRect(find.byKey(ValueKey('page-slice-$j')));
       expect(
         rect.top,
         moreOrLessEquals(slices[j].top, epsilon: 0.01),
