@@ -129,13 +129,15 @@ class GathaSlice extends PageSlice {
 }
 
 /// The rows [fromRow] to [toRow] of a table, after its header row when
-/// [repeatHeader]; drawn by `BookTableView` shrunk to the width.
+/// [repeatHeader]; drawn by `BookTableView` shrunk to the width, then at
+/// [scale] (below 1 only when one row is taller than the room on a page).
 class TableSlice extends PageSlice {
   const TableSlice(
     this.block,
     this.fromRow,
     this.toRow,
     this.repeatHeader, {
+    this.scale = 1,
     required super.spot,
     required super.top,
     required super.height,
@@ -145,6 +147,7 @@ class TableSlice extends PageSlice {
   final int block;
   final int fromRow, toRow;
   final bool repeatHeader;
+  final double scale;
 }
 
 /// A bundled picture at [scale] times the full width (below 1 only when it
@@ -546,14 +549,33 @@ class _Cutter {
       if (!_empty) return false;
       fit = math.max(fit, 1);
     }
-    _addRows(b, metrics, from, from + fit, repeat);
+    // A row taller than the room (only ever alone on its page) is scaled
+    // to fit it, as a picture is.
+    final tall = over + metrics.rowsHeight(from, from + fit);
+    _addRows(
+      b,
+      metrics,
+      from,
+      from + fit,
+      repeat,
+      scale: tall > room && room > 0 ? room / tall : 1,
+    );
     _part = from + fit;
     return _part == rows ? _nextBlock() : false;
   }
 
-  void _addRows(int b, TableMetrics metrics, int from, int to, bool repeat) {
+  void _addRows(
+    int b,
+    TableMetrics metrics,
+    int from,
+    int to,
+    bool repeat, {
+    double scale = 1,
+  }) {
     final height =
-        (repeat ? metrics.rowHeights[0] : 0.0) + metrics.rowsHeight(from, to);
+        ((repeat ? metrics.rowHeights[0] : 0.0) +
+            metrics.rowsHeight(from, to)) *
+        scale;
     _add(
       b,
       (top) => TableSlice(
@@ -561,6 +583,7 @@ class _Cutter {
         from,
         to,
         repeat,
+        scale: scale,
         spot: BookSpot(b, metrics.rowChars[from]),
         top: top,
         height: height,

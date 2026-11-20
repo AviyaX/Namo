@@ -251,11 +251,19 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
     setState(() {});
   }
 
-  /// The pages moved one way: tells the screen of a new chapter, announces
-  /// the page and saves it in a moment.
+  /// The pages moved one way: announces the page and saves it in a moment.
+  /// Into a new chapter, the place is saved at once and then the screen is
+  /// told: a reader that is built afresh for it (the mode was switched
+  /// since it opened) opens at this page.
   void _turned(int chapterBefore) {
     final stream = _stream!;
-    if (stream.n != chapterBefore) widget.onChapter(stream.n);
+    if (stream.n != chapterBefore) {
+      _dirty = true;
+      saveNow();
+      widget.onChapter(stream.n);
+    } else {
+      _markMoved();
+    }
     final count = stream.count;
     final page = 'Page ${stream.index + 1}';
     SemanticsService.sendAnnouncement(
@@ -263,7 +271,6 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       count == null ? page : '$page of $count',
       Directionality.of(context),
     );
-    _markMoved();
   }
 
   void _turnedForward() {

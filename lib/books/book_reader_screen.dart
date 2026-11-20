@@ -234,7 +234,12 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
           key: _pagesKey,
           book: book,
           n: widget.n,
-          onChapter: (n) => context.go(Routes.bookReader(widget.id, n)),
+          // The address follows the pages in place: the browser's history
+          // keeps one entry for the reader, so Back leaves it.
+          onChapter: (n) => Router.neglect(
+            context,
+            () => context.go(Routes.bookReader(widget.id, n)),
+          ),
           onBack: _back,
         );
       } else {

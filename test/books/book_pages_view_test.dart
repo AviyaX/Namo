@@ -92,6 +92,32 @@ Future<void> _open(
   await t.pumpAndSettle();
 }
 
+/// The long-blocks books with forty more paragraphs in "2-1-1" (n 7), so
+/// the chapter before "3" (n 8) is several pages.
+Map<String, Object> _longSeven() {
+  final books = tinyBooksWithLongBlocks();
+  final path = tinyBookFile(tinyBookNestedId);
+  final book = jsonDecode(jsonEncode(books[path])) as Map<String, dynamic>;
+  final blocks = (book['pages'] as List)[6]['blocks'] as List;
+  for (var i = 0; i < 40; i++) {
+    blocks.insert(0, {'kind': 'para', 'text': 'Long paragraph $i.'});
+  }
+  books[path] = book.cast<String, Object>();
+  return books;
+}
+
+/// Taps [arrow] and pumps the turn frame by frame, checking that one
+/// reader, and never a second, is on screen throughout: no route
+/// transition.
+Future<void> _turnWithoutTransition(WidgetTester t, Finder arrow) async {
+  await t.tap(arrow);
+  for (var f = 0; f < 40; f++) {
+    await t.pump(const Duration(milliseconds: 20));
+    expect(find.byType(BookReaderScreen), findsOneWidget, reason: 'frame $f');
+  }
+  await t.pumpAndSettle();
+}
+
 Future<void> _tapNext(WidgetTester t) async {
   await t.tap(_next);
   await t.pumpAndSettle();
@@ -200,6 +226,96 @@ void main() {
     expect(find.text(tinyLongTitle), findsOneWidget);
     expect(_shown(t).$1, 1);
     expect(_view(t).spot, BookSpot.title);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets(
+    'switched from Scroll to Pages in the reader, a crossing back has no '
+    "route transition and opens the previous chapter's last page",
+    (t) async {
+      await _open(
+        t,
+        Routes.bookReader(tinyBookNestedId, 8),
+        settings: _large.copyWith(bookReadingMode: BookReadingMode.scroll),
+        books: _longSeven(),
+      );
+      expect(find.byType(BookPagesView), findsNothing);
+      _container(t)
+          .read(settingsProvider.notifier)
+          .setBookReadingMode(BookReadingMode.pages);
+      await t.pumpAndSettle();
+      expect(_shown(t).$1, 1);
+      await _turnWithoutTransition(t, _prev);
+      expect(_location(t), '/library/book/tiny-nested/read/7');
+      final (i, n) = _shown(t);
+      expect(n, greaterThan(1));
+      expect(i, n);
+      // And forward again, in place.
+      final screen = t.state(find.byType(BookReaderScreen));
+      await _turnWithoutTransition(t, _next);
+      expect(_location(t), '/library/book/tiny-nested/read/8');
+      expect(_shown(t).$1, 1);
+      expect(t.state(find.byType(BookReaderScreen)), same(screen));
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'a crossing replaces the history entry, and device Back then goes to '
+    "the new chapter's parent",
+    (t) async {
+      await _open(t, Routes.bookReader(tinyBookNestedId, 7));
+      final reports = <Map<Object?, Object?>>[];
+      t.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.navigation,
+        (call) async {
+          if (call.method == 'routeInformationUpdated') {
+            reports.add(call.arguments as Map<Object?, Object?>);
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => t.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.navigation,
+          null,
+        ),
+      );
+      var (i, n) = _shown(t);
+      while (i < n) {
+        await _tapNext(t);
+        (i, n) = _shown(t);
+      }
+      await _tapNext(t);
+      expect(_location(t), '/library/book/tiny-nested/read/8');
+      final toEight = reports.where(
+        (r) => '${r['uri'] ?? r['location']}'.endsWith('/read/8'),
+      );
+      expect(toEight, isNotEmpty);
+      expect(toEight.every((r) => r['replace'] == true), isTrue);
+      // Device Back (the system's pop) leaves for the contents of "3", which
+      // is top level: the book's page.
+      await t.binding.handlePopRoute();
+      await t.pumpAndSettle();
+      expect(_location(t), Routes.book(tinyBookNestedId));
+      expect(t.takeException(), isNull);
+    },
+  );
+
+  testWidgets('with animations off the arrow turns with no curl', (t) async {
+    t.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    await _open(t, Routes.bookReader(tinyBookNestedId, 8));
+    final (_, n) = _shown(t);
+    await t.tap(_next);
+    await t.pump();
+    expect(_shown(t), (2, n));
+    for (var f = 0; f < 20; f++) {
+      expect(find.byKey(const ValueKey('page-curl-paint')), findsNothing);
+      await t.pump(const Duration(milliseconds: 20));
+    }
+    expect(_shown(t), (2, n));
     expect(t.takeException(), isNull);
   });
 

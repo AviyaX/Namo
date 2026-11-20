@@ -78,7 +78,7 @@ Future<void> _expectDrawnAsMeasured(
       Theme(
         data: ThemeData(extensions: const [NamoPalette.light]),
         child: MediaQuery(
-          data: const MediaQueryData(),
+          data: MediaQueryData(textScaler: s.scaler),
           child: Directionality(
             textDirection: TextDirection.ltr,
             child: Align(
@@ -356,6 +356,79 @@ void main() {
     }
     expect(covered, [for (var r = 1; r < 40; r++) r]);
     await _expectDrawnAsMeasured(t, page, pages, s, _box);
+  });
+
+  testWidgets('a table row taller than a page is scaled to fit it', (t) async {
+    // One short cell beside a long one: the long cell wraps in a narrow
+    // column into a row taller than the box, alone and under a repeated
+    // header.
+    final long = [for (var i = 0; i < 4; i++) _words(i, 30)].join(' ');
+    const box = PageBox(width: 360, height: 300);
+    final s = _styles(fontScale: 1.6);
+    for (final header in [false, true]) {
+      final page = _chapter([
+        BookTable(
+          header: header,
+          rows: [
+            if (header) ['Name', 'Note'],
+            ['Short', long],
+            ['Short', long],
+          ],
+        ),
+      ]);
+      final pages = paginate(page, s, box).toList();
+      final tables = [
+        for (final p in pages)
+          for (final slice in p.slices)
+            if (slice is TableSlice) slice,
+      ];
+      expect(
+        tables.where((slice) => slice.scale < 1),
+        isNotEmpty,
+        reason: 'header $header',
+      );
+      for (final slice in tables) {
+        expect(slice.top + slice.height, lessThanOrEqualTo(box.height + 0.01));
+      }
+      await _expectDrawnAsMeasured(t, page, pages, s, box);
+    }
+  });
+
+  testWidgets("the reader's short and long cell table fits large text", (
+    t,
+  ) async {
+    // As in the reader on a 390 x 844 phone (a 350 x 674 page) at the
+    // largest text size with the device's text at 1.2 and 1.5.
+    const box = PageBox(width: 350, height: 674);
+    const long =
+        'A made-up table cell with one long sentence in it, long enough that '
+        'it has to wrap over more than one line in the reading column at any '
+        'size';
+    final page = _chapter([
+      const BookTable(
+        header: false,
+        rows: [
+          ['Short', long],
+        ],
+      ),
+    ]);
+    for (final device in [1.2, 1.5]) {
+      final s = BookTextStyles.from(
+        palette: NamoPalette.light,
+        settings: const AppSettings(fontScale: 1.6),
+        scaler: TextScaler.linear(device),
+      );
+      final pages = paginate(page, s, box).toList();
+      for (final p in pages) {
+        final last = p.slices.last;
+        expect(
+          last.top + last.height,
+          lessThanOrEqualTo(box.height + 0.01),
+          reason: 'device text $device',
+        );
+      }
+      await _expectDrawnAsMeasured(t, page, pages, s, box);
+    }
   });
 
   testWidgets('a wide table is shrunk to the width', (t) async {

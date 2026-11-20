@@ -115,9 +115,11 @@ class ScreenPageView extends StatelessWidget {
         :final fromRow,
         :final toRow,
         :final repeatHeader,
+        :final scale,
+        :final height,
       ):
         final t = chapter.blocks[block] as BookTable;
-        return BookTableView(
+        final table = BookTableView(
           rows: t.rows,
           border: s.border,
           styleOf: (r) => s.tableRow(t, r),
@@ -125,6 +127,23 @@ class ScreenPageView extends StatelessWidget {
           repeatHeader: repeatHeader,
           fromRow: fromRow,
           toRow: toRow,
+        );
+        if (scale == 1) return table;
+        // Laid out at the full width, then drawn smaller, centred.
+        return SizedBox(
+          height: height,
+          child: LayoutBuilder(
+            builder: (context, constraints) => Center(
+              child: SizedBox(
+                width: constraints.maxWidth * scale,
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(width: constraints.maxWidth, child: table),
+                ),
+              ),
+            ),
+          ),
         );
       case ImageSlice(:final block, :final scale, :final height):
         final image = chapter.blocks[block] as BookImage;

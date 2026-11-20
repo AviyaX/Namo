@@ -236,16 +236,18 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
         final n = int.tryParse(state.pathParameters['n']!);
-        // Read page by page, the screen stays as the pages carry on into
-        // the next chapter: the address changes, the page and its state do
-        // not. Scrolled, a new page starts afresh, at its top.
+        // The page key is the route's own, the same for every book and
+        // chapter, so moving to another chapter never plays a route
+        // transition (whatever the mode was when the reader opened). Read
+        // page by page, the screen stays too as the pages carry on into the
+        // next chapter; scrolled, a new chapter starts afresh, at its top.
         final pages =
             ProviderScope.containerOf(context)
                 .read(settingsProvider)
                 .bookReadingMode ==
             BookReadingMode.pages;
         return namoPage(
-          key: pages ? ValueKey('book-read-$id') : state.pageKey,
+          key: state.pageKey,
           context: context,
           child: n == null
               ? const NotFoundScreen()
