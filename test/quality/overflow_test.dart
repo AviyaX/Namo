@@ -154,10 +154,10 @@ void main() {
       expectInView(t);
     });
 
-    testWidgets('Library with the My flows tip does not overflow: $where', (
+    testWidgets('Home with the My flows tip does not overflow: $where', (
       t,
     ) async {
-      await openReal(t, Routes.library,
+      await openReal(t, Routes.home,
           size: size, deviceTextScale: 2.0, tips: true);
       // The tip waits for its card to be wholly on screen; on a small screen
       // at large text that is a scroll away.
@@ -744,7 +744,7 @@ void main() {
   // page, and a footnotes page. Page numbers: "1" is 2, "1-1" is 3, "1-2" is
   // 4, "2-1-1" is 7.
   final booksScreens = <(String, String, Map<String, String>)>[
-    ('Books shelf', Routes.library, const {}),
+    ('Books shelf', Routes.tipitaka, const {}),
     ('Book page', Routes.book(tinyBookNestedId), const {}),
     (
       'Book page with a place',

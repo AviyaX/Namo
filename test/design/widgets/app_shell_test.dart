@@ -12,11 +12,20 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../bana/bana_support.dart';
 import '../../quality/quality_support.dart';
 
-const _labels = ['Home', 'Library', 'Bana', 'Tripitaka', 'Saved', 'Settings'];
+const _labels = ['Home', 'Pirith & Gatha', 'Bana', 'Library', 'Settings'];
 
-Finder _nav(String label) => find.byKey(ValueKey('nav-${label.toLowerCase()}'));
+/// The tab's name in keys: its label may change, this does not.
+const _ids = {
+  'Home': 'home',
+  'Pirith & Gatha': 'library',
+  'Bana': 'bana',
+  'Library': 'tripitaka',
+  'Settings': 'settings',
+};
+
+Finder _nav(String label) => find.byKey(ValueKey('nav-${_ids[label]}'));
 Finder _screen(String label) =>
-    find.byKey(ValueKey('screen-${label.toLowerCase()}'));
+    find.byKey(ValueKey('screen-${_ids[label]}'));
 Finder get _bar => find.byType(FloatingBar);
 
 /// The vertical scroll view of the tab named [label].
@@ -85,7 +94,7 @@ void main() {
   setUpAll(loadBundledFonts);
 
   group('phone: floating bar', () {
-    testWidgets('bar shows six tabs in order Home, Library, Bana, Tripitaka, Saved, '
+    testWidgets('bar shows five tabs in order Home, Pirith & Gatha, Bana, Library, '
         'Settings, each 48 x 48, the bar 16 from the sides',
         (t) async {
       await openReal(t, Routes.home);
@@ -105,10 +114,8 @@ void main() {
       expect(xs, orderedEquals([...xs]..sort()));
       expect(_bar, findsOneWidget);
       final bar = t.getRect(_bar);
-      // Six tabs need the tighter side margin (8) at this width; the five-tab
-      // bar had 16.
-      expect(bar.left, anyOf(16, 8));
-      expect(bar.right, 390 - bar.left);
+      expect(bar.left, 16);
+      expect(bar.right, 390 - 16);
       expect(bar.bottom, 844 - 12);
       expect(bar.height, greaterThanOrEqualTo(64));
       for (final l in _labels) {
@@ -130,7 +137,7 @@ void main() {
     testWidgets('the active destination is selected and its icon filled', (t) async {
       final h = t.ensureSemantics();
       await openReal(t, Routes.home);
-      for (final active in ['Home', 'Saved']) {
+      for (final active in ['Home', 'Library']) {
         if (active != 'Home') await _go(t, active);
         for (final l in _labels) {
           final data = t.getSemantics(_nav(l)).getSemanticsData();
@@ -156,7 +163,6 @@ void main() {
         Symbols.menu_book_rounded,
         Symbols.smart_display_rounded,
         Symbols.auto_stories_rounded,
-        Symbols.bookmark_rounded,
         Symbols.settings_rounded,
       ];
       for (var i = 0; i < _labels.length; i++) {
@@ -169,30 +175,40 @@ void main() {
 
     testWidgets('tapping a destination shows its tab', (t) async {
       await openReal(t, Routes.home);
-      await _go(t, 'Library');
-      expect(_screen('Library'), findsOneWidget);
+      await _go(t, 'Pirith & Gatha');
+      expect(_screen('Pirith & Gatha'), findsOneWidget);
       expect(_screen('Home'), findsNothing);
     });
 
-    testWidgets('tapping Tripitaka opens /tipitaka', (t) async {
+    testWidgets('tapping Library opens /tipitaka, titled Tripitaka & Books',
+        (t) async {
       await openReal(t, Routes.home);
-      await _go(t, 'Tripitaka');
-      expect(_screen('Tripitaka'), findsOneWidget);
+      await _go(t, 'Library');
+      expect(_screen('Library'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: _screen('Library'),
+          matching: find.text('Tripitaka & Books'),
+        ),
+        findsOneWidget,
+      );
       expect(_screen('Home'), findsNothing);
       expect(_location(t), Routes.tipitaka);
     });
 
-    testWidgets('Saved and Settings tabs still open their pages', (t) async {
+    testWidgets('Settings opens its page, with Saved inside it', (t) async {
       await openReal(t, Routes.home);
-      await _go(t, 'Tripitaka');
-      await _go(t, 'Saved');
-      expect(_screen('Saved'), findsOneWidget);
-      expect(_location(t), Routes.saved);
+      await _go(t, 'Library');
       await _go(t, 'Settings');
       expect(_screen('Settings'), findsOneWidget);
       expect(_location(t), Routes.settings);
-      await _go(t, 'Library');
-      expect(_screen('Library'), findsOneWidget);
+      await t.tap(find.byKey(const ValueKey('settings-saved')));
+      await t.pumpAndSettle();
+      expect(find.byKey(const ValueKey('screen-saved')), findsOneWidget);
+      expect(_location(t), '/settings/saved');
+      expect(_nav('Settings'), findsOneWidget);
+      await _go(t, 'Pirith & Gatha');
+      expect(_screen('Pirith & Gatha'), findsOneWidget);
     });
 
     testWidgets('each tab keeps its scroll position and open card when away',
@@ -216,7 +232,7 @@ void main() {
         t.state<ScrollableState>(_scrollable('Settings')).position.pixels,
         200,
       );
-      await _go(t, 'Library');
+      await _go(t, 'Pirith & Gatha');
       expect(find.byKey(ValueKey('open-${category.id}')), findsOneWidget);
     });
 
@@ -276,7 +292,7 @@ void main() {
   });
 
   group('wide: side rail', () {
-    testWidgets('rail has six entries at 1280 px', (t) async {
+    testWidgets('rail has five entries at 1280 px', (t) async {
       await openReal(t, Routes.home, size: const Size(1280, 800));
       final rail = find.byKey(const ValueKey('nav-rail'));
       for (final l in _labels) {
@@ -292,10 +308,10 @@ void main() {
                 (w.key! as ValueKey<String>).value != 'nav-rail',
           ),
         ),
-        findsNWidgets(6),
+        findsNWidgets(5),
       );
-      await _go(t, 'Tripitaka');
-      expect(_screen('Tripitaka'), findsOneWidget);
+      await _go(t, 'Library');
+      expect(_screen('Library'), findsOneWidget);
     });
 
     for (final size in const [Size(840, 600), Size(1280, 800), Size(844, 390)]) {
@@ -303,7 +319,7 @@ void main() {
           'destinations stand in a rail at the left', (t) async {
         await openReal(t, Routes.home, size: size);
         final rects = [for (final l in _labels) t.getRect(_nav(l))];
-        expect(rects, hasLength(6));
+        expect(rects, hasLength(5));
         for (var i = 0; i < _labels.length; i++) {
           expect(rects[i].left, rects[0].left, reason: _labels[i]);
           expect(rects[i].right, lessThanOrEqualTo(88), reason: _labels[i]);
@@ -405,20 +421,31 @@ void main() {
             size: const Size(320, 568), deviceTextScale: 2, dark: dark);
         expect(t.takeException(), isNull);
         final bar = t.getRect(_bar);
-        // With six tabs, Tripitaka does not fit one line here at 2x text
-        // (the bar lets it wrap); the five-tab bar brings that back.
-        for (final l in _labels.where((l) => l != 'Tripitaka')) {
+        for (final l in _labels) {
           final label = find.descendant(of: _nav(l), matching: find.text(l));
           final text = t.widget<Text>(label);
           expect(text.overflow, isNot(anyOf(TextOverflow.ellipsis, TextOverflow.clip, TextOverflow.fade)));
           expect(text.maxLines, isNull, reason: l);
           final paragraph = t.renderObject<RenderParagraph>(label);
           expect(paragraph.didExceedMaxLines, isFalse, reason: l);
-          // One word, so one line: not broken in the middle.
+          // One word, so one line: not broken in the middle. A label of
+          // several words may wrap between them (two lines at most), never
+          // inside a word.
           final lines = paragraph.getBoxesForSelection(
             TextSelection(baseOffset: 0, extentOffset: l.length),
           ).map((b) => b.top).toSet();
-          expect(lines, hasLength(1), reason: '$l is broken across lines');
+          expect(
+            lines,
+            hasLength(l.contains(' ') ? lessThanOrEqualTo(2) : 1),
+            reason: '$l is broken across lines',
+          );
+          for (final word in l.split(' ')) {
+            final at = l.indexOf(word);
+            final boxes = paragraph.getBoxesForSelection(
+              TextSelection(baseOffset: at, extentOffset: at + word.length),
+            ).map((b) => b.top).toSet();
+            expect(boxes, hasLength(1), reason: '$word is broken in $l');
+          }
           // Never smaller than the 12 px it has at 1.0x.
           expect(paragraph.textScaler.scale(12), greaterThanOrEqualTo(12), reason: l);
           final rect = t.getRect(label);
@@ -435,13 +462,22 @@ void main() {
 
     for (final width in const [320.0, 360.0]) {
       testWidgets('at ${width.round()} px and text scale 2.0 each label paints '
-          'on one line, unclipped', (t) async {
+          'on one line (a label of several words, between its words), unclipped', (t) async {
         await openReal(t, Routes.home,
             size: Size(width, 640), deviceTextScale: 2);
         expect(t.takeException(), isNull);
-        for (final l in _labels.where((l) => l != 'Tripitaka')) {
+        for (final l in _labels) {
           final label = find.descendant(of: _nav(l), matching: find.text(l));
           final paragraph = t.renderObject<RenderParagraph>(label);
+          if (l.contains(' ')) {
+            // Wraps between its words; each word whole, inside its tab.
+            expect(paragraph.didExceedMaxLines, isFalse, reason: l);
+            final dest = t.getRect(_nav(l));
+            final rect = t.getRect(label);
+            expect(rect.left, greaterThanOrEqualTo(dest.left), reason: l);
+            expect(rect.right, lessThanOrEqualTo(dest.right), reason: l);
+            continue;
+          }
           // The label's own width on one line, at the scale it is drawn.
           final intrinsic = TextPainter(
             text: TextSpan(text: l, style: paragraph.text.style),
@@ -465,7 +501,7 @@ void main() {
     }
 
     testWidgets('the labels grow with the text size', (t) async {
-      await openReal(t, Routes.home, size: const Size(600, 844), deviceTextScale: 1.3);
+      await openReal(t, Routes.home, size: const Size(390, 844), deviceTextScale: 1.3);
       final paragraph = t.renderObject<RenderParagraph>(
         find.descendant(of: _nav('Home'), matching: find.text('Home')),
       );

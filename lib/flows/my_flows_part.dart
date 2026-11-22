@@ -19,7 +19,7 @@ import 'flow_reading.dart';
 import 'flows.dart';
 import 'new_flow_sheet.dart';
 
-/// The Library's "My flows": the person's flows in the order they were made,
+/// Home's "My flows": the person's flows in the order they were made,
 /// each opening in the reader and with a button to edit it, and a way to
 /// make a new one. With no flows it is a card that says what a flow is.
 class MyFlowsPart extends ConsumerWidget {

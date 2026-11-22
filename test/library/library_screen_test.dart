@@ -153,9 +153,8 @@ void main() {
 
   testWidgets('Enter on the focused card toggles it', (t) async {
     await pumpApp(t, overrides: fake, location: Routes.library);
-    // The search box comes first in the focus order, then My flows' "New
-    // flow", then the topic row.
-    for (var i = 0; i < 3; i++) {
+    // The search box comes first in the focus order, then the topic row.
+    for (var i = 0; i < 2; i++) {
       await t.sendKeyEvent(LogicalKeyboardKey.tab);
       await t.pump();
     }
@@ -170,9 +169,9 @@ void main() {
       await pumpApp(t, overrides: fake, location: Routes.library);
       await t.tap(find.text('category 1'));
       await t.pumpAndSettle();
-      await t.tap(find.text('Saved'));
+      await t.tap(find.text('Settings'));
       await t.pumpAndSettle();
-      await t.tap(find.text('Library'));
+      await t.tap(find.text('Pirith & Gatha'));
       await t.pumpAndSettle();
       expect(find.text('heading 1'), findsOneWidget);
 
@@ -520,15 +519,16 @@ void main() {
     });
   });
 
-  group('My flows', () {
-    testWidgets('shows above the topics', (t) async {
+  group('without My flows and Books', () {
+    testWidgets('Pirith & Gatha lists the topics, with no flows or books', (
+      t,
+    ) async {
       await pumpApp(t, overrides: fake, location: Routes.library);
-      final part = find.byKey(const ValueKey('my-flows'));
-      expect(part, findsOneWidget);
-      expect(
-        t.getBottomLeft(part).dy,
-        lessThanOrEqualTo(t.getTopLeft(find.text('category 1')).dy),
-      );
+      expect(find.text('Pirith & Gatha'), findsWidgets);
+      expect(find.byKey(const ValueKey('my-flows')), findsNothing);
+      expect(find.byKey(const ValueKey('new-flow')), findsNothing);
+      expect(find.byKey(const ValueKey('books-shelf')), findsNothing);
+      expect(find.text('category 1'), findsOneWidget);
     });
 
     for (final (address, category, heading) in [
@@ -536,7 +536,7 @@ void main() {
       (Routes.contents('r3'), 'c2', 'heading 3'),
       (Routes.contents('r1'), 'c1', 'heading 1'),
     ]) {
-      testWidgets('$address opens its topic with flows listed above', (
+      testWidgets('$address opens its topic', (
         t,
       ) async {
         final c = await flows.openFlows(t, address, {
@@ -552,7 +552,6 @@ void main() {
           ),
           findsOneWidget,
         );
-        expect(find.byKey(const ValueKey('flow-open-flow-2')), findsOneWidget);
       });
     }
   });

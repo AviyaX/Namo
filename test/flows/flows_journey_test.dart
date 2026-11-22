@@ -84,16 +84,16 @@ Future<void> _scrollPageTo(WidgetTester t, Finder f) async {
   await t.pumpAndSettle();
 }
 
-/// From the Library: a new flow from Buddha Wandanawa, its second section
+/// From Home: a new flow from Buddha Wandanawa, its second section
 /// removed, its first moved down one, and [pirith] added; then chanted, and
-/// Back twice to the Library. Returns the flow's sections as made.
+/// Back to Home. Returns the flow's sections as made.
 Future<List<FlowRef>> _journey(
   WidgetTester t,
   Reading buddha,
   Reading pirith,
 ) async {
   final c = _container(t);
-  await _go(t, Routes.library);
+  await _go(t, Routes.home);
 
   // New flow, from Buddha Wandanawa.
   await t.ensureVisible(find.byKey(const ValueKey('new-flow')));
@@ -197,7 +197,7 @@ Future<List<FlowRef>> _journey(
   expect(find.byKey(const ValueKey('screen-flow-editor')), findsOneWidget);
   await t.tap(find.byTooltip('Back').first);
   await t.pumpAndSettle();
-  expect(location(c), Routes.library);
+  expect(location(c), Routes.home);
   expect(t.takeException(), isNull);
   return made;
 }
@@ -206,11 +206,11 @@ void main() {
   setUpAll(loadBundledFonts);
 
   testWidgets('make a flow from Buddha Wandanawa, edit it, chant it, and '
-      'find it in the Library and on Home', (t) async {
+      'find it on Home', (t) async {
     final lib = await realLibrary(t);
     final buddha = lib.reading(realReadingId)!;
     final pirith = lib.reading(mangalaReadingId)!;
-    await openReal(t, Routes.library, library: lib);
+    await openReal(t, Routes.home, library: lib);
 
     final made = await _journey(t, buddha, pirith);
 
@@ -226,24 +226,9 @@ void main() {
       findsOneWidget,
     );
 
-    await t.tap(find.byKey(const ValueKey('nav-home')));
-    await t.pumpAndSettle();
-    final card = find.byKey(const ValueKey('home-flow-flow-1'));
-    await t.ensureVisible(card);
-    await t.pumpAndSettle();
-    expect(find.text('Your flows'), findsOneWidget);
-    expect(
-      t.getTopLeft(card).dy,
-      greaterThan(t.getTopLeft(find.text('Your flows')).dy),
-    );
-    expect(
-      find.descendant(of: card, matching: find.text('Evening')),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(of: card, matching: find.text(sectionCount(made.length))),
-      findsOneWidget,
-    );
+    // The flows are listed once, in My flows: no second row.
+    expect(find.text('Your flows'), findsNothing);
+    expect(row, findsOneWidget);
     expect(t.takeException(), isNull);
   });
 
@@ -252,7 +237,7 @@ void main() {
     final lib = await realLibrary(t);
     final buddha = lib.reading(realReadingId)!;
     final pirith = lib.reading(mangalaReadingId)!;
-    await openReal(t, Routes.library, library: lib);
+    await openReal(t, Routes.home, library: lib);
     final c = _container(t);
 
     Future<Map<String, List<(String, int, String)>>> headings() async => {
@@ -294,7 +279,7 @@ void main() {
       'Library, the editor, the reader and on Home, and the stored flow is '
       'not rewritten', (t) async {
     final a = ref('r1', 's01'), gone = ref('r1', 'gone'), b = ref('r1', 's02');
-    final c = await openFlows(t, Routes.library, {
+    final c = await openFlows(t, Routes.home, {
       'flow-1': [a, gone, b],
     });
     final stored = c.read(keyValueStoreProvider).read(flowsKey);
@@ -320,7 +305,7 @@ void main() {
     await _go(t, Routes.home);
     expect(
       find.descendant(
-        of: find.byKey(const ValueKey('home-flow-flow-1')),
+        of: find.byKey(const ValueKey('flow-open-flow-1')),
         matching: find.text('2 sections'),
       ),
       findsOneWidget,

@@ -76,7 +76,7 @@ class SavedScreen extends ConsumerWidget {
                 message:
                     'Bookmark a section or favourite a reading and it will '
                     'wait for you here.',
-                actionLabel: 'Open the Library',
+                actionLabel: 'Open Pirith & Gatha',
                 onAction: () => context.go(Routes.library),
               );
             }

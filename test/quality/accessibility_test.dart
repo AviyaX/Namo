@@ -46,8 +46,8 @@ void main() {
   // scrolls, so everything is on screen) and what to do once it is open.
   final screens = <(String, String, Size, Future<void> Function(WidgetTester)?, bool)>[
     ('Home', Routes.home, const Size(390, 2600), expectWholeHome, false),
-    ('Library (closed)', Routes.library, const Size(390, 844), null, false),
-    ('Library (open)', Routes.category(realCategoryId), const Size(390, 1800), null, false),
+    ('Pirith & Gatha (closed)', Routes.library, const Size(390, 844), null, false),
+    ('Pirith & Gatha (open)', Routes.category(realCategoryId), const Size(390, 1800), null, false),
     ('Reader', Routes.reader(realReadingId), const Size(390, 844), null, false),
     ('Reader sheet', Routes.reader(realReadingId), const Size(390, 844), openSheet, false),
     ('Saved', Routes.saved, const Size(390, 844), null, true),
@@ -218,9 +218,10 @@ void main() {
   });
 
   group('bottom bar and navigation rail', () {
-    const tabs = ['Home', 'Library', 'Bana', 'Tripitaka', 'Saved', 'Settings'];
+    const tabs = ['Home', 'Pirith & Gatha', 'Bana', 'Library', 'Settings'];
+    const ids = {'Home': 'home', 'Pirith & Gatha': 'library', 'Bana': 'bana', 'Library': 'tripitaka', 'Settings': 'settings'};
 
-    testWidgets('the bottom bar has the six tabs, each labelled and 48 high', (t) async {
+    testWidgets('the bottom bar has the five tabs, each labelled and 48 high', (t) async {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.home);
       for (final tab in tabs) {
@@ -233,7 +234,7 @@ void main() {
       for (final tab in tabs) {
         final destination = find.ancestor(
           of: find.text(tab),
-          matching: find.byKey(ValueKey('nav-${tab.toLowerCase()}')),
+          matching: find.byKey(ValueKey('nav-${ids[tab]}')),
         );
         expect(t.getSize(destination).height, greaterThanOrEqualTo(48), reason: tab);
         expect(t.getSize(destination).width, greaterThanOrEqualTo(48), reason: tab);
@@ -242,7 +243,7 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('the rail has the six tabs, each labelled and at least 48 x 48', (t) async {
+    testWidgets('the rail has the five tabs, each labelled and at least 48 x 48', (t) async {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.home, size: const Size(1280, 800));
       expect(find.byKey(const ValueKey('nav-rail')), findsOneWidget);
@@ -287,10 +288,9 @@ void main() {
 
   // Each with a text that shows the flows were loaded.
   final flowScreens = <(String, String, Size, String, Future<void> Function(WidgetTester)?)>[
-    ('Library with My flows', Routes.library, const Size(390, 1400), 'Evening', null),
-    ('New flow sheet', Routes.library, const Size(390, 844), 'Start from', (t) => tapKey(t, 'new-flow')),
-    ('Home with Your flows', Routes.home, const Size(390, 2800), 'Your flows', expectWholeHome),
-    ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections · 1 with a recording', null),
+    ('Home with My flows', Routes.home, const Size(390, 2800), 'Evening', expectWholeHome),
+    ('New flow sheet', Routes.home, const Size(390, 844), 'Start from', (t) => tapKey(t, 'new-flow')),
+        ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections · 1 with a recording', null),
     ('Flow reader with the chant bar', Routes.reader('flow-1'), const Size(390, 844), 'Chant', null),
     ('Flow editor, move menu open', Routes.flowEditor('flow-1'), const Size(390, 1400), 'Move down',
         (t) async {
@@ -512,7 +512,7 @@ void main() {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.tipitaka);
       final tab = find.byKey(const ValueKey('nav-tripitaka'));
-      expect(t.getSemantics(tab).label, startsWith('Tripitaka'));
+      expect(t.getSemantics(tab).label, startsWith('Library'));
       expect(t.getSize(tab).height, greaterThanOrEqualTo(48));
       handle.dispose();
     });

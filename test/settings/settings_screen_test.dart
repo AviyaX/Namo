@@ -35,6 +35,32 @@ Future<ProviderContainer> openSettings(
 Finder row(String label) => find.bySemanticsLabel(RegExp('^$label'));
 
 void main() {
+  testWidgets('Saved is the first row and opens Saved inside Settings', (
+    t,
+  ) async {
+    await openSettings(t);
+    final saved = find.byKey(const ValueKey('settings-saved'));
+    expect(saved, findsOneWidget);
+    expect(
+      t.getTopLeft(saved).dy,
+      lessThan(t.getTopLeft(find.text('Appearance')).dy),
+    );
+    expect(t.getSize(saved).height, greaterThanOrEqualTo(48));
+    await t.tap(saved);
+    await t.pumpAndSettle();
+    expect(find.byKey(const ValueKey('screen-saved')), findsOneWidget);
+    expect(
+      ProviderScope.containerOf(t.element(find.byType(Scaffold).first))
+          .read(routerProvider)
+          .routeInformationProvider
+          .value
+          .uri
+          .path,
+      Routes.saved,
+    );
+    expect(find.byKey(const ValueKey('nav-settings')), findsOneWidget);
+  });
+
   const third = 'Two languages at most. Switch one off first.';
   const last = 'One language always stays on.';
 

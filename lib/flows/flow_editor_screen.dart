@@ -116,7 +116,7 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
     );
     if (sure != true || !mounted) return;
     setState(() => _leaving = true);
-    context.go(Routes.library);
+    context.go(Routes.home);
     _flows.delete(flow.id);
   }
 
@@ -233,7 +233,7 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
         child: NamoIconButton(
           icon: Symbols.arrow_back_rounded,
           tooltip: 'Back',
-          onPressed: () => context.go(Routes.library),
+          onPressed: () => context.go(Routes.home),
         ),
       ),
       const SizedBox(height: NamoSpace.sm),

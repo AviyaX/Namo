@@ -5,13 +5,13 @@ import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/widgets/namo_page.dart';
 import '../flows/flows.dart' show flowsProvider, isFlowId;
+import '../flows/my_flows_part.dart';
 import '../library/library_gate.dart';
 import '../reader/position_controller.dart';
 import '../settings/settings.dart';
 import 'collections_row.dart';
 import 'continue_card.dart';
 import 'featured_carousel.dart';
-import 'flows_row.dart';
 import 'gatha_card.dart';
 import 'home_header.dart';
 import 'quick_access.dart';
@@ -104,8 +104,6 @@ class _Blocks extends ConsumerWidget {
             lineSpacing: lineSpacing,
           );
     final featured = first == null ? null : FeaturedCarousel(library: library);
-    // Only with a flow, so Home without flows keeps its gaps as they were.
-    final flowsRow = flows.flows.isEmpty ? null : FlowsRow(library: library);
 
     final buddha = library.category(quickAccessTopicId);
     final quickAccess = buddha == null || quickAccessCards(buddha).isEmpty
@@ -131,8 +129,9 @@ class _Blocks extends ConsumerWidget {
         ?gathaCard,
       ],
       ?quickAccess,
-      ?flowsRow,
       ?collections,
+      // Below the rows: the person's flows, or the card that offers one.
+      MyFlowsPart(library: library),
     ];
 
     return Column(

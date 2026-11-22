@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../books/books_part.dart';
 import '../design/tokens.dart';
 import '../design/widgets/app_shell.dart';
 import '../design/widgets/namo_page.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/search_field.dart';
-import 'tipitaka_labels.dart';
 import 'tipitaka_repository.dart';
 import 'tipitaka_search.dart';
 import 'tipitaka_state.dart';
@@ -78,11 +78,10 @@ class _TipitakaHomeScreenState extends ConsumerState<TipitakaHomeScreen> {
     return NamoPage(
       maxWidth: wide ? NamoSizes.homeColumn : NamoSizes.readingColumn,
       children: [
-        const PageHeader(
-          title: tipitakaPageTitle,
-          caption: tipitakaPageCaption,
-        ),
+        const PageHeader(title: 'Tripitaka & Books'),
         const SizedBox(height: NamoSpace.lg),
+        // The books come first; a search by name is for the Tripitaka.
+        const BooksPart(),
         SearchField(
           key: const ValueKey('tipitaka-search'),
           controller: _query,

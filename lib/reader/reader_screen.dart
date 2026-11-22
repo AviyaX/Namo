@@ -826,7 +826,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   /// The top-bar arrow and the system Back: to the page the reading was
-  /// opened from. A flow goes back to Home, its editor, or else the Library;
+  /// opened from. A flow goes back to Home or its editor;
   /// for any other reading the editor means nothing.
   void _back() {
     if (context.canPop()) {
@@ -838,7 +838,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       context.go(switch (widget.from) {
         ReaderFrom.home => Routes.home,
         ReaderFrom.editor => Routes.flowEditor(id),
-        ReaderFrom.saved || null => Routes.library,
+        ReaderFrom.saved || null => Routes.home,
       });
       return;
     }

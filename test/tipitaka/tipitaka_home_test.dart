@@ -40,7 +40,7 @@ void main() {
       (t) async {
     final app = await openTipitakaApp(t, Routes.tipitaka);
     expect(find.byKey(const ValueKey('screen-tripitaka')), findsOneWidget);
-    expect(find.text('ත්‍රිපිටකය'), findsOneWidget);
+    expect(find.text('Tripitaka & Books'), findsOneWidget);
     expect(find.text('Search by name'), findsOneWidget);
     final expected = {
       'vp': ('S vp', 'Vinaya Pitaka', '5 texts'),

@@ -33,7 +33,7 @@ void main() {
     );
     await openReal(
       t,
-      Routes.library,
+      Routes.home,
       size: const Size(390, 1400),
       storeExtras: {flowsKey: jsonEncode(withBuddhaOnly.toJson())},
     );

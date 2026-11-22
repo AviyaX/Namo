@@ -155,7 +155,7 @@ void main() {
     expect(find.text('No favourites yet.'), findsNothing);
     expect(find.textContaining('Bookmarks ·'), findsNothing);
 
-    await t.tap(find.text('Open the Library'));
+    await t.tap(find.text('Open Pirith & Gatha'));
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
   });

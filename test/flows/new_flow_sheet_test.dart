@@ -57,7 +57,7 @@ void main() {
 
   testWidgets('shows the title, the name with its hint, "Start from", '
       '"Nothing" chosen, and every reading grouped by category', (t) async {
-    await openFlows(t, Routes.library, {});
+    await openFlows(t, Routes.home, {});
     await _openSheet(t);
     final sheet = find.byType(BottomSheet);
     Finder inSheet(String text) =>
@@ -107,7 +107,7 @@ void main() {
 
   testWidgets('"Nothing" is drawn in the English font, the readings in the '
       'Sinhala one', (t) async {
-    await openFlows(t, Routes.library, {});
+    await openFlows(t, Routes.home, {});
     await _openSheet(t);
     String? family(String key, String text) => t
         .widget<Text>(
@@ -124,10 +124,10 @@ void main() {
 
   testWidgets('Create with no name and "Nothing" makes an empty "My flow" '
       'and opens its editor', (t) async {
-    final c = await openFlows(t, Routes.library, {});
+    final c = await openFlows(t, Routes.home, {});
     await _openSheet(t);
     await _tapCreate(t);
-    expect(location(c), '/library/flow/flow-1');
+    expect(location(c), '/flow/flow-1');
     final flow = savedFlow(c, 'flow-1')!;
     expect(flow.name, 'My flow');
     expect(flow.sections, isEmpty);
@@ -136,14 +136,14 @@ void main() {
   });
 
   testWidgets('a second flow with no name is "My flow 2"', (t) async {
-    final c = await openFlows(t, Routes.library, {});
+    final c = await openFlows(t, Routes.home, {});
     await _openSheet(t);
     await _tapCreate(t);
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
     await _openSheet(t);
     await _tapCreate(t);
-    expect(location(c), '/library/flow/flow-2');
+    expect(location(c), '/flow/flow-2');
     expect(savedFlow(c, 'flow-2')!.name, 'My flow 2');
     expect(c.read(flowsProvider).flows.map((f) => f.name), [
       'My flow',
@@ -152,7 +152,7 @@ void main() {
   });
 
   testWidgets('a typed name is kept, trimmed', (t) async {
-    final c = await openFlows(t, Routes.library, {});
+    final c = await openFlows(t, Routes.home, {});
     await _openSheet(t);
     await t.enterText(find.byKey(_field), '  Evening  ');
     await t.pump();
@@ -162,7 +162,7 @@ void main() {
 
   testWidgets('choosing a reading starts the flow with all its sections, in '
       'order', (t) async {
-    final c = await openFlows(t, Routes.library, {});
+    final c = await openFlows(t, Routes.home, {});
     await _openSheet(t);
     await _scrollTo(t, 'start-from-r2');
     await t.tap(find.byKey(const ValueKey('start-from-r2')));
@@ -177,7 +177,7 @@ void main() {
 
   testWidgets('choosing "Nothing" again after a reading makes an empty flow',
       (t) async {
-    final c = await openFlows(t, Routes.library, {});
+    final c = await openFlows(t, Routes.home, {});
     await _openSheet(t);
     await t.tap(find.byKey(const ValueKey('start-from-r1')));
     await t.pump();
@@ -189,7 +189,7 @@ void main() {
 
   testWidgets('a 500-character paste keeps at most 40 characters on one line',
       (t) async {
-    final c = await openFlows(t, Routes.library, {});
+    final c = await openFlows(t, Routes.home, {});
     await _openSheet(t);
     final long = List.filled(50, 'abcdefghi\n').join();
     expect(long.length, 500);
@@ -205,7 +205,7 @@ void main() {
   });
 
   testWidgets('dismissing the sheet creates nothing', (t) async {
-    final c = await openFlows(t, Routes.library, {});
+    final c = await openFlows(t, Routes.home, {});
     await _openSheet(t);
     await t.enterText(find.byKey(_field), 'Other');
     await t.tap(find.byKey(const ValueKey('start-from-r1')));
@@ -215,12 +215,12 @@ void main() {
     expect(find.byType(BottomSheet), findsNothing);
     expect(c.read(flowsProvider).flows, isEmpty);
     expect(c.read(flowsProvider).nextNumber, 1);
-    expect(location(c), Routes.library);
+    expect(location(c), Routes.home);
   });
 
   testWidgets('the list of readings is built lazily', (t) async {
     final lib = await realLibrary(t);
-    await openFlows(t, Routes.library, {}, library: lib);
+    await openFlows(t, Routes.home, {}, library: lib);
     await _openSheet(t);
     final last = lib.categories.last.readings.last;
     final key = 'start-from-${last.id}';
@@ -246,7 +246,7 @@ void main() {
             final Library lib = await realLibrary(t);
             await openFlows(
               t,
-              Routes.library,
+              Routes.home,
               {},
               library: lib,
               size: size,

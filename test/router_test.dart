@@ -9,6 +9,8 @@ import 'package:buddhist_gatha/library/library_screen.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'bana/bana_support.dart';
@@ -17,7 +19,9 @@ import 'support/test_content.dart';
 import 'tipitaka/tipitaka_support.dart';
 
 // The library loads at once; while it loads, a ring turns and never settles.
-final _loaded = [
+// A getter: each test gets its own repositories, whose loads (cached once
+// made) belong to that test's clock.
+List<Override> get _loaded => [
   ...banaOverrides(),
   contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
   tipitakaRepositoryProvider.overrideWithValue(
@@ -27,24 +31,60 @@ final _loaded = [
 
 void main() {
   test('the flow editor\'s address', () {
-    expect(Routes.flowEditor('flow-3'), '/library/flow/flow-3');
+    expect(Routes.flowEditor('flow-3'), '/flow/flow-3');
   });
 
   test("the books' addresses", () {
-    expect(Routes.book('x'), '/library/book/x');
-    expect(Routes.bookContents('x', 2), '/library/book/x/contents/2');
-    expect(Routes.bookReader('x', 3), '/library/book/x/read/3');
+    expect(Routes.book('x'), '/tipitaka/book/x');
+    expect(Routes.bookContents('x', 2), '/tipitaka/book/x/contents/2');
+    expect(Routes.bookReader('x', 3), '/tipitaka/book/x/read/3');
+  });
+
+  test("Saved's address is inside Settings", () {
+    expect(Routes.saved, '/settings/saved');
+  });
+
+  String where(WidgetTester t) => ProviderScope.containerOf(
+    t.element(find.byType(MaterialApp)),
+  ).read(routerProvider).routeInformationProvider.value.uri.toString();
+
+  testWidgets('old addresses redirect', (t) async {
+    for (final (old, now) in [
+      ('/saved', '/settings/saved'),
+      ('/library/book/x', '/tipitaka/book/x'),
+      ('/library/book/x/contents/2', '/tipitaka/book/x/contents/2'),
+      ('/library/book/x/read/3', '/tipitaka/book/x/read/3'),
+      ('/library/flow/flow-1', '/flow/flow-1'),
+    ]) {
+      await t.pumpWidget(const SizedBox());
+      await pumpApp(t, overrides: _loaded, location: old);
+      expect(where(t), now, reason: old);
+    }
+  });
+
+  testWidgets('a book page is inside the Library tab, with the bar',
+      (t) async {
+    await pumpApp(t, overrides: _loaded, location: '/library/book/x');
+    expect(find.byType(BookScreen), findsOneWidget);
+    expect(find.byKey(const ValueKey('nav-bar')), findsOneWidget);
+    expect(
+      t.widget<Semantics>(find.descendant(
+        of: find.byKey(const ValueKey('nav-tripitaka')),
+        matching: find.byType(Semantics),
+      ).first).properties.selected,
+      isTrue,
+    );
   });
 
   testWidgets('the book paths resolve to their screens', (t) async {
-    await pumpApp(t, overrides: _loaded, location: '/library/book/x');
+    await pumpApp(t, overrides: _loaded, location: '/tipitaka/book/x');
     expect(find.byType(BookScreen), findsOneWidget);
     expect(t.widget<BookScreen>(find.byType(BookScreen)).id, 'x');
     await t.pumpWidget(const SizedBox());
     await pumpApp(
       t,
       overrides: _loaded,
-      location: '/library/book/x/contents/2',
+      location: '/tipitaka/book/x/contents/2',
     );
     expect(find.byType(BookContentsScreen), findsOneWidget);
     final contents = t.widget<BookContentsScreen>(
@@ -56,7 +96,7 @@ void main() {
     await pumpApp(
       t,
       overrides: _loaded,
-      location: '/library/book/x/contents/two',
+      location: '/tipitaka/book/x/contents/two',
     );
     expect(find.byType(BookContentsScreen), findsNothing);
     expect(find.byType(NotFoundScreen), findsOneWidget);
@@ -64,7 +104,7 @@ void main() {
   });
 
   testWidgets("the book reader's path resolves outside the shell", (t) async {
-    await pumpApp(t, overrides: _loaded, location: '/library/book/x/read/3');
+    await pumpApp(t, overrides: _loaded, location: '/tipitaka/book/x/read/3');
     expect(find.byType(BookReaderScreen), findsOneWidget);
     final reader = t.widget<BookReaderScreen>(find.byType(BookReaderScreen));
     expect((reader.id, reader.n), ('x', 3));
@@ -75,7 +115,7 @@ void main() {
     expect(find.byKey(const ValueKey('nav-bar')), findsNothing);
     expect(find.byKey(const ValueKey('nav-rail')), findsNothing);
     await t.pumpWidget(const SizedBox());
-    await pumpApp(t, overrides: _loaded, location: '/library/book/x/read/3a');
+    await pumpApp(t, overrides: _loaded, location: '/tipitaka/book/x/read/3a');
     expect(find.byType(BookReaderScreen), findsNothing);
     expect(find.byType(NotFoundScreen), findsOneWidget);
     expect(t.takeException(), isNull);
@@ -103,15 +143,21 @@ void main() {
     expect(t.widget<LibraryScreen>(find.byType(LibraryScreen)).focusSearch, isFalse);
   });
 
-  testWidgets('six tabs switch screens', (t) async {
+  testWidgets('five tabs switch screens', (t) async {
     await pumpApp(t, overrides: _loaded);
-    for (final label in ['Home', 'Library', 'Bana', 'Tripitaka', 'Saved', 'Settings']) {
+    for (final (label, id) in [
+      ('Home', 'home'),
+      ('Pirith & Gatha', 'library'),
+      ('Bana', 'bana'),
+      ('Library', 'tripitaka'),
+      ('Settings', 'settings'),
+    ]) {
       await t.tap(find.descendant(
-        of: find.byKey(ValueKey('nav-${label.toLowerCase()}')),
+        of: find.byKey(ValueKey('nav-$id')),
         matching: find.text(label),
       ));
       await t.pumpAndSettle();
-      expect(find.byKey(ValueKey('screen-${label.toLowerCase()}')), findsOneWidget);
+      expect(find.byKey(ValueKey('screen-$id')), findsOneWidget);
     }
   });
   testWidgets('wide screens move the tabs to the side', (t) async {

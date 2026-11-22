@@ -27,11 +27,11 @@ import 'tipitaka/tipitaka_reader_screen.dart';
 abstract final class Routes {
   static const home = '/';
   static const library = '/library';
-  static const saved = '/saved';
+  static const saved = '/settings/saved';
   static const settings = '/settings';
   static const sources = '/settings/sources';
 
-  /// The Library with its search box focused.
+  /// Pirith & Gatha with its search box focused.
   static const librarySearch = '/library?focus=search';
 
   /// The Library with this category's sections showing.
@@ -60,17 +60,17 @@ abstract final class Routes {
   }
 
   /// The editor of one flow.
-  static String flowEditor(String flowId) => '/library/flow/$flowId';
+  static String flowEditor(String flowId) => '/flow/$flowId';
 
   /// A book's page: its cover, the way in and its chapters.
-  static String book(String id) => '/library/book/$id';
+  static String book(String id) => '/tipitaka/book/$id';
 
   /// The pages under page [n] of a book.
   static String bookContents(String id, int n) =>
-      '/library/book/$id/contents/$n';
+      '/tipitaka/book/$id/contents/$n';
 
   /// A book's reader at page [n].
-  static String bookReader(String id, int n) => '/library/book/$id/read/$n';
+  static String bookReader(String id, int n) => '/tipitaka/book/$id/read/$n';
 
   /// The Bana tab's first page.
   static const bana = '/bana';
@@ -99,9 +99,22 @@ abstract final class Routes {
 /// and means nothing for a reading that is not a flow.
 enum ReaderFrom { home, saved, editor }
 
+/// Saved links from before the five tabs: Saved was a tab, the books and the
+/// flow editor were under the Library.
+String? _oldAddress(BuildContext context, GoRouterState state) {
+  final path = state.uri.path;
+  String? moved(String from, String to) => path == from || path.startsWith('$from/')
+      ? '$to${path.substring(from.length)}${state.uri.hasQuery ? '?${state.uri.query}' : ''}'
+      : null;
+  return moved('/saved', Routes.saved) ??
+      moved('/library/book', '/tipitaka/book') ??
+      moved('/library/flow', '/flow');
+}
+
 GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
   initialLocation: initialLocation,
   errorBuilder: (context, state) => const NotFoundScreen(),
+  redirect: _oldAddress,
   routes: [
     StatefulShellRoute(
       builder: (context, state, shell) => AppShell(shell: shell),
@@ -115,6 +128,19 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
             GoRoute(
               path: Routes.home,
               builder: (context, state) => const HomeScreen(),
+              routes: [
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'flow/:id',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: FlowEditorScreen(
+                      flowId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -138,43 +164,6 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                   path: 'reading/:id',
                   redirect: (context, state) =>
                       Routes.contents(state.pathParameters['id']!),
-                ),
-                GoRoute(
-                  path: 'flow/:id',
-                  pageBuilder: (context, state) => namoPage(
-                    key: state.pageKey,
-                    context: context,
-                    child: FlowEditorScreen(
-                      flowId: state.pathParameters['id']!,
-                    ),
-                  ),
-                ),
-                // Inside the tab, so the bar stays.
-                GoRoute(
-                  path: 'book/:id',
-                  pageBuilder: (context, state) => namoPage(
-                    key: state.pageKey,
-                    context: context,
-                    child: BookScreen(id: state.pathParameters['id']!),
-                  ),
-                  routes: [
-                    GoRoute(
-                      path: 'contents/:n',
-                      pageBuilder: (context, state) {
-                        final n = int.tryParse(state.pathParameters['n']!);
-                        return namoPage(
-                          key: state.pageKey,
-                          context: context,
-                          child: n == null
-                              ? const NotFoundScreen()
-                              : BookContentsScreen(
-                                  id: state.pathParameters['id']!,
-                                  n: n,
-                                ),
-                        );
-                      },
-                    ),
-                  ],
                 ),
               ],
             ),
@@ -226,15 +215,34 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                     ),
                   ),
                 ),
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'book/:id',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: BookScreen(id: state.pathParameters['id']!),
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: 'contents/:n',
+                      pageBuilder: (context, state) {
+                        final n = int.tryParse(state.pathParameters['n']!);
+                        return namoPage(
+                          key: state.pageKey,
+                          context: context,
+                          child: n == null
+                              ? const NotFoundScreen()
+                              : BookContentsScreen(
+                                  id: state.pathParameters['id']!,
+                                  n: n,
+                                ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: Routes.saved,
-              builder: (context, state) => const SavedScreen(),
             ),
           ],
         ),
@@ -244,6 +252,14 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               path: Routes.settings,
               builder: (context, state) => const SettingsScreen(),
               routes: [
+                GoRoute(
+                  path: 'saved',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: const SavedScreen(),
+                  ),
+                ),
                 GoRoute(
                   path: 'sources',
                   pageBuilder: (context, state) => namoPage(
@@ -273,7 +289,7 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
     ),
     // Outside the shell: the reader has the whole screen.
     GoRoute(
-      path: '/library/book/:id/read/:n',
+      path: '/tipitaka/book/:id/read/:n',
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
         final n = int.tryParse(state.pathParameters['n']!);

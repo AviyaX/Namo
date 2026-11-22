@@ -17,9 +17,9 @@ String _location(WidgetTester t) => GoRouter.of(
 ).routerDelegate.currentConfiguration.last.matchedLocation;
 
 void main() {
-  testWidgets('the bar has six tabs in order with Bana third', (t) async {
+  testWidgets('the bar has five tabs in order with Bana third', (t) async {
     await openReal(t, Routes.home, overrides: banaOverrides());
-    final labels = ['Home', 'Library', 'Bana', 'Tripitaka', 'Saved', 'Settings'];
+    final labels = ['Home', 'Library', 'Bana', 'Tripitaka', 'Settings'];
     final xs = [for (final l in labels) t.getCenter(_nav(l)).dx];
     expect(xs, orderedEquals([...xs]..sort()));
     await t.tap(_nav('Bana'));
@@ -31,7 +31,7 @@ void main() {
   testWidgets('existing tabs still open by address', (t) async {
     for (final (path, screen) in [
       ('/tipitaka', 'screen-tripitaka'),
-      ('/saved', 'screen-saved'),
+      ('/settings/saved', 'screen-saved'),
       ('/settings', 'screen-settings'),
     ]) {
       await openReal(t, path, overrides: banaOverrides());
