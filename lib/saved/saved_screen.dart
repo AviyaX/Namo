@@ -52,6 +52,15 @@ class SavedScreen extends ConsumerWidget {
     return NamoPage(
       columnKey: const ValueKey('saved-column'),
       children: [
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: NamoIconButton(
+            icon: Symbols.arrow_back_rounded,
+            tooltip: 'Back',
+            onPressed: () => context.go(Routes.settings),
+          ),
+        ),
+        const SizedBox(height: NamoSpace.sm),
         const PageHeader(title: 'Saved'),
         const SizedBox(height: NamoSpace.lg),
         LibraryGate(

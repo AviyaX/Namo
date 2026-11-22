@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../books/book_hits.dart';
+import '../books/book_search.dart';
 import '../books/books_part.dart';
+import '../books/books_repository.dart';
 import '../design/tokens.dart';
 import '../design/widgets/app_shell.dart';
 import '../design/widgets/namo_page.dart';
@@ -66,9 +69,26 @@ class _TipitakaHomeScreenState extends ConsumerState<TipitakaHomeScreen> {
     final Widget body;
     if (tree != null) {
       final query = _query.text;
-      body = foldTipitakaQuery(query).isNotEmpty
-          ? TipitakaResults(tree: tree, query: query)
-          : _Browse(tree: tree, wide: wide);
+      if (foldTipitakaQuery(query).isNotEmpty) {
+        // The books whose title matches come first, then the names.
+        final books = searchBooks(
+          ref.watch(booksIndexProvider).value?.books ?? const [],
+          query,
+        );
+        body = Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            BookHits(books: books),
+            TipitakaResults(
+              tree: tree,
+              query: query,
+              quietWhenEmpty: books.isNotEmpty,
+            ),
+          ],
+        );
+      } else {
+        body = _Browse(tree: tree, wide: wide);
+      }
     } else if (loaded.hasError && !loaded.isLoading) {
       body = const TipitakaLoadError();
     } else {

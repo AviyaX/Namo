@@ -150,11 +150,16 @@ void main() {
 
     testWidgets('the New flow sheet opens and closes at once', (t) async {
       await openFlows(t, Routes.home);
+      // My flows is at the foot of Home.
+      await t.ensureVisible(find.byKey(const ValueKey('new-flow')));
+      await t.pumpAndSettle();
       await openSheetAtOnce(t, 'new-flow');
     });
 
     testWidgets('the editor opens from Home at once', (t) async {
       await openFlows(t, Routes.home);
+      await t.ensureVisible(find.byKey(const ValueKey('flow-edit-flow-1')));
+      await t.pumpAndSettle();
       await tapAndStop(t, 'flow-edit-flow-1');
       expect(find.byKey(const ValueKey('screen-flow-editor')), findsOneWidget);
     });

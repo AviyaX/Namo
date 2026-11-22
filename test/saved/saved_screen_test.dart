@@ -141,6 +141,23 @@ void main() {
     handle.dispose();
   });
 
+  testWidgets('Saved has a 48-point Back arrow that goes to Settings', (
+    t,
+  ) async {
+    final c = await openSaved(t);
+    final back = find.byTooltip('Back');
+    expect(back, findsOneWidget);
+    expect(t.getSize(back).width, greaterThanOrEqualTo(48));
+    expect(t.getSize(back).height, greaterThanOrEqualTo(48));
+    await t.tap(back);
+    await t.pumpAndSettle();
+    expect(find.byKey(const ValueKey('screen-settings')), findsOneWidget);
+    expect(
+      c.read(routerProvider).routeInformationProvider.value.uri.path,
+      Routes.settings,
+    );
+  });
+
   testWidgets('with nothing saved there is one calm empty state', (t) async {
     await openSaved(t);
     expect(find.text('Nothing saved yet'), findsOneWidget);
@@ -227,8 +244,8 @@ void main() {
       ..toggleFavourite('r1');
     await t.pumpAndSettle();
     final buttons = find.byType(NamoIconButton);
-    expect(buttons, findsNWidgets(2));
-    for (var i = 0; i < 2; i++) {
+    expect(buttons, findsNWidgets(3));
+    for (var i = 0; i < 3; i++) {
       final size = t.getSize(buttons.at(i));
       expect(size.width, greaterThanOrEqualTo(48));
       expect(size.height, greaterThanOrEqualTo(48));

@@ -302,10 +302,19 @@ class TipitakaNodeRow extends ConsumerWidget {
 
 /// The names that match [query], each with its path; or the empty state.
 class TipitakaResults extends ConsumerWidget {
-  const TipitakaResults({super.key, required this.tree, required this.query});
+  const TipitakaResults({
+    super.key,
+    required this.tree,
+    required this.query,
+    this.quietWhenEmpty = false,
+  });
 
   final TipitakaTree tree;
   final String query;
+
+  /// Says nothing when no name matches (books matched, so it is not "no
+  /// results").
+  final bool quietWhenEmpty;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -318,6 +327,7 @@ class TipitakaResults extends ConsumerWidget {
     }
     final hits = index.find(query);
     if (hits.isEmpty) {
+      if (quietWhenEmpty) return const SizedBox.shrink();
       return const EmptyState(
         key: ValueKey('tipitaka-results'),
         icon: Symbols.search_off_rounded,

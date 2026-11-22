@@ -10,11 +10,6 @@ const tipitakaEnglishLabels = {
 
 String textsLabel(int count) => count == 1 ? '1 text' : '$count texts';
 
-/// The Tripitaka tab's page title (an interface label, as the design gives
-/// it) and the caption under it.
-const tipitakaPageTitle = 'ත්‍රිපිටකය';
-const tipitakaPageCaption = 'Tripitaka';
-
 /// Between the names of a path.
 const tipitakaPathSeparator = ' › ';
 

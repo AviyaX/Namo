@@ -21,9 +21,9 @@ import 'library_gate.dart';
 import 'open_categories.dart';
 import 'search.dart';
 
-/// The topics as rows, with a search box; a tap on
-/// a topic opens the numbered sections of its readings underneath, on the
-/// same page. Search results take the place of both.
+/// Pirith & Gatha: the topics as rows, with a search box; a tap on a topic
+/// opens the numbered sections of its readings underneath, on the same page.
+/// Search results take the place of the rows.
 ///
 /// [openCategory] or [openReading] (from the address) opens that category
 /// once; an id that matches nothing is ignored. [focusSearch] (from the
