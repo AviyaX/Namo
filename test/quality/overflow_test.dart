@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:buddhist_gatha/audio/recording_store.dart';
+import 'package:buddhist_gatha/bana/bana_progress.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
@@ -920,6 +921,33 @@ void main() {
         await t.pumpAndSettle();
         expect(t.takeException(), isNull);
         await scrollThrough(t);
+      });
+    }
+  }
+
+  // The series page, with a last-opened part, at the narrowest size and the
+  // wide one, text 1.6x, both themes.
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final dark in [false, true]) {
+      testWidgets('Bana series page does not overflow: ${size.width.round()}x'
+          '${size.height.round()}, text 1.6x, ${dark ? 'dark' : 'light'}',
+          (t) async {
+        await openReal(
+          t,
+          Routes.banaSeries('s1'),
+          size: size,
+          dark: dark,
+          settings: const AppSettings(fontScale: 1.6),
+          deviceTextScale: 1.6,
+          overrides: banaOverrides(),
+          storeExtras: {
+            banaLastPartKey: jsonEncode({'s1': 'v2'}),
+          },
+        );
+        expect(t.takeException(), isNull);
+        await scrollThrough(t);
+        expect(t.takeException(), isNull);
+        await expectLater(t, meetsGuideline(androidTapTargetGuideline));
       });
     }
   }

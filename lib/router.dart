@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'bana/bana_screen.dart';
+import 'bana/bana_series_screen.dart';
 import 'books/book_contents_screen.dart';
 import 'books/book_reader_screen.dart';
 import 'books/book_screen.dart';
@@ -191,7 +192,7 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                   pageBuilder: (context, state) => namoPage(
                     key: state.pageKey,
                     context: context,
-                    child: const NotFoundScreen(),
+                    child: BanaSeriesScreen(id: state.pathParameters['id']!),
                   ),
                 ),
                 GoRoute(
