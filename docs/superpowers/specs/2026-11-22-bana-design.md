@@ -101,8 +101,8 @@ the app arranges them.
   player supports it; Namo sends no personal data.
 - **Ads note**: Settings → Sources gains a Bana entry crediting each channel
   and saying the bana play from YouTube, which may show its own ads.
-- **Search**: Library search also finds bana by title (and series parts),
-  shown as a "Bana" group of results.
+- **Search**: the Bana tab has its own search box; it finds bana by title
+  (and series parts).
 - **Series card**: series title, speaker, "N parts", and "Continue: part K"
   once any part was opened (remembered on the device, per series).
 - **Part numbers** in the Patthana series: all 72 present; six numbers were placed
