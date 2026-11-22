@@ -43,6 +43,7 @@ dependencies:
   background_downloader: ^9.6.6
   crypto: ^3.0.8
   url_launcher: ^6.3.3
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
