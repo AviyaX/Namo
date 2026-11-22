@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'bana/bana_player_screen.dart';
 import 'bana/bana_screen.dart';
 import 'bana/bana_series_screen.dart';
 import 'books/book_contents_screen.dart';
@@ -185,8 +186,7 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
               path: Routes.bana,
               builder: (context, state) => const BanaScreen(),
               routes: [
-                // Inside the tab, so the bar stays. Placeholders until the
-                // series and player pages replace them.
+                // Inside the tab, so the bar stays.
                 GoRoute(
                   path: 'series/:id',
                   pageBuilder: (context, state) => namoPage(
@@ -200,7 +200,9 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                   pageBuilder: (context, state) => namoPage(
                     key: state.pageKey,
                     context: context,
-                    child: const NotFoundScreen(),
+                    child: BanaPlayerScreen(
+                      videoId: state.pathParameters['videoId']!,
+                    ),
                   ),
                 ),
               ],

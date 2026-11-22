@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../bana/bana_support.dart';
 import '../books/books_support.dart';
 import '../support/fake_chant_player.dart';
 import '../support/passages.dart';
@@ -169,6 +170,7 @@ Future<void> openReal(
   ChantPlayer? player,
   RecordingStore? recordingStore,
   List<Override> overrides = const [],
+  FakePlayers? players,
   Map<String, String> storeExtras = const {},
   bool settle = true,
   AssetBytes? tipitaka,
@@ -215,6 +217,8 @@ Future<void> openReal(
     t,
     overrides: [
       ...overrides,
+      // No test builds a real web view; Bana tests pass their own [players].
+      (players ?? FakePlayers()).override,
       contentRepositoryProvider.overrideWithValue(
         _FixedRepository(lib),
       ),

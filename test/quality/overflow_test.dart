@@ -951,4 +951,34 @@ void main() {
       });
     }
   }
+
+  // The player page: a middle part (both neighbours), and the offline panel.
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final dark in [false, true]) {
+      for (final fails in [false, true]) {
+        testWidgets('Bana player page does not overflow: '
+            '${size.width.round()}x${size.height.round()}, text 1.6x, '
+            '${dark ? 'dark' : 'light'}${fails ? ', offline' : ''}',
+            (t) async {
+          final fake = FakePlayers();
+          await openReal(
+            t,
+            Routes.banaPlay('v2'),
+            size: size,
+            dark: dark,
+            settings: const AppSettings(fontScale: 1.6),
+            deviceTextScale: 1.6,
+            players: fake,
+            overrides: banaOverrides(),
+          );
+          fails ? fake.fail() : fake.ready();
+          await t.pump();
+          expect(t.takeException(), isNull);
+          await scrollThrough(t);
+          expect(t.takeException(), isNull);
+          await expectLater(t, meetsGuideline(androidTapTargetGuideline));
+        });
+      }
+    }
+  }
 }
