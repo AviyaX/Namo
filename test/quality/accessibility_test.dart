@@ -176,7 +176,7 @@ void main() {
       // Each block, with the words that identify it to a screen reader and
       // where it is drawn.
       final blocks = <(String, String, Finder)>[
-        ('search', 'Search the library', find.byKey(const ValueKey('home-search'))),
+        ('search', 'Search Pirith & Gatha', find.byKey(const ValueKey('home-search'))),
         ('featured', 'Featured collections', find.byType(FeaturedCarousel)),
         ('bookmark', 'Bookmark this section', find.byKey(const ValueKey('gatha-bookmark'))),
         ('read in context', 'Read in context', find.text('Read in context')),

@@ -133,7 +133,7 @@ class BanaTile extends StatelessWidget {
             ClipRRect(
               borderRadius: radius,
               child: SizedBox(
-                width: 120,
+                width: NamoSizes.banaThumbWidth,
                 height: 68,
                 child: Stack(
                   fit: StackFit.expand,

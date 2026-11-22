@@ -89,6 +89,8 @@ class FakePlayers {
   String? lastVideoId;
   VoidCallback? onReady;
   VoidCallback? onError;
+  bool active = true;
+  int paused = 0;
 
   void ready() => onReady!();
   void fail() => onError!();
@@ -98,7 +100,10 @@ class FakePlayers {
     bana, {
     required onReady,
     required onError,
+    required active,
   }) {
+    if (this.active && !active) paused++;
+    this.active = active;
     lastVideoId = bana.id;
     this.onReady = onReady;
     this.onError = onError;

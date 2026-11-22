@@ -55,7 +55,7 @@ class HomeHeader extends StatelessWidget {
               child: NamoIconButton(
                 key: const ValueKey('home-search'),
                 icon: Symbols.search_rounded,
-                tooltip: 'Search the library',
+                tooltip: 'Search Pirith & Gatha',
                 onPressed: () => context.go(Routes.librarySearch),
               ),
             ),

@@ -51,6 +51,11 @@ void main() {
     )!.version;
   });
 
+  test('the list request sends no User-Agent on the web (CORS preflight)', () {
+    expect(banaFetchHeaders(web: true), isEmpty);
+    expect(banaFetchHeaders(web: false), containsPair('User-Agent', isNotEmpty));
+  });
+
   test('shows the bundled list with an empty store', () async {
     final env = _Env();
     final cat = await env.load(env.container());

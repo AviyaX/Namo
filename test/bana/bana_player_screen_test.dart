@@ -1,4 +1,5 @@
 import 'package:buddhist_gatha/bana/bana_progress.dart';
+import 'package:buddhist_gatha/design/widgets/app_shell.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/powered_by.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +120,41 @@ void main() {
     expect(_k('fake-player'), findsOneWidget);
     fake.ready();
     await t.pump();
+  });
+
+  testWidgets('an error after ready still shows the offline panel', (t) async {
+    final fake = await _open(t, 'v1');
+    expect(_k('fake-player'), findsOneWidget);
+    fake.fail();
+    await t.pump();
+    expect(find.text(_offline), findsOneWidget);
+  });
+
+  testWidgets('the channel opens its page', (t) async {
+    final opened = <Uri>[];
+    await _open(t, 'v1', opened: opened);
+    await t.tap(_k('bana-channel'));
+    await t.pump();
+    expect(opened, [Uri.parse('https://example.org/c')]);
+  });
+
+  testWidgets('the video is paused when another tab shows, not before',
+      (t) async {
+    final fake = await _open(t, 'v1');
+    expect(fake.active, isTrue);
+    final container = ProviderScope.containerOf(
+      t.element(find.byType(Scaffold).first),
+    );
+    container.read(currentTabProvider.notifier).show(TabIndex.bana);
+    await t.pump();
+    expect(fake.paused, 0);
+    container.read(currentTabProvider.notifier).show(TabIndex.home);
+    await t.pump();
+    expect(fake.active, isFalse);
+    expect(fake.paused, 1);
+    container.read(currentTabProvider.notifier).show(TabIndex.bana);
+    await t.pump();
+    expect(fake.active, isTrue);
   });
 
   testWidgets('no ready within 15 s shows the offline panel', (t) async {

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb, visibleForTesting;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -18,10 +19,16 @@ typedef BanaFetch = Future<String?> Function(Uri url);
 
 Uri get banaListUrl => Uri.parse('$audioBaseUrl/audio/bana/bana.json');
 
+/// The headers of the list request. A browser may not set `User-Agent`, and
+/// any extra header makes it send a CORS preflight the Worker rejects.
+@visibleForTesting
+Map<String, String> banaFetchHeaders({required bool web}) =>
+    web ? const {} : const {'User-Agent': audioUserAgent};
+
 Future<String?> _httpFetch(Uri url) async {
   try {
     final r = await http
-        .get(url, headers: {'User-Agent': audioUserAgent})
+        .get(url, headers: banaFetchHeaders(web: kIsWeb))
         .timeout(const Duration(seconds: 20));
     return r.statusCode == 200 ? r.body : null;
   } catch (_) {

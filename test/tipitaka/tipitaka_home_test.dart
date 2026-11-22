@@ -189,6 +189,18 @@ void main() {
       );
     });
 
+    testWidgets('a book title shows even when the Tripitaka failed to load',
+        (t) async {
+      await openReal(
+        t,
+        Routes.tipitaka,
+        size: const Size(390, 3000),
+        tipitaka: (_) async => throw StateError('no tree'),
+      );
+      await _type(t, 'Nested bo');
+      expect(nested, findsOneWidget);
+    });
+
     testWidgets('a query no book matches shows no Books group', (t) async {
       await openReal(t, Routes.tipitaka, size: const Size(390, 3000));
       await _type(t, 'qqqq');

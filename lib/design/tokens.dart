@@ -15,6 +15,12 @@ abstract final class NamoSizes {
   static const icon = 24.0;
   static const navBarHeight = 64.0;
 
+  /// The widest the Bana player (or its offline panel) grows.
+  static const playerColumn = 720.0;
+
+  /// The width of a Bana thumbnail in a list row.
+  static const banaThumbWidth = 120.0;
+
   /// The side margin of a page at [width].
   static double pageMargin(double width) => width < 360
       ? 16

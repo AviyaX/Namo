@@ -7,6 +7,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../design/tokens.dart';
 import '../design/typography.dart';
+import '../design/widgets/app_shell.dart';
 import '../design/widgets/buttons.dart';
 import '../design/widgets/not_found.dart';
 import '../design/widgets/pressable.dart';
@@ -164,6 +165,10 @@ class _BanaPlayerScreenState extends ConsumerState<BanaPlayerScreen> {
         cat.speakers.where((s) => s.id == bana.speaker).firstOrNull?.name ??
         bana.speaker;
     final channel = cat.channels[bana.channel]?.name ?? bana.channel;
+    final channelUri = Uri.tryParse(cat.channels[bana.channel]?.url ?? '');
+    final channelUrl = channelUri != null && channelUri.hasScheme
+        ? channelUri
+        : null;
 
     void go(Bana b) => context.pushReplacement(Routes.banaPlay(b.id));
 
@@ -186,9 +191,12 @@ class _BanaPlayerScreenState extends ConsumerState<BanaPlayerScreen> {
         const SizedBox(height: NamoSpace.sm),
         Text(speaker, style: NamoType.body(p.textSecondary)),
         const SizedBox(height: NamoSpace.xs),
-        Text(
-          '${bana.lengthLabel} · From YouTube · $channel',
-          style: NamoType.caption(p.textSecondary),
+        _SourceLine(
+          text: '${bana.lengthLabel} · From YouTube · $channel',
+          channel: channel,
+          onOpenChannel: channelUrl == null
+              ? null
+              : () => ref.read(linkOpenerProvider)(channelUrl),
         ),
         if (previous != null || next != null) ...[
           const SizedBox(height: NamoSpace.lg),
@@ -270,6 +278,7 @@ class _BanaPlayerScreenState extends ConsumerState<BanaPlayerScreen> {
         onOpen: () => _open(bana),
       );
     }
+    final tab = ref.watch(currentTabProvider);
     final player = KeyedSubtree(
       key: ValueKey('player-$_attempt'),
       child: ref.read(banaPlayerBuilderProvider)(
@@ -277,16 +286,54 @@ class _BanaPlayerScreenState extends ConsumerState<BanaPlayerScreen> {
         bana,
         onReady: _onReady,
         onError: _onError,
+        active: tab == null || tab == TabIndex.bana,
       ),
     );
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 720),
+        constraints: const BoxConstraints(maxWidth: NamoSizes.playerColumn),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(NamoRadius.sm)),
           child: ColoredBox(
             color: p.backgroundAlt,
             child: AspectRatio(aspectRatio: 16 / 9, child: player),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// "10:00 · From YouTube · Channel": the line opens the channel's page.
+class _SourceLine extends StatelessWidget {
+  const _SourceLine({
+    required this.text,
+    required this.channel,
+    required this.onOpenChannel,
+  });
+
+  final String text, channel;
+  final VoidCallback? onOpenChannel;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = NamoPalette.of(context);
+    final line = Text(text, style: NamoType.caption(p.textSecondary));
+    if (onOpenChannel == null) return line;
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Pressable(
+        key: const ValueKey('bana-channel'),
+        onTap: onOpenChannel!,
+        borderRadius: const BorderRadius.all(Radius.circular(NamoRadius.sm)),
+        semanticLabel: '$text. Opens $channel on YouTube',
+        excludeChildSemantics: true,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            widthFactor: 1,
+            child: line,
           ),
         ),
       ),
@@ -307,7 +354,7 @@ class _Panel extends StatelessWidget {
     final p = NamoPalette.of(context);
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 720),
+        constraints: const BoxConstraints(maxWidth: NamoSizes.playerColumn),
         child: Container(
           padding: const EdgeInsets.all(NamoSpace.lg),
           decoration: BoxDecoration(

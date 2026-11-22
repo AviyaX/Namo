@@ -51,6 +51,20 @@ class TabPressedAgain extends Notifier<(int, int)?> {
 final tabPressedAgainProvider =
     NotifierProvider<TabPressedAgain, (int, int)?>(TabPressedAgain.new);
 
+/// The tab showing now, as the shell last built it (null before any shell).
+/// Every tab stays mounted, so a page that must stop when its tab is hidden
+/// (a playing video) watches this.
+class CurrentTab extends Notifier<int?> {
+  @override
+  int? build() => null;
+
+  void show(int index) {
+    if (state != index) state = index;
+  }
+}
+
+final currentTabProvider = NotifierProvider<CurrentTab, int?>(CurrentTab.new);
+
 /// The width of the side rail on wide screens.
 const _railWidth = 88.0;
 
@@ -69,6 +83,12 @@ class AppShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Told after the frame: a provider may not change while building.
+    final shown = shell.currentIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.mounted) ref.read(currentTabProvider.notifier).show(shown);
+    });
+
     void select(int index) {
       final again = index == shell.currentIndex;
       shell.goBranch(index, initialLocation: again);
