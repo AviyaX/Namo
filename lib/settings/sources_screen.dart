@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../content/content_repository.dart';
+import '../bana/bana_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -244,6 +245,7 @@ class SourcesScreen extends StatelessWidget {
         const _SamanthaCreditBlock(),
         const _TipitakaCreditBlock(),
         const _BooksCreditBlock(),
+        const _BanaCreditBlock(),
         const _SectionLabel('Pictures'),
         for (final credit in _pictureCredits) _CreditBlock(credit),
         LibraryGate(
@@ -363,6 +365,67 @@ class _BooksCreditBlock extends StatelessWidget {
               padding: const EdgeInsets.only(top: NamoSpace.xs),
               child: Text(sentence, style: NamoType.body(p.textSecondary)),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The credit for the bana: each channel with its link, the speakers, and a
+/// note that they play from YouTube. Nothing until the list has loaded.
+class _BanaCreditBlock extends ConsumerWidget {
+  const _BanaCreditBlock();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cat = ref.watch(banaCatalogueProvider).value;
+    if (cat == null) return const SizedBox.shrink();
+    final p = NamoPalette.of(context);
+    return _SourceCard(
+      key: const ValueKey('sources-bana'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Text('Bana', style: NamoType.cardTitle(p.text)),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: NamoSpace.xs),
+            child: Text(
+              'The bana are from these YouTube channels:',
+              style: NamoType.body(p.textSecondary),
+            ),
+          ),
+          for (final c in cat.channels.values) ...[
+            Padding(
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
+              child: Text(c.name, style: NamoType.body(p.text)),
+            ),
+            // The address is shown as text to copy, never opened.
+            Semantics(
+              container: true,
+              label: c.url,
+              child: ExcludeSemantics(
+                child: SelectableText(c.url, style: NamoType.caption(p.sage)),
+              ),
+            ),
+          ],
+          if (cat.speakers.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: NamoSpace.xs),
+              child: Text(
+                'Speakers: ${cat.speakers.map((s) => s.name).join(', ')}.',
+                style: NamoType.body(p.textSecondary),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.only(top: NamoSpace.xs),
+            child: Text(
+              'The bana play from YouTube, which may show its own ads.',
+              style: NamoType.body(p.textSecondary),
+            ),
+          ),
         ],
       ),
     );
