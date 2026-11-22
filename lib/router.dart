@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'bana/bana_screen.dart';
 import 'books/book_contents_screen.dart';
 import 'books/book_reader_screen.dart';
 import 'books/book_screen.dart';
@@ -68,6 +69,15 @@ abstract final class Routes {
 
   /// A book's reader at page [n].
   static String bookReader(String id, int n) => '/library/book/$id/read/$n';
+
+  /// The Bana tab's first page.
+  static const bana = '/bana';
+
+  /// A series' page, inside the Bana tab.
+  static String banaSeries(String id) => '/bana/series/$id';
+
+  /// The player of one video, inside the Bana tab.
+  static String banaPlay(String videoId) => '/bana/play/$videoId';
 
   /// The Tripitaka tab's first page.
   static const tipitaka = '/tipitaka';
@@ -163,6 +173,34 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                       },
                     ),
                   ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.bana,
+              builder: (context, state) => const BanaScreen(),
+              routes: [
+                // Inside the tab, so the bar stays. Placeholders until the
+                // series and player pages replace them.
+                GoRoute(
+                  path: 'series/:id',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: const NotFoundScreen(),
+                  ),
+                ),
+                GoRoute(
+                  path: 'play/:videoId',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: const NotFoundScreen(),
+                  ),
                 ),
               ],
             ),

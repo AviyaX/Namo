@@ -18,6 +18,7 @@ import 'package:buddhist_gatha/tipitaka/tipitaka_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../bana/bana_support.dart';
 import '../books/books_support.dart';
 import '../support/fake_recording_store.dart';
 import '../tipitaka/tipitaka_app_support.dart';
@@ -879,5 +880,47 @@ void main() {
       }
       expect(t.takeException(), isNull);
     });
+  }
+
+  // The Bana tab: first page, with a monk and a topic chosen, and with a
+  // search, at the narrowest size and the wide one, text 1.6x, both themes.
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final dark in [false, true]) {
+      testWidgets('Bana tab does not overflow: ${size.width.round()}x'
+          '${size.height.round()}, text 1.6x, ${dark ? 'dark' : 'light'}',
+          (t) async {
+        await openReal(
+          t,
+          Routes.bana,
+          size: size,
+          dark: dark,
+          settings: const AppSettings(fontScale: 1.6),
+          deviceTextScale: 1.6,
+          overrides: banaOverrides(),
+        );
+        expect(t.takeException(), isNull);
+        await scrollThrough(t);
+        // The header scrolled out of the lazy list: back to the top.
+        t
+            .state<ScrollableState>(find.byType(Scrollable).first)
+            .position
+            .jumpTo(0);
+        await t.pumpAndSettle();
+        await t.ensureVisible(find.byKey(const ValueKey('bana-speaker-b')));
+        await t.tap(find.byKey(const ValueKey('bana-speaker-b')));
+        await t.pumpAndSettle();
+        expect(t.takeException(), isNull);
+        await t.enterText(
+          find.descendant(
+            of: find.byKey(const ValueKey('bana-search')),
+            matching: find.byType(TextField),
+          ),
+          'single',
+        );
+        await t.pumpAndSettle();
+        expect(t.takeException(), isNull);
+        await scrollThrough(t);
+      });
+    }
   }
 }

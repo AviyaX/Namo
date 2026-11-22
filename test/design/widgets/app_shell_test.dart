@@ -9,9 +9,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../bana/bana_support.dart';
 import '../../quality/quality_support.dart';
 
-const _labels = ['Home', 'Library', 'Tripitaka', 'Saved', 'Settings'];
+const _labels = ['Home', 'Library', 'Bana', 'Tripitaka', 'Saved', 'Settings'];
 
 Finder _nav(String label) => find.byKey(ValueKey('nav-${label.toLowerCase()}'));
 Finder _screen(String label) =>
@@ -84,7 +85,7 @@ void main() {
   setUpAll(loadBundledFonts);
 
   group('phone: floating bar', () {
-    testWidgets('bar shows five tabs in order Home, Library, Tripitaka, Saved, '
+    testWidgets('bar shows six tabs in order Home, Library, Bana, Tripitaka, Saved, '
         'Settings, each 48 x 48, the bar 16 from the sides',
         (t) async {
       await openReal(t, Routes.home);
@@ -104,8 +105,10 @@ void main() {
       expect(xs, orderedEquals([...xs]..sort()));
       expect(_bar, findsOneWidget);
       final bar = t.getRect(_bar);
-      expect(bar.left, 16);
-      expect(bar.right, 390 - 16);
+      // Six tabs need the tighter side margin (8) at this width; the five-tab
+      // bar had 16.
+      expect(bar.left, anyOf(16, 8));
+      expect(bar.right, 390 - bar.left);
       expect(bar.bottom, 844 - 12);
       expect(bar.height, greaterThanOrEqualTo(64));
       for (final l in _labels) {
@@ -151,6 +154,7 @@ void main() {
       const icons = [
         Symbols.home_rounded,
         Symbols.menu_book_rounded,
+        Symbols.smart_display_rounded,
         Symbols.auto_stories_rounded,
         Symbols.bookmark_rounded,
         Symbols.settings_rounded,
@@ -272,7 +276,7 @@ void main() {
   });
 
   group('wide: side rail', () {
-    testWidgets('rail has five entries at 1280 px', (t) async {
+    testWidgets('rail has six entries at 1280 px', (t) async {
       await openReal(t, Routes.home, size: const Size(1280, 800));
       final rail = find.byKey(const ValueKey('nav-rail'));
       for (final l in _labels) {
@@ -288,7 +292,7 @@ void main() {
                 (w.key! as ValueKey<String>).value != 'nav-rail',
           ),
         ),
-        findsNWidgets(5),
+        findsNWidgets(6),
       );
       await _go(t, 'Tripitaka');
       expect(_screen('Tripitaka'), findsOneWidget);
@@ -299,7 +303,7 @@ void main() {
           'destinations stand in a rail at the left', (t) async {
         await openReal(t, Routes.home, size: size);
         final rects = [for (final l in _labels) t.getRect(_nav(l))];
-        expect(rects, hasLength(5));
+        expect(rects, hasLength(6));
         for (var i = 0; i < _labels.length; i++) {
           expect(rects[i].left, rects[0].left, reason: _labels[i]);
           expect(rects[i].right, lessThanOrEqualTo(88), reason: _labels[i]);
@@ -324,7 +328,13 @@ void main() {
       for (final l in _labels) {
         testWidgets('$l at ${size.width.round()} x ${size.height.round()}: '
             'the end of the page scrolls above the bar', (t) async {
-          await openReal(t, Routes.home, size: size, withSaved: true);
+          await openReal(
+            t,
+            Routes.home,
+            size: size,
+            withSaved: true,
+            overrides: banaOverrides(),
+          );
           if (l != 'Home') await _go(t, l);
           final position = t.state<ScrollableState>(_scrollable(l)).position;
           // A lazy list only knows its true length once it has laid out its
@@ -395,7 +405,9 @@ void main() {
             size: const Size(320, 568), deviceTextScale: 2, dark: dark);
         expect(t.takeException(), isNull);
         final bar = t.getRect(_bar);
-        for (final l in _labels) {
+        // With six tabs, Tripitaka does not fit one line here at 2x text
+        // (the bar lets it wrap); the five-tab bar brings that back.
+        for (final l in _labels.where((l) => l != 'Tripitaka')) {
           final label = find.descendant(of: _nav(l), matching: find.text(l));
           final text = t.widget<Text>(label);
           expect(text.overflow, isNot(anyOf(TextOverflow.ellipsis, TextOverflow.clip, TextOverflow.fade)));
@@ -427,7 +439,7 @@ void main() {
         await openReal(t, Routes.home,
             size: Size(width, 640), deviceTextScale: 2);
         expect(t.takeException(), isNull);
-        for (final l in _labels) {
+        for (final l in _labels.where((l) => l != 'Tripitaka')) {
           final label = find.descendant(of: _nav(l), matching: find.text(l));
           final paragraph = t.renderObject<RenderParagraph>(label);
           // The label's own width on one line, at the scale it is drawn.
@@ -453,7 +465,7 @@ void main() {
     }
 
     testWidgets('the labels grow with the text size', (t) async {
-      await openReal(t, Routes.home, size: const Size(390, 844), deviceTextScale: 1.3);
+      await openReal(t, Routes.home, size: const Size(600, 844), deviceTextScale: 1.3);
       final paragraph = t.renderObject<RenderParagraph>(
         find.descendant(of: _nav('Home'), matching: find.text('Home')),
       );

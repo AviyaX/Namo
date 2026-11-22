@@ -11,12 +11,14 @@ import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'bana/bana_support.dart';
 import 'support/pump_app.dart';
 import 'support/test_content.dart';
 import 'tipitaka/tipitaka_support.dart';
 
 // The library loads at once; while it loads, a ring turns and never settles.
 final _loaded = [
+  ...banaOverrides(),
   contentRepositoryProvider.overrideWithValue(FakeContentRepository()),
   tipitakaRepositoryProvider.overrideWithValue(
     TipitakaRepository(load: fakeAssets(tinyTipitaka()), inBackground: false),
@@ -101,9 +103,9 @@ void main() {
     expect(t.widget<LibraryScreen>(find.byType(LibraryScreen)).focusSearch, isFalse);
   });
 
-  testWidgets('five tabs switch screens', (t) async {
+  testWidgets('six tabs switch screens', (t) async {
     await pumpApp(t, overrides: _loaded);
-    for (final label in ['Home', 'Library', 'Tripitaka', 'Saved', 'Settings']) {
+    for (final label in ['Home', 'Library', 'Bana', 'Tripitaka', 'Saved', 'Settings']) {
       await t.tap(find.descendant(
         of: find.byKey(ValueKey('nav-${label.toLowerCase()}')),
         matching: find.text(label),

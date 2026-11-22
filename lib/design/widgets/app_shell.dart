@@ -20,6 +20,7 @@ class _Tab {
 const _tabs = [
   _Tab('Home', Symbols.home_rounded),
   _Tab('Library', Symbols.menu_book_rounded),
+  _Tab('Bana', Symbols.smart_display_rounded),
   _Tab('Tripitaka', Symbols.auto_stories_rounded),
   _Tab('Saved', Symbols.bookmark_rounded),
   _Tab('Settings', Symbols.settings_rounded),
@@ -29,9 +30,10 @@ const _tabs = [
 abstract final class TabIndex {
   static const home = 0;
   static const library = 1;
-  static const tripitaka = 2;
-  static const saved = 3;
-  static const settings = 4;
+  static const bana = 2;
+  static const tripitaka = 3;
+  static const saved = 4;
+  static const settings = 5;
 }
 
 /// A press on the tab that is already showing: which tab, and a count that

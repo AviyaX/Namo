@@ -14,6 +14,7 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../books/books_support.dart';
+import '../bana/bana_support.dart';
 import 'quality_support.dart';
 
 Future<void> expectGuidelines(WidgetTester t) async {
@@ -217,9 +218,9 @@ void main() {
   });
 
   group('bottom bar and navigation rail', () {
-    const tabs = ['Home', 'Library', 'Tripitaka', 'Saved', 'Settings'];
+    const tabs = ['Home', 'Library', 'Bana', 'Tripitaka', 'Saved', 'Settings'];
 
-    testWidgets('the bottom bar has the five tabs, each labelled and 48 high', (t) async {
+    testWidgets('the bottom bar has the six tabs, each labelled and 48 high', (t) async {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.home);
       for (final tab in tabs) {
@@ -241,7 +242,7 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('the rail has the five tabs, each labelled and at least 48 x 48', (t) async {
+    testWidgets('the rail has the six tabs, each labelled and at least 48 x 48', (t) async {
       final handle = t.ensureSemantics();
       await openReal(t, Routes.home, size: const Size(1280, 800));
       expect(find.byKey(const ValueKey('nav-rail')), findsOneWidget);
@@ -603,5 +604,24 @@ void main() {
         handle.dispose();
       });
     }
+  }
+
+  // The Bana tab: tap targets (48 points), labels and contrast, both themes,
+  // at the narrowest size with large text.
+  for (final dark in [false, true]) {
+    testWidgets('Bana tab (${dark ? 'dark' : 'light'}) meets the guidelines '
+        'at 320x568, text 1.6x', (t) async {
+      final handle = t.ensureSemantics();
+      await openReal(
+        t,
+        Routes.bana,
+        size: const Size(320, 568),
+        dark: dark,
+        deviceTextScale: 1.6,
+        overrides: banaOverrides(),
+      );
+      await expectGuidelines(t);
+      handle.dispose();
+    });
   }
 }
