@@ -11,7 +11,7 @@ the app arranges them.
 
 ## Goals
 
-- A **Bana** section in **Library, after Books** (no new bottom tab).
+- A **Bana bottom tab** of its own, like Tripitaka (owner's choice), placed between Library and Tripitaka: six tabs in all.
 - Bana are YouTube videos played **inside Namo with YouTube's own embedded
   player**; an **"Open in YouTube"** button on every bana, and the only way
   when a video's owner has turned embedding off or the player fails.
@@ -44,15 +44,16 @@ the app arranges them.
 ## Decided (owner)
 
 - Embedded YouTube player + Open in YouTube fallback (approach A).
-- Library after Books; online list with a bundled copy.
+- Its own bottom tab (owner overrode "Library after Books"); online list with a bundled copy.
 - Topic + speaker filters; series as one card with parts inside and resume.
-- Current content (2 monks, 176 bana), from the owner's playlists:
+- Current content (2 monks, 180 bana), from the owner's playlists:
   - Ven. Na Uyane Ariyadhamma Maha Thero — 85 single bana (channel
     "Budu Dahama බුදු දහම", playlist PLGNIkoMWkSHwt6A8dAjMOziznanGdB8SM) and
     the 23-part course **සමථ භාවනාව** (channel "Yathiwara Adawiya යතිවර
     අඩවිය", playlist PLiOaRw4J4Uyv9IBNP9aDWxsluAqtC_Bng).
   - Ven. Kiriwaththuduwe Ariyadassana Thero — the series **පට්ඨාන ධර්ම
-    දේශනා මාලාව**, 68 parts present of 72 (channel "Wassana Dharma Deshana
+    දේශනා මාලාව**, all 72 parts (68 from the playlist, parts 38, 45, 48, 50
+    found on the same channel by search) (channel "Wassana Dharma Deshana
     වස්සාන ධර්ම දේශනා", playlist PLoV7IpZqAgVSLpauPjwUnoYi2VVuRxT33).
 - Topics, in this order (Sinhala — English):
   1. භාවනාව — Meditation (the සමථ භාවනාව course + 7 single meditation bana)
@@ -104,8 +105,7 @@ the app arranges them.
   shown as a "Bana" group of results.
 - **Series card**: series title, speaker, "N parts", and "Continue: part K"
   once any part was opened (remembered on the device, per series).
-- **Part numbers** in the Patthana series: 38, 45, 48, 50 are missing from
-  the playlist (shown as "68 of 72"; no gaps drawn); six numbers were placed
+- **Part numbers** in the Patthana series: all 72 present; six numbers were placed
   by playlist order because the titles lacked or repeated a number
   (`partGuessed: true` in the draft) — the owner checks these later; the app
   just uses the part numbers in the file.
@@ -130,7 +130,7 @@ the app arranges them.
   CORS headers the web app uses for recordings). The plan includes the
   tool command that produces the file and this upload step as the last task;
   freshness relies on the `version` field, not cache headers.
-- **Missing series parts**: parts are only the ones present. The series card
+- **Missing series parts** (none now, rule kept for later series): parts are only the ones present. The series card
   says "68 parts" (and, where the file gives a known total, "of 72"); the
   player shows "Part 39"; Previous/Next go to the neighbouring present part
   (37 → 39).
@@ -142,10 +142,10 @@ the app arranges them.
   the device only, per series.
 - **Search**: a hit on a series part opens that part's player screen, with its
   series context (Part N, Previous/Next).
-- **Navigation**: like Books. Library gets a Bana part after Books (a short
-  preview: topic chips + a few series/bana) with "See all" to the Bana screen.
-  Routes under Library: `/library/bana`, `/library/bana/series/:id`,
-  `/library/bana/play/:videoId` (deep-linkable, like books).
+- **Navigation**: the Bana tab's screen is the full Bana list (monk chips,
+  topic chips, series cards and bana). Routes: `/bana`, `/bana/series/:id`,
+  `/bana/play/:videoId` (deep-linkable). Mockup:
+  https://claude.ai/artifact/VqqWCNDmoCCBcSBeqL1zsX
 - **Title trimming**: the tool trims only known strings listed in its mapping
   file (channel names, the monks' name forms) plus separators, and prints any
   title that still contains a speaker or channel fragment for review. The
