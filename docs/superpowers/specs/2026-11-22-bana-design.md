@@ -157,6 +157,32 @@ the app arranges them.
 - **Web**: the web build fetches `bana.json` from the same Worker (CORS as for
   recordings) and embeds YouTube iframes, which any host allows.
 
+## New bottom bar (owner, 2026-11-22)
+
+The owner reorganised the whole bottom bar while Bana was being built. Five
+tabs, in this order:
+
+1. **Home** — as today, plus **My flows** moved here from Library (the full
+   part: the person's flows, New flow, editing), below the existing rows.
+2. **Pirith & Gatha** — today's Library screen without My flows and Books:
+   search, Buddha Wandanawa, Pirith, Samantha Pattana (owner: Samantha
+   Pattana stays here). Its address stays `/library` so saved links and
+   readers' Back keep working; only the label and the parts change.
+3. **Bana** — this design.
+4. **Tripitaka** — the Rerukane **Books** shelf at the top, then the
+   Tripitaka as today (owner: books go here; tab keeps the name
+   "Tripitaka" — designer's call, owner may rename it "Books"). Book pages
+   move under this tab (`/tipitaka/book/...`); the old `/library/book/...`
+   addresses redirect.
+5. **Settings** — gains a **Saved** row (first in the list) opening the Saved
+   page inside Settings (`/settings/saved`); `/saved` redirects there. The
+   Saved tab goes away.
+
+Labels: "Home", "Pirith & Gatha", "Bana", "Tripitaka", "Settings". Every
+place that sent people to the Library or Saved tab (Back from a book, the
+flow editor, Saved's empty state, "See all" on Home, the readers' Back)
+goes to the page's new home.
+
 ## Constraints
 
 Project rules apply: Android, iOS and web in step; no overflow at 320 wide
