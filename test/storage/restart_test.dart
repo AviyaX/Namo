@@ -187,8 +187,8 @@ void main() {
     });
   }
 
-  testWidgets('the app starts with damaged flows: no flows in the Library or '
-      'on Home', (t) async {
+  testWidgets('the app starts with damaged flows: no flows in Pirith & Gatha, and '
+      'the invite on Home', (t) async {
     SharedPreferences.setMockInitialValues({flowsKey: '{"flows": [1, '});
     final prefs = await SharedPreferences.getInstance();
     for (final at in [Routes.home, Routes.library]) {
@@ -209,9 +209,18 @@ void main() {
         // Home itself drew, with its content: not a blank or error page.
         expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
         expect(find.byType(FeaturedCard), findsOneWidget);
+        // My flows sits below the fold on Home.
+        final invite = find.text('Make your own flow', skipOffstage: false);
+        await t.scrollUntilVisible(
+          invite,
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(find.text('Make your own flow'), findsOneWidget);
+      } else {
+        expect(find.text('Make your own flow'), findsNothing);
       }
     }
-    expect(find.text('Make your own flow'), findsOneWidget);
   });
 
   test('settings, bookmarks and places saved before flows existed still load, '
