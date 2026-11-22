@@ -105,9 +105,9 @@
  ],
  "trim": [
   "(most\\s+)?(ven\\.?\\s*)?na\\s+uyane\\s+ariyadhamma(\\s+maha)?(\\s+thero)?",
-  "(most\\s+)?(ven\\.?\\s*)?kir\\w*\\s+(ariya\\s+)?\\w*sana(\\s+thero)?",
-  "\\b(ari|aiy)\\w*das+ana(\\s+thero)?",
-  "wass?[ab]na\\s+desana(\\s+bana\\s+katha)?",
+  "(most\\s+)?(ven\\.?\\s*)?kir\\w*\\s+(ariya\\s+)?\\w*sana?(\\s+thero)?",
+  "\\b(ari|aiy)\\w*das+ana?(\\s+thero)?",
+  "wass?[ab][nb]a(\\s+desh?ana)?(\\s+bana\\s+katha)?",
   "wassana\\s+dharma\\s+deshana",
   "budu\\s+dahama",
   "yathiwara\\s+adawiya",

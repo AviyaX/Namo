@@ -14,7 +14,11 @@ import re
 import sys
 
 VERSION = 1
-REVIEW = ("thero", "uyane", "ariyadassana")
+REVIEW = (
+    "thero", "uyane", "ariyadassana", "wassana", "wassaba", "kiriwaththuduv",
+    "kiriwaththuduw", "kirivaththuduw", "kiriwathuduv", "ariyadassan",
+    "ariyadasana", "ariya asana", "aiyadassana",
+)
 EDGE = " \t-|.​‍‌"
 
 
