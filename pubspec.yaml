@@ -110,6 +110,7 @@ flutter:
     - assets/books/
     - assets/books/covers/
     - assets/books/pictures/
+    - assets/bana/
     - assets/pictures/buddha_wandanawa.jpg
     - assets/pictures/hero_dark.jpg
     - assets/pictures/hero_light.jpg

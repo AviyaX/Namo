@@ -1,0 +1,2189 @@
+{
+ "version": 1,
+ "topics": [
+  {
+   "id": "M",
+   "si": "භාවනාව",
+   "en": "Meditation"
+  },
+  {
+   "id": "ME",
+   "si": "මෛත්‍රී",
+   "en": "Loving-kindness"
+  },
+  {
+   "id": "BG",
+   "si": "බුදු ගුණ",
+   "en": "Qualities of the Buddha"
+  },
+  {
+   "id": "SU",
+   "si": "සූත්‍ර දේශනා",
+   "en": "Suttas explained"
+  },
+  {
+   "id": "KS",
+   "si": "කර්මය හා සංසාරය",
+   "en": "Kamma and samsara"
+  },
+  {
+   "id": "DP",
+   "si": "දානය, පින් හා පාරමිතා",
+   "en": "Giving, merit and perfections"
+  },
+  {
+   "id": "PW",
+   "si": "මාර්ගය හා ප්‍රඥාව",
+   "en": "The path and wisdom"
+  },
+  {
+   "id": "LV",
+   "si": "උතුමන්ගේ චරිත",
+   "en": "Lives of the noble ones"
+  },
+  {
+   "id": "PY",
+   "si": "පොහොය දින දේශනා",
+   "en": "Poya day talks"
+  },
+  {
+   "id": "DL",
+   "si": "එදිනෙදා ජීවිතයට",
+   "en": "Mind and daily life"
+  },
+  {
+   "id": "PT",
+   "si": "පට්ඨානය",
+   "en": "Patthana"
+  }
+ ],
+ "speakers": [
+  {
+   "id": "na-uyane-ariyadhamma",
+   "name": "Ven. Na Uyane Ariyadhamma Maha Thero"
+  },
+  {
+   "id": "kiriwaththuduwe-ariyadassana",
+   "name": "Ven. Kiriwaththuduwe Ariyadassana Thero"
+  }
+ ],
+ "channels": [
+  {
+   "id": "budu-dahama",
+   "name": "Budu Dahama බුදු දහම",
+   "url": "https://www.youtube.com/playlist?list=PLGNIkoMWkSHwt6A8dAjMOziznanGdB8SM"
+  },
+  {
+   "id": "yathiwara-adawiya",
+   "name": "Yathiwara Adawiya යතිවර අඩවිය",
+   "url": "https://www.youtube.com/playlist?list=PLiOaRw4J4Uyv9IBNP9aDWxsluAqtC_Bng"
+  },
+  {
+   "id": "wassana-dharma-deshana",
+   "name": "Wassana Dharma Deshana වස්සාන ධර්ම දේශනා",
+   "url": "https://www.youtube.com/playlist?list=PLoV7IpZqAgVSLpauPjwUnoYi2VVuRxT33"
+  }
+ ],
+ "series": [
+  {
+   "id": "samatha-bhavana",
+   "title": "සමථ භාවනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [
+    "M"
+   ],
+   "parts": [
+    "iexSKfsj4ts",
+    "nZZh0SiW19g",
+    "Dwq7trTw9uU",
+    "70SwSZ-nle8",
+    "FjTYOUA-VyM",
+    "pjFhMjtAqus",
+    "OPWyWyoFUl0",
+    "dkRTy2IBE1I",
+    "3lc951ETypw",
+    "dVOMJDFekR8",
+    "Uy1IlvZlOoo",
+    "bVxFFPGj7zQ",
+    "1BS8_v2e70k",
+    "hWtyVMx0f40",
+    "bpYY3lqehLk",
+    "mjqTeWMAoLI",
+    "Sas9aqofGJw",
+    "XwdCMHubgTA",
+    "o-fcdIdOyUg",
+    "zSeK8qKucrI",
+    "sD0Ty-YV1eM",
+    "1umZY1eKuNI",
+    "ky8xWaTCwaM"
+   ]
+  },
+  {
+   "id": "patthana-deshana",
+   "title": "පට්ඨාන ධර්ම දේශනා මාලාව",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [
+    "PT"
+   ],
+   "parts": [
+    "EZVbdWdKP2s",
+    "rH5AEfi_g-U",
+    "MG8K8UIosM8",
+    "nbOUqGLKZt4",
+    "Zq0jGELBnD8",
+    "GsEyHKzXF78",
+    "K351KyE0Ev4",
+    "o9315wYMpLg",
+    "k2jSKE9AM2g",
+    "E11E2n5FlCw",
+    "7gjr-bLVAzM",
+    "WJ3OVQWKCUw",
+    "y5BVvS1_74Q",
+    "5Y3i_cp_fcg",
+    "9dVWiH8yZD8",
+    "WMW4CCZTV6k",
+    "f8aec-Ztra4",
+    "C8dQKse5Uzs",
+    "4HwfdUIUa7Q",
+    "mTKFaqE5EK8",
+    "M6Prle4pfrc",
+    "vsLsis22NiU",
+    "U187Is7OlCQ",
+    "5CAiqgXeVRo",
+    "jAXdW8g7RVE",
+    "pQIsqwPNAzs",
+    "l9BnyLvELRY",
+    "AL8XnNOoTDQ",
+    "AZyqOaWR_Zc",
+    "co1u9F4dFL8",
+    "GCtWcrQlRnc",
+    "mvPb5CvGg8c",
+    "78mJJd-POkE",
+    "R1DS1K8XtDs",
+    "BxU23R6bY18",
+    "kjjw_0BQLlk",
+    "_EjNMQmBN74",
+    "4pXAHEx__dk",
+    "GPM4SuO5CmY",
+    "3JtD7pgyXuU",
+    "xsyAPNtpjJY",
+    "IhjWy7ZNmZo",
+    "YG-lNpxGJcQ",
+    "i5waLuTu1H8",
+    "1YQC64ZUtyU",
+    "4lxqFed8LnE",
+    "VLSISzf6Gqg",
+    "4ZVCH5y_Hgg",
+    "u0IuQ6aMtPo",
+    "Eb0301iAvgg",
+    "3ld9Xq7kWaM",
+    "YCfEpA2Plqc",
+    "mYXcv1Reeb8",
+    "XFVDmcTka14",
+    "AZOtMP2sqKQ",
+    "rNL6Cd3Vu1U",
+    "Y_5yjD-aJEk",
+    "0Wrv7rLK-Ns",
+    "g38VAlnMaTY",
+    "jxL3D5rGrG4",
+    "5y2ZdXM8zHo",
+    "SDssOg7su70",
+    "vXf-NRvYRho",
+    "VzbYFvtVZyc",
+    "ZNpa5gILvMo",
+    "OEfK-prW15E",
+    "-vBZUtD95Y8",
+    "lfV-1uSp5Xc",
+    "A-8iIyzr8kk",
+    "m47R9qRnVLI",
+    "a_igke3DsSo",
+    "Y3TlhYmHQKE"
+   ]
+  }
+ ],
+ "bana": [
+  {
+   "id": "2PZGfjRIOJk",
+   "title": "කර්මය අපගේ ජීවිතයට බලපාන ආකාරය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "KS"
+   ],
+   "seconds": 2542,
+   "embeddable": true
+  },
+  {
+   "id": "knM8xgl0wyQ",
+   "title": "අසිරිමත් සම්මා සම්බුදු ගුණ · budu guna",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "BG"
+   ],
+   "seconds": 2584,
+   "embeddable": true
+  },
+  {
+   "id": "6shZHItMJTo",
+   "title": "මෛත්‍රී භාවනාවෙන් ධ්‍යාන දක්වා යන ආකාරය · maithree bawanawa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "ME"
+   ],
+   "seconds": 2462,
+   "embeddable": true
+  },
+  {
+   "id": "2la7cI9cT0Y",
+   "title": "දාන පාරමිතාවේ ආශ්චර්ය · Dana paramithawa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 1869,
+   "embeddable": true
+  },
+  {
+   "id": "Hf5Z-dGu3LU",
+   "title": "විශේෂ ධර්ම දේශනාව (වෙසක් පොහොය · vesak poya)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 2992,
+   "embeddable": true
+  },
+  {
+   "id": "0s-Kop1TiBM",
+   "title": "ආශ්චර්ය ධර්ම දේශනාව · (ආසිවිසොපම සූත්‍රය)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 3155,
+   "embeddable": true
+  },
+  {
+   "id": "Kznj4cedUaQ",
+   "title": "බුද්ධානුස්සති භාවනාව · Buddhanussathi Bhawanawa Sinhala",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "M"
+   ],
+   "seconds": 2855,
+   "embeddable": true
+  },
+  {
+   "id": "OrhPMfmKbx4",
+   "title": "poson poya · ධර්ම සාකච්ඡාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 3038,
+   "embeddable": true
+  },
+  {
+   "id": "HRET7pyAfp8",
+   "title": "මෛත්‍රී විහරණයෙන් වාසය කිරීම · maithree bawanawa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "ME"
+   ],
+   "seconds": 1815,
+   "embeddable": true
+  },
+  {
+   "id": "bS9sRIT_mlY",
+   "title": "ධම්මානුස්සති භාවනාව · Dhammanussathi Bhawanawa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "M"
+   ],
+   "seconds": 3093,
+   "embeddable": true
+  },
+  {
+   "id": "S7zWHQZOaX8",
+   "title": "බයක්, තැතිගැනීමක් ඇති විට එයින් අත්මිදෙන ආකාරය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 2064,
+   "embeddable": true
+  },
+  {
+   "id": "uKwF35uYFh8",
+   "title": "අගක්, මුලක් නොපෙනෙන සංසාරය · (digu sasara)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "KS"
+   ],
+   "seconds": 1846,
+   "embeddable": true
+  },
+  {
+   "id": "F4mkt0NH5IQ",
+   "title": "අනාථපිණ්ඩික සිටුතුමාගේ ජීවිත කතාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "LV"
+   ],
+   "seconds": 2051,
+   "embeddable": true
+  },
+  {
+   "id": "yII1-skBG1o",
+   "title": "අනෙක ජාති සංසාරං · aneka jathi sansaran",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "KS"
+   ],
+   "seconds": 2772,
+   "embeddable": true
+  },
+  {
+   "id": "dCRa9Bd4vq8",
+   "title": "අප්පමාද සූත්‍රය · appamada suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 2399,
+   "embeddable": true
+  },
+  {
+   "id": "q2eJCnq6kx8",
+   "title": "අරියපරියෙසන සූත්‍රය · ariyapariyesana suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 3511,
+   "embeddable": true
+  },
+  {
+   "id": "1hGfHPROJ3k",
+   "title": "අච්ඡරිය මනුස්සෝ · achchariya manusso",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "BG"
+   ],
+   "seconds": 2597,
+   "embeddable": true
+  },
+  {
+   "id": "2iJ34y8hcSk",
+   "title": "චූළහත්ථිපදෝපම සූත්‍රය · chulahaththipadopama suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 3190,
+   "embeddable": true
+  },
+  {
+   "id": "tAMDoy8u-pM",
+   "title": "විශේෂ ධර්ම සාකච්ඡාව · ( Esala poya · ඇසල පොහොය)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 2885,
+   "embeddable": true
+  },
+  {
+   "id": "gliz36wO5lc",
+   "title": "Kalakarama suthraya · (කාළකාරාම සූත්‍රය)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 2538,
+   "embeddable": true
+  },
+  {
+   "id": "xTxLE5RAsPU",
+   "title": "ප්‍රඥාව වැඩීමට උපකාරවන ධර්මතා · ( pragnawa )",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 3827,
+   "embeddable": true
+  },
+  {
+   "id": "3Jj1_TfWjY4",
+   "title": "අතිශයින්ම දුර්ලභ ප්‍රාර්ථනා හතර",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 2101,
+   "embeddable": true
+  },
+  {
+   "id": "K68-eTxkX7U",
+   "title": "ලොව ඇති දුර්ලභ කාරණා · සුගතෝවාදය · Sugathowadaya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 2734,
+   "embeddable": true
+  },
+  {
+   "id": "dPcqNXjLCL0",
+   "title": "රාහුල ස්වාමින්වහන්සේගේ ජීවිත කතාව සහ ආනාපානසති භාවනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "LV"
+   ],
+   "seconds": 3113,
+   "embeddable": true
+  },
+  {
+   "id": "ySaEEafpPm0",
+   "title": "මහා බෝසතාණන් වහන්සේ පුරන ලද පාරමිතා · (Dasa Paramitha)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 2185,
+   "embeddable": true
+  },
+  {
+   "id": "5P3qMzLKPj4",
+   "title": "දන් පින්කම් කිරීමේ වටිනාකම · (සුමනා සූත්‍රය)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 3099,
+   "embeddable": true
+  },
+  {
+   "id": "sinkSqqiyVg",
+   "title": "බුදු සසුනේ ඇති ආශ්චර්ය අද්භූත ධර්මයෝ · (පහාරාද සූත්‍රය)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 2589,
+   "embeddable": true
+  },
+  {
+   "id": "GwBDfONhcJI",
+   "title": "නිකිණි ‌‌පෝය දින විශේෂ ධර්ම ‌දේශණය · nikini poya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 3275,
+   "embeddable": true
+  },
+  {
+   "id": "it4TmgkprW4",
+   "title": "නිකිණි ‌‌පෝය දින විශේෂ ධර්ම සාකච්ඡාව · Nikini Poya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 3044,
+   "embeddable": true
+  },
+  {
+   "id": "RkGgH6w187w",
+   "title": "කෙලෙසුන් ප්‍රහාණය කරන ආකාරය (සල්ලේඛ සූත්‍රය-salleka suthraya)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 3371,
+   "embeddable": true
+  },
+  {
+   "id": "EgY3tYylmbM",
+   "title": "සම්මුතිය සහ පරමාර්ථය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 1904,
+   "embeddable": true
+  },
+  {
+   "id": "4ygwWNzloc8",
+   "title": "රට්ඨපාල සූත්‍රය · Ratthapala Suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 1806,
+   "embeddable": true
+  },
+  {
+   "id": "ly1XYzr5P6o",
+   "title": "සැමවිටම සිත පිරිසිදුව තබාගමු",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 1736,
+   "embeddable": true
+  },
+  {
+   "id": "R72hhTr77pU",
+   "title": "ගිහි බෞද්ධයන් ශ්‍රවණය කළ යුතුම ධර්ම දේශනාවක් (පත්තකම්ම සූත්‍රය)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 4912,
+   "embeddable": true
+  },
+  {
+   "id": "3JGGuA8z4tA",
+   "title": "සප්ත විශුද්ධිය සහ මාර්ගඵල · Saptha Visuddhiya & Margapala",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 3819,
+   "embeddable": true
+  },
+  {
+   "id": "KRVN6qKnDd8",
+   "title": "ගිරිමානන්ද සූත්‍රය · Girimananda Suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 2977,
+   "embeddable": true
+  },
+  {
+   "id": "u85zHv_5Wrw",
+   "title": "සියල්ලෝම දත යුතුයි · පරාභව සූත්‍රය · parabawa suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 4200,
+   "embeddable": true
+  },
+  {
+   "id": "u-dI_1iWIDg",
+   "title": "සප්ත බොජ්ඣංග වැඩෙන කරුණු · Saptha Bojjhanga",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 3493,
+   "embeddable": true
+  },
+  {
+   "id": "0lMj1xQnqRU",
+   "title": "භාවනා පිළිබඳ ධර්ම සාකච්ඡාව · වප් පොහොය · (Wap Poya)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 3041,
+   "embeddable": true
+  },
+  {
+   "id": "2vrgdwxV39A",
+   "title": "ප්‍රඥාව දියුණු කරගන්නා ආකාරය · Pragnawa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 4136,
+   "embeddable": true
+  },
+  {
+   "id": "Ce0t1p6pPEg",
+   "title": "කෙළෙස් මාරයාට හසු නොවීමට · චක්‍රවර්ති සිංහනාද සූත්‍රය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 3194,
+   "embeddable": true
+  },
+  {
+   "id": "bHBlFp_vnOA",
+   "title": "මියගිය ඥාතීන්ට පින් දීමේ වටිනාකම · තිරොකුඩ්ඩ සූත්‍රය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 2656,
+   "embeddable": true
+  },
+  {
+   "id": "V4Wf5YtGzKM",
+   "title": "තමා අනුව යන්නා වූ පුණ්‍යනිධානය · නිධිකණ්ඩ සූත්‍රය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 3854,
+   "embeddable": true
+  },
+  {
+   "id": "8SmgCnW1CP0",
+   "title": "සිත ආරක්ෂා කර ගැනීම",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 3892,
+   "embeddable": true
+  },
+  {
+   "id": "7kCuyQCOCVw",
+   "title": "දස මහා සෘද්ධි",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 2239,
+   "embeddable": true
+  },
+  {
+   "id": "0Hqi_YEfILg",
+   "title": "තථාගතයන් වහන්සේගේ ඉන්ද්‍රිය පරොපරියත්ත ඥානය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "BG"
+   ],
+   "seconds": 3704,
+   "embeddable": true
+  },
+  {
+   "id": "a9qEAaFupF8",
+   "title": "ලක්ෂණ සූත්‍රය · දෙතිස් මහා පුරුෂ ලක්ෂණ",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "BG"
+   ],
+   "seconds": 2629,
+   "embeddable": true
+  },
+  {
+   "id": "zRSSnWMgvQs",
+   "title": "සුනාමි අනුස්මරණ විශේෂ ධර්ම දේශනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 3029,
+   "embeddable": true
+  },
+  {
+   "id": "tluak1XZ9fc",
+   "title": "කරණීය මෙත්ත සූත්‍රයේ අර්ථ විවරණය · Karaniya Meththa Suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "ME"
+   ],
+   "seconds": 2333,
+   "embeddable": true
+  },
+  {
+   "id": "EYIMJazzip8",
+   "title": "සීවලී මහා රහතන් වහන්සේගේ චරිතාපදානය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "LV"
+   ],
+   "seconds": 2345,
+   "embeddable": true
+  },
+  {
+   "id": "71f97NkFh6g",
+   "title": "අනාගාමී චිත්‍ර ගෘහපති තුමා · Anagami Chithra Gruhapathi Thuma",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "LV"
+   ],
+   "seconds": 1801,
+   "embeddable": true
+  },
+  {
+   "id": "Dd_4_obGBIo",
+   "title": "සුවය පිණිස පවත්නා සම්පත් සතරක්",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 4137,
+   "embeddable": true
+  },
+  {
+   "id": "5bgOfXLnYXg",
+   "title": "සම්මා සංකප්ප · Samma Sankappa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 3324,
+   "embeddable": true
+  },
+  {
+   "id": "IUOldp5B_FI",
+   "title": "විශේෂයෙන් බෞද්ධයන් ශ්‍රවණය කල යුතුම ධර්ම දේශනාවක්",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 3880,
+   "embeddable": true
+  },
+  {
+   "id": "JCMPhh4-e9w",
+   "title": "කෙලෙස් නැසූ අසිරිමත් ජීවිත · මැදින් පෝදා ධර්ම දේශනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 2588,
+   "embeddable": true
+  },
+  {
+   "id": "o5z56dsmt3U",
+   "title": "සතර සතිපට්ඨානය පිළිබඳ වටිනා ධර්ම දේශනාවක්",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "M"
+   ],
+   "seconds": 4671,
+   "embeddable": true
+  },
+  {
+   "id": "ncZryMOONDg",
+   "title": "විශේෂ ධර්ම දේශනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 3196,
+   "embeddable": true
+  },
+  {
+   "id": "d2V4yO58sM8",
+   "title": "සෝවාන් වීමට අවශ්‍ය අංග සතර · සෝතාපත්ති අංග",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 2846,
+   "embeddable": true
+  },
+  {
+   "id": "zgvfwa7nyYc",
+   "title": "අපි හැමෝටම ඉතා වටිනා ධර්ම දේශනාවක් · ආර්ය අෂ්ටාංගික මාර්ගය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 3215,
+   "embeddable": true
+  },
+  {
+   "id": "K66dtvXerrE",
+   "title": "සැමට සුවය ගෙන දෙන කාරණා",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 2268,
+   "embeddable": true
+  },
+  {
+   "id": "WE0MdUqYv5U",
+   "title": "එදිනෙදා අපිට මේ මෛත්‍රියෙන් ගත හැකි ප්‍රයෝජන",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "ME"
+   ],
+   "seconds": 3466,
+   "embeddable": true
+  },
+  {
+   "id": "AglWeUA37yw",
+   "title": "ප්‍රමාද නොවී අප්‍රමාදී වෙමු",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 5179,
+   "embeddable": true
+  },
+  {
+   "id": "0coaTKXYRyU",
+   "title": "චූළහත්‍ථිපදෝපම සූත්‍රය ඇසුරෙන් (පොසොන් පෝදා ධර්ම දේශනාව)",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 3370,
+   "embeddable": true
+  },
+  {
+   "id": "3eRZyPL6DxA",
+   "title": "අපිත් අප්‍රමාදව කුසල් රැස්කරමු",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 1980,
+   "embeddable": true
+  },
+  {
+   "id": "_-zDNh--rTA",
+   "title": "ආසිවිසොපම සූත්‍රය · Asivisopama Suthraya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 3237,
+   "embeddable": true
+  },
+  {
+   "id": "4Yq1SWnFJVY",
+   "title": "මේ ධර්ම දේශනාව අවසන්වන තෙක් අහන්න · මහාපරිනිර්වාණ සූත්‍රය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 2801,
+   "embeddable": true
+  },
+  {
+   "id": "sD-pf5F1XVg",
+   "title": "අපි භාවනාව දියුණු කරගන්න උනන්දු වෙමු",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "M"
+   ],
+   "seconds": 3400,
+   "embeddable": true
+  },
+  {
+   "id": "7pu6xzUUCbU",
+   "title": "යෝගාවචරයන් වහන්සේලාට වටිනා ධර්ම දේශනාවක්",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "M"
+   ],
+   "seconds": 3718,
+   "embeddable": true
+  },
+  {
+   "id": "SXANaDVNVyo",
+   "title": "පංච නීවරණ · Pancha Neevarana",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "M"
+   ],
+   "seconds": 3589,
+   "embeddable": true
+  },
+  {
+   "id": "XsgbqmUzd5k",
+   "title": "බොජ්ඣංග භාවනාව සහ ඉන්ද්‍රිය භාවනාව කෙසේ වැඩේද?",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "M"
+   ],
+   "seconds": 3511,
+   "embeddable": true
+  },
+  {
+   "id": "qQpAjuG5yLo",
+   "title": "නිකිණි පොහෝ දා ධර්ම දේශනාව · Nikini Poya Dina Dharma Deshanawa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 3935,
+   "embeddable": true
+  },
+  {
+   "id": "U5HNzpRH2Z4",
+   "title": "බුදු ගුණ අනන්තයි · Budu Guna Ananthai",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "BG"
+   ],
+   "seconds": 3078,
+   "embeddable": true
+  },
+  {
+   "id": "omU4JbCtMf8",
+   "title": "මහාධම්මපාල ජාතකය · Mahadhammapala Jathakaya",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "LV"
+   ],
+   "seconds": 2521,
+   "embeddable": true
+  },
+  {
+   "id": "5n6bz-5wgYg",
+   "title": "අනුගාමික පුණ්‍ය නිධානයේ ආනුභාවය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 3471,
+   "embeddable": true
+  },
+  {
+   "id": "2hcKZ-4Hcwo",
+   "title": "මේ බණ අවසන්වන තෙක් අහන්න. · චක්‍රවර්ති සිංහනාද සූත්‍රය ඇසුරෙන්",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 3211,
+   "embeddable": true
+  },
+  {
+   "id": "ZP7bpwihX-s",
+   "title": "කළගුණ සැලකූ සැරියුත් තෙරණුවෝ",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "LV"
+   ],
+   "seconds": 3119,
+   "embeddable": true
+  },
+  {
+   "id": "KcbvGJqe2OQ",
+   "title": "කඨිනානිසංස දැනගනිමු · Katinanisansa",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DP"
+   ],
+   "seconds": 2384,
+   "embeddable": true
+  },
+  {
+   "id": "72xaR_zQPt4",
+   "title": "ප්‍රඥාවෙන් අගතැන්පත් සැරියුත් මහරහතන් වහන්සේගේ උතුම් ගුණ",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "LV"
+   ],
+   "seconds": 3351,
+   "embeddable": true
+  },
+  {
+   "id": "8tZT_UVWjvs",
+   "title": "සියලු සංස්කාරයෝ අනිත්‍ය යි.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 2873,
+   "embeddable": true
+  },
+  {
+   "id": "Y5qbiKD48Uw",
+   "title": "අප්පමාද සූත්‍රය ඇසුරෙන්",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "SU"
+   ],
+   "seconds": 2098,
+   "embeddable": true
+  },
+  {
+   "id": "uiVr-9d-hMU",
+   "title": "අනන්ත නය සමන්වාගත සමත්ත පට්ඨාන මහා ප්‍රකරණය",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PT",
+    "PW"
+   ],
+   "seconds": 3291,
+   "embeddable": true
+  },
+  {
+   "id": "VAT5ouceM_E",
+   "title": "සිල් රකින අයට වැදගත් බණක්",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "DL"
+   ],
+   "seconds": 3317,
+   "embeddable": true
+  },
+  {
+   "id": "wAZAQjVkFW4",
+   "title": "නොයෙක් අශ්චර්ය අද්භූත ධර්මයන්ගෙන් යුක්ත වූ සේක.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "BG"
+   ],
+   "seconds": 2157,
+   "embeddable": true
+  },
+  {
+   "id": "HU8DjiyBnbc",
+   "title": "ආර්ය අෂ්ටාංගික මාර්ගය අපේ සන්තාන තුළ දියුණු කරගනිමු",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PW"
+   ],
+   "seconds": 1913,
+   "embeddable": true
+  },
+  {
+   "id": "eMwNQpQqGnY",
+   "title": "ඇසළ පුන් පොහෝ දා ධර්ම දේශනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "budu-dahama",
+   "topics": [
+    "PY"
+   ],
+   "seconds": 2478,
+   "embeddable": true
+  },
+  {
+   "id": "EZVbdWdKP2s",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා මාලාව 01 · PATTANA DESANA 01",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3812,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 1
+  },
+  {
+   "id": "rH5AEfi_g-U",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා මාලාව 02 · PATTANA DESANA 02",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3359,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 2
+  },
+  {
+   "id": "MG8K8UIosM8",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා මාලාව 03 · PATTANA DESANA 03",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3320,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 3
+  },
+  {
+   "id": "nbOUqGLKZt4",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා මාලාව 04 · PATTANA DESANA 04",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 2756,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 4
+  },
+  {
+   "id": "Zq0jGELBnD8",
+   "title": "අති දුර්ලභවූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා මාලාව 05 · PATTANA DESANA 05",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3317,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 5
+  },
+  {
+   "id": "GsEyHKzXF78",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා මාලාව 06 · PATTANA DESANA 06",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3183,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 6
+  },
+  {
+   "id": "K351KyE0Ev4",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා මාලාව 07 · PATTANA DESANA 07",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3476,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 7
+  },
+  {
+   "id": "o9315wYMpLg",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා 08 · PATTANA DESANA 08",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3866,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 8
+  },
+  {
+   "id": "k2jSKE9AM2g",
+   "title": "අති දුර්ලභ වූ ගම්භීර වූ පට්ඨාන ධර්ම දේශනා 09 · PATTANA DESANA 09",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3677,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 9
+  },
+  {
+   "id": "E11E2n5FlCw",
+   "title": "Pattana Sajjayana · සමන්ත පට්ඨාන ධර්ම වන්දනාව",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3799,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 10
+  },
+  {
+   "id": "7gjr-bLVAzM",
+   "title": "සමන්ත පට්ඨාන ධර්ම වන්දනාව 11 · Pattana Sajjayana · POSON POYA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3881,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 11
+  },
+  {
+   "id": "WJ3OVQWKCUw",
+   "title": "සමන්ත පට්ඨාන ධර්ම වන්දනාව 12 · Pattana Sajjayana 12",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3447,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 12
+  },
+  {
+   "id": "y5BVvS1_74Q",
+   "title": "සමන්ත පට්ඨාන ධර්ම වන්දනාව 13 · Pattana Sajjayana 13 · WASSANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 2880,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 13
+  },
+  {
+   "id": "5Y3i_cp_fcg",
+   "title": "පට්ඨාන ධර්ම දේශනා 14",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4202,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 14
+  },
+  {
+   "id": "9dVWiH8yZD8",
+   "title": "PATTANA Desana 15 · PATTANA DARMA SAJJAYANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3586,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 15
+  },
+  {
+   "id": "WMW4CCZTV6k",
+   "title": "PATTANA DESANA 16",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3223,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 16
+  },
+  {
+   "id": "f8aec-Ztra4",
+   "title": "පට්ඨාන ධර්ම දේශනා 17 · PATTANA DESANA 17 · WASSABA DESANA BANA KATHA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3757,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 17
+  },
+  {
+   "id": "C8dQKse5Uzs",
+   "title": "පට්ඨාන ධර්ම දේශනා 18 · PATTANA DESANA 18 · WASSABA DESANA BANA KATHA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3659,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 18
+  },
+  {
+   "id": "4HwfdUIUa7Q",
+   "title": "PATTANA DESANA 19 · PATTANA VANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 2697,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 19
+  },
+  {
+   "id": "mTKFaqE5EK8",
+   "title": "PATTANA DESANA 20 · PATTANA DARMA VANDANAVA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3753,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 20
+  },
+  {
+   "id": "M6Prle4pfrc",
+   "title": "PATTANA DESANA 21 · PATTANA VANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3367,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 21
+  },
+  {
+   "id": "vsLsis22NiU",
+   "title": "PATTANA DESANA 22 · NIKINI POYA BANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3925,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 22
+  },
+  {
+   "id": "U187Is7OlCQ",
+   "title": "Pattana desana 23",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3362,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 23
+  },
+  {
+   "id": "jAXdW8g7RVE",
+   "title": "Pattana Desana 25",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3495,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 25
+  },
+  {
+   "id": "5CAiqgXeVRo",
+   "title": "PATTANA DARMA VANDANA 24 · PATTANA DESANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3787,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 24
+  },
+  {
+   "id": "pQIsqwPNAzs",
+   "title": "PATTANA DESANA 26",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3754,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 26
+  },
+  {
+   "id": "l9BnyLvELRY",
+   "title": "Pattana desana 26 · Wassana deshana",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3960,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 27
+  },
+  {
+   "id": "AL8XnNOoTDQ",
+   "title": "PATTANA DESANA 28 · PATTANA DARMA VANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3016,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 28
+  },
+  {
+   "id": "AZyqOaWR_Zc",
+   "title": "PATTANA DESANA 29 · PATTANA WANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3465,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 29
+  },
+  {
+   "id": "co1u9F4dFL8",
+   "title": "PATTANA DESANA 30",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 5966,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 30
+  },
+  {
+   "id": "GCtWcrQlRnc",
+   "title": "PATTANA DARMA VANDANA 31",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3770,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 31
+  },
+  {
+   "id": "mvPb5CvGg8c",
+   "title": "PATTANA DARMA VANDANAVA 32 · PATTANA DESANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3684,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 32
+  },
+  {
+   "id": "78mJJd-POkE",
+   "title": "PATTANA DHARMA VANDANA · PATTANA DESANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3552,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 33
+  },
+  {
+   "id": "R1DS1K8XtDs",
+   "title": "PATTANA DHARMA VANDANA · PATTANA DESANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3746,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 34
+  },
+  {
+   "id": "BxU23R6bY18",
+   "title": "PATTANA DHARMA VANDANA · PATTANA DESANA 35",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4195,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 35
+  },
+  {
+   "id": "kjjw_0BQLlk",
+   "title": "PATTANA DARMA VANDANA 36 · PATTANA DESANA 36",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 2494,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 36
+  },
+  {
+   "id": "_EjNMQmBN74",
+   "title": "දරුවන්ට ධර්මය දීමේ වටිනාකම · PATTANA DARMA VANDANA · PATTANA DESANA 37 · KIRIWATHTHUDUVE ARIYADASSAN",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3256,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 37
+  },
+  {
+   "id": "GPM4SuO5CmY",
+   "title": "PATTANA DESANA 39 · PATTANA DHARMA VANDANA · KALANA MITHURU HAMUVA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3778,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 39
+  },
+  {
+   "id": "3JtD7pgyXuU",
+   "title": "PATTANA DARMA VANDANA 40 · ගිහි දිවියේ දියුණුව පිණිස · PATTANAYA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 5173,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 40
+  },
+  {
+   "id": "xsyAPNtpjJY",
+   "title": "PATTANA DHARMA VANDANA · PATTANA DESANA 41 · PATTANAYA NEW BANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3516,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 41
+  },
+  {
+   "id": "IhjWy7ZNmZo",
+   "title": "PATTANA DHARMA VANDANA · PATTANA DESANA 43",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3649,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 42
+  },
+  {
+   "id": "YG-lNpxGJcQ",
+   "title": "PATTANA DESANA 43 · PATTANA DARMA VANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3652,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 43
+  },
+  {
+   "id": "i5waLuTu1H8",
+   "title": "PATTANA DESANA 44 · PATTANA DARMA VANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3655,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 44
+  },
+  {
+   "id": "4lxqFed8LnE",
+   "title": "PATTANA DARMAVANDANA · PATTANA DESANA 46 · NEW PATTANA DESANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3874,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 46
+  },
+  {
+   "id": "VLSISzf6Gqg",
+   "title": "PATTANA DESANA 47 · PATTANA DARMA VANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3776,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 47
+  },
+  {
+   "id": "u0IuQ6aMtPo",
+   "title": "PATTANA DARMA VANDANA 49 · MADIHE SUGATHASIRI THERO BIRTHDAY",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4109,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 49
+  },
+  {
+   "id": "3ld9Xq7kWaM",
+   "title": "PATTANA DARMA VANDANA 51 · පට්ටාන දේශනා",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3751,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 51
+  },
+  {
+   "id": "YCfEpA2Plqc",
+   "title": "PATTANA DARMA VANDANA 52 · PATTANA DESANA 52 · MEDITATION",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3640,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 52
+  },
+  {
+   "id": "mYXcv1Reeb8",
+   "title": "PATTANA DARMA VANDANA · PATTANA DESANA 53",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3343,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 53
+  },
+  {
+   "id": "XFVDmcTka14",
+   "title": "PATTANA DARMA WANDANA 54 · Pattana Desana",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3782,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 54
+  },
+  {
+   "id": "AZOtMP2sqKQ",
+   "title": "PATTANA DESANA 55 · Pattana Darma Vandana",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4342,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 55
+  },
+  {
+   "id": "rNL6Cd3Vu1U",
+   "title": "PATTANA DESANA 56 · PATTANA DHARMA WANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3997,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 56
+  },
+  {
+   "id": "Y_5yjD-aJEk",
+   "title": "PATTANA DESANA 57 · pattana darma vandana · pattana bana kata",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4439,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 57
+  },
+  {
+   "id": "0Wrv7rLK-Ns",
+   "title": "PATTANA DESANA 58 · Pattana Darma Vandana",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4039,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 58
+  },
+  {
+   "id": "g38VAlnMaTY",
+   "title": "59 PATTANA DESANA · PATTANA DARMA VANDANA · VIRAL BANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3982,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 59
+  },
+  {
+   "id": "jxL3D5rGrG4",
+   "title": "PATTANA DARMA WANDANA 60 · PATTANA DESANA 60",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3920,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 60
+  },
+  {
+   "id": "5y2ZdXM8zHo",
+   "title": "බිනර පොහොය · PATTANA DARMA WANDANA · pattana desana 61",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3903,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 61
+  },
+  {
+   "id": "SDssOg7su70",
+   "title": "Pattana Darmawandana 62 · Pattana desana 62",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4002,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 62
+  },
+  {
+   "id": "vXf-NRvYRho",
+   "title": "PATTANA DARMAWANDNA 63 · PATTANA DESANA 63",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3910,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 63
+  },
+  {
+   "id": "VzbYFvtVZyc",
+   "title": "PATTANA DESANA 64 · pattana Darma Vandana",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3848,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 64
+  },
+  {
+   "id": "ZNpa5gILvMo",
+   "title": "PATTANA DESANA 65 · PATTANA DARMA VANDANAVA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3710,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 65
+  },
+  {
+   "id": "OEfK-prW15E",
+   "title": "PATTANA DESANA 66 · PATTANA DARMA WANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3804,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 66
+  },
+  {
+   "id": "-vBZUtD95Y8",
+   "title": "PATTANA DARMA WANDANA 67 · PATTANA DESANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3755,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 67
+  },
+  {
+   "id": "lfV-1uSp5Xc",
+   "title": "PATTANA ​DHARMA WANDANA 68 · PATTANA DESANA 68 · pattana bana",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4154,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 68
+  },
+  {
+   "id": "A-8iIyzr8kk",
+   "title": "PATTANA PATTANA DHARMA WANDANA 69 · PATTANA DESANA 69",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3974,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 69
+  },
+  {
+   "id": "m47R9qRnVLI",
+   "title": "70 PATTANA DHARMAVANDANA · PATTANA DESANA 70",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 2999,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 70
+  },
+  {
+   "id": "a_igke3DsSo",
+   "title": "PATTANA DHARMA WANDANA 71 · PATTANA DESANA 71 · DR NISHANTHA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3807,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 71
+  },
+  {
+   "id": "Y3TlhYmHQKE",
+   "title": "PATTANA DARMA VANDANA 72 · PATTANA DESANA 72",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4007,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 72
+  },
+  {
+   "id": "iexSKfsj4ts",
+   "title": "1.භාවනාව හැදින්වීම",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 3006,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 1
+  },
+  {
+   "id": "nZZh0SiW19g",
+   "title": "2.අසුභ භාවනාව 1.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2636,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 2
+  },
+  {
+   "id": "Dwq7trTw9uU",
+   "title": "3.අසුභ භාවනාව 2.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2508,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 3
+  },
+  {
+   "id": "70SwSZ-nle8",
+   "title": "4.අසුභ භාවනාව 3.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2924,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 4
+  },
+  {
+   "id": "FjTYOUA-VyM",
+   "title": "5.අසුභ භාවනාව 4.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2487,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 5
+  },
+  {
+   "id": "pjFhMjtAqus",
+   "title": "6.අසුභ භාවනාව 5.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2159,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 6
+  },
+  {
+   "id": "OPWyWyoFUl0",
+   "title": "7.අසුභ භාවනාව 6.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2562,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 7
+  },
+  {
+   "id": "dkRTy2IBE1I",
+   "title": "8.බුද්ධානුස්සති භාවනාව.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2904,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 8
+  },
+  {
+   "id": "3lc951ETypw",
+   "title": "9.ධම්මානුස්සති භාවනාව .",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 3136,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 9
+  },
+  {
+   "id": "dVOMJDFekR8",
+   "title": "10.සංඝානුස්සති භාවනාව .",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2760,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 10
+  },
+  {
+   "id": "Uy1IlvZlOoo",
+   "title": "11.සීලානුස්සති භාවනාව .",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2367,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 11
+  },
+  {
+   "id": "bVxFFPGj7zQ",
+   "title": "12.චාගානුස්සති භාවනාව.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2885,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 12
+  },
+  {
+   "id": "1BS8_v2e70k",
+   "title": "13. උපසමානුස්සති භාවනාව.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2854,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 13
+  },
+  {
+   "id": "hWtyVMx0f40",
+   "title": "14. දේවතානුස්සති භාවනාව .",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2689,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 14
+  },
+  {
+   "id": "bpYY3lqehLk",
+   "title": "15. කායගතාසති භාවනාව .",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2820,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 15
+  },
+  {
+   "id": "mjqTeWMAoLI",
+   "title": "16. මරණානුස්සති භාවනාව.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2585,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 16
+  },
+  {
+   "id": "Sas9aqofGJw",
+   "title": "17. ආනාපානසති භාවනාව · 1.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2801,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 17
+  },
+  {
+   "id": "XwdCMHubgTA",
+   "title": "18. ආනාපානසති භාවනාව · 2.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 3213,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 18
+  },
+  {
+   "id": "o-fcdIdOyUg",
+   "title": "19.මෛත්‍රී භාවනාව.",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2791,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 19
+  },
+  {
+   "id": "zSeK8qKucrI",
+   "title": "20.කරුණා භාවනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2740,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 20
+  },
+  {
+   "id": "sD0Ty-YV1eM",
+   "title": "21.මුදිතා භාවනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2194,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 21
+  },
+  {
+   "id": "1umZY1eKuNI",
+   "title": "22. උපේක්ෂා භාවනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2309,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 22
+  },
+  {
+   "id": "ky8xWaTCwaM",
+   "title": "23.තේජෝ කසිණ භාවනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [],
+   "seconds": 2238,
+   "embeddable": true,
+   "series": "samatha-bhavana",
+   "part": 23
+  },
+  {
+   "id": "4pXAHEx__dk",
+   "title": "PATTANA DESANA 38 · pattana dharma vandanava",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3826,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 38
+  },
+  {
+   "id": "1YQC64ZUtyU",
+   "title": "PATTANA DESANA 45 · PATTANA DHARMA VANDANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3586,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 45
+  },
+  {
+   "id": "4ZVCH5y_Hgg",
+   "title": "PATTANA DARMA VANDANA 48",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 3533,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 48
+  },
+  {
+   "id": "Eb0301iAvgg",
+   "title": "PATTANA DARMA VANDANA 50 · PATTANA DESANA",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [],
+   "seconds": 4000,
+   "embeddable": true,
+   "series": "patthana-deshana",
+   "part": 50
+  }
+ ]
+}
