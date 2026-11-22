@@ -169,16 +169,17 @@ tabs, in this order:
    Pattana stays here). Its address stays `/library` so saved links and
    readers' Back keep working; only the label and the parts change.
 3. **Bana** — this design.
-4. **Tripitaka** — the Rerukane **Books** shelf at the top, then the
-   Tripitaka as today (owner: books go here; tab keeps the name
-   "Tripitaka" — designer's call, owner may rename it "Books"). Book pages
+4. **Library** (tab label) — the page is titled **"Tripitaka & Books"**: the
+   Rerukane **Books** shelf at the top, then the Tripitaka as today (owner:
+   books go here, "Tripitaka and other books"; the short label "Library" is
+   the designer's call so it fits the bar — owner may overrule). Book pages
    move under this tab (`/tipitaka/book/...`); the old `/library/book/...`
    addresses redirect.
 5. **Settings** — gains a **Saved** row (first in the list) opening the Saved
    page inside Settings (`/settings/saved`); `/saved` redirects there. The
    Saved tab goes away.
 
-Labels: "Home", "Pirith & Gatha", "Bana", "Tripitaka", "Settings". Every
+Labels: "Home", "Pirith & Gatha", "Bana", "Library", "Settings". Every
 place that sent people to the Library or Saved tab (Back from a book, the
 flow editor, Saved's empty state, "See all" on Home, the readers' Back)
 goes to the page's new home.
