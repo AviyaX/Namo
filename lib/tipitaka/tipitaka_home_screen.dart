@@ -106,8 +106,6 @@ class _TipitakaHomeScreenState extends ConsumerState<TipitakaHomeScreen> {
       children: [
         const PageHeader(title: 'Tripitaka & Books'),
         const SizedBox(height: NamoSpace.lg),
-        // The books come first; a search by name is for the Tripitaka.
-        const BooksPart(),
         SearchField(
           key: const ValueKey('tipitaka-search'),
           controller: _query,
@@ -117,6 +115,9 @@ class _TipitakaHomeScreenState extends ConsumerState<TipitakaHomeScreen> {
         ),
         const SizedBox(height: NamoSpace.lg),
         body,
+        // The Tripitaka first, then the other books.
+        const SizedBox(height: NamoSpace.xl),
+        const BooksPart(),
       ],
     );
   }

@@ -442,10 +442,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     unawaited(_player?.seek(start));
   }
 
+  /// The chanting goes on in the background (the phone shows its own
+  /// controls); only the scrolling stops and the screen is let go.
   void _toBackground() {
     _autoScroll.pause();
-    _pauseAudio();
-    // The player reports its pause later; the screen is let go now.
     _setAwake(false);
     _save();
   }

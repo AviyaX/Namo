@@ -94,7 +94,7 @@ class _BanaScreenState extends ConsumerState<BanaScreen> {
       if (cat != null) ...[
         const SizedBox(height: NamoSpace.xs),
         Text(
-          '${cat.bana.length} bana · ${cat.speakers.length} monks',
+          '${cat.bana.length} bana · ${cat.speakers.length} venerable speakers',
           style: NamoType.caption(p.textSecondary),
         ),
       ],
@@ -108,12 +108,12 @@ class _BanaScreenState extends ConsumerState<BanaScreen> {
       ),
       if (cat != null) ...[
         const SizedBox(height: NamoSpace.lg),
-        const Overline('MONK'),
+        const Overline('VENERABLE SPEAKER'),
         const SizedBox(height: NamoSpace.sm),
         chips([
           BanaChip(
             key: const ValueKey('bana-speaker-all'),
-            label: 'All monks',
+            label: 'All speakers',
             selected: _speaker == null,
             onTap: () => _pickSpeaker(cat, null),
           ),

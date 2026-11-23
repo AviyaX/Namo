@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 import 'audio_catalogue.dart';
 import 'recording_location.dart';
@@ -135,15 +137,20 @@ class JustAudioChantPlayer implements ChantPlayer {
     _loading = true;
     _publish();
     try {
-      switch (_locate(r)) {
-        case AssetLocation(:final asset):
-          await _player.setAsset(asset);
-        case FileLocation(:final path):
-          await _player.setFilePath(path);
-        case UrlLocation(:final url):
-          await _player.setUrl(url.toString());
-        case null:
-          _failed = true;
+      // The tag names the chanting on the lock screen and notification.
+      final tag = kIsWeb
+          ? null
+          : MediaItem(id: r.readingId, title: r.label, album: 'Namo');
+      final source = switch (_locate(r)) {
+        AssetLocation(:final asset) => AudioSource.asset(asset, tag: tag),
+        FileLocation(:final path) => AudioSource.file(path, tag: tag),
+        UrlLocation(:final url) => AudioSource.uri(url, tag: tag),
+        null => null,
+      };
+      if (source == null) {
+        _failed = true;
+      } else {
+        await _player.setAudioSource(source);
       }
     } catch (_) {
       // An overtaken load is interrupted by the newer one; that is not a

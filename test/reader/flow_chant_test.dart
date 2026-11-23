@@ -475,7 +475,7 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('going to the background while waiting disarms the wait', (
+  testWidgets('a wait armed before going to the background goes on there', (
     t,
   ) async {
     final first = await _recording(t, mangalaReadingId);
@@ -493,22 +493,15 @@ void main() {
     t.binding
       ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
       ..handleAppLifecycleStateChanged(AppLifecycleState.hidden);
-    t.binding
-      ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
-      ..handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await t.pump();
 
+    // The next recording arrives while the app is away: the flow goes on.
     store.set(_karaniyaId, _status(Availability.downloaded));
     await t.pump();
     await t.pump();
     await t.pump();
     expect(player.ids, [first.readingId, second.readingId]);
-    expect(player.state.status, isNot(ChantStatus.playing));
-    expect(find.byTooltip('Play chanting'), findsOneWidget);
-
-    await _tap(t, _play);
     expect(player.state.status, ChantStatus.playing);
-    expect(player.ids, [first.readingId, second.readingId]);
   });
 
   testWidgets('a failed load of the second recording says so and Play '

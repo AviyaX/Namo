@@ -64,15 +64,17 @@ void main() {
     h.dispose();
   });
 
-  testWidgets('the shelf comes first, above the Tripitaka', (t) async {
+  testWidgets('the shelf comes after the Tripitaka', (t) async {
     await openReal(t, Routes.tipitaka, size: _tall);
     expect(
       t.getTopLeft(_shelf).dy,
-      lessThan(t.getTopLeft(find.byKey(const ValueKey('tipitaka-search'))).dy),
+      greaterThan(
+        t.getTopLeft(find.byKey(const ValueKey('tipitaka-search'))).dy,
+      ),
     );
     expect(
       t.getTopLeft(_shelf).dy,
-      lessThan(
+      greaterThan(
         t.getTopLeft(find.byKey(const ValueKey('tipitaka-pitaka-vp'))).dy,
       ),
     );

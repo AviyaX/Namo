@@ -43,9 +43,9 @@ void main() {
   testWidgets('/bana shows series first then bana', (t) async {
     await openReal(t, '/bana', overrides: banaOverrides());
     expect(find.text('බණ · Bana'), findsOneWidget);
-    expect(find.text('5 bana · 2 monks'), findsOneWidget);
+    expect(find.text('5 bana · 2 venerable speakers'), findsOneWidget);
     expect(find.text('Search bana'), findsOneWidget);
-    expect(find.text('All monks'), findsOneWidget);
+    expect(find.text('All speakers'), findsOneWidget);
     expect(find.text('SERIES · 3 PARTS'), findsOneWidget);
     expect(find.text('Start: part 1'), findsOneWidget);
     final series = t.getTopLeft(_k('bana-series-s1')).dy;
