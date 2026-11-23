@@ -9,11 +9,11 @@ BanaCatalogue _real() =>
 void main() {
   test('parses the bundled file', () {
     final c = _real();
-    expect(c.version, 1);
-    expect(c.bana, hasLength(180));
-    expect([for (final s in c.series) s.parts.length], [23, 72]);
+    expect(c.version, 2);
+    expect(c.bana, hasLength(263));
+    expect([for (final s in c.series) s.parts.length], [23, 72, 83]);
     expect(c.topics, hasLength(11));
-    expect(c.speakers, hasLength(2));
+    expect(c.speakers, hasLength(3));
   });
 
   test('parse returns null on malformed or missing version', () {

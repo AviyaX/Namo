@@ -13,11 +13,11 @@ import json
 import re
 import sys
 
-VERSION = 1
+VERSION = 2
 REVIEW = (
     "thero", "uyane", "ariyadassana", "wassana", "wassaba", "kiriwaththuduv",
     "kiriwaththuduw", "kirivaththuduw", "kiriwathuduv", "ariyadassan",
-    "ariyadasana", "ariya asana", "aiyadassana",
+    "ariyadasana", "ariya asana", "aiyadassana", "kelaniye", "sasanawansa", "pragna",
 )
 EDGE = " \t-|.​‍‌"
 

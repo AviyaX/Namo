@@ -64,6 +64,10 @@
   {
    "id": "kiriwaththuduwe-ariyadassana",
    "name": "Ven. Kiriwaththuduwe Ariyadassana Thero"
+  },
+  {
+   "id": "kelaniye-sasanawansa",
+   "name": "Ven. Kelaniye Sasanawansa Thero"
   }
  ],
  "channels": [
@@ -81,6 +85,11 @@
    "id": "wassana-dharma-deshana",
    "name": "Wassana Dharma Deshana වස්සාන ධර්ම දේශනා",
    "url": "https://www.youtube.com/playlist?list=PLoV7IpZqAgVSLpauPjwUnoYi2VVuRxT33"
+  },
+  {
+   "id": "pragna-tv",
+   "name": "Pragna TV",
+   "url": "https://www.youtube.com/playlist?list=PLELiWFtuVMLaUt47e-HUuXs7dGvQFnyi1"
   }
  ],
  "series": [
@@ -101,6 +110,13 @@
    "topics": [
     "PT"
    ]
+  },
+  {
+   "id": "pragna-tv-bana",
+   "draft": "Pragna TV bana",
+   "speaker": "kelaniye-sasanawansa",
+   "channel": "pragna-tv",
+   "topics": []
   }
  ],
  "trim": [
@@ -111,6 +127,8 @@
   "wassana\\s+dharma\\s+deshana",
   "budu\\s+dahama",
   "yathiwara\\s+adawiya",
-  "^\\s*bana(\\s+katha)?\\s*$"
+  "^\\s*bana(\\s+katha)?\\s*$",
+  "pragna\\s+tv",
+  "(ven\\.?\\s*)?kelaniye\\s+sasanawansa(\\s+thero)?"
  ]
 }
