@@ -55,7 +55,9 @@ EXTENDED_SECTIONS = {"s05": "5–6", "s06": "6–7", "s07": "8"}
 PARITHA_PAGES = {"s08-v6": 3, "s08-v7": 3, "s08-v8": 3, "s23-v1": 38}
 # The rows of §5.3: printed form -> number of places.
 NAMO_COUNTS = {'ගච්චාමි': 9, 'විඡ්ඡාචරණ': 1, 'සමාදියාමී': 4, 'සුමාමේරය': 1, 'ධානේසු': 1,
-               'අධිවාසේ තුනෝ': 1, 'බෝදි': 1}
+               'අධිවාසේ තුනෝ': 1, 'බෝදි': 1, 'ඝනසාරප්ප දිත්තේන': 1}
+# Owner's corrections made after the baseline was frozen: (verse id, printed, corrected).
+LATER_CORRECTIONS = {"s12-v1": ("ඝනසාරප්ප දිත්තේන", "ගන්ධ තේල පදිත්තේන")}
 BOOKLET_COUNTS = {'රුස්කර': 3, 'පුණ්ය': 3, 'භූතයා්': 1, 'ම විසින්': 3, 'සාසණ': 1,
                   'පුංඤ්ඤකෙත්තං': 1, 'අනුත්ථරං': 1, 'දේවානාගා': 3}
 COUNTS = {**NAMO_COUNTS, **BOOKLET_COUNTS}
@@ -513,10 +515,21 @@ class BuildContentTest(unittest.TestCase):
                 if field in ("english_source", "english_kind") and verse_id in NOTTINGHAM_ENGLISH:
                     self.assertIsNone(value, old_id)  # the booklet fills an English that was missing
                     continue
-                self.assertEqual(self.by_id[verse_id][field], value, f"{old_id} -> {verse_id} {field}")
+                actual = self.by_id[verse_id][field]
+                if verse_id in LATER_CORRECTIONS and field in ("pali_si", "corrections"):
+                    printed, corrected = LATER_CORRECTIONS[verse_id]
+                    if field == "pali_si":
+                        self.assertEqual(actual, value.replace(printed, corrected), verse_id)
+                    else:
+                        self.assertEqual([c["from"] for c in actual], [c["from"] for c in value] + [printed])
+                    continue
+                self.assertEqual(actual, value, f"{old_id} -> {verse_id} {field}")
         base = baseline_of("pali_si")
-        self.assertEqual(collections.Counter(base.values()),
-                         collections.Counter(self.by_id[new_id(k)]["pali_si"] for k in base))
+        later = {new_id(k): v for k, v in base.items()}
+        for verse_id, (printed, corrected) in LATER_CORRECTIONS.items():
+            later[verse_id] = later[verse_id].replace(printed, corrected)
+        self.assertEqual(collections.Counter(later.values()),
+                         collections.Counter(self.by_id[k]["pali_si"] for k in later))
 
     def test_reflow_function(self):
         reflow = build_content._reflow_prose

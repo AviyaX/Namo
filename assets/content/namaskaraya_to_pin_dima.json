@@ -1005,8 +1005,8 @@
         {
          "id": "s12-v1",
          "source": null,
-         "pali_si": "ඝනසාරප්ප දිත්තේන – දීපේන තමධංසිනා\nතිලෝකදීපං සම්බුද්ධං – පූජයාමි තමෝනුදං",
-         "pali_roman": "Ghanasārappa dittēna - Dīpēna tamadhansinā\nTilokadīpan sambuddhan - Pūjayāmi tamonudan",
+         "pali_si": "ගන්ධ තේල පදිත්තේන – දීපේන තමධංසිනා\nතිලෝකදීපං සම්බුද්ධං – පූජයාමි තමෝනුදං",
+         "pali_roman": null,
          "sinhala": "ශ්‍රද්ධාවෙන් දල්වන ලද අඳුර දුරලන්නාවූ මේ පහන් ආලෝකයෙන් තුන් ලොවට මහා පහන් කණුවක් වැනි වූ මෝහන්ධකාරය දුරු කරන ලද බුදුරජාණන් වහන්සේ පුදමි.",
          "sinhala_source": null,
          "english": "With lights brightly shining\nAbolishing this gloom\nI adore the Enlightened One\nThe Light of the three worlds*\nwho dispels the darkness ( of ignorance )\n\n(*three worlds – kama loka, rupa loka and arupa loka)",
@@ -1019,7 +1019,15 @@
          "english_kind": "translation",
          "check": "checked against source",
          "notes": [],
-         "corrections": []
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "ඝනසාරප්ප දිත්තේන",
+           "to": "ගන්ධ තේල පදිත්තේන",
+           "count": 1,
+           "reason": "the owner's word, 2026-11-23 (\"ගන්ධ තේල පදිත්තේන … exact same, only the first changes\"): Ven. Na Uyane Ariyadhamma Thero chants the lamp offering this way, and his recording plays it"
+          }
+         ]
         }
        ]
       },

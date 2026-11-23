@@ -27,10 +27,12 @@ void main() {
   test('every verse has Pali; the verses the booklet prints have Roman Pali', () {
     expect(verses.length, 114);
     // The app's own verses the Nottingham booklet does not print, and the
-    // one whose booklet wording differs (Roman stays empty for it).
+    // ones whose booklet wording differs (Roman stays empty for them; s12-v1
+    // follows Ven. Na Uyane Ariyadhamma Thero's chanting, the owner's call).
     const noRoman = {
       's10-v3',
       's11-v1',
+      's12-v1',
       's13-v1',
       's16-v1',
       's18-v1',

@@ -187,7 +187,8 @@ PALI_VARIANTS: list[tuple[str, str, str, str]] = [
     ("s10-v1", "minor", "නිසින්නෝච/නිසින්නෝව (a single letter)", "5d443d90"),
     ("s10-v2", "minor", "මහාබෝධී/මහා බෝධි (a word split and vowel length), තෙ/තේ (vowel length)",
      "eb5cd60b"),
-    ("s12-v1", "minor", "ඝනසාරප්ප/ඝණසාරප්ප (a single letter)", "ca99e96f"),
+    ("s12-v1", "wording", "the app begins ගන්ධ තේල පදිත්තේන (the owner's correction, 2026-11-23); "
+                          "the booklet begins ඝණසාරප්ප දිත්තේන", "ca99e96f"),
     ("s14-v2", "minor", "ලභාමි/ලබාමි (a single letter), ඉදම්මේ/ඉදං මේ (a word split)", "7027547c"),
     ("s20-v3", "wording", "the app ends පුඤ්ඤක්ඛෙත්තං අනුත්තරං; the booklet ends සුපටිපන්න අනුත්තර",
      "ef8a7c3a"),
@@ -212,6 +213,9 @@ CORRECTIONS = [
     ("namo", "අධිවාසේ තුනෝ", "අධිවාසේතු නෝ", 1,
      "spacing only; the page itself prints it this way 3 times, the booklet 11"),
     ("namo", "බෝදි", "බෝධි", 1, "9 times on the page itself, 15 elsewhere on namo.lk, 13 in the booklet"),
+    ("namo", "ඝනසාරප්ප දිත්තේන", "ගන්ධ තේල පදිත්තේන", 1,
+     "the owner's word, 2026-11-23 (\"ගන්ධ තේල පදිත්තේන … exact same, only the first changes\"): "
+     "Ven. Na Uyane Ariyadhamma Thero chants the lamp offering this way, and his recording plays it"),
     ("booklet", "රුස්කර", "රැස්කර", 3, "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"),
     ("booklet", "පුණ්ය", "පුණ්‍ය", 3, "the booklet's own other use; namo.lk"),
     ("booklet", "භූතයා්", "භූතයෝ", 1, "3 times elsewhere in the booklet, 2 on namo.lk"),
