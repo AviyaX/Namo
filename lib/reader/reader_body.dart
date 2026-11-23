@@ -613,11 +613,12 @@ class _ChantedVerseState extends State<_ChantedVerse> {
         ],
       );
     }
-    if (widget.onTap != null) {
+    if (widget.block != null) {
+      // A short verse is still a full-size target, and keeps that height
+      // whether or not chanting has started, so the page does not move.
       child = GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.onTap,
-        // A short verse is still a full-size target.
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
           child: child,

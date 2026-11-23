@@ -189,6 +189,17 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('starting the chant does not move the page', (t) async {
+    final (reading, _, _) = await _open(t);
+    final last = _verse(reading.sections[1].verses.first.id).first;
+    final before = t.getTopLeft(last).dy;
+    final short = _verse(reading.sections.first.verses.first.id).first;
+    expect(t.getSize(short).height, greaterThanOrEqualTo(48));
+    await _tap(t, _play);
+    expect(t.getTopLeft(last).dy, before);
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('a verse the recordings lack is never marked', (t) async {
     final (reading, catalogue, player) = await _open(
       t,
