@@ -56,7 +56,9 @@ ChantPlace? placeAt(
       ? 1.0
       : ((position - t.start).inMicroseconds / span).clamp(0.0, 1.0);
 
-  final lengths = block < paliLengths.length ? paliLengths[block] : const <int>[];
+  final lengths = block < paliLengths.length
+      ? paliLengths[block]
+      : const <int>[];
   if (lengths.isEmpty) return ChantPlace(block, 0);
   final total = lengths.fold<int>(0, (a, b) => a + b);
   final target = total * progress;
@@ -68,18 +70,27 @@ ChantPlace? placeAt(
   return ChantPlace(block, lengths.length - 1);
 }
 
-/// The Pali length of every phrase, `[block][phrase]`, over every section whose
-/// verses are all phrased, in order: the reader's block numbering.
+/// The Pali length of every phrase, `[block][phrase]`, over every section of
+/// blocks ([sectionHasBlocks]), in order: the reader's block numbering. A
+/// verse that is not phrased is one phrase: its whole Pali.
 List<List<int>> paliLengthsOf(Reading reading) => [
   for (final s in reading.sections)
     if (sectionIsPhrased(s))
-      for (final v in s.verses) [for (final p in v.phrases) p.pali.length],
+      for (final v in s.verses) [for (final p in v.phrases) p.pali.length]
+    else if (sectionHasBlocks(s))
+      for (final v in s.verses) [(v.paliSi ?? '').length],
 ];
 
 /// True for a section the reader shows as blocks of phrases: it has verses
 /// and every one is phrased (as `buildReaderItems` numbers them).
 bool sectionIsPhrased(Section s) =>
     s.verses.isNotEmpty && s.verses.every((v) => v.isPhrased);
+
+/// True for a section whose verses are numbered as blocks for chanting: a
+/// phrased section (a pirith), or one with its own recording, where each
+/// verse is a block (a Buddha Wandanawa section).
+bool sectionHasBlocks(Section s) =>
+    sectionIsPhrased(s) || (s.audio != null && s.verses.isNotEmpty);
 
 /// When [block] starts; null for an untimed (or missing) block.
 Duration? blockStart(List<BlockTime?> times, int block) =>

@@ -154,7 +154,12 @@ void main() {
   testWidgets(
     'the recordings tip does not appear under a reader opened from Home',
     (t) async {
-      await openReal(t, Routes.home, library: await realLibrary(t), tips: true);
+      await openReal(
+        t,
+        Routes.home,
+        library: await silentWandanaLibrary(t),
+        tips: true,
+      );
       _expectBubble(Tip.recordings);
 
       _container(t)
@@ -179,12 +184,12 @@ void main() {
   );
 
   testWidgets(
-    'a gatha reader shows Languages and layout pointing at the settings button',
+    'a gatha reader without chanting shows Languages and layout pointing at the settings button',
     (t) async {
       await openReal(
         t,
         Routes.reader(realReadingId),
-        library: await realLibrary(t),
+        library: await silentWandanaLibrary(t),
         tips: true,
       );
       _expectBubble(Tip.readerSettings);

@@ -84,7 +84,7 @@ List<_Line> _lines(
               subtitle: r.titleRoman,
               recorded: sectionIsRecorded(
                 r.sections.single,
-                catalogue.recordingFor(r.id),
+                recordingOfSection(catalogue, r.id, r.sections.single),
               ),
             ),
           );
@@ -98,7 +98,10 @@ List<_Line> _lines(
               ref: FlowRef(readingId: r.id, sectionId: s.id),
               number: s.number,
               title: s.heading,
-              recorded: sectionIsRecorded(s, catalogue.recordingFor(r.id)),
+              recorded: sectionIsRecorded(
+                s,
+                recordingOfSection(catalogue, r.id, s),
+              ),
             ),
       ];
       if (left.isEmpty) continue;
@@ -189,7 +192,9 @@ class _AddSectionsSheet extends ConsumerWidget {
       subtitle: line.subtitle,
       subtitleFamily: NamoFonts.romanPali,
       trailing: line.recorded
-          ? RecordingMark(key: ValueKey('flow-recorded-${flowSectionId(line.ref)}'))
+          ? RecordingMark(
+              key: ValueKey('flow-recorded-${flowSectionId(line.ref)}'),
+            )
           : null,
       // The row speaks one label of its own; the mark's is said here.
       detailLabel: line.recorded ? 'has a recording' : null,

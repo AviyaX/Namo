@@ -51,18 +51,23 @@ def recordings(root: pathlib.Path) -> list[dict]:
             raise SyncError(f"cannot read {file.name}: {e}")
         for category in data.get("categories", []):
             for reading in category.get("readings", []):
-                audio = reading.get("audio")
-                if audio is None:
-                    continue
-                where = f"{file.name}: reading {reading.get('id')!r}"
-                for key in ("path", "bytes", "sha256"):
-                    if key not in audio:
-                        raise SyncError(f"{where}: audio has no {key}")
-                sha = audio["sha256"]
-                if not (isinstance(sha, str) and len(sha) == 64 and set(sha) <= HEX):
-                    raise SyncError(f"{where}: sha256 is not 64 hex characters")
-                found.append({"path": audio["path"], "bytes": audio["bytes"],
-                              "sha256": sha, "reading": reading["id"]})
+                # The reading's own recording, then each section's (a Buddha Wandanawa section).
+                owners = [(reading.get("audio"), reading["id"], f"reading {reading.get('id')!r}")]
+                owners += [(s.get("audio"), f"{reading['id']}#{s.get('id')}",
+                            f"reading {reading.get('id')!r} section {s.get('id')!r}")
+                           for s in reading.get("sections", [])]
+                for audio, owner, what in owners:
+                    if audio is None:
+                        continue
+                    where = f"{file.name}: {what}"
+                    for key in ("path", "bytes", "sha256"):
+                        if key not in audio:
+                            raise SyncError(f"{where}: audio has no {key}")
+                    sha = audio["sha256"]
+                    if not (isinstance(sha, str) and len(sha) == 64 and set(sha) <= HEX):
+                        raise SyncError(f"{where}: sha256 is not 64 hex characters")
+                    found.append({"path": audio["path"], "bytes": audio["bytes"],
+                                  "sha256": sha, "reading": owner})
     return found
 
 

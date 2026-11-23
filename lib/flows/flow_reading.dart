@@ -52,6 +52,7 @@ Reading flowReading(Flow flow, Library library) {
         source: original.source,
         check: original.check,
         corrections: original.corrections,
+        audio: original.audio,
         verses: List.unmodifiable([
           for (final v in original.verses)
             v.withId('${ref.readingId}$flowIdSeparator${v.id}'),

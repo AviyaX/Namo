@@ -318,8 +318,8 @@ void main() {
       await openSources(t);
       expect(find.text('Corrections'), findsOneWidget);
       expect(find.text('Still to be checked'), findsOneWidget);
-      // The bundled file: 15 distinct verse corrections and 1 heading.
-      expect(keyed('correction-'), 16);
+      // The bundled file: 16 distinct verse corrections and 1 heading.
+      expect(keyed('correction-'), 17);
       // Buddha Wandanawa's 4 verses and 17 sections, and one row each for the two
       // Samantha Pattana readings.
       expect(keyed('check-'), 23);
@@ -445,9 +445,22 @@ void main() {
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 7 text sources + the Tripitaka + the Books + 4 pictures + 16 corrections
-    // + 23 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(52));
+    // 7 text sources + the Wandanawa chanting + the Tripitaka + the Books + 4
+    // pictures + 17 corrections + 23 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(54));
+  });
+
+  testWidgets('Sources credits the Buddha Wandanawa chanting and says which '
+      'is computer-made', (t) async {
+    await openSources(t);
+    expect(text('Buddha Wandanawa chanting'), findsOneWidget);
+    final detail = find.textContaining('the chanting is computer-made');
+    expect(detail, findsOneWidget);
+    expect(
+      find.textContaining("an AI voice tool changed it into the Thero's voice"),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Sections 31 and 32'), findsOneWidget);
   });
 
   for (final dark in [false, true]) {
@@ -608,7 +621,10 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.descendant(of: card, matching: text('Speakers: Ven. Alpha, Ven. Beta.')),
+        find.descendant(
+          of: card,
+          matching: text('Speakers: Ven. Alpha, Ven. Beta.'),
+        ),
         findsWidgets,
       );
       expect(

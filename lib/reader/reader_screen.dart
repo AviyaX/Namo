@@ -748,7 +748,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     final top = body.offsetOfPhrase(place.block, place.phrase);
     if (top != null) return (offset: top - third, exact: true);
     final index = body.widget.items.indexWhere(
-      (i) => i is PhraseBlockItem && i.index == place.block,
+      (i) => blockOfItem(i) == place.block,
     );
     final extents = body.extents();
     if (index < 0 || index >= extents.length) {

@@ -64,6 +64,16 @@ const _credits = [
         'Attribution-NoDerivatives 4.0 International.',
     'https://pitaka.lk/pirith/',
   ),
+  _Credit(
+    'Buddha Wandanawa chanting',
+    'Chanted by Ven. Nauyane Ariyadhamma Thero: his morning Buddha Vandana '
+        '(YouTube channel "Theravada"), his Saranagamana as at pitaka.lk, '
+        'and his Pansil (YouTube channel "Ehipassiko"). Where his recordings '
+        "do not have a verse, the chanting is computer-made: the app's owner "
+        "chanted it and an AI voice tool changed it into the Thero's voice. "
+        'Each section says which it is. Sections 31 and 32, verse 3 of '
+        'section 8 and most of section 33 are not chanted.',
+  ),
 ];
 
 const _pictureCredits = [

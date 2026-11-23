@@ -244,10 +244,7 @@ class RecordingInfo {
       for (final t in (json['block_times'] as List?) ?? const [])
         t == null
             ? null
-            : BlockTime(
-                _seconds((t as List)[0] as num),
-                _seconds(t[1] as num),
-              ),
+            : BlockTime(_seconds((t as List)[0] as num), _seconds(t[1] as num)),
     ],
     lineTimes: [
       for (final block in (json['line_times'] as List?) ?? const [])
@@ -293,6 +290,7 @@ class Section {
     this.notes = const [],
     this.corrections = const [],
     this.verses = const [],
+    this.audio,
   });
 
   factory Section.fromJson(Map<String, dynamic> json) => Section(
@@ -314,6 +312,9 @@ class Section {
       for (final v in (json['verses'] as List?) ?? const [])
         Verse.fromJson(v as Map<String, dynamic>),
     ],
+    audio: json['audio'] == null
+        ? null
+        : RecordingInfo.fromJson(json['audio'] as Map<String, dynamic>),
   );
 
   final String id;
@@ -326,6 +327,10 @@ class Section {
   final List<String> notes;
   final List<Correction> corrections;
   final List<Verse> verses;
+
+  /// This section's own recording, one block per verse (a Buddha Wandanawa
+  /// section); null when it has none.
+  final RecordingInfo? audio;
 
   LanguageCover coverOf(ReadingLanguage l) {
     final have = verses.where((v) => v.isPhrased || v.text(l) != null).length;

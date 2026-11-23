@@ -217,7 +217,7 @@ class _FlowEditorScreenState extends ConsumerState<FlowEditorScreen> {
   ) {
     final reading = library.reading(section.readingId)!;
     final s = reading.sections.firstWhere((s) => s.id == section.sectionId);
-    return sectionIsRecorded(s, catalogue.recordingFor(reading.id));
+    return sectionIsRecorded(s, recordingOfSection(catalogue, reading.id, s));
   }
 
   Widget _header(

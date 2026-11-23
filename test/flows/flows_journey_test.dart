@@ -26,10 +26,11 @@ Finder _inSheet(Finder f) =>
 
 /// The headings the reader is showing, in order: id, number and heading.
 List<(String, int, String)> _readerHeadings(WidgetTester t) => [
-  for (final h in t
-      .widget<ReaderBody>(find.byType(ReaderBody))
-      .items
-      .whereType<HeadingItem>())
+  for (final h
+      in t
+          .widget<ReaderBody>(find.byType(ReaderBody))
+          .items
+          .whereType<HeadingItem>())
     (h.section.id, h.section.number, h.section.heading),
 ];
 
@@ -87,6 +88,16 @@ Future<void> _scrollPageTo(WidgetTester t, Finder f) async {
 /// From Home: a new flow from Buddha Wandanawa, its second section
 /// removed, its first moved down one, and [pirith] added; then chanted, and
 /// Back to Home. Returns the flow's sections as made.
+/// How many of [refs] have chanting: every pirith, and the Buddha Wandanawa
+/// sections with their own recording.
+int _recorded(List<FlowRef> refs, Reading buddha) => refs
+    .where(
+      (r) =>
+          r.readingId != buddha.id ||
+          buddha.sections.firstWhere((s) => s.id == r.sectionId).audio != null,
+    )
+    .length;
+
 Future<List<FlowRef>> _journey(
   WidgetTester t,
   Reading buddha,
@@ -121,11 +132,14 @@ Future<List<FlowRef>> _journey(
   expect(location(c), Routes.flowEditor('flow-1'));
 
   // The editor shows every section of the reading, in its order.
-  final all = [
-    for (final s in buddha.sections) ref(buddha.id, s.id),
-  ];
+  final all = [for (final s in buddha.sections) ref(buddha.id, s.id)];
   expect(all.length, greaterThanOrEqualTo(3));
-  expect(find.text(sectionCount(all.length)), findsOneWidget);
+  expect(
+    find.text(
+      flowCaption(sections: all.length, recorded: _recorded(all, buddha)),
+    ),
+    findsOneWidget,
+  );
   expect(await _editorRows(t), [for (final r in all) flowSectionId(r)]);
 
   // Remove the second section, and let the "Removed" message go.
@@ -166,7 +180,12 @@ Future<List<FlowRef>> _journey(
   expect(c.read(flowsProvider).flow('flow-1')!.sections, made);
   expect(savedFlow(c, 'flow-1')!.sections, made);
   expect(await _editorRows(t), [for (final r in made) flowSectionId(r)]);
-  expect(find.text(flowCaption(sections: made.length, recorded: 1)), findsOneWidget);
+  expect(
+    find.text(
+      flowCaption(sections: made.length, recorded: _recorded(made, buddha)),
+    ),
+    findsOneWidget,
+  );
 
   // Start chanting: the headings in the edited order, numbered from 1.
   final start = find.byKey(const ValueKey('flow-start'));
@@ -222,7 +241,12 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.descendant(of: row, matching: find.text(flowCaption(sections: made.length, recorded: 1))),
+      find.descendant(
+        of: row,
+        matching: find.text(
+          flowCaption(sections: made.length, recorded: _recorded(made, buddha)),
+        ),
+      ),
       findsOneWidget,
     );
 

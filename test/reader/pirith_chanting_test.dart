@@ -141,8 +141,12 @@ void main() {
     expect(t.widget<Slider>(_slider).onChanged, isNull, reason: 'not loaded');
   });
 
-  testWidgets('Buddha Wandanawa has no chanting controls', (t) async {
-    await openReal(t, Routes.reader(realReadingId));
+  testWidgets('a gatha with no recordings has no chanting controls', (t) async {
+    await openReal(
+      t,
+      Routes.reader(realReadingId),
+      library: await silentWandanaLibrary(t),
+    );
     expect(find.byKey(const ValueKey('reader-play')), findsOneWidget);
     expect(_play, findsNothing);
     expect(_slider, findsNothing);

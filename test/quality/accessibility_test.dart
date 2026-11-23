@@ -290,7 +290,7 @@ void main() {
   final flowScreens = <(String, String, Size, String, Future<void> Function(WidgetTester)?)>[
     ('Home with My flows', Routes.home, const Size(390, 2800), 'Evening', expectWholeHome),
     ('New flow sheet', Routes.home, const Size(390, 844), 'Start from', (t) => tapKey(t, 'new-flow')),
-        ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections · 1 with a recording', null),
+        ('Flow editor', Routes.flowEditor('flow-1'), const Size(390, 1400), '4 sections · 4 with recordings', null),
     ('Flow reader with the chant bar', Routes.reader('flow-1'), const Size(390, 844), 'Chant', null),
     ('Flow editor, move menu open', Routes.flowEditor('flow-1'), const Size(390, 1400), 'Move down',
         (t) async {

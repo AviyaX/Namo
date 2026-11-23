@@ -76,11 +76,12 @@ RecordingStatus _status(Availability a, {double progress = 0, String? reason}) =
 
 FlowRef _whole(String readingId) => FlowRef(readingId: readingId, sectionId: 'p');
 
-/// The first three sections of Buddha Wandanawa, as flow-1 "Evening" has.
-Future<List<FlowRef>> _buddha(WidgetTester t, [int count = 3]) async {
+/// Sections of Buddha Wandanawa with no chanting (31 and 32), or the first
+/// [count] of them.
+Future<List<FlowRef>> _buddha(WidgetTester t, [int count = 2]) async {
   final buddha = (await realLibrary(t)).reading(realReadingId)!;
   return [
-    for (final s in buddha.sections.take(count))
+    for (final s in buddha.sections.where((s) => s.audio == null).take(count))
       FlowRef(readingId: buddha.id, sectionId: s.id),
   ];
 }
@@ -195,7 +196,7 @@ void main() {
       _whole(_karaniyaId),
     ]);
     expect(_coverage, findsOneWidget);
-    expect(t.widget<Text>(_coverage).data, 'Chant plays 2 of 5 sections');
+    expect(t.widget<Text>(_coverage).data, 'Chant plays 2 of 4 sections');
     expect(_slider, findsNothing);
 
     await _tap(t, _play);
@@ -224,7 +225,7 @@ void main() {
     store.set(mangalaReadingId, _status(Availability.downloaded));
     await t.pump();
     expect(_row, findsNothing);
-    expect(t.widget<Text>(_coverage).data, 'Chant plays 2 of 5 sections');
+    expect(t.widget<Text>(_coverage).data, 'Chant plays 2 of 4 sections');
     expect(t.takeException(), isNull);
   });
 

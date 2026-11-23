@@ -5,6 +5,7 @@ Run: python -I -X utf8 tools/test_build_content.py
 """
 import collections
 import copy
+import hashlib
 import importlib.util
 import json
 import pathlib
@@ -586,6 +587,29 @@ class BuildContentTest(unittest.TestCase):
         for s in self.sections:
             self.assertFalse(s["heading"][:1].isdigit(), s["heading"])
             self.assertNotIn("  ", s["heading"])
+
+    def test_sections_carry_their_recordings(self):
+        by_number = {s["number"]: s for s in self.sections}
+        recorded = [n for n, s in by_number.items() if "audio" in s]
+        self.assertEqual(recorded, [n for n in range(1, 34) if n not in (31, 32)])
+        for n in recorded:
+            audio = by_number[n]["audio"]
+            self.assertEqual(audio["path"], f"audio/wandana/{n:02d}.m4a")
+            self.assertEqual(len(audio["block_times"]), len(by_number[n]["verses"]), n)
+            data = (ROOT / "hosted" / audio["path"]).read_bytes()
+            self.assertEqual(audio["bytes"], len(data))
+            self.assertEqual(audio["sha256"], hashlib.sha256(data).hexdigest())
+            self.assertGreater(audio["duration_ms"], 5000)
+            ends = [t[1] for t in audio["block_times"] if t is not None]
+            self.assertLessEqual(max(ends) * 1000, audio["duration_ms"] + 50, n)
+            starts = [t[0] for t in audio["block_times"] if t is not None]
+            self.assertEqual(starts, sorted(starts), n)
+            self.assertTrue(audio["label"].startswith(("Chanted by Ven. Nauyane Ariyadhamma Thero",
+                                                       "Computer-made chanting")), n)
+        # Verses the Thero's recordings lack stay silent.
+        self.assertIsNone(by_number[8]["audio"]["block_times"][2])
+        self.assertEqual([t is not None for t in by_number[33]["audio"]["block_times"]],
+                         [i in (0, 6) for i in range(11)])
 
     def test_file_is_reproducible(self):
         first = build_content.render(build_content.build(ROOT))

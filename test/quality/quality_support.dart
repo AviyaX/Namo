@@ -65,6 +65,43 @@ Future<Library> buddhaOnlyLibrary(WidgetTester t) async {
   return Library(categories: [lib.category(realCategoryId)!]);
 }
 
+/// The bundled content with Buddha Wandanawa's section recordings taken
+/// away, for tests about a gatha reading that has no chanting.
+Future<Library> silentWandanaLibrary(WidgetTester t) async {
+  final lib = await realLibrary(t);
+  Section silent(Section s) => Section(
+    id: s.id,
+    number: s.number,
+    heading: s.heading,
+    source: s.source,
+    check: s.check,
+    notes: s.notes,
+    corrections: s.corrections,
+    verses: s.verses,
+  );
+  return Library(
+    categories: [
+      for (final c in lib.categories)
+        Category(
+          id: c.id,
+          title: c.title,
+          subtitle: c.subtitle,
+          shortTitle: c.shortTitle,
+          readings: [
+            for (final r in c.readings)
+              Reading(
+                id: r.id,
+                title: r.title,
+                audio: r.audio,
+                titleRoman: r.titleRoman,
+                sections: [for (final s in r.sections) silent(s)],
+              ),
+          ],
+        ),
+    ],
+  );
+}
+
 /// Four categories, Latin placeholder text, one of them with two readings and
 /// a long title, so that Home has several cards to lay out.
 Library severalCategories() => Library(

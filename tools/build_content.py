@@ -13,12 +13,16 @@ instruction printed after its Pali and stands three times instead; see THREE_TIM
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import pathlib
 import re
 import sys
 
 OUTPUT = pathlib.Path("assets/content/namaskaraya_to_pin_dima.json")
+# Written by tools/assemble_wandana_audio.py: each recorded section's file, label and verse times.
+AUDIO_TIMES = pathlib.Path("content/wandana_audio.json")
+HOSTED = pathlib.Path("hosted")
 TITLE = "Buddha Wandanawa"
 SUBTITLE = "බුද්ධ වන්දනාව"
 NOT_NAMED = "not named by the source"
@@ -869,15 +873,56 @@ def build(root: pathlib.Path) -> dict:
     _apply_nottingham(sections_by_key, nott)
     _apply_paritha_sinhala(sections_by_key, booklet)
 
+    audio = _section_audio(root, sections)
     out_sections = []
     for number, section in enumerate(sections, start=1):
         check = NEEDS_CHECKING if any(v["check"] == NEEDS_CHECKING for v in section["verses"]) else CHECKED
-        out_sections.append({"id": f"s{number:02d}", "number": number, "heading": section["heading"],
+        sid = f"s{number:02d}"
+        out_sections.append({"id": sid, "number": number, "heading": section["heading"],
                              "check": check, "notes": section.get("notes", []), "source": section["source"],
-                             "corrections": section["corrections"], "verses": section["verses"]})
+                             "corrections": section["corrections"], "verses": section["verses"],
+                             **({"audio": audio[sid]} if sid in audio else {})})
     return {"schema": 1, "categories": [{
         "id": "cat-namaskaraya", "title": TITLE, "subtitle": SUBTITLE,
         "readings": [{"id": "namaskaraya", "title": TITLE, "audio": None, "sections": out_sections}]}]}
+
+
+def _mp4_duration_ms(data: bytes) -> int:
+    """The recording's length, read as tools/build_pirith.py reads it."""
+    spec = importlib.util.spec_from_file_location("build_pirith", pathlib.Path(__file__).with_name("build_pirith.py"))
+    pirith = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(pirith)
+    try:
+        return pirith.mp4_duration_ms(data)
+    except pirith.BuildError as e:
+        raise BuildError(str(e))
+
+
+def _section_audio(root: pathlib.Path, sections: list[dict]) -> dict[str, dict]:
+    """Each recorded section's audio object, by section id (s01 ...)."""
+    try:
+        times = json.loads((root / AUDIO_TIMES).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        raise BuildError(f"cannot read {AUDIO_TIMES.as_posix()}: {e}")
+    out = {}
+    for number, section in enumerate(sections, start=1):
+        sid = f"s{number:02d}"
+        entry = times.pop(sid, None)
+        if entry is None:
+            continue
+        if len(entry["block_times"]) != len(section["verses"]):
+            raise BuildError(f"{sid}: {len(entry['block_times'])} verse times for {len(section['verses'])} verses")
+        path = root / HOSTED / entry["path"]
+        try:
+            data = path.read_bytes()
+        except OSError as e:
+            raise BuildError(f"cannot read recording {path.as_posix()}: {e}")
+        out[sid] = {"path": entry["path"], "label": entry["label"], "duration_ms": _mp4_duration_ms(data),
+                    "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
+                    "block_times": entry["block_times"]}
+    if times:
+        raise BuildError(f"{AUDIO_TIMES.as_posix()} names sections that do not exist: {sorted(times)}")
+    return out
 
 
 def render(data: dict) -> bytes:

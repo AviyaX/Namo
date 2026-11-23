@@ -585,7 +585,7 @@ void main() {
 
           testWidgets('the editor does not overflow: $name', (t) async {
             await open(t);
-            expect(find.text('4 sections · 1 with a recording'), findsOneWidget);
+            expect(find.text('4 sections · 4 with recordings'), findsOneWidget);
             await scrollThrough(t);
           });
 
