@@ -8,6 +8,7 @@ import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:buddhist_gatha/settings/settings.dart';
 import 'package:buddhist_gatha/storage/key_value_store.dart';
+import 'package:buddhist_gatha/books/book_blocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -122,7 +123,7 @@ void main() {
     );
     expect(
       t.widget<Text>(find.text('A subhead')).style!.fontWeight,
-      FontWeight.w600,
+      FontWeight.w700,
     );
     expect(find.text('•'), findsNWidgets(2));
     for (final cell in ['Name', 'Count', 'Apples', '3']) {
@@ -131,11 +132,11 @@ void main() {
     expect(find.byType(Table), findsOneWidget);
     expect(
       t.widget<Text>(find.text('Name')).style!.fontWeight,
-      FontWeight.w600,
+      FontWeight.w700,
     );
     expect(
       t.widget<Text>(find.text('Apples')).style!.fontWeight,
-      isNot(FontWeight.w600),
+      isNot(FontWeight.w700),
     );
     expect(find.text('Picture: A made-up picture'), findsOneWidget);
     _inOrder(t, [
@@ -156,22 +157,22 @@ void main() {
     // "1-1": a paragraph, a verse line by line, a heading, a paragraph.
     await _open(t, Routes.bookReader(tinyBookNestedId, 3));
     expect(find.text(tinyLongTitle), findsOneWidget);
-    final para = t.widget<Text>(find.text('One one text.')).style!;
+    final para = t.widget<Text>(find.text('${bookParaLead}One one text.')).style!;
     final heading = t.widget<Text>(find.text('A heading')).style!;
-    expect(heading.fontSize, closeTo(para.fontSize! * 1.25, 0.001));
-    expect(heading.fontWeight, FontWeight.w600);
+    expect(heading.fontSize, closeTo(para.fontSize! * 1.2, 0.001));
+    expect(heading.fontWeight, FontWeight.w700);
     _inOrder(t, [
       tinyLongTitle,
-      'One one text.',
+      '${bookParaLead}One one text.',
       'Verse line one',
       'Verse line two',
       'A heading',
-      'After the heading.',
+      '${bookParaLead}After the heading.',
     ]);
     // The verse is set in from the paragraphs.
     expect(
       t.getTopLeft(find.text('Verse line one')).dx,
-      greaterThan(t.getTopLeft(find.text('One one text.')).dx),
+      greaterThan(t.getTopLeft(find.text('${bookParaLead}One one text.')).dx),
     );
 
     // "1-2": a list numbered from 3, a list with its own labels, footnotes.
@@ -222,20 +223,20 @@ void main() {
     expect(_enabled(t, _prev), isTrue);
     await t.tap(_next);
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/6');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/6');
     expect(find.text('5 / 6'), findsOneWidget);
-    expect(find.text('Two one text.'), findsOneWidget);
+    expect(find.text('${bookParaLead}Two one text.'), findsOneWidget);
     await t.tap(_next);
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/7');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/7');
     expect(find.text('6 / 6'), findsOneWidget);
     expect(_enabled(t, _next), isFalse);
     await t.tap(_prev);
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/6');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/6');
     await t.tap(_prev);
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/4');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/4');
 
     await _open(t, Routes.bookReader(tinyBookNestedId, 1));
     expect(find.text('1 / 6'), findsOneWidget);
@@ -246,16 +247,16 @@ void main() {
 
   testWidgets('a non-reading n redirects to the next reading page', (t) async {
     await _open(t, Routes.bookReader(tinyBookNestedId, 5));
-    expect(_location(t), '/library/book/tiny-nested/read/6');
-    expect(find.text('Two one text.'), findsOneWidget);
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/6');
+    expect(find.text('${bookParaLead}Two one text.'), findsOneWidget);
     await _open(t, Routes.bookReader(tinyBookNestedId, 0));
-    expect(_location(t), '/library/book/tiny-nested/read/1');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/1');
     expect(t.takeException(), isNull);
   });
 
   testWidgets('an n past the end opens the last reading page', (t) async {
     await _open(t, Routes.bookReader(tinyBookNestedId, 99));
-    expect(_location(t), '/library/book/tiny-nested/read/7');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/7');
     expect(find.text('6 / 6'), findsOneWidget);
     expect(t.takeException(), isNull);
   });
@@ -270,7 +271,7 @@ void main() {
         }
       }),
     );
-    expect(_location(t), '/library/book/tiny-nested');
+    expect(_location(t), '/tipitaka/book/tiny-nested');
     expect(find.byType(BookScreen), findsOneWidget);
     expect(t.takeException(), isNull);
   });
@@ -280,7 +281,7 @@ void main() {
   ) async {
     await _open(t, Routes.bookReader('no-such-book', 2));
     expect(find.text('This page could not be found.'), findsOneWidget);
-    await _open(t, '/library/book/tiny-nested/read/two');
+    await _open(t, '/tipitaka/book/tiny-nested/read/two');
     expect(find.text('This page could not be found.'), findsOneWidget);
     expect(t.takeException(), isNull);
   });
@@ -302,7 +303,7 @@ void main() {
         'spot': [-1, 0],
       },
     });
-    await t.drag(find.text('Two one text.'), const Offset(0, -300));
+    await t.drag(find.text('${bookParaLead}Two one text.'), const Offset(0, -300));
     await t.pumpAndSettle();
     await t.pump(const Duration(milliseconds: 500));
     final offset = _position(t).pixels;
@@ -368,7 +369,8 @@ void main() {
       size: _small,
       books: books,
     );
-    await t.drag(find.text('Two one text.'), const Offset(0, -600));
+    // The picture fills the top of the screen: drag the page by it.
+    await t.drag(find.byType(Image).first, const Offset(0, -600));
     await t.pumpAndSettle();
     await t.pump(const Duration(milliseconds: 500));
     final offset = _position(t).pixels;
@@ -397,7 +399,7 @@ void main() {
       size: _small,
       books: _longBooks(),
     );
-    await t.drag(find.text('Two one text.'), const Offset(0, -300));
+    await t.drag(find.text('${bookParaLead}Two one text.'), const Offset(0, -300));
     await t.pumpAndSettle();
     await t.pump(const Duration(milliseconds: 500));
     final offset = _position(t).pixels;
@@ -554,12 +556,12 @@ void main() {
       size: _small,
       books: _longBooks(),
     );
-    await t.drag(find.text('Two one text.'), const Offset(0, -300));
+    await t.drag(find.text('${bookParaLead}Two one text.'), const Offset(0, -300));
     await t.pump();
     expect(_position(t).pixels, greaterThan(0));
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/contents/5');
+    expect(_location(t), '/tipitaka/book/tiny-nested/contents/5');
     final place = jsonDecode(_storedPlaces(t)!)[tinyBookNestedId] as Map;
     expect(place['n'], 6);
     expect(place['offset'], greaterThan(0));
@@ -575,13 +577,13 @@ void main() {
       size: _small,
       books: _longBooks(),
     );
-    await t.fling(find.text('Two one text.'), const Offset(0, -300), 3000);
+    await t.fling(find.text('${bookParaLead}Two one text.'), const Offset(0, -300), 3000);
     await t.pump();
     expect(_position(t).isScrollingNotifier.value, isTrue);
     await t.tap(_next);
     await t.pumpAndSettle();
     await t.pump(const Duration(milliseconds: 500));
-    expect(_location(t), '/library/book/tiny-nested/read/7');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/7');
     expect(jsonDecode(_storedPlaces(t)!), {
       tinyBookNestedId: {
         'n': 7,
@@ -597,11 +599,11 @@ void main() {
     await _open(t, Routes.bookReader(tinyBookNestedId, 7));
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/contents/6');
+    expect(_location(t), '/tipitaka/book/tiny-nested/contents/6');
     await _open(t, Routes.bookReader(tinyBookNestedId, 3));
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/contents/2');
+    expect(_location(t), '/tipitaka/book/tiny-nested/contents/2');
     expect(t.takeException(), isNull);
   });
 
@@ -609,7 +611,7 @@ void main() {
     await _open(t, Routes.bookReader(tinyBookNestedId, 2));
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested');
+    expect(_location(t), '/tipitaka/book/tiny-nested');
     expect(find.byType(BookScreen), findsOneWidget);
     expect(t.takeException(), isNull);
   });
@@ -620,8 +622,8 @@ void main() {
       Routes.bookReader(tinyBookNestedId, 2),
       settings: const AppSettings(fontScale: 1.4, lineSpacing: 2.0),
     );
-    final style = t.widget<Text>(find.text('Part one text.')).style!;
-    expect(style.fontSize, closeTo(18 * 1.4, 0.001));
+    final style = t.widget<Text>(find.text('${bookParaLead}Part one text.')).style!;
+    expect(style.fontSize, closeTo(18 * 1.4 * bookFaceScale, 0.001));
     expect(style.height, 2.0);
     await t.tap(find.byTooltip('Reading settings'));
     await t.pumpAndSettle();
@@ -654,7 +656,7 @@ void main() {
     await t.tap(find.text('Try again'));
     await t.pumpAndSettle();
     expect(find.text('The book could not be opened.'), findsNothing);
-    expect(find.text('Part one text.'), findsOneWidget);
+    expect(find.text('${bookParaLead}Part one text.'), findsOneWidget);
     expect(find.text('2 / 6'), findsOneWidget);
     expect(t.takeException(), isNull);
   });

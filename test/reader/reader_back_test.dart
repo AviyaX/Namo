@@ -166,15 +166,15 @@ void main() {
         withFlow: true,
       );
       await goBack(t, way);
-      expect(location(c), '/library/flow/flow-1');
+      expect(location(c), '/flow/flow-1');
     });
 
-    testWidgets('${way.name} Back: a flow opened from the Library or by '
-        'address, back to the Library', (t) async {
+    testWidgets('${way.name} Back: a flow opened from My flows or by '
+        'address, back to Home', (t) async {
       final c = await openAt(t, Routes.reader('flow-1'), withFlow: true);
       await goBack(t, way);
-      expect(location(c), Routes.library);
-      expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+      expect(location(c), Routes.home);
+      expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
     });
 
     testWidgets('${way.name} Back: a reading opened with from=editor goes '

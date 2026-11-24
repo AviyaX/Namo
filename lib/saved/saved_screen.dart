@@ -52,6 +52,15 @@ class SavedScreen extends ConsumerWidget {
     return NamoPage(
       columnKey: const ValueKey('saved-column'),
       children: [
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: NamoIconButton(
+            icon: Symbols.arrow_back_rounded,
+            tooltip: 'Back',
+            onPressed: () => context.go(Routes.settings),
+          ),
+        ),
+        const SizedBox(height: NamoSpace.sm),
         const PageHeader(title: 'Saved'),
         const SizedBox(height: NamoSpace.lg),
         LibraryGate(
@@ -76,7 +85,7 @@ class SavedScreen extends ConsumerWidget {
                 message:
                     'Bookmark a section or favourite a reading and it will '
                     'wait for you here.',
-                actionLabel: 'Open the Library',
+                actionLabel: 'Open Pirith & Gatha',
                 onAction: () => context.go(Routes.library),
               );
             }

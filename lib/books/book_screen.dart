@@ -18,8 +18,8 @@ import 'books_repository.dart';
 /// A book's page: its cover and title, a button that opens the reader where
 /// the person left off (or at the start), and the book's chapters as rows.
 ///
-/// Back goes to the Library. An id that is not on the shelf shows the
-/// not-found page.
+/// Back goes to the Library tab (the Tripitaka & Books page). An id that is
+/// not on the shelf shows the not-found page.
 class BookScreen extends ConsumerStatefulWidget {
   const BookScreen({super.key, required this.id});
 
@@ -30,7 +30,7 @@ class BookScreen extends ConsumerStatefulWidget {
 }
 
 class _BookScreenState extends ConsumerState<BookScreen> {
-  void _back() => context.go(Routes.library);
+  void _back() => context.go(Routes.tipitaka);
 
   void _retry() {
     if (ref.read(booksIndexProvider).hasError) {

@@ -15,6 +15,12 @@ abstract final class NamoSizes {
   static const icon = 24.0;
   static const navBarHeight = 64.0;
 
+  /// The widest the Bana player (or its offline panel) grows.
+  static const playerColumn = 720.0;
+
+  /// The width of a Bana thumbnail in a list row.
+  static const banaThumbWidth = 120.0;
+
   /// The side margin of a page at [width].
   static double pageMargin(double width) => width < 360
       ? 16
@@ -344,7 +350,8 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   }
 }
 
-/// The colours a book page is drawn with on the chosen paper. Soft ink is
+/// The colours a book page is drawn with on the chosen paper; [title] is
+/// the brown of a chapter's title and its flourish. Soft ink is
 /// for the page number only; captions and footnotes take the secondary ink.
 /// On dark paper both are the dark palette's secondary text, so they read in
 /// either theme.
@@ -357,6 +364,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
   Color rule,
   Color fold,
   Color spine,
+  Color title,
 }) bookColours(
   NamoPalette p,
   BookPaper paper,
@@ -371,6 +379,7 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
           rule: p.bookRule,
           fold: p.bookFold,
           spine: p.bookSpine,
+          title: const Color(0xFF8A4B1F),
         ),
       BookPaper.dark => (
           paper: p.bookPaperDark,
@@ -381,5 +390,6 @@ class NamoPalette extends ThemeExtension<NamoPalette> {
           rule: p.bookRuleDark,
           fold: p.bookFoldDark,
           spine: p.bookSpineDark,
+          title: const Color(0xFFD9A06A),
         ),
     };

@@ -105,13 +105,14 @@ class ReaderBodyState extends State<ReaderBody> {
   /// the top of the block when the phrase has no text there. Null before
   /// layout, and while the block is not built.
   double? offsetOfPhrase(int block, int phrase) {
-    final index = widget.items.indexWhere(
-      (i) => i is PhraseBlockItem && i.index == block,
-    );
+    final index = widget.items.indexWhere((i) => blockOfItem(i) == block);
     if (index < 0 || index >= _itemKeys.length) return null;
     final context = _itemKeys[index].currentContext;
     if (context == null) return null;
-    final item = widget.items[index] as PhraseBlockItem;
+    final found = widget.items[index];
+    // A recorded verse (not phrased): the top of its first item.
+    if (found is! PhraseBlockItem) return _topOf(context.findRenderObject());
+    final item = found;
     final blockTop = _topOf(context.findRenderObject());
     final language = _firstShownLanguage(item);
     if (language == null || phrase < 0 || phrase >= item.phrases.length) {
@@ -280,19 +281,33 @@ class ReaderBodyState extends State<ReaderBody> {
             ? null
             : (line) => widget.onTapLine!(item.index, line),
       ),
-      VersePairItem() => _VersePairView(
+      VersePairItem() => _ChantedVerse(
         key: ValueKey('pair-${item.verseId}'),
-        item: item,
+        block: item.block,
         gap: gap,
-        fontScale: widget.fontScale,
-        lineSpacing: widget.lineSpacing,
+        chantPlace: widget.chantPlace,
+        onTap: item.block == null || widget.onTapBlock == null
+            ? null
+            : () => widget.onTapBlock!(item.block!),
+        child: _VersePairView(
+          item: item,
+          fontScale: widget.fontScale,
+          lineSpacing: widget.lineSpacing,
+        ),
       ),
-      VerseTextItem() => _VerseView(
+      VerseTextItem() => _ChantedVerse(
         key: ValueKey('verse-${item.verseId}-${item.language.code}'),
-        item: item,
+        block: item.block,
         gap: gap,
-        fontScale: widget.fontScale,
-        lineSpacing: widget.lineSpacing,
+        chantPlace: widget.chantPlace,
+        onTap: item.block == null || widget.onTapBlock == null
+            ? null
+            : () => widget.onTapBlock!(item.block!),
+        child: _VerseView(
+          item: item,
+          fontScale: widget.fontScale,
+          lineSpacing: widget.lineSpacing,
+        ),
       ),
     };
     return KeyedSubtree(key: _itemKeys[index], child: child);
@@ -511,34 +526,134 @@ class _HeadingView extends StatelessWidget {
   }
 }
 
+/// A verse with the room [gap] above it. While its [block] is being chanted
+/// it sits on the same tint as a pirith's block; while chanting, a tap
+/// ([onTap]) goes to it.
+class _ChantedVerse extends StatefulWidget {
+  const _ChantedVerse({
+    super.key,
+    required this.block,
+    required this.gap,
+    required this.chantPlace,
+    required this.onTap,
+    required this.child,
+  });
+
+  final int? block;
+  final double gap;
+  final ValueListenable<ChantPlace?>? chantPlace;
+  final VoidCallback? onTap;
+  final Widget child;
+
+  @override
+  State<_ChantedVerse> createState() => _ChantedVerseState();
+}
+
+class _ChantedVerseState extends State<_ChantedVerse> {
+  bool _active = false;
+
+  bool _now() {
+    final block = widget.block;
+    return block != null && widget.chantPlace?.value?.block == block;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _active = _now();
+    widget.chantPlace?.addListener(_onPlace);
+  }
+
+  @override
+  void didUpdateWidget(_ChantedVerse old) {
+    super.didUpdateWidget(old);
+    if (!identical(old.chantPlace, widget.chantPlace)) {
+      old.chantPlace?.removeListener(_onPlace);
+      widget.chantPlace?.addListener(_onPlace);
+    }
+    _active = _now();
+  }
+
+  @override
+  void dispose() {
+    widget.chantPlace?.removeListener(_onPlace);
+    super.dispose();
+  }
+
+  void _onPlace() {
+    final now = _now();
+    if (now != _active) setState(() => _active = now);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var child = widget.child;
+    if (_active) {
+      final p = NamoPalette.of(context);
+      child = Stack(
+        fit: StackFit.passthrough,
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: -NamoSpace.sm,
+            right: -NamoSpace.sm,
+            top: -NamoSpace.xs,
+            bottom: -NamoSpace.xs,
+            child: ExcludeSemantics(
+              child: DecoratedBox(
+                key: const ValueKey('verse-active'),
+                decoration: BoxDecoration(
+                  color: p.sageTint,
+                  borderRadius: BorderRadius.circular(NamoRadius.sm),
+                ),
+              ),
+            ),
+          ),
+          child,
+        ],
+      );
+    }
+    if (widget.block != null) {
+      // A short verse is still a full-size target, and keeps that height
+      // whether or not chanting has started, so the page does not move.
+      child = GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: NamoSizes.touchTarget),
+          child: child,
+        ),
+      );
+    }
+    return Padding(
+      padding: EdgeInsets.only(top: widget.gap),
+      child: child,
+    );
+  }
+}
+
 class _VerseView extends StatelessWidget {
   const _VerseView({
-    super.key,
     required this.item,
-    required this.gap,
     required this.fontScale,
     required this.lineSpacing,
   });
 
   final VerseTextItem item;
-  final double gap;
   final double fontScale;
   final double lineSpacing;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    return Padding(
-      padding: EdgeInsets.only(top: gap),
-      child: Text(
-        item.text,
-        softWrap: true,
-        style: readingStyle(
-          item.language,
-          fontScale: fontScale,
-          lineSpacing: lineSpacing,
-          color: item.secondary ? p.textSecondary : p.text,
-        ),
+    return Text(
+      item.text,
+      softWrap: true,
+      style: readingStyle(
+        item.language,
+        fontScale: fontScale,
+        lineSpacing: lineSpacing,
+        color: item.secondary ? p.textSecondary : p.text,
       ),
     );
   }
@@ -547,55 +662,49 @@ class _VerseView extends StatelessWidget {
 /// A verse in two columns: Pali, then Sinhala in the quiet colour.
 class _VersePairView extends StatelessWidget {
   const _VersePairView({
-    super.key,
     required this.item,
-    required this.gap,
     required this.fontScale,
     required this.lineSpacing,
   });
 
   final VersePairItem item;
-  final double gap;
   final double fontScale;
   final double lineSpacing;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    return Padding(
-      padding: EdgeInsets.only(top: gap),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Text(
-              item.pali,
-              key: ValueKey('pair-${item.verseId}-pi'),
-              softWrap: true,
-              style: readingStyle(
-                ReadingLanguage.pali,
-                fontScale: fontScale,
-                lineSpacing: lineSpacing,
-                color: p.text,
-              ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Text(
+            item.pali,
+            key: ValueKey('pair-${item.verseId}-pi'),
+            softWrap: true,
+            style: readingStyle(
+              ReadingLanguage.pali,
+              fontScale: fontScale,
+              lineSpacing: lineSpacing,
+              color: p.text,
             ),
           ),
-          const SizedBox(width: NamoSpace.lg),
-          Expanded(
-            child: Text(
-              item.sinhala,
-              key: ValueKey('pair-${item.verseId}-si'),
-              softWrap: true,
-              style: readingStyle(
-                ReadingLanguage.sinhala,
-                fontScale: fontScale,
-                lineSpacing: lineSpacing,
-                color: p.textSecondary,
-              ),
+        ),
+        const SizedBox(width: NamoSpace.lg),
+        Expanded(
+          child: Text(
+            item.sinhala,
+            key: ValueKey('pair-${item.verseId}-si'),
+            softWrap: true,
+            style: readingStyle(
+              ReadingLanguage.sinhala,
+              fontScale: fontScale,
+              lineSpacing: lineSpacing,
+              color: p.textSecondary,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -627,7 +736,10 @@ RenderParagraph? _firstParagraph(Element root) {
 /// exclusive) in the passage in [language], which is the phrase texts joined
 /// by single spaces (single line breaks in a unit kept line by line); null
 /// for a phrase with no text in [language].
-List<(int, int)?> _passageRanges(PhraseBlockItem item, ReadingLanguage language) {
+List<(int, int)?> _passageRanges(
+  PhraseBlockItem item,
+  ReadingLanguage language,
+) {
   final out = <(int, int)?>[];
   var at = 0;
   for (final phrase in item.phrases) {

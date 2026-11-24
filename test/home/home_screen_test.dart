@@ -185,7 +185,7 @@ final _testFlow = _flowOne(const [
 
 const _quickAccess = ValueKey('home-quick-access');
 const _collections = ValueKey('home-collections');
-const _flowsRow = ValueKey('home-flows');
+const _flowsRow = ValueKey('my-flows');
 
 double _top(WidgetTester t, Finder f) => t.getTopLeft(f).dy;
 
@@ -766,10 +766,10 @@ void main() {
     });
   });
 
-  group('your flows', () {
+  group('My flows', () {
     final row = find.byKey(_flowsRow);
 
-    testWidgets('phone: after Quick Access, before Collections', (t) async {
+    testWidgets('phone: below Quick Access and Collections', (t) async {
       await openReal(
         t,
         Routes.home,
@@ -779,11 +779,14 @@ void main() {
       );
       expect(find.byType(ContinueCard), findsNothing);
       expect(_top(t, row), greaterThan(_top(t, find.byKey(_quickAccess))));
-      expect(_top(t, row), lessThan(_top(t, find.byKey(_collections))));
+      expect(_top(t, row), greaterThan(_top(t, find.byKey(_collections))));
+      // Once: no second row of the same flows.
+      expect(find.byKey(const ValueKey('flow-open-flow-1')), findsOneWidget);
+      expect(find.text('Your flows'), findsNothing);
     });
 
-    testWidgets('wide: after the Continue reading and gatha row and Quick '
-        'Access, before Collections', (t) async {
+    testWidgets('wide: below the Continue reading and gatha row, Quick '
+        'Access and Collections', (t) async {
       await openReal(
         t,
         Routes.home,
@@ -806,10 +809,10 @@ void main() {
         _top(t, row),
         greaterThan(t.getBottomLeft(find.byKey(_quickAccess)).dy),
       );
-      expect(_top(t, row), lessThan(_top(t, find.byKey(_collections))));
+      expect(_top(t, row), greaterThan(_top(t, find.byKey(_collections))));
     });
 
-    testWidgets('the row goes when the last flow is deleted', (t) async {
+    testWidgets('with no flow there is the card and New flow', (t) async {
       await openReal(
         t,
         Routes.home,
@@ -817,13 +820,25 @@ void main() {
         storeExtras: _testFlow,
         size: const Size(390, 3000),
       );
-      expect(row, findsOneWidget);
-      final before = _top(t, find.byKey(_collections));
+      expect(find.byKey(const ValueKey('flow-open-flow-1')), findsOneWidget);
       _container(t).read(flowsProvider.notifier).delete('flow-1');
       await t.pumpAndSettle();
-      expect(row, findsNothing);
-      expect(find.text('Your flows'), findsNothing);
-      expect(_top(t, find.byKey(_collections)), lessThan(before));
+      expect(find.byKey(const ValueKey('flow-open-flow-1')), findsNothing);
+      expect(row, findsOneWidget);
+      expect(find.text('Make your own flow'), findsOneWidget);
+      expect(find.byKey(const ValueKey('new-flow')), findsOneWidget);
+    });
+
+    testWidgets('Home shows My flows with New flow', (t) async {
+      await openReal(
+        t,
+        Routes.home,
+        library: testLibrary(),
+        storeExtras: _testFlow,
+        size: const Size(390, 3000),
+      );
+      expect(find.text('My flows'), findsOneWidget);
+      expect(find.byKey(const ValueKey('new-flow')), findsOneWidget);
     });
   });
 
@@ -843,7 +858,7 @@ void main() {
     }
 
     testWidgets('phone: header, featured, Continue (a flow), gatha, Quick '
-        'Access, flows, Collections', (t) async {
+        'Access, Collections, flows', (t) async {
       await openReal(
         t,
         Routes.home,
@@ -860,13 +875,13 @@ void main() {
         find.byType(ContinueCard),
         find.byType(GathaCard),
         find.byKey(_quickAccess),
-        find.byKey(_flowsRow),
         find.byKey(_collections),
+        find.byKey(_flowsRow),
       ]);
     });
 
     testWidgets('wide: featured; Continue (a flow) beside the gatha; Quick '
-        'Access; flows; Collections', (t) async {
+        'Access; Collections; flows', (t) async {
       await openReal(
         t,
         Routes.home,
@@ -886,8 +901,8 @@ void main() {
         find.byType(FeaturedCard),
         find.byType(GathaCard),
         find.byKey(_quickAccess),
-        find.byKey(_flowsRow),
         find.byKey(_collections),
+        find.byKey(_flowsRow),
       ]);
     });
   });

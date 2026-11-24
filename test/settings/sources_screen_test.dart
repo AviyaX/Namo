@@ -8,8 +8,10 @@ import 'package:buddhist_gatha/storage/key_value_store.dart';
 import 'package:buddhist_gatha/tipitaka/tipitaka_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 
+import '../bana/bana_support.dart';
 import '../support/pump_app.dart';
 import '../support/test_content.dart';
 import '../tipitaka/tipitaka_support.dart';
@@ -18,6 +20,7 @@ Future<void> openSources(
   WidgetTester t, {
   AssetBytes? load,
   Library? content,
+  List<Override> extra = const [],
 }) async {
   // The bundled file is read by real I/O, which fake-async time cannot
   // advance; read it first and hand the app the finished library.
@@ -27,6 +30,7 @@ Future<void> openSources(
   await pumpApp(
     t,
     overrides: [
+      ...extra,
       contentRepositoryProvider.overrideWithValue(
         FakeContentRepository(library: library),
       ),
@@ -55,7 +59,8 @@ Finder text(String s) => find.text(s, findRichText: true);
 
 int keyed(String prefix) => find
     .byWidgetPredicate(
-      (w) => w.key is ValueKey<String> &&
+      (w) =>
+          w.key is ValueKey<String> &&
           (w.key! as ValueKey<String>).value.startsWith(prefix),
     )
     .evaluate()
@@ -79,8 +84,16 @@ Library _checkLibrary({required List<String> verseNotes}) => Library.fromJson({
               'check': 'needs checking',
               'notes': ['check this section'],
               'verses': [
-                {'id': 's01-v1', 'check': 'needs checking', 'notes': verseNotes},
-                {'id': 's01-v2', 'check': 'needs checking', 'notes': <String>[]},
+                {
+                  'id': 's01-v1',
+                  'check': 'needs checking',
+                  'notes': verseNotes,
+                },
+                {
+                  'id': 's01-v2',
+                  'check': 'needs checking',
+                  'notes': <String>[],
+                },
               ],
             },
             {'id': 's02', 'number': 2, 'heading': 'H2', 'verses': <Object>[]},
@@ -101,10 +114,7 @@ void main() {
         text('Namo is free. It has no ads and nothing to buy.'),
         findsOneWidget,
       );
-      expect(
-        text(notMadeBy),
-        findsOneWidget,
-      );
+      expect(text(notMadeBy), findsOneWidget);
       expect(
         text(
           "The recordings are fetched from the app's own storage (namo-audio.v-g-a-induwara.workers.dev), not from the sources' sites.",
@@ -119,7 +129,9 @@ void main() {
 
       expect(text('https://namo.lk/buddha-puja/'), findsOneWidget);
       expect(
-        text('https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf'),
+        text(
+          'https://www.paritha.org/wp-content/uploads/2019/11/Booklet-1.pdf',
+        ),
         findsOneWidget,
       );
       expect(
@@ -192,10 +204,7 @@ void main() {
       find.descendant(of: card, matching: find.byType(SelectableText)),
       findsNothing,
     );
-    expect(
-      text(notMadeBy),
-      findsOneWidget,
-    );
+    expect(text(notMadeBy), findsOneWidget);
     expect(
       find.textContaining(
         RegExp('permission', caseSensitive: false),
@@ -269,20 +278,32 @@ void main() {
     },
   );
 
-  testWidgets('Sources credits the Home header and featured pictures under Pictures', (t) async {
-    await openSources(t);
-    final name = text('Home header and featured pictures');
-    expect(name, findsOneWidget);
-    expect(text('Home banner picture'), findsNothing);
-    expect(
-      find.textContaining('Shown behind the Home header and on the featured card', findRichText: true),
-      findsOneWidget,
-    );
-    final y = t.getTopLeft(find.text('Pictures')).dy;
-    expect(t.getTopLeft(name).dy, greaterThan(t.getTopLeft(text('Home card picture')).dy));
-    expect(t.getTopLeft(name).dy, greaterThan(y));
-    expect(t.getTopLeft(name).dy, lessThan(t.getTopLeft(find.text('Corrections')).dy));
-  });
+  testWidgets(
+    'Sources credits the Home header and featured pictures under Pictures',
+    (t) async {
+      await openSources(t);
+      final name = text('Home header and featured pictures');
+      expect(name, findsOneWidget);
+      expect(text('Home banner picture'), findsNothing);
+      expect(
+        find.textContaining(
+          'Shown behind the Home header and on the featured card',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
+      final y = t.getTopLeft(find.text('Pictures')).dy;
+      expect(
+        t.getTopLeft(name).dy,
+        greaterThan(t.getTopLeft(text('Home card picture')).dy),
+      );
+      expect(t.getTopLeft(name).dy, greaterThan(y));
+      expect(
+        t.getTopLeft(name).dy,
+        lessThan(t.getTopLeft(find.text('Corrections')).dy),
+      );
+    },
+  );
 
   testWidgets('Sources no longer mentions Wikimedia or Price Zero', (t) async {
     await openSources(t);
@@ -291,52 +312,62 @@ void main() {
     expect(find.textContaining('Samadhi', findRichText: true), findsNothing);
   });
 
-  testWidgets('Sources lists the corrections and the open checks from the content',
-      (t) async {
-    await openSources(t);
-    expect(find.text('Corrections'), findsOneWidget);
-    expect(find.text('Still to be checked'), findsOneWidget);
-    // The bundled file: 15 distinct verse corrections and 1 heading.
-    expect(keyed('correction-'), 16);
-    // Buddha Wandanawa's 4 verses and 17 sections, and one row each for the two
-    // Samantha Pattana readings.
-    expect(keyed('check-'), 23);
-    expect(keyed('check-section-'), 17);
-    expect(keyed('check-reading-'), 2);
-    expect(find.textContaining('ගච්චාමි'), findsOneWidget);
-    expect(find.textContaining('ගච්ඡාමි'), findsOneWidget);
-  });
+  testWidgets(
+    'Sources lists the corrections and the open checks from the content',
+    (t) async {
+      await openSources(t);
+      expect(find.text('Corrections'), findsOneWidget);
+      expect(find.text('Still to be checked'), findsOneWidget);
+      // The bundled file: 16 distinct verse corrections and 1 heading.
+      expect(keyed('correction-'), 17);
+      // Buddha Wandanawa's 4 verses and 17 sections, and one row each for the two
+      // Samantha Pattana readings.
+      expect(keyed('check-'), 23);
+      expect(keyed('check-section-'), 17);
+      expect(keyed('check-reading-'), 2);
+      expect(find.textContaining('ගච්චාමි'), findsOneWidget);
+      expect(find.textContaining('ගච්ඡාමි'), findsOneWidget);
+    },
+  );
 
-  testWidgets('a reading that wholly needs checking is one row, not one per verse',
-      (t) async {
-    await openSources(t);
-    expect(find.byKey(const ValueKey('check-reading-sp-introduction')), findsOneWidget);
-    expect(find.byKey(const ValueKey('check-reading-sp-vandana')), findsOneWidget);
-    expect(keyed('check-u-'), 0);
-    expect(keyed('check-intro-'), 0);
-    expect(
-      find.descendant(
-        of: find.byKey(const ValueKey('check-reading-sp-introduction')),
-        matching: find.text('Introduction'),
-      ),
-      findsOneWidget,
-    );
-    // Buddha Wandanawa keeps one row per verse with notes, by verse id, and one
-    // per section from the Nottingham booklet: 4 + 17.
-    expect(keyed('check-s'), 21);
-    // Pirith still has none.
-    final library = await t.runAsync(
-      () => AssetContentRepository(rootBundle).load(),
-    );
-    final pirith = library!.category('cat-pirith')!.readings;
-    expect(pirith, isNotEmpty);
-    for (final r in pirith) {
-      expect(find.byKey(ValueKey('check-reading-${r.id}')), findsNothing);
-      for (final v in r.sections.expand((s) => s.verses)) {
-        expect(find.byKey(ValueKey('check-${v.id}')), findsNothing);
+  testWidgets(
+    'a reading that wholly needs checking is one row, not one per verse',
+    (t) async {
+      await openSources(t);
+      expect(
+        find.byKey(const ValueKey('check-reading-sp-introduction')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('check-reading-sp-vandana')),
+        findsOneWidget,
+      );
+      expect(keyed('check-u-'), 0);
+      expect(keyed('check-intro-'), 0);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('check-reading-sp-introduction')),
+          matching: find.text('Introduction'),
+        ),
+        findsOneWidget,
+      );
+      // Buddha Wandanawa keeps one row per verse with notes, by verse id, and one
+      // per section from the Nottingham booklet: 4 + 17.
+      expect(keyed('check-s'), 21);
+      // Pirith still has none.
+      final library = await t.runAsync(
+        () => AssetContentRepository(rootBundle).load(),
+      );
+      final pirith = library!.category('cat-pirith')!.readings;
+      expect(pirith, isNotEmpty);
+      for (final r in pirith) {
+        expect(find.byKey(ValueKey('check-reading-${r.id}')), findsNothing);
+        for (final v in r.sections.expand((s) => s.verses)) {
+          expect(find.byKey(ValueKey('check-${v.id}')), findsNothing);
+        }
       }
-    }
-  });
+    },
+  );
 
   testWidgets('Font licences opens the licence page', (t) async {
     await openSources(t);
@@ -355,9 +386,14 @@ void main() {
       await openSources(t);
       final arrows = RegExp('[←-⇿]');
       for (final w in t.widgetList<Text>(find.byType(Text))) {
-        expect(w.data ?? w.textSpan?.toPlainText() ?? '', isNot(contains(arrows)));
+        expect(
+          w.data ?? w.textSpan?.toPlainText() ?? '',
+          isNot(contains(arrows)),
+        );
       }
-      for (final w in t.widgetList<SelectableText>(find.byType(SelectableText))) {
+      for (final w in t.widgetList<SelectableText>(
+        find.byType(SelectableText),
+      )) {
         expect(w.data ?? '', isNot(contains(arrows)));
       }
       // Both printed forms are on the first row, apart from each other.
@@ -378,7 +414,9 @@ void main() {
     },
   );
 
-  testWidgets('a correction row with long forms wraps without overflow', (t) async {
+  testWidgets('a correction row with long forms wraps without overflow', (
+    t,
+  ) async {
     await openSources(t);
     expect(t.takeException(), isNull);
     for (var i = 0; i < 16; i++) {
@@ -387,49 +425,67 @@ void main() {
     }
   });
 
-  testWidgets('Sources has a Back button above the title that returns to Settings',
-      (t) async {
-    await openSources(t);
-    final back = find.byTooltip('Back');
-    expect(back, findsOneWidget);
-    expect(
-      t.getTopLeft(back).dy,
-      lessThan(t.getTopLeft(find.text('Sources')).dy),
-    );
-    expect(t.getSize(back).width, greaterThanOrEqualTo(48));
-    expect(find.byType(AppBar), findsNothing);
-    await t.tap(back);
-    await t.pumpAndSettle();
-    expect(find.byKey(const ValueKey('screen-settings')), findsOneWidget);
-  });
+  testWidgets(
+    'Sources has a Back button above the title that returns to Settings',
+    (t) async {
+      await openSources(t);
+      final back = find.byTooltip('Back');
+      expect(back, findsOneWidget);
+      expect(
+        t.getTopLeft(back).dy,
+        lessThan(t.getTopLeft(find.text('Sources')).dy),
+      );
+      expect(t.getSize(back).width, greaterThanOrEqualTo(48));
+      expect(find.byType(AppBar), findsNothing);
+      await t.tap(back);
+      await t.pumpAndSettle();
+      expect(find.byKey(const ValueKey('screen-settings')), findsOneWidget);
+    },
+  );
 
   testWidgets('each credit, correction and check is a surface card', (t) async {
     await openSources(t);
-    // 7 text sources + the Tripitaka + the Books + 4 pictures + 16 corrections
-    // + 23 checks.
-    expect(find.byType(SurfaceCard), findsNWidgets(52));
+    // 7 text sources + the Wandanawa chanting + the Tripitaka + the Books + 4
+    // pictures + 17 corrections + 23 checks.
+    expect(find.byType(SurfaceCard), findsNWidgets(54));
+  });
+
+  testWidgets('Sources credits the Buddha Wandanawa chanting and says which '
+      'is computer-made', (t) async {
+    await openSources(t);
+    expect(text('Buddha Wandanawa chanting'), findsOneWidget);
+    final detail = find.textContaining('the chanting is computer-made');
+    expect(detail, findsOneWidget);
+    expect(
+      find.textContaining("an AI voice tool changed it into the Thero's voice"),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Sections 31 and 32'), findsOneWidget);
   });
 
   for (final dark in [false, true]) {
     for (final w in [320.0, 360.0, 390.0, 840.0]) {
-      testWidgets('Sources does not overflow at $w, ${dark ? 'dark' : 'light'}',
-          (t) async {
-        t.platformDispatcher.textScaleFactorTestValue = w == 320 ? 2.0 : 1.0;
-        t.platformDispatcher.platformBrightnessTestValue =
-            dark ? Brightness.dark : Brightness.light;
-        addTearDown(() {
-          t.platformDispatcher.clearTextScaleFactorTestValue();
-          t.platformDispatcher.clearPlatformBrightnessTestValue();
-        });
-        await openSources(t);
-        t.view.physicalSize = Size(w, 800);
-        await t.pumpAndSettle();
-        for (var i = 0; i < 10; i++) {
-          await t.drag(find.byType(Scrollable).first, const Offset(0, -600));
-          await t.pump();
-        }
-        expect(t.takeException(), isNull);
-      });
+      testWidgets(
+        'Sources does not overflow at $w, ${dark ? 'dark' : 'light'}',
+        (t) async {
+          t.platformDispatcher.textScaleFactorTestValue = w == 320 ? 2.0 : 1.0;
+          t.platformDispatcher.platformBrightnessTestValue = dark
+              ? Brightness.dark
+              : Brightness.light;
+          addTearDown(() {
+            t.platformDispatcher.clearTextScaleFactorTestValue();
+            t.platformDispatcher.clearPlatformBrightnessTestValue();
+          });
+          await openSources(t);
+          t.view.physicalSize = Size(w, 800);
+          await t.pumpAndSettle();
+          for (var i = 0; i < 10; i++) {
+            await t.drag(find.byType(Scrollable).first, const Offset(0, -600));
+            await t.pump();
+          }
+          expect(t.takeException(), isNull);
+        },
+      );
     }
   }
 
@@ -453,10 +509,10 @@ void main() {
             'path.nirvana@gmail.com so it can be corrected at the source.',
       ]) {
         expect(
-          find.descendant(of: card, matching: find.textContaining(
-            sentence,
-            findRichText: true,
-          )),
+          find.descendant(
+            of: card,
+            matching: find.textContaining(sentence, findRichText: true),
+          ),
           findsOneWidget,
           reason: sentence,
         );
@@ -491,10 +547,7 @@ void main() {
     }
     expect(text(notMadeBy), findsOneWidget);
     // It follows the Tripitaka card.
-    expect(
-      t.getTopLeft(card).dy,
-      greaterThan(t.getTopLeft(tripitakaCard).dy),
-    );
+    expect(t.getTopLeft(card).dy, greaterThan(t.getTopLeft(tripitakaCard).dy));
   });
 
   testWidgets('Sources entry does not say "used with permission"', (t) async {
@@ -544,12 +597,45 @@ void main() {
     expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
   });
 
-  testWidgets('a verse with notes still gets its row under a section row',
-      (t) async {
+  testWidgets('a verse with notes still gets its row under a section row', (
+    t,
+  ) async {
     await openSources(t, content: _checkLibrary(verseNotes: const ['n']));
-    final section = t.getTopLeft(find.byKey(const ValueKey('check-section-s01')));
+    final section = t.getTopLeft(
+      find.byKey(const ValueKey('check-section-s01')),
+    );
     final verse = t.getTopLeft(find.byKey(const ValueKey('check-s01-v1')));
     expect(section.dy, lessThan(verse.dy));
     expect(find.byKey(const ValueKey('check-s01-v2')), findsNothing);
   });
+
+  testWidgets(
+    'Sources credits the bana channels and says they play from YouTube',
+    (t) async {
+      await openSources(t, extra: banaOverrides());
+      final card = find.byKey(const ValueKey('sources-bana'));
+      expect(card, findsOneWidget);
+      expect(find.descendant(of: card, matching: text('Chan')), findsOneWidget);
+      expect(
+        find.descendant(of: card, matching: text('https://example.org/c')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: card,
+          matching: text('Speakers: Ven. Alpha, Ven. Beta.'),
+        ),
+        findsWidgets,
+      );
+      expect(
+        find.descendant(
+          of: card,
+          matching: text(
+            'The bana play from YouTube, which may show its own ads.',
+          ),
+        ),
+        findsOneWidget,
+      );
+    },
+  );
 }

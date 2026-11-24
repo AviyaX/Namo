@@ -105,7 +105,11 @@ void main() {
 
   testWidgets('the play button is a 56-px sage circle between 48-px '
       'previous and next', (t) async {
-    await openReal(t, Routes.reader(realReadingId));
+    await openReal(
+      t,
+      Routes.reader(realReadingId),
+      library: await silentWandanaLibrary(t),
+    );
     final p = paletteOf(t);
     expect(t.getSize(_play), const Size(56, 56));
     final disc = find.descendant(
@@ -164,7 +168,11 @@ void main() {
   });
 
   testWidgets('without a recording there are no audio controls', (t) async {
-    await openReal(t, Routes.reader(realReadingId));
+    await openReal(
+      t,
+      Routes.reader(realReadingId),
+      library: await silentWandanaLibrary(t),
+    );
     expect(_audioPlay, findsNothing);
     expect(
       find.descendant(of: find.byType(FloatingBar), matching: _play),

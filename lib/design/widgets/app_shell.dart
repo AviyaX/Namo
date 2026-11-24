@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../router.dart' show Routes;
 import '../../tips/tip_anchor.dart';
 import '../../tips/tip_host.dart';
 import '../../tips/tips.dart';
@@ -12,25 +13,28 @@ import 'floating_bar.dart';
 import 'pressable.dart';
 
 class _Tab {
-  const _Tab(this.label, this.icon);
+  const _Tab(this.id, this.label, this.icon);
+
+  /// Names the tab's key (`nav-<id>`); the label may change, this does not.
+  final String id;
   final String label;
   final IconData icon;
 }
 
 const _tabs = [
-  _Tab('Home', Symbols.home_rounded),
-  _Tab('Library', Symbols.menu_book_rounded),
-  _Tab('Tripitaka', Symbols.auto_stories_rounded),
-  _Tab('Saved', Symbols.bookmark_rounded),
-  _Tab('Settings', Symbols.settings_rounded),
+  _Tab('home', 'Home', Symbols.home_rounded),
+  _Tab('library', 'Pirith & Gatha', Symbols.menu_book_rounded),
+  _Tab('bana', 'Bana', Symbols.smart_display_rounded),
+  _Tab('tripitaka', 'Library', Symbols.auto_stories_rounded),
+  _Tab('settings', 'Settings', Symbols.settings_rounded),
 ];
 
 /// The tabs' places in the bar, as the router's branches are listed.
 abstract final class TabIndex {
   static const home = 0;
   static const library = 1;
-  static const tripitaka = 2;
-  static const saved = 3;
+  static const bana = 2;
+  static const tripitaka = 3;
   static const settings = 4;
 }
 
@@ -46,6 +50,20 @@ class TabPressedAgain extends Notifier<(int, int)?> {
 
 final tabPressedAgainProvider =
     NotifierProvider<TabPressedAgain, (int, int)?>(TabPressedAgain.new);
+
+/// The tab showing now, as the shell last built it (null before any shell).
+/// Every tab stays mounted, so a page that must stop when its tab is hidden
+/// (a playing video) watches this.
+class CurrentTab extends Notifier<int?> {
+  @override
+  int? build() => null;
+
+  void show(int index) {
+    if (state != index) state = index;
+  }
+}
+
+final currentTabProvider = NotifierProvider<CurrentTab, int?>(CurrentTab.new);
 
 /// The width of the side rail on wide screens.
 const _railWidth = 88.0;
@@ -65,6 +83,12 @@ class AppShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Told after the frame: a provider may not change while building.
+    final shown = shell.currentIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.mounted) ref.read(currentTabProvider.notifier).show(shown);
+    });
+
     void select(int index) {
       final again = index == shell.currentIndex;
       shell.goBranch(index, initialLocation: again);
@@ -73,9 +97,13 @@ class AppShell extends ConsumerWidget {
 
     // Every tab stays built behind the one showing, so only the showing
     // tab's tip is asked for.
+    // Home's tips are for Home itself, not for a page opened over it (the
+    // flow editor).
     List<Tip> tipsFor() => switch (shell.currentIndex) {
-      TabIndex.home => [Tip.recordings],
-      TabIndex.library => [Tip.myFlows],
+      TabIndex.home =>
+        GoRouterState.of(context).uri.path == Routes.home
+            ? [Tip.recordings, Tip.myFlows]
+            : const [],
       _ => const [],
     };
 
@@ -143,21 +171,24 @@ TextStyle _measuredLabelStyle(BuildContext context) => DefaultTextStyle.of(
   context,
 ).style.merge(_labelStyle(NamoPalette.of(context).text));
 
-/// Whether every label, at [factor] times its size, is at most [room] wide on
-/// one line.
+/// Whether every label's longest word, at [factor] times its size, is at
+/// most [room] wide on one line. A label of several words ("Pirith & Gatha")
+/// may wrap between its words; a word is never broken.
 bool _labelsFit(BuildContext context, double room, double factor) {
   final style = _measuredLabelStyle(context);
   final direction = Directionality.of(context);
   for (final t in _tabs) {
-    final tp = TextPainter(
-      text: TextSpan(text: t.label, style: style),
-      textDirection: direction,
-      textScaler: TextScaler.linear(factor),
-      maxLines: 1,
-    )..layout();
-    final width = tp.width;
-    tp.dispose();
-    if (width > room) return false;
+    for (final word in t.label.split(' ')) {
+      final tp = TextPainter(
+        text: TextSpan(text: word, style: style),
+        textDirection: direction,
+        textScaler: TextScaler.linear(factor),
+        maxLines: 1,
+      )..layout();
+      final width = tp.width;
+      tp.dispose();
+      if (width > room) return false;
+    }
   }
   return true;
 }
@@ -321,7 +352,7 @@ class _Destination extends StatelessWidget {
     final color = active ? p.onSage : p.textSecondary;
     final radius = BorderRadius.circular(pill ? NamoRadius.pill : NamoRadius.sm);
     return Pressable(
-      key: ValueKey('nav-${tab.label.toLowerCase()}'),
+      key: ValueKey('nav-${tab.id}'),
       onTap: onTap,
       borderRadius: radius,
       semanticLabel: tab.label,

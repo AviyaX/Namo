@@ -11,6 +11,37 @@ import '../settings/reading_language.dart';
 import '../settings/settings.dart';
 import 'book_model.dart';
 
+/// What goes before a paragraph's text to indent its first line, as in
+/// print. It is added only where the text is measured and drawn, never to
+/// the text itself: places and line starts count from the text's own first
+/// character. No-break spaces keep the same width under justification.
+const bookParaLead = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0';
+
+/// The books' face is drawn this much larger than the reading size, so it
+/// reads as large as the app's Sinhala face does.
+const bookFaceScale = 1.15;
+
+/// A chapter title's size, and a long title's ([bookLongTitle] characters
+/// or more: a whole sentence or question), as print sets such a heading.
+const bookTitleSize = 27.0;
+const bookLongTitleSize = 20.0;
+const bookLongTitle = 60;
+
+/// The room above a chapter's title: it starts a little way down the page.
+const bookTitleSink = NamoSpace.xl;
+
+/// The gap between a chapter's title and its flourish.
+const bookFlourishGap = NamoSpace.xs;
+
+/// The flourish's height.
+const bookFlourishHeight = 12.0;
+
+/// The space between two blocks of a page: none between two paragraphs
+/// (the next paragraph's indent marks it, as in print), [NamoSpace.md]
+/// otherwise.
+double bookBlockGap(BookBlock previous, BookBlock block) =>
+    previous is BookPara && block is BookPara ? 0 : NamoSpace.md;
+
 /// The text styles a book page is drawn and measured with, already merged
 /// with the surrounding default text style, and the text size and direction
 /// they are laid out at.
@@ -35,22 +66,37 @@ class BookTextStyles {
     TextStyle base = const TextStyle(),
     TextScaler scaler = TextScaler.noScaling,
     TextDirection direction = TextDirection.ltr,
+    Color? titleColor,
   }) {
+    final reading = readingStyle(
+      ReadingLanguage.sinhala,
+      fontScale: settings.fontScale,
+      lineSpacing: settings.lineSpacing,
+      color: palette.text,
+    );
     final prose = base.merge(
-      readingStyle(
-        ReadingLanguage.sinhala,
-        fontScale: settings.fontScale,
-        lineSpacing: settings.lineSpacing,
-        color: palette.text,
+      reading.copyWith(
+        fontFamily: NamoFonts.book,
+        fontFamilyFallback: [
+          NamoFonts.sinhala,
+          ...?reading.fontFamilyFallback,
+        ],
+        fontSize: reading.fontSize! * bookFaceScale,
       ),
     );
-    final strong = prose.copyWith(fontWeight: FontWeight.w600);
+    final strong = prose.copyWith(fontWeight: FontWeight.w700);
     return BookTextStyles(
       prose: prose,
       strong: strong,
-      heading: strong.copyWith(fontSize: prose.fontSize! * 1.25),
+      heading: strong.copyWith(fontSize: prose.fontSize! * 1.2),
       caption: base.merge(NamoType.caption(palette.textSecondary)),
-      title: base.merge(NamoType.sectionTitleSinhala(palette.text)),
+      // One size whatever the reading size (as the chapter titles always
+      // were), so a long title still leaves room on a page for its text.
+      title: strong.copyWith(
+        fontSize: bookTitleSize,
+        height: 1.35,
+        color: titleColor ?? palette.text,
+      ),
       border: palette.border,
       scaler: scaler,
       direction: direction,
@@ -80,6 +126,7 @@ class BookTextStyles {
         textSecondary: c.inkSecondary,
         border: c.rule,
       ),
+      titleColor: c.title,
       settings: settings,
       base: DefaultTextStyle.of(context).style,
       scaler: MediaQuery.textScalerOf(context),
@@ -120,6 +167,11 @@ class BookTextStyles {
     scaler: scaler,
     direction: direction,
   );
+
+  /// The style [title] is drawn in: [title] set smaller when it is long.
+  TextStyle titleFor(String title) => title.length >= bookLongTitle
+      ? this.title.copyWith(fontSize: bookLongTitleSize)
+      : this.title;
 
   /// The style of [table]'s row [r].
   TextStyle tableRow(BookTable table, int r) =>
@@ -234,7 +286,7 @@ class BookBlockView extends StatelessWidget {
     final s = styles;
     return switch (block) {
       BookPara(:final text) => Text(
-        text,
+        bookParaLead + text,
         style: s.prose,
         textAlign: TextAlign.justify,
       ),
@@ -526,4 +578,88 @@ class BookTableView extends StatelessWidget {
       );
     },
   );
+}
+
+/// A chapter's title as a printed book opens a chapter: [bookTitleSink]
+/// down, centred, in the title's brown, with a small flourish under it.
+/// As tall as `BookMeasurer.titleHeight` measures it.
+class BookChapterTitle extends StatelessWidget {
+  const BookChapterTitle({super.key, required this.title, required this.style});
+
+  final String title;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      key: const ValueKey('book-chapter-title'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: bookTitleSink),
+        Semantics(
+          header: true,
+          child: Text(title, style: style, textAlign: TextAlign.center),
+        ),
+        const SizedBox(height: bookFlourishGap),
+        SizedBox(
+          height: bookFlourishHeight,
+          child: ExcludeSemantics(
+            child: CustomPaint(
+              key: const ValueKey('book-flourish'),
+              painter: _FlourishPainter(
+                (style.color ?? NamoPalette.of(context).text).withValues(
+                  alpha: 0.7,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// A small flourish: a leaf between two fine tapering strokes.
+class _FlourishPainter extends CustomPainter {
+  const _FlourishPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final c = Offset(size.width / 2, size.height / 2);
+    final paint = Paint()
+      ..color = color
+      ..isAntiAlias = true;
+    const reach = 26.0, leaf = 5.0;
+    for (final side in [-1.0, 1.0]) {
+      final stroke = Path()
+        ..moveTo(c.dx + side * (leaf + 3), c.dy - 0.9)
+        ..quadraticBezierTo(
+          c.dx + side * (leaf + reach * 0.6),
+          c.dy - 2.4,
+          c.dx + side * (leaf + reach),
+          c.dy,
+        )
+        ..quadraticBezierTo(
+          c.dx + side * (leaf + reach * 0.6),
+          c.dy + 1.2,
+          c.dx + side * (leaf + 3),
+          c.dy + 0.9,
+        )
+        ..close();
+      canvas.drawPath(stroke, paint);
+    }
+    final diamond = Path()
+      ..moveTo(c.dx, c.dy - leaf)
+      ..quadraticBezierTo(c.dx + leaf * 0.9, c.dy - leaf * 0.2, c.dx + leaf, c.dy)
+      ..quadraticBezierTo(c.dx + leaf * 0.9, c.dy + leaf * 0.2, c.dx, c.dy + leaf)
+      ..quadraticBezierTo(c.dx - leaf * 0.9, c.dy + leaf * 0.2, c.dx - leaf, c.dy)
+      ..quadraticBezierTo(c.dx - leaf * 0.9, c.dy - leaf * 0.2, c.dx, c.dy - leaf)
+      ..close();
+    canvas.drawPath(diamond, paint);
+  }
+
+  @override
+  bool shouldRepaint(_FlourishPainter old) => old.color != color;
 }

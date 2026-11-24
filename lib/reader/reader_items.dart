@@ -1,3 +1,4 @@
+import '../audio/chant_timing.dart';
 import '../content/model.dart';
 import '../settings/reading_language.dart';
 
@@ -45,6 +46,7 @@ class VerseTextItem extends ReaderItem {
     required this.language,
     required this.text,
     required this.secondary,
+    this.block,
   });
 
   @override
@@ -54,6 +56,10 @@ class VerseTextItem extends ReaderItem {
   final ReadingLanguage language;
   final String text;
   final bool secondary;
+
+  /// The verse's block for chanting (a section with its own recording);
+  /// null otherwise.
+  final int? block;
 }
 
 /// One verse in Pali and Sinhala for two columns side by side.
@@ -63,6 +69,7 @@ class VersePairItem extends ReaderItem {
     required this.verseId,
     required this.pali,
     required this.sinhala,
+    this.block,
   });
 
   @override
@@ -70,7 +77,19 @@ class VersePairItem extends ReaderItem {
   @override
   final String verseId;
   final String pali, sinhala;
+
+  /// As [VerseTextItem.block].
+  final int? block;
 }
+
+/// The chanting block [item] shows: a pirith block's index, or a recorded
+/// verse's block; null for anything else.
+int? blockOfItem(ReaderItem item) => switch (item) {
+  PhraseBlockItem(:final index) => index,
+  VerseTextItem(:final block) => block,
+  VersePairItem(:final block) => block,
+  HeadingItem() => null,
+};
 
 /// One block of a pirith: its phrases together, shown in [languages] (the
 /// chosen selection, in order). [index] is the block's zero-based position
@@ -185,8 +204,7 @@ List<String> _notes(Section section, List<ReadingLanguage> languages) {
   final explains =
       languages.contains(ReadingLanguage.english) &&
       section.verses.any(
-        (v) =>
-            v.english != null && v.englishKind == EnglishKind.explanation,
+        (v) => v.english != null && v.englishKind == EnglishKind.explanation,
       );
   if (explains) notes.add(_explanationNote);
   return notes;
@@ -239,6 +257,10 @@ List<ReaderItem> buildReaderItems(
     return items;
   }
 
+  // The block of each verse of the section being built, when it has its own
+  // recording.
+  var blocks = const <String, int>{};
+
   VerseTextItem? item(Section s, Verse v, int index) {
     final text = v.text(languages[index]);
     if (text == null) return null;
@@ -248,6 +270,7 @@ List<ReaderItem> buildReaderItems(
       language: languages[index],
       text: text,
       secondary: index == 1,
+      block: blocks[v.id],
     );
   }
 
@@ -262,6 +285,10 @@ List<ReaderItem> buildReaderItems(
       }
       continue;
     }
+    // A section with its own recording: each verse is a block.
+    blocks = sectionHasBlocks(s)
+        ? {for (final v in s.verses) v.id: block++}
+        : const <String, int>{};
     if (isAlwaysShown(s)) {
       // An introduction: its Sinhala paragraphs whatever the languages.
       items.add(HeadingItem(s, const [], canBookmark: false));
@@ -275,12 +302,13 @@ List<ReaderItem> buildReaderItems(
             language: ReadingLanguage.sinhala,
             text: text,
             secondary: false,
+            block: blocks[v.id],
           ),
         );
       }
       continue;
     }
-    items.add(HeadingItem(s, _notes(s, languages)));
+    items.add(HeadingItem(s, _notes(s, languages), credit: s.audio?.label));
     if (sideBySide) {
       for (final v in s.verses) {
         final pi = v.text(ReadingLanguage.pali);
@@ -292,6 +320,7 @@ List<ReaderItem> buildReaderItems(
               verseId: v.id,
               pali: pi,
               sinhala: si,
+              block: blocks[v.id],
             ),
           );
         } else if (pi != null) {
@@ -302,6 +331,7 @@ List<ReaderItem> buildReaderItems(
               language: ReadingLanguage.pali,
               text: pi,
               secondary: false,
+              block: blocks[v.id],
             ),
           );
         } else if (si != null) {
@@ -312,6 +342,7 @@ List<ReaderItem> buildReaderItems(
               language: ReadingLanguage.sinhala,
               text: si,
               secondary: true,
+              block: blocks[v.id],
             ),
           );
         }

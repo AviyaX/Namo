@@ -141,8 +141,12 @@ void main() {
     expect(t.widget<Slider>(_slider).onChanged, isNull, reason: 'not loaded');
   });
 
-  testWidgets('Buddha Wandanawa has no chanting controls', (t) async {
-    await openReal(t, Routes.reader(realReadingId));
+  testWidgets('a gatha with no recordings has no chanting controls', (t) async {
+    await openReal(
+      t,
+      Routes.reader(realReadingId),
+      library: await silentWandanaLibrary(t),
+    );
     expect(find.byKey(const ValueKey('reader-play')), findsOneWidget);
     expect(_play, findsNothing);
     expect(_slider, findsNothing);
@@ -281,15 +285,22 @@ void main() {
     expect(player.state.status, ChantStatus.playing);
   });
 
-  testWidgets('going to the background pauses the chanting', (t) async {
+  testWidgets('going to the background keeps the chanting playing', (t) async {
     final player = await _open(t);
     await t.tap(_play);
     await t.pump();
     t.binding
       ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
-      ..handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      ..handleAppLifecycleStateChanged(AppLifecycleState.hidden)
+      ..handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await t.pump();
-    expect(player.state.status, ChantStatus.paused);
+    expect(player.state.status, ChantStatus.playing);
+    t.binding
+      ..handleAppLifecycleStateChanged(AppLifecycleState.hidden)
+      ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
+      ..handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await t.pump();
+    expect(player.state.status, ChantStatus.playing);
   });
 
   testWidgets('leaving the reader pauses the chanting', (t) async {

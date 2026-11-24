@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../books/book_hits.dart';
+import '../books/book_model.dart';
+import '../books/book_search.dart';
+import '../books/books_part.dart';
+import '../books/books_repository.dart';
 import '../design/tokens.dart';
 import '../design/widgets/app_shell.dart';
 import '../design/widgets/namo_page.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/search_field.dart';
-import 'tipitaka_labels.dart';
 import 'tipitaka_repository.dart';
 import 'tipitaka_search.dart';
 import 'tipitaka_state.dart';
@@ -63,12 +67,34 @@ class _TipitakaHomeScreenState extends ConsumerState<TipitakaHomeScreen> {
     if (tree != null) _pruneOnce(tree);
     final wide = MediaQuery.sizeOf(context).width >= NamoSizes.wideBreakpoint;
 
+    final books = foldTipitakaQuery(_query.text).isEmpty
+        ? const <BookSummary>[]
+        : searchBooks(
+            ref.watch(booksIndexProvider).value?.books ?? const [],
+            _query.text,
+          );
     final Widget body;
     if (tree != null) {
       final query = _query.text;
-      body = foldTipitakaQuery(query).isNotEmpty
-          ? TipitakaResults(tree: tree, query: query)
-          : _Browse(tree: tree, wide: wide);
+      if (foldTipitakaQuery(query).isNotEmpty) {
+        // The books whose title matches come first, then the names.
+        body = Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            BookHits(books: books),
+            TipitakaResults(
+              tree: tree,
+              query: query,
+              quietWhenEmpty: books.isNotEmpty,
+            ),
+          ],
+        );
+      } else {
+        body = _Browse(tree: tree, wide: wide);
+      }
+    } else if (books.isNotEmpty) {
+      // The books are found even while the Tripitaka is not there.
+      body = BookHits(books: books);
     } else if (loaded.hasError && !loaded.isLoading) {
       body = const TipitakaLoadError();
     } else {
@@ -78,10 +104,7 @@ class _TipitakaHomeScreenState extends ConsumerState<TipitakaHomeScreen> {
     return NamoPage(
       maxWidth: wide ? NamoSizes.homeColumn : NamoSizes.readingColumn,
       children: [
-        const PageHeader(
-          title: tipitakaPageTitle,
-          caption: tipitakaPageCaption,
-        ),
+        const PageHeader(title: 'Tripitaka & Books'),
         const SizedBox(height: NamoSpace.lg),
         SearchField(
           key: const ValueKey('tipitaka-search'),
@@ -92,6 +115,9 @@ class _TipitakaHomeScreenState extends ConsumerState<TipitakaHomeScreen> {
         ),
         const SizedBox(height: NamoSpace.lg),
         body,
+        // The Tripitaka first, then the other books.
+        const SizedBox(height: NamoSpace.xl),
+        const BooksPart(),
       ],
     );
   }

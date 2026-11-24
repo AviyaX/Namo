@@ -49,7 +49,13 @@ class Recording {
   bool get timed => blockTimes.isNotEmpty;
 }
 
-/// Where the app finds the recording of a reading.
+/// The catalogue id of section [sectionId]'s own recording in reading
+/// [readingId] (a Buddha Wandanawa section).
+String sectionRecordingId(String readingId, String sectionId) =>
+    '$readingId#$sectionId';
+
+/// Where the app finds the recording of a reading, or of a section with its
+/// own recording (by [sectionRecordingId]).
 abstract interface class AudioCatalogue {
   /// Null when the reading has no recording.
   Recording? recordingFor(String readingId);
@@ -63,6 +69,14 @@ class ContentAudioCatalogue implements AudioCatalogue {
           for (final reading in category.readings)
             if (reading.audio != null)
               reading.id: _recordingOf(reading.id, reading.audio!),
+        for (final category in library.categories)
+          for (final reading in category.readings)
+            for (final section in reading.sections)
+              if (section.audio != null)
+                sectionRecordingId(reading.id, section.id): _recordingOf(
+                  sectionRecordingId(reading.id, section.id),
+                  section.audio!,
+                ),
       };
 
   static Recording _recordingOf(String readingId, RecordingInfo info) {
@@ -85,7 +99,7 @@ class ContentAudioCatalogue implements AudioCatalogue {
 
   final Map<String, Recording> _byReading;
 
-  /// Every reading's recording, in library order.
+  /// Every reading's recording, then every section's, in library order.
   List<Recording> get recordings => _byReading.values.toList();
 
   @override
@@ -93,7 +107,8 @@ class ContentAudioCatalogue implements AudioCatalogue {
 }
 
 /// The development tone: not a chant, only for trying the controls.
-const placeholderToneAsset = 'assets/audio_dev/placeholder_tone_not_a_chant.wav';
+const placeholderToneAsset =
+    'assets/audio_dev/placeholder_tone_not_a_chant.wav';
 const placeholderToneLabel = 'Development placeholder tone (not a chant)';
 
 /// [real], and the labelled tone for every reading it has nothing for.

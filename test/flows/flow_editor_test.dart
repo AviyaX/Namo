@@ -260,7 +260,7 @@ void main() {
       await t.tap(find.byTooltip('Back'));
       await t.pump();
       await t.pump(const Duration(milliseconds: 500));
-      expect(location(c), Routes.library);
+      expect(location(c), Routes.home);
       await t.tap(find.text('Undo'));
       await t.pumpAndSettle();
       expect(t.takeException(), isNull);
@@ -430,7 +430,7 @@ void main() {
       expect(savedFlow(c, 'flow-1'), isNull);
       expect(savedFlow(c, 'flow-2'), isNotNull);
       expect(c.read(positionProvider).byReading, isNot(contains('flow-1')));
-      expect(location(c), Routes.library);
+      expect(location(c), Routes.home);
       expect(find.byType(NotFoundScreen), findsNothing);
     });
   });
@@ -444,7 +444,7 @@ void main() {
     final c = await openFlows(t, editor, {'flow-1': [_a]});
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(location(c), Routes.library);
+    expect(location(c), Routes.home);
   });
 
   testWidgets('every control of a row is at least 48 x 48', (t) async {
@@ -585,7 +585,7 @@ void main() {
 
           testWidgets('the editor does not overflow: $name', (t) async {
             await open(t);
-            expect(find.text('4 sections · 1 with a recording'), findsOneWidget);
+            expect(find.text('4 sections · 4 with recordings'), findsOneWidget);
             await scrollThrough(t);
           });
 

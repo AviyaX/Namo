@@ -3,19 +3,35 @@ import '../flows/flow_reading.dart';
 import 'audio_catalogue.dart';
 import 'chant_timing.dart';
 
-/// True when [recording] chants [section]: the section shows as blocks of
-/// phrases and the recording times exactly its blocks.
+/// True when [recording] chants [section]: the section is numbered as blocks
+/// ([sectionHasBlocks]) and the recording times exactly its blocks.
 ///
-/// The design also asks that the recording's reading has exactly one
-/// section; every recorded reading has one today, so the verse count stands
-/// in for it. A recording of a reading with several sections would attach to
-/// each section whose verse count matches its blocks; such a recording needs
-/// per-section cues ([Recording.sectionCues]) first.
+/// A pirith's recording is its reading's, and every recorded reading has one
+/// section, so the verse count stands in for that. A section with its own
+/// recording (a Buddha Wandanawa section) is chanted only by that.
 bool sectionIsRecorded(Section section, Recording? recording) =>
-    sectionIsPhrased(section) &&
+    sectionHasBlocks(section) &&
     recording != null &&
     recording.timed &&
     recording.blockTimes.length == section.verses.length;
+
+/// The recording that would chant [section] of reading [readingId]: its own
+/// (a Buddha Wandanawa section), else its reading's. In a flow, the section's
+/// original reading and section. Null when there is none.
+Recording? recordingOfSection(
+  AudioCatalogue catalogue,
+  String readingId,
+  Section section,
+) {
+  final ref = refOfFlowSection(section.id);
+  final from = ref?.readingId ?? readingId;
+  if (section.audio != null) {
+    return catalogue.recordingFor(
+      sectionRecordingId(from, ref?.sectionId ?? section.id),
+    );
+  }
+  return catalogue.recordingFor(from);
+}
 
 /// One recorded section, played at [start] on the programme's timeline.
 class ChantLeg {
@@ -91,9 +107,8 @@ class ChantProgramme {
     var block = 0;
     var start = Duration.zero;
     for (final s in reading.sections) {
-      if (!sectionIsPhrased(s)) continue;
-      final readingId = refOfFlowSection(s.id)?.readingId ?? reading.id;
-      final recording = catalogue.recordingFor(readingId);
+      if (!sectionHasBlocks(s)) continue;
+      final recording = recordingOfSection(catalogue, reading.id, s);
       if (sectionIsRecorded(s, recording)) {
         final leg = ChantLeg(
           recording: recording!,

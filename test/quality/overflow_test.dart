@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:buddhist_gatha/audio/recording_store.dart';
+import 'package:buddhist_gatha/bana/bana_progress.dart';
 import 'package:buddhist_gatha/books/book_places.dart';
 import 'package:buddhist_gatha/design/widgets/buttons.dart';
 import 'package:buddhist_gatha/design/widgets/floating_bar.dart';
@@ -18,6 +19,7 @@ import 'package:buddhist_gatha/tipitaka/tipitaka_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../bana/bana_support.dart';
 import '../books/books_support.dart';
 import '../support/fake_recording_store.dart';
 import '../tipitaka/tipitaka_app_support.dart';
@@ -152,10 +154,10 @@ void main() {
       expectInView(t);
     });
 
-    testWidgets('Library with the My flows tip does not overflow: $where', (
+    testWidgets('Home with the My flows tip does not overflow: $where', (
       t,
     ) async {
-      await openReal(t, Routes.library,
+      await openReal(t, Routes.home,
           size: size, deviceTextScale: 2.0, tips: true);
       // The tip waits for its card to be wholly on screen; on a small screen
       // at large text that is a scroll away.
@@ -742,7 +744,7 @@ void main() {
   // page, and a footnotes page. Page numbers: "1" is 2, "1-1" is 3, "1-2" is
   // 4, "2-1-1" is 7.
   final booksScreens = <(String, String, Map<String, String>)>[
-    ('Books shelf', Routes.library, const {}),
+    ('Books shelf', Routes.tipitaka, const {}),
     ('Book page', Routes.book(tinyBookNestedId), const {}),
     (
       'Book page with a place',
@@ -879,5 +881,104 @@ void main() {
       }
       expect(t.takeException(), isNull);
     });
+  }
+
+  // The Bana tab: first page, with a monk and a topic chosen, and with a
+  // search, at the narrowest size and the wide one, text 1.6x, both themes.
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final dark in [false, true]) {
+      testWidgets('Bana tab does not overflow: ${size.width.round()}x'
+          '${size.height.round()}, text 1.6x, ${dark ? 'dark' : 'light'}',
+          (t) async {
+        await openReal(
+          t,
+          Routes.bana,
+          size: size,
+          dark: dark,
+          settings: const AppSettings(fontScale: 1.6),
+          deviceTextScale: 1.6,
+          overrides: banaOverrides(),
+        );
+        expect(t.takeException(), isNull);
+        await scrollThrough(t);
+        // The header scrolled out of the lazy list: back to the top.
+        t
+            .state<ScrollableState>(find.byType(Scrollable).first)
+            .position
+            .jumpTo(0);
+        await t.pumpAndSettle();
+        await t.ensureVisible(find.byKey(const ValueKey('bana-speaker-b')));
+        await t.tap(find.byKey(const ValueKey('bana-speaker-b')));
+        await t.pumpAndSettle();
+        expect(t.takeException(), isNull);
+        await t.enterText(
+          find.descendant(
+            of: find.byKey(const ValueKey('bana-search')),
+            matching: find.byType(TextField),
+          ),
+          'single',
+        );
+        await t.pumpAndSettle();
+        expect(t.takeException(), isNull);
+        await scrollThrough(t);
+      });
+    }
+  }
+
+  // The series page, with a last-opened part, at the narrowest size and the
+  // wide one, text 1.6x, both themes.
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final dark in [false, true]) {
+      testWidgets('Bana series page does not overflow: ${size.width.round()}x'
+          '${size.height.round()}, text 1.6x, ${dark ? 'dark' : 'light'}',
+          (t) async {
+        await openReal(
+          t,
+          Routes.banaSeries('s1'),
+          size: size,
+          dark: dark,
+          settings: const AppSettings(fontScale: 1.6),
+          deviceTextScale: 1.6,
+          overrides: banaOverrides(),
+          storeExtras: {
+            banaLastPartKey: jsonEncode({'s1': 'v2'}),
+          },
+        );
+        expect(t.takeException(), isNull);
+        await scrollThrough(t);
+        expect(t.takeException(), isNull);
+        await expectLater(t, meetsGuideline(androidTapTargetGuideline));
+      });
+    }
+  }
+
+  // The player page: a middle part (both neighbours), and the offline panel.
+  for (final size in const [Size(320, 568), Size(1280, 800)]) {
+    for (final dark in [false, true]) {
+      for (final fails in [false, true]) {
+        testWidgets('Bana player page does not overflow: '
+            '${size.width.round()}x${size.height.round()}, text 1.6x, '
+            '${dark ? 'dark' : 'light'}${fails ? ', offline' : ''}',
+            (t) async {
+          final fake = FakePlayers();
+          await openReal(
+            t,
+            Routes.banaPlay('v2'),
+            size: size,
+            dark: dark,
+            settings: const AppSettings(fontScale: 1.6),
+            deviceTextScale: 1.6,
+            players: fake,
+            overrides: banaOverrides(),
+          );
+          fails ? fake.fail() : fake.ready();
+          await t.pump();
+          expect(t.takeException(), isNull);
+          await scrollThrough(t);
+          expect(t.takeException(), isNull);
+          await expectLater(t, meetsGuideline(androidTapTargetGuideline));
+        });
+      }
+    }
   }
 }

@@ -1,0 +1,134 @@
+{
+ "topics": [
+  {
+   "id": "M",
+   "si": "භාවනාව",
+   "en": "Meditation"
+  },
+  {
+   "id": "ME",
+   "si": "මෛත්‍රී",
+   "en": "Loving-kindness"
+  },
+  {
+   "id": "BG",
+   "si": "බුදු ගුණ",
+   "en": "Qualities of the Buddha"
+  },
+  {
+   "id": "SU",
+   "si": "සූත්‍ර දේශනා",
+   "en": "Suttas explained"
+  },
+  {
+   "id": "KS",
+   "si": "කර්මය හා සංසාරය",
+   "en": "Kamma and samsara"
+  },
+  {
+   "id": "DP",
+   "si": "දානය, පින් හා පාරමිතා",
+   "en": "Giving, merit and perfections"
+  },
+  {
+   "id": "PW",
+   "si": "මාර්ගය හා ප්‍රඥාව",
+   "en": "The path and wisdom"
+  },
+  {
+   "id": "LV",
+   "si": "උතුමන්ගේ චරිත",
+   "en": "Lives of the noble ones"
+  },
+  {
+   "id": "PY",
+   "si": "පොහොය දින දේශනා",
+   "en": "Poya day talks"
+  },
+  {
+   "id": "DL",
+   "si": "එදිනෙදා ජීවිතයට",
+   "en": "Mind and daily life"
+  },
+  {
+   "id": "PT",
+   "si": "පට්ඨානය",
+   "en": "Patthana"
+  }
+ ],
+ "speakers": [
+  {
+   "id": "na-uyane-ariyadhamma",
+   "name": "Ven. Na Uyane Ariyadhamma Maha Thero"
+  },
+  {
+   "id": "kiriwaththuduwe-ariyadassana",
+   "name": "Ven. Kiriwaththuduwe Ariyadassana Thero"
+  },
+  {
+   "id": "kelaniye-sasanawansa",
+   "name": "Ven. Kelaniye Sasanawansa Thero"
+  }
+ ],
+ "channels": [
+  {
+   "id": "budu-dahama",
+   "name": "Budu Dahama බුදු දහම",
+   "url": "https://www.youtube.com/playlist?list=PLGNIkoMWkSHwt6A8dAjMOziznanGdB8SM"
+  },
+  {
+   "id": "yathiwara-adawiya",
+   "name": "Yathiwara Adawiya යතිවර අඩවිය",
+   "url": "https://www.youtube.com/playlist?list=PLiOaRw4J4Uyv9IBNP9aDWxsluAqtC_Bng"
+  },
+  {
+   "id": "wassana-dharma-deshana",
+   "name": "Wassana Dharma Deshana වස්සාන ධර්ම දේශනා",
+   "url": "https://www.youtube.com/playlist?list=PLoV7IpZqAgVSLpauPjwUnoYi2VVuRxT33"
+  },
+  {
+   "id": "pragna-tv",
+   "name": "Pragna TV",
+   "url": "https://www.youtube.com/playlist?list=PLELiWFtuVMLaUt47e-HUuXs7dGvQFnyi1"
+  }
+ ],
+ "series": [
+  {
+   "id": "samatha-bhavana",
+   "draft": "සමථ භාවනාව",
+   "speaker": "na-uyane-ariyadhamma",
+   "channel": "yathiwara-adawiya",
+   "topics": [
+    "M"
+   ]
+  },
+  {
+   "id": "patthana-deshana",
+   "draft": "පට්ඨාන ධර්ම දේශනා මාලාව",
+   "speaker": "kiriwaththuduwe-ariyadassana",
+   "channel": "wassana-dharma-deshana",
+   "topics": [
+    "PT"
+   ]
+  },
+  {
+   "id": "pragna-tv-bana",
+   "draft": "Pragna TV bana",
+   "speaker": "kelaniye-sasanawansa",
+   "channel": "pragna-tv",
+   "topics": []
+  }
+ ],
+ "trim": [
+  "(most\\s+)?(ven\\.?\\s*)?na\\s+uyane\\s+ariyadhamma(\\s+maha)?(\\s+thero)?",
+  "(most\\s+)?(ven\\.?\\s*)?kir\\w*\\s+(ariya\\s+)?\\w*sana?(\\s+thero)?",
+  "\\b(ari|aiy)\\w*das+ana?(\\s+thero)?",
+  "wass?[ab][nb]a(\\s+desh?ana)?(\\s+bana\\s+katha)?",
+  "wassana\\s+dharma\\s+deshana",
+  "budu\\s+dahama",
+  "yathiwara\\s+adawiya",
+  "^\\s*bana(\\s+katha)?\\s*$",
+  "pragna\\s+tv",
+  "(ven\\.?\\s*)?kelaniye\\s+sasanawansa(\\s+thero)?"
+ ]
+}

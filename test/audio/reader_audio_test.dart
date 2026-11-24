@@ -289,7 +289,7 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('going to the background pauses the audio', (t) async {
+  testWidgets('going to the background keeps the audio playing', (t) async {
     final player = FakeChantPlayer();
     await open(t, player: player);
     await t.tap(_audioPlay);
@@ -297,14 +297,14 @@ void main() {
     t.binding
       ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
       ..handleAppLifecycleStateChanged(AppLifecycleState.hidden);
-    expect(player.state.status, ChantStatus.paused);
+    expect(player.state.status, ChantStatus.playing);
     // Frames stop while the app is hidden; draw again to see the label.
     t.binding
       ..handleAppLifecycleStateChanged(AppLifecycleState.inactive)
       ..handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await pumpStream(t);
-    expect(player.state.status, ChantStatus.paused);
-    expect(audioLabel(t), 'Play recording');
+    expect(player.state.status, ChantStatus.playing);
+    expect(audioLabel(t), 'Pause recording');
   });
 
   testWidgets('leaving the reader disposes the player', (t) async {

@@ -178,19 +178,23 @@ class ScreenPage {
   BookSpot get start => slices.first.spot;
 }
 
-/// The space above [slice] on a page, after [previous] (null when it is
-/// the first on the page): as in the scroll column, [NamoSpace.lg] after
-/// the title and [NamoSpace.md] between blocks; none between the slices of
-/// one list's items.
-double gapBefore(PageSlice? previous, PageSlice slice) =>
-    _gapBefore(previous, slice.block);
+/// The space above [slice] on a page of [blocks], after [previous] (null
+/// when it is the first on the page): as in the scroll column,
+/// [NamoSpace.lg] after the title and [bookBlockGap] between blocks; none
+/// between the slices of one block.
+double gapBefore(
+  List<BookBlock> blocks,
+  PageSlice? previous,
+  PageSlice slice,
+) => _gapBefore(blocks, previous, slice.block);
 
-double _gapBefore(PageSlice? previous, int block) => switch (previous) {
-  null => 0,
-  TitleSlice() => NamoSpace.lg,
-  _ when previous.block == block => 0,
-  _ => NamoSpace.md,
-};
+double _gapBefore(List<BookBlock> blocks, PageSlice? previous, int block) =>
+    switch (previous) {
+      null => 0,
+      TitleSlice() => NamoSpace.lg,
+      _ when previous.block == block => 0,
+      _ => bookBlockGap(blocks[previous.block], blocks[block]),
+    };
 
 /// Cuts [page] into screen pages of [box], one at a time, so a caller can
 /// show the first before the rest are cut. [imageSize] gives a bundled
@@ -230,7 +234,7 @@ const scrollTopPadding = NamoSpace.lg;
 
 /// The spot of the first line at or below [offset] in [page]'s scroll
 /// column [width] wide (laid out as the scroll view draws it: the title,
-/// [NamoSpace.lg], the blocks [NamoSpace.md] apart, tables at their
+/// [NamoSpace.lg], the blocks [bookBlockGap] apart, tables at their
 /// natural width); the last line's spot when [offset] is past the end.
 BookSpot spotAtOffset(
   BookPage page,
@@ -245,7 +249,7 @@ BookSpot spotAtOffset(
   var last = BookSpot.title;
   y += m.titleHeight(page.title) + NamoSpace.lg;
   for (var b = 0; b < page.blocks.length; b++) {
-    if (b > 0) y += NamoSpace.md;
+    if (b > 0) y += bookBlockGap(page.blocks[b - 1], page.blocks[b]);
     final metrics = m.measure(page.blocks[b]);
     for (final (dy, char) in metrics.lineTops) {
       last = BookSpot(b, char);
@@ -272,7 +276,7 @@ double offsetOfSpot(
   var y = scrollTopPadding + m.titleHeight(page.title) + NamoSpace.lg;
   var line = y;
   for (var b = 0; b < page.blocks.length; b++) {
-    if (b > 0) y += NamoSpace.md;
+    if (b > 0) y += bookBlockGap(page.blocks[b - 1], page.blocks[b]);
     final metrics = m.measure(page.blocks[b]);
     for (final (dy, char) in metrics.lineTops) {
       if (b == spot.block && char > spot.char) return line;
@@ -331,7 +335,8 @@ class _Cutter {
                     page.blocks[s.block] is BookSubhead),
       );
 
-  double _gap(int block) => _gapBefore(_slices.lastOrNull, block);
+  double _gap(int block) =>
+      _gapBefore(page.blocks, _slices.lastOrNull, block);
 
   /// The height left for a slice of [block].
   double _room(int block) => box.height - _bottom - _gap(block);

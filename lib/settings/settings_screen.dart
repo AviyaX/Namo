@@ -31,7 +31,25 @@ class SettingsScreen extends ConsumerWidget {
       columnKey: const ValueKey('settings-column'),
       children: [
         const PageHeader(title: 'Settings'),
-        const SizedBox(height: NamoSpace.xl),
+        const SizedBox(height: NamoSpace.lg),
+        ListRow(
+          key: const ValueKey('settings-saved'),
+          leading: Icon(
+            Symbols.bookmark_rounded,
+            size: NamoSizes.icon,
+            weight: 300,
+            color: p.gold,
+          ),
+          title: 'Saved',
+          onTap: () => context.go(Routes.saved),
+          trailing: Icon(
+            Symbols.chevron_right_rounded,
+            size: NamoSizes.iconSmall,
+            weight: 300,
+            color: p.textSecondary,
+          ),
+        ),
+        const SizedBox(height: NamoSpace.lg),
         const SettingsGroup(
           icon: Symbols.palette_rounded,
           label: 'Appearance',

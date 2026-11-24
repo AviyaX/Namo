@@ -12,6 +12,9 @@ import 'package:buddhist_gatha/tipitaka/tipitaka_tree.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../books/books_support.dart' show tinyBookFlatId, tinyBookNestedId;
+import '../quality/quality_support.dart' show openReal;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'tipitaka_app_support.dart';
 import 'tipitaka_support.dart';
 
@@ -40,7 +43,7 @@ void main() {
       (t) async {
     final app = await openTipitakaApp(t, Routes.tipitaka);
     expect(find.byKey(const ValueKey('screen-tripitaka')), findsOneWidget);
-    expect(find.text('ත්‍රිපිටකය'), findsOneWidget);
+    expect(find.text('Tripitaka & Books'), findsOneWidget);
     expect(find.text('Search by name'), findsOneWidget);
     final expected = {
       'vp': ('S vp', 'Vinaya Pitaka', '5 texts'),
@@ -148,6 +151,70 @@ void main() {
     await _type(t, latinKey(shippedTree.node('dn-1')!.pali));
     expect(_results, findsOneWidget);
     expect(find.byKey(const ValueKey('tipitaka-result-dn-1')), findsOneWidget);
+  });
+
+  group('book search on the Library tab', () {
+    final nested = find.byKey(const ValueKey('book-hit-$tinyBookNestedId'));
+
+    testWidgets('a book title shows under Books and opens the book page', (
+      t,
+    ) async {
+      await openReal(t, Routes.tipitaka, size: const Size(390, 3000));
+      await _type(t, 'Nested bo');
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('book-hits')),
+          matching: find.text('Books'),
+        ),
+        findsOneWidget,
+      );
+      expect(nested, findsOneWidget);
+      expect(
+        find.descendant(of: nested, matching: find.text('Nested book')),
+        findsOneWidget,
+      );
+      expect(find.byKey(const ValueKey('book-hit-$tinyBookFlatId')), findsNothing);
+      // Books only: not "no names match".
+      expect(find.text('No names match'), findsNothing);
+      await t.tap(nested);
+      await t.pumpAndSettle();
+      expect(
+        ProviderScope.containerOf(t.element(find.byType(MaterialApp)))
+            .read(routerProvider)
+            .routeInformationProvider
+            .value
+            .uri
+            .path,
+        Routes.book(tinyBookNestedId),
+      );
+    });
+
+    testWidgets('a book title shows even when the Tripitaka failed to load',
+        (t) async {
+      await openReal(
+        t,
+        Routes.tipitaka,
+        size: const Size(390, 3000),
+        tipitaka: (_) async => throw StateError('no tree'),
+      );
+      await _type(t, 'Nested bo');
+      expect(nested, findsOneWidget);
+    });
+
+    testWidgets('a query no book matches shows no Books group', (t) async {
+      await openReal(t, Routes.tipitaka, size: const Size(390, 3000));
+      await _type(t, 'qqqq');
+      expect(find.byKey(const ValueKey('book-hits')), findsNothing);
+      expect(find.text('No names match'), findsOneWidget);
+    });
+
+    testWidgets('a query only a book matches (its subtitle) is not no results',
+        (t) async {
+      await openReal(t, Routes.tipitaka, size: const Size(390, 3000));
+      await _type(t, 'made-up subtitle');
+      expect(nested, findsOneWidget);
+      expect(find.text('No names match'), findsNothing);
+    });
   });
 
   testWidgets('a query with no match shows the empty state', (t) async {

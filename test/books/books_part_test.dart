@@ -24,7 +24,7 @@ void main() {
 
   testWidgets('the shelf shows every book with its title', (t) async {
     final h = t.ensureSemantics();
-    await openReal(t, Routes.library, size: _tall);
+    await openReal(t, Routes.tipitaka, size: _tall);
     expect(_shelf, findsOneWidget);
     expect(
       find.descendant(of: _shelf, matching: find.text('පොත්')),
@@ -64,25 +64,27 @@ void main() {
     h.dispose();
   });
 
-  testWidgets('the shelf comes after the topics', (t) async {
-    await openReal(t, Routes.library, size: _tall);
-    final topics = find.byWidgetPredicate(
-      (w) => w.runtimeType.toString() == '_CategoryEntry',
+  testWidgets('the shelf comes after the Tripitaka', (t) async {
+    await openReal(t, Routes.tipitaka, size: _tall);
+    expect(
+      t.getTopLeft(_shelf).dy,
+      greaterThan(
+        t.getTopLeft(find.byKey(const ValueKey('tipitaka-search'))).dy,
+      ),
     );
-    expect(topics, findsWidgets);
-    final shelfTop = t.getTopLeft(_shelf).dy;
-    for (final e in topics.evaluate()) {
-      final box = e.renderObject! as RenderBox;
-      final bottom = box.localToGlobal(Offset(0, box.size.height)).dy;
-      expect(bottom, lessThanOrEqualTo(shelfTop));
-    }
+    expect(
+      t.getTopLeft(_shelf).dy,
+      greaterThan(
+        t.getTopLeft(find.byKey(const ValueKey('tipitaka-pitaka-vp'))).dy,
+      ),
+    );
   });
 
   testWidgets('a tap opens the book page', (t) async {
-    await openReal(t, Routes.library, size: _tall);
+    await openReal(t, Routes.tipitaka, size: _tall);
     await t.tap(_card(tinyBookFlatId));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-flat');
+    expect(_location(t), '/tipitaka/book/tiny-flat');
     expect(find.byType(BookScreen), findsOneWidget);
   });
 
@@ -96,7 +98,7 @@ void main() {
         {...b as Map<String, Object?>, 'cover': 'assets/books/covers/none.jpg'},
     ];
     assets[tinyBooksIndexPath] = index;
-    await openReal(t, Routes.library, size: _tall, books: fakeAssets(assets));
+    await openReal(t, Routes.tipitaka, size: _tall, books: fakeAssets(assets));
     // The asset bundle answers outside the test's fake clock.
     await t.runAsync(() => Future<void>.delayed(const Duration(seconds: 1)));
     await t.pumpAndSettle();
@@ -122,7 +124,7 @@ void main() {
         {...first, 'id': 'book-$i', 'title': 'Book number $i'},
     ];
     assets[tinyBooksIndexPath] = index;
-    await openReal(t, Routes.library, size: _tall, books: fakeAssets(assets));
+    await openReal(t, Routes.tipitaka, size: _tall, books: fakeAssets(assets));
     final row = find.descendant(of: _shelf, matching: find.byType(Scrollable));
     // The row's right edge is the viewport edge: the page margin (20 px at
     // 390 px) is inside the screen.
@@ -146,14 +148,14 @@ void main() {
     expect(t.getTopLeft(_card('book-8')).dy, top);
     await t.tap(_card('book-8'));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/book-8');
+    expect(_location(t), '/tipitaka/book/book-8');
     expect(t.takeException(), isNull);
   });
 
   testWidgets('the row fits at 320 wide with large text', (t) async {
     await openReal(
       t,
-      Routes.library,
+      Routes.tipitaka,
       size: const Size(320, 2000),
       deviceTextScale: 2.0,
     );
@@ -178,7 +180,7 @@ void main() {
 
       await openReal(
         t,
-        Routes.library,
+        Routes.tipitaka,
         size: _tall,
         deviceTextScale: scale,
         books: load,
@@ -203,19 +205,19 @@ void main() {
   });
 
   testWidgets('no books, no shelf', (t) async {
-    await openReal(t, Routes.library, books: fakeAssets(noBooks()));
+    await openReal(t, Routes.tipitaka, books: fakeAssets(noBooks()));
     expect(_shelf, findsOneWidget);
     expect(t.getSize(_shelf).height, 0);
     expect(find.text('පොත්'), findsNothing);
   });
 
-  testWidgets('the Library tab stays selected on the book page', (t) async {
+  testWidgets('the Library tab (Tripitaka & Books) stays selected on the book page', (t) async {
     final h = t.ensureSemantics();
-    await openReal(t, Routes.library, size: _tall);
+    await openReal(t, Routes.tipitaka, size: _tall);
     await t.tap(_card(tinyBookNestedId));
     await t.pumpAndSettle();
     expect(find.byType(BookScreen), findsOneWidget);
-    final tab = find.byKey(const ValueKey('nav-library'));
+    final tab = find.byKey(const ValueKey('nav-tripitaka'));
     expect(tab, findsOneWidget);
     expect(
       t.getSemantics(tab).getSemanticsData().flagsCollection.isSelected

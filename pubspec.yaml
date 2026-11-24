@@ -43,6 +43,9 @@ dependencies:
   background_downloader: ^9.6.6
   crypto: ^3.0.8
   url_launcher: ^6.3.3
+  http: ^1.6.0
+  youtube_player_iframe: ^6.0.4
+  just_audio_background: ^0.0.1-beta.17
 
 dev_dependencies:
   flutter_test:
@@ -103,6 +106,7 @@ flutter:
     - assets/fonts/OFL-NotoSansSinhala.txt
     - assets/fonts/OFL-NotoSerif.txt
     - assets/fonts/OFL-Lora.txt
+    - assets/fonts/OFL-AbhayaLibre.txt
     - assets/branding/
     - assets/content/
     - assets/tipitaka/
@@ -110,6 +114,7 @@ flutter:
     - assets/books/
     - assets/books/covers/
     - assets/books/pictures/
+    - assets/bana/
     - assets/pictures/buddha_wandanawa.jpg
     - assets/pictures/hero_dark.jpg
     - assets/pictures/hero_light.jpg
@@ -128,6 +133,12 @@ flutter:
         - asset: assets/fonts/NotoSerif.ttf
         - asset: assets/fonts/NotoSerif-Italic.ttf
           style: italic
+    # The books' face: after the classic Sinhala printing type.
+    - family: AbhayaLibre
+      fonts:
+        - asset: assets/fonts/AbhayaLibre-Regular.ttf
+        - asset: assets/fonts/AbhayaLibre-Bold.ttf
+          weight: 700
     - family: Lora
       fonts:
         - asset: assets/fonts/Lora.ttf

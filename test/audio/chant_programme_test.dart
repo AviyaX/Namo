@@ -229,4 +229,132 @@ void main() {
       [null],
     ]);
   });
+
+  group('sections with their own recordings (the Buddha Wandanawa)', () {
+    const info = RecordingInfo(path: 'audio/w.m4a', label: 'Chanted');
+    Section own(String id, List<Verse> verses, {bool audio = true}) => Section(
+      id: id,
+      number: 1,
+      heading: 'Heading $id',
+      audio: audio ? info : null,
+      verses: verses,
+    );
+    // s1 (two verses, recorded), s2 (no recording), s3 (three verses, the
+    // middle one silent).
+    Reading wandana() => Reading(
+      id: 'wandana',
+      title: 'Wandana',
+      sections: [
+        own('s1', [plain('a1'), plain('a2')]),
+        own('s2', [plain('b1')], audio: false),
+        own('s3', [plain('c1'), plain('c2'), plain('c3')]),
+      ],
+    );
+    AudioCatalogue catalogue() => _Catalogue({
+      sectionRecordingId('wandana', 's1'): recording('wandana#s1', [
+        bt(0.3, 4),
+        bt(4.7, 9),
+      ], s(10)),
+      sectionRecordingId('wandana', 's3'): recording('wandana#s3', [
+        bt(0.3, 2),
+        null,
+        bt(3, 5),
+      ], s(6)),
+    });
+
+    test('play one after another, a block per verse', () {
+      expect(sectionRecordingId('wandana', 's3'), 'wandana#s3');
+      final p = ChantProgramme.of(wandana(), catalogue())!;
+      expect(p.legs.map((l) => l.sectionId), ['s1', 's3']);
+      expect(p.legs.map((l) => l.firstBlock), [0, 2]);
+      expect(p.legs.map((l) => l.start), [Duration.zero, s(10)]);
+      expect(p.times, [bt(0.3, 4), bt(4.7, 9), bt(10.3, 12), null, bt(13, 15)]);
+      expect(p.paliLengths, [
+        for (final id in ['a1', 'a2', 'c1', 'c2', 'c3']) ['plain $id'.length],
+      ]);
+      expect(p.sectionCount, 3);
+      expect(p.partial, isTrue);
+      expect(p.total, s(16));
+    });
+
+    test('a section is recorded only with a time per verse', () {
+      final r = wandana();
+      expect(
+        sectionIsRecorded(
+          r.sections[0],
+          catalogue().recordingFor('wandana#s1'),
+        ),
+        isTrue,
+      );
+      // A recording timing three verses does not chant a section of two.
+      expect(
+        sectionIsRecorded(
+          r.sections[0],
+          catalogue().recordingFor('wandana#s3'),
+        ),
+        isFalse,
+      );
+      // A section without its own recording is not chanted by one.
+      expect(
+        sectionIsRecorded(
+          r.sections[1],
+          catalogue().recordingFor('wandana#s1'),
+        ),
+        isFalse,
+      );
+      expect(
+        recordingOfSection(catalogue(), 'wandana', r.sections[2])?.readingId,
+        'wandana#s3',
+      );
+      expect(recordingOfSection(catalogue(), 'wandana', r.sections[1]), isNull);
+    });
+
+    test('in a flow, a section keeps its recording', () {
+      final w = wandana();
+      final f = Reading(
+        id: 'flow-1',
+        title: 'My flow',
+        sections: [
+          for (final sec in [w.sections[2], w.sections[0]])
+            Section(
+              id: 'wandana~${sec.id}',
+              number: 1,
+              heading: sec.heading,
+              audio: sec.audio,
+              verses: [for (final v in sec.verses) v.withId('wandana~${v.id}')],
+            ),
+        ],
+      );
+      final p = ChantProgramme.of(f, catalogue())!;
+      expect(p.legs.map((l) => l.sectionId), ['wandana~s3', 'wandana~s1']);
+      expect(p.times, [bt(0.3, 2), null, bt(3, 5), bt(6.3, 10), bt(10.7, 15)]);
+      expect(
+        recordingOfSection(catalogue(), 'flow-1', f.sections[0])?.readingId,
+        'wandana#s3',
+      );
+    });
+
+    test('the block index space matches the reader items', () {
+      final p = ChantProgramme.of(wandana(), catalogue())!;
+      final items = buildReaderItems(
+        wandana(),
+        LanguageSelection.initial,
+        TwoLanguageLayout.verse,
+      );
+      final blocks = <String, int>{
+        for (final i in items)
+          if (blockOfItem(i) != null) i.verseId!: blockOfItem(i)!,
+      };
+      expect(blocks, {'a1': 0, 'a2': 1, 'c1': 2, 'c2': 3, 'c3': 4});
+      expect(p.times, hasLength(blocks.length));
+      expect(p.legOfBlock(blocks['c3']!)?.sectionId, 's3');
+      expect(
+        items
+            .whereType<VerseTextItem>()
+            .where((i) => i.verseId == 'b1')
+            .every((i) => i.block == null),
+        isTrue,
+      );
+    });
+  });
 }

@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'bana/bana_player_screen.dart';
+import 'bana/bana_screen.dart';
+import 'bana/bana_series_screen.dart';
 import 'books/book_contents_screen.dart';
 import 'books/book_reader_screen.dart';
 import 'books/book_screen.dart';
@@ -24,11 +27,11 @@ import 'tipitaka/tipitaka_reader_screen.dart';
 abstract final class Routes {
   static const home = '/';
   static const library = '/library';
-  static const saved = '/saved';
+  static const saved = '/settings/saved';
   static const settings = '/settings';
   static const sources = '/settings/sources';
 
-  /// The Library with its search box focused.
+  /// Pirith & Gatha with its search box focused.
   static const librarySearch = '/library?focus=search';
 
   /// The Library with this category's sections showing.
@@ -57,17 +60,26 @@ abstract final class Routes {
   }
 
   /// The editor of one flow.
-  static String flowEditor(String flowId) => '/library/flow/$flowId';
+  static String flowEditor(String flowId) => '/flow/$flowId';
 
   /// A book's page: its cover, the way in and its chapters.
-  static String book(String id) => '/library/book/$id';
+  static String book(String id) => '/tipitaka/book/$id';
 
   /// The pages under page [n] of a book.
   static String bookContents(String id, int n) =>
-      '/library/book/$id/contents/$n';
+      '/tipitaka/book/$id/contents/$n';
 
   /// A book's reader at page [n].
-  static String bookReader(String id, int n) => '/library/book/$id/read/$n';
+  static String bookReader(String id, int n) => '/tipitaka/book/$id/read/$n';
+
+  /// The Bana tab's first page.
+  static const bana = '/bana';
+
+  /// A series' page, inside the Bana tab.
+  static String banaSeries(String id) => '/bana/series/$id';
+
+  /// The player of one video, inside the Bana tab.
+  static String banaPlay(String videoId) => '/bana/play/$videoId';
 
   /// The Tripitaka tab's first page.
   static const tipitaka = '/tipitaka';
@@ -87,9 +99,22 @@ abstract final class Routes {
 /// and means nothing for a reading that is not a flow.
 enum ReaderFrom { home, saved, editor }
 
+/// Saved links from before the five tabs: Saved was a tab, the books and the
+/// flow editor were under the Library.
+String? _oldAddress(BuildContext context, GoRouterState state) {
+  final path = state.uri.path;
+  String? moved(String from, String to) => path == from || path.startsWith('$from/')
+      ? '$to${path.substring(from.length)}${state.uri.hasQuery ? '?${state.uri.query}' : ''}'
+      : null;
+  return moved('/saved', Routes.saved) ??
+      moved('/library/book', '/tipitaka/book') ??
+      moved('/library/flow', '/flow');
+}
+
 GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
   initialLocation: initialLocation,
   errorBuilder: (context, state) => const NotFoundScreen(),
+  redirect: _oldAddress,
   routes: [
     StatefulShellRoute(
       builder: (context, state, shell) => AppShell(shell: shell),
@@ -103,6 +128,19 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
             GoRoute(
               path: Routes.home,
               builder: (context, state) => const HomeScreen(),
+              routes: [
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'flow/:id',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: FlowEditorScreen(
+                      flowId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -127,13 +165,53 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
                   redirect: (context, state) =>
                       Routes.contents(state.pathParameters['id']!),
                 ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.bana,
+              builder: (context, state) => const BanaScreen(),
+              routes: [
+                // Inside the tab, so the bar stays.
                 GoRoute(
-                  path: 'flow/:id',
+                  path: 'series/:id',
                   pageBuilder: (context, state) => namoPage(
                     key: state.pageKey,
                     context: context,
-                    child: FlowEditorScreen(
-                      flowId: state.pathParameters['id']!,
+                    child: BanaSeriesScreen(id: state.pathParameters['id']!),
+                  ),
+                ),
+                GoRoute(
+                  path: 'play/:videoId',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: BanaPlayerScreen(
+                      videoId: state.pathParameters['videoId']!,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.tipitaka,
+              builder: (context, state) => const TipitakaHomeScreen(),
+              routes: [
+                // Inside the tab, so the bar stays.
+                GoRoute(
+                  path: 'n/:key',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: TipitakaListScreen(
+                      nodeKey: state.pathParameters['key']!,
                     ),
                   ),
                 ),
@@ -171,38 +249,17 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: Routes.tipitaka,
-              builder: (context, state) => const TipitakaHomeScreen(),
-              routes: [
-                // Inside the tab, so the bar stays.
-                GoRoute(
-                  path: 'n/:key',
-                  pageBuilder: (context, state) => namoPage(
-                    key: state.pageKey,
-                    context: context,
-                    child: TipitakaListScreen(
-                      nodeKey: state.pathParameters['key']!,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: Routes.saved,
-              builder: (context, state) => const SavedScreen(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
               path: Routes.settings,
               builder: (context, state) => const SettingsScreen(),
               routes: [
+                GoRoute(
+                  path: 'saved',
+                  pageBuilder: (context, state) => namoPage(
+                    key: state.pageKey,
+                    context: context,
+                    child: const SavedScreen(),
+                  ),
+                ),
                 GoRoute(
                   path: 'sources',
                   pageBuilder: (context, state) => namoPage(
@@ -232,7 +289,7 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
     ),
     // Outside the shell: the reader has the whole screen.
     GoRoute(
-      path: '/library/book/:id/read/:n',
+      path: '/tipitaka/book/:id/read/:n',
       pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
         final n = int.tryParse(state.pathParameters['n']!);

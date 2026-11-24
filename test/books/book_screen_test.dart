@@ -112,7 +112,7 @@ void main() {
     );
     await t.tap(_continue);
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/3');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/3');
   });
 
   testWidgets('Continue reading finds the saved page by its key', (t) async {
@@ -132,7 +132,7 @@ void main() {
     );
     await t.tap(_continue);
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/4');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/4');
   });
 
   testWidgets('a saved place past the end reads as Start reading', (t) async {
@@ -148,7 +148,7 @@ void main() {
     );
     await t.tap(_continue);
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/1');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/1');
   });
 
   testWidgets('a row with children opens the contents list; a leaf opens '
@@ -156,30 +156,30 @@ void main() {
     await _open(t, Routes.book(tinyBookNestedId));
     await t.tap(_row(2));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/contents/2');
+    expect(_location(t), '/tipitaka/book/tiny-nested/contents/2');
 
     await _open(t, Routes.book(tinyBookNestedId));
     await t.tap(_row(5));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/contents/5');
+    expect(_location(t), '/tipitaka/book/tiny-nested/contents/5');
 
     await _open(t, Routes.book(tinyBookNestedId));
     await t.tap(_row(1));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/1');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/1');
 
     await _open(t, Routes.book(tinyBookFlatId));
     await t.tap(_row(3));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-flat/read/3');
+    expect(_location(t), '/tipitaka/book/tiny-flat/read/3');
   });
 
-  testWidgets('Back goes to the Library', (t) async {
+  testWidgets('Back goes to the Tripitaka tab', (t) async {
     await _open(t, Routes.book(tinyBookFlatId));
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(_location(t), Routes.library);
-    expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+    expect(_location(t), Routes.tipitaka);
+    expect(find.byKey(const ValueKey('screen-tripitaka')), findsOneWidget);
   });
 
   testWidgets('an unknown id shows Not found', (t) async {

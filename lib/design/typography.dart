@@ -8,6 +8,9 @@ abstract final class NamoFonts {
   static const english = 'Lora';
   static const serif = 'Lora';
   static const sans = 'NotoSansSinhala';
+
+  /// The Rerukane books' face, as in print.
+  static const book = 'AbhayaLibre';
 }
 
 /// Every text style in the app comes from here, so each one carries the

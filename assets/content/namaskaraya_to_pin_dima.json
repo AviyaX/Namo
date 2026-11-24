@@ -117,7 +117,36 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/01.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 25500,
+        "bytes": 165251,
+        "sha256": "251671770d0d14cae79de9d378ebcdd4f128f2da58d55b6b59d19fc54a9e1780",
+        "block_times": [
+         [
+          0.3,
+          4.527
+         ],
+         [
+          5.227,
+          9.304
+         ],
+         [
+          10.004,
+          14.295
+         ],
+         [
+          14.995,
+          19.19
+         ],
+         [
+          19.89,
+          24.878
+         ]
+        ]
+       }
       },
       {
        "id": "s02",
@@ -152,7 +181,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/02.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 25200,
+        "bytes": 177555,
+        "sha256": "1eb15971a8a6ecd39fe2f04ca1e6dd64198d38dd3cfaac8e94dcbadcfd27ef45",
+        "block_times": [
+         [
+          0.3,
+          24.579
+         ]
+        ]
+       }
       },
       {
        "id": "s03",
@@ -195,7 +237,20 @@
           }
          ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/03.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 73700,
+        "bytes": 529286,
+        "sha256": "2d13dd08070a1d436b2ae729fa86aed2b29124c0f479338f7ca2a69d5eec366a",
+        "block_times": [
+         [
+          0.3,
+          73.015
+         ]
+        ]
+       }
       },
       {
        "id": "s04",
@@ -245,7 +300,20 @@
           }
          ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/04.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero; the last line computer-made in his voice",
+        "duration_ms": 61700,
+        "bytes": 440308,
+        "sha256": "c45c629e66c9450caaa65271dd1cca48d3220eeb2ce213f460f151d5a332e71b",
+        "block_times": [
+         [
+          0.3,
+          61.016
+         ]
+        ]
+       }
       },
       {
        "id": "s05",
@@ -386,7 +454,36 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/05.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 79800,
+        "bytes": 558476,
+        "sha256": "716ac4caaf8a201e6f049eedc648c1a982b39f930b485f8f20bf7f8d82bdac40",
+        "block_times": [
+         [
+          0.3,
+          26.343
+         ],
+         [
+          27.043,
+          33.789
+         ],
+         [
+          34.489,
+          49.321
+         ],
+         [
+          50.021,
+          64.406
+         ],
+         [
+          65.106,
+          79.191
+         ]
+        ]
+       }
       },
       {
        "id": "s06",
@@ -519,7 +616,36 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/06.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 73100,
+        "bytes": 509197,
+        "sha256": "e545b47ade0df6f15de93e528abf2c445c67ed6155c6779d4d879ce9adf88af3",
+        "block_times": [
+         [
+          0.3,
+          19.387
+         ],
+         [
+          20.087,
+          26.881
+         ],
+         [
+          27.581,
+          42.82
+         ],
+         [
+          43.52,
+          57.755
+         ],
+         [
+          58.455,
+          72.49
+         ]
+        ]
+       }
       },
       {
        "id": "s07",
@@ -652,7 +778,36 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/07.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 112600,
+        "bytes": 794103,
+        "sha256": "e6aa2024f1062493458933ec5666e9645b70ee7007708c4b1a3194e3cd443f86",
+        "block_times": [
+         [
+          0.3,
+          57.537
+         ],
+         [
+          58.237,
+          65.166
+         ],
+         [
+          65.866,
+          81.661
+         ],
+         [
+          82.361,
+          96.949
+         ],
+         [
+          97.649,
+          111.994
+         ]
+        ]
+       }
       },
       {
        "id": "s08",
@@ -837,7 +992,45 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/08.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero; verses 6 to 8 computer-made in his voice. Verse 3 is not chanted.",
+        "duration_ms": 120800,
+        "bytes": 847327,
+        "sha256": "1d7bb9e7c358cdd6831b7f24e424d39a279b86c04369672d1d98b3c660282d03",
+        "block_times": [
+         [
+          0.3,
+          15.586
+         ],
+         [
+          16.286,
+          29.376
+         ],
+         null,
+         [
+          30.076,
+          44.317
+         ],
+         [
+          45.017,
+          67.208
+         ],
+         [
+          67.908,
+          84.885
+         ],
+         [
+          85.585,
+          102.515
+         ],
+         [
+          103.215,
+          120.102
+         ]
+        ]
+       }
       },
       {
        "id": "s09",
@@ -880,7 +1073,20 @@
           }
          ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/09.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 13200,
+        "bytes": 91511,
+        "sha256": "42eb9139db33c0b3ec6f629d7a4304b39334f59d30406d7440d8df0d677fd9eb",
+        "block_times": [
+         [
+          0.3,
+          12.6
+         ]
+        ]
+       }
       },
       {
        "id": "s10",
@@ -956,7 +1162,28 @@
           }
          ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/10.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 43400,
+        "bytes": 303753,
+        "sha256": "1d04442b2a55104c9eb3eec4dade2e51a31e68aac782232e6a62283ba4a82332",
+        "block_times": [
+         [
+          0.3,
+          11.477
+         ],
+         [
+          12.177,
+          22.138
+         ],
+         [
+          22.838,
+          42.799
+         ]
+        ]
+       }
       },
       {
        "id": "s11",
@@ -986,7 +1213,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/11.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 11100,
+        "bytes": 76287,
+        "sha256": "d65a3dcbabfd7b9c1c01e5fc2848115ce00e03f13c795c11ca7d9129640c6858",
+        "block_times": [
+         [
+          0.3,
+          10.482
+         ]
+        ]
+       }
       },
       {
        "id": "s12",
@@ -1005,8 +1245,8 @@
         {
          "id": "s12-v1",
          "source": null,
-         "pali_si": "ඝනසාරප්ප දිත්තේන – දීපේන තමධංසිනා\nතිලෝකදීපං සම්බුද්ධං – පූජයාමි තමෝනුදං",
-         "pali_roman": "Ghanasārappa dittēna - Dīpēna tamadhansinā\nTilokadīpan sambuddhan - Pūjayāmi tamonudan",
+         "pali_si": "ගන්ධ තේල පදිත්තේන – දීපේන තමධංසිනා\nතිලෝකදීපං සම්බුද්ධං – පූජයාමි තමෝනුදං",
+         "pali_roman": null,
          "sinhala": "ශ්‍රද්ධාවෙන් දල්වන ලද අඳුර දුරලන්නාවූ මේ පහන් ආලෝකයෙන් තුන් ලොවට මහා පහන් කණුවක් වැනි වූ මෝහන්ධකාරය දුරු කරන ලද බුදුරජාණන් වහන්සේ පුදමි.",
          "sinhala_source": null,
          "english": "With lights brightly shining\nAbolishing this gloom\nI adore the Enlightened One\nThe Light of the three worlds*\nwho dispels the darkness ( of ignorance )\n\n(*three worlds – kama loka, rupa loka and arupa loka)",
@@ -1019,9 +1259,30 @@
          "english_kind": "translation",
          "check": "checked against source",
          "notes": [],
-         "corrections": []
+         "corrections": [
+          {
+           "field": "pali_si",
+           "from": "ඝනසාරප්ප දිත්තේන",
+           "to": "ගන්ධ තේල පදිත්තේන",
+           "count": 1,
+           "reason": "the owner's word, 2026-11-23 (\"ගන්ධ තේල පදිත්තේන … exact same, only the first changes\"): Ven. Na Uyane Ariyadhamma Thero chants the lamp offering this way, and his recording plays it"
+          }
+         ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/12.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 15600,
+        "bytes": 107966,
+        "sha256": "c7e6c6f7d6c83a0d2794055c389dedf2adc03f1eb1de7440498b479c7569cc9c",
+        "block_times": [
+         [
+          0.3,
+          14.935
+         ]
+        ]
+       }
       },
       {
        "id": "s13",
@@ -1078,7 +1339,24 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/13.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero; verse 1 computer-made in his voice",
+        "duration_ms": 27200,
+        "bytes": 188916,
+        "sha256": "0d83cd54c82d906f5519cdb7d9affebf30415451b89b41379e76d22fc9d37cf1",
+        "block_times": [
+         [
+          0.3,
+          11.816
+         ],
+         [
+          12.516,
+          26.595
+         ]
+        ]
+       }
       },
       {
        "id": "s14",
@@ -1134,7 +1412,24 @@
          ],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/14.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 25500,
+        "bytes": 176292,
+        "sha256": "c8eb52aaae1422a0ddcf024ecd4f9a6a9649e9f4500e6b4652f927accfe02351",
+        "block_times": [
+         [
+          0.3,
+          16.277
+         ],
+         [
+          16.977,
+          24.81
+         ]
+        ]
+       }
       },
       {
        "id": "s15",
@@ -1169,7 +1464,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/15.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 11600,
+        "bytes": 79561,
+        "sha256": "c56ce2fbd0d1b5b7d96b33b1467e1c4fd6b8905d63d9f90d3043e34be1187a2f",
+        "block_times": [
+         [
+          0.3,
+          10.928
+         ]
+        ]
+       }
       },
       {
        "id": "s16",
@@ -1199,7 +1507,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/16.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 11400,
+        "bytes": 77848,
+        "sha256": "c7ae281c05b9cf8e332225c9ddcda628599f6af83dffb98f08ca3bf10128d13f",
+        "block_times": [
+         [
+          0.3,
+          10.71
+         ]
+        ]
+       }
       },
       {
        "id": "s17",
@@ -1234,7 +1555,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/17.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 10700,
+        "bytes": 72984,
+        "sha256": "9d61577d42ec40a4fdd0976fb92662dbcc02c5ac6aab79e8e8f237c825fdafc0",
+        "block_times": [
+         [
+          0.3,
+          10.031
+         ]
+        ]
+       }
       },
       {
        "id": "s18",
@@ -1264,7 +1598,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/18.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 13700,
+        "bytes": 94179,
+        "sha256": "c6f2aa9f1574d0a41485959b60fbbae1df3bf1c15a978ee06a6580a049b452e3",
+        "block_times": [
+         [
+          0.3,
+          13.004
+         ]
+        ]
+       }
       },
       {
        "id": "s19",
@@ -1307,7 +1654,20 @@
           }
          ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/19.m4a",
+        "label": "Computer-made chanting in the voice of Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 11600,
+        "bytes": 79270,
+        "sha256": "e5e3bfac1dab320a8c9aa338f89a1e0e633f1c18bbb74d761cd043e3fd597b20",
+        "block_times": [
+         [
+          0.3,
+          10.938
+         ]
+        ]
+       }
       },
       {
        "id": "s20",
@@ -1420,7 +1780,28 @@
           }
          ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/20.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 35800,
+        "bytes": 247177,
+        "sha256": "c72814e4fb6812e675ca35f354727bb6198e92861d6a947d2b2ccc88dc9c821d",
+        "block_times": [
+         [
+          0.3,
+          12.291
+         ],
+         [
+          12.991,
+          24.922
+         ],
+         [
+          25.622,
+          35.106
+         ]
+        ]
+       }
       },
       {
        "id": "s21",
@@ -1457,7 +1838,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/21.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 18900,
+        "bytes": 131914,
+        "sha256": "81ac5b25fcf05f6f754c4647211c1659064a90157116ad5314b4e0598ad30fe9",
+        "block_times": [
+         [
+          0.3,
+          18.235
+         ]
+        ]
+       }
       },
       {
        "id": "s22",
@@ -1626,7 +2020,32 @@
           }
          ]
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/22.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 76800,
+        "bytes": 539831,
+        "sha256": "8abee01642be79520d9e4d425d06f0128e7e0d32509598f197d41fc89d12c946",
+        "block_times": [
+         [
+          0.3,
+          12.393
+         ],
+         [
+          13.093,
+          25.341
+         ],
+         [
+          26.041,
+          38.271
+         ],
+         [
+          38.971,
+          76.107
+         ]
+        ]
+       }
       },
       {
        "id": "s23",
@@ -1725,7 +2144,32 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/23.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 53100,
+        "bytes": 367764,
+        "sha256": "1ed84979b7dfd55b584ad9e3932e736094fb930f78300646e1a06dc83012461c",
+        "block_times": [
+         [
+          0.3,
+          12.231
+         ],
+         [
+          12.931,
+          32.412
+         ],
+         [
+          33.112,
+          41.445
+         ],
+         [
+          42.145,
+          52.484
+         ]
+        ]
+       }
       },
       {
        "id": "s24",
@@ -1952,7 +2396,60 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/24.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 153300,
+        "bytes": 1065732,
+        "sha256": "5c8e46686872173e11da37418b3e928d59c7891789db148667b3454998b20716",
+        "block_times": [
+         [
+          0.3,
+          13.183
+         ],
+         [
+          13.883,
+          26.331
+         ],
+         [
+          27.031,
+          40.421
+         ],
+         [
+          41.121,
+          54.913
+         ],
+         [
+          55.613,
+          68.202
+         ],
+         [
+          68.902,
+          81.483
+         ],
+         [
+          82.183,
+          94.978
+         ],
+         [
+          95.678,
+          109.223
+         ],
+         [
+          109.923,
+          123.221
+         ],
+         [
+          123.921,
+          137.057
+         ],
+         [
+          137.757,
+          152.601
+         ]
+        ]
+       }
       },
       {
        "id": "s25",
@@ -2065,7 +2562,36 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/25.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 70000,
+        "bytes": 487070,
+        "sha256": "2adc057163f4ed9bbd11b5ab499c861497134e22b5bf56ceb7f5cdbd7154ef03",
+        "block_times": [
+         [
+          0.3,
+          14.197
+         ],
+         [
+          14.897,
+          27.684
+         ],
+         [
+          28.384,
+          41.321
+         ],
+         [
+          42.021,
+          54.959
+         ],
+         [
+          55.659,
+          69.398
+         ]
+        ]
+       }
       },
       {
        "id": "s26",
@@ -2197,7 +2723,40 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/26.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 82100,
+        "bytes": 570220,
+        "sha256": "9ee1bc490321a6966efff7144749b69a0e89c3cb21c8717ebe7a2b43fae14dbd",
+        "block_times": [
+         [
+          0.3,
+          12.829
+         ],
+         [
+          13.529,
+          26.763
+         ],
+         [
+          27.463,
+          40.4
+         ],
+         [
+          41.1,
+          53.837
+         ],
+         [
+          54.537,
+          66.917
+         ],
+         [
+          67.617,
+          81.403
+         ]
+        ]
+       }
       },
       {
        "id": "s27",
@@ -2348,7 +2907,44 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/27.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 95100,
+        "bytes": 663361,
+        "sha256": "266bc48f727e0337658547577d158b3e923d25ae3990c74cb982dab2b11df751",
+        "block_times": [
+         [
+          0.3,
+          13.483
+         ],
+         [
+          14.183,
+          26.931
+         ],
+         [
+          27.631,
+          40.173
+         ],
+         [
+          40.873,
+          52.97
+         ],
+         [
+          53.67,
+          66.0
+         ],
+         [
+          66.7,
+          79.349
+         ],
+         [
+          80.049,
+          94.498
+         ]
+        ]
+       }
       },
       {
        "id": "s28",
@@ -2423,7 +3019,28 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/28.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 54900,
+        "bytes": 385265,
+        "sha256": "8e49aa255a25467ffab4d55a969b326451ebc95c5409788867c2a4ccb8737fd1",
+        "block_times": [
+         [
+          0.3,
+          13.685
+         ],
+         [
+          14.385,
+          31.572
+         ],
+         [
+          32.272,
+          54.265
+         ]
+        ]
+       }
       },
       {
        "id": "s29",
@@ -2460,7 +3077,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/29.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 63400,
+        "bytes": 454285,
+        "sha256": "3d664f9d545269f1a2a107dc643f130bd06ca17fb326e0613949edf3085b7959",
+        "block_times": [
+         [
+          0.3,
+          62.747
+         ]
+        ]
+       }
       },
       {
        "id": "s30",
@@ -2497,7 +3127,20 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/30.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero",
+        "duration_ms": 72900,
+        "bytes": 523289,
+        "sha256": "fa5e70523b02b2c7713815847c3987bdb423db7990f9cd0010b72b62316f4284",
+        "block_times": [
+         [
+          0.3,
+          72.283
+         ]
+        ]
+       }
       },
       {
        "id": "s31",
@@ -2969,7 +3612,33 @@
          "notes": [],
          "corrections": []
         }
-       ]
+       ],
+       "audio": {
+        "path": "audio/wandana/33.m4a",
+        "label": "Chanted by Ven. Nauyane Ariyadhamma Thero. Only verses 1 and 7 are chanted; his other verses differ from this text.",
+        "duration_ms": 64500,
+        "bytes": 458608,
+        "sha256": "ecd58ca3e47b60e146cecdac757685f5741504e985beb354a85edd4c9f290349",
+        "block_times": [
+         [
+          0.3,
+          12.998
+         ],
+         null,
+         null,
+         null,
+         null,
+         null,
+         [
+          13.698,
+          63.836
+         ],
+         null,
+         null,
+         null,
+         null
+        ]
+       }
       }
      ]
     }

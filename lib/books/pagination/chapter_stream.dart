@@ -138,6 +138,33 @@ class ChapterStream extends ChangeNotifier {
         : (previous!, c.pages.last);
   }
 
+  /// The page [offset] pages from [current] (1 the next, -1 the previous),
+  /// with the reading page it is cut from and its 0-based place there; null
+  /// while it is not cut yet, past either end of the book, or further than
+  /// the current chapter's neighbours.
+  ({int n, int index, ScreenPage page})? peekAt(int offset) {
+    if (!_located) return null;
+    var n = _n, i = _index + offset;
+    while (true) {
+      final c = _chapters[n];
+      if (c == null) return null;
+      if (i < 0) {
+        final previous = book.previousReading(n);
+        final p = previous == null ? null : _chapters[previous];
+        if (p == null || !p.done) return null;
+        i += p.pages.length;
+        n = previous!;
+        continue;
+      }
+      if (i < c.pages.length) return (n: n, index: i, page: c.pages[i]);
+      if (!c.done) return null;
+      i -= c.pages.length;
+      final next = book.nextReading(n);
+      if (next == null) return null;
+      n = next;
+    }
+  }
+
   /// True while a turn was refused only because the page is still being cut.
   bool get waiting => _waitingFor != 0;
 

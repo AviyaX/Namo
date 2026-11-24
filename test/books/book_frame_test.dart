@@ -45,22 +45,44 @@ Future<void> _open(
   await t.pumpAndSettle();
 }
 
-String _numberText(WidgetTester t) => t
-    .widget<Text>(find.descendant(of: _number, matching: find.byType(Text)))
-    .data!;
+String _numberText(WidgetTester t) => t.widget<Text>(_number).data!;
 
-/// The colours the text in [scope] is drawn in: the page's title and its
-/// justified lines.
+String _runningTitle(WidgetTester t) =>
+    t.widget<Text>(find.byKey(const ValueKey('book-running-title'))).data!;
+
+/// The colours the text in [scope] is drawn in: its justified lines, its
+/// paragraphs and its list and footnote items (the title has its own brown).
 Set<Color?> _ink(WidgetTester t, Finder scope) => {
   for (final text in t.widgetList<Text>(
-    find.descendant(of: scope, matching: find.text(tinyLongBlocksTitle)),
+    find.descendant(of: scope, matching: find.byType(Text)),
   ))
-    text.style?.color,
+    if (text.data != null &&
+        (text.data!.startsWith(bookParaLead) ||
+            text.data!.startsWith('Item ') ||
+            text.data!.startsWith('Note ')))
+      text.style?.color,
   for (final lines in t.widgetList<JustifiedLines>(
     find.descendant(of: scope, matching: find.byType(JustifiedLines)),
   ))
     lines.style.color,
 };
+
+/// Checks the text in [scope] is drawn in [paper]'s ink: its text ink, and
+/// for captions and footnotes its secondary ink, nothing else.
+void _expectInk(WidgetTester t, Finder scope, BookPaper paper) {
+  final c = bookColours(_palette(t), paper);
+  final ink = _ink(t, scope);
+  expect(ink, contains(c.ink));
+  expect(ink.difference({c.ink, c.inkSecondary}), isEmpty);
+}
+
+/// The colour of the chapter's title in [scope].
+Color? _titleInk(WidgetTester t, Finder scope) => t
+    .widget<Text>(
+      find.descendant(of: scope, matching: find.text(tinyLongBlocksTitle)),
+    )
+    .style
+    ?.color;
 
 NamoPalette _palette(WidgetTester t) =>
     NamoPalette.of(t.element(find.byType(BookFrame)));
@@ -71,34 +93,111 @@ Color _paperColour(WidgetTester t) =>
 void main() {
   setUpAll(loadBundledFonts);
 
-  testWidgets('Pages mode draws cover, paper, number and corner', (t) async {
+  testWidgets('Pages mode draws cover, paper, running head and corner', (
+    t,
+  ) async {
     await _open(t);
     expect(_cover, findsOneWidget);
     expect(_paper, findsOneWidget);
     expect(_number, findsOneWidget);
     expect(_corner, findsOneWidget);
     expect(_numberText(t), '1');
-    expect(t.widget<Text>(_count).data, '1 of 3');
+    final count = t.widget<Text>(_count).data!;
+    expect(count, startsWith('1 of '));
     // The paper sits inside the cover; the page turns inside the rule.
     final cover = t.getRect(_cover), paper = t.getRect(_paper);
     expect(paper, cover.deflate(bookCoverInset));
     final inside = paper.deflate(bookRuleWidth);
     expect(t.getRect(find.byKey(const ValueKey('book-page-curl'))), inside);
-    // The number at the foot, the corner at the bottom right.
+    // Page 1 is a right-hand page: the number in the top right corner, the
+    // chapter's title in the running head, the spine on the left.
     final number = t.getRect(_number), corner = t.getRect(_corner);
-    expect(number.center.dx, moreOrLessEquals(paper.center.dx, epsilon: 1));
-    expect(number.bottom, lessThan(paper.bottom));
-    expect(number.top, greaterThan(paper.center.dy));
+    expect(number.top, lessThan(paper.center.dy));
+    expect(number.right, greaterThan(paper.center.dx));
+    expect(_runningTitle(t), tinyLongBlocksTitle);
     expect(corner.bottomRight, inside.bottomRight);
-    // The text keeps clear of the number and the spine.
+    final spine = t.getRect(find.byKey(const ValueKey('book-spine')));
+    expect(spine.left, inside.left);
+    // The text keeps below the running head and clear of the spine.
     final text = t.getRect(_onPage(find.byType(ScreenPageView)));
-    expect(text.bottom, lessThanOrEqualTo(number.top));
+    expect(text.top, greaterThanOrEqualTo(number.bottom));
     expect(text.left, greaterThan(inside.left + bookPaperPadding));
+    expect(
+      inside.right - text.right,
+      lessThan(text.left - inside.left),
+      reason: 'the wider margin is on the spine side',
+    );
 
     await t.tap(_next);
     await t.pumpAndSettle();
-    expect(t.widget<Text>(_count).data, '2 of 3');
+    expect(t.widget<Text>(_count).data, startsWith('2 of '));
+    // Page 2 is a left-hand page: the number on the left, the book's title,
+    // the spine on the right.
     expect(_numberText(t), '2');
+    expect(t.getRect(_number).left, lessThan(paper.center.dx));
+    expect(_runningTitle(t), 'Nested book');
+    expect(
+      t.getRect(find.byKey(const ValueKey('book-spine'))).right,
+      inside.right,
+    );
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('the chapter opens with its title in brown and a flourish', (
+    t,
+  ) async {
+    await _open(t, dark: false);
+    final page = _onPage(find.byType(ScreenPageView));
+    final p = _palette(t);
+    expect(_titleInk(t, page), bookColours(p, BookPaper.cream).title);
+    expect(
+      find.descendant(
+        of: page,
+        matching: find.byKey(const ValueKey('book-flourish')),
+      ),
+      findsOneWidget,
+    );
+    // Centred, a little way down the page.
+    final title = t.widget<Text>(
+      find.descendant(of: page, matching: find.text(tinyLongBlocksTitle)),
+    );
+    expect(title.textAlign, TextAlign.center);
+    expect(
+      t
+              .getRect(
+                find.descendant(
+                  of: page,
+                  matching: find.text(tinyLongBlocksTitle),
+                ),
+              )
+              .top -
+          t.getRect(page).top,
+      greaterThanOrEqualTo(bookTitleSink),
+    );
+  });
+
+  testWidgets('sideways the book lies open: two pages, turned two at a time', (
+    t,
+  ) async {
+    await openReal(
+      t,
+      Routes.bookReader(tinyBookNestedId, 8),
+      size: const Size(1000, 600),
+      settings: _large,
+      books: fakeAssets(tinyBooksWithLongBlocks()),
+    );
+    await t.pumpAndSettle();
+    expect(find.byKey(const ValueKey('book-spread')), findsOneWidget);
+    final left = t.getRect(find.byKey(const ValueKey('book-paper-left')));
+    final right = t.getRect(_paper);
+    expect(left.right, lessThanOrEqualTo(right.left));
+    expect(left.width, moreOrLessEquals(right.width, epsilon: 1));
+    expect(t.widget<Text>(_count).data, startsWith('1–2 of '));
+    final numbers = [for (final n in t.widgetList<Text>(_number)) n.data];
+    expect(numbers, ['1', '2']);
+    await t.tap(_next);
+    await t.pumpAndSettle();
+    expect(t.widget<Text>(_count).data, startsWith('3'));
     expect(t.takeException(), isNull);
   });
 
@@ -125,8 +224,11 @@ void main() {
     final paper = t.getRect(_paper);
     final title = t.getRect(find.text(tinyLongBlocksTitle));
     expect(title.left, paper.left + bookRuleWidth + bookPaperPadding);
-    // As far down from the paper's top as from its side, as in Pages mode.
-    expect(title.top, paper.top + bookRuleWidth + bookPaperPadding);
+    // A little way down the paper, as a chapter opens in Pages mode.
+    expect(
+      title.top,
+      paper.top + bookRuleWidth + bookPaperPadding + bookTitleSink,
+    );
     expect(
       paper.width - 2 * (bookRuleWidth + bookPaperPadding),
       bookScrollTextWidth(_phone.width),
@@ -139,10 +241,8 @@ void main() {
       await _open(t, dark: true);
       final p = _palette(t);
       expect(_paperColour(t), p.bookPaper);
-      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInk});
-      final number = t.widget<Text>(
-        find.descendant(of: _number, matching: find.byType(Text)),
-      );
+      _expectInk(t, _onPage(find.byType(ScreenPageView)), BookPaper.cream);
+      final number = t.widget<Text>(_number);
       expect(number.style!.color, p.bookInkSoft);
       // Captions and footnotes take the darker secondary ink, which reads
       // at 4.5:1 on cream; the soft ink is the page number's only.
@@ -161,7 +261,7 @@ void main() {
       );
       final p = _palette(t);
       expect(_paperColour(t), p.bookPaperDark);
-      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      _expectInk(t, _onPage(find.byType(ScreenPageView)), BookPaper.dark);
     });
 
     testWidgets('in Scroll mode too', (t) async {
@@ -172,7 +272,7 @@ void main() {
       );
       final p = _palette(t);
       expect(_paperColour(t), p.bookPaper);
-      expect(_ink(t, _paper), {p.bookInk});
+      _expectInk(t, _paper, BookPaper.cream);
     });
   });
 
@@ -185,7 +285,8 @@ void main() {
     final page = t
         .widget<ScreenPageView>(_onPage(find.byType(ScreenPageView)))
         .page;
-    expect(t.widget<Text>(_count).data, '2 of 3');
+    final count = t.widget<Text>(_count).data;
+    expect(count, startsWith('2 of '));
 
     ProviderScope.containerOf(t.element(find.byType(BookPagesView)))
         .read(settingsProvider.notifier)
@@ -194,8 +295,8 @@ void main() {
 
     final p = _palette(t);
     expect(_paperColour(t), p.bookPaperDark);
-    expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
-    expect(t.widget<Text>(_count).data, '2 of 3');
+    _expectInk(t, _onPage(find.byType(ScreenPageView)), BookPaper.dark);
+    expect(t.widget<Text>(_count).data, count);
     expect(_numberText(t), '2');
     expect(view.spot, spot);
     // Not cut again: the very page that was shown.
@@ -225,10 +326,9 @@ void main() {
       await t.pump();
       // Still the page as it was cut, held until its passage is cut again.
       expect(shown(t).page, same(page));
-      final p = _palette(t);
-      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      _expectInk(t, _onPage(find.byType(ScreenPageView)), BookPaper.dark);
       await t.pumpAndSettle();
-      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      _expectInk(t, _onPage(find.byType(ScreenPageView)), BookPaper.dark);
       expect(t.takeException(), isNull);
     });
 
@@ -242,10 +342,9 @@ void main() {
       settings(t).setBookPaper(BookPaper.dark);
       await t.pump();
       expect(shown(t).page, same(page));
-      final p = _palette(t);
-      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      _expectInk(t, _onPage(find.byType(ScreenPageView)), BookPaper.dark);
       await t.pumpAndSettle();
-      expect(_ink(t, _onPage(find.byType(ScreenPageView))), {p.bookInkDark});
+      _expectInk(t, _onPage(find.byType(ScreenPageView)), BookPaper.dark);
       expect(t.takeException(), isNull);
     });
   });
@@ -295,15 +394,20 @@ void main() {
       expect(find.byKey(const ValueKey('book-spine')), findsNothing);
     });
 
-    testWidgets('with page marks the text keeps off the spine and the foot', (
+    testWidgets('with page marks the text keeps off the spine and the head', (
       t,
     ) async {
-      late EdgeInsets marks, plain;
+      late EdgeInsets right, left, plain;
       await t.pumpWidget(
         host(
           Builder(
             builder: (context) {
-              marks = bookTextInsets(context, pageMarks: true);
+              right = bookTextInsets(context, pageMarks: true);
+              left = bookTextInsets(
+                context,
+                pageMarks: true,
+                side: BookSide.left,
+              );
               plain = bookTextInsets(context, pageMarks: false);
               return const SizedBox();
             },
@@ -311,11 +415,22 @@ void main() {
         ),
       );
       expect(plain, const EdgeInsets.all(bookPaperPadding));
-      expect(marks.left, greaterThan(plain.left));
-      expect(marks.left, greaterThanOrEqualTo(bookSpineWidth));
-      expect(marks.right, plain.right);
-      expect(marks.top, plain.top);
-      expect(marks.bottom, greaterThan(plain.bottom));
+      // A right-hand page's spine is on its left; a left-hand page's on its
+      // right; the text is as wide on either.
+      expect(right.left, greaterThan(plain.left));
+      expect(right.left, greaterThanOrEqualTo(bookSpineWidth));
+      expect(right.right, plain.right);
+      expect(left.right, right.left);
+      expect(left.left, right.right);
+      // Room at the top for the running head; none at the foot.
+      expect(right.top, greaterThan(plain.top));
+      expect(right.bottom, plain.bottom);
+    });
+
+    test('odd page numbers are right-hand pages', () {
+      expect(BookSide.ofNumber(1), BookSide.right);
+      expect(BookSide.ofNumber(2), BookSide.left);
+      expect(BookSide.ofNumber(15), BookSide.right);
     });
   });
 }

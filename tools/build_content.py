@@ -13,12 +13,16 @@ instruction printed after its Pali and stands three times instead; see THREE_TIM
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import pathlib
 import re
 import sys
 
 OUTPUT = pathlib.Path("assets/content/namaskaraya_to_pin_dima.json")
+# Written by tools/assemble_wandana_audio.py: each recorded section's file, label and verse times.
+AUDIO_TIMES = pathlib.Path("content/wandana_audio.json")
+HOSTED = pathlib.Path("hosted")
 TITLE = "Buddha Wandanawa"
 SUBTITLE = "බුද්ධ වන්දනාව"
 NOT_NAMED = "not named by the source"
@@ -187,7 +191,8 @@ PALI_VARIANTS: list[tuple[str, str, str, str]] = [
     ("s10-v1", "minor", "නිසින්නෝච/නිසින්නෝව (a single letter)", "5d443d90"),
     ("s10-v2", "minor", "මහාබෝධී/මහා බෝධි (a word split and vowel length), තෙ/තේ (vowel length)",
      "eb5cd60b"),
-    ("s12-v1", "minor", "ඝනසාරප්ප/ඝණසාරප්ප (a single letter)", "ca99e96f"),
+    ("s12-v1", "wording", "the app begins ගන්ධ තේල පදිත්තේන (the owner's correction, 2026-11-23); "
+                          "the booklet begins ඝණසාරප්ප දිත්තේන", "ca99e96f"),
     ("s14-v2", "minor", "ලභාමි/ලබාමි (a single letter), ඉදම්මේ/ඉදං මේ (a word split)", "7027547c"),
     ("s20-v3", "wording", "the app ends පුඤ්ඤක්ඛෙත්තං අනුත්තරං; the booklet ends සුපටිපන්න අනුත්තර",
      "ef8a7c3a"),
@@ -212,6 +217,9 @@ CORRECTIONS = [
     ("namo", "අධිවාසේ තුනෝ", "අධිවාසේතු නෝ", 1,
      "spacing only; the page itself prints it this way 3 times, the booklet 11"),
     ("namo", "බෝදි", "බෝධි", 1, "9 times on the page itself, 15 elsewhere on namo.lk, 13 in the booklet"),
+    ("namo", "ඝනසාරප්ප දිත්තේන", "ගන්ධ තේල පදිත්තේන", 1,
+     "the owner's word, 2026-11-23 (\"ගන්ධ තේල පදිත්තේන … exact same, only the first changes\"): "
+     "Ven. Na Uyane Ariyadhamma Thero chants the lamp offering this way, and his recording plays it"),
     ("booklet", "රුස්කර", "රැස්කර", 3, "රැස් 6 times elsewhere in the booklet and 8 on namo.lk"),
     ("booklet", "පුණ්ය", "පුණ්‍ය", 3, "the booklet's own other use; namo.lk"),
     ("booklet", "භූතයා්", "භූතයෝ", 1, "3 times elsewhere in the booklet, 2 on namo.lk"),
@@ -865,15 +873,56 @@ def build(root: pathlib.Path) -> dict:
     _apply_nottingham(sections_by_key, nott)
     _apply_paritha_sinhala(sections_by_key, booklet)
 
+    audio = _section_audio(root, sections)
     out_sections = []
     for number, section in enumerate(sections, start=1):
         check = NEEDS_CHECKING if any(v["check"] == NEEDS_CHECKING for v in section["verses"]) else CHECKED
-        out_sections.append({"id": f"s{number:02d}", "number": number, "heading": section["heading"],
+        sid = f"s{number:02d}"
+        out_sections.append({"id": sid, "number": number, "heading": section["heading"],
                              "check": check, "notes": section.get("notes", []), "source": section["source"],
-                             "corrections": section["corrections"], "verses": section["verses"]})
+                             "corrections": section["corrections"], "verses": section["verses"],
+                             **({"audio": audio[sid]} if sid in audio else {})})
     return {"schema": 1, "categories": [{
         "id": "cat-namaskaraya", "title": TITLE, "subtitle": SUBTITLE,
         "readings": [{"id": "namaskaraya", "title": TITLE, "audio": None, "sections": out_sections}]}]}
+
+
+def _mp4_duration_ms(data: bytes) -> int:
+    """The recording's length, read as tools/build_pirith.py reads it."""
+    spec = importlib.util.spec_from_file_location("build_pirith", pathlib.Path(__file__).with_name("build_pirith.py"))
+    pirith = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(pirith)
+    try:
+        return pirith.mp4_duration_ms(data)
+    except pirith.BuildError as e:
+        raise BuildError(str(e))
+
+
+def _section_audio(root: pathlib.Path, sections: list[dict]) -> dict[str, dict]:
+    """Each recorded section's audio object, by section id (s01 ...)."""
+    try:
+        times = json.loads((root / AUDIO_TIMES).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        raise BuildError(f"cannot read {AUDIO_TIMES.as_posix()}: {e}")
+    out = {}
+    for number, section in enumerate(sections, start=1):
+        sid = f"s{number:02d}"
+        entry = times.pop(sid, None)
+        if entry is None:
+            continue
+        if len(entry["block_times"]) != len(section["verses"]):
+            raise BuildError(f"{sid}: {len(entry['block_times'])} verse times for {len(section['verses'])} verses")
+        path = root / HOSTED / entry["path"]
+        try:
+            data = path.read_bytes()
+        except OSError as e:
+            raise BuildError(f"cannot read recording {path.as_posix()}: {e}")
+        out[sid] = {"path": entry["path"], "label": entry["label"], "duration_ms": _mp4_duration_ms(data),
+                    "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
+                    "block_times": entry["block_times"]}
+    if times:
+        raise BuildError(f"{AUDIO_TIMES.as_posix()} names sections that do not exist: {sorted(times)}")
+    return out
 
 
 def render(data: dict) -> bytes:

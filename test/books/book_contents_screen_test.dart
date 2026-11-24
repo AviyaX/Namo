@@ -47,12 +47,12 @@ void main() {
     );
     await t.tap(_own(2));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/2');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/2');
 
     await _open(t, Routes.bookContents(tinyBookNestedId, 2));
     await t.tap(_row(4));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/4');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/4');
     expect(t.takeException(), isNull);
   });
 
@@ -69,7 +69,7 @@ void main() {
     expect(find.bySemanticsLabel('Two one, 1 text'), findsOneWidget);
     await t.tap(_row(6));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/contents/6');
+    expect(_location(t), '/tipitaka/book/tiny-nested/contents/6');
     expect(_own(6), findsOneWidget);
     expect(_row(7), findsOneWidget);
     // An own row and a leaf are their titles alone.
@@ -82,16 +82,16 @@ void main() {
     await _open(t, Routes.bookContents(tinyBookNestedId, 6));
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/contents/5');
+    expect(_location(t), '/tipitaka/book/tiny-nested/contents/5');
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested');
+    expect(_location(t), '/tipitaka/book/tiny-nested');
     expect(find.byType(BookScreen), findsOneWidget);
   });
 
   testWidgets('a childless n shows Not found', (t) async {
     for (final n in ['1', '3', '99', '0', 'x']) {
-      await _open(t, '/library/book/tiny-nested/contents/$n');
+      await _open(t, '/tipitaka/book/tiny-nested/contents/$n');
       expect(
         find.text('This page could not be found.'),
         findsOneWidget,

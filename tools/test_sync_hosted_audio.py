@@ -61,6 +61,16 @@ class RecordingsTest(Base):
         self.assertEqual(sync.recordings(self.root),
                          [{"path": "audio/t/a.m4a", "bytes": 6, "sha256": SHA, "reading": "r1"}])
 
+    def test_recordings_lists_section_recordings(self):
+        p = self.root / "assets" / "content" / "x.json"
+        data = json.loads(p.read_text(encoding="utf-8"))
+        data["categories"][0]["readings"][1]["sections"] = [
+            {"id": "s1"}, {"id": "s2", "audio": {"path": "audio/t/b.m4a", "bytes": 3, "sha256": SHA}}]
+        p.write_text(json.dumps(data), encoding="utf-8")
+        self.assertEqual(sync.recordings(self.root), [
+            {"path": "audio/t/a.m4a", "bytes": 6, "sha256": SHA, "reading": "r1"},
+            {"path": "audio/t/b.m4a", "bytes": 3, "sha256": SHA, "reading": "r2#s2"}])
+
     def test_recordings_rejects_bad_sha(self):
         p = self.root / "assets" / "content" / "x.json"
         p.write_text(p.read_text(encoding="utf-8").replace(SHA, "zz"), encoding="utf-8")

@@ -70,6 +70,11 @@ Future<FakeChantPlayer> _mangalaPlayer(WidgetTester t) async {
 ChantStatus _chantStatus(WidgetTester t) =>
     t.widget<ReaderBottomBar>(find.byType(ReaderBottomBar)).chantState!.status;
 
+const _recordingsSeen = {tipsKey: '{"seen":["recordings"]}'};
+
+/// Home tall enough for My flows to be on screen.
+const _tallHome = Size(390, 2800);
+
 void main() {
   testWidgets('Home shows the Recordings tip once over the tab bar', (t) async {
     await openReal(t, Routes.home, library: await realLibrary(t), tips: true);
@@ -110,13 +115,15 @@ void main() {
   });
 
   testWidgets(
-    'Library shows My flows pointing at the card, or at New flow when flows exist',
+    'Home shows My flows pointing at the card, or at New flow when flows exist',
     (t) async {
       await openReal(
         t,
-        Routes.library,
+        Routes.home,
+        size: _tallHome,
         library: await realLibrary(t),
         tips: true,
+        storeExtras: _recordingsSeen,
       );
       _expectBubble(Tip.myFlows);
       _expectInCutout(
@@ -130,10 +137,14 @@ void main() {
       await t.pumpWidget(const SizedBox());
       await openReal(
         t,
-        Routes.library,
+        Routes.home,
+        size: _tallHome,
         library: await realLibrary(t),
         tips: true,
-        storeExtras: await realFlowsStore(t),
+        storeExtras: {
+          ...await realFlowsStore(t),
+          ..._recordingsSeen,
+        },
       );
       _expectBubble(Tip.myFlows);
       _expectInCutout(t, find.byKey(const ValueKey('new-flow')));
@@ -143,7 +154,12 @@ void main() {
   testWidgets(
     'the recordings tip does not appear under a reader opened from Home',
     (t) async {
-      await openReal(t, Routes.home, library: await realLibrary(t), tips: true);
+      await openReal(
+        t,
+        Routes.home,
+        library: await silentWandanaLibrary(t),
+        tips: true,
+      );
       _expectBubble(Tip.recordings);
 
       _container(t)
@@ -168,12 +184,12 @@ void main() {
   );
 
   testWidgets(
-    'a gatha reader shows Languages and layout pointing at the settings button',
+    'a gatha reader without chanting shows Languages and layout pointing at the settings button',
     (t) async {
       await openReal(
         t,
         Routes.reader(realReadingId),
-        library: await realLibrary(t),
+        library: await silentWandanaLibrary(t),
         tips: true,
       );
       _expectBubble(Tip.readerSettings);
@@ -301,16 +317,23 @@ void main() {
     expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
   });
 
-  testWidgets('Back on Library with My flows up dismisses it and stays', (
+  testWidgets('Back on Home with My flows up dismisses it and stays', (
     t,
   ) async {
-    await openReal(t, Routes.library, library: await realLibrary(t), tips: true);
+    await openReal(
+      t,
+      Routes.home,
+      size: _tallHome,
+      library: await realLibrary(t),
+      tips: true,
+      storeExtras: _recordingsSeen,
+    );
     _expectBubble(Tip.myFlows);
     await t.binding.handlePopRoute();
     await t.pumpAndSettle();
     expect(_bubble, findsNothing);
     expect(_container(t).read(tipsProvider).seen, contains(Tip.myFlows));
-    expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
+    expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
   });
 
   testWidgets(
@@ -332,34 +355,36 @@ void main() {
     (t) async {
       await openReal(
         t,
-        Routes.library,
+        Routes.home,
+        size: _tallHome,
         library: await realLibrary(t),
         tips: true,
-        storeExtras: {tipsKey: '{"seen":["recordings"]}'},
+        storeExtras: _recordingsSeen,
       );
       _expectBubble(Tip.myFlows);
 
       // As a browser Back does: the address changes, no Back is heard.
       final router = _container(t).read(routerProvider);
-      router.go(Routes.home);
+      router.go(Routes.library);
       await t.pumpAndSettle();
-      expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+      expect(find.byKey(const ValueKey('screen-library')), findsOneWidget);
       expect(_bubble, findsNothing);
       expect(_container(t).read(tipsProvider).active, isNull);
       expect(_container(t).read(tipsProvider).seen, {Tip.recordings});
 
-      router.go(Routes.library);
+      router.go(Routes.home);
       await t.pumpAndSettle();
       _expectBubble(Tip.myFlows);
     },
   );
 
   testWidgets(
-    'no My flows tip over the flow editor; it shows back on the Library',
+    'no My flows tip over the flow editor; it shows back on Home',
     (t) async {
       await openReal(
         t,
-        Routes.library,
+        Routes.home,
+        size: _tallHome,
         library: await realLibrary(t),
         tips: true,
         storeExtras: {
@@ -371,7 +396,7 @@ void main() {
       final router = _container(t).read(routerProvider);
       router.go(Routes.flowEditor('flow-1'));
       await t.pumpAndSettle();
-      expect(find.byKey(const ValueKey('screen-library')), findsNothing);
+      expect(find.byKey(const ValueKey('screen-home')), findsNothing);
 
       // As Settings' "Show the tips again" does.
       _container(t).read(tipsProvider.notifier).resetAll();
@@ -379,14 +404,18 @@ void main() {
       expect(_bubble, findsNothing);
       expect(_container(t).read(tipsProvider).active, isNull);
 
-      router.go(Routes.library);
+      // Back on Home: Recordings first (the tips were reset), then My flows.
+      router.go(Routes.home);
+      await t.pumpAndSettle();
+      _expectBubble(Tip.recordings);
+      await t.tap(_gotIt);
       await t.pumpAndSettle();
       _expectBubble(Tip.myFlows);
     },
   );
 
   testWidgets(
-    'the Library search opened with tips on has its focus back after My flows',
+    'the Pirith & Gatha search opened with tips on has its focus, and no tip',
     (t) async {
       await openReal(
         t,
@@ -394,9 +423,6 @@ void main() {
         library: await realLibrary(t),
         tips: true,
       );
-      _expectBubble(Tip.myFlows);
-      await t.tap(_gotIt);
-      await t.pumpAndSettle();
       expect(_bubble, findsNothing);
       final field = t.widget<EditableText>(
         find.descendant(

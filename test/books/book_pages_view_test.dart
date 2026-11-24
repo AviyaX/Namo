@@ -204,7 +204,7 @@ void main() {
     await _tapNext(t);
     expect(_shown(t), (2, n));
     expect(_view(t).spot!.compareTo(first), greaterThan(0));
-    expect(_location(t), '/library/book/tiny-nested/read/8');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/8');
     // The last page of the book's last chapter: no next page.
     for (var i = 2; i < n; i++) {
       await _tapNext(t);
@@ -236,14 +236,14 @@ void main() {
       }
       await t.pumpAndSettle();
       expect(t.state(find.byType(BookReaderScreen)), same(screen));
-      expect(_location(t), '/library/book/tiny-nested/read/8');
+      expect(_location(t), '/tipitaka/book/tiny-nested/read/8');
       expect(_shown(t).$1, 1);
       expect(_onPage(tinyLongBlocksTitle), findsOneWidget);
       expect(_topTitle(t), tinyLongBlocksTitle);
       // And back across into the last page of "2-1-1".
       await t.tap(_prev);
       await t.pumpAndSettle();
-      expect(_location(t), '/library/book/tiny-nested/read/7');
+      expect(_location(t), '/tipitaka/book/tiny-nested/read/7');
       expect(_topTitle(t), 'Two one one');
       expect(_shown(t), (n, n));
       expect(t.state(find.byType(BookReaderScreen)), same(screen));
@@ -262,7 +262,7 @@ void main() {
       (i, n) = _shown(t);
     }
     await _tapNext(t);
-    expect(_location(t), '/library/book/tiny-nested/read/8');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/8');
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
     expect(_location(t), Routes.book(tinyBookNestedId));
@@ -304,14 +304,14 @@ void main() {
       await t.pumpAndSettle();
       expect(_shown(t).$1, 1);
       await _turnWithoutTransition(t, _prev);
-      expect(_location(t), '/library/book/tiny-nested/read/7');
+      expect(_location(t), '/tipitaka/book/tiny-nested/read/7');
       final (i, n) = _shown(t);
       expect(n, greaterThan(1));
       expect(i, n);
       // And forward again, in place.
       final screen = t.state(find.byType(BookReaderScreen));
       await _turnWithoutTransition(t, _next);
-      expect(_location(t), '/library/book/tiny-nested/read/8');
+      expect(_location(t), '/tipitaka/book/tiny-nested/read/8');
       expect(_shown(t).$1, 1);
       expect(t.state(find.byType(BookReaderScreen)), same(screen));
       expect(t.takeException(), isNull);
@@ -345,7 +345,7 @@ void main() {
         (i, n) = _shown(t);
       }
       await _tapNext(t);
-      expect(_location(t), '/library/book/tiny-nested/read/8');
+      expect(_location(t), '/tipitaka/book/tiny-nested/read/8');
       final toEight = reports.where(
         (r) => '${r['uri'] ?? r['location']}'.endsWith('/read/8'),
       );
@@ -412,7 +412,7 @@ void main() {
     }
     books[path] = book.cast<String, Object>();
     await _open(t, Routes.bookReader(tinyBookNestedId, 5), books: books);
-    expect(_location(t), '/library/book/tiny-nested/read/6');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/6');
     expect(find.byType(BookPagesView), findsOneWidget);
     _container(t)
         .read(settingsProvider.notifier)
@@ -573,16 +573,19 @@ void main() {
     final screen = t.state(find.byType(BookReaderScreen));
     await t.tap(find.byKey(const ValueKey('book-prev')));
     await t.pumpAndSettle();
-    expect(_location(t), '/library/book/tiny-nested/read/7');
+    expect(_location(t), '/tipitaka/book/tiny-nested/read/7');
     expect(t.state(find.byType(BookReaderScreen)), isNot(same(screen)));
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('a wide window draws the book in the reading column', (t) async {
-    const size = Size(1280, 900);
+  testWidgets('a tall wide window draws the book in the reading column', (
+    t,
+  ) async {
+    const size = Size(900, 1200);
     await _open(t, Routes.bookReader(tinyBookNestedId, 8), size: size);
     final cover = find.byKey(const ValueKey('book-cover'));
     expect(cover, findsOneWidget);
+    expect(find.byKey(const ValueKey('book-spread')), findsNothing);
     expect(t.getSize(cover).width, NamoSizes.readingColumn);
     expect(t.getTopLeft(cover).dx, (size.width - NamoSizes.readingColumn) / 2);
     // The curl's edges are the paper's, inside its rule.
@@ -594,6 +597,51 @@ void main() {
     await t.tapAt(Offset(rect.right - 20, rect.center.dy));
     await t.pumpAndSettle();
     expect(_shown(t), (2, n));
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('a window wider than tall opens the book: two pages, centred, '
+      'the right page turning two pages on', (t) async {
+    const size = Size(1280, 900);
+    await _open(t, Routes.bookReader(tinyBookNestedId, 8), size: size);
+    final cover = find.byKey(const ValueKey('book-cover'));
+    expect(find.byKey(const ValueKey('book-spread')), findsOneWidget);
+    final width = t.getSize(cover).width;
+    expect(width, size.width - 2 * NamoSizes.pageMargin(size.width));
+    expect(width, lessThanOrEqualTo(2 * NamoSizes.readingColumn));
+    expect(t.getTopLeft(cover).dx, (size.width - width) / 2);
+    // The curl turns the right page, inside its rule.
+    final paper = t.getRect(find.byKey(const ValueKey('book-paper')));
+    final rect = t.getRect(find.byKey(const ValueKey('book-page-curl')));
+    expect(rect, paper.deflate(bookRuleWidth));
+    expect(
+      t.getRect(find.byKey(const ValueKey('book-paper-left'))).right,
+      lessThanOrEqualTo(paper.left),
+    );
+    // "3" is the book's last page and both its pages are open: no turn on.
+    expect(_countText(t), '1–2 of 2');
+    final next = find.byKey(const ValueKey('book-page-next'));
+    expect(t.widget<NamoIconButton>(next).onPressed, isNull);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('sideways, a turn moves on two pages and back two', (t) async {
+    // A small phone held sideways: "3" runs to several pages.
+    await _open(
+      t,
+      Routes.bookReader(tinyBookNestedId, 8),
+      size: const Size(760, 420),
+    );
+    expect(find.byKey(const ValueKey('book-spread')), findsOneWidget);
+    final first = _countText(t);
+    expect(first, startsWith('1–2 of '));
+    final rect = t.getRect(find.byKey(const ValueKey('book-page-curl')));
+    await t.tapAt(Offset(rect.right - 20, rect.center.dy));
+    await t.pumpAndSettle();
+    expect(_countText(t), startsWith('3'));
+    await t.tap(find.byKey(const ValueKey('book-page-prev')));
+    await t.pumpAndSettle();
+    expect(_countText(t), first);
     expect(t.takeException(), isNull);
   });
 
@@ -750,12 +798,12 @@ void main() {
       // The peel has ended and the press waits for the chapter before.
       expect(paint, findsNothing);
       expect(waitingMark, findsOneWidget);
-      expect(_location(t), '/library/book/tiny-nested/read/8');
+      expect(_location(t), '/tipitaka/book/tiny-nested/read/8');
       await t.pumpAndSettle();
       expect(waitingMark, findsNothing);
       await t.tap(_prev);
       await t.pumpAndSettle();
-      expect(_location(t), '/library/book/tiny-nested/read/7');
+      expect(_location(t), '/tipitaka/book/tiny-nested/read/7');
       expect(_topTitle(t), 'Two one one');
       final (i, n) = _shown(t);
       expect(i, n);
@@ -776,11 +824,7 @@ void main() {
       await _open(t, Routes.bookReader(tinyBookNestedId, 8));
       final corner = find.byKey(const ValueKey('book-corner'));
       final number = find.byKey(const ValueKey('book-page-number'));
-      String numberText() => t
-          .widget<Text>(
-            find.descendant(of: number, matching: find.byType(Text)),
-          )
-          .data!;
+      String numberText() => t.widget<Text>(number).data!;
       expect(corner, findsOneWidget);
       expect(numberText(), '1');
       await t.tap(_next);

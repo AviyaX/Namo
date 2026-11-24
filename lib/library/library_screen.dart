@@ -4,10 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../audio/audio_controls.dart';
-import '../books/book_model.dart';
-import '../books/book_search.dart';
-import '../books/books_part.dart';
-import '../books/books_repository.dart';
 import '../content/model.dart';
 import '../design/tokens.dart';
 import '../design/typography.dart';
@@ -18,7 +14,6 @@ import '../design/widgets/namo_page.dart';
 import '../design/widgets/page_header.dart';
 import '../design/widgets/search_field.dart';
 import '../design/widgets/segmented_selector.dart';
-import '../flows/my_flows_part.dart';
 import '../home/card_art.dart';
 import '../router.dart';
 import '../settings/settings.dart';
@@ -26,9 +21,9 @@ import 'library_gate.dart';
 import 'open_categories.dart';
 import 'search.dart';
 
-/// The person's flows, then the topics as rows, with a search box; a tap on
-/// a topic opens the numbered sections of its readings underneath, on the
-/// same page. Search results take the place of both.
+/// Pirith & Gatha: the topics as rows, with a search box; a tap on a topic
+/// opens the numbered sections of its readings underneath, on the same page.
+/// Search results take the place of the rows.
 ///
 /// [openCategory] or [openReading] (from the address) opens that category
 /// once; an id that matches nothing is ignored. [focusSearch] (from the
@@ -120,7 +115,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   }
 
   /// Scrolls [categoryId]'s header to the top of the page when it is not
-  /// wholly in view (the person's flows can push the topics below the fold);
+  /// wholly in view (a long list of topics can push it below the fold);
   /// a header already in view leaves the page where it is.
   void _reveal(String categoryId) {
     final header = _headers[categoryId]?.currentContext;
@@ -148,7 +143,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     final open = ref.watch(openCategoriesProvider);
     final selection = ref.watch(settingsProvider.select((s) => s.languages));
     final index = ref.watch(searchIndexProvider);
-    final books = ref.watch(booksIndexProvider).value?.books ?? const [];
     return NamoPage(
       children: [
         LibraryGate(
@@ -179,7 +173,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 PageHeader(
-                  title: 'Library',
+                  title: 'Pirith & Gatha',
                   caption: '$n ${n == 1 ? 'collection' : 'collections'}',
                 ),
                 const SizedBox(height: NamoSpace.lg),
@@ -187,19 +181,16 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                   key: const ValueKey('library-search'),
                   controller: _query,
                   focusNode: _searchFocus,
-                  label: 'Search the library',
+                  label: 'Search Pirith & Gatha',
                   onChanged: (_) => setState(() {}),
                 ),
                 const SizedBox(height: NamoSpace.lg),
                 if (searching)
                   _Results(
-                    books: searchBooks(books, query),
                     hits: index?.search(query, selection) ?? const [],
                     query: query.trim(),
                   )
                 else ...[
-                  MyFlowsPart(library: library),
-                  const SizedBox(height: NamoSpace.xl),
                   if (n >= 2) ...[
                     ChoiceChips<String?>(
                       key: const ValueKey('library-chips'),
@@ -221,9 +212,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                         open: open.contains(c.id) || c.id == requested?.id,
                         animate: c.id != requested?.id,
                       ),
-                  // The books come after the topics.
-                  const SizedBox(height: NamoSpace.xl),
-                  const BooksPart(),
                 ],
               ],
             );
@@ -234,23 +222,21 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   }
 }
 
-/// The books and the sections that match the search, or a nothing-found
+/// The sections that match the search, or a nothing-found
 /// state.
 class _Results extends StatelessWidget {
   const _Results({
-    required this.books,
     required this.hits,
     required this.query,
   });
 
-  final List<BookSummary> books;
   final List<SearchHit> hits;
   final String query;
 
   @override
   Widget build(BuildContext context) {
     final p = NamoPalette.of(context);
-    if (books.isEmpty && hits.isEmpty) {
+    if (hits.isEmpty) {
       return EmptyState(
         key: const ValueKey('library-results'),
         icon: Symbols.search_off_rounded,
@@ -262,28 +248,6 @@ class _Results extends StatelessWidget {
       key: const ValueKey('library-results'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (books.isNotEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: NamoSpace.lg),
-            child: Overline('Books', header: true),
-          ),
-          const SizedBox(height: NamoSpace.sm),
-          for (final b in books)
-            ListRow(
-              key: ValueKey('book-hit-${b.id}'),
-              title: b.title,
-              titleFamily: NamoFonts.sinhala,
-              subtitle: b.subtitle,
-              onTap: () => context.go(Routes.book(b.id)),
-              trailing: Icon(
-                Symbols.chevron_right_rounded,
-                size: NamoSizes.iconSmall,
-                weight: 300,
-                color: p.textSecondary,
-              ),
-            ),
-          if (hits.isNotEmpty) const SizedBox(height: NamoSpace.lg),
-        ],
         for (final h in hits)
           ListRow(
             // A topic gone through reading by reading numbers its readings.

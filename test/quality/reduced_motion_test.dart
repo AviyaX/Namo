@@ -149,12 +149,17 @@ void main() {
     }
 
     testWidgets('the New flow sheet opens and closes at once', (t) async {
-      await openFlows(t, Routes.library);
+      await openFlows(t, Routes.home);
+      // My flows is at the foot of Home.
+      await t.ensureVisible(find.byKey(const ValueKey('new-flow')));
+      await t.pumpAndSettle();
       await openSheetAtOnce(t, 'new-flow');
     });
 
-    testWidgets('the editor opens from the Library at once', (t) async {
-      await openFlows(t, Routes.library);
+    testWidgets('the editor opens from Home at once', (t) async {
+      await openFlows(t, Routes.home);
+      await t.ensureVisible(find.byKey(const ValueKey('flow-edit-flow-1')));
+      await t.pumpAndSettle();
       await tapAndStop(t, 'flow-edit-flow-1');
       expect(find.byKey(const ValueKey('screen-flow-editor')), findsOneWidget);
     });
@@ -214,9 +219,9 @@ void main() {
 
     testWidgets('a flow card on Home opens the reader at once', (t) async {
       await openFlows(t, Routes.home);
-      await t.ensureVisible(find.byKey(const ValueKey('home-flow-flow-1')));
+      await t.ensureVisible(find.byKey(const ValueKey('flow-open-flow-1')));
       await t.pumpAndSettle();
-      await tapAndStop(t, 'home-flow-flow-1');
+      await tapAndStop(t, 'flow-open-flow-1');
       expect(find.byKey(const ValueKey('reader-top-bar')), findsOneWidget);
     });
   });

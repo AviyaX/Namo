@@ -296,7 +296,7 @@ void main() {
     final button = find.byKey(const ValueKey('home-search'));
     expect(button, findsOneWidget);
     expect(
-      find.descendant(of: button, matching: find.byTooltip('Search the library')),
+      find.descendant(of: button, matching: find.byTooltip('Search Pirith & Gatha')),
       findsOneWidget,
     );
     expect(
@@ -311,7 +311,7 @@ void main() {
           )
           .getSemanticsData()
           .tooltip,
-      'Search the library',
+      'Search Pirith & Gatha',
     );
     handle.dispose();
     await t.tap(button);

@@ -1,6 +1,7 @@
 import 'package:buddhist_gatha/audio/audio_catalogue.dart';
 import 'package:buddhist_gatha/audio/chant_player.dart';
 import 'package:buddhist_gatha/audio/recording_store.dart';
+import 'package:buddhist_gatha/content/model.dart';
 import 'package:buddhist_gatha/design/widgets/pressable.dart';
 import 'package:buddhist_gatha/router.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +42,13 @@ Future<FakeChantPlayer> _open(
   FakeRecordingStore store, {
   String id = mangalaReadingId,
   FakeChantPlayer? player,
+  Library? library,
 }) async {
   player ??= FakeChantPlayer();
   await openReal(
     t,
     Routes.reader(id),
-    library: await realLibrary(t),
+    library: library ?? await realLibrary(t),
     player: player,
     recordingStore: store,
   );
@@ -254,7 +256,12 @@ void main() {
     t,
   ) async {
     final store = FakeRecordingStore(everything: Availability.notDownloaded);
-    await _open(t, store, id: realReadingId);
+    await _open(
+      t,
+      store,
+      id: realReadingId,
+      library: await silentWandanaLibrary(t),
+    );
     expect(find.byKey(const ValueKey('reader-play')), findsOneWidget);
     expect(_row, findsNothing);
   });

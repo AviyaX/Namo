@@ -442,10 +442,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     unawaited(_player?.seek(start));
   }
 
+  /// The chanting goes on in the background (the phone shows its own
+  /// controls); only the scrolling stops and the screen is let go.
   void _toBackground() {
     _autoScroll.pause();
-    _pauseAudio();
-    // The player reports its pause later; the screen is let go now.
     _setAwake(false);
     _save();
   }
@@ -748,7 +748,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     final top = body.offsetOfPhrase(place.block, place.phrase);
     if (top != null) return (offset: top - third, exact: true);
     final index = body.widget.items.indexWhere(
-      (i) => i is PhraseBlockItem && i.index == place.block,
+      (i) => blockOfItem(i) == place.block,
     );
     final extents = body.extents();
     if (index < 0 || index >= extents.length) {
@@ -826,7 +826,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   /// The top-bar arrow and the system Back: to the page the reading was
-  /// opened from. A flow goes back to Home, its editor, or else the Library;
+  /// opened from. A flow goes back to Home or its editor;
   /// for any other reading the editor means nothing.
   void _back() {
     if (context.canPop()) {
@@ -838,7 +838,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       context.go(switch (widget.from) {
         ReaderFrom.home => Routes.home,
         ReaderFrom.editor => Routes.flowEditor(id),
-        ReaderFrom.saved || null => Routes.library,
+        ReaderFrom.saved || null => Routes.home,
       });
       return;
     }
