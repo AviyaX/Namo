@@ -155,11 +155,13 @@ void main() {
     "the last page's first line below the column's end: Scroll goes to the "
     'end, and back in Pages the same page shows',
     (t) async {
-      // A taller phone: "3" is two pages, and the second starts less than
-      // a screen from the scroll column's end.
+      // A taller phone: the last page of "3" starts less than a screen
+      // from the scroll column's end.
       await _open(t, BookReadingMode.pages, size: const Size(390, 1000));
-      await t.tap(_next);
-      await t.pumpAndSettle();
+      for (var i = 0; i < 10 && _nextEnabled(t); i++) {
+        await t.tap(_next);
+        await t.pumpAndSettle();
+      }
       expect(_nextEnabled(t), isFalse);
       final shown = _pagesSpot(t)!;
       final offset = offsetOfSpot(_chapter(t), _styles(t), _width, shown);

@@ -33,7 +33,11 @@ class ScreenPageView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (var i = 0; i < slices.length; i++) ...[
-          SizedBox(height: gapBefore(i == 0 ? null : slices[i - 1], slices[i])),
+          SizedBox(height: gapBefore(
+              chapter.blocks,
+              i == 0 ? null : slices[i - 1],
+              slices[i],
+            )),
           KeyedSubtree(
             key: ValueKey('page-slice-$i'),
             child: _slice(slices[i]),
@@ -48,9 +52,9 @@ class ScreenPageView extends StatelessWidget {
     final s = styles;
     switch (slice) {
       case TitleSlice():
-        return Semantics(
-          header: true,
-          child: Text(chapter.title, style: s.title),
+        return BookChapterTitle(
+          title: chapter.title,
+          style: s.titleFor(chapter.title),
         );
       case BlockSlice(:final block):
         return BookBlockView(
@@ -146,7 +150,19 @@ class ScreenPageView extends StatelessWidget {
       charStart: charStart,
       charEnd: charEnd,
     );
-    if (b case BookPara(:final text)) return justified(text, s.prose);
+    if (b case BookPara(:final text)) {
+      // Drawn with the indent before it; the slice's range counts from the
+      // text's own first character, and the first line takes the indent.
+      const k = bookParaLead.length;
+      return JustifiedLines(
+        text: bookParaLead + text,
+        style: s.prose,
+        scaler: s.scaler,
+        direction: s.direction,
+        charStart: charStart == 0 ? 0 : charStart + k,
+        charEnd: charEnd + k,
+      );
+    }
     final whole = switch (b) {
       BookHeading(:final text) => (text, s.heading),
       BookSubhead(:final text) => (text, s.strong),

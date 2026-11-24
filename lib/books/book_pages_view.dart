@@ -320,13 +320,31 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
   void _turnedForward() {
     final stream = _stream!;
     final before = stream.n;
-    if (stream.next()) _turned(before);
+    if (!stream.next()) return;
+    // Open sideways, the turn moves on two pages: the next spread.
+    if (_spread) stream.next();
+    _turned(before);
   }
 
   void _turnedBack() {
     final stream = _stream!;
     final before = stream.n;
-    if (stream.previous()) _turned(before);
+    if (!stream.previous()) return;
+    if (_spread) stream.previous();
+    _turned(before);
+  }
+
+  /// Whether the book lies open sideways, two pages side by side (set as
+  /// the page area is laid out).
+  bool _spread = false;
+
+  /// The page that a turn [forward] (or back) brings: the next or previous
+  /// page, or open sideways the next spread's left page or the previous
+  /// spread's right page.
+  Object? _pageThatWay({required bool forward}) {
+    final stream = _stream!;
+    if (!_spread) return forward ? stream.peekNext : stream.peekPrevious;
+    return stream.peekAt(forward ? 2 : -1)?.page;
   }
 
   /// Turns with the curl when the page that way is cut; otherwise asks the
@@ -342,17 +360,27 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       forward ? _curl.turnForward() : _curl.turnBack();
       return;
     }
-    final ready = forward ? stream.peekNext : stream.peekPrevious;
+    final ready = _pageThatWay(forward: forward);
     if (ready != null) {
       forward ? _curl.turnForward() : _curl.turnBack();
       return;
     }
     final before = stream.n;
     if (forward ? stream.next() : stream.previous()) {
+      if (_spread) forward ? stream.next() : stream.previous();
       _turned(before);
     } else if (stream.waiting) {
       setState(() => _waitingFor = forward ? 1 : -1);
     }
+  }
+
+  /// The page numbers shown, from the current page's [index]: "3", or open
+  /// sideways with the right page in the same chapter, "3–4".
+  String _shownPages(int index) {
+    final right = _spread ? _stream?.peekAt(1) : null;
+    return right != null && right.n == _stream!.n
+        ? '${index + 1}–${index + 2}'
+        : '${index + 1}';
   }
 
   /// No page that way: the book's first or last page is shown.
@@ -364,9 +392,15 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       return stream.index == 0 && book.previousReading(stream.n) == null;
     }
     final count = stream.count;
-    return count != null &&
+    final lastShown = count != null &&
         stream.index == count - 1 &&
         book.nextReading(stream.n) == null;
+    if (!_spread || lastShown) return lastShown;
+    // Open sideways: at the end when the right page is the book's last.
+    final right = stream.peekAt(1);
+    if (right == null || stream.peekAt(2) != null) return false;
+    if (book.nextReading(right.n) != null) return false;
+    return right.n != stream.n || (count != null && right.index == count - 1);
   }
 
   // ---- build --------------------------------------------------------------
@@ -482,16 +516,29 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
     required double screen,
   }) {
     final margin = NamoSizes.pageMargin(screen);
+    // Sideways, with room for two pages: the book lies open, two pages
+    // side by side.
+    final spread = _spread =
+        area.width > area.height && area.width >= bookSpreadMinWidth;
     final column = math.max(
       0.0,
-      math.min(area.width - 2 * margin, NamoSizes.readingColumn),
+      math.min(
+        area.width - 2 * margin,
+        (spread ? 2 : 1) * NamoSizes.readingColumn,
+      ),
     );
     const top = NamoSpace.sm, bottom = NamoSpace.sm;
     final height = math.max(0.0, area.height - top - bottom);
-    final insets = bookTextInsets(context, pageMarks: true);
+    EdgeInsets insetsOf(BookSide side) =>
+        bookTextInsets(context, pageMarks: true, side: side);
+    final insets = insetsOf(BookSide.right);
+    // One page's paper: the column less the cover, then each page's rule.
+    final paperWidth = spread
+        ? (column - 2 * bookCoverInset) / 2 - 2 * bookRuleWidth
+        : column - 2 * (bookCoverInset + bookRuleWidth);
     const edge = 2 * (bookCoverInset + bookRuleWidth);
     final box = PageBox(
-      width: math.max(0, column - edge - insets.horizontal),
+      width: math.max(0, paperWidth - insets.horizontal),
       height: math.max(0, height - edge - insets.vertical),
     );
     if (box.width <= 0 || box.height <= 0) return const SizedBox.shrink();
@@ -500,9 +547,10 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
     final book = widget.book;
     final colours = bookColours(NamoPalette.of(context), paper);
 
-    Widget? page(ScreenPage? page, int? n) {
+    Widget? page(ScreenPage? page, int? n, {BookSide side = BookSide.right}) {
       final chapter = n == null ? null : book.page(n);
       if (page == null || chapter == null) return null;
+      final insets = insetsOf(side);
       final held = _held;
       final old = held != null && identical(page, held.$1);
       // A page cut for another text size or box is drawn as it was cut,
@@ -531,55 +579,132 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
       );
     }
 
-    final current = page(stream.current, stream.n);
-    if (current == null) return const BookLoading();
+    // The marks of the page at [index] of chapter [n]: its side by its
+    // number (or as placed in the open book), the book's title on a
+    // left-hand page and the chapter's on a right-hand page.
+    BookPageMarks marksOf(int n, int index, {BookSide? side, bool corner = true}) {
+      final number = index + 1;
+      final s = side ?? BookSide.ofNumber(number);
+      return BookPageMarks(
+        side: s,
+        number: number,
+        title: s == BookSide.left ? book.title : book.page(n)?.title,
+        corner: corner,
+      );
+    }
+
     // The chapter and those either side: every page the curl may turn to
     // next has its pictures read ahead.
     _precache(stream.n);
     _precache(book.nextReading(stream.n));
     _precache(book.previousReading(stream.n));
-    final curl = PageCurl(
-      key: const ValueKey('book-page-curl'),
-      current: current,
-      next: page(stream.peekNext, stream.peekNextChapter),
-      previous: page(stream.peekPrevious, stream.peekPreviousChapter),
-      onTurnedForward: _turnedForward,
-      onTurnedBack: _turnedBack,
-      controller: _curl,
-      flapColour: colours.paper,
-    );
+    final canNext = !_atEnd(forward: true);
+    final canPrevious = !_atEnd(forward: false);
+    if (stream.current == null) return const BookLoading();
+
+    final Widget frame;
+    if (spread) {
+      // The left page lies still; the right page turns, to the page after
+      // the next spread's left page (or a blank page at the book's end),
+      // and back to the previous spread's right page.
+      final right = stream.peekAt(1);
+      Widget blank() => ColoredBox(color: colours.paper);
+      Widget? at(int offset, BookSide side) {
+        final p = stream.peekAt(offset);
+        return p == null ? null : page(p.page, p.n, side: side);
+      }
+
+      final left = page(stream.current, stream.n, side: BookSide.left)!;
+      final rightPage = at(1, BookSide.right) ?? blank();
+      final next =
+          at(3, BookSide.right) ?? (stream.peekAt(2) != null ? blank() : null);
+      final curl = PageCurl(
+        key: const ValueKey('book-page-curl'),
+        current: rightPage,
+        next: next,
+        previous: at(-1, BookSide.right),
+        onTurnedForward: _turnedForward,
+        onTurnedBack: _turnedBack,
+        controller: _curl,
+        flapColour: colours.paper,
+      );
+      frame = BookSpreadFrame(
+        paper: paper,
+        turning: _curl.turning,
+        left: left,
+        leftMarks: marksOf(stream.n, stream.index, side: BookSide.left),
+        rightMarks: right == null
+            ? const BookPageMarks(side: BookSide.right, corner: false)
+            : marksOf(right.n, right.index, side: BookSide.right),
+        right: _pageArea2(curl, canNext: canNext, canPrevious: canPrevious),
+      );
+    } else {
+      final number = stream.index + 1;
+      final side = BookSide.ofNumber(number);
+      final current = page(stream.current, stream.n, side: side)!;
+      final curl = PageCurl(
+        key: const ValueKey('book-page-curl'),
+        current: current,
+        next: page(
+          stream.peekNext,
+          stream.peekNextChapter,
+          side: BookSide.ofNumber(
+            stream.peekNextChapter == stream.n ? number + 1 : 1,
+          ),
+        ),
+        previous: page(
+          stream.peekPrevious,
+          stream.peekPreviousChapter,
+          side: BookSide.ofNumber(
+            stream.peekPreviousChapter == stream.n
+                ? number - 1
+                : (stream.peekAt(-1)?.index ?? 0) + 1,
+          ),
+        ),
+        onTurnedForward: _turnedForward,
+        onTurnedBack: _turnedBack,
+        controller: _curl,
+        flapColour: colours.paper,
+      );
+      final marks = marksOf(stream.n, stream.index);
+      frame = BookFrame(
+        paper: paper,
+        pageMarks: true,
+        pageNumber: marks.number,
+        runningTitle: marks.title,
+        side: side,
+        turning: _curl.turning,
+        child: _pageArea2(curl, canNext: canNext, canPrevious: canPrevious),
+      );
+    }
     if (!_peelAsked) {
       // Once the curl is laid out at its size.
       WidgetsBinding.instance.addPostFrameCallback((_) => _peelIfDue());
     }
-    final canNext = !_atEnd(forward: true);
-    final canPrevious = !_atEnd(forward: false);
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, top, 0, bottom),
       child: Align(
         alignment: Alignment.topCenter,
-        child: SizedBox(
-          width: column,
-          height: height,
-          child: BookFrame(
-            paper: paper,
-            pageMarks: true,
-            pageNumber: stream.index + 1,
-            turning: _curl.turning,
-            child: Semantics(
-              key: const ValueKey('book-page-area'),
-              container: true,
-              customSemanticsActions: {
-                if (canNext) _nextPage: () => _turn(forward: true),
-                if (canPrevious) _previousPage: () => _turn(forward: false),
-              },
-              child: curl,
-            ),
-          ),
-        ),
+        child: SizedBox(width: column, height: height, child: frame),
       ),
     );
   }
+
+  /// The turning page with the screen reader's Next page and Previous page
+  /// actions on it.
+  Widget _pageArea2(
+    Widget curl, {
+    required bool canNext,
+    required bool canPrevious,
+  }) => Semantics(
+    key: const ValueKey('book-page-area'),
+    container: true,
+    customSemanticsActions: {
+      if (canNext) _nextPage: () => _turn(forward: true),
+      if (canPrevious) _previousPage: () => _turn(forward: false),
+    },
+    child: curl,
+  );
 
   Widget _bottomBar(BuildContext context) {
     final p = NamoPalette.of(context);
@@ -620,9 +745,8 @@ class BookPagesViewState extends ConsumerState<BookPagesView> {
                   child: Text(
                     !shown
                         ? ''
-                        : count == null
-                        ? '${index + 1}'
-                        : '${index + 1} of $count',
+                        : '${_shownPages(index)}'
+                              '${count == null ? '' : ' of $count'}',
                     key: const ValueKey('book-page-count'),
                     style: NamoType.caption(p.textSecondary),
                   ),

@@ -350,7 +350,8 @@ void main() {
       'Verse line six',
     ]);
     final page = _chapter([..._thirtyParagraphs().take(4), gatha]);
-    for (var height = 300.0; height <= 640; height += 17) {
+    // From a page tall enough for the whole verse at this size.
+    for (var height = 400.0; height <= 640; height += 17) {
       final pages = paginate(
         page,
         _styles(fontScale: 1.6),

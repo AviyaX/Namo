@@ -410,13 +410,19 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Semantics(
-                          header: true,
-                          child: Text(page.title, style: styles.title),
+                        BookChapterTitle(
+                          title: page.title,
+                          style: styles.titleFor(page.title),
                         ),
                         const SizedBox(height: NamoSpace.lg),
                         for (var i = 0; i < blocks.length; i++) ...[
-                          if (i > 0) const SizedBox(height: NamoSpace.md),
+                          if (i > 0)
+                            SizedBox(
+                              height: bookBlockGap(
+                                page.blocks[i - 1],
+                                page.blocks[i],
+                              ),
+                            ),
                           blocks[i],
                         ],
                       ],

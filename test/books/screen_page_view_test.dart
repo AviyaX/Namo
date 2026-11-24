@@ -57,8 +57,9 @@ void main() {
       ),
     );
     expect(find.text('A chapter'), findsOneWidget);
-    expect(find.text(text), findsOneWidget);
-    expect(find.text(_words(2, 8)), findsOneWidget);
+    // A paragraph drawn whole carries the indent before its text.
+    expect(find.text(bookParaLead + text), findsOneWidget);
+    expect(find.text(bookParaLead + _words(2, 8)), findsOneWidget);
   });
 
   testWidgets('no overflow at 320 wide with fontScale 1.6', (t) async {

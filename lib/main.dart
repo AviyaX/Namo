@@ -12,6 +12,7 @@ void _registerFontLicences() {
     'Noto Sans Sinhala': 'assets/fonts/OFL-NotoSansSinhala.txt',
     'Noto Serif': 'assets/fonts/OFL-NotoSerif.txt',
     'Lora': 'assets/fonts/OFL-Lora.txt',
+    'Abhaya Libre': 'assets/fonts/OFL-AbhayaLibre.txt',
   };
   LicenseRegistry.addLicense(() async* {
     for (final e in files.entries) {

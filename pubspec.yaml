@@ -106,6 +106,7 @@ flutter:
     - assets/fonts/OFL-NotoSansSinhala.txt
     - assets/fonts/OFL-NotoSerif.txt
     - assets/fonts/OFL-Lora.txt
+    - assets/fonts/OFL-AbhayaLibre.txt
     - assets/branding/
     - assets/content/
     - assets/tipitaka/
@@ -132,6 +133,12 @@ flutter:
         - asset: assets/fonts/NotoSerif.ttf
         - asset: assets/fonts/NotoSerif-Italic.ttf
           style: italic
+    # The books' face: after the classic Sinhala printing type.
+    - family: AbhayaLibre
+      fonts:
+        - asset: assets/fonts/AbhayaLibre-Regular.ttf
+        - asset: assets/fonts/AbhayaLibre-Bold.ttf
+          weight: 700
     - family: Lora
       fonts:
         - asset: assets/fonts/Lora.ttf

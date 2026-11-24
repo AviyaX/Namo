@@ -45,6 +45,10 @@ Future<void> loadBundledFonts() async {
   await load('NotoSansSinhala', ['NotoSansSinhala.ttf']);
   await load('NotoSerif', ['NotoSerif.ttf']);
   await load('Lora', ['Lora.ttf']);
+  await load('AbhayaLibre', [
+    'AbhayaLibre-Regular.ttf',
+    'AbhayaLibre-Bold.ttf',
+  ]);
   // The app points 'Roboto' at Lora (see pubspec.yaml).
   await load('Roboto', ['Lora.ttf']);
 }

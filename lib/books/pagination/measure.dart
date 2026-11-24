@@ -24,11 +24,13 @@ List<int> runningStarts(List<int> lengths) {
 
 /// The character each of [painter]'s lines ([metrics], its line metrics)
 /// starts at.
+///
+/// The character at each line's left edge is the line's start. Its line is
+/// not asked for: the web engine names the line before for the first
+/// character of a line, which would start every line a line early.
 List<int> lineStarts(TextPainter painter, List<LineMetrics> metrics) => [
   for (final line in metrics)
-    painter
-        .getLineBoundary(painter.getPositionForOffset(Offset(0, line.baseline)))
-        .start,
+    painter.getPositionForOffset(Offset(line.left, line.baseline)).offset,
 ];
 
 /// A text laid out at a width: where each line starts and how tall it is.
@@ -40,15 +42,20 @@ class TextLines {
     TextStyle style,
     double width,
     TextScaler scaler,
-    TextDirection dir,
-  ) {
+    TextDirection dir, {
+    String lead = '',
+  }) {
     final painter = TextPainter(
-      text: TextSpan(text: text, style: style),
+      text: TextSpan(text: lead + text, style: style),
       textDirection: dir,
       textScaler: scaler,
     )..layout(maxWidth: width);
     final metrics = painter.computeLineMetrics();
-    final starts = lineStarts(painter, metrics);
+    // Line starts count from the text's own first character, not the lead.
+    final starts = [
+      for (final s in lineStarts(painter, metrics))
+        s <= lead.length ? 0 : s - lead.length,
+    ];
     final heights = [for (final line in metrics) line.height];
     painter.dispose();
     if (starts.isEmpty) {
@@ -71,10 +78,15 @@ class TextLines {
 
   /// Where lines `[a, b)` end in the text: the next line's start, less the
   /// hard line break that ends line `b - 1` (drawn, it would add a line).
+  ///
+  /// A blank line (nothing but its break) keeps its break: without it the
+  /// lines `[a, b)` would end before the blank line and it would not be
+  /// drawn, though it is counted in [height].
   int end(int b) {
     if (b >= count) return text.length;
     final next = starts[b];
-    return next > 0 && text[next - 1] == '\n' ? next - 1 : next;
+    final blank = b > 0 && starts[b - 1] == next - 1;
+    return next > 0 && text[next - 1] == '\n' && !blank ? next - 1 : next;
   }
 
   /// How tall lines `[a, b)` are.
@@ -280,20 +292,39 @@ class BookMeasurer {
   /// picture as 4:3.
   final Size? Function(String asset)? imageSize;
 
-  TextLines _lines(String text, TextStyle style, double width) =>
-      TextLines.layout(text, style, width, styles.scaler, styles.direction);
+  TextLines _lines(
+    String text,
+    TextStyle style,
+    double width, {
+    String lead = '',
+  }) => TextLines.layout(
+    text,
+    style,
+    width,
+    styles.scaler,
+    styles.direction,
+    lead: lead,
+  );
 
   double _height(String text, TextStyle style, double width) {
     final lines = _lines(text, style, width);
     return lines.height(0, lines.count);
   }
 
-  double titleHeight(String title) => _height(title, styles.title, width);
+  /// A chapter title's height as [BookChapterTitle] draws it: the sink, the
+  /// title's lines, the gap and the flourish.
+  double titleHeight(String title) =>
+      bookTitleSink +
+      _height(title, styles.titleFor(title), width) +
+      bookFlourishGap +
+      bookFlourishHeight;
 
   BlockMetrics measure(BookBlock block) {
     final s = styles;
     return switch (block) {
-      BookPara(:final text) => ParaMetrics(_lines(text, s.prose, width)),
+      BookPara(:final text) => ParaMetrics(
+        _lines(text, s.prose, width, lead: bookParaLead),
+      ),
       BookHeading(:final text) => HeadingMetrics(
         _lines(text, s.heading, width),
       ),
